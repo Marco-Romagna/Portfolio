@@ -1,3 +1,32 @@
+/* Big target preview (≈ 2x2 tiles) */
+.preview{
+  margin:6px 0 14px;
+  display:grid;
+  place-items:center;
+  height:160px; /* ~ 2 tiles tall */
+  background:rgba(255,255,255,.04);
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:12px;
+}
+.preview .shape.big{ width:100px; height:100px; }
+.preview .triangle.big{
+  width:0;height:0;
+  border-left:50px solid transparent;
+  border-right:50px solid transparent;
+  border-bottom:100px solid rgba(255,255,255,.12);
+}
+
+/* click states */
+.cell.correct{
+  outline:2px solid var(--accent);
+  background:rgba(122,162,247,.15);
+}
+.cell.wrong{
+  outline:2px solid #c04949;
+  background:rgba(192,73,73,.18);
+}
+
+
 /* reuse colors from main.css */
 .wrap{padding:16px 0}
 .grid{display:grid;grid-template-columns:1fr 320px;gap:16px}
