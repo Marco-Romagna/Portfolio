@@ -10,6 +10,35 @@
   <link rel="stylesheet" href="/Portfolio/css/games/reaction-room/styles.css">
   
 </head>
+
+<!-- Results Modal -->
+<div id="resultsModal" class="modal" hidden>
+  <div class="modal-dialog">
+    <h2>Round Results</h2>
+
+    <div class="stat-grid">
+      <div class="chip"><span>Best</span><strong id="m-best">—</strong></div>
+      <div class="chip"><span>Average</span><strong id="m-avg">—</strong></div>
+      <div class="chip"><span>Worst</span><strong id="m-worst">—</strong></div>
+      <div class="chip"><span>Total</span><strong id="m-total">—</strong></div>
+    </div>
+
+    <div class="table-wrap">
+      <table class="splits">
+        <thead>
+          <tr><th>#</th><th>Split</th><th>Cumulative</th><th>Tile</th></tr>
+        </thead>
+        <tbody id="m-splits"></tbody>
+      </table>
+    </div>
+
+    <div class="modal-actions">
+      <button id="closeModal" class="btn">Close</button>
+      <button id="playAgain" class="btn-ghost">Play Again</button>
+    </div>
+  </div>
+</div>
+
 <body>
   <header class="header">
     <div class="container nav">
