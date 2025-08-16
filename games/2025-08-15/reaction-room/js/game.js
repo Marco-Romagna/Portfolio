@@ -1,11 +1,27 @@
 // games/2025-08-15/reaction-room/js/game.js
 window.addEventListener('DOMContentLoaded', () => {
   // --- Config ---
-  const SHAPES = ["circle","square","triangle"];
-  const GRID = 5;
-  const CELLS = GRID * GRID;
-  const OCCUPANCY = 0.65;        // ~65% of cells contain a shape
-  const COUNT_DELAY = 500;       // ms between 3-2-1 ticks
+  const ROWS = 6, COLS = 5;
+  const CELLS = ROWS * COLS;
+  const OCC_MIN = 0.58, OCC_MAX = 0.69;     // 58%–69% each round
+  const COUNT_DELAY = 500;                  // ms between 3-2-1 ticks
+  const TARGETS_TO_COMPLETE = 12;           // round ends after this many correct hits
+
+  // Shape keys
+  const BASIC = ["circle","square","triangle"];
+  const SUITS = ["club","heart","diamond","spade"];
+  const SPECIAL = ["star","moon","bolt","shield"];
+  const ALL_SHAPES = [...BASIC, ...SUITS, ...SPECIAL];
+
+  // Guaranteed counts each round
+  const GUARANTEED = {
+    club:1, heart:1, diamond:1, spade:1,
+    star:1, moon:1,
+    bolt:2, shield:2
+  };
+
+  // Weighted pool for non-guaranteed spawns (basics favored)
+  const WEIGHTS = { circle:6, square:6, triangle:6, bolt:0.5, shield:0.5, club:0.25, heart:0.25, diamond:0.25, spade:0.25, star:0, moon:0 };
 
   // --- Elements ---
   const board     = document.getElementById("game-board");
@@ -23,34 +39,37 @@ window.addEventListener('DOMContentLoaded', () => {
   const sideStats = document.querySelector(".side .stats");
 
   // Modal elements
-  const modal      = document.getElementById("resultsModal");
-  const mBest      = document.getElementById("m-best");
-  const mAvg       = document.getElementById("m-avg");
-  const mWorst     = document.getElementById("m-worst");
-  const mTotal     = document.getElementById("m-total");
-  const mSplits    = document.getElementById("m-splits");
-  const btnClose   = document.getElementById("closeModal");
-  const btnAgain   = document.getElementById("playAgain");
+  const modal   = document.getElementById("resultsModal");
+  const mBest   = document.getElementById("m-best");
+  const mAvg    = document.getElementById("m-avg");
+  const mWorst  = document.getElementById("m-worst");
+  const mTotal  = document.getElementById("m-total");
+  const mSplits = document.getElementById("m-splits");
+  const btnClose= document.getElementById("closeModal");
+  const btnAgain= document.getElementById("playAgain");
 
   // --- Round state ---
+  let occupancy = 0.62;
   let targetShape = null;
   let lives = 3;
   let playing = false;
-  let cells = [];
-  let totalTargets = 0;
-  let foundTargets = 0;
+  let cells = []; // DOM refs
+  let shapes = new Array(CELLS).fill(""); // shape ids or ""
+  let foundTargetsCount = 0;
 
   // Timing (split stats)
-  let startedAt = 0;       // reveal time
-  let lastSplitAt = 0;     // time of last correct (or reveal)
+  let startedAt = 0;
+  let lastSplitAt = 0;
   let clickSplits = [];    // durations between correct clicks
-  let splitDetails = [];   // { idx,row,col,split,total }
+  let splitDetails = [];   // { idx,row,col,split,total,shape }
 
-  // Purple Lock
-  // lock = { type: 'row'|'col', idx: number }
-  let lock = null;                 // current lock
-  let nextLock = null;             // planned next lock (used for neutral hints)
-  let prevCoveredCorrectIndices = [];
+  // Lock state & hints
+  // lock/nextLock = { type: 'row'|'col', idx: number }
+  let lock = null;
+  let nextLock = null;
+
+  // Exclusivity limiter (applies to NEXT target only)
+  let forbidNext = new Set(); // e.g., when click star => forbid 'moon' once
 
   // Timers
   let countdownTimer = null;
@@ -58,8 +77,10 @@ window.addEventListener('DOMContentLoaded', () => {
 
   // --- Utils ---
   const ms = x => `${Math.round(x)} ms`;
-  const cellRow = i => Math.floor(i / GRID);
-  const cellCol = i => i % GRID;
+  const idxOf = (r,c) => r*COLS + c;
+  const rowOf = i => Math.floor(i / COLS);
+  const colOf = i => i % COLS;
+  const inBounds = (r,c) => r>=0 && r<ROWS && c>=0 && c<COLS;
   const lockLabel = lk => lk ? (lk.type === 'row' ? `row ${lk.idx+1}` : `column ${lk.idx+1}`) : '';
 
   function log(msg){
@@ -80,119 +101,243 @@ window.addEventListener('DOMContentLoaded', () => {
     preview.innerHTML = "";
     if (!shape) return;
     const el = document.createElement("div");
-    el.className = (shape === "triangle") ? "shape triangle big" : `shape ${shape} big`;
+    if (shape === "triangle"){
+      el.className = "shape triangle big";
+    } else {
+      el.className = `shape ${shape} big`;
+    }
     preview.appendChild(el);
   }
 
-  // --- Grid ---
-  function buildGrid(){
-    board.innerHTML = "";
-    cells = [];
-    for (let i = 0; i < CELLS; i++){
-      const cell = document.createElement("div");
-      cell.className = "cell";
-      if (Math.random() < OCCUPANCY){
-        const s = SHAPES[Math.floor(Math.random()*SHAPES.length)];
-        cell.dataset.shape = s;
-        cell.appendChild(makeShape(s));
-      } else {
-        cell.dataset.shape = "";
-      }
-      cell.addEventListener("click", () => handleClick(cell, i));
-      cells.push(cell);
-      board.appendChild(cell);
-    }
+  // --- Board build & spawn rules ---
+  function randomOccupancy(){
+    return OCC_MIN + Math.random()*(OCC_MAX - OCC_MIN);
   }
-  function makeShape(s){
-    if (s === "triangle"){ const tri = document.createElement("div"); tri.className = "shape triangle"; return tri; }
-    const el = document.createElement("div"); el.className = `shape ${s}`; return el;
+  function weightedPick(){
+    const entries = Object.entries(WEIGHTS).filter(([k,w]) => w > 0);
+    const total = entries.reduce((s,[,w])=>s+w,0);
+    let r = Math.random()*total;
+    for (const [k,w] of entries){
+      if (r < w) return k;
+      r -= w;
+    }
+    return "circle";
   }
 
-  // --- Purple Lock / Hints helpers ---
-  function coverageIndicesFor(lk){
-    const out = [];
-    for (let i=0;i<CELLS;i++){
-      if (lk.type === 'row' && cellRow(i) === lk.idx) out.push(i);
-      if (lk.type === 'col' && cellCol(i) === lk.idx) out.push(i);
-    }
-    return out;
-  }
-  function applyLock(lk){
-    // clear old lock visuals
-    cells.forEach(c => c.classList.remove('locked'));
-    lock = lk;
-    coverageIndicesFor(lock).forEach(i => cells[i].classList.add('locked'));
-  }
-  function coveredCorrectIndices(lk){
-    if (!lk) return [];
-    return coverageIndicesFor(lk).filter(i =>
-      cells[i].dataset.shape === targetShape && !cells[i].classList.contains('correct')
-    );
-  }
-  function pickNewLock(avoidCorrectIdx = []){
-    const tried = new Set();
-    for (let attempts=0; attempts<100; attempts++){
-      const type = Math.random() < 0.5 ? 'row' : 'col';
-      const idx = Math.floor(Math.random() * GRID);
-      const key = `${type}:${idx}`;
-      if (tried.has(key)) continue;
-      tried.add(key);
-      const candidate = { type, idx };
-      const covers = coverageIndicesFor(candidate);
-      const intersects = avoidCorrectIdx.some(i => covers.includes(i));
-      if (!intersects) return candidate;
-    }
-    return { type: 'row', idx: 0 }; // last resort
-  }
-
-  // Neutral hint classes are cleared on each lock move
   function clearHints(){
     cells.forEach(c => c.classList.remove('hint-pulse','hint-dim'));
   }
 
-  // Plan the *next* lock (used for neutral hints)
+  function coverageIndicesFor(lk){
+    const out = [];
+    for (let i=0;i<CELLS;i++){
+      if (lk.type === 'row' && rowOf(i) === lk.idx) out.push(i);
+      if (lk.type === 'col' && colOf(i) === lk.idx) out.push(i);
+    }
+    return out;
+  }
+  function applyLock(lk){
+    cells.forEach(c => c.classList.remove('locked'));
+    lock = lk;
+    coverageIndicesFor(lock).forEach(i => cells[i].classList.add('locked'));
+  }
   function planNextLock(){
-    const avoid = coveredCorrectIndices(lock);
-    nextLock = pickNewLock(avoid);
+    // Avoid covering unfound target tiles if possible
+    const avoid = [];
+    for (let i=0;i<CELLS;i++){
+      if (shapes[i] === targetShape && !cells[i].classList.contains('correct')) avoid.push(i);
+    }
+    const tried = new Set();
+    for (let attempts=0; attempts<100; attempts++){
+      const type = Math.random() < 0.5 ? 'row' : 'col';
+      const idx  = type==='row' ? Math.floor(Math.random()*ROWS) : Math.floor(Math.random()*COLS);
+      const key  = `${type}:${idx}`; if (tried.has(key)) continue; tried.add(key);
+      const covers = coverageIndicesFor({type,idx});
+      const bad = avoid.some(i => covers.includes(i));
+      if (!bad){ nextLock = {type,idx}; return; }
+    }
+    nextLock = { type:'row', idx:0 };
+  }
+  function moveLock(reason){
+    if (!nextLock) planNextLock();
+    clearHints();
+    applyLock(nextLock);
+    planNextLock();
+    log(`Lock moved (${reason}) → ${lockLabel(lock)}`);
   }
 
-  function moveLock(reason){
-    // move to the already planned next lock, if any
-    if (!nextLock){
-      // plan a fallback if not planned yet
-      nextLock = pickNewLock(coveredCorrectIndices(lock));
+  function buildGrid(){
+    // DOM cells
+    board.innerHTML = "";
+    board.style.gridTemplateColumns = `repeat(${COLS},1fr)`;
+    cells = [];
+    for (let i=0;i<CELLS;i++){
+      const cell = document.createElement("div");
+      cell.className = "cell";
+      cell.addEventListener("click", () => handleClick(i));
+      cells.push(cell);
+      board.appendChild(cell);
     }
-    clearHints(); // all hint visuals reset when the lock switches
-    applyLock(nextLock); // this becomes the current lock now
-    planNextLock();      // compute the next-next lock for future hints
-    log(`Lock moved (${reason}) → ${lockLabel(lock)}`);
+  }
+
+  function renderCell(i){
+    const cell = cells[i];
+    cell.innerHTML = "";
+    const s = shapes[i];
+    if (!s) return; // empty
+    if (s === "triangle"){
+      const el = document.createElement("div"); el.className = "shape triangle"; cell.appendChild(el); return;
+    }
+    const el = document.createElement("div");
+    el.className = `shape ${s}`;
+    cell.appendChild(el);
+  }
+
+  function populateBoard(){
+    // choose occupancy for this round
+    occupancy = randomOccupancy();
+    const fillCount = Math.round(CELLS * occupancy);
+
+    shapes.fill("");
+
+    // choose distinct random indices to fill
+    const idxs = [...Array(CELLS).keys()];
+    idxs.sort(()=>Math.random()-0.5);
+
+    // place guaranteed first
+    const needed = [];
+    for (const [key,count] of Object.entries(GUARANTEED)){
+      for (let k=0;k<count;k++) needed.push(key);
+    }
+    const filledIndices = [];
+
+    for (let g=0; g<needed.length && idxs.length; g++){
+      const i = idxs.pop();
+      shapes[i] = needed[g];
+      filledIndices.push(i);
+    }
+
+    // fill remaining up to fillCount with weighted pool (mostly basics)
+    while (filledIndices.length < fillCount && idxs.length){
+      const i = idxs.pop();
+      const pick = weightedPick();
+      shapes[i] = pick;
+      filledIndices.push(i);
+    }
+
+    // render all cells
+    for (let i=0;i<CELLS;i++) renderCell(i);
+  }
+
+  // --- Target selection ---
+  function pickInitialTarget(){
+    const presentSet = new Set(shapes.filter(Boolean));
+    const candidates = [...presentSet];
+    return chooseTargetFrom(candidates, new Set());
+  }
+
+  function chooseTargetFrom(candidates, banSet){
+    // remove banned
+    const pool = candidates.filter(s => !banSet.has(s));
+    if (!pool.length) return null;
+
+    // prefer shapes with >=2 instances
+    const counts = new Map();
+    for (let s of shapes) if (s) counts.set(s, (counts.get(s)||0)+1);
+    const twoPlus = pool.filter(s => (counts.get(s)||0) >= 2);
+    const finalPool = twoPlus.length ? twoPlus : pool;
+
+    // random pick
+    return finalPool[Math.floor(Math.random()*finalPool.length)];
+  }
+
+  function setTarget(shape){
+    targetShape = shape;
+    targetEl.textContent = shape || "—";
+    setPreview(shape);
+  }
+
+  // compute forbidden set for NEXT target based on last clicked shape
+  function computeForbidNext(lastShape){
+    const ban = new Set();
+    if (lastShape === "star") ban.add("moon");
+    if (lastShape === "moon") ban.add("star");
+    if (SUITS.includes(lastShape)){
+      for (const s of SUITS) if (s !== lastShape) ban.add(s);
+    }
+    return ban;
+  }
+
+  // Ensure at least one instance of current target remains on board
+  function ensureTargetExistsAfter(iRemoved){
+    if (!targetShape) return;
+    let count = 0;
+    for (let i=0;i<CELLS;i++){
+      if (i === iRemoved) continue;
+      if (shapes[i] === targetShape) count++;
+    }
+    if (count === 0){
+      // bump one random filled non-locked tile to targetShape
+      const candidates = [];
+      for (let i=0;i<CELLS;i++){
+        if (i===iRemoved) continue;
+        if (!shapes[i]) continue;
+        if (cells[i].classList.contains('locked')) continue;
+        candidates.push(i);
+      }
+      if (candidates.length){
+        const j = candidates[Math.floor(Math.random()*candidates.length)];
+        shapes[j] = targetShape;
+        renderCell(j);
+      }
+    }
+  }
+
+  // Respawn a clicked tile to a new random shape (respect general weighting)
+  function respawnShapeAt(i){
+    // pick from weighted pool, but you could also decide to disallow immediate repeats
+    shapes[i] = weightedPick();
+    renderCell(i);
+  }
+
+  // Lightning reveal next lock: pulse the planned line
+  function lightningReveal(){
+    if (!nextLock) return;
+    const covers = coverageIndicesFor(nextLock);
+    covers.forEach(i => {
+      const c = cells[i];
+      c.classList.remove('hint-dim');
+      c.classList.add('hint-pulse');
+    });
   }
 
   // --- Flow ---
   function startRound(){
     clearTimers();
     playing = false;
-    targetShape = null;
-    foundTargets = 0;
-    totalTargets = 0;
+    lives = 3;
+    foundTargetsCount = 0;
     clickSplits = [];
     splitDetails = [];
     startedAt = 0;
     lastSplitAt = 0;
+    forbidNext = new Set();
+    targetShape = null;
 
-    setPreview(null);
+    if (sideStats) sideStats.style.display = 'none'; // hide during play
     resetStatsUI();
-    if (sideStats) sideStats.style.display = 'none';   // hide during play
+    logEl.textContent = "";
 
     cdEl.textContent = "3";
     targetEl.textContent = "—";
-    lives = 3; livesEl.textContent = lives;
+    livesEl.textContent = lives;
 
     buildGrid();
-    cells.forEach(c => { c.classList.remove('locked','hint-pulse','hint-dim','correct','wrong'); });
-    lock = null;
-    nextLock = null;
-    prevCoveredCorrectIndices = [];
+    populateBoard();
+
+    // clear states
+    cells.forEach(c => c.classList.remove('locked','hint-pulse','hint-dim','correct','wrong'));
+    lock = null; nextLock = null;
 
     // 3-2-1
     let n = 3;
@@ -207,25 +352,20 @@ window.addEventListener('DOMContentLoaded', () => {
   }
 
   function revealTarget(){
-    const present = cells.map(c => c.dataset.shape).filter(Boolean);
-    if (present.length === 0){ buildGrid(); return revealTarget(); }
+    // place initial lock + plan next
+    applyLock({ type: Math.random()<0.5 ? 'row' : 'col', idx: Math.floor(Math.random()*(Math.random()<0.5?ROWS:COLS)) });
+    planNextLock();
 
-    targetShape = present[Math.floor(Math.random()*present.length)];
-    totalTargets = cells.filter(c => c.dataset.shape === targetShape).length;
-    foundTargets = 0;
-
-    targetEl.textContent = targetShape;
-    setPreview(targetShape);
+    // choose initial target from present shapes
+    const present = new Set(shapes.filter(Boolean));
+    setTarget(chooseTargetFrom([...present], forbidNext));
 
     cdEl.textContent = "—";
     startedAt = performance.now();
     lastSplitAt = startedAt;
     playing = true;
 
-    // place initial lock and plan the next one
-    applyLock(pickNewLock([]));
-    planNextLock();
-    log(`Target: ${targetShape} (${totalTargets} to find). Lock placed → ${lockLabel(lock)}`);
+    log(`Lock placed → ${lockLabel(lock)}. Target: ${targetShape}`);
   }
 
   function updateSplitStats(totalMsNow){
@@ -244,74 +384,101 @@ window.addEventListener('DOMContentLoaded', () => {
     totalEl.textContent = ms(totalMsNow);
   }
 
-  function handleClick(cell, idx){
+  function handleClick(i){
     if (!playing) return;
 
-    const clicked = cell.dataset.shape;
-    const row = cellRow(idx);
-    const col = cellCol(idx);
+    const cell = cells[i];
+    const s = shapes[i]; // may be "" for neutral
+    const r = rowOf(i), c = colOf(i);
 
-    // NEUTRAL HINTING
-    if (!clicked){
-      // no life loss; just hint via nextLock
+    // NEUTRAL (empty) – hint behavior
+    if (!s){
       if (nextLock){
-        const willLock = (nextLock.type === 'row') ? (row === nextLock.idx) : (col === nextLock.idx);
+        const willLock = (nextLock.type === 'row') ? (r === nextLock.idx) : (c === nextLock.idx);
         cell.classList.remove('hint-pulse','hint-dim');
-        if (willLock){
-          cell.classList.add('hint-pulse');
-          log(`Hint: next lock → ${lockLabel(nextLock)}`);
-        } else {
-          cell.classList.add('hint-dim');
-          log(`Hint: not ${lockLabel(nextLock)}`);
-        }
+        if (willLock){ cell.classList.add('hint-pulse'); log(`Hint: next lock → ${lockLabel(nextLock)}`); }
+        else { cell.classList.add('hint-dim'); log(`Hint: not ${lockLabel(nextLock)}`); }
       } else {
-        log("Hint: next lock unknown (not planned yet)");
+        log("Hint: next lock unknown");
       }
-      return; // neutral clicks never progress or penalize
+      return; // no life change, costs time only
     }
 
     // Already marked? ignore
     if (cell.classList.contains("correct") || cell.classList.contains("wrong")) return;
 
-    // Purple lock penalty: life loss only; tile stays neutral
-    if (cell.classList.contains('locked')){
+    // LOCKED penalty (except shield)
+    if (cell.classList.contains('locked') && s !== "shield"){
       lives = Math.max(0, lives - 1);
       livesEl.textContent = lives;
-      log(`✖ locked tile (in ${lockLabel(lock)}) • lives ${lives}`);
+      log(`✖ locked ${s} • lives ${lives}`);
       if (lives === 0) return endRound(false, performance.now());
       moveLock('penalty');
+      // respawn the clicked tile to keep board fresh
+      respawnShapeAt(i);
       return;
     }
 
-    // Wrong shape (unlocked): mark red + life loss + move lock
-    if (clicked !== targetShape){
+    // SHIELD is always safe—no life loss even if locked
+    if (s === "shield" && cell.classList.contains('locked')){
+      log(`🛡 Safe click on locked shield`);
+      // respawn shield after click
+      respawnShapeAt(i);
+      moveLock('penalty'); // still triggers lock move for interaction
+      return;
+    }
+
+    // WRONG unlocked click (non-target)
+    if (s !== targetShape){
       cell.classList.add("wrong");
       lives = Math.max(0, lives - 1);
       livesEl.textContent = lives;
-      log(`✖ ${clicked} • lives ${lives}`);
+      log(`✖ wrong: ${s} • lives ${lives}`);
       if (lives === 0) return endRound(false, performance.now());
       moveLock('penalty');
+      // respawn wrong tile
+      respawnShapeAt(i);
       return;
     }
 
-    // Correct shape
+    // CORRECT click
     cell.classList.add("correct");
-    foundTargets++;
+    foundTargetsCount++;
 
     const now = performance.now();
-    const split = now - lastSplitAt;     // since reveal or previous correct
+    const split = now - lastSplitAt;
     clickSplits.push(split);
     lastSplitAt = now;
 
     const totalSoFar = now - startedAt;
-    splitDetails.push({ idx, row, col, split, total: totalSoFar });
-    log(`✔ r${row+1} c${col+1} • split ${Math.round(split)} ms • total ${Math.round(totalSoFar)} ms`);
+    splitDetails.push({ idx:i, row:r, col:c, split, total: totalSoFar, shape: s });
+    log(`✔ ${s} at r${r+1}c${c+1} • split ${Math.round(split)} ms • total ${Math.round(totalSoFar)} ms`);
 
     updateSplitStats(totalSoFar);
+
+    // Special on-click effects
+    if (s === "bolt"){ lightningReveal(); }
+    // Exclusivity for NEXT target
+    forbidNext = computeForbidNext(s);
+
+    // Respawn the clicked tile to keep board fresh
+    shapes[i] = ""; // brief clear (visual: mark disappears), then respawn
+    renderCell(i);
+    // Keep at least one of current target elsewhere before switching
+    ensureTargetExistsAfter(i);
+    respawnShapeAt(i);
+
+    // Move lock after correct
     moveLock('correct');
 
-    if (foundTargets === totalTargets){
-      endRound(true, now);
+    // NEXT TARGET: re-pick immediately (target changes after each correct)
+    const presentSet = new Set(shapes.filter(Boolean));
+    const nextTarget = chooseTargetFrom([...presentSet], forbidNext);
+    setTarget(nextTarget);
+
+    // End conditions
+    if (foundTargetsCount >= TARGETS_TO_COMPLETE){
+      return endRound(true, now);
     }
   }
 
@@ -319,7 +486,6 @@ window.addEventListener('DOMContentLoaded', () => {
     playing = false;
     const total = nowTs - startedAt;
 
-    // Compute round stats from splits
     const best  = clickSplits.length ? Math.min(...clickSplits) : 0;
     const worst = clickSplits.length ? Math.max(...clickSplits) : 0;
     const avg   = clickSplits.length ? (clickSplits.reduce((a,b)=>a+b,0) / clickSplits.length) : 0;
@@ -334,18 +500,17 @@ window.addEventListener('DOMContentLoaded', () => {
         <td>${i+1}</td>
         <td>${Math.round(s.split)} ms</td>
         <td>${Math.round(s.total)} ms</td>
-        <td>r${s.row+1}, c${s.col+1}</td>
+        <td>${s.shape} @ r${s.row+1}, c${s.col+1}</td>
       </tr>
     `).join('');
 
-    modal.hidden = false;                   // show results
-    if (sideStats) sideStats.style.display = 'grid'; // reveal side stats now
+    modal.hidden = false;
+    if (sideStats) sideStats.style.display = 'grid';
 
-    log(success ? `Completed in ${Math.round(total)} ms` : `Failed in ${Math.round(total)} ms`);
+    log(success ? `Completed ${TARGETS_TO_COMPLETE} targets in ${Math.round(total)} ms` : `Failed in ${Math.round(total)} ms`);
   }
 
   function resetAll(){
-    if (logEl) logEl.textContent = "";
     modal.hidden = true;
     startRound();
   }
