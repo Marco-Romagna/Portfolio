@@ -1,9 +1,10 @@
 // games/2025-08-15/reaction-room/js/game.js
 window.addEventListener('DOMContentLoaded', () => {
   const SHAPES = ["circle","square","triangle"];
-  const CELLS = 25;               // 5x5
-  const OCCUPANCY = 0.65;         // ~65% tiles have a shape
-  const COUNT_DELAY = 500;        // ms between 3-2-1 ticks
+  const GRID = 5;
+  const CELLS = GRID * GRID;
+  const OCCUPANCY = 0.65;      // ~65% tiles have a shape
+  const COUNT_DELAY = 500;     // ms between 3-2-1 ticks
 
   // Elements
   const board     = document.getElementById("game-board");
@@ -27,20 +28,27 @@ window.addEventListener('DOMContentLoaded', () => {
   let totalTargets = 0;
   let foundTargets = 0;
 
-  // Timing state (for split-based stats)
-  let startedAt = 0;          // when target revealed
-  let lastSplitAt = 0;        // time of last correct click (or reveal)
-  let clickSplits = [];       // array of split durations (ms)
+  // Timing state (split stats)
+  let startedAt = 0;       // when target revealed
+  let lastSplitAt = 0;     // last correct click timestamp (or reveal)
+  let clickSplits = [];    // durations between correct clicks
+
+  // Purple lock state
+  // lock = { type: 'row'|'col', idx: number }
+  let lock = null;
+  let prevCoveredCorrectIndices = []; // correct (matching target) indices covered by the previous lock
 
   // Timers
   let countdownTimer = null;
   let revealTimer = null;
 
-  // Utils
+  // --- Utils ---
   const ms = x => `${Math.round(x)} ms`;
-  const log = msg => { if (!logEl) return; const d = document.createElement("div"); d.textContent = msg; logEl.prepend(d); };
+  const log = msg => { if (!logEl) return; const d=document.createElement("div"); d.textContent=msg; logEl.prepend(d); };
   const clearTimers = () => { if (countdownTimer) { clearInterval(countdownTimer); countdownTimer=null; } if (revealTimer){ clearTimeout(revealTimer); revealTimer=null; } };
   const resetStatsUI = () => { bestEl.textContent = avgEl.textContent = worstEl.textContent = totalEl.textContent = "—"; };
+  const cellRow = i => Math.floor(i / GRID);
+  const cellCol = i => i % GRID;
 
   function setPreview(shape){
     if (!preview) return;
@@ -75,6 +83,64 @@ window.addEventListener('DOMContentLoaded', () => {
     const el=document.createElement("div"); el.className=`shape ${s}`; return el;
   }
 
+  // --- Purple Lock helpers ---
+  function coverageIndicesFor(lk){
+    const out = [];
+    for (let i=0;i<CELLS;i++){
+      if (lk.type === 'row' && cellRow(i) === lk.idx) out.push(i);
+      if (lk.type === 'col' && cellCol(i) === lk.idx) out.push(i);
+    }
+    return out;
+  }
+
+  function applyLock(lk){
+    // clear previous visuals
+    cells.forEach(c => c.classList.remove('locked'));
+    lock = lk;
+    const cover = coverageIndicesFor(lock);
+    cover.forEach(i => cells[i].classList.add('locked'));
+  }
+
+  function coveredCorrectIndices(lk){
+    if (!lk) return [];
+    const cover = coverageIndicesFor(lk);
+    return cover.filter(i =>
+      cells[i].dataset.shape === targetShape &&
+      !cells[i].classList.contains('correct') // only those not yet found
+    );
+  }
+
+  function pickNewLock(avoidCorrectIdx = []){
+    // Try random candidates until we find one whose coverage
+    // doesn't include any of avoidCorrectIdx
+    const tried = new Set();
+    for (let attempts=0; attempts<100; attempts++){
+      const type = Math.random() < 0.5 ? 'row' : 'col';
+      const idx = Math.floor(Math.random() * GRID);
+      const key = `${type}:${idx}`;
+      if (tried.has(key)) continue;
+      tried.add(key);
+
+      const candidate = { type, idx };
+      const covers = coverageIndicesFor(candidate);
+      // Check intersection with forbidden correct indices
+      const intersects = avoidCorrectIdx.some(i => covers.includes(i));
+      if (!intersects) return candidate;
+    }
+    // Fallback: return something (best effort)
+    return { type: 'row', idx: 0 };
+  }
+
+  function moveLock(reason){
+    // reason: 'correct' | 'miss'
+    // Determine which correct tiles were covered by the *current* lock (to avoid them)
+    prevCoveredCorrectIndices = coveredCorrectIndices(lock);
+    const newLock = pickNewLock(prevCoveredCorrectIndices);
+    applyLock(newLock);
+    if (reason === 'correct') log("Lock moved (correct).");
+    else log("Lock moved (penalty).");
+  }
+
   // --- Flow ---
   function startRound(){
     clearTimers();
@@ -93,8 +159,11 @@ window.addEventListener('DOMContentLoaded', () => {
     targetEl.textContent = "—";
     lives = 3; livesEl.textContent = lives;
 
-    // reset board
+    // reset board + clear lock visuals
     buildGrid();
+    cells.forEach(c => c.classList.remove('locked'));
+    lock = null;
+    prevCoveredCorrectIndices = [];
 
     // 3-2-1
     let n = 3;
@@ -125,7 +194,9 @@ window.addEventListener('DOMContentLoaded', () => {
     lastSplitAt = startedAt;
     playing = true;
 
-    log(`Target: ${targetShape} (${totalTargets} to find)`);
+    // INITIAL LOCK
+    applyLock(pickNewLock([]));
+    log(`Target: ${targetShape} (${totalTargets} to find). Lock placed.`);
   }
 
   function updateSplitStats(totalMsNow){
@@ -147,13 +218,25 @@ window.addEventListener('DOMContentLoaded', () => {
     if (!clicked) return;                              // empty tile ignored
     if (cell.classList.contains("correct") || cell.classList.contains("wrong")) return;
 
+    // Purple lock rule: any click on a locked tile = lose a life + move lock
+    if (cell.classList.contains('locked')){
+      cell.classList.add("wrong");
+      lives = Math.max(0, lives - 1);
+      livesEl.textContent = lives;
+      log(`Penalty: clicked locked tile. Lives left: ${lives}`);
+      if (lives === 0) return endRound(false, performance.now());
+      moveLock('miss');
+      return;
+    }
+
     if (clicked !== targetShape){
-      // wrong → mark red + lose a life
+      // wrong → mark red + lose a life + move lock
       cell.classList.add("wrong");
       lives = Math.max(0, lives - 1);
       livesEl.textContent = lives;
       log(`Miss (${clicked}). Lives left: ${lives}`);
-      if (lives === 0) endRound(false, performance.now());
+      if (lives === 0) return endRound(false, performance.now());
+      moveLock('miss');
       return;
     }
 
@@ -168,6 +251,9 @@ window.addEventListener('DOMContentLoaded', () => {
 
     // live-update stats using total-so-far
     updateSplitStats(now - startedAt);
+
+    // Move lock after each correct click.
+    moveLock('correct');
 
     if (foundTargets === totalTargets){
       endRound(true, now);
