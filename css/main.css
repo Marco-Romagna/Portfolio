@@ -105,3 +105,32 @@ h2 {
   border-radius:16px;
   padding:16px;
 }
+/* Reset list styles */
+.panel ul {
+  list-style: none;
+  padding: 0;
+  margin: 16px 0 0;
+}
+
+/* Card look for items */
+.panel li {
+  margin: 8px 0;
+  padding: 12px 16px;
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 12px;
+  transition: transform .15s ease, background .15s ease;
+}
+
+/* Hover effect */
+.panel li:hover {
+  background: rgba(255,255,255,.08);
+  transform: translateY(-2px);
+}
+
+/* Links inside cards */
+.panel li a {
+  display: block;
+  color: var(--accent);
+  font-weight: 600;
+}
