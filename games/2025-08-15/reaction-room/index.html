@@ -4,75 +4,48 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Reaction Room</title>
-
-  <!-- Load site theme + this game’s CSS -->
+  <meta name="color-scheme" content="dark light" />
+  <!-- Global site theme -->
   <link rel="stylesheet" href="/Portfolio/css/main.css">
+  <!-- Game styles -->
   <link rel="stylesheet" href="/Portfolio/css/games/reaction-room/styles.css">
-  
 </head>
-
-<!-- Results Modal -->
-<div id="resultsModal" class="modal" hidden>
-  <div class="modal-dialog">
-    <h2>Round Results</h2>
-
-    <div class="stat-grid">
-      <div class="chip"><span>Best</span><strong id="m-best">—</strong></div>
-      <div class="chip"><span>Average</span><strong id="m-avg">—</strong></div>
-      <div class="chip"><span>Worst</span><strong id="m-worst">—</strong></div>
-      <div class="chip"><span>Total</span><strong id="m-total">—</strong></div>
-    </div>
-
-    <div class="table-wrap">
-      <table class="splits">
-        <thead>
-          <tr><th>#</th><th>Split</th><th>Cumulative</th><th>Tile</th></tr>
-        </thead>
-        <tbody id="m-splits"></tbody>
-      </table>
-    </div>
-
-    <div class="modal-actions">
-      <button id="closeModal" class="btn">Close</button>
-      <button id="playAgain" class="btn-ghost">Play Again</button>
-    </div>
-  </div>
-</div>
-
 <body>
   <header class="header">
     <div class="container nav">
-      <div class="brand"><span class="dot"></span><span>Reaction Room</span></div>
+      <div class="brand">
+        <span class="dot"></span><span>Reaction Room</span>
+      </div>
       <nav class="links">
         <a class="link" href="/Portfolio/">← Home</a>
       </nav>
     </div>
   </header>
 
-  <!-- game layout -->
-  <div class="wrap container">
+  <main class="container wrap">
     <div class="grid">
+      <!-- Left: board -->
       <section class="room">
-        <div id="game-board" class="room-inner" aria-label="Room grid"></div>
+        <div id="game-board" class="room-inner" aria-label="Game board"></div>
       </section>
 
+      <!-- Right: controls -->
       <aside class="side">
         <h2>Round</h2>
         <div class="countbox">
           <span class="badge">Countdown: <strong id="countdown">—</strong></span>
-          <span class="badge">Target: <span id="target">?</span></span>
+          <span class="badge">Target: <strong id="target">?</strong></span>
         </div>
-        <div class="countbox">
-          <span class="badge">Lives: <strong id="lives">3</strong></span>
-        </div>
-        
-        <div id="targetPreview" class="preview"></div>
+        <div class="row"><span class="badge">Lives: <strong id="lives">3</strong></span></div>
+
+        <div id="targetPreview" class="preview" aria-label="Target preview"></div>
 
         <div class="row">
           <button id="start" class="btn">Start</button>
           <button id="reset" class="btn-ghost">Reset</button>
         </div>
 
+        <!-- Sidebar stats are hidden while playing (shown at end by JS) -->
         <h2>Stats</h2>
         <div class="stats">
           <div class="card"><h3>Best</h3><p id="best">—</p></div>
@@ -81,12 +54,40 @@
           <div class="card"><h3>Total</h3><p id="total">—</p></div>
         </div>
 
-        <div class="log" id="log"></div>
+        <div class="log" id="log" aria-live="polite"></div>
       </aside>
+    </div>
+  </main>
+
+  <!-- Results Modal -->
+  <div id="resultsModal" class="modal" hidden>
+    <div class="modal-dialog">
+      <h2>Round Results</h2>
+
+      <div class="stat-grid">
+        <div class="chip"><span>Best</span><strong id="m-best">—</strong></div>
+        <div class="chip"><span>Average</span><strong id="m-avg">—</strong></div>
+        <div class="chip"><span>Worst</span><strong id="m-worst">—</strong></div>
+        <div class="chip"><span>Total</span><strong id="m-total">—</strong></div>
+      </div>
+
+      <div class="table-wrap">
+        <table class="splits">
+          <thead>
+            <tr><th>#</th><th>Split</th><th>Cumulative</th><th>Tile</th></tr>
+          </thead>
+          <tbody id="m-splits"></tbody>
+        </table>
+      </div>
+
+      <div class="modal-actions">
+        <button id="closeModal" class="btn">Close</button>
+        <button id="playAgain" class="btn-ghost">Play Again</button>
+      </div>
     </div>
   </div>
 
-  <!-- game logic -->
+  <!-- Game script -->
   <script defer src="/Portfolio/games/2025-08-15/reaction-room/js/game.js"></script>
 </body>
 </html>
