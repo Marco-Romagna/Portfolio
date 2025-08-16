@@ -195,9 +195,14 @@ window.addEventListener('DOMContentLoaded', () => {
     playing = true;
 
     // INITIAL LOCK
-    applyLock(pickNewLock([]));
-    log(`Target: ${targetShape} (${totalTargets} to find). Lock placed.`);
-  }
+    function applyLock(lk){
+      // clear previous visuals
+      cells.forEach(c => c.classList.remove('locked'));
+      lock = lk;
+      const cover = coverageIndicesFor(lock);
+      cover.forEach(i => cells[i].classList.add('locked'));
+    }
+
 
   function updateSplitStats(totalMsNow){
     if (clickSplits.length === 0) { resetStatsUI(); totalEl.textContent = ms(totalMsNow); return; }
