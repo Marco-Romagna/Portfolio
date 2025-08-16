@@ -20,6 +20,7 @@ window.addEventListener('DOMContentLoaded', () => {
   const btnStart  = document.getElementById("start");
   const btnReset  = document.getElementById("reset");
   const preview   = document.getElementById("targetPreview");
+  const sideStats = document.querySelector(".side .stats");
 
   // Modal elements
   const modal      = document.getElementById("resultsModal");
@@ -161,6 +162,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
     setPreview(null);
     resetStatsUI();
+    if (sideStats) sideStats.style.display = 'none';   // hide during play
 
     cdEl.textContent = "3";
     targetEl.textContent = "—";
@@ -227,9 +229,8 @@ window.addEventListener('DOMContentLoaded', () => {
     if (!clicked) return; // empty tile ignored
     if (cell.classList.contains("correct") || cell.classList.contains("wrong")) return;
 
-    // Purple lock penalty
+    // Purple lock penalty: life loss only; tile stays neutral
     if (cell.classList.contains('locked')){
-      cell.classList.add("wrong");
       lives = Math.max(0, lives - 1);
       livesEl.textContent = lives;
       log(`✖ locked tile (in ${lockLabel(lock)}) • lives ${lives}`);
@@ -238,7 +239,7 @@ window.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
-    // Wrong shape
+    // Wrong shape (unlocked): mark red + life loss + move lock
     if (clicked !== targetShape){
       cell.classList.add("wrong");
       lives = Math.max(0, lives - 1);
@@ -295,7 +296,9 @@ window.addEventListener('DOMContentLoaded', () => {
       </tr>
     `).join('');
 
-    modal.hidden = false; // show results
+    modal.hidden = false;                  // show results
+    if (sideStats) sideStats.style.display = 'grid'; // reveal side stats now
+
     log(success ? `Completed in ${Math.round(total)} ms` : `Failed in ${Math.round(total)} ms`);
   }
 
