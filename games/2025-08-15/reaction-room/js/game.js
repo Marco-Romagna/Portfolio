@@ -1,32 +1,33 @@
 // games/2025-08-15/reaction-room/js/game.js
+// (Save as game.js; replace your current file.)
+
 window.addEventListener('DOMContentLoaded', () => {
-  // --- Config ---
+  /* ===================== Config ===================== */
   const ROWS = 6, COLS = 5;
   const CELLS = ROWS * COLS;
-  const OCC_MIN = 0.58, OCC_MAX = 0.69;
-  const COUNT_DELAY = 500;
-  const TARGETS_TO_COMPLETE = 12;
+  const OCC_MIN = 0.58, OCC_MAX = 0.69;   // board occupancy per round
+  const COUNT_SECONDS = 7;                // big countdown in preview
+  const COUNT_INTERVAL = 1000;            // 1s ticks
+  const TARGETS_TO_COMPLETE = 12;         // end after N correct hits
 
   const BASIC   = ["circle","square","triangle"];
   const SUITS   = ["club","heart","diamond","spade"];
-  const SPECIAL = ["star","moon","bolt","shield"];
+  const SPECIAL = ["star","moon","bolt","shield"]; // bolt is targetable; shield isn’t
   const GUARANTEED = {
     club:1, heart:1, diamond:1, spade:1,
     star:1, moon:1,
     bolt:2, shield:2
   };
-  // Favor basics for filler
+  // Weighted filler pool (basics favored)
   const WEIGHTS = {
     circle:6, square:6, triangle:6,
     bolt:0.5, shield:0.5,
     club:0.25, heart:0.25, diamond:0.25, spade:0.25,
     star:0, moon:0
   };
+  const NON_TARGET = new Set(["shield"]); // shield can never be the target
 
-  // Only shield is non-target; bolt IS a valid target now
-  const NON_TARGET = new Set(["shield"]);
-
-  // --- Elements ---
+  /* ===================== Elements ===================== */
   const board     = document.getElementById("game-board");
   const cdEl      = document.getElementById("countdown");
   const targetEl  = document.getElementById("target");
@@ -41,7 +42,7 @@ window.addEventListener('DOMContentLoaded', () => {
   const preview   = document.getElementById("targetPreview");
   const sideStats = document.querySelector(".side .stats");
 
-  // Modal
+  // Results modal
   const modal   = document.getElementById("resultsModal");
   const mBest   = document.getElementById("m-best");
   const mAvg    = document.getElementById("m-avg");
@@ -51,36 +52,36 @@ window.addEventListener('DOMContentLoaded', () => {
   const btnClose= document.getElementById("closeModal");
   const btnAgain= document.getElementById("playAgain");
 
-  // --- State ---
+  /* ===================== Round State ===================== */
   let occupancy = 0.62;
   let lives = 3;
   let playing = false;
 
-  let cells = [];                      // DOM cells
+  let cells = [];                        // DOM nodes
   let shapes = new Array(CELLS).fill(""); // shape id or ""
   let targetShape = null;
 
-  // Targets used this round (no repeat shape)
+  // no-repeat per round
   let usedTargets = new Set();
 
-  // Splits
+  // Split timing
   let startedAt = 0;
   let lastSplitAt = 0;
   let clickSplits = [];     // numbers
   let splitDetails = [];    // { idx,row,col,split,total,shape }
 
-  // Lock & hints
+  // Lock + hints
   // lock / nextLock := { type:'row'|'col', idx:number }
   let lock = null;
   let nextLock = null;
 
-  // “Forbid next target” (from star/moon & suits)
+  // “forbid next target” (star/moon & suits)
   let forbidNext = new Set();
 
   // Timers
   let countdownTimer = null, revealTimer = null;
 
-  // --- Utils ---
+  /* ===================== Utils ===================== */
   const ms = x => `${Math.round(x)} ms`;
   const rowOf = i => Math.floor(i / COLS);
   const colOf = i => i % COLS;
@@ -92,15 +93,9 @@ window.addEventListener('DOMContentLoaded', () => {
 
   function glyphFor(shape){
     switch (shape){
-      case "club": return "♣";
-      case "heart": return "♥";
-      case "diamond": return "♦";
-      case "spade": return "♠";
-      case "star": return "★";
-      case "moon": return "☾";
-      case "bolt": return "⚡";
-      case "shield": return "🛡";
-      default: return null;
+      case "club":return "♣"; case "heart":return "♥"; case "diamond":return "♦"; case "spade":return "♠";
+      case "star":return "★"; case "moon":return "☾"; case "bolt":return "⚡"; case "shield":return "🛡";
+      default:return null;
     }
   }
 
@@ -120,7 +115,6 @@ window.addEventListener('DOMContentLoaded', () => {
       preview.appendChild(el);
     }
   }
-
   function setTarget(shape){
     targetShape = shape;
     targetEl.innerHTML = "";
@@ -135,6 +129,11 @@ window.addEventListener('DOMContentLoaded', () => {
       targetEl.textContent=shape;
     }
     setPreview(shape);
+  }
+
+  function showBigCountdown(n){
+    if (!preview) return;
+    preview.innerHTML = `<div class="big-count">${n}</div>`;
   }
 
   function randomOccupancy(){ return OCC_MIN + Math.random()*(OCC_MAX - OCC_MIN); }
@@ -164,7 +163,7 @@ window.addEventListener('DOMContentLoaded', () => {
     coverageIndicesFor(lock).forEach(i => cells[i].classList.add('locked'));
   }
   function planNextLock(){
-    // Try to avoid covering remaining target tiles, if possible
+    // Avoid covering remaining target tiles if possible
     const avoid=[];
     for (let i=0;i<CELLS;i++){
       if (shapes[i]===targetShape && !cells[i].classList.contains('correct')) avoid.push(i);
@@ -181,9 +180,9 @@ window.addEventListener('DOMContentLoaded', () => {
   }
   function moveLock(reason){
     if (!nextLock) planNextLock();
-    clearHints();                    // remove all purple/yellow hints
-    applyLock(nextLock);             // promote next → current
-    planNextLock();                  // compute new “next”
+    clearHints();
+    applyLock(nextLock);   // promote next → current
+    planNextLock();        // compute new “next”
     log(`Lock moved (${reason}) → ${lockLabel(lock)}`);
   }
 
@@ -227,7 +226,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
     const idxs=[...Array(CELLS).keys()].sort(()=>Math.random()-0.5);
 
-    // place guarantees
+    // guarantees
     const needed=[];
     for (const [k,c] of Object.entries(GUARANTEED)) for (let t=0;t<c;t++) needed.push(k);
     const filled=[];
@@ -236,7 +235,7 @@ window.addEventListener('DOMContentLoaded', () => {
       shapes[i]=needed[g];
       filled.push(i);
     }
-    // fill with weighted
+    // filler
     while (filled.length<fillCount && idxs.length){
       const i=idxs.pop();
       shapes[i]=weightedPick();
@@ -245,7 +244,7 @@ window.addEventListener('DOMContentLoaded', () => {
     for (let i=0;i<CELLS;i++) renderCell(i);
   }
 
-  // --- Availability-aware target picking ---
+  /* ============== Availability-aware target picking ============== */
   function availableCount(shape){
     let n=0;
     for (let i=0;i<CELLS;i++){
@@ -255,13 +254,13 @@ window.addEventListener('DOMContentLoaded', () => {
   }
 
   function chooseTargetFrom(presentShapes, banSet){
-    // Start: remove non-targets, banned, and already used
+    // remove non-targets, banned, already used
     let pool = presentShapes.filter(s => !NON_TARGET.has(s) && !banSet.has(s) && !usedTargets.has(s));
-    // Keep only shapes that still have clickable instances
+    // only shapes that still have clickable instances
     pool = pool.filter(s => availableCount(s) > 0);
     if (!pool.length) return null;
 
-    // Prefer shapes with >= 2 available instances
+    // prefer shapes with >= 2 available instances
     const avail2 = pool.filter(s => availableCount(s) >= 2);
     const finalPool = avail2.length ? avail2 : pool;
 
@@ -279,7 +278,7 @@ window.addEventListener('DOMContentLoaded', () => {
   }
 
   function respawnShapeAt(i){
-    // For non-shield respawns; never blank the tile
+    // never blank a tile
     shapes[i]=weightedPick();
     renderCell(i);
   }
@@ -290,21 +289,20 @@ window.addEventListener('DOMContentLoaded', () => {
     covers.forEach(i => {
       const c=cells[i];
       c.classList.remove('hint-dim');
-      c.classList.add('hint-pulse'); // purple
+      c.classList.add('hint-pulse'); // purple pulse
     });
   }
   function lightningPreviewNextNextYellow(){
-    // After a lock move, nextLock has already been planned => preview “next-next” as yellow
     if (!nextLock) return;
     const covers=coverageIndicesFor(nextLock);
     covers.forEach(i => {
       const c=cells[i];
       c.classList.remove('hint-dim','hint-pulse');
-      c.classList.add('hint-bolt'); // yellow pulse (CSS required)
+      c.classList.add('hint-bolt');   // yellow pulse (CSS required)
     });
   }
 
-  // --- Flow ---
+  /* ===================== Flow ===================== */
   function startRound(){
     clearTimers();
     playing=false;
@@ -320,8 +318,6 @@ window.addEventListener('DOMContentLoaded', () => {
     resetStatsUI();
     logEl.textContent="";
 
-    cdEl.textContent="3";
-    setTarget(null);
     livesEl.textContent=lives;
 
     buildGrid();
@@ -330,12 +326,18 @@ window.addEventListener('DOMContentLoaded', () => {
     cells.forEach(c => c.classList.remove('locked','hint-pulse','hint-dim','hint-bolt','correct','pulse-wrong'));
     lock=null; nextLock=null;
 
-    let n=3;
-    countdownTimer=setInterval(()=>{
+    // Big 7→1 countdown inside the preview
+    cdEl.textContent = "—"; // small badge unused now
+    let n = COUNT_SECONDS + 1; // so first tick shows 7
+    countdownTimer = setInterval(() => {
       n--;
-      if (n>0) cdEl.textContent=n;
-      else { clearInterval(countdownTimer); countdownTimer=null; revealTimer=setTimeout(revealTarget,400); }
-    }, COUNT_DELAY);
+      if (n > 0) {
+        showBigCountdown(n);
+      } else {
+        clearInterval(countdownTimer); countdownTimer=null;
+        revealTimer = setTimeout(revealTarget, 200); // tiny pause
+      }
+    }, COUNT_INTERVAL);
   }
 
   function revealTarget(){
@@ -345,16 +347,15 @@ window.addEventListener('DOMContentLoaded', () => {
     applyLock({type,idx});
     planNextLock();
 
-    // initial target picking (availability-aware)
+    // pick initial target (availability-aware)
     const present = Array.from(new Set(shapes.filter(Boolean)));
     let next = chooseTargetFrom(present, new Set());
     if (!next){
-      // No available target at all → auto-success (edge case)
+      // no available target → immediate success (edge case)
       return endRound(true, performance.now());
     }
     setTarget(next);
 
-    cdEl.textContent="—";
     startedAt=performance.now();
     lastSplitAt=startedAt;
     playing=true;
@@ -393,14 +394,14 @@ window.addEventListener('DOMContentLoaded', () => {
     // Already confirmed correct? ignore
     if (cell.classList.contains("correct")) return;
 
-    // Shield → safe, DOES move the lock, does not change shape
+    // Shield → safe, moves lock, does not change shape
     if (s==="shield"){
       log("🛡 Shield clicked (safe) • lock advances");
       moveLock('shield');
       return;
     }
 
-    // Lightning behavior:
+    // Lightning behavior
     if (s==="bolt"){
       if (targetShape === "bolt"){
         // Treat as CORRECT
@@ -415,11 +416,11 @@ window.addEventListener('DOMContentLoaded', () => {
         usedTargets.add("bolt");
         forbidNext = computeForbidNext("bolt");
 
-        // Move lock, then preview the next-next lock in YELLOW
+        // Move lock, then yellow preview the next-next lock
         moveLock('correct');
         lightningPreviewNextNextYellow();
 
-        // Pick next target (availability-aware)
+        // Next target
         const present = Array.from(new Set(shapes.filter(Boolean)));
         let next = chooseTargetFrom(present, forbidNext);
         if (!next){ return endRound(true, now); }
@@ -428,7 +429,7 @@ window.addEventListener('DOMContentLoaded', () => {
         if (clickSplits.length >= TARGETS_TO_COMPLETE) return endRound(true, now);
         return;
       } else {
-        // Not target → reveal NEXT lock (purple), do not move lock; respawn bolt to keep board lively
+        // Not target → purple-preview next lock, no move, respawn bolt
         log("⚡ Lightning reveals the next lock");
         lightningPreviewNext();
         respawnShapeAt(i);
@@ -501,12 +502,12 @@ window.addEventListener('DOMContentLoaded', () => {
 
   function resetAll(){ modal.hidden=true; startRound(); }
 
-  // Wire
+  /* ===================== Wire ===================== */
   btnStart.addEventListener("click", startRound);
   btnReset.addEventListener("click", resetAll);
   btnClose.addEventListener("click", () => { modal.hidden=true; });
   btnAgain.addEventListener("click", () => { modal.hidden=true; startRound(); });
 
-  // Initial layout
+  // First paint
   buildGrid();
 });
