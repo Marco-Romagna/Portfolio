@@ -1,29 +1,13 @@
 // games/2025-08-15/reaction-room/js/game.js
 window.addEventListener('DOMContentLoaded', () => {
+  // --- Config ---
   const SHAPES = ["circle","square","triangle"];
   const GRID = 5;
   const CELLS = GRID * GRID;
-  const OCCUPANCY = 0.65;
-  const COUNT_DELAY = 500;
+  const OCCUPANCY = 0.65;        // ~65% of cells contain a shape
+  const COUNT_DELAY = 500;       // ms between 3-2-1 ticks
 
-  // Modal elements
-const modal = document.getElementById('resultsModal');
-const mBest = document.getElementById('m-best');
-const mAvg = document.getElementById('m-avg');
-const mWorst = document.getElementById('m-worst');
-const mTotal = document.getElementById('m-total');
-const mSplits = document.getElementById('m-splits');
-const btnClose = document.getElementById('closeModal');
-const btnPlayAgain = document.getElementById('playAgain');
-
-// Split detail list (for the tracker)
-let splitDetails = []; // {idx,row,col,split,total}
-
-// Nice labels for lock moves
-const lockLabel = lk => lk ? (lk.type === 'row' ? `row ${lk.idx+1}` : `column ${lk.idx+1}`) : '';
-
-
-  // Elements
+  // --- Elements ---
   const board     = document.getElementById("game-board");
   const cdEl      = document.getElementById("countdown");
   const targetEl  = document.getElementById("target");
@@ -37,7 +21,17 @@ const lockLabel = lk => lk ? (lk.type === 'row' ? `row ${lk.idx+1}` : `column ${
   const btnReset  = document.getElementById("reset");
   const preview   = document.getElementById("targetPreview");
 
-  // Round state
+  // Modal elements
+  const modal      = document.getElementById("resultsModal");
+  const mBest      = document.getElementById("m-best");
+  const mAvg       = document.getElementById("m-avg");
+  const mWorst     = document.getElementById("m-worst");
+  const mTotal     = document.getElementById("m-total");
+  const mSplits    = document.getElementById("m-splits");
+  const btnClose   = document.getElementById("closeModal");
+  const btnAgain   = document.getElementById("playAgain");
+
+  // --- Round state ---
   let targetShape = null;
   let lives = 3;
   let playing = false;
@@ -46,11 +40,12 @@ const lockLabel = lk => lk ? (lk.type === 'row' ? `row ${lk.idx+1}` : `column ${
   let foundTargets = 0;
 
   // Timing (split stats)
-  let startedAt = 0;
-  let lastSplitAt = 0;
-  let clickSplits = [];
+  let startedAt = 0;       // reveal time
+  let lastSplitAt = 0;     // time of last correct (or reveal)
+  let clickSplits = [];    // durations between correct clicks
+  let splitDetails = [];   // { idx,row,col,split,total }
 
-  // Purple lock state
+  // Purple Lock
   // lock = { type: 'row'|'col', idx: number }
   let lock = null;
   let prevCoveredCorrectIndices = [];
@@ -59,14 +54,25 @@ const lockLabel = lk => lk ? (lk.type === 'row' ? `row ${lk.idx+1}` : `column ${
   let countdownTimer = null;
   let revealTimer = null;
 
-  // Utils
+  // --- Utils ---
   const ms = x => `${Math.round(x)} ms`;
-  const log = msg => { if (!logEl) return; const d=document.createElement("div"); d.textContent=msg; logEl.prepend(d); };
-  const clearTimers = () => { if (countdownTimer) { clearInterval(countdownTimer); countdownTimer=null; } if (revealTimer){ clearTimeout(revealTimer); revealTimer=null; } };
-  const resetStatsUI = () => { bestEl.textContent = avgEl.textContent = worstEl.textContent = totalEl.textContent = "—"; };
   const cellRow = i => Math.floor(i / GRID);
   const cellCol = i => i % GRID;
+  const lockLabel = lk => lk ? (lk.type === 'row' ? `row ${lk.idx+1}` : `column ${lk.idx+1}`) : '';
 
+  function log(msg){
+    if (!logEl) return;
+    const d = document.createElement("div");
+    d.textContent = msg;
+    logEl.prepend(d);
+  }
+  function clearTimers(){
+    if (countdownTimer) { clearInterval(countdownTimer); countdownTimer = null; }
+    if (revealTimer) { clearTimeout(revealTimer); revealTimer = null; }
+  }
+  function resetStatsUI(){
+    bestEl.textContent = avgEl.textContent = worstEl.textContent = totalEl.textContent = "—";
+  }
   function setPreview(shape){
     if (!preview) return;
     preview.innerHTML = "";
@@ -76,11 +82,11 @@ const lockLabel = lk => lk ? (lk.type === 'row' ? `row ${lk.idx+1}` : `column ${
     preview.appendChild(el);
   }
 
-  // Grid
+  // --- Grid ---
   function buildGrid(){
     board.innerHTML = "";
     cells = [];
-    for (let i=0;i<CELLS;i++){
+    for (let i = 0; i < CELLS; i++){
       const cell = document.createElement("div");
       cell.className = "cell";
       if (Math.random() < OCCUPANCY){
@@ -90,17 +96,17 @@ const lockLabel = lk => lk ? (lk.type === 'row' ? `row ${lk.idx+1}` : `column ${
       } else {
         cell.dataset.shape = "";
       }
-      cell.addEventListener("click", () => handleClick(cell));
+      cell.addEventListener("click", () => handleClick(cell, i));
       cells.push(cell);
       board.appendChild(cell);
     }
   }
   function makeShape(s){
-    if (s === "triangle"){ const tri=document.createElement("div"); tri.className="shape triangle"; return tri; }
-    const el=document.createElement("div"); el.className=`shape ${s}`; return el;
+    if (s === "triangle"){ const tri = document.createElement("div"); tri.className = "shape triangle"; return tri; }
+    const el = document.createElement("div"); el.className = `shape ${s}`; return el;
   }
 
-  // Purple Lock helpers
+  // --- Purple Lock ---
   function coverageIndicesFor(lk){
     const out = [];
     for (let i=0;i<CELLS;i++){
@@ -110,15 +116,14 @@ const lockLabel = lk => lk ? (lk.type === 'row' ? `row ${lk.idx+1}` : `column ${
     return out;
   }
   function applyLock(lk){
-    cells.forEach(c => c.classList.remove('locked'));   // clear old
+    cells.forEach(c => c.classList.remove('locked')); // clear old visuals
     lock = lk;
     coverageIndicesFor(lock).forEach(i => cells[i].classList.add('locked'));
   }
   function coveredCorrectIndices(lk){
     if (!lk) return [];
     return coverageIndicesFor(lk).filter(i =>
-      cells[i].dataset.shape === targetShape &&
-      !cells[i].classList.contains('correct')
+      cells[i].dataset.shape === targetShape && !cells[i].classList.contains('correct')
     );
   }
   function pickNewLock(avoidCorrectIdx = []){
@@ -131,17 +136,18 @@ const lockLabel = lk => lk ? (lk.type === 'row' ? `row ${lk.idx+1}` : `column ${
       tried.add(key);
       const candidate = { type, idx };
       const covers = coverageIndicesFor(candidate);
-      if (!avoidCorrectIdx.some(i => covers.includes(i))) return candidate;
+      const intersects = avoidCorrectIdx.some(i => covers.includes(i));
+      if (!intersects) return candidate;
     }
-    return { type: 'row', idx: 0 }; // fallback
+    return { type: 'row', idx: 0 }; // last resort
   }
   function moveLock(reason){
     prevCoveredCorrectIndices = coveredCorrectIndices(lock);
     applyLock(pickNewLock(prevCoveredCorrectIndices));
-    log(reason === 'correct' ? "Lock moved (correct)." : "Lock moved (penalty).");
+    log(`Lock moved (${reason}) → ${lockLabel(lock)}`);
   }
 
-  // Flow
+  // --- Flow ---
   function startRound(){
     clearTimers();
     playing = false;
@@ -149,6 +155,7 @@ const lockLabel = lk => lk ? (lk.type === 'row' ? `row ${lk.idx+1}` : `column ${
     foundTargets = 0;
     totalTargets = 0;
     clickSplits = [];
+    splitDetails = [];
     startedAt = 0;
     lastSplitAt = 0;
 
@@ -164,6 +171,7 @@ const lockLabel = lk => lk ? (lk.type === 'row' ? `row ${lk.idx+1}` : `column ${
     lock = null;
     prevCoveredCorrectIndices = [];
 
+    // 3-2-1
     let n = 3;
     countdownTimer = setInterval(() => {
       n--;
@@ -193,11 +201,15 @@ const lockLabel = lk => lk ? (lk.type === 'row' ? `row ${lk.idx+1}` : `column ${
 
     // place initial lock
     applyLock(pickNewLock([]));
-    log(`Target: ${targetShape} (${totalTargets} to find). Lock placed.`);
+    log(`Target: ${targetShape} (${totalTargets} to find). Lock placed → ${lockLabel(lock)}`);
   }
 
   function updateSplitStats(totalMsNow){
-    if (clickSplits.length === 0) { resetStatsUI(); totalEl.textContent = ms(totalMsNow); return; }
+    if (clickSplits.length === 0) {
+      resetStatsUI();
+      totalEl.textContent = ms(totalMsNow);
+      return;
+    }
     const best  = Math.min(...clickSplits);
     const worst = Math.max(...clickSplits);
     const avg   = clickSplits.reduce((a,b)=>a+b,0) / clickSplits.length;
@@ -208,45 +220,51 @@ const lockLabel = lk => lk ? (lk.type === 'row' ? `row ${lk.idx+1}` : `column ${
     totalEl.textContent = ms(totalMsNow);
   }
 
-  function handleClick(cell){
+  function handleClick(cell, idx){
     if (!playing) return;
 
     const clicked = cell.dataset.shape;
-    if (!clicked) return;
+    if (!clicked) return; // empty tile ignored
     if (cell.classList.contains("correct") || cell.classList.contains("wrong")) return;
 
-    // locked penalty
+    // Purple lock penalty
     if (cell.classList.contains('locked')){
       cell.classList.add("wrong");
       lives = Math.max(0, lives - 1);
       livesEl.textContent = lives;
-      log(`Penalty: clicked locked tile. Lives left: ${lives}`);
+      log(`✖ locked tile (in ${lockLabel(lock)}) • lives ${lives}`);
       if (lives === 0) return endRound(false, performance.now());
-      moveLock('miss');
+      moveLock('penalty');
       return;
     }
 
-    // wrong shape
+    // Wrong shape
     if (clicked !== targetShape){
       cell.classList.add("wrong");
       lives = Math.max(0, lives - 1);
       livesEl.textContent = lives;
-      log(`Miss (${clicked}). Lives left: ${lives}`);
+      log(`✖ ${clicked} • lives ${lives}`);
       if (lives === 0) return endRound(false, performance.now());
-      moveLock('miss');
+      moveLock('penalty');
       return;
     }
 
-    // correct shape
+    // Correct shape
     cell.classList.add("correct");
     foundTargets++;
 
     const now = performance.now();
-    const split = now - lastSplitAt;
+    const split = now - lastSplitAt;     // since reveal or previous correct
     clickSplits.push(split);
     lastSplitAt = now;
 
-    updateSplitStats(now - startedAt);
+    const row = cellRow(idx);
+    const col = cellCol(idx);
+    const totalSoFar = now - startedAt;
+    splitDetails.push({ idx, row, col, split, total: totalSoFar });
+    log(`✔ r${row+1} c${col+1} • split ${Math.round(split)} ms • total ${Math.round(totalSoFar)} ms`);
+
+    updateSplitStats(totalSoFar);
     moveLock('correct');
 
     if (foundTargets === totalTargets){
@@ -257,16 +275,42 @@ const lockLabel = lk => lk ? (lk.type === 'row' ? `row ${lk.idx+1}` : `column ${
   function endRound(success, nowTs){
     playing = false;
     const total = nowTs - startedAt;
-    updateSplitStats(total);
-    log(success ? `Completed in ${ms(total)}` : `Failed in ${ms(total)}`);
+
+    // Compute round stats from splits
+    const best  = clickSplits.length ? Math.min(...clickSplits) : 0;
+    const worst = clickSplits.length ? Math.max(...clickSplits) : 0;
+    const avg   = clickSplits.length ? (clickSplits.reduce((a,b)=>a+b,0) / clickSplits.length) : 0;
+
+    // Fill modal
+    mBest.textContent  = best  ? `${Math.round(best)} ms`  : '—';
+    mAvg.textContent   = avg   ? `${Math.round(avg)} ms`   : '—';
+    mWorst.textContent = worst ? `${Math.round(worst)} ms` : '—';
+    mTotal.textContent = `${Math.round(total)} ms`;
+    mSplits.innerHTML = splitDetails.map((s, i) => `
+      <tr>
+        <td>${i+1}</td>
+        <td>${Math.round(s.split)} ms</td>
+        <td>${Math.round(s.total)} ms</td>
+        <td>r${s.row+1}, c${s.col+1}</td>
+      </tr>
+    `).join('');
+
+    modal.hidden = false; // show results
+    log(success ? `Completed in ${Math.round(total)} ms` : `Failed in ${Math.round(total)} ms`);
   }
 
   function resetAll(){
     if (logEl) logEl.textContent = "";
+    modal.hidden = true;
     startRound();
   }
 
+  // --- Events ---
   btnStart.addEventListener("click", startRound);
   btnReset.addEventListener("click", resetAll);
+  btnClose.addEventListener("click", () => { modal.hidden = true; });
+  btnAgain.addEventListener("click", () => { modal.hidden = true; startRound(); });
+
+  // Initial layout
   buildGrid();
 });
