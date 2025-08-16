@@ -94,4 +94,44 @@ button{border:0;padding:10px 12px;border-radius:10px;font-weight:700;cursor:poin
 .cell.flash{outline:2px solid #a33;animation:flash .25s ease}
 @keyframes flash{from{background:rgba(255,0,0,.2)}to{background:rgba(255,255,255,.04)}}
 
+/* --- Modal --- */
+.modal[hidden] { display: none; }
+.modal {
+  position: fixed; inset: 0; z-index: 9999;
+  display: grid; place-items: center;
+  background: rgba(0,0,0,.5);
+}
+.modal-dialog {
+  width: min(720px, 92vw);
+  background: linear-gradient(180deg,#1a1f2e,var(--panel));
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 14px;
+  padding: 16px;
+}
+.modal h2 { margin: 0 0 12px; }
+
+.stat-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 10px;
+}
+.chip {
+  background: rgba(255,255,255,.05);
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 10px; padding: 10px;
+  display: grid; gap: 4px; text-align: center;
+}
+.chip span { font-size: 12px; color: var(--muted); }
+.chip strong { font-size: 18px; }
+
+.table-wrap { max-height: 300px; overflow: auto; border-radius: 10px; }
+.splits { width: 100%; border-collapse: collapse; font-size: 14px; }
+.splits th, .splits td { padding: 8px 10px; border-bottom: 1px solid rgba(255,255,255,.08); }
+.splits tbody tr:nth-child(even) { background: rgba(255,255,255,.03); }
+
+.modal-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 10px; }
+
+/* Optional: hide sidebar cards now that a modal shows final stats */
+.side .stats { display: none; }
+
+/* Keep sidebar log from making panel feel taller & taller */
+.log { max-height: 140px; }
 
