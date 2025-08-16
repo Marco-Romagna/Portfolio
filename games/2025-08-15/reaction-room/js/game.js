@@ -6,6 +6,23 @@ window.addEventListener('DOMContentLoaded', () => {
   const OCCUPANCY = 0.65;
   const COUNT_DELAY = 500;
 
+  // Modal elements
+const modal = document.getElementById('resultsModal');
+const mBest = document.getElementById('m-best');
+const mAvg = document.getElementById('m-avg');
+const mWorst = document.getElementById('m-worst');
+const mTotal = document.getElementById('m-total');
+const mSplits = document.getElementById('m-splits');
+const btnClose = document.getElementById('closeModal');
+const btnPlayAgain = document.getElementById('playAgain');
+
+// Split detail list (for the tracker)
+let splitDetails = []; // {idx,row,col,split,total}
+
+// Nice labels for lock moves
+const lockLabel = lk => lk ? (lk.type === 'row' ? `row ${lk.idx+1}` : `column ${lk.idx+1}`) : '';
+
+
   // Elements
   const board     = document.getElementById("game-board");
   const cdEl      = document.getElementById("countdown");
