@@ -22,37 +22,36 @@
   </header>
 
   <main class="container">
-    <section id="projects" class="panel">
-      <h2>Projects</h2>
-    </section>
-
-    <section id="games" class="panel">
-      <h2>Games</h2>
-      <ul id="games-list"></ul>
-    </section>
-
-
-    <script>
-      (async () => {
-        const ul = document.getElementById('games-list');
-        try {
-          const res = await fetch('data/games.json', {cache:'no-store'});
-          const items = await res.json();
-          items.sort((a,b) => b.date.localeCompare(a.date));
-          for (const g of items) {
-            const li = document.createElement('li');
-            const a = document.createElement('a');
-            a.href = g.path;
-            a.textContent = `${g.title} (${g.date})`;
-            li.appendChild(a);
-            ul.appendChild(li);
+      <section id="projects" class="panel">
+        <h2>Projects</h2>
+        <ul id="projects-list"></ul>
+      </section>
+    
+      <section id="games" class="panel">
+        <h2>Games</h2>
+        <ul id="games-list"></ul>
+      </section>
+    
+      <script>
+        async function loadList(jsonPath, ulId){
+          const ul = document.getElementById(ulId);
+          try {
+            const res = await fetch(jsonPath, { cache: 'no-store' });
+            const items = await res.json();
+            items.sort((a,b) => b.date.localeCompare(a.date));
+            ul.innerHTML = items.map(x =>
+              `<li><a href="${x.path}">${x.title} (${x.date})</a></li>`
+            ).join('') || '<li><em>No items yet.</em></li>';
+          } catch (e) {
+            ul.innerHTML = '<li><em>Could not load list.</em></li>';
           }
-          if (!items.length) ul.innerHTML = '<li><em>No games yet.</em></li>';
-        } catch (e) {
-          ul.innerHTML = '<li><em>Could not load games list.</em></li>';
         }
-      })();
-    </script>
-  </main>
+    
+        loadList('data/projects.json', 'projects-list');
+        loadList('data/games.json', 'games-list');
+      </script>
+    </main>
+
+  
 </body>
 </html>
