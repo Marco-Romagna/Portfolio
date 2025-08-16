@@ -50,14 +50,39 @@
       <h2>Projects</h2>
     </section>
 
-    <section id="games" class="panel">
+    <section id="games">
       <h2>Games</h2>
-      <ul>
-        <li>
-          <a href="games/2025-08-15/reaction-room/index.html">Reaction Room</a>
-        </li>
-      </ul>
+      <ul id="games-list"></ul>
     </section>
+
+    <script>
+      (async () => {
+        const ul = document.getElementById('games-list');
+        try {
+          const res = await fetch('data/games.json', {cache:'no-store'});
+          const items = await res.json();
+      
+          // Sort newest first
+          items.sort((a,b) => b.date.localeCompare(a.date));
+      
+          // Render
+          for (const g of items) {
+            const li = document.createElement('li');
+            const a = document.createElement('a');
+            a.href = g.path;
+            a.textContent = `${g.title} (${g.date})`;
+            li.appendChild(a);
+            ul.appendChild(li);
+          }
+      
+          if (!items.length) ul.innerHTML = '<li><em>No games yet.</em></li>';
+        } catch (e) {
+          ul.innerHTML = '<li><em>Could not load games list.</em></li>';
+        }
+      })();
+    </script>
+    
   </main>
+</body>
 </html>
 
