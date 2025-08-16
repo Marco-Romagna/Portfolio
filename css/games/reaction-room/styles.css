@@ -12,8 +12,8 @@
 }
 .room-inner{
   display:grid;
-  grid-template-columns:repeat(5,1fr); /* JS also sets columns */
-  grid-auto-rows:minmax(72px,1fr);
+  grid-template-columns:repeat(5,1fr); /* 5 columns */
+  grid-auto-rows:minmax(72px,1fr);     /* supports 6 rows */
   gap:10px;
 }
 .cell{
@@ -32,33 +32,27 @@
   width:0;height:0;border-left:20px solid transparent;border-right:20px solid transparent;border-bottom:40px solid rgba(255,255,255,.12)
 }
 
-/* Specials as glyphs (text icons) — super reliable across browsers */
+/* Specials as glyphs (reliable cross-browser) */
 .glyph {
   font-size: 28px;
   line-height: 1;
   font-weight: 700;
   filter: drop-shadow(0 1px 0 rgba(0,0,0,.25));
 }
-.glyph.club    { color:#8bd17c }
-.glyph.heart   { color:#f47174 }
-.glyph.diamond { color:#e06c75 }
-.glyph.spade   { color:#7aa2f7 }
+.glyph.club    { color: #8bd17c; }
+.glyph.heart   { color: #f47174; }
+.glyph.diamond { color: #e06c75; }
+.glyph.spade   { color: #6aa2f7; }
+.glyph.star    { color: #f5d142; }
+.glyph.moon    { color: #cfd6e4; }
+.glyph.bolt    { color: #ffd24a; }
+.glyph.shield  { color: #9aa4b2; }
 
-.glyph.star    { color:#f5d142 }
-.glyph.moon    { color:#cfd6e4 }
-.glyph.bolt    { color:#ffd24a }
-.glyph.shield  { color:#9aa4b2 }
-
-/* Big preview */
-.preview{
-  margin:6px 0 14px;display:grid;place-items:center;height:160px;
-  background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:12px
-}
-.preview .glyph{font-size:64px}
+.preview{margin:6px 0 14px;display:grid;place-items:center;height:160px;background:rgba(255,255,255,.04);
+         border:1px solid rgba(255,255,255,.08);border-radius:12px}
 .preview .shape.big{width:100px;height:100px}
-.preview .triangle.big{
-  width:0;height:0;border-left:50px solid transparent;border-right:50px solid transparent;border-bottom:100px solid rgba(255,255,255,.12)
-}
+.preview .triangle.big{width:0;height:0;border-left:50px solid transparent;border-right:50px solid transparent;border-bottom:100px solid rgba(255,255,255,.12)}
+.preview .glyph{font-size:64px}
 
 /* Side panel */
 .side{
@@ -75,19 +69,23 @@ button{border:0;padding:10px 12px;border-radius:10px;font-weight:700;cursor:poin
 .card{background:rgba(255,255,255,.05);border-radius:10px;padding:10px;text-align:center}
 .card h3{margin:0;font-size:12px;color:var(--muted)}
 .card p{margin:6px 0 0;font-size:18px}
-.log{
-  margin-top:10px;max-height:140px;overflow:auto;border:1px solid rgba(255,255,255,.08);
-  border-radius:10px;padding:8px;font-size:13px;color:#cfd6e4;background:rgba(255,255,255,.04)
-}
+.log{margin-top:10px;max-height:140px;overflow:auto;border:1px solid rgba(255,255,255,.08);
+     border-radius:10px;padding:8px;font-size:13px;color:#cfd6e4;background:rgba(255,255,255,.04)}
 .countbox{display:flex;align-items:center;gap:10px;margin:8px 0 12px}
-.badge{
-  display:inline-flex;align-items:center;gap:8px;padding:6px 10px;border-radius:999px;
-  background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);font-size:13px
-}
+.badge{display:inline-flex;align-items:center;gap:8px;padding:6px 10px;border-radius:999px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);font-size:13px}
 
 /* ===== States ===== */
 .cell.correct{outline:2px solid var(--accent);background:rgba(122,162,247,.15)}
-.cell.wrong{outline:2px solid #c04949;background:rgba(192,73,73,.18)}
+
+/* New: quick red pulse for wrong clicks (no sticky red) */
+.cell.pulse-wrong{
+  animation: wrongPulse .45s ease;
+}
+@keyframes wrongPulse{
+  0%   { box-shadow:0 0 0 0 rgba(192,73,73,.6); outline:2px solid #c04949; background:rgba(192,73,73,.18); }
+  90%  { box-shadow:0 0 0 12px rgba(192,73,73,0); }
+  100% { outline:none; background:rgba(255,255,255,.04); }
+}
 
 /* Purple Lock visuals */
 .cell.locked{outline: 2px dashed #a78bfa;background: rgba(167,139,250,.10) !important}
