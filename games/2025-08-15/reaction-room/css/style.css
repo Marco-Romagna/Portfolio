@@ -1,0 +1,53 @@
+body {
+  font-family: Arial, sans-serif;
+  text-align: center;
+  margin: 20px;
+}
+
+#game-board {
+  display: grid;
+  grid-template-columns: repeat(5, 80px);
+  grid-template-rows: repeat(5, 80px);
+  gap: 10px;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.cell {
+  width: 80px;
+  height: 80px;
+  background-color: #f0f0f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border: 1px solid #ccc;
+}
+
+.shape {
+  width: 40px;
+  height: 40px;
+}
+
+.circle {
+  border-radius: 50%;
+  background-color: red;
+}
+
+.square {
+  background-color: blue;
+}
+
+.triangle {
+  width: 0;
+  height: 0;
+  border-left: 20px solid transparent;
+  border-right: 20px solid transparent;
+  border-bottom: 40px solid green;
+}
+
+#target {
+  margin-top: 20px;
+  font-size: 24px;
+  font-weight: bold;
+}
