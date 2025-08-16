@@ -1,22 +1,84 @@
-/* Big target preview (≈ 2x2 tiles) */
-.preview{
-  margin:6px 0 14px;
+/* ===== Layout & theme (reuses main.css variables) ===== */
+.wrap{padding:16px 0}
+.grid{display:grid;grid-template-columns:1fr 320px;gap:16px}
+@media (max-width:920px){.grid{grid-template-columns:1fr}}
+
+.room{
+  background:linear-gradient(180deg,#1a1f2e,var(--panel));
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:14px;
+  padding:12px;
+  min-height:420px;
+}
+.room-inner{
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  grid-auto-rows:minmax(72px,1fr);
+  gap:10px;
+}
+.cell{
   display:grid;
   place-items:center;
-  height:160px; /* ~ 2 tiles tall */
+  border-radius:10px;
   background:rgba(255,255,255,.04);
-  border:1px solid rgba(255,255,255,.08);
-  border-radius:12px;
-}
-.preview .shape.big{ width:100px; height:100px; }
-.preview .triangle.big{
-  width:0;height:0;
-  border-left:50px solid transparent;
-  border-right:50px solid transparent;
-  border-bottom:100px solid rgba(255,255,255,.12);
+  border:1px solid rgba(255,255,255,.06);
+  cursor:pointer;
+  user-select:none;
+  position:relative;
 }
 
-/* click states */
+.shape{width:40px;height:40px;display:block}
+.circle{border-radius:50%;background:rgba(255,255,255,.12)}
+.square{background:rgba(255,255,255,.12)}
+.triangle{
+  width:0;height:0;
+  border-left:20px solid transparent;
+  border-right:20px solid transparent;
+  border-bottom:40px solid rgba(255,255,255,.12);
+}
+
+.side{
+  background:linear-gradient(180deg,#1a1f2e,var(--panel));
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:14px;
+  padding:14px;
+}
+h2{margin:0 0 8px;font-size:18px}
+.row{display:flex;gap:10px;flex-wrap:wrap;margin:8px 0 12px}
+button{border:0;padding:10px 12px;border-radius:10px;font-weight:700;cursor:pointer}
+.btn{background:var(--accent);color:#0b1020}
+.btn-ghost{background:rgba(255,255,255,.06);color:var(--text)}
+.stats{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:8px;
+  margin-bottom:10px;
+}
+.card{background:rgba(255,255,255,.05);border-radius:10px;padding:10px;text-align:center}
+.card h3{margin:0;font-size:12px;color:var(--muted)}
+.card p{margin:6px 0 0;font-size:18px}
+.log{
+  margin-top:10px;
+  max-height:140px;           /* keep panel from growing forever */
+  overflow:auto;
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:10px;
+  padding:8px;
+  font-size:13px;
+  color:#cfd6e4;
+  background:rgba(255,255,255,.04)
+}
+
+.countbox{display:flex;align-items:center;gap:10px;margin:8px 0 12px}
+.badge{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:6px 10px;border-radius:999px;
+  background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.08);
+  font-size:13px
+}
+
+/* ===== States ===== */
 .cell.correct{
   outline:2px solid var(--accent);
   background:rgba(122,162,247,.15);
@@ -26,112 +88,71 @@
   background:rgba(192,73,73,.18);
 }
 
-/* --- Purple Lock visuals --- */
+/* Purple Lock: tint + dashed ring; shapes turn purple while locked */
 .cell.locked{
-  outline: 2px dashed #a78bfa;                    /* purple dashed ring */
-  background: rgba(167,139,250,.10) !important;   /* light purple tint */
-  position: relative;
+  outline: 2px dashed #a78bfa;
+  background: rgba(167,139,250,.10) !important;
 }
-
-/* purple-fill shapes while locked */
 .cell.locked .shape.circle,
 .cell.locked .shape.square{
-  background: #a78bfa !important;
+  background:#a78bfa !important;
 }
 .cell.locked .shape.triangle{
-  border-left-color: transparent !important;
-  border-right-color: transparent !important;
-  border-bottom-color: #a78bfa !important;
+  border-left-color:transparent !important;
+  border-right-color:transparent !important;
+  border-bottom-color:#a78bfa !important;
 }
-
-/* make the whole line feel outlined by adding a faint glow on each cell */
 .cell.locked::after{
-  content:"";
-  position:absolute; inset:0;
+  content:"";position:absolute;inset:0;border-radius:10px;
   box-shadow: inset 0 0 0 2px rgba(167,139,250,.25);
-  border-radius: 10px;
-  pointer-events: none;
+  pointer-events:none;
 }
 
-
-
-
-/* reuse colors from main.css */
-.wrap{padding:16px 0}
-.grid{display:grid;grid-template-columns:1fr 320px;gap:16px}
-@media (max-width:920px){.grid{grid-template-columns:1fr}}
-
-.room{background:linear-gradient(180deg,#1a1f2e,var(--panel));border:1px solid rgba(255,255,255,.08);
-      border-radius:14px;padding:12px;min-height:420px}
-.room-inner{display:grid;grid-template-columns:repeat(5,1fr);grid-auto-rows:minmax(72px,1fr);gap:10px}
-.cell{display:grid;place-items:center;border-radius:10px;background:rgba(255,255,255,.04);
-      border:1px solid rgba(255,255,255,.06);cursor:pointer;user-select:none}
-
-.shape{width:40px;height:40px;display:block}
-.circle{border-radius:50%;background:rgba(255,255,255,.12)}
-.square{background:rgba(255,255,255,.12)}
-.triangle{width:0;height:0;border-left:20px solid transparent;border-right:20px solid transparent;border-bottom:40px solid rgba(255,255,255,.12)}
-
-.side{background:linear-gradient(180deg,#1a1f2e,var(--panel));border:1px solid rgba(255,255,255,.08);
-      border-radius:14px;padding:14px}
-h2{margin:0 0 8px;font-size:18px}
-.row{display:flex;gap:10px;flex-wrap:wrap;margin:8px 0 12px}
-button{border:0;padding:10px 12px;border-radius:10px;font-weight:700;cursor:pointer}
-.btn{background:var(--accent);color:#0b1020}
-.btn-ghost{background:rgba(255,255,255,.06);color:var(--text)}
-.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:10px}
-.card{background:rgba(255,255,255,.05);border-radius:10px;padding:10px;text-align:center}
-.card h3{margin:0;font-size:12px;color:var(--muted)}
-.card p{margin:6px 0 0;font-size:18px}
-.log{margin-top:10px;max-height:220px;overflow:auto;border:1px solid rgba(255,255,255,.08);
-     border-radius:10px;padding:8px;font-size:13px;color:#cfd6e4;background:rgba(255,255,255,.04)}
-
-.countbox{display:flex;align-items:center;gap:10px;margin:8px 0 12px}
-.badge{display:inline-flex;align-items:center;gap:8px;padding:6px 10px;border-radius:999px;
-       background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);font-size:13px}
-
-/* misclick feedback */
+/* Misclick feedback (kept for legacy flashes) */
 .cell.flash{outline:2px solid #a33;animation:flash .25s ease}
 @keyframes flash{from{background:rgba(255,0,0,.2)}to{background:rgba(255,255,255,.04)}}
 
-/* --- Modal --- */
-.modal[hidden] { display: none; }
-.modal {
-  position: fixed; inset: 0; z-index: 9999;
-  display: grid; place-items: center;
-  background: rgba(0,0,0,.5);
+/* Big target preview (~2x2 tiles) */
+.preview{
+  margin:6px 0 14px;display:grid;place-items:center;
+  height:160px;background:rgba(255,255,255,.04);
+  border:1px solid rgba(255,255,255,.08);border-radius:12px;
 }
-.modal-dialog {
-  width: min(720px, 92vw);
-  background: linear-gradient(180deg,#1a1f2e,var(--panel));
-  border: 1px solid rgba(255,255,255,.12);
-  border-radius: 14px;
-  padding: 16px;
+.preview .shape.big{width:100px;height:100px}
+.preview .triangle.big{
+  width:0;height:0;border-left:50px solid transparent;border-right:50px solid transparent;border-bottom:100px solid rgba(255,255,255,.12)
 }
-.modal h2 { margin: 0 0 12px; }
 
-.stat-grid {
-  display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 10px;
+/* Hide sidebar stats during play – JS sets it back to grid at end */
+.side .stats{display:none}
+
+/* ===== Results Modal ===== */
+.modal[hidden]{display:none}
+.modal{
+  position:fixed;inset:0;z-index:9999;
+  display:grid;place-items:center;
+  background:rgba(0,0,0,.5);
 }
-.chip {
-  background: rgba(255,255,255,.05);
-  border: 1px solid rgba(255,255,255,.08);
-  border-radius: 10px; padding: 10px;
-  display: grid; gap: 4px; text-align: center;
+.modal-dialog{
+  width:min(720px,92vw);
+  background:linear-gradient(180deg,#1a1f2e,var(--panel));
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:14px;padding:16px;
 }
-.chip span { font-size: 12px; color: var(--muted); }
-.chip strong { font-size: 18px; }
-
-.table-wrap { max-height: 300px; overflow: auto; border-radius: 10px; }
-.splits { width: 100%; border-collapse: collapse; font-size: 14px; }
-.splits th, .splits td { padding: 8px 10px; border-bottom: 1px solid rgba(255,255,255,.08); }
-.splits tbody tr:nth-child(even) { background: rgba(255,255,255,.03); }
-
-.modal-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 10px; }
-
-/* Optional: hide sidebar cards now that a modal shows final stats */
-.side .stats { display: none; }
-
-/* Keep sidebar log from making panel feel taller & taller */
-.log { max-height: 140px; }
-
+.modal h2{margin:0 0 12px}
+.stat-grid{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:10px
+}
+.chip{
+  background:rgba(255,255,255,.05);
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:10px;padding:10px;
+  display:grid;gap:4px;text-align:center
+}
+.chip span{font-size:12px;color:var(--muted)}
+.chip strong{font-size:18px}
+.table-wrap{max-height:300px;overflow:auto;border-radius:10px}
+.splits{width:100%;border-collapse:collapse;font-size:14px}
+.splits th,.splits td{padding:8px 10px;border-bottom:1px solid rgba(255,255,255,.08)}
+.splits tbody tr:nth-child(even){background:rgba(255,255,255,.03)}
+.modal-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:10px}
