@@ -30,10 +30,13 @@
         border-radius:14px;padding:12px;min-height:420px}
   .room-inner{display:grid;grid-template-columns:repeat(5,1fr);grid-auto-rows:minmax(72px,1fr);gap:10px}
   .cell{display:grid;place-items:center;border-radius:10px;background:rgba(255,255,255,.04);
-        border:1px solid rgba(255,255,255,.06);cursor:default;user-select:none}
-  .obj{width:36px;height:36px;border-radius:999px;background:rgba(255,255,255,.12)}
-  .target .obj{background:var(--accent);box-shadow:0 0 0 6px rgba(122,162,247,.25)}
-  .countdown{display:grid;place-items:center;height:100%;font-size:28px;color:var(--muted)}
+        border:1px solid rgba(255,255,255,.06);cursor:pointer;user-select:none}
+
+  /* Shapes */
+  .shape{width:40px;height:40px;display:block}
+  .circle{border-radius:50%; background:rgba(255,255,255,.12)}
+  .square{background:rgba(255,255,255,.12)}
+  .triangle{width:0;height:0;border-left:20px solid transparent;border-right:20px solid transparent;border-bottom:40px solid rgba(255,255,255,.12)}
 
   /* Sidebar */
   .side{background:linear-gradient(180deg,#1a1f2e,var(--panel));border:1px solid rgba(255,255,255,.08);
@@ -50,6 +53,20 @@
   .log{margin-top:10px;max-height:220px;overflow:auto;border:1px solid rgba(255,255,255,.08);
        border-radius:10px;padding:8px;font-size:13px;color:#cfd6e4;background:rgba(255,255,255,.04)}
   .muted{color:var(--muted);font-size:12px}
+
+  /* Countdown + target + lives */
+  .countbox{display:flex; align-items:center; gap:10px; margin:8px 0 12px}
+  .badge{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:6px 10px;border-radius:999px;
+         background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);font-size:13px}
+  .target-chip{background:var(--accent); color:#0b1020; border-color:transparent; font-weight:700}
+  .chip-shape{display:inline-block; width:16px; height:16px}
+  .chip-shape.circle{border-radius:50%; background:#0b1020}
+  .chip-shape.square{background:#0b1020}
+  .chip-shape.triangle{width:0;height:0;border-left:8px solid transparent;border-right:8px solid transparent;border-bottom:16px solid #0b1020}
+
+  /* Misclick flash */
+  .cell.flash { outline: 2px solid #a33; animation: flash .25s ease; }
+  @keyframes flash { from { background: rgba(255,0,0,.2); } to { background: rgba(255,255,255,.04); } }
 </style>
 </head>
 <body>
@@ -74,18 +91,30 @@
 
       <!-- Sidebar -->
       <aside class="side">
+        <h2>Round</h2>
+
+        <!-- Countdown + target (side only) -->
+        <div class="countbox">
+          <span class="badge">Countdown: <strong id="cd">—</strong></span>
+          <span id="targetBadge" class="badge">Target: <span id="targetName" style="margin-left:6px;color:#cfd6e4">—</span></span>
+        </div>
+
+        <!-- Lives -->
+        <div class="countbox">
+          <span class="badge">Lives: <strong id="lives">3</strong></span>
+        </div>
+
+        <div class="row">
+          <button id="start" class="btn">Start</button>
+          <button id="reset" class="btn-ghost">Reset</button>
+        </div>
+
         <h2>Stats</h2>
         <div class="stats">
           <div class="card"><h3>Last</h3><p id="last">—</p></div>
           <div class="card"><h3>Best</h3><p id="best">—</p></div>
           <div class="card"><h3>Average</h3><p id="avg">—</p></div>
         </div>
-
-        <div class="row">
-          <button id="start" class="btn">Start Round</button>
-          <button id="reset" class="btn-ghost">Reset</button>
-        </div>
-        <div class="muted">Wait for the target to appear, then click it as fast as you can.</div>
 
         <div class="log" id="log"></div>
       </aside>
@@ -101,44 +130,29 @@
   const bestEl = document.getElementById('best');
   const avgEl = document.getElementById('avg');
   const logEl = document.getElementById('log');
+  const cdEl = document.getElementById('cd');
+  const targetBadge = document.getElementById('targetBadge');
+  const targetNameEl = document.getElementById('targetName');
+  const livesEl = document.getElementById('lives');
 
-  const CELLS = 25;        // 5x5 room
-  const COUNTDOWN_MS = 1500; // total countdown duration
-  const REVEAL_DELAY_MIN = 600;  // after countdown, random jitter
-  const REVEAL_DELAY_MAX = 1600;
+  const SHAPES = ['circle','square','triangle'];
+  const CELLS = 25;                 // 5x5 grid
+  const COUNT_STEPS = [3,2,1];      // side countdown only
+  const JITTER_MIN = 400;           // small random delay before reveal
+  const JITTER_MAX = 1200;
 
-  let targetIndex = -1;
   let startedAt = 0;
+  let playing = false;
+  let targetShape = null;
   let results = [];
   let countdownTimer = null;
   let revealTimer = null;
-  let playing = false;
-
-  // build grid
-  const cells = [];
-  for (let i = 0; i < CELLS; i++) {
-    const cell = document.createElement('div');
-    cell.className = 'cell';
-    const dot = document.createElement('div');
-    dot.className = 'obj';
-    cell.appendChild(dot);
-    cell.addEventListener('click', () => handleClick(i));
-    cells.push(cell);
-    roomEl.appendChild(cell);
-  }
+  let cells = [];
+  let lives = 3;
 
   function ms(x){ return `${Math.round(x)} ms`; }
 
-  function clearTimers(){
-    if (countdownTimer) { clearInterval(countdownTimer); countdownTimer = null; }
-    if (revealTimer) { clearTimeout(revealTimer); revealTimer = null; }
-  }
-
-  function resetUI() {
-    clearTimers();
-    cells.forEach(c => { c.classList.remove('target'); c.innerHTML = '<div class="obj"></div>'; });
-    targetIndex = -1; startedAt = 0; playing = false;
-  }
+  function setLives(v){ lives = v; livesEl.textContent = String(lives); }
 
   function log(msg){
     const line = document.createElement('div');
@@ -156,46 +170,115 @@
     avgEl.textContent = ms(avg);
   }
 
-  function countdown() {
-    // simple 3..2..1 overlay across all cells
-    let remain = COUNTDOWN_MS;
-    cells.forEach(c => c.innerHTML = '<div class="countdown">3</div>');
+  function clearTimers(){
+    if (countdownTimer) { clearInterval(countdownTimer); countdownTimer = null; }
+    if (revealTimer) { clearTimeout(revealTimer); revealTimer = null; }
+  }
+
+  function resetUI(){
+    clearTimers();
+    cdEl.textContent = '—';
+    targetNameEl.textContent = '—';
+    targetBadge.classList.remove('target-chip');
+    startedAt = 0;
+    playing = false;
+  }
+
+  function buildGrid(){
+    roomEl.innerHTML = '';
+    cells = [];
+    for (let i = 0; i < CELLS; i++) {
+      const cell = document.createElement('div');
+      cell.className = 'cell';
+      // random shape on the board already
+      const shape = SHAPES[Math.floor(Math.random()*SHAPES.length)];
+      cell.dataset.shape = shape;
+      cell.appendChild(makeShapeEl(shape));
+      cell.addEventListener('click', () => handleClick(shape, cell));
+      cells.push(cell);
+      roomEl.appendChild(cell);
+    }
+  }
+
+  function makeShapeEl(shape){
+    if (shape === 'triangle') {
+      const tri = document.createElement('div');
+      tri.className = 'shape triangle';
+      return tri;
+    } else {
+      const el = document.createElement('div');
+      el.className = `shape ${shape}`;
+      return el;
+    }
+  }
+
+  function sideCountdownThenReveal(){
+    let idx = 0;
+    cdEl.textContent = COUNT_STEPS[idx];
     countdownTimer = setInterval(() => {
-      remain -= 500;
-      const t = remain / 500; // 3 steps: 3,2,1,0
-      const label = t >= 3 ? '3' : t >= 2 ? '2' : t >= 1 ? '1' : '';
-      cells.forEach(c => c.querySelector('.countdown')?.replaceWith(Object.assign(document.createElement('div'),{className:'countdown',textContent:label})));
-      if (remain <= 0) {
+      idx++;
+      if (idx >= COUNT_STEPS.length) {
         clearInterval(countdownTimer); countdownTimer = null;
-        // after a small random delay, reveal target
-        const jitter = REVEAL_DELAY_MIN + Math.random()*(REVEAL_DELAY_MAX-REVEAL_DELAY_MIN);
+        const jitter = JITTER_MIN + Math.random()*(JITTER_MAX - JITTER_MIN);
         revealTimer = setTimeout(revealTarget, jitter);
+      } else {
+        cdEl.textContent = COUNT_STEPS[idx];
       }
     }, 500);
   }
 
   function revealTarget(){
-    // clear overlays
-    cells.forEach(c => c.innerHTML = '<div class="obj"></div>');
-    targetIndex = Math.floor(Math.random()*CELLS);
-    cells[targetIndex].classList.add('target');
+    // pick a target shape (from the 3)
+    targetShape = SHAPES[Math.floor(Math.random()*SHAPES.length)];
+    // show it in the badge
+    targetNameEl.innerHTML = '';
+    const icon = document.createElement('span');
+    icon.className = `chip-shape ${targetShape}`;
+    targetNameEl.appendChild(icon);
+    const label = document.createElement('span');
+    label.textContent = ` ${targetShape}`;
+    targetNameEl.appendChild(label);
+    targetBadge.classList.add('target-chip');
+
     startedAt = performance.now();
     playing = true;
+    log(`Target: ${targetShape}`);
   }
 
-  function handleClick(i){
-    // ignore clicks if not playing or clicking non-target
-    if (!playing || i !== targetIndex) return;
+  function handleClick(clickedShape, cellEl){
+    if (!playing) return;
+
+    const hit = (clickedShape === targetShape);
+    if (!hit) {
+      // wrong tile → lose a life
+      setLives(Math.max(0, lives - 1));
+      log(`Miss (clicked ${clickedShape}). Lives left: ${lives}`);
+      // quick visual feedback on all cells of that wrong shape
+      cells.forEach(c => {
+        if (c.dataset.shape === clickedShape) {
+          c.classList.add('flash');
+          setTimeout(() => c.classList.remove('flash'), 200);
+        }
+      });
+      if (lives === 0) {
+        playing = false;
+        log(`Out of lives. Round over.`);
+      }
+      return;
+    }
+
+    // correct hit → measure & record
     const rt = performance.now() - startedAt;
     playing = false;
-    cells[i].classList.remove('target');
     updateStats(rt);
-    log(`Hit in ${ms(rt)}`);
+    log(`Hit ${targetShape} in ${ms(rt)}`);
   }
 
   startBtn.addEventListener('click', () => {
     resetUI();
-    countdown();
+    setLives(3);
+    buildGrid();
+    sideCountdownThenReveal();
   });
 
   resetBtn.addEventListener('click', () => {
@@ -203,16 +286,19 @@
     lastEl.textContent = bestEl.textContent = avgEl.textContent = '—';
     logEl.textContent = '';
     resetUI();
+    setLives(3);
+    buildGrid();
   });
 
-  // keyboard: Space to start
+  // Space to start
   window.addEventListener('keydown', (e) => {
-    if (e.code === 'Space') {
-      e.preventDefault();
-      startBtn.click();
-    }
+    if (e.code === 'Space') { e.preventDefault(); startBtn.click(); }
   });
+
+  // initial render
+  buildGrid();
 })();
 </script>
 </body>
 </html>
+
