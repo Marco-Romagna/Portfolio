@@ -69,7 +69,7 @@ window.addEventListener('DOMContentLoaded', () => {
   let nextLock = null;
 
   // Exclusivity limiter (applies to NEXT target only)
-  let forbidNext = new Set(); // e.g., when click star => forbid 'moon' once
+  let forbidNext = new Set(); // e.g., star forbids moon for next target
 
   // Timers
   let countdownTimer = null;
@@ -80,7 +80,6 @@ window.addEventListener('DOMContentLoaded', () => {
   const idxOf = (r,c) => r*COLS + c;
   const rowOf = i => Math.floor(i / COLS);
   const colOf = i => i % COLS;
-  const inBounds = (r,c) => r>=0 && r<ROWS && c>=0 && c<COLS;
   const lockLabel = lk => lk ? (lk.type === 'row' ? `row ${lk.idx+1}` : `column ${lk.idx+1}`) : '';
 
   function log(msg){
@@ -96,16 +95,40 @@ window.addEventListener('DOMContentLoaded', () => {
   function resetStatsUI(){
     bestEl.textContent = avgEl.textContent = worstEl.textContent = totalEl.textContent = "—";
   }
+
+  // specials as glyphs for reliability
+  function glyphFor(shape) {
+    switch (shape) {
+      case "club":    return "♣";
+      case "heart":   return "♥";
+      case "diamond": return "♦";
+      case "spade":   return "♠";
+      case "star":    return "★";
+      case "moon":    return "☾";
+      case "bolt":    return "⚡";
+      case "shield":  return "🛡";
+      default:        return null;
+    }
+  }
+
   function setPreview(shape){
     if (!preview) return;
     preview.innerHTML = "";
     if (!shape) return;
-    const el = document.createElement("div");
-    if (shape === "triangle"){
-      el.className = "shape triangle big";
-    } else {
-      el.className = `shape ${shape} big`;
+
+    const ch = glyphFor(shape);
+    if (ch) {
+      const span = document.createElement("span");
+      span.className = `glyph ${shape}`;
+      span.textContent = ch;
+      preview.appendChild(span);
+      return;
     }
+
+    // basics use big CSS shapes
+    const el = document.createElement("div");
+    if (shape === "triangle") el.className = "shape triangle big";
+    else el.className = `shape ${shape} big`;
     preview.appendChild(el);
   }
 
@@ -114,7 +137,7 @@ window.addEventListener('DOMContentLoaded', () => {
     return OCC_MIN + Math.random()*(OCC_MAX - OCC_MIN);
   }
   function weightedPick(){
-    const entries = Object.entries(WEIGHTS).filter(([k,w]) => w > 0);
+    const entries = Object.entries(WEIGHTS).filter(([,w]) => w > 0);
     const total = entries.reduce((s,[,w])=>s+w,0);
     let r = Math.random()*total;
     for (const [k,w] of entries){
@@ -142,7 +165,7 @@ window.addEventListener('DOMContentLoaded', () => {
     coverageIndicesFor(lock).forEach(i => cells[i].classList.add('locked'));
   }
   function planNextLock(){
-    // Avoid covering unfound target tiles if possible
+    // avoid covering unfound targets if possible
     const avoid = [];
     for (let i=0;i<CELLS;i++){
       if (shapes[i] === targetShape && !cells[i].classList.contains('correct')) avoid.push(i);
@@ -150,8 +173,10 @@ window.addEventListener('DOMContentLoaded', () => {
     const tried = new Set();
     for (let attempts=0; attempts<100; attempts++){
       const type = Math.random() < 0.5 ? 'row' : 'col';
-      const idx  = type==='row' ? Math.floor(Math.random()*ROWS) : Math.floor(Math.random()*COLS);
-      const key  = `${type}:${idx}`; if (tried.has(key)) continue; tried.add(key);
+      const idx  = (type === 'row') ? Math.floor(Math.random()*ROWS) : Math.floor(Math.random()*COLS);
+      const key  = `${type}:${idx}`;
+      if (tried.has(key)) continue; tried.add(key);
+
       const covers = coverageIndicesFor({type,idx});
       const bad = avoid.some(i => covers.includes(i));
       if (!bad){ nextLock = {type,idx}; return; }
@@ -167,7 +192,6 @@ window.addEventListener('DOMContentLoaded', () => {
   }
 
   function buildGrid(){
-    // DOM cells
     board.innerHTML = "";
     board.style.gridTemplateColumns = `repeat(${COLS},1fr)`;
     cells = [];
@@ -184,17 +208,39 @@ window.addEventListener('DOMContentLoaded', () => {
     const cell = cells[i];
     cell.innerHTML = "";
     const s = shapes[i];
-    if (!s) return; // empty
-    if (s === "triangle"){
-      const el = document.createElement("div"); el.className = "shape triangle"; cell.appendChild(el); return;
+    if (!s) return; // empty (neutral)
+
+    // basics via CSS shapes
+    if (s === "circle" || s === "square" || s === "triangle") {
+      if (s === "triangle") {
+        const el = document.createElement("div");
+        el.className = "shape triangle";
+        cell.appendChild(el);
+      } else {
+        const el = document.createElement("div");
+        el.className = `shape ${s}`;
+        cell.appendChild(el);
+      }
+      return;
     }
+
+    // specials as glyphs
+    const ch = glyphFor(s);
+    if (ch) {
+      const span = document.createElement("span");
+      span.className = `glyph ${s}`;
+      span.textContent = ch;
+      cell.appendChild(span);
+      return;
+    }
+
+    // fallback
     const el = document.createElement("div");
-    el.className = `shape ${s}`;
+    el.className = "shape square";
     cell.appendChild(el);
   }
 
   function populateBoard(){
-    // choose occupancy for this round
     occupancy = randomOccupancy();
     const fillCount = Math.round(CELLS * occupancy);
 
@@ -209,23 +255,23 @@ window.addEventListener('DOMContentLoaded', () => {
     for (const [key,count] of Object.entries(GUARANTEED)){
       for (let k=0;k<count;k++) needed.push(key);
     }
-    const filledIndices = [];
+    const filled = [];
 
     for (let g=0; g<needed.length && idxs.length; g++){
       const i = idxs.pop();
       shapes[i] = needed[g];
-      filledIndices.push(i);
+      filled.push(i);
     }
 
-    // fill remaining up to fillCount with weighted pool (mostly basics)
-    while (filledIndices.length < fillCount && idxs.length){
+    // fill remaining up to fillCount with weighted pool
+    while (filled.length < fillCount && idxs.length){
       const i = idxs.pop();
       const pick = weightedPick();
       shapes[i] = pick;
-      filledIndices.push(i);
+      filled.push(i);
     }
 
-    // render all cells
+    // render
     for (let i=0;i<CELLS;i++) renderCell(i);
   }
 
@@ -237,7 +283,6 @@ window.addEventListener('DOMContentLoaded', () => {
   }
 
   function chooseTargetFrom(candidates, banSet){
-    // remove banned
     const pool = candidates.filter(s => !banSet.has(s));
     if (!pool.length) return null;
 
@@ -247,7 +292,6 @@ window.addEventListener('DOMContentLoaded', () => {
     const twoPlus = pool.filter(s => (counts.get(s)||0) >= 2);
     const finalPool = twoPlus.length ? twoPlus : pool;
 
-    // random pick
     return finalPool[Math.floor(Math.random()*finalPool.length)];
   }
 
@@ -257,7 +301,6 @@ window.addEventListener('DOMContentLoaded', () => {
     setPreview(shape);
   }
 
-  // compute forbidden set for NEXT target based on last clicked shape
   function computeForbidNext(lastShape){
     const ban = new Set();
     if (lastShape === "star") ban.add("moon");
@@ -268,7 +311,7 @@ window.addEventListener('DOMContentLoaded', () => {
     return ban;
   }
 
-  // Ensure at least one instance of current target remains on board
+  // Keep at least one instance of current target after a click
   function ensureTargetExistsAfter(iRemoved){
     if (!targetShape) return;
     let count = 0;
@@ -277,7 +320,6 @@ window.addEventListener('DOMContentLoaded', () => {
       if (shapes[i] === targetShape) count++;
     }
     if (count === 0){
-      // bump one random filled non-locked tile to targetShape
       const candidates = [];
       for (let i=0;i<CELLS;i++){
         if (i===iRemoved) continue;
@@ -293,14 +335,11 @@ window.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // Respawn a clicked tile to a new random shape (respect general weighting)
   function respawnShapeAt(i){
-    // pick from weighted pool, but you could also decide to disallow immediate repeats
     shapes[i] = weightedPick();
     renderCell(i);
   }
 
-  // Lightning reveal next lock: pulse the planned line
   function lightningReveal(){
     if (!nextLock) return;
     const covers = coverageIndicesFor(nextLock);
@@ -324,7 +363,7 @@ window.addEventListener('DOMContentLoaded', () => {
     forbidNext = new Set();
     targetShape = null;
 
-    if (sideStats) sideStats.style.display = 'none'; // hide during play
+    if (sideStats) sideStats.style.display = 'none';
     resetStatsUI();
     logEl.textContent = "";
 
@@ -335,7 +374,6 @@ window.addEventListener('DOMContentLoaded', () => {
     buildGrid();
     populateBoard();
 
-    // clear states
     cells.forEach(c => c.classList.remove('locked','hint-pulse','hint-dim','correct','wrong'));
     lock = null; nextLock = null;
 
@@ -352,11 +390,13 @@ window.addEventListener('DOMContentLoaded', () => {
   }
 
   function revealTarget(){
-    // place initial lock + plan next
-    applyLock({ type: Math.random()<0.5 ? 'row' : 'col', idx: Math.floor(Math.random()*(Math.random()<0.5?ROWS:COLS)) });
+    // initial lock
+    const type = Math.random()<0.5 ? 'row' : 'col';
+    const idx  = (type==='row') ? Math.floor(Math.random()*ROWS) : Math.floor(Math.random()*COLS);
+    applyLock({ type, idx });
     planNextLock();
 
-    // choose initial target from present shapes
+    // initial target
     const present = new Set(shapes.filter(Boolean));
     setTarget(chooseTargetFrom([...present], forbidNext));
 
@@ -422,9 +462,8 @@ window.addEventListener('DOMContentLoaded', () => {
     // SHIELD is always safe—no life loss even if locked
     if (s === "shield" && cell.classList.contains('locked')){
       log(`🛡 Safe click on locked shield`);
-      // respawn shield after click
       respawnShapeAt(i);
-      moveLock('penalty'); // still triggers lock move for interaction
+      moveLock('penalty');
       return;
     }
 
@@ -436,7 +475,6 @@ window.addEventListener('DOMContentLoaded', () => {
       log(`✖ wrong: ${s} • lives ${lives}`);
       if (lives === 0) return endRound(false, performance.now());
       moveLock('penalty');
-      // respawn wrong tile
       respawnShapeAt(i);
       return;
     }
@@ -458,13 +496,14 @@ window.addEventListener('DOMContentLoaded', () => {
 
     // Special on-click effects
     if (s === "bolt"){ lightningReveal(); }
+
     // Exclusivity for NEXT target
     forbidNext = computeForbidNext(s);
 
     // Respawn the clicked tile to keep board fresh
-    shapes[i] = ""; // brief clear (visual: mark disappears), then respawn
+    shapes[i] = "";
     renderCell(i);
-    // Keep at least one of current target elsewhere before switching
+    // Make sure at least one of current target still exists elsewhere before switching
     ensureTargetExistsAfter(i);
     respawnShapeAt(i);
 
