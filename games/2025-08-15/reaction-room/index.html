@@ -1,22 +1,59 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Reaction Room</title>
-  <link rel="stylesheet" href="../../css/games/reaction-room/styles.css">
+
+  <!-- Load site theme + this game’s CSS -->
+  <link rel="stylesheet" href="/Portfolio/css/main.css">
+  <link rel="stylesheet" href="/Portfolio/css/games/reaction-room/styles.css">
 </head>
 <body>
-  <div id="game-container">
-    <div id="sidebar">
-      <div id="countdown">3</div>
-      <div id="target">?</div>
-      <div id="lives">Lives: 3</div>
-      <div id="reaction-time">Reaction Time: --</div>
+  <header class="header">
+    <div class="container nav">
+      <div class="brand"><span class="dot"></span><span>Reaction Room</span></div>
+      <nav class="links">
+        <a class="link" href="/Portfolio/">← Home</a>
+      </nav>
     </div>
-    <div id="game-board"></div>
+  </header>
+
+  <!-- game layout -->
+  <div class="wrap container">
+    <div class="grid">
+      <section class="room">
+        <div id="game-board" class="room-inner" aria-label="Room grid"></div>
+      </section>
+
+      <aside class="side">
+        <h2>Round</h2>
+        <div class="countbox">
+          <span class="badge">Countdown: <strong id="countdown">—</strong></span>
+          <span class="badge">Target: <span id="target">?</span></span>
+        </div>
+        <div class="countbox">
+          <span class="badge">Lives: <strong id="lives">3</strong></span>
+        </div>
+
+        <div class="row">
+          <button id="start" class="btn">Start</button>
+          <button id="reset" class="btn-ghost">Reset</button>
+        </div>
+
+        <h2>Stats</h2>
+        <div class="stats">
+          <div class="card"><h3>Last</h3><p id="last">—</p></div>
+          <div class="card"><h3>Best</h3><p id="best">—</p></div>
+          <div class="card"><h3>Average</h3><p id="avg">—</p></div>
+        </div>
+
+        <div class="log" id="log"></div>
+      </aside>
+    </div>
   </div>
 
-  <script src="js/games.js"></script>
+  <!-- game logic -->
+  <script src="/Portfolio/games/2025-08-15/reaction-room/js/games.js"></script>
 </body>
 </html>
