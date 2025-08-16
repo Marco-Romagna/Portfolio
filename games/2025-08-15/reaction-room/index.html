@@ -57,6 +57,24 @@
         <div class="log" id="log" aria-live="polite"></div>
       </aside>
     </div>
+
+    <!-- Rules & Abilities -->
+    <section class="panel" style="margin-top:16px">
+      <h2>Rules & Abilities</h2>
+      <ul class="rules">
+        <li><strong>Board:</strong> 6×5 grid. Each round fills ~58–69% of tiles with shapes.</li>
+        <li><strong>Always present:</strong> ♣, ♥, ♦, ♠ (1 each), ⭐, 🌙 (1 each), ⚡, 🛡 (2 each). The rest are basics (● ◼ ▲).</li>
+        <li><strong>Goal:</strong> Click the <em>current target shape</em>. After every correct click, the target <em>changes</em>.</li>
+        <li><strong>Lives:</strong> 3 total. Clicking a <em>locked</em> tile costs 1 life (🛡 is always safe). Wrong unlocked clicks cost 1 life.</li>
+        <li><strong>Lock:</strong> One row/column is purple-locked. It moves after each correct click or any life loss.</li>
+        <li><strong>Neutral tiles (empty):</strong> Click to get a hint. If it’s in the next lock’s row/col, it <em>pulses purple</em>; otherwise it <em>dims</em> until the lock moves.</li>
+        <li><strong>⚡ Lightning:</strong> Instantly reveals the <em>next</em> lock (pulses the row/column).</li>
+        <li><strong>🛡 Shield:</strong> Never costs a life, even when locked.</li>
+        <li><strong>Exclusivity:</strong> Clicking ⭐ forbids 🌙 (and vice versa) as the <em>next</em> target. Clicking a suit (♣/♥/♦/♠) forbids the <em>other suits</em> as the next target.</li>
+        <li><strong>Respawn:</strong> Every click respawns that tile into a new random shape (rules above still apply).</li>
+        <li><strong>Round end:</strong> When you reach <strong>0 lives</strong> or after <strong>12 correct targets</strong> (your results will pop up).</li>
+      </ul>
+    </section>
   </main>
 
   <!-- Results Modal -->
