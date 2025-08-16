@@ -26,12 +26,33 @@
   background:rgba(192,73,73,.18);
 }
 
-/* Purple lock state */
+/* --- Purple Lock visuals --- */
 .cell.locked{
-  outline: 2px dashed #a78bfa;
-  background: rgba(167,139,250,.12);
-  cursor: not-allowed;
+  outline: 2px dashed #a78bfa;                    /* purple dashed ring */
+  background: rgba(167,139,250,.10) !important;   /* light purple tint */
+  position: relative;
 }
+
+/* purple-fill shapes while locked */
+.cell.locked .shape.circle,
+.cell.locked .shape.square{
+  background: #a78bfa !important;
+}
+.cell.locked .shape.triangle{
+  border-left-color: transparent !important;
+  border-right-color: transparent !important;
+  border-bottom-color: #a78bfa !important;
+}
+
+/* make the whole line feel outlined by adding a faint glow on each cell */
+.cell.locked::after{
+  content:"";
+  position:absolute; inset:0;
+  box-shadow: inset 0 0 0 2px rgba(167,139,250,.25);
+  border-radius: 10px;
+  pointer-events: none;
+}
+
 
 
 
