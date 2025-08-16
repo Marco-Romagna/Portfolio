@@ -26,6 +26,14 @@
   background:rgba(192,73,73,.18);
 }
 
+/* Purple lock state */
+.cell.locked{
+  outline: 2px dashed #a78bfa;
+  background: rgba(167,139,250,.12);
+  cursor: not-allowed;
+}
+
+
 
 /* reuse colors from main.css */
 .wrap{padding:16px 0}
@@ -64,3 +72,5 @@ button{border:0;padding:10px 12px;border-radius:10px;font-weight:700;cursor:poin
 /* misclick feedback */
 .cell.flash{outline:2px solid #a33;animation:flash .25s ease}
 @keyframes flash{from{background:rgba(255,0,0,.2)}to{background:rgba(255,255,255,.04)}}
+
+
