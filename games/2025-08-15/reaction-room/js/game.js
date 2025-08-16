@@ -48,7 +48,8 @@ window.addEventListener('DOMContentLoaded', () => {
 
   // Purple Lock
   // lock = { type: 'row'|'col', idx: number }
-  let lock = null;
+  let lock = null;                 // current lock
+  let nextLock = null;             // planned next lock (used for neutral hints)
   let prevCoveredCorrectIndices = [];
 
   // Timers
@@ -107,7 +108,7 @@ window.addEventListener('DOMContentLoaded', () => {
     const el = document.createElement("div"); el.className = `shape ${s}`; return el;
   }
 
-  // --- Purple Lock ---
+  // --- Purple Lock / Hints helpers ---
   function coverageIndicesFor(lk){
     const out = [];
     for (let i=0;i<CELLS;i++){
@@ -117,7 +118,8 @@ window.addEventListener('DOMContentLoaded', () => {
     return out;
   }
   function applyLock(lk){
-    cells.forEach(c => c.classList.remove('locked')); // clear old visuals
+    // clear old lock visuals
+    cells.forEach(c => c.classList.remove('locked'));
     lock = lk;
     coverageIndicesFor(lock).forEach(i => cells[i].classList.add('locked'));
   }
@@ -142,9 +144,27 @@ window.addEventListener('DOMContentLoaded', () => {
     }
     return { type: 'row', idx: 0 }; // last resort
   }
+
+  // Neutral hint classes are cleared on each lock move
+  function clearHints(){
+    cells.forEach(c => c.classList.remove('hint-pulse','hint-dim'));
+  }
+
+  // Plan the *next* lock (used for neutral hints)
+  function planNextLock(){
+    const avoid = coveredCorrectIndices(lock);
+    nextLock = pickNewLock(avoid);
+  }
+
   function moveLock(reason){
-    prevCoveredCorrectIndices = coveredCorrectIndices(lock);
-    applyLock(pickNewLock(prevCoveredCorrectIndices));
+    // move to the already planned next lock, if any
+    if (!nextLock){
+      // plan a fallback if not planned yet
+      nextLock = pickNewLock(coveredCorrectIndices(lock));
+    }
+    clearHints(); // all hint visuals reset when the lock switches
+    applyLock(nextLock); // this becomes the current lock now
+    planNextLock();      // compute the next-next lock for future hints
     log(`Lock moved (${reason}) → ${lockLabel(lock)}`);
   }
 
@@ -169,8 +189,9 @@ window.addEventListener('DOMContentLoaded', () => {
     lives = 3; livesEl.textContent = lives;
 
     buildGrid();
-    cells.forEach(c => c.classList.remove('locked'));
+    cells.forEach(c => { c.classList.remove('locked','hint-pulse','hint-dim','correct','wrong'); });
     lock = null;
+    nextLock = null;
     prevCoveredCorrectIndices = [];
 
     // 3-2-1
@@ -201,8 +222,9 @@ window.addEventListener('DOMContentLoaded', () => {
     lastSplitAt = startedAt;
     playing = true;
 
-    // place initial lock
+    // place initial lock and plan the next one
     applyLock(pickNewLock([]));
+    planNextLock();
     log(`Target: ${targetShape} (${totalTargets} to find). Lock placed → ${lockLabel(lock)}`);
   }
 
@@ -226,7 +248,29 @@ window.addEventListener('DOMContentLoaded', () => {
     if (!playing) return;
 
     const clicked = cell.dataset.shape;
-    if (!clicked) return; // empty tile ignored
+    const row = cellRow(idx);
+    const col = cellCol(idx);
+
+    // NEUTRAL HINTING
+    if (!clicked){
+      // no life loss; just hint via nextLock
+      if (nextLock){
+        const willLock = (nextLock.type === 'row') ? (row === nextLock.idx) : (col === nextLock.idx);
+        cell.classList.remove('hint-pulse','hint-dim');
+        if (willLock){
+          cell.classList.add('hint-pulse');
+          log(`Hint: next lock → ${lockLabel(nextLock)}`);
+        } else {
+          cell.classList.add('hint-dim');
+          log(`Hint: not ${lockLabel(nextLock)}`);
+        }
+      } else {
+        log("Hint: next lock unknown (not planned yet)");
+      }
+      return; // neutral clicks never progress or penalize
+    }
+
+    // Already marked? ignore
     if (cell.classList.contains("correct") || cell.classList.contains("wrong")) return;
 
     // Purple lock penalty: life loss only; tile stays neutral
@@ -259,8 +303,6 @@ window.addEventListener('DOMContentLoaded', () => {
     clickSplits.push(split);
     lastSplitAt = now;
 
-    const row = cellRow(idx);
-    const col = cellCol(idx);
     const totalSoFar = now - startedAt;
     splitDetails.push({ idx, row, col, split, total: totalSoFar });
     log(`✔ r${row+1} c${col+1} • split ${Math.round(split)} ms • total ${Math.round(totalSoFar)} ms`);
@@ -296,7 +338,7 @@ window.addEventListener('DOMContentLoaded', () => {
       </tr>
     `).join('');
 
-    modal.hidden = false;                  // show results
+    modal.hidden = false;                   // show results
     if (sideStats) sideStats.style.display = 'grid'; // reveal side stats now
 
     log(success ? `Completed in ${Math.round(total)} ms` : `Failed in ${Math.round(total)} ms`);
