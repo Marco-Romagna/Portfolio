@@ -1,7 +1,12 @@
 [
   {
-    "date": "2025-08-15",
     "title": "Reaction Room",
-    "path": "games/2025-08-15/reaction-room/"
+    "date": "2025-08-15",
+    "path": "games/2025-08-15/reaction-room"
+  },
+  {
+    "title": "Random Evolution",
+    "date": "2025-08-19",
+    "path": "games/2025-08-19/random-evolution"
   }
 ]
