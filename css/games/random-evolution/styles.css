@@ -317,8 +317,8 @@
   position: absolute;
   top: 12px;
   bottom: 12px;
-  left: 12px;                 
-  width: 12px;                
+  left: 12px;
+  width: 12px;
   background: rgba(255,255,255,.10);
   border-radius: 8px;
   overflow: hidden;
@@ -335,10 +335,9 @@
   transition: height 180ms ease-out;
 }
 
-/* generation markers */
 .gen-marker {
   position: absolute;
-  left: 18px;
+  left: 18px;                 /* labels to the right of the bar */
   transform: translateY(50%);
   font-size: 11px;
   color: var(--muted);
@@ -348,7 +347,7 @@
 .gen-marker::before {
   content: "";
   position: absolute;
-  left: -16px;
+  left: -16px;                /* tiny tick touching the bar */
   top: 50%;
   width: 14px;
   height: 1px;
