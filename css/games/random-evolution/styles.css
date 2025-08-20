@@ -139,35 +139,65 @@
   text-align: center;
 }
 
+/* Soft color halo behind content for a friendly feel */
+.revo-start::before {
+  content: "";
+  position: absolute;
+  inset: 8% 12%;
+  pointer-events: none;
+  border-radius: 24px;
+  background:
+    radial-gradient(40% 60% at 25% 25%, rgba(122,162,247,.10), transparent 70%),
+    radial-gradient(40% 60% at 75% 75%, rgba(247,118,142,.10), transparent 70%);
+  filter: blur(0.5px);
+}
+
+/* Center column */
 .start-content {
+  position: relative;
+  z-index: 1;          /* above the halo */
   display: grid;
   justify-items: center;
   gap: 14px;
-  max-width: 520px;     /* keeps readable line length */
+  max-width: 520px;    /* readable line length */
 }
 
+/* Title with subtle color */
 .revo-start .title {
   margin: 0 0 6px;
   font-size: clamp(20px, 2.4vw, 28px);
   font-weight: 800;
   letter-spacing: .4px;
-}
-
-.revo-start .subtitle.bigger {
-  margin: 0 0 6px;
-  color: var(--muted);
-  font-size: clamp(15px, 1.9vw, 18px);
+  color: #9ab4ff;      /* soft indigo-blue accent */
+  text-shadow: 0 1px 0 rgba(0,0,0,.25);
 }
 
 /* Simple numbered rules (no panels) */
 .rules-list {
-  margin: 10px 0 12px;
+  margin: 10px 0 8px;
   text-align: left;
   font-size: 14px;
-  line-height: 1.6;
+  line-height: 1.65;
+  color: var(--muted);
 }
 .rules-list p { margin: 6px 0; }
-.rules-list strong { color: var(--text); }
+
+/* Colored step numbers if you use <span class="k">1.</span> */
+.rules-list .k {
+  display: inline-block;
+  min-width: 1.2em;
+  font-weight: 800;
+  color: #7aa2f7;      /* blue accent */
+  margin-right: 4px;
+}
+
+/* Subtitle placed between rules and buttons */
+.revo-start .subtitle.bigger {
+  margin: 6px 0 6px;
+  color: #b8c4ff;      /* lighter blue for emphasis */
+  font-size: clamp(15px, 1.9vw, 18px);
+  font-weight: 700;
+}
 
 /* End overlay */
 .revo-end {
@@ -207,17 +237,18 @@
   cursor: pointer;
   font-weight: 700;
   font-size: 13px;
-  transition: transform .1s ease, background .15s ease;
+  transition: transform .1s ease, background .15s ease, filter .15s ease, box-shadow .15s ease;
 }
 
 .mode-btn:hover { background: rgba(255,255,255,.10); transform: translateY(-1px); }
 .mode-btn:active { transform: translateY(0); }
 
-.mode-btn.easy   { box-shadow: 0 0 0 2px rgba(122,162,247,.15); } /* blue halo */
-.mode-btn.medium { box-shadow: 0 0 0 2px rgba(130,170,255,.1);  }
-.mode-btn.hard   { box-shadow: 0 0 0 2px rgba(247,118,142,.15); } /* red-ish halo */
+/* Default halos retained for non-start placements */
+.mode-btn.easy   { box-shadow: 0 0 0 2px rgba(122,162,247,.15); }
+.mode-btn.medium { box-shadow: 0 0 0 2px rgba(130,170,255,.10); }
+.mode-btn.hard   { box-shadow: 0 0 0 2px rgba(247,118,142,.15); }
 
-/* Bigger friendlier difficulty buttons for start screen */
+/* Bigger, friendlier difficulty buttons on the start screen with color */
 .revo-start .btn-row.big {
   display: flex;
   gap: 14px;
@@ -228,11 +259,20 @@
   padding: 12px 22px;
   font-size: 15px;
   border-radius: 14px;
-  box-shadow: 0 3px 0 rgba(0,0,0,.35);
+  box-shadow: 0 3px 0 rgba(0,0,0,.35), 0 0 0 2px rgba(255,255,255,.06) inset;
+  border: 1px solid rgba(255,255,255,.12);
 }
 
-.revo-start .btn-row.big .mode-btn:hover { transform: translateY(-1px); }
+/* Friendly, readable colors against dark background */
+.revo-start .btn-row.big .mode-btn.easy   { background: #58c86a; color: #0b101b; }
+.revo-start .btn-row.big .mode-btn.medium { background: #f0a23a; color: #0b101b; }
+.revo-start .btn-row.big .mode-btn.hard   { background: #e6677a; color: #0b101b; }
+
+.revo-start .btn-row.big .mode-btn:hover {
+  filter: brightness(1.08);
+  transform: translateY(-1px);
+}
 .revo-start .btn-row.big .mode-btn:active {
   transform: translateY(0);
-  box-shadow: 0 1px 0 rgba(0,0,0,.35);
+  box-shadow: 0 1px 0 rgba(0,0,0,.35), 0 0 0 2px rgba(255,255,255,.06) inset;
 }
