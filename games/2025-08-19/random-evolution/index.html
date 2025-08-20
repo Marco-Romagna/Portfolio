@@ -31,11 +31,11 @@
 
       <!-- Stage wrapper with external Pokédex rail -->
       <div class="revo-stage-wrap">
-        <!-- LEFT: Pokédex rail -->
+        <!-- LEFT: Pokédex rail (outside the stage) -->
         <div id="pokedex-rail" class="pokedex-rail">
           <div class="rail-fill"></div>
           <div class="needle"><span class="needle-label">#—</span></div>
-          <!-- Gen markers inserted dynamically -->
+          <!-- Gen markers inserted by JS -->
         </div>
 
         <!-- RIGHT: Game stage -->
@@ -73,10 +73,16 @@
           </div>
         </div><!-- /stage -->
       </div><!-- /stage-wrap -->
+
+      <!-- Controls -->
+      <div id="controls">
+        <img id="a-button" src="assets/buttons/A_button.png" alt="A Button">
+        <img id="b-button" src="assets/buttons/B_button.png" alt="B Button">
+      </div>
     </section>
   </main>
 
-  <!-- JS -->
+  <!-- JS (relative to this folder) -->
   <script src="./js/random-evolution.js" defer></script>
 </body>
 </html>
