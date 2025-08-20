@@ -3,7 +3,6 @@
 window.addEventListener("DOMContentLoaded", () => {
   (async function () {
     /* ---------- Boot debug ---------- */
-    // Resolve settings.json relative to the *page* (index.html), not the JS file.
     const settingsURL = new URL("./settings.json", document.baseURI);
     console.log("[REVO] boot", {
       pageURL: window.location.href,
@@ -39,7 +38,7 @@ window.addEventListener("DOMContentLoaded", () => {
     const finalScore   = document.getElementById("final-score");
     const playAgain    = document.getElementById("play-again");
 
-    // HUD (display only)
+    // HUD
     const hud        = document.getElementById("hud");
     const hudCurrent = document.getElementById("hud-current");
     const hudRule    = document.getElementById("hud-rule");
@@ -115,12 +114,12 @@ window.addEventListener("DOMContentLoaded", () => {
       railTrack.querySelectorAll(".rail-divider").forEach(el => el.remove());
       rail?.querySelector(".rail-mid-labels")?.remove();
     }
-    
+
     function renderRailDecor(currentMode) {
       if (!railTrack) return;
       clearRailDecor();
-    
-      /* Dividers at generation starts (keep ticks even if labels are hidden in hard) */
+
+      // Always draw dividers at generation starts
       GEN_STARTS.forEach(startNum => {
         const pos = pctForDex(startNum);
         const divider = document.createElement("div");
@@ -128,30 +127,28 @@ window.addEventListener("DOMContentLoaded", () => {
         divider.style.bottom = pos + "%";
         railTrack.appendChild(divider);
       });
-    
-      /* Midpoint labels (overlayed), skip entirely in hard mode */
+
+      // Midpoint overlay labels (skip in hard)
       if (currentMode === "hard") return;
-    
-      // Build the list of segment bounds: [gen1Start, gen2Start, ..., end+1]
+
       const bounds = [...GEN_STARTS, MAX_DEX + 1];
-    
       const wrap = document.createElement("div");
       wrap.className = "rail-mid-labels";
-    
+
       for (let i = 0; i < bounds.length - 1; i++) {
         const start = bounds[i];
-        const next  = bounds[i + 1];                 // next gen start or end+1
+        const next  = bounds[i + 1];
         const lastDexInSegment = next - 1;
         const midDex = Math.floor((start + lastDexInSegment) / 2);
-    
         const pos = pctForDex(midDex);
+
         const lab = document.createElement("div");
         lab.className = "rail-mid-label";
         lab.style.bottom = pos + "%";
         lab.textContent = `GEN ${i + 1}`;
         wrap.appendChild(lab);
       }
-    
+
       rail.appendChild(wrap);
     }
 
@@ -165,17 +162,18 @@ window.addEventListener("DOMContentLoaded", () => {
       needleLabel.textContent = `#${dexNumber ?? "—"}`;
     }
 
+    function applyRailModeClass(m) {
+      if (!rail) return;
+      rail.classList.remove("easy", "medium", "hard");
+      if (m) rail.classList.add(m);
+      renderRailDecor(m || "easy");
+    }
+
     /* ---------- Game UI ---------- */
     function setGameActive(active) {
       gameActive = active;
-
-      // A/B buttons hidden until game starts
       controls?.classList.toggle("hidden", !active);
-
-      // Hide left/right HUD blocks until game starts
       hud?.classList.toggle("inactive", !active);
-
-      // Keep rail column; hide contents when inactive
       rail?.classList.toggle("pokedex-rail--hidden", !active);
     }
 
@@ -191,7 +189,7 @@ window.addEventListener("DOMContentLoaded", () => {
         hudRule.classList.toggle("higher", gameActive && rule === "higher");
         hudRule.classList.toggle("lower",  gameActive && rule === "lower");
       }
-      if (currentId != null) updateRail(currentId, mode || "easy");
+      if (currentId != null) updateRail(currentId);
     }
 
     function newRule() {
@@ -229,7 +227,6 @@ window.addEventListener("DOMContentLoaded", () => {
       });
     }
 
-    // Overlays
     const showStart = () => startScreen?.classList.remove("hidden");
     const hideStart = () => startScreen?.classList.add("hidden");
     const showEnd   = () => endScreen?.classList.remove("hidden");
@@ -282,7 +279,6 @@ window.addEventListener("DOMContentLoaded", () => {
 
     async function stopAndJudge() {
       if (!rolling) return;
-
       session++;
       rolling = false;
 
@@ -321,11 +317,10 @@ window.addEventListener("DOMContentLoaded", () => {
 
       if (lives <= 0) {
         if (finalScore) finalScore.textContent = String(score);
-        setGameActive(false);   // hides A/B + HUD side blocks
+        setGameActive(false);
         showEnd();
         return;
       }
-
       newRule();
     }
 
@@ -360,11 +355,10 @@ window.addEventListener("DOMContentLoaded", () => {
         const m = btn.getAttribute("data-mode");
         if (!modes[m]) return;
         mode = m;
+        applyRailModeClass(mode);
 
         score = 0; lives = 3; mult = 1;
-        setGameActive(true);         // show A/B and HUD blocks
-
-        renderRailDecor(mode);
+        setGameActive(true);
 
         if (!currentId) currentId = randId();
         await showInstant(currentId);
@@ -378,11 +372,7 @@ window.addEventListener("DOMContentLoaded", () => {
     playAgain?.addEventListener("click", async () => {
       setGameActive(false);
       mode = null;
-
-      clearRailDecor();
-      if (railFill) railFill.style.height = "0%";
-      if (railNeedle) railNeedle.style.bottom = "0%";
-      if (needleLabel) needleLabel.textContent = "#—";
+      applyRailModeClass(null);
 
       currentId = randId();
       imgA.src = urlFor(currentId);
@@ -395,8 +385,7 @@ window.addEventListener("DOMContentLoaded", () => {
       showStart();
     });
 
-    /* ---------- First paint: FORCE idle ---------- */
-    // (Even if HTML classes were missing, we guarantee the idle look.)
+    /* ---------- First paint ---------- */
     controls?.classList.add("hidden");
     hud?.classList.add("inactive");
     rail?.classList.add("pokedex-rail--hidden");
@@ -411,5 +400,6 @@ window.addEventListener("DOMContentLoaded", () => {
     setHUD();
     hideEnd();
     showStart();
+    applyRailModeClass(null);
   })();
 });
