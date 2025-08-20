@@ -9,6 +9,7 @@
   const imgB     = document.getElementById("imgB");
   const flash    = document.getElementById("flash");
   const timerEl  = document.getElementById("timer");
+  const stage    = document.getElementById("stage");            // NEW: stage root
 
   // --- Controls ---
   const btnA     = document.getElementById("a-button");
@@ -38,6 +39,11 @@
   const ext   = settings.sprites.file_extension || ".png";
   const start = settings.sprites.range.start || 1;
   const end   = settings.sprites.range.end   || 1025;
+
+  // --- National Dex meta for the sidebar ---
+  // Starts of each generation in the National Dex (Bulbasaur = 1)
+  const GEN_STARTS = [1, 152, 252, 387, 494, 650, 722, 810, 906];
+  const MAX_DEX    = end; // respect your sprite range
 
   // --- Modes (interval = baseInterval / factor) ---
   const modes = {
@@ -75,6 +81,52 @@
   const currentInterval = () =>
     reducedMotion ? 240 : (baseInterval / (modes[mode]?.speedFactor || 1.0));
 
+  // ---------- Pokédex Bar (build once + update per state) ----------
+  let dexBarEl, dexProgressEl;
+  function buildPokedexBar() {
+    dexBarEl = document.getElementById("pokedex-bar");
+    if (!dexBarEl) {
+      // fallback in case HTML was missing it
+      dexBarEl = document.createElement("div");
+      dexBarEl.id = "pokedex-bar";
+      dexBarEl.className = "pokedex-bar";
+      stage.appendChild(dexBarEl);
+    }
+    dexProgressEl = dexBarEl.querySelector(".progress");
+    if (!dexProgressEl) {
+      dexProgressEl = document.createElement("div");
+      dexProgressEl.className = "progress";
+      dexBarEl.appendChild(dexProgressEl);
+    }
+  }
+
+  function renderGenMarkers(currentMode) {
+    if (!dexBarEl) return;
+    // Clear previous markers
+    dexBarEl.querySelectorAll(".gen-marker").forEach(n => n.remove());
+
+    // Hard mode: no generation markers
+    if (currentMode === "hard") return;
+
+    // Easy/Medium: draw generation start ticks
+    GEN_STARTS.forEach((startNum, idx) => {
+      const posPct = Math.max(0, Math.min(100, (startNum / MAX_DEX) * 100));
+      const m = document.createElement("div");
+      m.className = "gen-marker";
+      m.style.bottom = posPct + "%";
+      m.textContent = (currentMode === "easy") ? `Gen ${idx+1} (${startNum})` : `Gen ${idx+1}`;
+      dexBarEl.appendChild(m);
+    });
+  }
+
+  function updatePokedexBar(currentDex, currentMode) {
+    if (!dexProgressEl) return;
+    const pct = Math.max(0, Math.min(100, (currentDex / MAX_DEX) * 100));
+    dexProgressEl.style.height = pct + "%";
+    // Re-render markers when mode changes. Cheap/safe to call each time.
+    renderGenMarkers(currentMode || "easy");
+  }
+
   // Toggle global game UI/inputs availability
   function setGameActive(active) {
     gameActive = active;
@@ -86,8 +138,10 @@
     }
     // Hide HUD side blocks when inactive
     hud?.classList.toggle("inactive", !active);
-  }
 
+    // Optional: hide sidebar when not in an active session
+    document.getElementById("pokedex-bar")?.classList.toggle("hidden", !active);
+  }
 
   function setHUD() {
     if (hudCurrent) hudCurrent.textContent = (gameActive && currentId) ? `#${String(currentId).padStart(3,"0")}` : "#—";
@@ -101,6 +155,9 @@
       hudRule.classList.toggle("higher", gameActive && rule === "higher");
       hudRule.classList.toggle("lower",  gameActive && rule === "lower");
     }
+
+    // NEW: keep the Pokédex bar in sync
+    if (currentId != null) updatePokedexBar(currentId, mode || "easy");
   }
 
   function newRule() {
@@ -286,6 +343,9 @@
       score = 0; lives = 3; mult = 1;
       setGameActive(true);       // enables A/B, shows HUD left/right
 
+      // Render markers for the chosen mode right away
+      renderGenMarkers(mode);
+
       // Reveal the first Pokémon (was hidden), but DO NOT start rolling yet
       if (!currentId) currentId = randId();
       await showInstant(currentId);
@@ -303,6 +363,9 @@
     setGameActive(false);
     mode  = null;
 
+    // remove markers while inactive
+    renderGenMarkers("hard"); // hard path clears markers
+
     // pick & preload a new starting Pokémon; keep it on stage but HUD left/right hidden
     currentId = randId();
     imgA.src = urlFor(currentId);
@@ -315,17 +378,15 @@
     showStart();
   });
 
-   // --- Initial boot: preload a starting Pokémon, keep UI inactive, show start screen ---
+  // --- Initial boot: build the Pokédex bar and preload a starting Pokémon ---
+  buildPokedexBar();
+
   currentId = randId();
   imgA.src = urlFor(currentId);
   imgA.style.opacity = 0; // hidden until a difficulty is chosen
   imgB.style.opacity = 0;
   if (timerEl) { timerEl.textContent = "—"; timerEl.classList.remove("warn"); }
-  setGameActive(false);   // disables A/B; hides Current/Score/Mult/Lives
-  setHUD();               // HUD shows placeholders
+  setGameActive(false);   // disables A/B; hides Current/Score/Mult/Lives; hides bar
+  setHUD();               // HUD shows placeholders; bar shows initial position but hidden
   showStart();            // overlay visible until difficulty picked
-  
-  // --- Ensure boot state is clean ---
-  hideEnd();              // make sure end screen isn't visible (e.g., after hot reload)
-
 })();
