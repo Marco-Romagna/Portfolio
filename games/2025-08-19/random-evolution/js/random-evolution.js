@@ -1,22 +1,30 @@
-// Random Evolution: silhouette flicker -> speed-up -> flash -> reveal, with A/B controls
+// Higher / Lower mode with A-toggle stop and limited B (resets multiplier)
 
 (async function () {
   // Elements
-  const imgA = document.getElementById("imgA");
-  const imgB = document.getElementById("imgB");
-  const flash = document.getElementById("flash");
-  const btnA = document.getElementById("a-button"); // evolve
-  const btnB = document.getElementById("b-button"); // cancel
+  const imgA   = document.getElementById("imgA");
+  const imgB   = document.getElementById("imgB");
+  const flash  = document.getElementById("flash");
+  const btnA   = document.getElementById("a-button"); // start/stop (no penalty)
+  const btnB   = document.getElementById("b-button"); // panic stop (limited, resets mult)
+
+  // HUD
+  const hudCurrent = document.getElementById("hud-current");
+  const hudRule    = document.getElementById("hud-rule");
+  const hudScore   = document.getElementById("hud-score");
+  const hudLives   = document.getElementById("hud-lives");
+  const hudMult    = document.getElementById("hud-mult");
+  const hudBuses   = document.getElementById("hud-buses");
 
   // Settings
   const res = await fetch("settings.json", { cache: "no-store" });
   const settings = await res.json();
-  const base = settings.sprites.base_url;
-  const ext = settings.sprites.file_extension || ".png";
+  const base  = settings.sprites.base_url;
+  const ext   = settings.sprites.file_extension || ".png";
   const start = settings.sprites.range.start || 1;
-  const end = settings.sprites.range.end || 1025;
+  const end   = settings.sprites.range.end   || 1025;
 
-  // Timings
+  // Timing (slower feel you liked)
   const timings = {
     introHold: 900,
     swaps: 18,
@@ -28,24 +36,24 @@
 
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  let currentId = null;
-  let busy = false;
-  let cancelRequested = false;
+  // Game state
+  let currentId = null;       // current shown in color between rounds
+  let rolling   = false;      // are we currently alternating silhouettes?
+  let killed    = false;      // stop flag for the roll loop
+  let score     = 0;
+  let lives     = 3;
+  let mult      = 1;          // score multiplier
+  let bUses     = 3;          // remaining B uses
+  let rule      = "higher";   // "higher" | "lower"
+  let candidateId = null;     // currently-displayed silhouette during roll
 
   // Helpers
   const randId = () => Math.floor(Math.random() * (end - start + 1)) + start;
-
-  const pickOther = () => {
-    let id = randId();
-    if (currentId == null) return id;
-    while (id === currentId) id = randId();
-    return id;
-  };
-
+  const pickOther = () => { let id = randId(); while (currentId != null && id === currentId) id = randId(); return id; };
   const urlFor = (id) => `${base}${id}${ext}`;
-  const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
-  const lerp = (a, b, t) => a + (b - a) * t;
-  const ease = (p) => p * p * (3 - 2 * p); // smoothstep
+  const sleep  = (ms) => new Promise((r) => setTimeout(r, ms));
+  const lerp   = (a, b, t) => a + (b - a) * t;
+  const ease   = (p) => p * p * (3 - 2 * p);
 
   function preload(src) {
     return new Promise((resolve, reject) => {
@@ -61,11 +69,25 @@
     el.style.transform = "scale(0.9)";
     requestAnimationFrame(() => {
       el.style.transform = "scale(1)";
-      setTimeout(() => {
-        el.style.transition = "";
-        el.style.transform = "";
-      }, durMs + 20);
+      setTimeout(() => { el.style.transition = ""; el.style.transform = ""; }, durMs + 20);
     });
+  }
+
+  function setHUD() {
+    hudCurrent.textContent = currentId ? `#${String(currentId).padStart(3, "0")}` : "#—";
+    hudScore.textContent   = String(score);
+    hudLives.textContent   = String(lives);
+    hudRule.textContent    = rule === "higher" ? "Higher" : "Lower";
+    hudRule.classList.toggle("higher", rule === "higher");
+    hudRule.classList.toggle("lower", rule === "lower");
+    hudMult.textContent    = `x${mult}`;
+    hudBuses.textContent   = String(bUses);
+    btnB.classList.toggle("disabled", bUses <= 0);
+  }
+
+  function newRule() {
+    rule = Math.random() < 0.5 ? "higher" : "lower";
+    setHUD();
   }
 
   async function showInstant(id) {
@@ -77,71 +99,55 @@
     imgA.style.opacity = 1;
     imgB.style.opacity = 0;
     flash.style.opacity = 0;
+    setHUD();
   }
 
-  async function evolve() {
-    if (busy) return;
-    busy = true;
-    cancelRequested = false;
-    btnA?.classList.add("disabled");
+  async function startRoundIfNeeded() {
+    if (!currentId) await showInstant(randId());
+    newRule();
+  }
 
-    // cancel hook
-    const requestCancel = () => {
-      if (!busy) return;
-      cancelRequested = true;
-    };
-    btnB?.addEventListener("click", requestCancel, { once: true });
+  // Start rolling silhouettes (called when A pressed if not rolling)
+  async function startRoll() {
+    if (rolling) return;
+    rolling = true;
+    killed  = false;
 
-    const nextId = pickOther();
+    candidateId = pickOther();
+    try { await preload(urlFor(candidateId)); } catch {}
 
-    try { await preload(urlFor(nextId)); } catch (_) { /* ignore; will try anyway */ }
-
-    // Prep
-    imgA.src = urlFor(currentId ?? pickOther());
-    imgB.src = urlFor(nextId);
-    imgA.classList.add("silhouette");
+    // prep: A in color, B silhouette
+    imgA.src = urlFor(currentId);
+    imgB.src = urlFor(candidateId);
+    imgA.classList.remove("silhouette");
     imgB.classList.add("silhouette");
     imgA.style.opacity = 1;
     imgB.style.opacity = 0;
     flash.style.opacity = 0;
 
-    // Reduced motion: quick crossfade
-    if (reducedMotion) {
-      if (!cancelRequested) {
-        imgA.classList.remove("silhouette");
-        imgB.classList.remove("silhouette");
-        imgB.style.transition = "opacity 200ms linear";
-        requestAnimationFrame(() => {
-          imgB.style.opacity = 1;
-          imgA.style.opacity = 0;
-        });
-        await sleep(220);
-        currentId = nextId;
-      }
-      finish();
-      return;
-    }
-
-    // Intro hold
-    for (let t = 0; t < timings.introHold; t += 16) {
-      if (cancelRequested) return finish();
-      await sleep(16);
-    }
-
-    // Alternation with acceleration
-    for (let i = 0; i < timings.swaps; i++) {
-      if (cancelRequested) return finish();
-      const p = timings.swaps <= 1 ? 1 : i / (timings.swaps - 1);
-      const interval = lerp(timings.startInterval, timings.endInterval, ease(p));
+    // rolling loop
+    let i = 0;
+    while (!killed) {
+      const p = Math.min(1, i / timings.swaps);
+      const interval = reducedMotion ? 200 : lerp(timings.startInterval, timings.endInterval, ease(p));
       const showB = i % 2 === 0;
+
+      if (showB) imgB.src = urlFor(candidateId = pickOther());
       imgA.style.opacity = showB ? 0 : 1;
       imgB.style.opacity = showB ? 1 : 0;
+
+      i++;
       await sleep(interval);
     }
+  }
 
-    if (cancelRequested) return finish();
+  // Stop & lock-in (called by A when rolling, or by B with penalty)
+  async function stopAndJudge({ penalty = false } = {}) {
+    if (!rolling) return;
+    killed  = true;
+    rolling = false;
 
-    // Flash + reveal
+    // flash + reveal candidate in color
     flash.style.opacity = 1;
     await sleep(timings.flashMs);
     flash.style.opacity = 0;
@@ -150,40 +156,78 @@
     imgB.classList.remove("silhouette");
     imgA.style.opacity = 0;
     imgB.style.opacity = 1;
-
     pop(imgB, timings.revealPopMs);
 
-    currentId = nextId;
-    finish();
+    // Judge
+    const ok = rule === "higher" ? candidateId > currentId : candidateId < currentId;
 
-    // local cleanup
-    function finish() {
-      busy = false;
-      btnA?.classList.remove("disabled");
-      // Show currentId in A layer for idle state
-      imgA.src = urlFor(currentId ?? randId());
-      imgA.classList.remove("silhouette");
-      imgB.classList.remove("silhouette");
-      imgA.style.opacity = 1;
-      imgB.style.opacity = 0;
-      flash.style.opacity = 0;
+    if (ok) {
+      // score with multiplier
+      score += mult;
+      // grow multiplier only if no penalty stop
+      if (!penalty) mult += 1;
+      // advance current
+      currentId = candidateId;
+    } else {
+      // wrong guess
+      lives -= 1;
+      // reset multiplier on wrong as well
+      mult = 1;
     }
+
+    // if penalty stop, reset multiplier and decrement B uses
+    if (penalty) {
+      mult = 1;
+      if (bUses > 0) bUses -= 1;
+    }
+
+    // settle back to A layer
+    await sleep(280);
+    imgA.src = urlFor(currentId);
+    imgA.style.opacity = 1;
+    imgB.style.opacity = 0;
+
+    setHUD();
+
+    // game over -> soft reset
+    if (lives <= 0) {
+      lives = 3;
+      score = 0;
+      mult  = 1;
+      bUses = 3;
+      currentId = randId();
+      await showInstant(currentId);
+    }
+
+    // next round
+    newRule();
+  }
+
+  // A = toggle: start roll if idle, stop & judge if rolling (no penalty)
+  async function onA() {
+    if (!rolling) startRoll();
+    else stopAndJudge({ penalty: false });
+  }
+
+  // B = panic stop: only if you have uses; stop & judge with penalty
+  async function onB() {
+    if (!rolling) return;
+    if (bUses <= 0) return; // out of B uses
+    stopAndJudge({ penalty: true });
   }
 
   // Init
   await showInstant(randId());
+  await startRoundIfNeeded();
+  setHUD();
 
   // Controls
-  btnA?.addEventListener("click", evolve);
-  // Optional keyboard: Enter/Space = A, Escape/B = B
+  btnA?.addEventListener("click", onA);
+  btnB?.addEventListener("click", onB);
+
+  // Keyboard shortcuts
   window.addEventListener("keydown", (e) => {
-    if (e.key === "Enter" || e.key === " ") btnA?.click();
-    if (e.key.toLowerCase() === "b" || e.key === "Escape") {
-      // simulate cancel press
-      if (busy) {
-        const ev = new Event("click");
-        btnB?.dispatchEvent(ev);
-      }
-    }
+    if (e.key === "Enter" || e.key === " ") btnA?.click();             // A
+    if (e.key.toLowerCase() === "b" || e.key === "Escape") btnB?.click(); // B
   });
 })();
