@@ -143,7 +143,7 @@
   display: grid;
   justify-items: center;
   gap: 14px;
-  max-width: 520px;
+  max-width: 520px;     /* keeps readable line length */
 }
 
 .revo-start .title {
@@ -159,39 +159,15 @@
   font-size: clamp(15px, 1.9vw, 18px);
 }
 
-/* Rules as pill cards */
-.rules-cards {
-  display: grid;
-  gap: 10px;
-  width: 100%;
-  margin: 4px 0 10px;
-}
-
-.rule-card {
-  display: grid;
-  grid-template-columns: auto 1fr;
-  align-items: center;
-  gap: 10px;
-  padding: 10px 12px;
-  border-radius: 12px;
-  border: 1px solid rgba(255,255,255,.10);
-  background: rgba(255,255,255,.05);
-  color: var(--text);
-  font-size: 14px;
+/* Simple numbered rules (no panels) */
+.rules-list {
+  margin: 10px 0 12px;
   text-align: left;
+  font-size: 14px;
+  line-height: 1.6;
 }
-
-.rule-card .k {
-  display: inline-grid;
-  place-items: center;
-  width: 24px;
-  height: 24px;
-  border-radius: 999px;
-  font-weight: 700;
-  font-size: 12px;
-  background: rgba(255,255,255,.08);
-  border: 1px solid rgba(255,255,255,.12);
-}
+.rules-list p { margin: 6px 0; }
+.rules-list strong { color: var(--text); }
 
 /* End overlay */
 .revo-end {
