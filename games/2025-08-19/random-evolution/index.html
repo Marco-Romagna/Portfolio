@@ -64,8 +64,18 @@
       
         <!-- Start overlay (visible on load) -->
         <div id="start-screen" class="revo-start">
-          <h3 class="title">Random Evolution</h3>
-          <p class="subtitle">Choose a difficulty to begin</p>
+          <h3 class="title">Do you know your Pokédex numbers?</h3>
+          <p class="subtitle">Choose your difficulty to begin.</p>
+
+          <div class="rules">
+            <h4>How to Play</h4>
+            <ul>
+              <li>Decide if the next Pokémon’s number is <strong>higher</strong> or <strong>lower</strong>.</li>
+              <li>You only have a few seconds to choose!</li>
+              <li>Press <strong>B</strong> to stop the evolution if it doesn’t match the Pokédex number direction.</li>
+            </ul>
+          </div>
+
           <div class="btn-row">
             <button class="mode-btn easy"   data-mode="easy">Easy</button>
             <button class="mode-btn medium" data-mode="medium">Medium</button>
@@ -84,7 +94,7 @@
       </div>
 
       <!-- Controls -->
-      <div id="controls">
+      <div id="controls" class="hidden">
         <img id="a-button" src="assets/buttons/A_button.png" alt="A Button">
         <img id="b-button" src="assets/buttons/B_button.png" alt="B Button">
       </div>
