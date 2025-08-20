@@ -18,12 +18,12 @@
 
   // Timings
   const timings = {
-    introHold: 650,
-    swaps: 16,
-    startInterval: 200,
-    endInterval: 35,
-    flashMs: 100,
-    revealPopMs: 220
+    introHold: 900,
+    swaps: 18,
+    startInterval: 260,
+    endInterval: 70,
+    flashMs: 120,
+    revealPopMs: 250
   };
 
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
