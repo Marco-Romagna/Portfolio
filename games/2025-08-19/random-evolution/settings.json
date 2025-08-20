@@ -1,0 +1,7 @@
+{
+  "sprites": {
+    "base_url": "https://cdn.jsdelivr.net/gh/PokeAPI/sprites@9683e1d7ffbab3401c1542e39d8105102153e6f9/sprites/pokemon/other/official-artwork/",
+    "file_extension": ".png",
+    "range": { "start": 1, "end": 1025 }
+  }
+}
