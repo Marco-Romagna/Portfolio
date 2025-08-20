@@ -309,3 +309,62 @@
 .revo-start .btn-row.big .mode-btn.hard   { background: #e6677a; color: #0b101b; }
 .revo-start .btn-row.big .mode-btn:hover  { filter: brightness(1.08); transform: translateY(-1px); }
 .revo-start .btn-row.big .mode-btn:active { transform: translateY(0); box-shadow: 0 1px 0 rgba(0,0,0,.35), 0 0 0 2px rgba(255,255,255,.06) inset; }
+
+/* ===============================
+   Pokédex progress bar
+   =============================== */
+.pokedex-bar {
+  position: absolute;
+  top: 12px;
+  bottom: 12px;
+  left: -28px;                 /* tuck into the left gutter of the stage */
+  width: 8px;
+  background: rgba(255,255,255,.08);
+  border-radius: 8px;
+  overflow: hidden;
+  z-index: 3;
+}
+
+/* fill that grows from bottom → top */
+.pokedex-bar .progress {
+  position: absolute;
+  left: 0; right: 0;
+  bottom: 0;
+  height: 0%;
+  background: linear-gradient(to top, #4facfe, #00f2fe);
+  border-radius: 8px;
+  transition: height 180ms ease-out;
+}
+
+/* generation markers (label + tiny tick) */
+.gen-marker {
+  position: absolute;
+  left: 12px;                  /* push text to the right of the bar */
+  transform: translateY(50%);
+  font-size: 11px;
+  color: var(--muted);
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+/* the little tick on the bar */
+.gen-marker::before {
+  content: "";
+  position: absolute;
+  left: -12px;                 /* reaches into the bar */
+  top: 50%;
+  width: 10px;
+  height: 1px;
+  background: rgba(255,255,255,.25);
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+/* hide the whole thing if needed */
+.pokedex-bar.hidden { display: none; }
+
+/* tighter on very small stages */
+@media (max-width: 520px) {
+  .pokedex-bar { left: -22px; }
+  .gen-marker { font-size: 10px; }
+}
