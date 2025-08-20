@@ -77,6 +77,7 @@ window.addEventListener("DOMContentLoaded", () => {
     }
 
     const base  = settings.sprites.base_url;
+    theExt:
     const ext   = settings.sprites.file_extension || ".png";
     const start = settings.sprites.range.start || 1;
     const end   = settings.sprites.range.end   || 1025;
@@ -295,11 +296,64 @@ window.addEventListener("DOMContentLoaded", () => {
       watchdogLoop(mySession);
     }
 
+    // --------- ACCEPT / CANCEL / TIMEOUT judge ----------
     async function stopAndJudge(action /* "accept" | "cancel" | "timeout" */) {
       if (!rolling) return;
       session++;
       rolling = false;
 
+      // for logging clarity
+      const prevCurrent = currentId;
+
+      // Evaluate whether candidate satisfies the rule
+      const isCorrectDir = (rule === "higher") ? (candidateId > currentId) : (candidateId < currentId);
+
+      // CANCEL path: instant revert (no flash/reveal)
+      if (action === "cancel") {
+        let gained = false, lost = false;
+
+        if (!isCorrectDir) {        // correctly rejected
+          score += mult; mult += 1;
+          gained = true;
+        } else {                    // wrongly rejected
+          lives -= 1; mult = 1;
+          lost = true;
+        }
+
+        // Snap back to current form immediately
+        imgA.classList.remove("silhouette");
+        imgB.classList.remove("silhouette");
+        imgA.src = urlFor(currentId);
+        imgA.style.opacity = 1;
+        imgB.style.opacity = 0;
+        if (timerEl) { timerEl.textContent = "—"; timerEl.classList.remove("warn"); }
+
+        dlog("compare", {
+          rule,
+          current_before: prevCurrent,
+          next: candidateId,
+          current_after: currentId,
+          isCorrectDir,
+          action: "cancel",
+          outcome: gained ? "point" : "life_lost"
+        });
+        if (lost) dlog("life:lost", { score, mult, lives });
+        if (gained) dlog("score:update", { score, mult, lives });
+
+        setHUD();
+
+        if (lives <= 0) {
+          if (finalScore) finalScore.textContent = String(score);
+          setGameActive(false);
+          showEnd();
+          dlog("game:over", { finalScore: score });
+          return;
+        }
+        newRule();
+        return; // important: end here for cancel flow
+      }
+
+      // ACCEPT/TIMEOUT path: keep reveal + flash
       imgA.classList.add("silhouette");
       imgB.classList.add("silhouette");
       imgA.style.opacity = 0;
@@ -317,38 +371,16 @@ window.addEventListener("DOMContentLoaded", () => {
       imgB.style.opacity = 1;
       pop(imgB, 250);
 
-      // Snapshot before any changes for logging clarity
-      const prevCurrent = currentId;
+      let gained = false, lost = false;
 
-      // Does the candidate satisfy the rule?
-      const isCorrectDir = (rule === "higher") ? (candidateId > currentId) : (candidateId < currentId);
-
-      // Action semantics:
-      // - "accept" or "timeout" => you let evolution go through (candidate becomes current)
-      // - "cancel"              => you reject the evolution (current stays)
-      let gained = false;
-      let lost   = false;
-
-      if (action === "accept" || action === "timeout") {
-        if (isCorrectDir) {
-          score += mult; mult += 1;
-          currentId = candidateId;          // evolution applied
-          gained = true;
-        } else {
-          lives -= 1; mult = 1;
-          currentId = candidateId;          // accepted a wrong evolution; it applies
-          lost = true;
-        }
-      } else if (action === "cancel") {
-        if (!isCorrectDir) {
-          score += mult; mult += 1;
-          // currentId stays; you correctly rejected
-          gained = true;
-        } else {
-          lives -= 1; mult = 1;
-          // currentId stays; you wrongly rejected
-          lost = true;
-        }
+      if (isCorrectDir) {           // accepted correct evolution
+        score += mult; mult += 1;
+        currentId = candidateId;
+        gained = true;
+      } else {                      // accepted wrong evolution
+        lives -= 1; mult = 1;
+        currentId = candidateId;
+        lost = true;
       }
 
       dlog("compare", {
@@ -358,7 +390,7 @@ window.addEventListener("DOMContentLoaded", () => {
         current_after: currentId,
         isCorrectDir,
         action,
-        outcome: gained ? "point" : (lost ? "life_lost" : "noop")
+        outcome: gained ? "point" : "life_lost"
       });
 
       await sleep(280);
@@ -404,7 +436,7 @@ window.addEventListener("DOMContentLoaded", () => {
     btnA?.addEventListener("click", onA);
     btnB?.addEventListener("click", onB);
     window.addEventListener("keydown", (e) => {
-      if (e.key === "Enter" || e.key === " ") onA();              // A = accept
+      if (e.key === "Enter" || e.key === " ") onA();                // A = accept
       if (e.key.toLowerCase() === "b" || e.key === "Escape") onB(); // B/Esc = cancel
     });
 
