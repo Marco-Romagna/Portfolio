@@ -8,7 +8,7 @@
   <!-- Main portfolio styles -->
   <link rel="stylesheet" href="../../../css/main.css">
   <!-- Game-specific styles -->
-  <link rel="stylesheet" href="../../../css/games/random-evolution.css">
+  <link rel="stylesheet" href="../../../css/games/random-evolution/styles.css">
 </head>
 <body>
   <!-- Header -->
@@ -29,18 +29,21 @@
   <main class="container">
     <section class="panel">
       <h2>Random Evolution</h2>
-      <p>This is the starting page for the game.</p>
+      <p>Watch a Pokémon evolve with a classic-style animation.</p>
+
+      <!-- Stage -->
+      <div id="stage" class="revo-stage">
+        <img id="imgA" class="revo-img" alt="Current form">
+        <img id="imgB" class="revo-img" alt="Next form">
+        <div id="flash" class="revo-flash"></div>
+      </div>
+
+      <!-- Controls -->
+      <div id="controls">
+        <img id="a-button" src="assets/buttons/A_button.png" alt="A Button">
+        <img id="b-button" src="assets/buttons/B_button.png" alt="B Button">
+      </div>
     </section>
-
-    <!-- Sprite area -->
-    <div id="sprite-container">
-      <img id="pokemon-sprite" src="" alt="Current Pokémon">
-    </div>
-
-    <!-- Controls -->
-    <div>
-      <button id="evolve-btn">Evolve</button>
-    </div>
   </main>
 
   <!-- Scripts -->
