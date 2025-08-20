@@ -74,7 +74,7 @@
   }
 
   function setHUD() {
-    if (hudCurrent) hudCurrent.textContent = currentId ? `#${String(currentId).padStart(3, "0")}` : "#—";
+    if (hudCurrent) hudCurrent.textContent = currentId ? `#${String(currentId).padStart(3,"0")}` : "#—";
     if (hudScore)   hudScore.textContent   = String(score);
     if (hudLives)   hudLives.textContent   = String(lives);
     if (hudRule) {
@@ -82,9 +82,9 @@
       hudRule.classList.toggle("higher", rule === "higher");
       hudRule.classList.toggle("lower",  rule === "lower");
     }
-    if (hudMult)  hudMult.textContent = `x${mult}`;
-    if (hudBuses) hudBuses.textContent = String(bUses);
+    if (hudMult) hudMult.textContent = `x${mult}`;
   }
+
 
   function newRule() {
     rule = Math.random() < 0.5 ? "higher" : "lower";
@@ -142,17 +142,17 @@
     }
   }
 
-  // Stop & lock-in (called by A when rolling, or by B with penalty)
-  async function stopAndJudge({ penalty = false } = {}) {
+  // Stop & lock-in (called by A when rolling)
+ async function stopAndJudge() {
     if (!rolling) return;
     killed  = true;
     rolling = false;
-
-    // flash + reveal candidate in color
+  
+    // flash + reveal
     flash.style.opacity = 1;
     await sleep(timings.flashMs);
     flash.style.opacity = 0;
-
+  
     imgA.classList.remove("silhouette");
     imgB.classList.remove("silhouette");
     imgA.style.opacity = 0;
@@ -163,58 +163,41 @@
     const ok = rule === "higher" ? candidateId > currentId : candidateId < currentId;
 
     if (ok) {
-      // score with multiplier
-      score += mult;
-      // grow multiplier only if no penalty stop
-      if (!penalty) mult += 1;
-      // advance current
+      score += mult;   // award with current multiplier
+      mult += 1;       // grow multiplier on correct
       currentId = candidateId;
     } else {
-      // wrong guess
       lives -= 1;
-      // reset multiplier on wrong as well
-      mult = 1;
+      mult = 1;        // reset only on wrong
     }
-
-    // if penalty stop, reset multiplier and decrement B uses
-    if (penalty) {
-      mult = 1;
-      if (bUses > 0) bUses -= 1;
-    }
-
-    // settle back to A layer
+  
+    // settle back
     await sleep(280);
     imgA.src = urlFor(currentId);
     imgA.style.opacity = 1;
     imgB.style.opacity = 0;
-
+  
     setHUD();
-
-    // game over -> soft reset
+  
     if (lives <= 0) {
-      lives = 3;
-      score = 0;
-      mult  = 1;
-      bUses = 3;
+      lives = 3; score = 0; mult = 1;
       currentId = randId();
       await showInstant(currentId);
     }
-
-    // next round
+  
     newRule();
   }
 
   // A = toggle: start roll if idle, stop & judge if rolling (no penalty)
   async function onA() {
     if (!rolling) startRoll();
-    else stopAndJudge({ penalty: false });
+    else stopAndJudge(); // no penalty
   }
 
-  // B = panic stop: only if you have uses; stop & judge with penalty
+  // B = panic stop:
   async function onB() {
     if (!rolling) return;
-    if (bUses <= 0) return; // out of B uses
-    stopAndJudge({ penalty: true });
+    stopAndJudge(); // no penalty, unlimited
   }
 
   // Init
