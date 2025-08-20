@@ -104,3 +104,49 @@
 }
 .revo-timer.warn { color: #f7768e; }  /* red-ish when close to 0 */
 
+/* Start overlay */
+.revo-start {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  gap: 10px;
+  background: radial-gradient(120% 120% at 50% 55%, rgba(7,10,18,.94) 0%, rgba(7,10,18,.88) 60%, rgba(7,10,18,.82) 100%);
+  border-radius: 16px;
+  text-align: center;
+}
+
+.revo-start .title {
+  margin: 0 0 4px;
+  font-size: 18px;
+  letter-spacing: .3px;
+}
+
+.revo-start .subtitle {
+  margin: 0 0 12px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.revo-start .btn-row {
+  display: flex;
+  gap: 10px;
+}
+
+.mode-btn {
+  padding: 8px 14px;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,.12);
+  background: rgba(255,255,255,.06);
+  color: var(--text);
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 13px;
+  transition: transform .1s ease, background .15s ease;
+}
+.mode-btn:hover { background: rgba(255,255,255,.10); transform: translateY(-1px); }
+.mode-btn:active { transform: translateY(0); }
+
+.mode-btn.easy   { box-shadow: 0 0 0 2px rgba(122,162,247,.15); } /* blue halo */
+.mode-btn.medium { box-shadow: 0 0 0 2px rgba(130,170,255,.1);  }
+.mode-btn.hard   { box-shadow: 0 0 0 2px rgba(247,118,142,.15); } /* red-ish halo */
