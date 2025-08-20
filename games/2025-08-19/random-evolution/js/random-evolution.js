@@ -74,15 +74,16 @@
   }
 
   function setHUD() {
-    hudCurrent.textContent = currentId ? `#${String(currentId).padStart(3, "0")}` : "#—";
-    hudScore.textContent   = String(score);
-    hudLives.textContent   = String(lives);
-    hudRule.textContent    = rule === "higher" ? "Higher" : "Lower";
-    hudRule.classList.toggle("higher", rule === "higher");
-    hudRule.classList.toggle("lower", rule === "lower");
-    hudMult.textContent    = `x${mult}`;
-    hudBuses.textContent   = String(bUses);
-    btnB.classList.toggle("disabled", bUses <= 0);
+    if (hudCurrent) hudCurrent.textContent = currentId ? `#${String(currentId).padStart(3, "0")}` : "#—";
+    if (hudScore)   hudScore.textContent   = String(score);
+    if (hudLives)   hudLives.textContent   = String(lives);
+    if (hudRule) {
+      hudRule.textContent = rule === "higher" ? "Higher" : "Lower";
+      hudRule.classList.toggle("higher", rule === "higher");
+      hudRule.classList.toggle("lower",  rule === "lower");
+    }
+    if (hudMult)  hudMult.textContent = `x${mult}`;
+    if (hudBuses) hudBuses.textContent = String(bUses);
   }
 
   function newRule() {
