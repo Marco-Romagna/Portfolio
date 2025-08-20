@@ -6,20 +6,16 @@
   <title>Random Evolution • Game</title>
   <meta name="color-scheme" content="dark light" />
 
-  <!-- IMPORTANT: everything below resolves relative to /Portfolio/ -->
-  <base href="/Portfolio/">
-
-  <!-- Site styles -->
+  <!-- Site styles (path is from this file: games/2025-08-19/random-evolution/index.html) -->
   <link rel="stylesheet" href="../../../css/main.css">
   <!-- Game styles -->
   <link rel="stylesheet" href="../../../css/games/random-evolution/styles.css">
-
 </head>
 <body>
   <!-- Header -->
   <header class="header">
     <div class="container nav">
-      <a class="brand" href="index.html">
+      <a class="brand" href="../../../index.html">
         <span class="dot"></span><span>Marco • Portfolio</span>
       </a>
       <nav class="links">
@@ -34,8 +30,8 @@
       <h2 class="panel-title">Random Evolution</h2>
       <p class="panel-subtitle">Decide if the next Pokémon’s Pokédex number is higher or lower!</p>
 
-      <!-- HUD -->
-      <div class="revo-hud" id="hud">
+      <!-- HUD (start inactive so left/right blocks are hidden) -->
+      <div class="revo-hud inactive" id="hud">
         <div class="hud-left">
           <span class="tag">Current</span>
           <span id="hud-current" class="mono">#—</span>
@@ -112,15 +108,15 @@
         </div><!-- /revo-stage -->
       </div><!-- /revo-stage-wrap -->
 
-      <!-- Controls -->
-      <div id="controls">
-        <img id="a-button" src="games/2025-08-19/random-evolution/assets/buttons/A_button.png" alt="A Button">
-        <img id="b-button" src="games/2025-08-19/random-evolution/assets/buttons/B_button.png" alt="B Button">
+      <!-- Controls (start hidden; JS reveals after difficulty pick) -->
+      <div id="controls" class="hidden">
+        <img id="a-button" src="./assets/buttons/A_button.png" alt="A Button">
+        <img id="b-button" src="./assets/buttons/B_button.png" alt="B Button">
       </div>
     </section>
   </main>
 
-  <!-- Game script -->
+  <!-- Game script (path is relative to this index.html) -->
   <script src="./js/random-evolution.js" defer></script>
 </body>
 </html>
