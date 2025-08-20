@@ -2,7 +2,7 @@
 
 window.addEventListener("DOMContentLoaded", () => {
   (async function () {
-    // --- QUICK BOOT DIAG ---
+    /* ---------- Boot debug ---------- */
     const settingsURL = new URL("../settings.json", import.meta.url);
     console.log("[REVO] boot", {
       jsURL: import.meta.url,
@@ -11,14 +11,14 @@ window.addEventListener("DOMContentLoaded", () => {
       stage: !!document.getElementById("stage")
     });
 
-    // --- Stage elements ---
+    /* ---------- Grab DOM ---------- */
+    // Stage
     const imgA   = document.getElementById("imgA");
     const imgB   = document.getElementById("imgB");
     const flash  = document.getElementById("flash");
     const timerEl= document.getElementById("timer");
-    const stage  = document.getElementById("stage");
 
-    // --- Rail elements (outside the stage) ---
+    // Rail (outside stage)
     const rail        = document.getElementById("pokedex-rail");
     const railTrack   = rail?.querySelector(".rail-track");
     const railFill    = rail?.querySelector(".rail-fill");
@@ -26,20 +26,20 @@ window.addEventListener("DOMContentLoaded", () => {
     const needleLine  = railNeedle?.querySelector(".needle-line");
     const needleLabel = railNeedle?.querySelector(".needle-label");
 
-    // --- Controls ---
+    // Controls
+    const controls = document.getElementById("controls");
     const btnA     = document.getElementById("a-button");
     const btnB     = document.getElementById("b-button");
-    const controls = document.getElementById("controls");
 
-    // --- Overlays ---
+    // Overlays
     const startScreen  = document.getElementById("start-screen");
     const startButtons = startScreen?.querySelectorAll(".mode-btn");
     const endScreen    = document.getElementById("end-screen");
     const finalScore   = document.getElementById("final-score");
     const playAgain    = document.getElementById("play-again");
 
-    // --- HUD (display only; no mode selector) ---
-    const hud        = document.querySelector(".revo-hud");
+    // HUD (display only)
+    const hud        = document.getElementById("hud");
     const hudCurrent = document.getElementById("hud-current");
     const hudRule    = document.getElementById("hud-rule");
     const hudScore   = document.getElementById("hud-score");
@@ -47,7 +47,7 @@ window.addEventListener("DOMContentLoaded", () => {
     const hudMult    = document.getElementById("hud-mult");
     const hudMode    = document.getElementById("hud-mode");
 
-    // --- Settings (sprite source) ---
+    /* ---------- Settings ---------- */
     let settings;
     try {
       const res = await fetch(settingsURL, { cache: "no-store" });
@@ -55,7 +55,6 @@ window.addEventListener("DOMContentLoaded", () => {
       settings = await res.json();
     } catch (err) {
       console.error("[REVO] Failed to load settings.json", err);
-      // Minimal fallback so page still works locally
       settings = {
         sprites: {
           base_url: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/",
@@ -70,11 +69,10 @@ window.addEventListener("DOMContentLoaded", () => {
     const start = settings.sprites.range.start || 1;
     const end   = settings.sprites.range.end   || 1025;
 
-    // --- National Dex meta for the rail ---
+    /* ---------- Constants ---------- */
     const GEN_STARTS = [1, 152, 252, 387, 494, 650, 722, 810, 906]; // Gens 1..9
     const MAX_DEX    = end;
 
-    // --- Modes (interval = baseInterval / factor) ---
     const modes = {
       easy:   { speedFactor: 0.4, limitMs: 16000 },
       medium: { speedFactor: 0.8, limitMs: 11000 },
@@ -83,40 +81,33 @@ window.addEventListener("DOMContentLoaded", () => {
     const baseInterval   = 500;
     const reducedMotion  = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-    // --- Game state ---
-    let mode         = null;          // chosen on start screen
-    let gameActive   = false;         // only during an active game
-    let currentId    = null;
-    let candidateId  = null;
-    let deadline     = 0;
-    let score        = 0;
-    let lives        = 3;
-    let mult         = 1;
-    let rule         = "higher";      // "higher" | "lower"
+    /* ---------- State ---------- */
+    let mode       = null;
+    let gameActive = false;
+    let currentId  = null;
+    let candidateId= null;
+    let deadline   = 0;
+    let score      = 0;
+    let lives      = 3;
+    let mult       = 1;
+    let rule       = "higher";
 
-    // --- Loop/session control (prevents races) ---
-    let session      = 0;
-    let rolling      = false;
-    let debouncing   = false;
+    let session    = 0;
+    let rolling    = false;
+    let debouncing = false;
 
-    // --- Helpers ---
+    /* ---------- Helpers ---------- */
     const randId    = () => Math.floor(Math.random() * (end - start + 1)) + start;
     const pickOther = () => { let id = randId(); while (currentId != null && id === currentId) id = randId(); return id; };
     const urlFor    = (id) => `${base}${id}${ext}`;
     const sleep     = (ms) => new Promise(r => setTimeout(r, ms));
     const now       = () => performance.now();
     const cap       = (s) => s ? s[0].toUpperCase() + s.slice(1) : "—";
-
     const currentInterval = () =>
       reducedMotion ? 240 : (baseInterval / (modes[mode]?.speedFactor || 1.0));
 
-    /* =======================================
-       Pokédex Rail (outside-stage UI)
-       ======================================= */
-    function pctForDex(n) {
-      const clamped = Math.max(1, Math.min(MAX_DEX, n || 1));
-      return (clamped / MAX_DEX) * 100;
-    }
+    /* ---------- Rail ---------- */
+    const pctForDex = (n) => (Math.max(1, Math.min(MAX_DEX, n || 1)) / MAX_DEX) * 100;
 
     function clearRailDecor() {
       if (!railTrack) return;
@@ -126,25 +117,22 @@ window.addEventListener("DOMContentLoaded", () => {
     function renderRailDecor(currentMode) {
       if (!railTrack) return;
       clearRailDecor();
-      if (currentMode === "hard") return; // no markers in hard
+      if (currentMode === "hard") return;
 
       GEN_STARTS.forEach((startNum, idx) => {
         const pos = pctForDex(startNum);
 
-        // vertical divider line
         const divider = document.createElement("div");
         divider.className = "rail-divider";
         divider.style.bottom = pos + "%";
         railTrack.appendChild(divider);
 
-        // generation badge INSIDE the rail
         const badge = document.createElement("div");
         badge.className = "rail-badge";
         badge.style.bottom = pos + "%";
         badge.textContent = `GEN ${idx + 1}`;
         railTrack.appendChild(badge);
 
-        // LEFT label with starting dex number (only in Easy)
         if (currentMode === "easy") {
           const lab = document.createElement("div");
           lab.className = "rail-left-label";
@@ -157,34 +145,26 @@ window.addEventListener("DOMContentLoaded", () => {
 
     function updateRail(dexNumber, currentMode) {
       if (!rail || !railFill || !railNeedle || !needleLine || !needleLabel) return;
-
       rail.classList.remove("pokedex-rail--hidden");
-
       const pct = pctForDex(dexNumber);
       railFill.style.height = pct + "%";
-
       railNeedle.style.bottom = pct + "%";
       needleLine.style.width = "100%";
       needleLabel.textContent = `#${dexNumber ?? "—"}`;
-
-      // Repaint markers when mode changes
       renderRailDecor(currentMode || "easy");
     }
 
-    /* =======================================
-       Game UI / HUD
-       ======================================= */
-
+    /* ---------- Game UI ---------- */
     function setGameActive(active) {
       gameActive = active;
 
-      // Show/hide A/B controls (but keep their DOM; avoids layout shift)
+      // A/B buttons hidden until game starts
       controls?.classList.toggle("hidden", !active);
 
-      // Hide HUD side blocks when inactive (if present)
+      // Hide left/right HUD blocks until game starts
       hud?.classList.toggle("inactive", !active);
 
-      // Keep rail column reserved, only hide its *contents* when inactive
+      // Keep rail column; hide contents when inactive
       rail?.classList.toggle("pokedex-rail--hidden", !active);
     }
 
@@ -200,7 +180,6 @@ window.addEventListener("DOMContentLoaded", () => {
         hudRule.classList.toggle("higher", gameActive && rule === "higher");
         hudRule.classList.toggle("lower",  gameActive && rule === "lower");
       }
-
       if (currentId != null) updateRail(currentId, mode || "easy");
     }
 
@@ -239,13 +218,13 @@ window.addEventListener("DOMContentLoaded", () => {
       });
     }
 
-    // --- Overlay helpers ---
-    function showStart() { startScreen?.classList.remove("hidden"); }
-    function hideStart() { startScreen?.classList.add("hidden"); }
-    function showEnd()   { endScreen?.classList.remove("hidden"); }
-    function hideEnd()   { endScreen?.classList.add("hidden"); }
+    // Overlays
+    const showStart = () => startScreen?.classList.remove("hidden");
+    const hideStart = () => startScreen?.classList.add("hidden");
+    const showEnd   = () => endScreen?.classList.remove("hidden");
+    const hideEnd   = () => endScreen?.classList.add("hidden");
 
-    // --- Rolling machinery (session token protects from races) ---
+    /* ---------- Rolling ---------- */
     async function prepRoll(id) {
       imgA.src = urlFor(currentId ?? randId());
       imgB.src = urlFor(id);
@@ -290,14 +269,12 @@ window.addEventListener("DOMContentLoaded", () => {
       watchdogLoop(mySession);
     }
 
-    async function stopAndJudge(fromTimeout = false) {
+    async function stopAndJudge() {
       if (!rolling) return;
 
-      // cancel loops immediately
       session++;
       rolling = false;
 
-      // lock visuals on candidate BEFORE flash to avoid a stray swap
       imgA.classList.add("silhouette");
       imgB.classList.add("silhouette");
       imgA.style.opacity = 0;
@@ -305,7 +282,6 @@ window.addEventListener("DOMContentLoaded", () => {
 
       if (timerEl) { timerEl.textContent = "—"; timerEl.classList.remove("warn"); }
 
-      // reveal
       flash.style.opacity = 1;
       await sleep(120);
       flash.style.opacity = 0;
@@ -316,7 +292,6 @@ window.addEventListener("DOMContentLoaded", () => {
       imgB.style.opacity = 1;
       pop(imgB, 250);
 
-      // judge
       const ok = rule === "higher" ? candidateId > currentId : candidateId < currentId;
       if (ok) {
         score += mult;
@@ -327,70 +302,59 @@ window.addEventListener("DOMContentLoaded", () => {
         mult   = 1;
       }
 
-      // settle back to A layer
       await sleep(280);
       imgA.src = urlFor(currentId);
       imgA.style.opacity = 1;
       imgB.style.opacity = 0;
       setHUD();
 
-      // game over -> end screen
       if (lives <= 0) {
         if (finalScore) finalScore.textContent = String(score);
-        setGameActive(false);
+        setGameActive(false);   // hides A/B + HUD side blocks
         showEnd();
         return;
       }
 
-      // next round instruction
       newRule();
     }
 
-    // --- Debounce (prevents double taps) ---
+    /* ---------- Debounce & inputs ---------- */
     function withDebounce(fn, ms = 120) {
       return (...args) => {
         if (debouncing) return;
         debouncing = true;
-        try { fn(...args); } finally {
-          setTimeout(() => { debouncing = false; }, ms);
-        }
+        try { fn(...args); } finally { setTimeout(() => { debouncing = false; }, ms); }
       };
     }
 
-    // --- Inputs ---
     const onA = withDebounce(() => {
       if (!gameActive) return;
-      if (!rolling) startRoll();
-      else stopAndJudge(false);
+      if (!rolling) startRoll(); else stopAndJudge();
     });
-
     const onB = withDebounce(() => {
       if (!gameActive || !rolling) return;
-      stopAndJudge(false);
+      stopAndJudge();
     });
 
     btnA?.addEventListener("click", onA);
     btnB?.addEventListener("click", onB);
     window.addEventListener("keydown", (e) => {
-      if (e.key === "Enter" || e.key === " ") onA();                 // A
-      if (e.key.toLowerCase() === "b" || e.key === "Escape") onB();  // B
+      if (e.key === "Enter" || e.key === " ") onA();
+      if (e.key.toLowerCase() === "b" || e.key === "Escape") onB();
     });
 
-    // --- Start buttons: pick difficulty → reveal first mon (no auto-roll) ---
+    /* ---------- Start / Restart ---------- */
     startButtons?.forEach(btn => {
       btn.addEventListener("click", async () => {
         const m = btn.getAttribute("data-mode");
         if (!modes[m]) return;
         mode = m;
 
-        // Begin a new game
         score = 0; lives = 3; mult = 1;
-        setGameActive(true);
+        setGameActive(true);         // show A/B and HUD blocks
 
-        // Render rail decor for the chosen mode
         renderRailDecor(mode);
 
-        // Reveal the first Pokémon (no auto-roll)
         if (!currentId) currentId = randId();
         await showInstant(currentId);
 
@@ -400,10 +364,9 @@ window.addEventListener("DOMContentLoaded", () => {
       });
     });
 
-    // --- Play Again: reset state and return to difficulty picker ---
     playAgain?.addEventListener("click", async () => {
       setGameActive(false);
-      mode  = null;
+      mode = null;
 
       clearRailDecor();
       if (railFill) railFill.style.height = "0%";
@@ -421,16 +384,21 @@ window.addEventListener("DOMContentLoaded", () => {
       showStart();
     });
 
-    // --- Initial boot: preload a starting Pokémon; keep rail column visible (contents hidden) ---
+    /* ---------- First paint: FORCE idle ---------- */
+    // (Even if HTML classes were missing, we guarantee the idle look.)
+    controls?.classList.add("hidden");
+    hud?.classList.add("inactive");
+    rail?.classList.add("pokedex-rail--hidden");
+
     currentId = randId();
     imgA.src = urlFor(currentId);
     imgA.style.opacity = 0;
     imgB.style.opacity = 0;
     if (timerEl) { timerEl.textContent = "—"; timerEl.classList.remove("warn"); }
 
-    rail?.classList.add("pokedex-rail--hidden"); // reserve column but hide contents
     setGameActive(false);
     setHUD();
+    hideEnd();
     showStart();
   })();
 });
