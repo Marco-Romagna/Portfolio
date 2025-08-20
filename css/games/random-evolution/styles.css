@@ -129,8 +129,33 @@
 }
 
 .revo-start .btn-row { gap: 14px; }
-/* hide start overlay when JS adds .hidden */
-.revo-start.hidden { display: none; }
+
+/* Generic hidden helper */
+.revo-start.hidden, .revo-end.hidden { display: none; }
+
+/* End overlay */
+.revo-end {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  gap: 10px;
+  background: radial-gradient(120% 120% at 50% 55%, rgba(7,10,18,.94) 0%, rgba(7,10,18,.88) 60%, rgba(7,10,18,.82) 100%);
+  border-radius: 16px;
+  text-align: center;
+}
+
+.revo-end .title {
+  margin: 0 0 8px;
+  font-size: 22px;
+  letter-spacing: .4px;
+}
+
+.revo-end .subtitle {
+  margin: 0 0 16px;
+  color: var(--muted);
+  font-size: 15px;
+}
 
 .mode-btn {
   padding: 10px 16px;
