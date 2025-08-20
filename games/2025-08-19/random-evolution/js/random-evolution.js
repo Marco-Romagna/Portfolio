@@ -41,14 +41,14 @@
   const hudMode    = document.getElementById("hud-mode");
 
   // --- Settings (sprite source) ---
-  // IMPORTANT: fetch relative to THIS page's folder
-  const res = await fetch("./settings.json", { cache: "no-store" });
+  const settingsURL = new URL("../settings.json", import.meta.url);
+  const res = await fetch(settingsURL, { cache: "no-store" });
   const settings = await res.json();
+  
   const base  = settings.sprites.base_url;
-  const ext   = settings.sprites.file_extension || ".png";
-  const start = settings.sprites.range.start || 1;
-  const end   = settings.sprites.range.end   || 1025;
-
+  const ext   = settings.sprites.file_extension;
+  const start = settings.sprites.range.start;
+  const end   = settings.sprites.range.end;
   // --- National Dex meta for the rail ---
   const GEN_STARTS = [1, 152, 252, 387, 494, 650, 722, 810, 906]; // Gen 1..9
   const MAX_DEX    = end;
