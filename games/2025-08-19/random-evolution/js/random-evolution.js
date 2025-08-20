@@ -3,9 +3,10 @@
 window.addEventListener("DOMContentLoaded", () => {
   (async function () {
     /* ---------- Boot debug ---------- */
-    const settingsURL = new URL("../settings.json", import.meta.url);
+    // Resolve settings.json relative to the *page* (index.html), not the JS file.
+    const settingsURL = new URL("./settings.json", document.baseURI);
     console.log("[REVO] boot", {
-      jsURL: import.meta.url,
+      pageURL: window.location.href,
       settingsURL: settingsURL.toString(),
       startScreen: !!document.getElementById("start-screen"),
       stage: !!document.getElementById("stage")
@@ -13,10 +14,10 @@ window.addEventListener("DOMContentLoaded", () => {
 
     /* ---------- Grab DOM ---------- */
     // Stage
-    const imgA   = document.getElementById("imgA");
-    const imgB   = document.getElementById("imgB");
-    const flash  = document.getElementById("flash");
-    const timerEl= document.getElementById("timer");
+    const imgA    = document.getElementById("imgA");
+    const imgB    = document.getElementById("imgB");
+    const flash   = document.getElementById("flash");
+    const timerEl = document.getElementById("timer");
 
     // Rail (outside stage)
     const rail        = document.getElementById("pokedex-rail");
@@ -78,8 +79,8 @@ window.addEventListener("DOMContentLoaded", () => {
       medium: { speedFactor: 0.8, limitMs: 11000 },
       hard:   { speedFactor: 1.0, limitMs:  7000 }
     };
-    const baseInterval   = 500;
-    const reducedMotion  = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const baseInterval  = 500;
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
     /* ---------- State ---------- */
     let mode       = null;
