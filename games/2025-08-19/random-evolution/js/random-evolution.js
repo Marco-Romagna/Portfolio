@@ -1,4 +1,4 @@
-// Higher / Lower: A = start or re-roll one candidate, B = stop & judge (no penalty)
+// Higher / Lower with modes: A = start/re-roll one candidate, B = stop & judge, auto-lock by mode timer
 
 (async function () {
   // Elements
@@ -8,12 +8,13 @@
   const btnA = document.getElementById("a-button");
   const btnB = document.getElementById("b-button");
 
-  // HUD (no B counter)
+  // HUD
   const hudCurrent = document.getElementById("hud-current");
   const hudRule    = document.getElementById("hud-rule");
   const hudScore   = document.getElementById("hud-score");
   const hudLives   = document.getElementById("hud-lives");
   const hudMult    = document.getElementById("hud-mult");
+  const modeSelect = document.getElementById("mode-select");
 
   // Settings
   const res = await fetch("settings.json", { cache: "no-store" });
@@ -23,22 +24,25 @@
   const start = settings.sprites.range.start || 1;
   const end   = settings.sprites.range.end   || 1025;
 
-  // Timings (slower + readable)
-  const timings = {
-    swapInterval: 500, // constant, gives time to think
-    flashMs: 120,
-    revealPopMs: 250
+  // Modes (speedFactor: 1.0 = hard baseline; interval = baseInterval / factor)
+  const modes = {
+    easy:   { speedFactor: 0.4, limitMs: 16000 },
+    medium: { speedFactor: 0.8, limitMs: 11000 },
+    hard:   { speedFactor: 1.0, limitMs:  7000 }
   };
+  let mode = "medium"; // default matches the selector
+  const baseInterval = 500; // base swap interval (ms)
 
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   // State
-  let currentId   = null; // shown between rounds
-  let candidateId = null; // single candidate while rolling
+  let currentId   = null;
+  let candidateId = null;   // one candidate at a time
   let rolling     = false;
   let stopFlag    = false;
+  let deadline    = 0;      // epoch ms when we auto-lock
   let score = 0, lives = 3, mult = 1;
-  let rule = "higher"; // or "lower"
+  let rule = "higher";
 
   // Helpers
   const randId   = () => Math.floor(Math.random() * (end - start + 1)) + start;
@@ -75,24 +79,29 @@
     setHUD();
   }
 
-  // Start or re-roll a single candidate (A)
+  function currentInterval() {
+    if (reducedMotion) return 240;
+    // slower modes yield longer wait (i.e., more thinking time)
+    return baseInterval / (modes[mode]?.speedFactor || 1.0);
+  }
+
+  // A: start or re-roll one candidate (timer continues; does NOT reset on re-roll)
   async function onA() {
     if (!rolling) {
-      // start new roll against one candidate
       candidateId = pickOther();
       await prepRoll(candidateId);
       rolling = true;
       stopFlag = false;
-      rollLoop(); // fire and forget
+      deadline = performance.now() + (modes[mode]?.limitMs || 7000);
+      rollLoop();        // start alternation
+      watchdogLoop();    // start timer
     } else {
-      // re-roll candidate (no judge)
+      // re-roll candidate, keep timer running
       candidateId = pickOther();
       imgB.src = urlFor(candidateId);
-      // keep alternating with the NEW candidate
     }
   }
 
-  // Prepares layers and visibility for rolling vs one candidate
   async function prepRoll(id) {
     imgA.src = urlFor(currentId ?? randId());
     imgB.src = urlFor(id);
@@ -103,58 +112,66 @@
     flash.style.opacity = 0;
   }
 
-  // Alternation loop between current and the single candidate
+  // Alternation between current and the single candidate
   async function rollLoop() {
     while (rolling && !stopFlag) {
-      // toggle visibility
       const showB = imgB.style.opacity !== "1";
-      imgA.style.opacity = showB ? 0 : 1;
-      imgB.style.opacity = showB ? 1 : 0;
-
-      // keep silhouettes during roll
+      // keep silhouettes while rolling
       imgA.classList.add("silhouette");
       imgB.classList.add("silhouette");
-
-      await sleep(reducedMotion ? 240 : timings.swapInterval);
+      imgA.style.opacity = showB ? 0 : 1;
+      imgB.style.opacity = showB ? 1 : 0;
+      await sleep(currentInterval());
     }
   }
 
-  // Stop & judge current candidate (B)
+  // Auto-lock watchdog: stops when time is up
+  async function watchdogLoop() {
+    while (rolling && !stopFlag) {
+      if (performance.now() >= deadline) {
+        await onB(); // auto stop & judge
+        break;
+      }
+      await sleep(60);
+    }
+  }
+
+  // B: stop & judge current candidate (no penalty)
   async function onB() {
     if (!rolling) return;
     stopFlag = true;
     rolling  = false;
 
-    // Reveal candidate
+    // reveal candidate
     flash.style.opacity = 1;
-    await sleep(timings.flashMs);
+    await sleep(120);
     flash.style.opacity = 0;
 
     imgA.classList.remove("silhouette");
     imgB.classList.remove("silhouette");
     imgA.style.opacity = 0;
     imgB.style.opacity = 1;
+
     // tiny pop
-    imgB.style.transition = `transform ${timings.revealPopMs}ms cubic-bezier(.2,1,.2,1)`;
+    imgB.style.transition = `transform 250ms cubic-bezier(.2,1,.2,1)`;
     imgB.style.transform  = "scale(0.9)";
     requestAnimationFrame(() => {
       imgB.style.transform = "scale(1)";
-      setTimeout(() => { imgB.style.transition = ""; imgB.style.transform = ""; }, timings.revealPopMs + 20);
+      setTimeout(() => { imgB.style.transition = ""; imgB.style.transform = ""; }, 270);
     });
 
-    // Judge
+    // judge
     const ok = rule === "higher" ? candidateId > currentId : candidateId < currentId;
-
     if (ok) {
       score += mult;
-      mult += 1;             // grows only on correct
+      mult += 1;
       currentId = candidateId;
     } else {
       lives -= 1;
-      mult = 1;              // reset on wrong
+      mult = 1;
     }
 
-    // Settle back to A layer
+    // settle to A layer
     await sleep(280);
     imgA.src = urlFor(currentId);
     imgA.style.opacity = 1;
@@ -162,25 +179,33 @@
 
     setHUD();
 
-    // Game over → soft reset
+    // game over → soft reset
     if (lives <= 0) {
       lives = 3; score = 0; mult = 1;
       await showInstant(randId());
     }
 
-    // Next round instruction
+    // next round
     newRule();
   }
 
+  // Mode change handler
+  modeSelect?.addEventListener("change", (e) => {
+    const v = String(e.target.value || "").toLowerCase();
+    if (modes[v]) mode = v;
+    // changing mode mid-roll: do nothing special, timer keeps counting down
+  });
+
   // Init
   await showInstant(randId());
+  modeSelect && (mode = modeSelect.value);
   newRule();
 
-  // Bind controls
+  // Controls
   btnA?.addEventListener("click", onA);
   btnB?.addEventListener("click", onB);
   window.addEventListener("keydown", (e) => {
-    if (e.key === "Enter" || e.key === " ") btnA?.click();              // A
-    if (e.key.toLowerCase() === "b" || e.key === "Escape") btnB?.click(); // B
+    if (e.key === "Enter" || e.key === " ") btnA?.click();
+    if (e.key.toLowerCase() === "b" || e.key === "Escape") btnB?.click();
   });
 })();
