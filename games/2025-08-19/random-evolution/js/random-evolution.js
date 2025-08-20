@@ -1,11 +1,12 @@
-// Random Evolution: silhouette flicker -> speed-up -> flash -> reveal
+// Random Evolution: silhouette flicker -> speed-up -> flash -> reveal, with A/B controls
 
 (async function () {
   // Elements
   const imgA = document.getElementById("imgA");
   const imgB = document.getElementById("imgB");
   const flash = document.getElementById("flash");
-  const btn = document.getElementById("evolve-btn");
+  const btnA = document.getElementById("a-button"); // evolve
+  const btnB = document.getElementById("b-button"); // cancel
 
   // Settings
   const res = await fetch("settings.json", { cache: "no-store" });
@@ -15,7 +16,7 @@
   const start = settings.sprites.range.start || 1;
   const end = settings.sprites.range.end || 1025;
 
-  // Timings (classic feel; can move into settings later)
+  // Timings
   const timings = {
     introHold: 650,
     swaps: 16,
@@ -29,7 +30,9 @@
 
   let currentId = null;
   let busy = false;
+  let cancelRequested = false;
 
+  // Helpers
   const randId = () => Math.floor(Math.random() * (end - start + 1)) + start;
 
   const pickOther = () => {
@@ -40,21 +43,31 @@
   };
 
   const urlFor = (id) => `${base}${id}${ext}`;
+  const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+  const lerp = (a, b, t) => a + (b - a) * t;
+  const ease = (p) => p * p * (3 - 2 * p); // smoothstep
 
-  // Preload helper
   function preload(src) {
     return new Promise((resolve, reject) => {
-      const img = new Image();
-      img.onload = () => resolve(src);
-      img.onerror = reject;
-      img.src = src;
+      const i = new Image();
+      i.onload = () => resolve(src);
+      i.onerror = reject;
+      i.src = src;
     });
   }
 
-  // Smoothstep
-  const ease = (p) => p * p * (3 - 2 * p);
+  function pop(el, durMs) {
+    el.style.transition = `transform ${durMs}ms cubic-bezier(.2,1,.2,1)`;
+    el.style.transform = "scale(0.9)";
+    requestAnimationFrame(() => {
+      el.style.transform = "scale(1)";
+      setTimeout(() => {
+        el.style.transition = "";
+        el.style.transform = "";
+      }, durMs + 20);
+    });
+  }
 
-  // Show a specific id instantly (no animation)
   async function showInstant(id) {
     currentId = id;
     imgA.src = urlFor(id);
@@ -63,19 +76,27 @@
     imgB.classList.remove("silhouette");
     imgA.style.opacity = 1;
     imgB.style.opacity = 0;
+    flash.style.opacity = 0;
   }
 
-  // Evolution sequence
   async function evolve() {
     if (busy) return;
     busy = true;
-    btn.disabled = true;
+    cancelRequested = false;
+    btnA?.classList.add("disabled");
+
+    // cancel hook
+    const requestCancel = () => {
+      if (!busy) return;
+      cancelRequested = true;
+    };
+    btnB?.addEventListener("click", requestCancel, { once: true });
 
     const nextId = pickOther();
-    // Preload next to avoid hitch
-    try { await preload(urlFor(nextId)); } catch (_) { /* fallback to another pick */ }
 
-    // Prepare layers
+    try { await preload(urlFor(nextId)); } catch (_) { /* ignore; will try anyway */ }
+
+    // Prep
     imgA.src = urlFor(currentId ?? pickOther());
     imgB.src = urlFor(nextId);
     imgA.classList.add("silhouette");
@@ -84,27 +105,32 @@
     imgB.style.opacity = 0;
     flash.style.opacity = 0;
 
-    // Reduced motion path: simple crossfade
+    // Reduced motion: quick crossfade
     if (reducedMotion) {
-      imgA.classList.remove("silhouette");
-      imgB.classList.remove("silhouette");
-      imgB.style.transition = "opacity 200ms linear";
-      requestAnimationFrame(() => {
-        imgB.style.opacity = 1;
-        imgA.style.opacity = 0;
-      });
-      await new Promise((r) => setTimeout(r, 220));
-      currentId = nextId;
-      btn.disabled = false;
-      busy = false;
+      if (!cancelRequested) {
+        imgA.classList.remove("silhouette");
+        imgB.classList.remove("silhouette");
+        imgB.style.transition = "opacity 200ms linear";
+        requestAnimationFrame(() => {
+          imgB.style.opacity = 1;
+          imgA.style.opacity = 0;
+        });
+        await sleep(220);
+        currentId = nextId;
+      }
+      finish();
       return;
     }
 
-    // Intro hold on current silhouette
-    await sleep(timings.introHold);
+    // Intro hold
+    for (let t = 0; t < timings.introHold; t += 16) {
+      if (cancelRequested) return finish();
+      await sleep(16);
+    }
 
-    // Alternating silhouettes with acceleration
+    // Alternation with acceleration
     for (let i = 0; i < timings.swaps; i++) {
+      if (cancelRequested) return finish();
       const p = timings.swaps <= 1 ? 1 : i / (timings.swaps - 1);
       const interval = lerp(timings.startInterval, timings.endInterval, ease(p));
       const showB = i % 2 === 0;
@@ -113,7 +139,9 @@
       await sleep(interval);
     }
 
-    // Flash + reveal (remove silhouettes)
+    if (cancelRequested) return finish();
+
+    // Flash + reveal
     flash.style.opacity = 1;
     await sleep(timings.flashMs);
     flash.style.opacity = 0;
@@ -123,34 +151,39 @@
     imgA.style.opacity = 0;
     imgB.style.opacity = 1;
 
-    // Tiny pop (scale via transform)
     pop(imgB, timings.revealPopMs);
 
     currentId = nextId;
-    btn.disabled = false;
-    busy = false;
+    finish();
+
+    // local cleanup
+    function finish() {
+      busy = false;
+      btnA?.classList.remove("disabled");
+      // Show currentId in A layer for idle state
+      imgA.src = urlFor(currentId ?? randId());
+      imgA.classList.remove("silhouette");
+      imgB.classList.remove("silhouette");
+      imgA.style.opacity = 1;
+      imgB.style.opacity = 0;
+      flash.style.opacity = 0;
+    }
   }
 
-  // Helpers
-  function sleep(ms) { return new Promise((r) => setTimeout(r, ms)); }
-  function lerp(a, b, t) { return a + (b - a) * t; }
-
-  function pop(el, durMs) {
-    el.style.transition = `transform ${durMs}ms cubic-bezier(.2,1,.2,1)`;
-    el.style.transform = "scale(0.9)";
-    requestAnimationFrame(() => {
-      el.style.transform = "scale(1)";
-      // cleanup after
-      setTimeout(() => {
-        el.style.transition = "";
-        el.style.transform = "";
-      }, durMs + 20);
-    });
-  }
-
-  // Init: pick a starting Pokémon
+  // Init
   await showInstant(randId());
 
-  // Wire button
-  btn?.addEventListener("click", evolve);
+  // Controls
+  btnA?.addEventListener("click", evolve);
+  // Optional keyboard: Enter/Space = A, Escape/B = B
+  window.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" || e.key === " ") btnA?.click();
+    if (e.key.toLowerCase() === "b" || e.key === "Escape") {
+      // simulate cancel press
+      if (busy) {
+        const ev = new Event("click");
+        btnB?.dispatchEvent(ev);
+      }
+    }
+  });
 })();
