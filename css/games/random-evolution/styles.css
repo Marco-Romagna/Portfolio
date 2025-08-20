@@ -87,3 +87,20 @@
 .revo-hud .rule.lower { color: #f7768e; }   /* red-ish */
 .revo-hud .rule.higher { color: #7aa2f7; }  /* blue-ish */
 
+/* Stage timer (top-right) */
+.revo-timer {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  padding: 4px 8px;
+  border-radius: 8px;
+  background: rgba(0,0,0,.5);
+  border: 1px solid rgba(255,255,255,.12);
+  color: var(--text);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 13px;
+  line-height: 1;
+  pointer-events: none;
+}
+.revo-timer.warn { color: #f7768e; }  /* red-ish when close to 0 */
+
