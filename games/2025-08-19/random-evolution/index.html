@@ -29,18 +29,20 @@
   <main class="container">
     <section class="panel">
       <h2>Random Evolution</h2>
-      <p>This is the starting page for the game.</p>
+      <p>Watch a Pokémon evolve with a classic-style animation.</p>
+
+      <!-- Sprite stage -->
+      <div id="stage" class="revo-stage">
+        <img id="imgA" class="revo-img" alt="Current form">
+        <img id="imgB" class="revo-img" alt="Next form">
+        <div id="flash" class="revo-flash"></div>
+      </div>
+
+      <!-- Controls -->
+      <div class="revo-controls">
+        <button id="evolve-btn" class="btn">Evolve</button>
+      </div>
     </section>
-
-    <!-- Sprite area -->
-    <div id="sprite-container">
-      <img id="pokemon-sprite" src="" alt="Current Pokémon">
-    </div>
-
-    <!-- Controls -->
-    <div>
-      <button id="evolve-btn">Evolve</button>
-    </div>
   </main>
 
   <!-- Scripts -->
