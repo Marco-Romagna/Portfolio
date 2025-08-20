@@ -1,6 +1,7 @@
 // Start screen + fixed difficulty + timer + end screen
 // A = start (if idle) / confirm (if rolling)
 // B = cancel & judge immediately (while rolling)
+// A/B disabled outside an active game; HUD Current/Score/Mult/Lives hidden outside a game
 
 (async function () {
   // --- Stage elements ---
@@ -12,6 +13,7 @@
   // --- Controls ---
   const btnA     = document.getElementById("a-button");
   const btnB     = document.getElementById("b-button");
+  const controls = document.getElementById("controls");
 
   // --- Overlays ---
   const startScreen  = document.getElementById("start-screen");
@@ -21,6 +23,7 @@
   const playAgain    = document.getElementById("play-again");
 
   // --- HUD (display only; no mode selector) ---
+  const hud        = document.querySelector(".revo-hud");
   const hudCurrent = document.getElementById("hud-current");
   const hudRule    = document.getElementById("hud-rule");
   const hudScore   = document.getElementById("hud-score");
@@ -47,6 +50,7 @@
 
   // --- Game state ---
   let mode         = null;          // chosen on start screen
+  let gameActive   = false;         // true only during an active game (between start pick and game over)
   let currentId    = null;
   let candidateId  = null;
   let deadline     = 0;             // epoch ms when we auto-confirm
@@ -71,16 +75,24 @@
   const currentInterval = () =>
     reducedMotion ? 240 : (baseInterval / (modes[mode]?.speedFactor || 1.0));
 
+  // Toggle global game UI/inputs availability
+  function setGameActive(active) {
+    gameActive = active;
+    controls?.classList.toggle("disabled", !active);
+    hud?.classList.toggle("inactive", !active); // hides Current + Score/Mult/Lives when inactive
+  }
+
   function setHUD() {
-    if (hudCurrent) hudCurrent.textContent = currentId ? `#${String(currentId).padStart(3,"0")}` : "#—";
-    if (hudScore)   hudScore.textContent   = String(score);
-    if (hudLives)   hudLives.textContent   = String(lives);
-    if (hudMult)    hudMult.textContent    = `x${mult}`;
+    if (hudCurrent) hudCurrent.textContent = (gameActive && currentId) ? `#${String(currentId).padStart(3,"0")}` : "#—";
+    if (hudScore)   hudScore.textContent   = String(gameActive ? score : 0);
+    if (hudLives)   hudLives.textContent   = String(gameActive ? lives : 3);
+    if (hudMult)    hudMult.textContent    = `x${gameActive ? mult : 1}`;
     if (hudMode)    hudMode.textContent    = cap(mode);
     if (hudRule) {
-      hudRule.textContent = rule === "higher" ? "Higher" : "Lower";
-      hudRule.classList.toggle("higher", rule === "higher");
-      hudRule.classList.toggle("lower",  rule === "lower");
+      const txt = gameActive ? (rule === "higher" ? "Higher" : "Lower") : "—";
+      hudRule.textContent = txt;
+      hudRule.classList.toggle("higher", gameActive && rule === "higher");
+      hudRule.classList.toggle("lower",  gameActive && rule === "lower");
     }
   }
 
@@ -214,9 +226,10 @@
     imgB.style.opacity = 0;
     setHUD();
 
-    // game over -> end screen (wait for Play Again)
+    // game over -> end screen (disable game; wait for Play Again)
     if (lives <= 0) {
       if (finalScore) finalScore.textContent = String(score);
+      setGameActive(false);  // disables A/B and hides HUD left/right
       showEnd();
       return;
     }
@@ -238,14 +251,14 @@
 
   // --- Inputs ---
   const onA = withDebounce(() => {
-    if (!mode) return;          // must pick difficulty first
-    if (!rolling) startRoll();  // start
-    else stopAndJudge(false);   // confirm
+    if (!gameActive) return;   // ignore outside active game
+    if (!rolling) startRoll(); // start
+    else stopAndJudge(false);  // confirm
   });
 
   const onB = withDebounce(() => {
-    if (!mode || !rolling) return;
-    stopAndJudge(false);        // cancel & judge immediately
+    if (!gameActive || !rolling) return;
+    stopAndJudge(false);       // cancel & judge immediately
   });
 
   btnA?.addEventListener("click", onA);
@@ -262,6 +275,10 @@
       if (!modes[m]) return;
       mode = m;
 
+      // Begin a new game (activate UI)
+      score = 0; lives = 3; mult = 1;
+      setGameActive(true);       // enables A/B, shows HUD left/right
+
       // Reveal the first Pokémon (was hidden), but DO NOT start rolling yet
       if (!currentId) currentId = randId();
       await showInstant(currentId);
@@ -275,14 +292,14 @@
 
   // --- Play Again: reset state and return to difficulty picker ---
   playAgain?.addEventListener("click", async () => {
-    // reset game state
-    score = 0; lives = 3; mult = 1;
+    // reset game state (inactive until a difficulty is picked again)
+    setGameActive(false);
     mode  = null;
 
-    // pick & preload a new starting Pokémon; keep hidden under start screen
+    // pick & preload a new starting Pokémon; keep it on stage but HUD left/right hidden
     currentId = randId();
     imgA.src = urlFor(currentId);
-    imgA.style.opacity = 0;
+    imgA.style.opacity = 0; // hidden until difficulty chosen
     imgB.style.opacity = 0;
     if (timerEl) { timerEl.textContent = "—"; timerEl.classList.remove("warn"); }
     setHUD();
@@ -291,12 +308,13 @@
     showStart();
   });
 
-  // --- Initial boot: preload a starting Pokémon, keep hidden behind overlay ---
+  // --- Initial boot: preload a starting Pokémon, keep UI inactive, show start screen ---
   currentId = randId();
   imgA.src = urlFor(currentId);
   imgA.style.opacity = 0; // hidden until a difficulty is chosen
   imgB.style.opacity = 0;
   if (timerEl) { timerEl.textContent = "—"; timerEl.classList.remove("warn"); }
-  setHUD();     // shows placeholders (#—, Mode —, etc.)
-  showStart();  // overlay visible until difficulty picked
+  setGameActive(false);   // disables A/B; hides Current/Score/Mult/Lives
+  setHUD();               // HUD shows placeholders
+  showStart();            // overlay visible until difficulty picked
 })();
