@@ -78,9 +78,16 @@
   // Toggle global game UI/inputs availability
   function setGameActive(active) {
     gameActive = active;
-    controls?.classList.toggle("disabled", !active);
-    hud?.classList.toggle("inactive", !active); // hides Current + Score/Mult/Lives when inactive
+    // Hide or show A/B controls
+    if (active) {
+      controls?.classList.remove("hidden");
+    } else {
+      controls?.classList.add("hidden");
+    }
+    // Hide HUD side blocks when inactive
+    hud?.classList.toggle("inactive", !active);
   }
+
 
   function setHUD() {
     if (hudCurrent) hudCurrent.textContent = (gameActive && currentId) ? `#${String(currentId).padStart(3,"0")}` : "#—";
@@ -308,7 +315,7 @@
     showStart();
   });
 
-  // --- Initial boot: preload a starting Pokémon, keep UI inactive, show start screen ---
+   // --- Initial boot: preload a starting Pokémon, keep UI inactive, show start screen ---
   currentId = randId();
   imgA.src = urlFor(currentId);
   imgA.style.opacity = 0; // hidden until a difficulty is chosen
@@ -317,4 +324,8 @@
   setGameActive(false);   // disables A/B; hides Current/Score/Mult/Lives
   setHUD();               // HUD shows placeholders
   showStart();            // overlay visible until difficulty picked
+  
+  // --- Ensure boot state is clean ---
+  hideEnd();              // make sure end screen isn't visible (e.g., after hot reload)
+
 })();
