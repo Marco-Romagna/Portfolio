@@ -128,10 +128,7 @@
   font-size: 15px;
 }
 
-.revo-start .btn-row { gap: 14px; }
-
-/* Generic hidden helper */
-.revo-start.hidden, .revo-end.hidden { display: none; }
+.revo-end .btn-row { margin-top: 8px; }
 
 /* End overlay */
 .revo-end {
