@@ -29,14 +29,19 @@
       <h2 class="panel-title">Random Evolution</h2>
       <p class="panel-subtitle">Decide if the next Pokémon’s Pokédex number is higher or lower!</p>
 
-      <!-- Stage wrapper with external Pokédex rail -->
+      <!-- Fixed two-column layout: [rail | stage] so the stage never shifts -->
       <div class="revo-stage-wrap">
-        <!-- LEFT: Pokédex rail (outside the stage) -->
-        <div id="pokedex-rail" class="pokedex-rail">
-          <div class="rail-fill"></div>
-          <div class="needle"><span class="needle-label">#—</span></div>
-          <!-- Gen markers inserted by JS -->
-        </div>
+        <!-- LEFT: Pokédex rail (always present; contents toggle by mode) -->
+        <aside id="pokedex-rail" class="pokedex-rail">
+          <div class="rail-track">
+            <div class="rail-fill" style="height:0%"></div>
+            <div class="rail-needle">
+              <div class="needle-line"></div>
+              <div class="needle-label">#—</div>
+            </div>
+            <!-- GEN badges, left labels, and dividers injected by JS -->
+          </div>
+        </aside>
 
         <!-- RIGHT: Game stage -->
         <div id="stage" class="revo-stage">
@@ -82,7 +87,7 @@
     </section>
   </main>
 
-  <!-- JS (relative to this folder) -->
+  <!-- JS (note the relative path) -->
   <script src="./js/random-evolution.js" defer></script>
 </body>
 </html>
