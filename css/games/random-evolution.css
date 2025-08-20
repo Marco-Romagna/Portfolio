@@ -5,3 +5,60 @@
   font-size: 15px;
   line-height: 1.5;
 }
+
+/* Evolution stage */
+.revo-stage {
+  position: relative;
+  width: min(80vmin, 720px);
+  aspect-ratio: 1 / 1;
+  margin: 16px auto;
+  background: #000;
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 16px;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+}
+
+.revo-img {
+  position: absolute;
+  max-width: 80%;
+  max-height: 80%;
+  image-rendering: auto; /* consistent for official-artwork */
+  opacity: 0;
+  transition: opacity 80ms linear;
+}
+
+.revo-img.silhouette {
+  filter: brightness(0) contrast(1000%);
+}
+
+.revo-flash {
+  position: absolute;
+  inset: 0;
+  background: #fff;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Controls */
+.revo-controls {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.revo-controls .btn {
+  padding: 8px 12px;
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 10px;
+  background: rgba(255,255,255,.04);
+  color: var(--text);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.revo-controls .btn:hover {
+  background: rgba(255,255,255,.08);
+}
