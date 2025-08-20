@@ -77,7 +77,7 @@ window.addEventListener("DOMContentLoaded", () => {
     }
 
     const base  = settings.sprites.base_url;
-    theExt:
+
     const ext   = settings.sprites.file_extension || ".png";
     const start = settings.sprites.range.start || 1;
     const end   = settings.sprites.range.end   || 1025;
