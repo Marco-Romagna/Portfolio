@@ -117,20 +117,23 @@
 }
 
 .revo-start .title {
-  margin: 0 0 4px;
-  font-size: 18px;
-  letter-spacing: .3px;
+  margin: 0 0 8px;
+  font-size: 22px;
+  letter-spacing: .4px;
 }
 
 .revo-start .subtitle {
-  margin: 0 0 12px;
+  margin: 0 0 16px;
   color: var(--muted);
-  font-size: 13px;
+  font-size: 15px;
 }
 
-.revo-start .btn-row {
-  display: flex;
-  gap: 10px;
+.revo-start .btn-row { gap: 14px; }
+
+.mode-btn {
+  padding: 10px 16px;
+  border-radius: 12px;
+  font-size: 14px;
 }
 
 .mode-btn {
