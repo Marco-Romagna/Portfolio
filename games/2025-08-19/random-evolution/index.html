@@ -62,7 +62,7 @@
         <div id="flash" class="revo-flash"></div>
         <div id="timer" class="revo-timer">—</div>
       
-        <!-- Start overlay -->
+        <!-- Start overlay (visible on load) -->
         <div id="start-screen" class="revo-start">
           <h3 class="title">Random Evolution</h3>
           <p class="subtitle">Choose a difficulty to begin</p>
@@ -72,14 +72,14 @@
             <button class="mode-btn hard"   data-mode="hard">Hard</button>
           </div>
         </div>
-      </div>
       
-      <!-- End overlay -->
-      <div id="end-screen" class="revo-end hidden">
-        <h3 class="title">Game Over</h3>
-        <p class="subtitle">Final score: <span id="final-score">0</span></p>
-        <div class="btn-row">
-          <button id="play-again" class="mode-btn">Play Again</button>
+        <!-- End overlay (hidden on load) -->
+        <div id="end-screen" class="revo-end hidden">
+          <h3 class="title">Game Over</h3>
+          <p class="subtitle">Final score: <span id="final-score">0</span></p>
+          <div class="btn-row">
+            <button id="play-again" class="mode-btn">Play Again</button>
+          </div>
         </div>
       </div>
 
