@@ -62,15 +62,15 @@
   const reducedMotion  = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   // --- Game state ---
-  let mode         = null;          // chosen on start screen
-  let gameActive   = false;         // true only during an active game (between start pick and game over)
+  let mode         = null;
+  let gameActive   = false;
   let currentId    = null;
   let candidateId  = null;
-  let deadline     = 0;             // epoch ms when we auto-confirm
+  let deadline     = 0;
   let score        = 0;
   let lives        = 3;
   let mult         = 1;
-  let rule         = "higher";      // "higher" | "lower"
+  let rule         = "higher";
 
   // --- Loop/session control (prevents races) ---
   let session      = 0;
@@ -91,11 +91,7 @@
   /* ==============================
      Pokédex Rail rendering
      ============================== */
-
-  function pctForDex(n) {
-    const clamped = Math.max(1, Math.min(MAX_DEX, n || 1));
-    return (clamped / MAX_DEX) * 100;
-  }
+  const pctForDex = (n) => (Math.max(1, Math.min(MAX_DEX, n || 1)) / MAX_DEX) * 100;
 
   function clearRailDecor() {
     railTrack.querySelectorAll(".rail-divider, .rail-badge, .rail-left-label").forEach(el => el.remove());
@@ -103,6 +99,10 @@
 
   function renderRailDecor(currentMode) {
     clearRailDecor();
+
+    // reflect mode on the rail for CSS visibility rules
+    rail.classList.remove("easy", "medium", "hard");
+    if (currentMode) rail.classList.add(currentMode);
 
     // Hard mode: only the fill + needle
     if (currentMode === "hard") return;
@@ -153,15 +153,13 @@
   /* ==============================
      Game UI / HUD
      ============================== */
-
   function setGameActive(active) {
     gameActive = active;
-    // Hide or show A/B controls
+    // Show A/B controls only during an active game
     controls?.classList.toggle("hidden", !active);
-    // Hide HUD side blocks when inactive (if you have HUD)
+    // Hide HUD sides when inactive
     hud?.classList.toggle("inactive", !active);
-
-    // Show/hide rail CONTENTS but keep the column to prevent shifting
+    // Hide/show rail CONTENTS but keep the column to prevent shifting
     rail.classList.toggle("pokedex-rail--hidden", !active);
   }
 
@@ -311,7 +309,7 @@
     imgB.style.opacity = 0;
     setHUD();
 
-    // game over -> end screen (disable game; wait for Play Again)
+    // game over -> end screen
     if (lives <= 0) {
       if (finalScore) finalScore.textContent = String(score);
       setGameActive(false);
@@ -373,13 +371,12 @@
 
       hideEnd();
       hideStart();
-      newRule();   // show "Higher" / "Lower" in HUD (if present)
+      newRule();   // show "Higher" / "Lower" in HUD
     });
   });
 
   // --- Play Again: reset state and return to difficulty picker ---
   playAgain?.addEventListener("click", async () => {
-    // reset game state (inactive until a difficulty is picked again)
     setGameActive(false);
     mode  = null;
 
@@ -401,7 +398,7 @@
     showStart();
   });
 
-  // --- Initial boot: preload a starting Pokémon, keep rail column visible (contents hidden) ---
+  // --- Initial boot ---
   currentId = randId();
   imgA.src = urlFor(currentId);
   imgA.style.opacity = 0;
