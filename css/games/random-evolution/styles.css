@@ -9,10 +9,11 @@
   line-height: 1.5;
 }
 
-/* Hide helpers */
+/* Generic hide helper */
 .hidden { display: none !important; }
+
 /* Hide overlays when .hidden is present */
-.revo-start.hidden, 
+.revo-start.hidden,
 .revo-end.hidden { display: none; }
 
 /* ===============================
@@ -31,6 +32,7 @@
   overflow: hidden;
 }
 
+/* Base sprite */
 .revo-img {
   position: absolute;
   max-width: 80%;
@@ -40,13 +42,13 @@
   transition: opacity 80ms linear;
 }
 
-/* Silhouette */
+/* Silhouette — dark with a rim */
 .revo-img.silhouette {
   filter: brightness(0) contrast(1000%) drop-shadow(0 0 10px rgba(255,255,255,.12));
   -webkit-filter: brightness(0) contrast(1000%) drop-shadow(0 0 10px rgba(255,255,255,.12));
 }
 
-/* Flash overlay */
+/* Flash — radial fade */
 .revo-flash {
   position: absolute;
   inset: 0;
@@ -55,7 +57,7 @@
   pointer-events: none;
 }
 
-/* Timer (top-right of stage) */
+/* Stage timer (top-right) */
 .revo-timer {
   position: absolute;
   top: 10px;
@@ -70,7 +72,7 @@
   line-height: 1;
   pointer-events: none;
 }
-.revo-timer.warn { color: #f7768e; } /* red-ish when close to 0 */
+.revo-timer.warn { color: #f7768e; }  /* red-ish when close to 0 */
 
 /* ===============================
    Controls (A/B buttons)
@@ -89,6 +91,7 @@
   filter: brightness(0.9);
   transition: transform 0.1s ease-in-out;
 }
+
 #controls img:active {
   transform: scale(0.95);
 }
@@ -129,20 +132,48 @@
   inset: 0;
   display: grid;
   place-items: center;
+  padding: 20px;
   gap: 10px;
   background: radial-gradient(120% 120% at 50% 55%, rgba(7,10,18,.94) 0%, rgba(7,10,18,.88) 60%, rgba(7,10,18,.82) 100%);
   border-radius: 16px;
   text-align: center;
 }
+
 .revo-start .title {
-  margin: 0 0 8px;
-  font-size: 22px;
+  margin: 0 0 6px;
+  font-size: clamp(20px, 2.4vw, 28px);
+  font-weight: 800;
   letter-spacing: .4px;
 }
+
 .revo-start .subtitle {
-  margin: 0 0 16px;
+  margin: 0 0 12px;
   color: var(--muted);
+  font-size: clamp(14px, 1.6vw, 16px);
+}
+
+/* Rules block */
+.revo-start .rules {
+  margin: 0 0 18px;
+  text-align: left;
+  max-width: 340px;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.revo-start .rules h4 {
+  margin: 0 0 6px;
   font-size: 15px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.revo-start .rules ul {
+  list-style: disc;
+  margin: 0;
+  padding-left: 20px;
+  display: grid;
+  gap: 4px;
 }
 
 /* End overlay */
@@ -156,16 +187,19 @@
   border-radius: 16px;
   text-align: center;
 }
+
 .revo-end .title {
   margin: 0 0 8px;
   font-size: 22px;
   letter-spacing: .4px;
 }
+
 .revo-end .subtitle {
   margin: 0 0 16px;
   color: var(--muted);
   font-size: 15px;
 }
+
 .revo-end .btn-row { margin-top: 8px; }
 
 /* ===============================
@@ -182,6 +216,7 @@
   font-size: 13px;
   transition: transform .1s ease, background .15s ease;
 }
+
 .mode-btn:hover { background: rgba(255,255,255,.10); transform: translateY(-1px); }
 .mode-btn:active { transform: translateY(0); }
 
