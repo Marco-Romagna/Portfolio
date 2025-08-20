@@ -1,24 +1,31 @@
-// Start screen + fixed difficulty: A=start/confirm, B=cancel&judge, timer & race-safe
+// Start screen + fixed difficulty + timer
+// A = start (if idle) / confirm (if rolling)
+// B = cancel & judge immediately (while rolling)
 
 (async function () {
-  // Elements
+  // Stage elements
   const imgA = document.getElementById("imgA");
   const imgB = document.getElementById("imgB");
   const flash = document.getElementById("flash");
+  const timerEl = document.getElementById("timer");
+
+  // Controls
   const btnA = document.getElementById("a-button");
   const btnB = document.getElementById("b-button");
-  const timerEl = document.getElementById("timer");
+
+  // Start overlay
   const startScreen = document.getElementById("start-screen");
   const startButtons = startScreen?.querySelectorAll(".mode-btn");
 
-  // HUD (no mode selector here)
+  // HUD (no selector—just display)
   const hudCurrent = document.getElementById("hud-current");
   const hudRule    = document.getElementById("hud-rule");
   const hudScore   = document.getElementById("hud-score");
   const hudLives   = document.getElementById("hud-lives");
   const hudMult    = document.getElementById("hud-mult");
+  const hudMode    = document.getElementById("hud-mode");
 
-  // Settings
+  // Settings (sprite source)
   const res = await fetch("settings.json", { cache: "no-store" });
   const settings = await res.json();
   const base  = settings.sprites.base_url;
@@ -35,15 +42,15 @@
   const baseInterval = 500;
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  // State
-  let mode = null;            // chosen at start
+  // Game state
+  let mode = null; // chosen when clicking a start button
   let currentId   = null;
   let candidateId = null;
-  let deadline    = 0;
+  let deadline    = 0;      // epoch ms when we auto-confirm
   let score = 0, lives = 3, mult = 1;
   let rule = "higher";
 
-  // Loop/session control (prevents race conditions)
+  // Loop/session control (prevents stray swaps after stop)
   let session = 0;
   let rolling = false;
   let debouncing = false;
@@ -57,11 +64,14 @@
 
   const currentInterval = () => reducedMotion ? 240 : (baseInterval / (modes[mode]?.speedFactor || 1.0));
 
+  function cap(str) { return str ? str[0].toUpperCase() + str.slice(1) : "—"; }
+
   function setHUD() {
     if (hudCurrent) hudCurrent.textContent = currentId ? `#${String(currentId).padStart(3,"0")}` : "#—";
     if (hudScore)   hudScore.textContent   = String(score);
     if (hudLives)   hudLives.textContent   = String(lives);
     if (hudMult)    hudMult.textContent    = `x${mult}`;
+    if (hudMode)    hudMode.textContent    = cap(mode);
     if (hudRule) {
       hudRule.textContent = rule === "higher" ? "Higher" : "Lower";
       hudRule.classList.toggle("higher", rule === "higher");
@@ -104,21 +114,16 @@
     });
   }
 
-  // --- Start screen flow ---
-
+  // Start overlay helpers
   function showStart() {
-    // blank the stage visuals
     imgA.style.opacity = 0;
     imgB.style.opacity = 0;
     if (timerEl) { timerEl.textContent = "—"; timerEl.classList.remove("warn"); }
     startScreen?.classList.remove("hidden");
   }
+  function hideStart() { startScreen?.classList.add("hidden"); }
 
-  function hideStart() {
-    startScreen?.classList.add("hidden");
-  }
-
-  // --- Rolling machinery with session token ---
+  // --- Rolling machinery (session token protects from races) ---
 
   async function prepRoll(id) {
     imgA.src = urlFor(currentId ?? randId());
@@ -146,15 +151,10 @@
   async function watchdogLoop(mySession) {
     while (rolling && mySession === session) {
       updateTimer();
-      if (now() >= deadline) {
-        await stopAndJudge(true);
-        break;
-      }
+      if (now() >= deadline) { await stopAndJudge(true); break; }
       await sleep(60);
     }
   }
-
-  // --- Actions ---
 
   async function startRoll() {
     session++;
@@ -169,18 +169,14 @@
     watchdogLoop(mySession);
   }
 
-  async function confirm() {
-    await stopAndJudge(false);
-  }
-
   async function stopAndJudge(fromTimeout = false) {
     if (!rolling) return;
 
-    // cancel async loops
+    // cancel loops immediately
     session++;
     rolling = false;
 
-    // lock visuals on candidate before flash (prevents stray swap)
+    // lock to candidate before flash (avoid stray swap)
     imgA.classList.add("silhouette");
     imgB.classList.add("silhouette");
     imgA.style.opacity = 0;
@@ -210,84 +206,77 @@
       mult = 1;
     }
 
-    // settle
+    // settle back to A layer
     await sleep(280);
     imgA.src = urlFor(currentId);
     imgA.style.opacity = 1;
     imgB.style.opacity = 0;
     setHUD();
 
-    // game over -> back to start screen
+    // game over -> back to start screen (must pick difficulty again)
     if (lives <= 0) {
       lives = 3; score = 0; mult = 1;
       await showInstant(randId()); // preload next start mon
+      mode = null;
+      setHUD();
       showStart();
-      mode = null;                // force re-pick difficulty next game
-      return;                     // don't roll a new rule yet
+      return;
     }
 
-    // next round
+    // next round instruction
     newRule();
   }
 
-  // Debounce helper
+  // Debounce to prevent double taps
   function withDebounce(fn, ms = 120) {
     return (...args) => {
       if (debouncing) return;
       debouncing = true;
-      try { fn(...args); } finally {
-        setTimeout(() => { debouncing = false; }, ms);
-      }
+      try { fn(...args); } finally { setTimeout(() => { debouncing = false; }, ms); }
     };
   }
 
   // Inputs
   const onA = withDebounce(() => {
-    if (!mode) return; // no difficulty chosen yet
-    if (!rolling) startRoll();
-    else confirm();
+    if (!mode) return;         // must pick difficulty first
+    if (!rolling) startRoll(); // start
+    else stopAndJudge(false);  // confirm
   });
 
   const onB = withDebounce(() => {
-    if (!mode) return;
-    if (!rolling) return;
-    stopAndJudge(false);
+    if (!mode || !rolling) return;
+    stopAndJudge(false);       // cancel & judge immediately
   });
 
-  // Start buttons (choose difficulty and reveal the first mon)
+  // Start buttons: choose difficulty, reveal first mon, start immediately
   startButtons?.forEach(btn => {
     btn.addEventListener("click", async () => {
       const m = btn.getAttribute("data-mode");
       if (!modes[m]) return;
       mode = m;
 
-      // reveal the first Pokémon (was hidden)
-      if (!currentId) {
-        await showInstant(randId());
-      } else {
-        imgA.style.opacity = 1;
-      }
-
+      if (!currentId) currentId = randId();     // ensure we have one
+      await showInstant(currentId);             // reveal it (was hidden)
       hideStart();
-      // Pick the first rule; player can now press A to start rolling
-      newRule();
+      newRule();                                // show "Higher/Lower"
+      startRoll();                              // begin right away
     });
   });
 
-  // Init — preload a starting Pokémon but keep it hidden behind the overlay
+  // Initial: preload a starting Pokémon but keep it hidden behind overlay
   currentId = randId();
   imgA.src = urlFor(currentId);
-  imgA.style.opacity = 0; // hidden until mode picked
+  imgA.style.opacity = 0; // hidden until a difficulty is chosen
   imgB.style.opacity = 0;
   if (timerEl) { timerEl.textContent = "—"; timerEl.classList.remove("warn"); }
-  setHUD(); // shows #--- until game begins
+  setHUD(); // shows placeholders (#—, Mode —, etc.)
   showStart();
 
   // Bind controls
   btnA?.addEventListener("click", onA);
   btnB?.addEventListener("click", onB);
   window.addEventListener("keydown", (e) => {
-    if (e.key === "Enter" || e.key === " ") onA();
-    if (e.key.toLowerCase() === "b" || e.key === "Escape") onB();
+    if (e.key === "Enter" || e.key === " ") onA();                 // A
+    if (e.key.toLowerCase() === "b" || e.key === "Escape") onB();  // B
   });
 })();
