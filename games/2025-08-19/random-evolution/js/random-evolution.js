@@ -1,4 +1,4 @@
-// Higher / Lower with modes: A = start/re-roll one candidate, B = stop & judge, auto-lock by mode timer
+// Higher / Lower with modes + timer: A = start/confirm, B = re-roll, auto-lock on timeout
 
 (async function () {
   // Elements
@@ -7,6 +7,7 @@
   const flash = document.getElementById("flash");
   const btnA = document.getElementById("a-button");
   const btnB = document.getElementById("b-button");
+  const timerEl = document.getElementById("timer");
 
   // HUD
   const hudCurrent = document.getElementById("hud-current");
@@ -24,31 +25,31 @@
   const start = settings.sprites.range.start || 1;
   const end   = settings.sprites.range.end   || 1025;
 
-  // Modes (speedFactor: 1.0 = hard baseline; interval = baseInterval / factor)
+  // Modes (interval = baseInterval / factor)
   const modes = {
     easy:   { speedFactor: 0.4, limitMs: 16000 },
     medium: { speedFactor: 0.8, limitMs: 11000 },
     hard:   { speedFactor: 1.0, limitMs:  7000 }
   };
-  let mode = "medium"; // default matches the selector
-  const baseInterval = 500; // base swap interval (ms)
+  let mode = "medium";
+  const baseInterval = 500;
 
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   // State
   let currentId   = null;
-  let candidateId = null;   // one candidate at a time
+  let candidateId = null;   // one-at-a-time candidate
   let rolling     = false;
   let stopFlag    = false;
-  let deadline    = 0;      // epoch ms when we auto-lock
+  let deadline    = 0;      // epoch ms
   let score = 0, lives = 3, mult = 1;
   let rule = "higher";
 
   // Helpers
-  const randId   = () => Math.floor(Math.random() * (end - start + 1)) + start;
+  const randId = () => Math.floor(Math.random() * (end - start + 1)) + start;
   const pickOther = () => { let id = randId(); while (currentId != null && id === currentId) id = randId(); return id; };
-  const urlFor   = (id) => `${base}${id}${ext}`;
-  const sleep    = (ms) => new Promise(r => setTimeout(r, ms));
+  const urlFor = (id) => `${base}${id}${ext}`;
+  const sleep = (ms) => new Promise(r => setTimeout(r, ms));
 
   function setHUD() {
     if (hudCurrent) hudCurrent.textContent = currentId ? `#${String(currentId).padStart(3,"0")}` : "#—";
@@ -76,16 +77,24 @@
     imgA.style.opacity = 1;
     imgB.style.opacity = 0;
     flash.style.opacity = 0;
+    if (timerEl) { timerEl.textContent = "—"; timerEl.classList.remove("warn"); }
     setHUD();
   }
 
   function currentInterval() {
     if (reducedMotion) return 240;
-    // slower modes yield longer wait (i.e., more thinking time)
     return baseInterval / (modes[mode]?.speedFactor || 1.0);
   }
 
-  // A: start or re-roll one candidate (timer continues; does NOT reset on re-roll)
+  function updateTimer() {
+    if (!timerEl || !rolling) return;
+    const ms = Math.max(0, deadline - performance.now());
+    const sec = (ms / 1000).toFixed(1);
+    timerEl.textContent = sec;
+    timerEl.classList.toggle("warn", ms <= 3000);
+  }
+
+  // A: if idle -> start; if rolling -> confirm (stop & judge)
   async function onA() {
     if (!rolling) {
       candidateId = pickOther();
@@ -93,13 +102,19 @@
       rolling = true;
       stopFlag = false;
       deadline = performance.now() + (modes[mode]?.limitMs || 7000);
-      rollLoop();        // start alternation
-      watchdogLoop();    // start timer
+      rollLoop();     // start alternation
+      watchdogLoop(); // start timer
     } else {
-      // re-roll candidate, keep timer running
-      candidateId = pickOther();
-      imgB.src = urlFor(candidateId);
+      await stopAndJudge(); // confirm
     }
+  }
+
+  // B: re-roll candidate (timer does NOT reset)
+  async function onB() {
+    if (!rolling) return;
+    candidateId = pickOther();
+    imgB.src = urlFor(candidateId);
+    // keep silhouettes and alternation; player keeps thinking within same timer
   }
 
   async function prepRoll(id) {
@@ -110,34 +125,36 @@
     imgA.style.opacity = 1;
     imgB.style.opacity = 0;
     flash.style.opacity = 0;
+    if (timerEl) timerEl.classList.remove("warn");
   }
 
-  // Alternation between current and the single candidate
+  // Alternation loop between current and the single candidate
   async function rollLoop() {
     while (rolling && !stopFlag) {
       const showB = imgB.style.opacity !== "1";
-      // keep silhouettes while rolling
       imgA.classList.add("silhouette");
       imgB.classList.add("silhouette");
       imgA.style.opacity = showB ? 0 : 1;
       imgB.style.opacity = showB ? 1 : 0;
+      updateTimer();
       await sleep(currentInterval());
     }
   }
 
-  // Auto-lock watchdog: stops when time is up
+  // Auto-lock watchdog: confirm when time expires
   async function watchdogLoop() {
     while (rolling && !stopFlag) {
+      updateTimer();
       if (performance.now() >= deadline) {
-        await onB(); // auto stop & judge
+        await stopAndJudge();
         break;
       }
       await sleep(60);
     }
   }
 
-  // B: stop & judge current candidate (no penalty)
-  async function onB() {
+  // Stop & judge current candidate (used by A confirm or timeout)
+  async function stopAndJudge() {
     if (!rolling) return;
     stopFlag = true;
     rolling  = false;
@@ -171,11 +188,12 @@
       mult = 1;
     }
 
-    // settle to A layer
+    // settle back to A layer
     await sleep(280);
     imgA.src = urlFor(currentId);
     imgA.style.opacity = 1;
     imgB.style.opacity = 0;
+    if (timerEl) { timerEl.textContent = "—"; timerEl.classList.remove("warn"); }
 
     setHUD();
 
@@ -189,11 +207,10 @@
     newRule();
   }
 
-  // Mode change handler
+  // Mode change
   modeSelect?.addEventListener("change", (e) => {
     const v = String(e.target.value || "").toLowerCase();
     if (modes[v]) mode = v;
-    // changing mode mid-roll: do nothing special, timer keeps counting down
   });
 
   // Init
@@ -205,7 +222,7 @@
   btnA?.addEventListener("click", onA);
   btnB?.addEventListener("click", onB);
   window.addEventListener("keydown", (e) => {
-    if (e.key === "Enter" || e.key === " ") btnA?.click();
-    if (e.key.toLowerCase() === "b" || e.key === "Escape") btnB?.click();
+    if (e.key === "Enter" || e.key === " ") btnA?.click();              // A
+    if (e.key.toLowerCase() === "b" || e.key === "Escape") btnB?.click(); // B (re-roll)
   });
 })();
