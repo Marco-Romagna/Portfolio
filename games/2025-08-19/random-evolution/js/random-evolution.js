@@ -1,4 +1,5 @@
-// Higher / Lower with modes + timer: A = start/confirm, B = cancel & judge
+// Start screen + fixed difficulty: A=start/confirm, B=cancel&judge, timer & race-safe
+
 (async function () {
   // Elements
   const imgA = document.getElementById("imgA");
@@ -7,14 +8,15 @@
   const btnA = document.getElementById("a-button");
   const btnB = document.getElementById("b-button");
   const timerEl = document.getElementById("timer");
+  const startScreen = document.getElementById("start-screen");
+  const startButtons = startScreen?.querySelectorAll(".mode-btn");
 
-  // HUD
+  // HUD (no mode selector here)
   const hudCurrent = document.getElementById("hud-current");
   const hudRule    = document.getElementById("hud-rule");
   const hudScore   = document.getElementById("hud-score");
   const hudLives   = document.getElementById("hud-lives");
   const hudMult    = document.getElementById("hud-mult");
-  const modeSelect = document.getElementById("mode-select");
 
   // Settings
   const res = await fetch("settings.json", { cache: "no-store" });
@@ -24,33 +26,34 @@
   const start = settings.sprites.range.start || 1;
   const end   = settings.sprites.range.end   || 1025;
 
-  // Modes
+  // Modes (interval = baseInterval / factor)
   const modes = {
     easy:   { speedFactor: 0.4, limitMs: 16000 },
     medium: { speedFactor: 0.8, limitMs: 11000 },
     hard:   { speedFactor: 1.0, limitMs:  7000 }
   };
-  let mode = "medium";
   const baseInterval = 500;
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   // State
+  let mode = null;            // chosen at start
   let currentId   = null;
-  let candidateId = null;      // single candidate per roll
-  let deadline    = 0;         // epoch ms for auto-confirm
+  let candidateId = null;
+  let deadline    = 0;
   let score = 0, lives = 3, mult = 1;
   let rule = "higher";
 
-  // Loop/session control
-  let session = 0;             // increments to cancel old loops
+  // Loop/session control (prevents race conditions)
+  let session = 0;
   let rolling = false;
   let debouncing = false;
 
   // Helpers
-  const randId = () => Math.floor(Math.random() * (end - start + 1)) + start;
+  const randId    = () => Math.floor(Math.random() * (end - start + 1)) + start;
   const pickOther = () => { let id = randId(); while (currentId != null && id === currentId) id = randId(); return id; };
-  const urlFor = (id) => `${base}${id}${ext}`;
-  const sleep = (ms) => new Promise(r => setTimeout(r, ms));
+  const urlFor    = (id) => `${base}${id}${ext}`;
+  const sleep     = (ms) => new Promise(r => setTimeout(r, ms));
+  const now       = () => performance.now();
 
   const currentInterval = () => reducedMotion ? 240 : (baseInterval / (modes[mode]?.speedFactor || 1.0));
 
@@ -86,7 +89,7 @@
 
   function updateTimer() {
     if (!timerEl || !rolling) return;
-    const ms = Math.max(0, deadline - performance.now());
+    const ms = Math.max(0, deadline - now());
     const sec = (ms / 1000).toFixed(1);
     timerEl.textContent = sec;
     timerEl.classList.toggle("warn", ms <= 3000);
@@ -99,6 +102,20 @@
       el.style.transform = "scale(1)";
       setTimeout(() => { el.style.transition = ""; el.style.transform = ""; }, durMs + 20);
     });
+  }
+
+  // --- Start screen flow ---
+
+  function showStart() {
+    // blank the stage visuals
+    imgA.style.opacity = 0;
+    imgB.style.opacity = 0;
+    if (timerEl) { timerEl.textContent = "—"; timerEl.classList.remove("warn"); }
+    startScreen?.classList.remove("hidden");
+  }
+
+  function hideStart() {
+    startScreen?.classList.add("hidden");
   }
 
   // --- Rolling machinery with session token ---
@@ -115,7 +132,6 @@
   }
 
   async function rollLoop(mySession) {
-    // alternate visibility between current (A) and candidate (B)
     while (rolling && mySession === session) {
       const showB = imgB.style.opacity !== "1";
       imgA.classList.add("silhouette");
@@ -130,9 +146,8 @@
   async function watchdogLoop(mySession) {
     while (rolling && mySession === session) {
       updateTimer();
-      if (performance.now() >= deadline) {
-        // auto-confirm
-        await stopAndJudge(true /* fromTimeout */);
+      if (now() >= deadline) {
+        await stopAndJudge(true);
         break;
       }
       await sleep(60);
@@ -142,7 +157,6 @@
   // --- Actions ---
 
   async function startRoll() {
-    // start a brand-new session
     session++;
     const mySession = session;
     rolling = true;
@@ -150,9 +164,7 @@
     candidateId = pickOther();
     await prepRoll(candidateId);
 
-    deadline = performance.now() + (modes[mode]?.limitMs || 7000);
-
-    // fire-and-forget loops bound to this session
+    deadline = now() + (modes[mode]?.limitMs || 7000);
     rollLoop(mySession);
     watchdogLoop(mySession);
   }
@@ -161,31 +173,22 @@
     await stopAndJudge(false);
   }
 
-  async function reroll() {
-    if (!rolling) return;
-    // just change the single candidate; do not touch session or deadline
-    candidateId = pickOther();
-    imgB.src = urlFor(candidateId);
-  }
-
-  // Stop flicker & judge the candidate now
   async function stopAndJudge(fromTimeout = false) {
     if (!rolling) return;
 
-    // cancel loops by bumping session and flipping rolling off
+    // cancel async loops
     session++;
     rolling = false;
 
-    // lock visuals on candidate BEFORE any flash to avoid stray swap
+    // lock visuals on candidate before flash (prevents stray swap)
     imgA.classList.add("silhouette");
     imgB.classList.add("silhouette");
     imgA.style.opacity = 0;
     imgB.style.opacity = 1;
 
-    // stop timer UI
     if (timerEl) { timerEl.textContent = "—"; timerEl.classList.remove("warn"); }
 
-    // reveal candidate
+    // reveal
     flash.style.opacity = 1;
     await sleep(120);
     flash.style.opacity = 0;
@@ -207,23 +210,27 @@
       mult = 1;
     }
 
-    // settle back to A layer showing the *current* (post-judgment) mon
+    // settle
     await sleep(280);
     imgA.src = urlFor(currentId);
     imgA.style.opacity = 1;
     imgB.style.opacity = 0;
     setHUD();
 
+    // game over -> back to start screen
     if (lives <= 0) {
       lives = 3; score = 0; mult = 1;
-      await showInstant(randId());
+      await showInstant(randId()); // preload next start mon
+      showStart();
+      mode = null;                // force re-pick difficulty next game
+      return;                     // don't roll a new rule yet
     }
 
+    // next round
     newRule();
   }
 
-  // --- Input handlers with light debounce to avoid double-fires ---
-
+  // Debounce helper
   function withDebounce(fn, ms = 120) {
     return (...args) => {
       if (debouncing) return;
@@ -234,28 +241,47 @@
     };
   }
 
-  // A: if idle -> start roll; if rolling -> confirm now
+  // Inputs
   const onA = withDebounce(() => {
+    if (!mode) return; // no difficulty chosen yet
     if (!rolling) startRoll();
     else confirm();
   });
 
-  // B: if rolling -> cancel flicker & judge now (no re-roll here per your request)
   const onB = withDebounce(() => {
+    if (!mode) return;
     if (!rolling) return;
     stopAndJudge(false);
   });
 
-  // Mode changes don’t interrupt current roll; new mode applies next start
-  modeSelect?.addEventListener("change", (e) => {
-    const v = String(e.target.value || "").toLowerCase();
-    if (modes[v]) mode = v;
+  // Start buttons (choose difficulty and reveal the first mon)
+  startButtons?.forEach(btn => {
+    btn.addEventListener("click", async () => {
+      const m = btn.getAttribute("data-mode");
+      if (!modes[m]) return;
+      mode = m;
+
+      // reveal the first Pokémon (was hidden)
+      if (!currentId) {
+        await showInstant(randId());
+      } else {
+        imgA.style.opacity = 1;
+      }
+
+      hideStart();
+      // Pick the first rule; player can now press A to start rolling
+      newRule();
+    });
   });
 
-  // Init
-  await showInstant(randId());
-  modeSelect && (mode = modeSelect.value);
-  newRule();
+  // Init — preload a starting Pokémon but keep it hidden behind the overlay
+  currentId = randId();
+  imgA.src = urlFor(currentId);
+  imgA.style.opacity = 0; // hidden until mode picked
+  imgB.style.opacity = 0;
+  if (timerEl) { timerEl.textContent = "—"; timerEl.classList.remove("warn"); }
+  setHUD(); // shows #--- until game begins
+  showStart();
 
   // Bind controls
   btnA?.addEventListener("click", onA);
