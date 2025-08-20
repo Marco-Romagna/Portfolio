@@ -87,3 +87,9 @@
 .revo-hud .rule.lower { color: #f7768e; }   /* red-ish */
 .revo-hud .rule.higher { color: #7aa2f7; }  /* blue-ish */
 
+/* Grey-out B button when out of uses */
+#b-button.disabled {
+  filter: grayscale(100%) brightness(0.6);
+  pointer-events: none;
+}
+
