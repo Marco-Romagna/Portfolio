@@ -131,7 +131,7 @@ window.addEventListener("DOMContentLoaded", () => {
       if (!railTrack) return;
       clearRailDecor();
 
-      // dividers at generation starts
+      // Dividers at generation starts
       GEN_STARTS.forEach(startNum => {
         const pos = pctForDex(startNum);
         const divider = document.createElement("div");
@@ -140,7 +140,7 @@ window.addEventListener("DOMContentLoaded", () => {
         railTrack.appendChild(divider);
       });
 
-      // overlay midpoint labels (skip for hard)
+      // Midpoint overlay labels (skip for hard)
       if (currentMode === "hard") return;
 
       const bounds = [...GEN_STARTS, MAX_DEX + 1];
@@ -274,7 +274,7 @@ window.addEventListener("DOMContentLoaded", () => {
         updateTimer();
         if (now() >= deadline) {
           dlog("timeout:deadline", { at: now(), deadline, rule, currentId, candidateId });
-          await stopAndJudge(true); // timed out
+          await stopAndJudge("timeout");
           break;
         }
         await sleep(60);
@@ -295,7 +295,7 @@ window.addEventListener("DOMContentLoaded", () => {
       watchdogLoop(mySession);
     }
 
-    async function stopAndJudge(timedOut = false) {
+    async function stopAndJudge(action /* "accept" | "cancel" | "timeout" */) {
       if (!rolling) return;
       session++;
       rolling = false;
@@ -317,34 +317,58 @@ window.addEventListener("DOMContentLoaded", () => {
       imgB.style.opacity = 1;
       pop(imgB, 250);
 
-      const ok = rule === "higher" ? candidateId > currentId : candidateId < currentId;
+      // Snapshot before any changes for logging clarity
+      const prevCurrent = currentId;
+
+      // Does the candidate satisfy the rule?
+      const isCorrectDir = (rule === "higher") ? (candidateId > currentId) : (candidateId < currentId);
+
+      // Action semantics:
+      // - "accept" or "timeout" => you let evolution go through (candidate becomes current)
+      // - "cancel"              => you reject the evolution (current stays)
+      let gained = false;
+      let lost   = false;
+
+      if (action === "accept" || action === "timeout") {
+        if (isCorrectDir) {
+          score += mult; mult += 1;
+          currentId = candidateId;          // evolution applied
+          gained = true;
+        } else {
+          lives -= 1; mult = 1;
+          currentId = candidateId;          // accepted a wrong evolution; it applies
+          lost = true;
+        }
+      } else if (action === "cancel") {
+        if (!isCorrectDir) {
+          score += mult; mult += 1;
+          // currentId stays; you correctly rejected
+          gained = true;
+        } else {
+          lives -= 1; mult = 1;
+          // currentId stays; you wrongly rejected
+          lost = true;
+        }
+      }
+
       dlog("compare", {
         rule,
-        current: currentId,
+        current_before: prevCurrent,
         next: candidateId,
-        result: ok ? "correct" : "wrong",
-        timedOut
+        current_after: currentId,
+        isCorrectDir,
+        action,
+        outcome: gained ? "point" : (lost ? "life_lost" : "noop")
       });
-
-      if (ok && !timedOut) {
-        // Only reward if user actively stopped in time
-        score += mult;
-        mult  += 1;
-        currentId = candidateId;
-        dlog("score:update", { score, mult, lives });
-      } else {
-        lives -= 1;
-        mult   = 1;
-        // If not rewarding on timeout, keep currentId as-is
-        if (!ok && !timedOut) currentId = currentId; // no-op, explicit for clarity
-        dlog("life:lost", { score, mult, lives });
-      }
 
       await sleep(280);
       imgA.src = urlFor(currentId);
       imgA.style.opacity = 1;
       imgB.style.opacity = 0;
       setHUD();
+
+      if (lost) dlog("life:lost", { score, mult, lives });
+      if (gained) dlog("score:update", { score, mult, lives });
 
       if (lives <= 0) {
         if (finalScore) finalScore.textContent = String(score);
@@ -368,19 +392,20 @@ window.addEventListener("DOMContentLoaded", () => {
     const onA = withDebounce(() => {
       if (!gameActive) return;
       dlog("input:A", { rolling });
-      if (!rolling) startRoll(); else stopAndJudge(false);
+      if (!rolling) startRoll();
+      else stopAndJudge("accept");
     });
     const onB = withDebounce(() => {
       if (!gameActive || !rolling) return;
       dlog("input:B");
-      stopAndJudge(false);
+      stopAndJudge("cancel");
     });
 
     btnA?.addEventListener("click", onA);
     btnB?.addEventListener("click", onB);
     window.addEventListener("keydown", (e) => {
-      if (e.key === "Enter" || e.key === " ") onA();
-      if (e.key.toLowerCase() === "b" || e.key === "Escape") onB();
+      if (e.key === "Enter" || e.key === " ") onA();              // A = accept
+      if (e.key.toLowerCase() === "b" || e.key === "Escape") onB(); // B/Esc = cancel
     });
 
     /* ---------- Start / Restart ---------- */
