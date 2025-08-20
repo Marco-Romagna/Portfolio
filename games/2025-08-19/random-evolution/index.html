@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Random Evolution • Game</title>
   <meta name="color-scheme" content="dark light" />
-  <!-- Main portfolio styles -->
+  <!-- Main portfolio styles (keep if you have it) -->
   <link rel="stylesheet" href="../../../css/main.css">
   <!-- Game-specific styles -->
   <link rel="stylesheet" href="../../../css/games/random-evolution/styles.css">
@@ -29,19 +29,45 @@
       <h2 class="panel-title">Random Evolution</h2>
       <p class="panel-subtitle">Decide if the next Pokémon’s Pokédex number is higher or lower!</p>
 
-      <!-- Fixed two-column layout: [rail | stage] so the stage never shifts -->
+      <!-- HUD -->
+      <div id="hud" class="revo-hud">
+        <div class="hud-left">
+          <span class="tag">Current</span>
+          <span id="hud-current" class="mono">#—</span>
+        </div>
+        <div class="hud-center">
+          <span class="tag">Aim</span>
+          <span id="hud-rule" class="rule">—</span>
+          <span class="tag">Mode</span>
+          <span id="hud-mode" class="mono">—</span>
+        </div>
+        <div class="hud-right">
+          <span class="tag">Score</span>
+          <span id="hud-score" class="mono">0</span>
+          <span class="sep">•</span>
+          <span class="tag">Mult</span>
+          <span id="hud-mult" class="mono">x1</span>
+          <span class="sep">•</span>
+          <span class="tag">Lives</span>
+          <span id="hud-lives" class="mono">3</span>
+        </div>
+      </div>
+
+      <!-- Stage wrapper (LEFT rail + RIGHT stage) -->
       <div class="revo-stage-wrap">
-        <!-- LEFT: Pokédex rail (always present; contents toggle by mode) -->
-        <aside id="pokedex-rail" class="pokedex-rail">
+        <!-- LEFT: Pokédex rail (outside the stage) -->
+        <div id="pokedex-rail" class="pokedex-rail">
           <div class="rail-track">
-            <div class="rail-fill" style="height:0%"></div>
+            <div class="rail-fill"></div>
+
+            <!-- Needle showing current Dex position -->
             <div class="rail-needle">
               <div class="needle-line"></div>
-              <div class="needle-label">#—</div>
+              <span class="needle-label">#—</span>
             </div>
-            <!-- GEN badges, left labels, and dividers injected by JS -->
+            <!-- Gen dividers, chips, and left labels are inserted by JS -->
           </div>
-        </aside>
+        </div>
 
         <!-- RIGHT: Game stage -->
         <div id="stage" class="revo-stage">
@@ -54,12 +80,15 @@
           <div id="start-screen" class="revo-start">
             <div class="start-content">
               <h3 class="title">Do you know your Pokédex numbers?</h3>
+
               <div class="rules-list">
                 <p><span class="k">1.</span> Decide if the next Pokémon’s number is <strong>higher</strong> or <strong>lower</strong>.</p>
                 <p><span class="k">2.</span> You only have a few seconds to choose!</p>
                 <p><span class="k">3.</span> Press <strong>B</strong> to stop the evolution if it doesn’t match the Pokédex number direction.</p>
               </div>
+
               <p class="subtitle bigger">Choose your difficulty to begin.</p>
+
               <div class="btn-row big">
                 <button class="mode-btn easy"   data-mode="easy">Easy</button>
                 <button class="mode-btn medium" data-mode="medium">Medium</button>
@@ -76,8 +105,8 @@
               <button id="play-again" class="mode-btn">Play Again</button>
             </div>
           </div>
-        </div><!-- /stage -->
-      </div><!-- /stage-wrap -->
+        </div><!-- /revo-stage -->
+      </div><!-- /revo-stage-wrap -->
 
       <!-- Controls -->
       <div id="controls">
@@ -87,7 +116,7 @@
     </section>
   </main>
 
-  <!-- JS (note the relative path) -->
+  <!-- Scripts -->
   <script src="./js/random-evolution.js" defer></script>
 </body>
 </html>
