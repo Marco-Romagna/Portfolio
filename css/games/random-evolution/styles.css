@@ -124,7 +124,7 @@
 .revo-hud .rule.higher { color: #7aa2f7; } /* blue-ish */
 
 /* ===============================
-   Overlays
+   Overlays — START
    =============================== */
 /* Start overlay */
 .revo-start {
@@ -139,7 +139,7 @@
   text-align: center;
 }
 
-/* Soft color halo behind content for a friendly feel */
+/* Soft color halo */
 .revo-start::before {
   content: "";
   position: absolute;
@@ -152,23 +152,22 @@
   filter: blur(0.5px);
 }
 
-/* Center column */
 .start-content {
   position: relative;
-  z-index: 1;          /* above the halo */
+  z-index: 1;
   display: grid;
   justify-items: center;
   gap: 14px;
-  max-width: 520px;    /* readable line length */
+  max-width: 520px;
 }
 
-/* Title with subtle color */
+/* Start title */
 .revo-start .title {
   margin: 0 0 6px;
   font-size: clamp(20px, 2.4vw, 28px);
   font-weight: 800;
   letter-spacing: .4px;
-  color: #9ab4ff;      /* soft indigo-blue accent */
+  color: #9ab4ff;
   text-shadow: 0 1px 0 rgba(0,0,0,.25);
 }
 
@@ -181,52 +180,76 @@
   color: var(--muted);
 }
 .rules-list p { margin: 6px 0; }
-
-/* Colored step numbers if you use <span class="k">1.</span> */
 .rules-list .k {
   display: inline-block;
   min-width: 1.2em;
   font-weight: 800;
-  color: #7aa2f7;      /* blue accent */
+  color: #7aa2f7;
   margin-right: 4px;
 }
 
-/* Subtitle placed between rules and buttons */
+/* Subtitle between rules and buttons */
 .revo-start .subtitle.bigger {
   margin: 6px 0 6px;
-  color: #b8c4ff;      /* lighter blue for emphasis */
+  color: #b8c4ff;
   font-size: clamp(15px, 1.9vw, 18px);
   font-weight: 700;
 }
 
-/* End overlay */
+/* ===============================
+   Overlays — END (Game Over)
+   =============================== */
 .revo-end {
   position: absolute;
   inset: 0;
   display: grid;
   place-items: center;
-  gap: 10px;
+  padding: 24px;
+  gap: 12px;
   background: radial-gradient(120% 120% at 50% 55%, rgba(7,10,18,.94) 0%, rgba(7,10,18,.88) 60%, rgba(7,10,18,.82) 100%);
   border-radius: 16px;
   text-align: center;
 }
 
+/* Soft matching halo */
+.revo-end::before {
+  content: "";
+  position: absolute;
+  inset: 10% 14%;
+  pointer-events: none;
+  border-radius: 24px;
+  background:
+    radial-gradient(38% 58% at 30% 30%, rgba(122,162,247,.10), transparent 70%),
+    radial-gradient(38% 58% at 70% 70%, rgba(247,118,142,.10), transparent 70%);
+}
+
 .revo-end .title {
-  margin: 0 0 8px;
-  font-size: 22px;
+  margin: 0 0 6px;
+  font-size: clamp(20px, 2.2vw, 26px);
+  font-weight: 800;
   letter-spacing: .4px;
+  color: #9ab4ff;
+  text-shadow: 0 1px 0 rgba(0,0,0,.25);
 }
 
 .revo-end .subtitle {
-  margin: 0 0 16px;
+  margin: 0 0 14px;
   color: var(--muted);
   font-size: 15px;
 }
 
-.revo-end .btn-row { margin-top: 8px; }
+/* Highlight the numeric final score */
+#final-score {
+  font-size: clamp(20px, 2vw, 24px);
+  font-weight: 800;
+  color: #7aa2f7;
+}
+
+/* Keep a little breathing room above the button row */
+.revo-end .btn-row { margin-top: 10px; }
 
 /* ===============================
-   Difficulty Buttons
+   Difficulty / Action Buttons
    =============================== */
 .mode-btn {
   padding: 8px 14px;
@@ -243,18 +266,17 @@
 .mode-btn:hover { background: rgba(255,255,255,.10); transform: translateY(-1px); }
 .mode-btn:active { transform: translateY(0); }
 
-/* Default halos retained for non-start placements */
+/* Default halos retained for non-overlay placements */
 .mode-btn.easy   { box-shadow: 0 0 0 2px rgba(122,162,247,.15); }
 .mode-btn.medium { box-shadow: 0 0 0 2px rgba(130,170,255,.10); }
 .mode-btn.hard   { box-shadow: 0 0 0 2px rgba(247,118,142,.15); }
 
-/* Bigger, friendlier difficulty buttons on the start screen with color */
+/* Bigger, colored difficulty buttons on the start screen */
 .revo-start .btn-row.big {
   display: flex;
   gap: 14px;
   margin-top: 6px;
 }
-
 .revo-start .btn-row.big .mode-btn {
   padding: 12px 22px;
   font-size: 15px;
@@ -262,17 +284,21 @@
   box-shadow: 0 3px 0 rgba(0,0,0,.35), 0 0 0 2px rgba(255,255,255,.06) inset;
   border: 1px solid rgba(255,255,255,.12);
 }
-
-/* Friendly, readable colors against dark background */
 .revo-start .btn-row.big .mode-btn.easy   { background: #58c86a; color: #0b101b; }
 .revo-start .btn-row.big .mode-btn.medium { background: #f0a23a; color: #0b101b; }
 .revo-start .btn-row.big .mode-btn.hard   { background: #e6677a; color: #0b101b; }
+.revo-start .btn-row.big .mode-btn:hover  { filter: brightness(1.08); transform: translateY(-1px); }
+.revo-start .btn-row.big .mode-btn:active { transform: translateY(0); box-shadow: 0 1px 0 rgba(0,0,0,.35), 0 0 0 2px rgba(255,255,255,.06) inset; }
 
-.revo-start .btn-row.big .mode-btn:hover {
-  filter: brightness(1.08);
-  transform: translateY(-1px);
+/* “Play Again” button match — same shape/feel as start buttons */
+.revo-end .mode-btn {
+  padding: 12px 22px;
+  font-size: 15px;
+  border-radius: 14px;
+  background: #7aa2f7;  /* accent blue */
+  color: #0b101b;
+  box-shadow: 0 3px 0 rgba(0,0,0,.35), 0 0 0 2px rgba(255,255,255,.06) inset;
+  border: 1px solid rgba(255,255,255,.12);
 }
-.revo-start .btn-row.big .mode-btn:active {
-  transform: translateY(0);
-  box-shadow: 0 1px 0 rgba(0,0,0,.35), 0 0 0 2px rgba(255,255,255,.06) inset;
-}
+.revo-end .mode-btn:hover  { filter: brightness(1.08); transform: translateY(-1px); }
+.revo-end .mode-btn:active { transform: translateY(0); box-shadow: 0 1px 0 rgba(0,0,0,.35), 0 0 0 2px rgba(255,255,255,.06) inset; }
