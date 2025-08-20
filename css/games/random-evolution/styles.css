@@ -17,8 +17,20 @@
 .revo-end.hidden { display: none; }
 
 /* ===============================
-   Stage & Sprites
+   Stage layout
    =============================== */
+
+/* Rail + Stage side-by-side, rail should match stage height */
+.revo-stage-wrap {
+  display: flex;
+  align-items: stretch;         /* makes the rail match stage height */
+  justify-content: center;
+  gap: 16px;
+  margin: 0 auto;
+  width: fit-content;
+}
+
+/* Stage */
 .revo-stage {
   position: relative;
   width: min(80vmin, 720px);
@@ -32,7 +44,9 @@
   overflow: hidden;
 }
 
-/* Base sprite */
+/* ===============================
+   Sprites
+   =============================== */
 .revo-img {
   position: absolute;
   max-width: 80%;
@@ -42,7 +56,6 @@
   transition: opacity 80ms linear;
 }
 
-/* Silhouette — dark with a rim */
 .revo-img.silhouette {
   filter: brightness(0) contrast(1000%) drop-shadow(0 0 10px rgba(255,255,255,.12));
   -webkit-filter: brightness(0) contrast(1000%) drop-shadow(0 0 10px rgba(255,255,255,.12));
@@ -72,7 +85,7 @@
   line-height: 1;
   pointer-events: none;
 }
-.revo-timer.warn { color: #f7768e; }  /* red-ish when close to 0 */
+.revo-timer.warn { color: #f7768e; }
 
 /* ===============================
    Controls (A/B buttons)
@@ -91,10 +104,7 @@
   filter: brightness(0.9);
   transition: transform 0.1s ease-in-out;
 }
-
-#controls img:active {
-  transform: scale(0.95);
-}
+#controls img:active { transform: scale(0.95); }
 
 /* ===============================
    HUD
@@ -112,16 +122,16 @@
 .revo-hud.inactive .hud-left,
 .revo-hud.inactive .hud-right { display: none; }
 
-.revo-hud .hud-left   { justify-self: start; display: flex; gap: 8px; align-items: baseline; }
+.revo-hud .hud-left   { justify-self: start;  display: flex; gap: 8px; align-items: baseline; }
 .revo-hud .hud-center { justify-self: center; display: flex; gap: 8px; align-items: baseline; }
-.revo-hud .hud-right  { justify-self: end; display: flex; gap: 8px; align-items: baseline; }
+.revo-hud .hud-right  { justify-self: end;    display: flex; gap: 8px; align-items: baseline; }
 
 .revo-hud .tag  { color: var(--muted); }
 .revo-hud .mono { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
 .revo-hud .sep  { color: var(--muted); opacity: .7; }
 .revo-hud .rule { font-weight: 800; color: var(--accent); }
-.revo-hud .rule.lower  { color: #f7768e; } /* red-ish */
-.revo-hud .rule.higher { color: #7aa2f7; } /* blue-ish */
+.revo-hud .rule.lower  { color: #f7768e; }
+.revo-hud .rule.higher { color: #7aa2f7; }
 
 /* ===============================
    Overlays — START
@@ -170,7 +180,7 @@
   text-shadow: 0 1px 0 rgba(0,0,0,.25);
 }
 
-/* Simple numbered rules (no panels) */
+/* Simple numbered rules */
 .rules-list {
   margin: 10px 0 8px;
   text-align: left;
@@ -204,13 +214,12 @@
   display: grid;
   place-items: center;
   padding: 24px;
-  gap: 6px;  /* tighter vertical rhythm */
+  gap: 6px;
   background: radial-gradient(120% 120% at 50% 55%, rgba(7,10,18,.94) 0%, rgba(7,10,18,.88) 60%, rgba(7,10,18,.82) 100%);
   border-radius: 16px;
   text-align: center;
 }
 
-/* Soft matching halo */
 .revo-end::before {
   content: "";
   position: absolute;
@@ -223,8 +232,8 @@
 }
 
 .revo-end .title {
-  margin: 0 0 4px; /* less gap under "Game Over" */
-  font-size: clamp(22px, 3vw, 30px);  /* bigger title */
+  margin: 0 0 4px;
+  font-size: clamp(22px, 3vw, 30px);
   font-weight: 800;
   letter-spacing: .4px;
   color: #9ab4ff;
@@ -232,31 +241,26 @@
 }
 
 .revo-end .subtitle {
-  margin: 0 0 6px;  /* closer to score */
+  margin: 0 0 6px;
   color: var(--muted);
   font-size: 15px;
 }
 
-/* Highlight the numeric final score and keep sentence flow natural */
 #final-score {
-  font-size: clamp(22px, 2.4vw, 28px); /* bigger number */
+  font-size: clamp(22px, 2.4vw, 28px);
   font-weight: 900;
   color: #7aa2f7;
   display: inline-block;
-  margin-left: 4px; /* “Final score: 21” spacing */
+  margin-left: 4px;
 }
 
-/* Bring the button closer to the score */
-.revo-end .btn-row { 
-  margin-top: 4px;   /* slightly closer than before */
-}
+.revo-end .btn-row { margin-top: 4px; }
 
-/* Match start buttons look/feel for end action */
 .revo-end .mode-btn {
   padding: 12px 22px;
   font-size: 15px;
   border-radius: 14px;
-  background: #7aa2f7;  /* accent blue */
+  background: #7aa2f7;
   color: #0b101b;
   box-shadow: 0 3px 0 rgba(0,0,0,.35), 0 0 0 2px rgba(255,255,255,.06) inset;
   border: 1px solid rgba(255,255,255,.12);
@@ -282,15 +286,11 @@
 .mode-btn:hover { background: rgba(255,255,255,.10); transform: translateY(-1px); }
 .mode-btn:active { transform: translateY(0); }
 
-/* Default halos retained for non-overlay placements */
 .mode-btn.easy   { box-shadow: 0 0 0 2px rgba(122,162,247,.15); }
 .mode-btn.medium { box-shadow: 0 0 0 2px rgba(130,170,255,.10); }
 .mode-btn.hard   { box-shadow: 0 0 0 2px rgba(247,118,142,.15); }
 
-/* ===============================
-   Start screen buttons — explicit override
-   (kept at END so these always win)
-   =============================== */
+/* Start screen buttons — explicit override */
 .revo-start .btn-row.big {
   display: flex;
   gap: 14px;
@@ -311,55 +311,78 @@
 .revo-start .btn-row.big .mode-btn:active { transform: translateY(0); box-shadow: 0 1px 0 rgba(0,0,0,.35), 0 0 0 2px rgba(255,255,255,.06) inset; }
 
 /* ===============================
-   Pokédex progress bar
+   External Pokédex rail (left of stage)
    =============================== */
-.pokedex-bar {
-  position: absolute;
-  top: 12px;
-  bottom: 12px;
-  left: 12px;
-  width: 12px;
-  background: rgba(255,255,255,.10);
-  border-radius: 8px;
-  overflow: hidden;
-  z-index: 7;                 /* above sprites, below overlays */
+.pokedex-rail {
+  position: relative;
+  width: 18px;
+  background: rgba(255,255,255,.08);
+  border: 1px solid rgba(255,255,255,.10);
+  border-radius: 12px;
+  overflow: hidden;            /* keeps the fill rounded */
 }
 
-.pokedex-bar .progress {
+/* Fill grows bottom → top */
+.pokedex-rail .rail-fill {
   position: absolute;
   left: 0; right: 0;
   bottom: 0;
   height: 0%;
-  background: linear-gradient(to top, #4facfe, #00f2fe);
-  border-radius: 8px;
+  background: linear-gradient(to top, #43b0ff, #00f2fe);
+  opacity: .75;
   transition: height 180ms ease-out;
 }
 
+/* Gen markers (labels visible over the fill) */
 .gen-marker {
   position: absolute;
-  left: 18px;                 /* labels to the right of the bar */
+  left: 22px;                  /* label to the right of the rail */
   transform: translateY(50%);
-  font-size: 11px;
+  font-size: 12px;
   color: var(--muted);
   white-space: nowrap;
+  z-index: 2;                  /* above fill */
   pointer-events: none;
 }
 .gen-marker::before {
   content: "";
   position: absolute;
-  left: -16px;                /* tiny tick touching the bar */
+  left: -20px;                 /* small tick touching the rail */
   top: 50%;
-  width: 14px;
+  width: 16px;
   height: 1px;
-  background: rgba(255,255,255,.28);
+  background: rgba(255,255,255,.35);
   transform: translateY(-50%);
-  pointer-events: none;
 }
 
-.pokedex-bar.hidden { display: none; }
+/* Needle line + label (current dex) */
+.pokedex-rail .needle {
+  position: absolute;
+  left: 0; right: -12px;       /* extend a bit toward the stage gap */
+  height: 0;
+  border-top: 2px solid rgba(122,162,247,.9);
+  z-index: 3;                  /* above markers & fill */
+}
+.pokedex-rail .needle-label {
+  position: absolute;
+  top: -11px;                  /* center chip on the line */
+  right: calc(100% + 6px);     /* place to the LEFT of the rail */
+  background: rgba(20, 26, 38, .9);
+  border: 1px solid rgba(255,255,255,.18);
+  padding: 2px 6px;
+  border-radius: 8px;
+  font-size: 11px;
+  color: #bcd0ff;
+  line-height: 1;
+}
+
+.pokedex-rail.hidden { display: none; }
 
 @media (max-width: 520px) {
-  .pokedex-bar { left: 8px; width: 10px; }
-  .gen-marker { font-size: 10px; left: 14px; }
-  .gen-marker::before { left: -12px; width: 10px; }
+  .revo-stage-wrap { gap: 12px; }
+  .pokedex-rail { width: 14px; }
+  .gen-marker { font-size: 11px; left: 18px; }
+  .gen-marker::before { left: -16px; width: 14px; }
+  .pokedex-rail .needle { right: -8px; }
+  .pokedex-rail .needle-label { font-size: 10px; }
 }
