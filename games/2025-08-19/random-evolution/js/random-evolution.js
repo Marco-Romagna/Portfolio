@@ -11,8 +11,8 @@
   const timerEl  = document.getElementById("timer");
   const stage    = document.getElementById("stage");
 
-  // --- Rail elements (outside stage; column must always remain to avoid shifting) ---
-  const rail        = document.getElementById("pokedex-rail");          // <div id="pokedex-rail" class="pokedex-rail">
+  // --- Rail elements (container exists in HTML)
+  const rail        = document.getElementById("pokedex-rail");
   const railTrack   = rail.querySelector(".rail-track");
   const railFill    = rail.querySelector(".rail-fill");
   const railNeedle  = rail.querySelector(".rail-needle");
@@ -41,6 +41,7 @@
   const hudMode    = document.getElementById("hud-mode");
 
   // --- Settings (sprite source) ---
+  // IMPORTANT: fetch relative to THIS page's folder
   const res = await fetch("./settings.json", { cache: "no-store" });
   const settings = await res.json();
   const base  = settings.sprites.base_url;
@@ -49,7 +50,7 @@
   const end   = settings.sprites.range.end   || 1025;
 
   // --- National Dex meta for the rail ---
-  const GEN_STARTS = [1, 152, 252, 387, 494, 650, 722, 810, 906]; // Gen 1..9 starts
+  const GEN_STARTS = [1, 152, 252, 387, 494, 650, 722, 810, 906]; // Gen 1..9
   const MAX_DEX    = end;
 
   // --- Modes (interval = baseInterval / factor) ---
@@ -84,74 +85,84 @@
   const sleep     = (ms) => new Promise(r => setTimeout(r, ms));
   const now       = () => performance.now();
   const cap       = (s) => s ? s[0].toUpperCase() + s.slice(1) : "—";
-  const currentInterval = () => reducedMotion ? 240 : (baseInterval / (modes[mode]?.speedFactor || 1.0));
+
+  const currentInterval = () =>
+    reducedMotion ? 240 : (baseInterval / (modes[mode]?.speedFactor || 1.0));
 
   /* ==============================
-     Pokédex Rail
+     Pokédex Rail rendering
      ============================== */
-  const pctForDex = n => (Math.max(1, Math.min(MAX_DEX, n || 1)) / MAX_DEX) * 100;
+
+  function pctForDex(n) {
+    const clamped = Math.max(1, Math.min(MAX_DEX, n || 1));
+    return (clamped / MAX_DEX) * 100;
+  }
 
   function clearRailDecor() {
-    railTrack.querySelectorAll(".rail-divider, .rail-left-gen, .rail-left-start").forEach(el => el.remove());
+    railTrack.querySelectorAll(".rail-divider, .rail-badge, .rail-left-label").forEach(el => el.remove());
   }
 
   function renderRailDecor(currentMode) {
     clearRailDecor();
-    rail.classList.remove("easy","medium","hard");
-    rail.classList.add(currentMode || "easy");
 
-    // Hard mode: no generation markers at all
+    // Hard mode: only the fill + needle
     if (currentMode === "hard") return;
 
     GEN_STARTS.forEach((startNum, idx) => {
       const pos = pctForDex(startNum);
 
-      // Divider across the bar (kept visible through fill)
+      // divider across the rail
       const divider = document.createElement("div");
       divider.className = "rail-divider";
       divider.style.bottom = pos + "%";
       railTrack.appendChild(divider);
 
-      // Left labels: GEN N and (start)
-      const gen = document.createElement("div");
-      gen.className = "rail-left-gen";
-      gen.style.bottom = pos + "%";
-      gen.textContent = `GEN ${idx + 1}`;
-      railTrack.appendChild(gen);
+      // badge inside the rail
+      const badge = document.createElement("div");
+      badge.className = "rail-badge";
+      badge.style.bottom = pos + "%";
+      badge.textContent = `GEN ${idx + 1}`;
+      railTrack.appendChild(badge);
 
-      const startLabel = document.createElement("div");
-      startLabel.className = "rail-left-start";
-      startLabel.style.bottom = pos + "%";
-      startLabel.textContent = `(${startNum})`;
-      railTrack.appendChild(startLabel);
+      // left-side number label only in Easy
+      if (currentMode === "easy") {
+        const lab = document.createElement("div");
+        lab.className = "rail-left-label";
+        lab.style.bottom = pos + "%";
+        lab.textContent = `(${startNum})`;
+        railTrack.appendChild(lab);
+      }
     });
   }
 
   function updateRail(dexNumber, currentMode) {
-    // Keep column visible at all times; only reveal/hide contents via opacity
+    // show contents (the rail column itself is always present)
     rail.classList.remove("pokedex-rail--hidden");
 
     const pct = pctForDex(dexNumber);
     railFill.style.height = pct + "%";
 
-    // Needle position + right label
+    // position the needle at the same pct
     railNeedle.style.bottom = pct + "%";
     needleLine.style.width = "100%";
     needleLabel.textContent = `#${dexNumber ?? "—"}`;
 
+    // Re-render decor when mode changes (cheap & idempotent)
     renderRailDecor(currentMode || "easy");
   }
 
   /* ==============================
      Game UI / HUD
      ============================== */
+
   function setGameActive(active) {
     gameActive = active;
-    // A/B controls only during active play (as you specified)
+    // Hide or show A/B controls
     controls?.classList.toggle("hidden", !active);
-    // Hide HUD side blocks when inactive
+    // Hide HUD side blocks when inactive (if you have HUD)
     hud?.classList.toggle("inactive", !active);
-    // Rail contents hidden while inactive but column remains to avoid stage shifting
+
+    // Show/hide rail CONTENTS but keep the column to prevent shifting
     rail.classList.toggle("pokedex-rail--hidden", !active);
   }
 
@@ -167,6 +178,7 @@
       hudRule.classList.toggle("higher", gameActive && rule === "higher");
       hudRule.classList.toggle("lower",  gameActive && rule === "lower");
     }
+
     if (currentId != null) updateRail(currentId, mode || "easy");
   }
 
@@ -211,7 +223,7 @@
   function showEnd()   { endScreen?.classList.remove("hidden"); }
   function hideEnd()   { endScreen?.classList.add("hidden"); }
 
-  // --- Rolling machinery ---
+  // --- Rolling machinery (session token protects from races) ---
   async function prepRoll(id) {
     imgA.src = urlFor(currentId ?? randId());
     imgB.src = urlFor(id);
@@ -300,7 +312,7 @@
     imgB.style.opacity = 0;
     setHUD();
 
-    // game over -> end screen
+    // game over -> end screen (disable game; wait for Play Again)
     if (lives <= 0) {
       if (finalScore) finalScore.textContent = String(score);
       setGameActive(false);
@@ -308,6 +320,7 @@
       return;
     }
 
+    // next round instruction
     newRule();
   }
 
@@ -352,7 +365,7 @@
       score = 0; lives = 3; mult = 1;
       setGameActive(true);
 
-      // Render rail decor for the chosen mode immediately
+      // Render rail decor for the chosen mode
       renderRailDecor(mode);
 
       // Reveal the first Pokémon (no auto-roll)
@@ -361,21 +374,23 @@
 
       hideEnd();
       hideStart();
-      newRule();
+      newRule();   // show "Higher" / "Lower" in HUD (if present)
     });
   });
 
   // --- Play Again: reset state and return to difficulty picker ---
   playAgain?.addEventListener("click", async () => {
+    // reset game state (inactive until a difficulty is picked again)
     setGameActive(false);
     mode  = null;
 
-    // Clear rail contents but keep column width
+    // Clear rail decor while inactive, but keep column from shifting
     clearRailDecor();
     railFill.style.height = "0%";
     railNeedle.style.bottom = "0%";
     needleLabel.textContent = "#—";
 
+    // pick & preload a new starting Pokémon; keep it on stage but HUD hidden
     currentId = randId();
     imgA.src = urlFor(currentId);
     imgA.style.opacity = 0;
@@ -387,15 +402,14 @@
     showStart();
   });
 
-  // --- Initial boot ---
+  // --- Initial boot: preload a starting Pokémon, keep rail column visible (contents hidden) ---
   currentId = randId();
   imgA.src = urlFor(currentId);
   imgA.style.opacity = 0;
   imgB.style.opacity = 0;
   if (timerEl) { timerEl.textContent = "—"; timerEl.classList.remove("warn"); }
 
-  // Keep rail column visible but hide its *contents* so the stage stays centered
-  rail.classList.add("pokedex-rail--hidden");
+  rail.classList.add("pokedex-rail--hidden"); // reserve column but hide contents
   setGameActive(false);
   setHUD();
   showStart();
