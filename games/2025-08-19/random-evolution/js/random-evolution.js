@@ -2,23 +2,30 @@
 
 window.addEventListener("DOMContentLoaded", () => {
   (async function () {
-    /* ---------- Boot debug ---------- */
+    /* ---------- Boot & Debug ---------- */
     const settingsURL = new URL("./settings.json", document.baseURI);
 
-    // Debug mode
-    const DEBUG =
-      new URLSearchParams(location.search).get("debug") === "1" ||
-      localStorage.getItem("revo_debug") === "1";
+    // DEBUG is ON by default. Override with ?debug=0 or localStorage 'revo_debug' = '0'
+    const qp = new URLSearchParams(location.search).get("debug"); // "1" | "0" | null
+    const stored = localStorage.getItem("revo_debug");            // "1" | "0" | null
+    let DEBUG = true; // default on
+    if (qp === "1" || stored === "1") DEBUG = true;
+    if (qp === "0" || stored === "0") DEBUG = false;
+
     const dlog = (...args) => { if (DEBUG) console.log("[REVO]", ...args); };
+
+    // Console helpers
     window.revoDebug = {
       on()    { localStorage.setItem("revo_debug","1"); location.reload(); },
-      off()   { localStorage.removeItem("revo_debug");  location.reload(); },
-      toggle(){ localStorage.getItem("revo_debug")==="1" ? this.off() : this.on(); }
+      off()   { localStorage.setItem("revo_debug","0"); location.reload(); },
+      toggle(){ (localStorage.getItem("revo_debug")==="1") ? this.off() : this.on(); },
+      state(){ return { DEBUG, qp, stored }; }
     };
 
     dlog("boot", {
       pageURL: window.location.href,
-      settingsURL: settingsURL.toString()
+      settingsURL: settingsURL.toString(),
+      debug: DEBUG
     });
 
     /* ---------- Grab DOM ---------- */
@@ -124,6 +131,7 @@ window.addEventListener("DOMContentLoaded", () => {
       if (!railTrack) return;
       clearRailDecor();
 
+      // dividers at generation starts
       GEN_STARTS.forEach(startNum => {
         const pos = pctForDex(startNum);
         const divider = document.createElement("div");
@@ -132,6 +140,7 @@ window.addEventListener("DOMContentLoaded", () => {
         railTrack.appendChild(divider);
       });
 
+      // overlay midpoint labels (skip for hard)
       if (currentMode === "hard") return;
 
       const bounds = [...GEN_STARTS, MAX_DEX + 1];
@@ -139,11 +148,11 @@ window.addEventListener("DOMContentLoaded", () => {
       wrap.className = "rail-mid-labels";
 
       for (let i = 0; i < bounds.length - 1; i++) {
-        const start = bounds[i];
-        const next  = bounds[i + 1];
-        const lastDexInSegment = next - 1;
-        const midDex = Math.floor((start + lastDexInSegment) / 2);
-        const pos = pctForDex(midDex);
+        const segStart = bounds[i];
+        const next     = bounds[i + 1];
+        const segEnd   = next - 1;
+        const midDex   = Math.floor((segStart + segEnd) / 2);
+        const pos      = pctForDex(midDex);
 
         const lab = document.createElement("div");
         lab.className = "rail-mid-label";
@@ -263,7 +272,11 @@ window.addEventListener("DOMContentLoaded", () => {
     async function watchdogLoop(mySession) {
       while (rolling && mySession === session) {
         updateTimer();
-        if (now() >= deadline) { await stopAndJudge(true); break; }
+        if (now() >= deadline) {
+          dlog("timeout:deadline", { at: now(), deadline, rule, currentId, candidateId });
+          await stopAndJudge(true); // timed out
+          break;
+        }
         await sleep(60);
       }
     }
@@ -282,7 +295,7 @@ window.addEventListener("DOMContentLoaded", () => {
       watchdogLoop(mySession);
     }
 
-    async function stopAndJudge() {
+    async function stopAndJudge(timedOut = false) {
       if (!rolling) return;
       session++;
       rolling = false;
@@ -305,9 +318,16 @@ window.addEventListener("DOMContentLoaded", () => {
       pop(imgB, 250);
 
       const ok = rule === "higher" ? candidateId > currentId : candidateId < currentId;
-      dlog("compare", { rule, current: currentId, next: candidateId, result: ok ? "correct" : "wrong" });
+      dlog("compare", {
+        rule,
+        current: currentId,
+        next: candidateId,
+        result: ok ? "correct" : "wrong",
+        timedOut
+      });
 
-      if (ok) {
+      if (ok && !timedOut) {
+        // Only reward if user actively stopped in time
         score += mult;
         mult  += 1;
         currentId = candidateId;
@@ -315,6 +335,8 @@ window.addEventListener("DOMContentLoaded", () => {
       } else {
         lives -= 1;
         mult   = 1;
+        // If not rewarding on timeout, keep currentId as-is
+        if (!ok && !timedOut) currentId = currentId; // no-op, explicit for clarity
         dlog("life:lost", { score, mult, lives });
       }
 
@@ -346,12 +368,12 @@ window.addEventListener("DOMContentLoaded", () => {
     const onA = withDebounce(() => {
       if (!gameActive) return;
       dlog("input:A", { rolling });
-      if (!rolling) startRoll(); else stopAndJudge();
+      if (!rolling) startRoll(); else stopAndJudge(false);
     });
     const onB = withDebounce(() => {
       if (!gameActive || !rolling) return;
       dlog("input:B");
-      stopAndJudge();
+      stopAndJudge(false);
     });
 
     btnA?.addEventListener("click", onA);
