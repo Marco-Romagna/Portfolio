@@ -132,11 +132,18 @@
   inset: 0;
   display: grid;
   place-items: center;
-  padding: 20px;
+  padding: 24px;
   gap: 10px;
   background: radial-gradient(120% 120% at 50% 55%, rgba(7,10,18,.94) 0%, rgba(7,10,18,.88) 60%, rgba(7,10,18,.82) 100%);
   border-radius: 16px;
   text-align: center;
+}
+
+.start-content {
+  display: grid;
+  justify-items: center;
+  gap: 14px;
+  max-width: 520px;
 }
 
 .revo-start .title {
@@ -146,34 +153,44 @@
   letter-spacing: .4px;
 }
 
-.revo-start .subtitle {
-  margin: 0 0 12px;
-  color: var(--muted);
-  font-size: clamp(14px, 1.6vw, 16px);
-}
-
-/* Rules block */
-.revo-start .rules {
-  margin: 0 0 18px;
-  text-align: left;
-  max-width: 340px;
-  color: var(--muted);
-  font-size: 14px;
-}
-
-.revo-start .rules h4 {
+.revo-start .subtitle.bigger {
   margin: 0 0 6px;
-  font-size: 15px;
-  font-weight: 700;
-  color: var(--text);
+  color: var(--muted);
+  font-size: clamp(15px, 1.9vw, 18px);
 }
 
-.revo-start .rules ul {
-  list-style: disc;
-  margin: 0;
-  padding-left: 20px;
+/* Rules as pill cards */
+.rules-cards {
   display: grid;
-  gap: 4px;
+  gap: 10px;
+  width: 100%;
+  margin: 4px 0 10px;
+}
+
+.rule-card {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,.10);
+  background: rgba(255,255,255,.05);
+  color: var(--text);
+  font-size: 14px;
+  text-align: left;
+}
+
+.rule-card .k {
+  display: inline-grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 12px;
+  background: rgba(255,255,255,.08);
+  border: 1px solid rgba(255,255,255,.12);
 }
 
 /* End overlay */
@@ -223,3 +240,23 @@
 .mode-btn.easy   { box-shadow: 0 0 0 2px rgba(122,162,247,.15); } /* blue halo */
 .mode-btn.medium { box-shadow: 0 0 0 2px rgba(130,170,255,.1);  }
 .mode-btn.hard   { box-shadow: 0 0 0 2px rgba(247,118,142,.15); } /* red-ish halo */
+
+/* Bigger friendlier difficulty buttons for start screen */
+.revo-start .btn-row.big {
+  display: flex;
+  gap: 14px;
+  margin-top: 6px;
+}
+
+.revo-start .btn-row.big .mode-btn {
+  padding: 12px 22px;
+  font-size: 15px;
+  border-radius: 14px;
+  box-shadow: 0 3px 0 rgba(0,0,0,.35);
+}
+
+.revo-start .btn-row.big .mode-btn:hover { transform: translateY(-1px); }
+.revo-start .btn-row.big .mode-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 1px 0 rgba(0,0,0,.35);
+}
