@@ -4,21 +4,29 @@ window.addEventListener("DOMContentLoaded", () => {
   (async function () {
     /* ---------- Boot debug ---------- */
     const settingsURL = new URL("./settings.json", document.baseURI);
-    console.log("[REVO] boot", {
+
+    // Debug mode
+    const DEBUG =
+      new URLSearchParams(location.search).get("debug") === "1" ||
+      localStorage.getItem("revo_debug") === "1";
+    const dlog = (...args) => { if (DEBUG) console.log("[REVO]", ...args); };
+    window.revoDebug = {
+      on()    { localStorage.setItem("revo_debug","1"); location.reload(); },
+      off()   { localStorage.removeItem("revo_debug");  location.reload(); },
+      toggle(){ localStorage.getItem("revo_debug")==="1" ? this.off() : this.on(); }
+    };
+
+    dlog("boot", {
       pageURL: window.location.href,
-      settingsURL: settingsURL.toString(),
-      startScreen: !!document.getElementById("start-screen"),
-      stage: !!document.getElementById("stage")
+      settingsURL: settingsURL.toString()
     });
 
     /* ---------- Grab DOM ---------- */
-    // Stage
     const imgA    = document.getElementById("imgA");
     const imgB    = document.getElementById("imgB");
     const flash   = document.getElementById("flash");
     const timerEl = document.getElementById("timer");
 
-    // Rail (outside stage)
     const rail        = document.getElementById("pokedex-rail");
     const railTrack   = rail?.querySelector(".rail-track");
     const railFill    = rail?.querySelector(".rail-fill");
@@ -26,19 +34,16 @@ window.addEventListener("DOMContentLoaded", () => {
     const needleLine  = railNeedle?.querySelector(".needle-line");
     const needleLabel = railNeedle?.querySelector(".needle-label");
 
-    // Controls
     const controls = document.getElementById("controls");
     const btnA     = document.getElementById("a-button");
     const btnB     = document.getElementById("b-button");
 
-    // Overlays
     const startScreen  = document.getElementById("start-screen");
     const startButtons = startScreen?.querySelectorAll(".mode-btn");
     const endScreen    = document.getElementById("end-screen");
     const finalScore   = document.getElementById("final-score");
     const playAgain    = document.getElementById("play-again");
 
-    // HUD
     const hud        = document.getElementById("hud");
     const hudCurrent = document.getElementById("hud-current");
     const hudRule    = document.getElementById("hud-rule");
@@ -119,7 +124,6 @@ window.addEventListener("DOMContentLoaded", () => {
       if (!railTrack) return;
       clearRailDecor();
 
-      // Always draw dividers at generation starts
       GEN_STARTS.forEach(startNum => {
         const pos = pctForDex(startNum);
         const divider = document.createElement("div");
@@ -128,7 +132,6 @@ window.addEventListener("DOMContentLoaded", () => {
         railTrack.appendChild(divider);
       });
 
-      // Midpoint overlay labels (skip in hard)
       if (currentMode === "hard") return;
 
       const bounds = [...GEN_STARTS, MAX_DEX + 1];
@@ -194,6 +197,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
     function newRule() {
       rule = Math.random() < 0.5 ? "higher" : "lower";
+      dlog("rule:set", { rule });
       setHUD();
     }
 
@@ -273,6 +277,7 @@ window.addEventListener("DOMContentLoaded", () => {
       await prepRoll(candidateId);
 
       deadline = now() + (modes[mode]?.limitMs || 7000);
+      dlog("roll:start", { rule, currentId, candidateId, timeLimitMs: (modes[mode]?.limitMs || 7000) });
       rollLoop(mySession);
       watchdogLoop(mySession);
     }
@@ -300,13 +305,17 @@ window.addEventListener("DOMContentLoaded", () => {
       pop(imgB, 250);
 
       const ok = rule === "higher" ? candidateId > currentId : candidateId < currentId;
+      dlog("compare", { rule, current: currentId, next: candidateId, result: ok ? "correct" : "wrong" });
+
       if (ok) {
         score += mult;
         mult  += 1;
         currentId = candidateId;
+        dlog("score:update", { score, mult, lives });
       } else {
         lives -= 1;
         mult   = 1;
+        dlog("life:lost", { score, mult, lives });
       }
 
       await sleep(280);
@@ -319,6 +328,7 @@ window.addEventListener("DOMContentLoaded", () => {
         if (finalScore) finalScore.textContent = String(score);
         setGameActive(false);
         showEnd();
+        dlog("game:over", { finalScore: score });
         return;
       }
       newRule();
@@ -335,10 +345,12 @@ window.addEventListener("DOMContentLoaded", () => {
 
     const onA = withDebounce(() => {
       if (!gameActive) return;
+      dlog("input:A", { rolling });
       if (!rolling) startRoll(); else stopAndJudge();
     });
     const onB = withDebounce(() => {
       if (!gameActive || !rolling) return;
+      dlog("input:B");
       stopAndJudge();
     });
 
@@ -365,6 +377,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
         hideEnd();
         hideStart();
+        dlog("mode:start", { mode: m });
         newRule();
       });
     });
@@ -383,6 +396,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
       hideEnd();
       showStart();
+      dlog("game:reset");
     });
 
     /* ---------- First paint ---------- */
