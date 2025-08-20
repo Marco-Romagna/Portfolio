@@ -41,7 +41,7 @@
   const hudMode    = document.getElementById("hud-mode");
 
   // --- Settings (sprite source) ---
-  const res = await fetch("settings.json", { cache: "no-store" });
+  const res = await fetch("./settings.json", { cache: "no-store" });
   const settings = await res.json();
   const base  = settings.sprites.base_url;
   const ext   = settings.sprites.file_extension || ".png";
