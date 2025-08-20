@@ -112,39 +112,50 @@ window.addEventListener("DOMContentLoaded", () => {
 
     function clearRailDecor() {
       if (!railTrack) return;
-      railTrack.querySelectorAll(".rail-divider, .rail-badge, .rail-left-label").forEach(el => el.remove());
+      railTrack.querySelectorAll(".rail-divider").forEach(el => el.remove());
+      rail?.querySelector(".rail-mid-labels")?.remove();
     }
-
+    
     function renderRailDecor(currentMode) {
       if (!railTrack) return;
       clearRailDecor();
-      if (currentMode === "hard") return;
-
-      GEN_STARTS.forEach((startNum, idx) => {
+    
+      /* Dividers at generation starts (keep ticks even if labels are hidden in hard) */
+      GEN_STARTS.forEach(startNum => {
         const pos = pctForDex(startNum);
-
         const divider = document.createElement("div");
         divider.className = "rail-divider";
         divider.style.bottom = pos + "%";
         railTrack.appendChild(divider);
-
-        const badge = document.createElement("div");
-        badge.className = "rail-badge";
-        badge.style.bottom = pos + "%";
-        badge.textContent = `GEN ${idx + 1}`;
-        railTrack.appendChild(badge);
-
-        if (currentMode === "easy") {
-          const lab = document.createElement("div");
-          lab.className = "rail-left-label";
-          lab.style.bottom = pos + "%";
-          lab.textContent = `(${startNum})`;
-          railTrack.appendChild(lab);
-        }
       });
+    
+      /* Midpoint labels (overlayed), skip entirely in hard mode */
+      if (currentMode === "hard") return;
+    
+      // Build the list of segment bounds: [gen1Start, gen2Start, ..., end+1]
+      const bounds = [...GEN_STARTS, MAX_DEX + 1];
+    
+      const wrap = document.createElement("div");
+      wrap.className = "rail-mid-labels";
+    
+      for (let i = 0; i < bounds.length - 1; i++) {
+        const start = bounds[i];
+        const next  = bounds[i + 1];                 // next gen start or end+1
+        const lastDexInSegment = next - 1;
+        const midDex = Math.floor((start + lastDexInSegment) / 2);
+    
+        const pos = pctForDex(midDex);
+        const lab = document.createElement("div");
+        lab.className = "rail-mid-label";
+        lab.style.bottom = pos + "%";
+        lab.textContent = `GEN ${i + 1}`;
+        wrap.appendChild(lab);
+      }
+    
+      rail.appendChild(wrap);
     }
 
-    function updateRail(dexNumber, currentMode) {
+    function updateRail(dexNumber) {
       if (!rail || !railFill || !railNeedle || !needleLine || !needleLabel) return;
       rail.classList.remove("pokedex-rail--hidden");
       const pct = pctForDex(dexNumber);
@@ -152,7 +163,6 @@ window.addEventListener("DOMContentLoaded", () => {
       railNeedle.style.bottom = pct + "%";
       needleLine.style.width = "100%";
       needleLabel.textContent = `#${dexNumber ?? "—"}`;
-      renderRailDecor(currentMode || "easy");
     }
 
     /* ---------- Game UI ---------- */
