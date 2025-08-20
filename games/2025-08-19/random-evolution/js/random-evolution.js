@@ -77,7 +77,6 @@ window.addEventListener("DOMContentLoaded", () => {
     }
 
     const base  = settings.sprites.base_url;
-
     const ext   = settings.sprites.file_extension || ".png";
     const start = settings.sprites.range.start || 1;
     const end   = settings.sprites.range.end   || 1025;
@@ -205,9 +204,35 @@ window.addEventListener("DOMContentLoaded", () => {
       if (currentId != null) updateRail(currentId);
     }
 
+    /* ---------- Challenge-weighted rule picker ---------- */
+    function biasStrengthForMode(m) {
+      // 0 = neutral (always 50/50), 1 = fully challenge-weighted
+      // Tune to taste
+      if (m === "easy")   return 0.25;
+      if (m === "medium") return 0.55;
+      if (m === "hard")   return 0.85;
+      return 0.5; // default
+    }
+
+    function pickRule(currentDex, m) {
+      // normalized position in the dex (0..1)
+      const x = Math.max(1, Math.min(MAX_DEX, currentDex || 1)) / MAX_DEX;
+      const s = biasStrengthForMode(m);
+
+      // pHigherNeutral = 0.5
+      // pHigherHard    = x  (contrarian: rarer outcome is favored)
+      // Mix by strength s
+      const pHigher = (1 - s) * 0.5 + s * x;
+
+      const r = Math.random();
+      const chosen = (r < pHigher) ? "higher" : "lower";
+
+      dlog("rule:pick", { currentDex, x: +x.toFixed(3), strength: s, pHigher: +pHigher.toFixed(3), roll: +r.toFixed(3), chosen });
+      return chosen;
+    }
+
     function newRule() {
-      rule = Math.random() < 0.5 ? "higher" : "lower";
-      dlog("rule:set", { rule });
+      rule = pickRule(currentId, mode);
       setHUD();
     }
 
