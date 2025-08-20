@@ -126,7 +126,6 @@
 /* ===============================
    Overlays — START
    =============================== */
-/* Start overlay */
 .revo-start {
   position: absolute;
   inset: 0;
@@ -225,7 +224,7 @@
 
 .revo-end .title {
   margin: 0 0 4px; /* less gap under "Game Over" */
-  font-size: clamp(20px, 2.2vw, 26px);
+  font-size: clamp(22px, 3vw, 30px);  /* bigger title */
   font-weight: 800;
   letter-spacing: .4px;
   color: #9ab4ff;
@@ -233,15 +232,15 @@
 }
 
 .revo-end .subtitle {
-  margin: 0 0 8px;  /* closer to score */
+  margin: 0 0 6px;  /* closer to score */
   color: var(--muted);
   font-size: 15px;
 }
 
 /* Highlight the numeric final score and keep sentence flow natural */
 #final-score {
-  font-size: clamp(20px, 2vw, 24px);
-  font-weight: 800;
+  font-size: clamp(22px, 2.4vw, 28px); /* bigger number */
+  font-weight: 900;
   color: #7aa2f7;
   display: inline-block;
   margin-left: 4px; /* “Final score: 21” spacing */
@@ -249,10 +248,10 @@
 
 /* Bring the button closer to the score */
 .revo-end .btn-row { 
-  margin-top: 6px; 
+  margin-top: 4px;   /* slightly closer than before */
 }
 
-/* Match start buttons look/feel */
+/* Match start buttons look/feel for end action */
 .revo-end .mode-btn {
   padding: 12px 22px;
   font-size: 15px;
@@ -265,3 +264,48 @@
 }
 .revo-end .mode-btn:hover  { filter: brightness(1.08); transform: translateY(-1px); }
 .revo-end .mode-btn:active { transform: translateY(0); box-shadow: 0 1px 0 rgba(0,0,0,.35), 0 0 0 2px rgba(255,255,255,.06) inset; }
+
+/* ===============================
+   Difficulty / Action Buttons (base)
+   =============================== */
+.mode-btn {
+  padding: 8px 14px;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,.12);
+  background: rgba(255,255,255,.06);
+  color: var(--text);
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 13px;
+  transition: transform .1s ease, background .15s ease, filter .15s ease, box-shadow .15s ease;
+}
+.mode-btn:hover { background: rgba(255,255,255,.10); transform: translateY(-1px); }
+.mode-btn:active { transform: translateY(0); }
+
+/* Default halos retained for non-overlay placements */
+.mode-btn.easy   { box-shadow: 0 0 0 2px rgba(122,162,247,.15); }
+.mode-btn.medium { box-shadow: 0 0 0 2px rgba(130,170,255,.10); }
+.mode-btn.hard   { box-shadow: 0 0 0 2px rgba(247,118,142,.15); }
+
+/* ===============================
+   Start screen buttons — explicit override
+   (kept at END so these always win)
+   =============================== */
+.revo-start .btn-row.big {
+  display: flex;
+  gap: 14px;
+  margin-top: 6px;
+}
+.revo-start .btn-row.big .mode-btn {
+  padding: 12px 22px;
+  font-size: 15px;
+  border-radius: 14px;
+  box-shadow: 0 3px 0 rgba(0,0,0,.35), 0 0 0 2px rgba(255,255,255,.06) inset;
+  border: 1px solid rgba(255,255,255,.12);
+  transition: transform .1s ease, filter .15s ease, box-shadow .15s ease, background .15s ease;
+}
+.revo-start .btn-row.big .mode-btn.easy   { background: #58c86a; color: #0b101b; }
+.revo-start .btn-row.big .mode-btn.medium { background: #f0a23a; color: #0b101b; }
+.revo-start .btn-row.big .mode-btn.hard   { background: #e6677a; color: #0b101b; }
+.revo-start .btn-row.big .mode-btn:hover  { filter: brightness(1.08); transform: translateY(-1px); }
+.revo-start .btn-row.big .mode-btn:active { transform: translateY(0); box-shadow: 0 1px 0 rgba(0,0,0,.35), 0 0 0 2px rgba(255,255,255,.06) inset; }
