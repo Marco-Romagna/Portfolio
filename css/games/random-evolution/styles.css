@@ -6,6 +6,16 @@
   line-height: 1.5;
 }
 
+/* Generic hide helper */
+.hidden { display: none !important; }
+
+/* Also hide overlays when .hidden is present (either rule works) */
+.revo-start.hidden, .revo-end.hidden { display: none; }
+
+/* When HUD is inactive, hide Current and Score/Mult/Lives blocks */
+.revo-hud.inactive .hud-left,
+.revo-hud.inactive .hud-right { display: none; }
+
 /* Evolution stage */
 .revo-stage {
   position: relative;
