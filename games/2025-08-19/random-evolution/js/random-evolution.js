@@ -254,12 +254,14 @@
       const m = btn.getAttribute("data-mode");
       if (!modes[m]) return;
       mode = m;
-
-      if (!currentId) currentId = randId();     // ensure we have one
-      await showInstant(currentId);             // reveal it (was hidden)
-      hideStart();
-      newRule();                                // show "Higher/Lower"
-      startRoll();                              // begin right away
+  
+      // Reveal the first Pokémon (was hidden), but DO NOT start rolling yet
+      if (!currentId) currentId = randId();
+      await showInstant(currentId);
+  
+      hideStart();   // overlay (title + buttons) disappears
+      newRule();     // shows "Higher"/"Lower" in the HUD
+      // wait for player to press A to start the roll
     });
   });
 
