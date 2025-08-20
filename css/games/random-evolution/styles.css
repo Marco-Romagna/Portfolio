@@ -129,6 +129,8 @@
 }
 
 .revo-start .btn-row { gap: 14px; }
+/* hide start overlay when JS adds .hidden */
+.revo-start.hidden { display: none; }
 
 .mode-btn {
   padding: 10px 16px;
