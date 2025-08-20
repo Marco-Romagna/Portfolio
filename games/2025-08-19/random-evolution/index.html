@@ -5,118 +5,45 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Random Evolution • Game</title>
   <meta name="color-scheme" content="dark light" />
-  <!-- Main portfolio styles (keep if you have it) -->
-  <link rel="stylesheet" href="../../../css/main.css">
-  <!-- Game-specific styles -->
-  <link rel="stylesheet" href="../../../css/games/random-evolution/styles.css">
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <!-- Header -->
   <header class="header">
     <div class="container nav">
-      <a class="brand" href="../../../index.html">
-        <span class="dot"></span><span>Marco • Portfolio</span>
+      <a class="brand" href="#">
+        <span class="dot"></span><span>Random Evolution</span>
       </a>
       <nav class="links">
-        <a class="cta" href="https://www.linkedin.com/in/marco-romagna" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+        <a class="cta" href="#">LinkedIn</a>
       </nav>
     </div>
   </header>
 
   <!-- Main -->
-  <main class="container">
-    <section class="panel">
-      <h2 class="panel-title">Random Evolution</h2>
-      <p class="panel-subtitle">Decide if the next Pokémon’s Pokédex number is higher or lower!</p>
-
-      <!-- HUD -->
-      <div id="hud" class="revo-hud">
-        <div class="hud-left">
-          <span class="tag">Current</span>
-          <span id="hud-current" class="mono">#—</span>
-        </div>
-        <div class="hud-center">
-          <span class="tag">Aim</span>
-          <span id="hud-rule" class="rule">—</span>
-          <span class="tag">Mode</span>
-          <span id="hud-mode" class="mono">—</span>
-        </div>
-        <div class="hud-right">
-          <span class="tag">Score</span>
-          <span id="hud-score" class="mono">0</span>
-          <span class="sep">•</span>
-          <span class="tag">Mult</span>
-          <span id="hud-mult" class="mono">x1</span>
-          <span class="sep">•</span>
-          <span class="tag">Lives</span>
-          <span id="hud-lives" class="mono">3</span>
-        </div>
+  <main class="container revo-stage-wrap">
+    <!-- Rail -->
+    <div class="pokedex-rail">
+      <div class="rail-track">
+        <div class="rail-fill"></div>
       </div>
+      <div class="rail-needle">
+        <div class="needle-line"></div>
+        <div class="needle-label"></div>
+      </div>
+    </div>
 
-      <!-- Stage wrapper (LEFT rail + RIGHT stage) -->
-      <div class="revo-stage-wrap">
-        <!-- LEFT: Pokédex rail (outside the stage) -->
-        <div id="pokedex-rail" class="pokedex-rail">
-          <div class="rail-track">
-            <div class="rail-fill"></div>
-
-            <!-- Needle showing current Dex position -->
-            <div class="rail-needle">
-              <div class="needle-line"></div>
-              <span class="needle-label">#—</span>
-            </div>
-            <!-- Gen dividers, chips, and left labels are inserted by JS -->
-          </div>
-        </div>
-
-        <!-- RIGHT: Game stage -->
-        <div id="stage" class="revo-stage">
-          <img id="imgA" class="revo-img" alt="Current form">
-          <img id="imgB" class="revo-img" alt="Next form">
-          <div id="flash" class="revo-flash"></div>
-          <div id="timer" class="revo-timer">—</div>
-
-          <!-- Start overlay -->
-          <div id="start-screen" class="revo-start">
-            <div class="start-content">
-              <h3 class="title">Do you know your Pokédex numbers?</h3>
-
-              <div class="rules-list">
-                <p><span class="k">1.</span> Decide if the next Pokémon’s number is <strong>higher</strong> or <strong>lower</strong>.</p>
-                <p><span class="k">2.</span> You only have a few seconds to choose!</p>
-                <p><span class="k">3.</span> Press <strong>B</strong> to stop the evolution if it doesn’t match the Pokédex number direction.</p>
-              </div>
-
-              <p class="subtitle bigger">Choose your difficulty to begin.</p>
-
-              <div class="btn-row big">
-                <button class="mode-btn easy"   data-mode="easy">Easy</button>
-                <button class="mode-btn medium" data-mode="medium">Medium</button>
-                <button class="mode-btn hard"   data-mode="hard">Hard</button>
-              </div>
-            </div>
-          </div>
-
-          <!-- End overlay -->
-          <div id="end-screen" class="revo-end hidden">
-            <h3 class="title">Game Over</h3>
-            <p class="subtitle">Final score: <span id="final-score">0</span></p>
-            <div class="btn-row">
-              <button id="play-again" class="mode-btn">Play Again</button>
-            </div>
-          </div>
-        </div><!-- /revo-stage -->
-      </div><!-- /revo-stage-wrap -->
-
-      <!-- Controls -->
-      <div id="controls">
-        <img id="a-button" src="assets/buttons/A_button.png" alt="A Button">
-        <img id="b-button" src="assets/buttons/B_button.png" alt="B Button">
+    <!-- Stage (Pokemon image etc.) -->
+    <section class="panel revo-stage">
+      <h2 id="status">Decide if the next Pokémon’s Pokédex number is higher or lower!</h2>
+      <div id="pokemon-image" class="pokemon-img"></div>
+      <div class="buttons">
+        <button id="btn-lower">A</button>
+        <button id="btn-higher">B</button>
       </div>
     </section>
   </main>
 
-  <!-- Scripts -->
-  <script src="./js/random-evolution.js" defer></script>
+  <script src="random-evolution.js"></script>
 </body>
 </html>
