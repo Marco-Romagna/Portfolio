@@ -1,5 +1,4 @@
 // games/2025-08-19/random-evolution/js/random-evolution.js
-
 window.addEventListener("DOMContentLoaded", () => {
   (async function () {
     /* ---------- Boot & Debug ---------- */
@@ -28,7 +27,7 @@ window.addEventListener("DOMContentLoaded", () => {
       debug: DEBUG
     });
 
-    /* ---------- Inject minimal feedback styles (score/lives pulse) ---------- */
+    /* ---------- Inject minimal feedback styles ---------- */
     (function injectRevoFeedbackStyles(){
       if (document.querySelector('style[data-revo-feedback]')) return;
       const css = `
@@ -36,7 +35,7 @@ window.addEventListener("DOMContentLoaded", () => {
       @keyframes revo-bad  { 0%{transform:scale(1)} 30%{transform:scale(0.88)} 100%{transform:scale(1)} }
       .revo-pulse-good{ animation:revo-good 320ms cubic-bezier(.2,1,.2,1); }
       .revo-pulse-bad { animation:revo-bad  320ms cubic-bezier(.2,1,.2,1); color:#f7768e !important; }
-      .revo-img[src=""]{ display:none; } /* safety: hide empty img to avoid flicker */
+      .revo-img[src=""]{ display:none; } /* hide empty img to avoid flicker */
       `;
       const style = document.createElement('style');
       style.setAttribute('data-revo-feedback','');
@@ -45,7 +44,6 @@ window.addEventListener("DOMContentLoaded", () => {
     })();
 
     /* ---------- Grab DOM ---------- */
-    const stage  = document.getElementById("stage");
     const imgA   = document.getElementById("imgA");
     const imgB   = document.getElementById("imgB");
     const flash  = document.getElementById("flash");
@@ -275,7 +273,7 @@ window.addEventListener("DOMContentLoaded", () => {
       if (!railTrack) return;
       clearRailDecor();
 
-      // Dividers at generation starts
+      // Dividers
       GEN_STARTS.forEach(startNum => {
         const pos = pctForDex(startNum);
         const divider = document.createElement("div");
@@ -284,12 +282,14 @@ window.addEventListener("DOMContentLoaded", () => {
         railTrack.appendChild(divider);
       });
 
-      // Midpoint overlay labels (skip for hard)
       if (currentMode === "hard") return;
 
       const bounds = [...GEN_STARTS, MAX_DEX + 1];
       const wrap = document.createElement("div");
       wrap.className = "rail-mid-labels";
+
+      // Compact labels on narrow screens
+      const compact = window.matchMedia("(max-width: 520px)").matches || (rail?.clientWidth ?? 56) <= 48;
 
       for (let i = 0; i < bounds.length - 1; i++) {
         const segStart = bounds[i];
@@ -301,7 +301,7 @@ window.addEventListener("DOMContentLoaded", () => {
         const lab = document.createElement("div");
         lab.className = "rail-mid-label";
         lab.style.bottom = pos + "%";
-        lab.textContent = `GEN ${i + 1}`;
+        lab.textContent = compact ? `G${i + 1}` : `GEN ${i + 1}`;
         wrap.appendChild(lab);
       }
 
@@ -361,7 +361,7 @@ window.addEventListener("DOMContentLoaded", () => {
     function pickRuleWeighted(currentDex, m) {
       const s = biasStrengthForMode(m);
       const clamped = Math.max(1, Math.min(MAX_DEX, currentDex || 1));
-      const x = clamped / MAX_DEX;                 // 0..1 position in dex
+      const x = clamped / MAX_DEX;                 // 0..1 position
       const pLower = (1 - s) * 0.5 + s * x;        // increases with x
       const roll = Math.random();
       const chosen = (roll < pLower) ? "lower" : "higher";
@@ -469,7 +469,7 @@ window.addEventListener("DOMContentLoaded", () => {
       candidateId = pickOther();
       const candUrl = urlFor(candidateId);
 
-      // PRELOAD before assigning to imgB to avoid ghost silhouette
+      // PRELOAD candidate to avoid ghost silhouette
       try { await preloadImage(candUrl); } catch (_) { /* ignore */ }
 
       await prepRoll(candidateId, candUrl);
@@ -482,7 +482,6 @@ window.addEventListener("DOMContentLoaded", () => {
     }
 
     // --------- ACCEPT / CANCEL / TIMEOUT judge ----------
-    // Timeout = "accept" (evolves): point if correct, life lost if wrong
     async function stopAndJudge(action /* "accept" | "cancel" | "timeout" */) {
       if (!rolling) return;
       session++;
@@ -491,7 +490,7 @@ window.addEventListener("DOMContentLoaded", () => {
       const prevCurrent = currentId;
       const isCorrectDir = (rule === "higher") ? (candidateId > currentId) : (candidateId < currentId);
 
-      // CANCEL path: instant revert (no flash/reveal)
+      // CANCEL: instant revert (no reveal)
       if (action === "cancel") {
         let gained = false, lost = false;
 
@@ -513,7 +512,7 @@ window.addEventListener("DOMContentLoaded", () => {
         imgA.src = urlFor(currentId);
         imgA.style.opacity = 1;
         imgB.style.opacity = 0;
-        imgB.src = ""; // clear candidate to prevent ghosting
+        imgB.src = ""; // clear candidate
         if (timerEl) { timerEl.textContent = "—"; timerEl.classList.remove("warn"); }
 
         dlog("compare", {
@@ -538,10 +537,10 @@ window.addEventListener("DOMContentLoaded", () => {
           return;
         }
         newRule();
-        return; // end cancel flow
+        return;
       }
 
-      // ACCEPT/TIMEOUT path: keep reveal + flash (timeout behaves as accept)
+      // ACCEPT/TIMEOUT: reveal
       imgA.classList.add("silhouette");
       imgB.classList.add("silhouette");
       imgA.style.opacity = 0;
@@ -561,13 +560,13 @@ window.addEventListener("DOMContentLoaded", () => {
 
       let gained = false, lost = false;
 
-      if (isCorrectDir) {           // accepted correct evolution
+      if (isCorrectDir) {
         score += mult; mult += 1;
         currentId = candidateId;
         AudioMgr.playOK();
         pulseOnce(hudScore, 'revo-pulse-good');
         gained = true;
-      } else {                      // accepted wrong evolution
+      } else {
         lives -= 1; mult = 1;
         currentId = candidateId;
         AudioMgr.playBad();
@@ -589,7 +588,7 @@ window.addEventListener("DOMContentLoaded", () => {
       imgA.src = urlFor(currentId);
       imgA.style.opacity = 1;
       imgB.style.opacity = 0;
-      imgB.src = ""; // clear candidate to prevent ghosting
+      imgB.src = "";
       setHUD();
 
       if (lost) dlog("life:lost", { score, mult, lives });
@@ -671,6 +670,13 @@ window.addEventListener("DOMContentLoaded", () => {
       hideEnd();
       showStart();
       dlog("game:reset");
+    });
+
+    /* ---------- Handle resize/orientation: relabel rail for compact mode ---------- */
+    let _rdTimer = null;
+    window.addEventListener('resize', () => {
+      if (_rdTimer) cancelAnimationFrame(_rdTimer);
+      _rdTimer = requestAnimationFrame(() => renderRailDecor(mode || "easy"));
     });
 
     /* ---------- First paint ---------- */
