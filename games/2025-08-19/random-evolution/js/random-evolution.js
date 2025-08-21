@@ -77,7 +77,6 @@ window.addEventListener("DOMContentLoaded", () => {
     }
 
     const base  = settings.sprites.base_url;
-
     const ext   = settings.sprites.file_extension || ".png";
     const start = settings.sprites.range.start || 1;
     const end   = settings.sprites.range.end   || 1025;
@@ -118,6 +117,16 @@ window.addEventListener("DOMContentLoaded", () => {
     const cap       = (s) => s ? s[0].toUpperCase() + s.slice(1) : "—";
     const currentInterval = () =>
       reducedMotion ? 240 : (baseInterval / (modes[mode]?.speedFactor || 1.0));
+
+    // Preload helper to avoid ghost images
+    function preloadImage(url) {
+      return new Promise((resolve, reject) => {
+        const im = new Image();
+        im.onload = () => resolve(true);
+        im.onerror = reject;
+        im.src = url;
+      });
+    }
 
     /* ---------- Rail ---------- */
     const pctForDex = (n) => (Math.max(1, Math.min(MAX_DEX, n || 1)) / MAX_DEX) * 100;
@@ -182,7 +191,7 @@ window.addEventListener("DOMContentLoaded", () => {
       renderRailDecor(m || "easy");
     }
 
-    /* ---------- Game UI ---------- */
+    /* ---------- HUD ---------- */
     function setGameActive(active) {
       gameActive = active;
       controls?.classList.toggle("hidden", !active);
@@ -205,12 +214,41 @@ window.addEventListener("DOMContentLoaded", () => {
       if (currentId != null) updateRail(currentId);
     }
 
+    /* ---------- Likely-direction weighting with difficulty ---------- */
+    // 0 = neutral (50/50), 1 = fully biased
+    function biasStrengthForMode(m) {
+      if (m === "easy")   return 0.30;
+      if (m === "medium") return 0.60;
+      if (m === "hard")   return 0.85;
+      return 0.50;
+    }
+
+    // High currentId → more "Lower"; low currentId → more "Higher"
+    function pickRuleWeighted(currentDex, m) {
+      const s = biasStrengthForMode(m);
+      const clamped = Math.max(1, Math.min(MAX_DEX, currentDex || 1));
+      const x = clamped / MAX_DEX;                 // 0..1 position in dex
+      const pLower = (1 - s) * 0.5 + s * x;        // increases with x
+      const roll = Math.random();
+      const chosen = (roll < pLower) ? "lower" : "higher";
+
+      dlog("rule:pick", {
+        mode: m, currentDex, x: +x.toFixed(3),
+        biasStrength: s,
+        pLower: +pLower.toFixed(3),
+        pHigher: +(1 - pLower).toFixed(3),
+        roll: +roll.toFixed(3),
+        chosen
+      });
+      return chosen;
+    }
+
     function newRule() {
-      rule = Math.random() < 0.5 ? "higher" : "lower";
-      dlog("rule:set", { rule });
+      rule = pickRuleWeighted(currentId, mode);
       setHUD();
     }
 
+    /* ---------- Stage helpers ---------- */
     async function showInstant(id) {
       currentId = id;
       imgA.src = urlFor(id);
@@ -247,15 +285,22 @@ window.addEventListener("DOMContentLoaded", () => {
     const hideEnd   = () => endScreen?.classList.add("hidden");
 
     /* ---------- Rolling ---------- */
-    async function prepRoll(id) {
+    async function prepRoll(id, preloadedUrl) {
+      // Clear old candidate to avoid stale flashes
+      imgB.src = "";
+
+      // Ensure current is set deterministically
       imgA.src = urlFor(currentId ?? randId());
-      imgB.src = urlFor(id);
       imgA.classList.remove("silhouette");
+
       imgB.classList.add("silhouette");
       imgA.style.opacity = 1;
       imgB.style.opacity = 0;
       flash.style.opacity = 0;
       if (timerEl) timerEl.classList.remove("warn");
+
+      // Set new candidate (preloaded)
+      imgB.src = preloadedUrl || urlFor(id);
     }
 
     async function rollLoop(mySession) {
@@ -288,24 +333,28 @@ window.addEventListener("DOMContentLoaded", () => {
       rolling = true;
 
       candidateId = pickOther();
-      await prepRoll(candidateId);
+      const candUrl = urlFor(candidateId);
+
+      // PRELOAD before assigning to imgB to avoid ghost silhouette
+      try { await preloadImage(candUrl); } catch (_) { /* ignore */ }
+
+      await prepRoll(candidateId, candUrl);
 
       deadline = now() + (modes[mode]?.limitMs || 7000);
       dlog("roll:start", { rule, currentId, candidateId, timeLimitMs: (modes[mode]?.limitMs || 7000) });
+
       rollLoop(mySession);
       watchdogLoop(mySession);
     }
 
     // --------- ACCEPT / CANCEL / TIMEOUT judge ----------
+    // Timeout = "accept" (evolves): point if correct, life lost if wrong
     async function stopAndJudge(action /* "accept" | "cancel" | "timeout" */) {
       if (!rolling) return;
       session++;
       rolling = false;
 
-      // for logging clarity
       const prevCurrent = currentId;
-
-      // Evaluate whether candidate satisfies the rule
       const isCorrectDir = (rule === "higher") ? (candidateId > currentId) : (candidateId < currentId);
 
       // CANCEL path: instant revert (no flash/reveal)
@@ -326,6 +375,7 @@ window.addEventListener("DOMContentLoaded", () => {
         imgA.src = urlFor(currentId);
         imgA.style.opacity = 1;
         imgB.style.opacity = 0;
+        imgB.src = ""; // clear candidate to prevent ghosting
         if (timerEl) { timerEl.textContent = "—"; timerEl.classList.remove("warn"); }
 
         dlog("compare", {
@@ -350,10 +400,10 @@ window.addEventListener("DOMContentLoaded", () => {
           return;
         }
         newRule();
-        return; // important: end here for cancel flow
+        return; // end cancel flow
       }
 
-      // ACCEPT/TIMEOUT path: keep reveal + flash
+      // ACCEPT/TIMEOUT path: keep reveal + flash (timeout behaves as accept)
       imgA.classList.add("silhouette");
       imgB.classList.add("silhouette");
       imgA.style.opacity = 0;
@@ -397,6 +447,7 @@ window.addEventListener("DOMContentLoaded", () => {
       imgA.src = urlFor(currentId);
       imgA.style.opacity = 1;
       imgB.style.opacity = 0;
+      imgB.src = ""; // clear candidate to prevent ghosting
       setHUD();
 
       if (lost) dlog("life:lost", { score, mult, lives });
