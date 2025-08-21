@@ -1,338 +1,512 @@
-// Start screen + fixed difficulty + timer + end screen
-// A = start (if idle) / confirm (if rolling)
-// B = cancel & judge immediately (while rolling)
+/ games/2025-08-15/reaction-room/js/game.js
+// (Save as game.js; replace your current file.)
 
-(async function () {
-  // --- Stage elements ---
-  const imgA    = document.getElementById("imgA");
-  const imgB    = document.getElementById("imgB");
-  const flash   = document.getElementById("flash");
-  const timerEl = document.getElementById("timer");
-  const stage   = document.getElementById("stage");
+window.addEventListener('DOMContentLoaded', () => {
+  /* ===================== Config ===================== */
+  const ROWS = 6, COLS = 5;
+  const CELLS = ROWS * COLS;
+  const OCC_MIN = 0.58, OCC_MAX = 0.69;   // board occupancy per round
+  const COUNT_SECONDS = 7;                // big countdown in preview
+  const COUNT_INTERVAL = 1000;            // 1s ticks
+  const TARGETS_TO_COMPLETE = 12;         // end after N correct hits
 
-  // --- Controls ---
-  const btnA     = document.getElementById("a-button");
-  const btnB     = document.getElementById("b-button");
-  const controls = document.getElementById("controls");
-
-  // --- Overlays ---
-  const startScreen  = document.getElementById("start-screen");
-  const startButtons = startScreen?.querySelectorAll(".mode-btn");
-  const endScreen    = document.getElementById("end-screen");
-  const finalScore   = document.getElementById("final-score");
-  const playAgain    = document.getElementById("play-again");
-
-  // --- HUD (display only) ---
-  const hud        = document.querySelector(".revo-hud");
-  const hudCurrent = document.getElementById("hud-current");
-  const hudRule    = document.getElementById("hud-rule");
-  const hudScore   = document.getElementById("hud-score");
-  const hudLives   = document.getElementById("hud-lives");
-  const hudMult    = document.getElementById("hud-mult");
-  const hudMode    = document.getElementById("hud-mode");
-
-  // --- Settings (sprite source) ---
-  const res = await fetch("settings.json", { cache: "no-store" });
-  const settings = await res.json();
-  const base  = settings.sprites.base_url;
-  const ext   = settings.sprites.file_extension || ".png";
-  const rangeStart = settings.sprites.range.start || 1;
-  const rangeEnd   = settings.sprites.range.end   || 1025;
-
-  // --- Pokédex meta ---
-  const GEN_STARTS = [1, 152, 252, 387, 494, 650, 722, 810, 906];
-  const MAX_DEX = rangeEnd;
-
-  // --- Modes ---
-  const modes = {
-    easy:   { speedFactor: 0.4, limitMs: 16000 },
-    medium: { speedFactor: 0.8, limitMs: 11000 },
-    hard:   { speedFactor: 1.0, limitMs:  7000 }
+  const BASIC   = ["circle","square","triangle"];
+  const SUITS   = ["club","heart","diamond","spade"];
+  const SPECIAL = ["star","moon","bolt","shield"]; // bolt is targetable; shield isn’t
+  const GUARANTEED = {
+    club:1, heart:1, diamond:1, spade:1,
+    star:1, moon:1,
+    bolt:2, shield:2
   };
-  const baseInterval   = 500;
-  const reducedMotion  = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  // Weighted filler pool (basics favored)
+  const WEIGHTS = {
+    circle:6, square:6, triangle:6,
+    bolt:0.5, shield:0.5,
+    club:0.25, heart:0.25, diamond:0.25, spade:0.25,
+    star:0, moon:0
+  };
+  const NON_TARGET = new Set(["shield"]); // shield can never be the target
 
-  // --- Game state ---
-  let mode       = null;
-  let gameActive = false;
-  let currentId  = null;
-  let candidateId= null;
-  let deadline   = 0;
-  let score      = 0;
-  let lives      = 3;
-  let mult       = 1;
-  let rule       = "higher";
-  let session    = 0;
-  let rolling    = false;
-  let debouncing = false;
+  /* ===================== Elements ===================== */
+  const board     = document.getElementById("game-board");
+  const cdEl      = document.getElementById("countdown");
+  const targetEl  = document.getElementById("target");
+  const livesEl   = document.getElementById("lives");
+  const bestEl    = document.getElementById("best");
+  const avgEl     = document.getElementById("avg");
+  const worstEl   = document.getElementById("worst");
+  const totalEl   = document.getElementById("total");
+  const logEl     = document.getElementById("log");
+  const btnStart  = document.getElementById("start");
+  const btnReset  = document.getElementById("reset");
+  const preview   = document.getElementById("targetPreview");
+  const sideStats = document.querySelector(".side .stats");
 
-  // --- Helpers ---
-  const randId    = () => Math.floor(Math.random() * (rangeEnd - rangeStart + 1)) + rangeStart;
-  const pickOther = () => { let id = randId(); while (currentId != null && id === currentId) id = randId(); return id; };
-  const urlFor    = (id) => `${base}${id}${ext}`;
-  const sleep     = (ms) => new Promise(r => setTimeout(r, ms));
-  const now       = () => performance.now();
-  const cap       = (s) => s ? s[0].toUpperCase() + s.slice(1) : "—";
-  const currentInterval = () => reducedMotion ? 240 : (baseInterval / (modes[mode]?.speedFactor || 1.0));
+  // Results modal
+  const modal   = document.getElementById("resultsModal");
+  const mBest   = document.getElementById("m-best");
+  const mAvg    = document.getElementById("m-avg");
+  const mWorst  = document.getElementById("m-worst");
+  const mTotal  = document.getElementById("m-total");
+  const mSplits = document.getElementById("m-splits");
+  const btnClose= document.getElementById("closeModal");
+  const btnAgain= document.getElementById("playAgain");
 
-  // ---------- Pokédex Rail ----------
-  let railEl, railFillEl, needleEl, needleLabelEl;
+  /* ===================== Round State ===================== */
+  let occupancy = 0.62;
+  let lives = 3;
+  let playing = false;
 
-  function buildPokedexRail(){
-    railEl = document.getElementById("pokedex-rail");
-    if (!railEl) return;
+  let cells = [];                        // DOM nodes
+  let shapes = new Array(CELLS).fill(""); // shape id or ""
+  let targetShape = null;
 
-    railFillEl = railEl.querySelector(".rail-fill");
-    if (!railFillEl){
-      railFillEl = document.createElement("div");
-      railFillEl.className = "rail-fill";
-      railEl.appendChild(railFillEl);
+  // no-repeat per round
+  let usedTargets = new Set();
+
+  // Split timing
+  let startedAt = 0;
+  let lastSplitAt = 0;
+  let clickSplits = [];     // numbers
+  let splitDetails = [];    // { idx,row,col,split,total,shape }
+
+  // Lock + hints
+  // lock / nextLock := { type:'row'|'col', idx:number }
+  let lock = null;
+  let nextLock = null;
+
+  // “forbid next target” (star/moon & suits)
+  let forbidNext = new Set();
+
+  // Timers
+  let countdownTimer = null, revealTimer = null;
+
+  /* ===================== Utils ===================== */
+  const ms = x => `${Math.round(x)} ms`;
+  const rowOf = i => Math.floor(i / COLS);
+  const colOf = i => i % COLS;
+  const lockLabel = lk => lk ? (lk.type === 'row' ? `row ${lk.idx+1}` : `column ${lk.idx+1}`) : '';
+
+  function log(msg){ if (!logEl) return; const d=document.createElement("div"); d.textContent=msg; logEl.prepend(d); }
+  function clearTimers(){ if (countdownTimer){clearInterval(countdownTimer);countdownTimer=null;} if (revealTimer){clearTimeout(revealTimer);revealTimer=null;} }
+  function resetStatsUI(){ bestEl.textContent=avgEl.textContent=worstEl.textContent=totalEl.textContent="—"; }
+
+  function glyphFor(shape){
+    switch (shape){
+      case "club":return "♣"; case "heart":return "♥"; case "diamond":return "♦"; case "spade":return "♠";
+      case "star":return "★"; case "moon":return "☾"; case "bolt":return "⚡"; case "shield":return "🛡";
+      default:return null;
     }
+  }
 
-    needleEl = railEl.querySelector(".needle");
-    needleLabelEl = railEl.querySelector(".needle .needle-label");
-    if (!needleEl){
-      needleEl = document.createElement("div");
-      needleEl.className = "needle";
-      needleLabelEl = document.createElement("span");
-      needleLabelEl.className = "needle-label";
-      needleLabelEl.textContent = "#—";
-      needleEl.appendChild(needleLabelEl);
-      railEl.appendChild(needleEl);
+  function setPreview(shape){
+    if (!preview) return;
+    preview.innerHTML = "";
+    if (!shape) return;
+    const ch = glyphFor(shape);
+    if (ch){
+      const span=document.createElement("span");
+      span.className=`glyph ${shape}`;
+      span.textContent=ch;
+      preview.appendChild(span);
+    } else {
+      const el=document.createElement("div");
+      el.className=(shape==="triangle")?"shape triangle big":`shape ${shape} big`;
+      preview.appendChild(el);
+    }
+  }
+  function setTarget(shape){
+    targetShape = shape;
+    targetEl.innerHTML = "";
+    if (!shape){ targetEl.textContent="—"; setPreview(null); return; }
+    const ch = glyphFor(shape);
+    if (ch){
+      const span=document.createElement("span");
+      span.className=`glyph ${shape}`;
+      span.textContent=ch;
+      targetEl.appendChild(span);
+    } else {
+      targetEl.textContent=shape;
+    }
+    setPreview(shape);
+  }
+
+  function showBigCountdown(n){
+    if (!preview) return;
+    preview.innerHTML = `<div class="big-count">${n}</div>`;
+  }
+
+  function randomOccupancy(){ return OCC_MIN + Math.random()*(OCC_MAX - OCC_MIN); }
+  function weightedPick(){
+    const entries = Object.entries(WEIGHTS).filter(([,w])=>w>0);
+    const total = entries.reduce((s,[,w])=>s+w,0);
+    let r = Math.random()*total;
+    for (const [k,w] of entries){ if (r < w) return k; r -= w; }
+    return "circle";
+  }
+
+  function clearHints(){
+    cells.forEach(c => c.classList.remove('hint-pulse','hint-dim','hint-bolt'));
+  }
+
+  function coverageIndicesFor(lk){
+    const out=[];
+    for (let i=0;i<CELLS;i++){
+      if (lk.type==='row' && rowOf(i)===lk.idx) out.push(i);
+      if (lk.type==='col' && colOf(i)===lk.idx) out.push(i);
+    }
+    return out;
+  }
+  function applyLock(lk){
+    cells.forEach(c => c.classList.remove('locked'));
+    lock = lk;
+    coverageIndicesFor(lock).forEach(i => cells[i].classList.add('locked'));
+  }
+  function planNextLock(){
+    // Avoid covering remaining target tiles if possible
+    const avoid=[];
+    for (let i=0;i<CELLS;i++){
+      if (shapes[i]===targetShape && !cells[i].classList.contains('correct')) avoid.push(i);
+    }
+    const tried=new Set();
+    for (let attempts=0; attempts<100; attempts++){
+      const type = Math.random()<0.5 ? 'row':'col';
+      const idx  = (type==='row') ? Math.floor(Math.random()*ROWS) : Math.floor(Math.random()*COLS);
+      const key = `${type}:${idx}`; if (tried.has(key)) continue; tried.add(key);
+      const covers = coverageIndicesFor({type,idx});
+      if (!avoid.some(v => covers.includes(v))){ nextLock = {type,idx}; return; }
+    }
+    nextLock = { type:'row', idx:0 };
+  }
+  function moveLock(reason){
+    if (!nextLock) planNextLock();
+    clearHints();
+    applyLock(nextLock);   // promote next → current
+    planNextLock();        // compute new “next”
+    log(`Lock moved (${reason}) → ${lockLabel(lock)}`);
+  }
+
+  function buildGrid(){
+    board.innerHTML="";
+    board.style.gridTemplateColumns = `repeat(${COLS},1fr)`;
+    cells=[];
+    for (let i=0;i<CELLS;i++){
+      const cell=document.createElement("div");
+      cell.className="cell";
+      cell.addEventListener("click",()=>handleClick(i));
+      cells.push(cell);
+      board.appendChild(cell);
     }
   }
 
-  function setRailMode(m){
-    if (!railEl) return;
-    railEl.classList.remove("easy","medium","hard");
-    railEl.classList.add(m || "easy");
+  function renderCell(i){
+    const cell=cells[i];
+    cell.innerHTML="";
+    const s=shapes[i];
+    if (!s) return;
+    if (s==="circle"||s==="square"||s==="triangle"){
+      if (s==="triangle"){ const el=document.createElement("div"); el.className="shape triangle"; cell.appendChild(el); return; }
+      const el=document.createElement("div"); el.className=`shape ${s}`; cell.appendChild(el); return;
+    }
+    const ch=glyphFor(s);
+    if (ch){
+      const span=document.createElement("span");
+      span.className=`glyph ${s}`;
+      span.textContent=ch;
+      cell.appendChild(span);
+      return;
+    }
+    const el=document.createElement("div"); el.className="shape square"; cell.appendChild(el);
   }
 
-  function clearGenMarkers(){
-    if (!railEl) return;
-    railEl.querySelectorAll(".gen-marker").forEach(n => n.remove());
+  function populateBoard(){
+    occupancy = randomOccupancy();
+    const fillCount = Math.round(CELLS*occupancy);
+    shapes.fill("");
+
+    const idxs=[...Array(CELLS).keys()].sort(()=>Math.random()-0.5);
+
+    // guarantees
+    const needed=[];
+    for (const [k,c] of Object.entries(GUARANTEED)) for (let t=0;t<c;t++) needed.push(k);
+    const filled=[];
+    for (let g=0; g<needed.length && idxs.length; g++){
+      const i=idxs.pop();
+      shapes[i]=needed[g];
+      filled.push(i);
+    }
+    // filler
+    while (filled.length<fillCount && idxs.length){
+      const i=idxs.pop();
+      shapes[i]=weightedPick();
+      filled.push(i);
+    }
+    for (let i=0;i<CELLS;i++) renderCell(i);
   }
 
-  function renderGenMarkers(currentMode){
-    if (!railEl) return;
-    clearGenMarkers();
-    if (currentMode === "hard") return;
+  /* ============== Availability-aware target picking ============== */
+  function availableCount(shape){
+    let n=0;
+    for (let i=0;i<CELLS;i++){
+      if (shapes[i]===shape && !cells[i].classList.contains('correct')) n++;
+    }
+    return n;
+  }
 
-    GEN_STARTS.forEach((startNum, idx) => {
-      const posPct = Math.max(0, Math.min(100, (startNum / MAX_DEX) * 100));
-      const el = document.createElement("div");
-      el.className = "gen-marker";
-      el.style.bottom = posPct + "%";
-      el.textContent  = (currentMode === "easy") ? `Gen ${idx+1} (${startNum})` : `Gen ${idx+1}`;
-      railEl.appendChild(el);
+  function chooseTargetFrom(presentShapes, banSet){
+    // remove non-targets, banned, already used
+    let pool = presentShapes.filter(s => !NON_TARGET.has(s) && !banSet.has(s) && !usedTargets.has(s));
+    // only shapes that still have clickable instances
+    pool = pool.filter(s => availableCount(s) > 0);
+    if (!pool.length) return null;
+
+    // prefer shapes with >= 2 available instances
+    const avail2 = pool.filter(s => availableCount(s) >= 2);
+    const finalPool = avail2.length ? avail2 : pool;
+
+    return finalPool[Math.floor(Math.random()*finalPool.length)];
+  }
+
+  function computeForbidNext(lastShape){
+    const ban=new Set();
+    if (lastShape==="star") ban.add("moon");
+    if (lastShape==="moon") ban.add("star");
+    if (SUITS.includes(lastShape)){
+      for (const s of SUITS) if (s!==lastShape) ban.add(s);
+    }
+    return ban;
+  }
+
+  function respawnShapeAt(i){
+    // never blank a tile
+    shapes[i]=weightedPick();
+    renderCell(i);
+  }
+
+  function lightningPreviewNext(){
+    if (!nextLock) return;
+    const covers=coverageIndicesFor(nextLock);
+    covers.forEach(i => {
+      const c=cells[i];
+      c.classList.remove('hint-dim');
+      c.classList.add('hint-pulse'); // purple pulse
+    });
+  }
+  function lightningPreviewNextNextYellow(){
+    if (!nextLock) return;
+    const covers=coverageIndicesFor(nextLock);
+    covers.forEach(i => {
+      const c=cells[i];
+      c.classList.remove('hint-dim','hint-pulse');
+      c.classList.add('hint-bolt');   // yellow pulse (CSS required)
     });
   }
 
-  function updateRail(dex){
-    if (!railEl || !railFillEl || !needleEl || !needleLabelEl) return;
-    const pct = Math.max(0, Math.min(100, (dex / MAX_DEX) * 100));
-    railFillEl.style.height = pct + "%";
-    needleEl.style.bottom   = pct + "%";
-    needleLabelEl.textContent = `#${String(dex).padStart(3,"0")}`;
+  /* ===================== Flow ===================== */
+  function startRound(){
+    clearTimers();
+    playing=false;
+    lives=3;
+    usedTargets.clear();
+    forbidNext.clear();
+    targetShape=null;
+    clickSplits.length=0;
+    splitDetails.length=0;
+    startedAt=0; lastSplitAt=0;
+
+    if (sideStats) sideStats.style.display='none';
+    resetStatsUI();
+    logEl.textContent="";
+
+    livesEl.textContent=lives;
+
+    buildGrid();
+    populateBoard();
+
+    cells.forEach(c => c.classList.remove('locked','hint-pulse','hint-dim','hint-bolt','correct','pulse-wrong'));
+    lock=null; nextLock=null;
+
+    // Big 7→1 countdown inside the preview
+    cdEl.textContent = "—"; // small badge unused now
+    let n = COUNT_SECONDS + 1; // so first tick shows 7
+    countdownTimer = setInterval(() => {
+      n--;
+      if (n > 0) {
+        showBigCountdown(n);
+      } else {
+        clearInterval(countdownTimer); countdownTimer=null;
+        revealTimer = setTimeout(revealTarget, 200); // tiny pause
+      }
+    }, COUNT_INTERVAL);
   }
 
-  // ---------- UI ----------
-  function setGameActive(active){
-    gameActive = active;
-    // Show/hide A/B controls only if you want; we keep them visible.
-    controls?.classList.toggle("hidden", false);
-    hud?.classList.toggle("inactive", !active);
-  }
+  function revealTarget(){
+    // initial lock & plan
+    const type = Math.random()<0.5 ? 'row':'col';
+    const idx  = (type==='row') ? Math.floor(Math.random()*ROWS) : Math.floor(Math.random()*COLS);
+    applyLock({type,idx});
+    planNextLock();
 
-  function setHUD(){
-    if (hudCurrent) hudCurrent.textContent = (gameActive && currentId) ? `#${String(currentId).padStart(3,"0")}` : "#—";
-    if (hudScore)   hudScore.textContent   = String(gameActive ? score : 0);
-    if (hudLives)   hudLives.textContent   = String(gameActive ? lives : 3);
-    if (hudMult)    hudMult.textContent    = `x${gameActive ? mult : 1}`;
-    if (hudMode)    hudMode.textContent    = cap(mode);
-    if (hudRule){
-      const txt = gameActive ? (rule === "higher" ? "Higher" : "Lower") : "—";
-      hudRule.textContent = txt;
-      hudRule.classList.toggle("higher", gameActive && rule === "higher");
-      hudRule.classList.toggle("lower",  gameActive && rule === "lower");
+    // pick initial target (availability-aware)
+    const present = Array.from(new Set(shapes.filter(Boolean)));
+    let next = chooseTargetFrom(present, new Set());
+    if (!next){
+      // no available target → immediate success (edge case)
+      return endRound(true, performance.now());
     }
-    if (currentId != null) updateRail(currentId);
+    setTarget(next);
+
+    startedAt=performance.now();
+    lastSplitAt=startedAt;
+    playing=true;
+
+    log(`Lock placed → ${lockLabel(lock)}. Target set.`);
   }
 
-  function newRule(){ rule = Math.random() < 0.5 ? "higher" : "lower"; setHUD(); }
-
-  async function showInstant(id){
-    currentId = id;
-    imgA.src = urlFor(id);
-    imgB.src = "";
-    imgA.classList.remove("silhouette");
-    imgB.classList.remove("silhouette");
-    imgA.style.opacity = 1;
-    imgB.style.opacity = 0;
-    flash.style.opacity = 0;
-    if (timerEl){ timerEl.textContent = "—"; timerEl.classList.remove("warn"); }
-    setHUD();
+  function updateSplitStats(totalMsNow){
+    if (clickSplits.length===0){ resetStatsUI(); totalEl.textContent=ms(totalMsNow); return; }
+    const best=Math.min(...clickSplits);
+    const worst=Math.max(...clickSplits);
+    const avg=clickSplits.reduce((a,b)=>a+b,0)/clickSplits.length;
+    bestEl.textContent=ms(best);
+    worstEl.textContent=ms(worst);
+    avgEl.textContent=ms(avg);
+    totalEl.textContent=ms(totalMsNow);
   }
 
-  function updateTimer(){
-    if (!timerEl || !rolling) return;
-    const ms = Math.max(0, deadline - now());
-    const sec = (ms / 1000).toFixed(1);
-    timerEl.textContent = sec;
-    timerEl.classList.toggle("warn", ms <= 3000);
-  }
+  function handleClick(i){
+    if (!playing) return;
+    const cell=cells[i];
+    const s=shapes[i];
+    const r=rowOf(i), c=colOf(i);
 
-  function pop(el, durMs = 250){
-    el.style.transition = `transform ${durMs}ms cubic-bezier(.2,1,.2,1)`;
-    el.style.transform  = "scale(0.9)";
-    requestAnimationFrame(() => {
-      el.style.transform = "scale(1)";
-      setTimeout(() => { el.style.transition = ""; el.style.transform = ""; }, durMs + 20);
-    });
-  }
-
-  // --- Overlay helpers ---
-  const showStart = () => startScreen?.classList.remove("hidden");
-  const hideStart = () => startScreen?.classList.add("hidden");
-  const showEnd   = () => endScreen?.classList.remove("hidden");
-  const hideEnd   = () => endScreen?.classList.add("hidden");
-
-  // --- Rolling machinery ---
-  async function prepRoll(id){
-    imgA.src = urlFor(currentId ?? randId());
-    imgB.src = urlFor(id);
-    imgA.classList.remove("silhouette");
-    imgB.classList.add("silhouette");
-    imgA.style.opacity = 1;
-    imgB.style.opacity = 0;
-    flash.style.opacity = 0;
-    if (timerEl) timerEl.classList.remove("warn");
-  }
-
-  async function rollLoop(mySession){
-    while (rolling && mySession === session){
-      const showB = imgB.style.opacity !== "1";
-      imgA.classList.add("silhouette");
-      imgB.classList.add("silhouette");
-      imgA.style.opacity = showB ? 0 : 1;
-      imgB.style.opacity = showB ? 1 : 0;
-      updateTimer();
-      await sleep(currentInterval());
+    // Neutral (empty) → hint
+    if (!s){
+      if (nextLock){
+        const willLock = (nextLock.type==='row') ? (r===nextLock.idx) : (c===nextLock.idx);
+        cell.classList.remove('hint-pulse','hint-dim','hint-bolt');
+        if (willLock){ cell.classList.add('hint-pulse'); log(`Hint: next lock → ${lockLabel(nextLock)}`); }
+        else { cell.classList.add('hint-dim'); log(`Hint: not ${lockLabel(nextLock)}`); }
+      } else { log("Hint: next lock unknown"); }
+      return;
     }
-  }
 
-  async function watchdogLoop(mySession){
-    while (rolling && mySession === session){
-      updateTimer();
-      if (now() >= deadline){ await stopAndJudge(true); break; }
-      await sleep(60);
+    // Already confirmed correct? ignore
+    if (cell.classList.contains("correct")) return;
+
+    // Shield → safe, moves lock, does not change shape
+    if (s==="shield"){
+      log("🛡 Shield clicked (safe) • lock advances");
+      moveLock('shield');
+      return;
     }
-  }
 
-  async function startRoll(){
-    session++; const mySession = session; rolling = true;
-    candidateId = pickOther(); await prepRoll(candidateId);
-    deadline = now() + (modes[mode]?.limitMs || 7000);
-    rollLoop(mySession); watchdogLoop(mySession);
-  }
+    // Lightning behavior
+    if (s==="bolt"){
+      if (targetShape === "bolt"){
+        // Treat as CORRECT
+        cell.classList.add("correct");
+        const now=performance.now();
+        const split=now-lastSplitAt; clickSplits.push(split); lastSplitAt=now;
+        const totalSoFar=now-startedAt;
+        splitDetails.push({idx:i,row:r,col:c,split,total:totalSoFar,shape:s});
+        log(`✔ bolt at r${r+1}c${c+1} • split ${Math.round(split)} ms • total ${Math.round(totalSoFar)} ms`);
+        updateSplitStats(totalSoFar);
 
-  async function stopAndJudge(fromTimeout = false){
-    if (!rolling) return;
-    session++; rolling = false;
+        usedTargets.add("bolt");
+        forbidNext = computeForbidNext("bolt");
 
-    imgA.classList.add("silhouette");
-    imgB.classList.add("silhouette");
-    imgA.style.opacity = 0; imgB.style.opacity = 1;
+        // Move lock, then yellow preview the next-next lock
+        moveLock('correct');
+        lightningPreviewNextNextYellow();
 
-    if (timerEl){ timerEl.textContent = "—"; timerEl.classList.remove("warn"); }
+        // Next target
+        const present = Array.from(new Set(shapes.filter(Boolean)));
+        let next = chooseTargetFrom(present, forbidNext);
+        if (!next){ return endRound(true, now); }
+        setTarget(next);
 
-    flash.style.opacity = 1; await sleep(120); flash.style.opacity = 0;
-
-    imgA.classList.remove("silhouette");
-    imgB.classList.remove("silhouette");
-    imgA.style.opacity = 0; imgB.style.opacity = 1; pop(imgB, 250);
-
-    const ok = rule === "higher" ? candidateId > currentId : candidateId < currentId;
-    if (ok){ score += mult; mult += 1; currentId = candidateId; }
-    else { lives -= 1; mult = 1; }
-
-    await sleep(280);
-    imgA.src = urlFor(currentId);
-    imgA.style.opacity = 1; imgB.style.opacity = 0; setHUD();
-
-    if (lives <= 0){
-      if (finalScore) finalScore.textContent = String(score);
-      setGameActive(false); showEnd(); return;
+        if (clickSplits.length >= TARGETS_TO_COMPLETE) return endRound(true, now);
+        return;
+      } else {
+        // Not target → purple-preview next lock, no move, respawn bolt
+        log("⚡ Lightning reveals the next lock");
+        lightningPreviewNext();
+        respawnShapeAt(i);
+        return;
+      }
     }
-    newRule();
+
+    // Locked penalty (non-shield)
+    if (cell.classList.contains('locked')){
+      lives=Math.max(0,lives-1); livesEl.textContent=lives;
+      cell.classList.remove('pulse-wrong'); void cell.offsetWidth; cell.classList.add('pulse-wrong');
+      log(`✖ locked ${s} • lives ${lives}`);
+      if (lives===0) return endRound(false, performance.now());
+      moveLock('penalty');
+      return;
+    }
+
+    // Wrong unlocked
+    if (s!==targetShape){
+      cell.classList.remove('pulse-wrong'); void cell.offsetWidth; cell.classList.add('pulse-wrong');
+      lives=Math.max(0,lives-1); livesEl.textContent=lives;
+      log(`✖ wrong: ${s} • lives ${lives}`);
+      if (lives===0) return endRound(false, performance.now());
+      moveLock('penalty');
+      return;
+    }
+
+    // Correct (non-bolt)
+    cell.classList.add("correct");
+    const now=performance.now();
+    const split=now-lastSplitAt; clickSplits.push(split); lastSplitAt=now;
+    const totalSoFar=now-startedAt;
+    splitDetails.push({idx:i,row:r,col:c,split,total:totalSoFar,shape:s});
+    log(`✔ ${s} at r${r+1}c${c+1} • split ${Math.round(split)} ms • total ${Math.round(totalSoFar)} ms`);
+    updateSplitStats(totalSoFar);
+
+    usedTargets.add(s);
+    forbidNext = computeForbidNext(s);
+
+    moveLock('correct');
+
+    // Next target (availability-aware)
+    const present = Array.from(new Set(shapes.filter(Boolean)));
+    let next = chooseTargetFrom(present, forbidNext);
+    if (!next){ return endRound(true, now); }
+    setTarget(next);
+
+    if (clickSplits.length >= TARGETS_TO_COMPLETE) return endRound(true, now);
   }
 
-  // --- Debounce ---
-  function withDebounce(fn, ms = 120){
-    return (...args) => {
-      if (debouncing) return;
-      debouncing = true;
-      try { fn(...args); } finally { setTimeout(() => debouncing = false, ms); }
-    };
+  function endRound(success, nowTs){
+    playing=false;
+    const total = nowTs - startedAt;
+    const best  = clickSplits.length ? Math.min(...clickSplits) : 0;
+    const worst = clickSplits.length ? Math.max(...clickSplits) : 0;
+    const avg   = clickSplits.length ? (clickSplits.reduce((a,b)=>a+b,0)/clickSplits.length) : 0;
+
+    mBest.textContent  = best  ? `${Math.round(best)} ms`  : '—';
+    mAvg.textContent   = avg   ? `${Math.round(avg)} ms`   : '—';
+    mWorst.textContent = worst ? `${Math.round(worst)} ms` : '—';
+    mTotal.textContent = `${Math.round(total)} ms`;
+    mSplits.innerHTML = splitDetails.map((s,i)=>`
+      <tr><td>${i+1}</td><td>${Math.round(s.split)} ms</td><td>${Math.round(s.total)} ms</td><td>${s.shape} @ r${s.row+1}, c${s.col+1}</td></tr>
+    `).join('');
+
+    modal.hidden=false;
+    if (sideStats) sideStats.style.display='grid';
+    log(success ? `Completed ${clickSplits.length} targets in ${Math.round(total)} ms` : `Failed in ${Math.round(total)} ms`);
   }
 
-  // --- Inputs ---
-  const onA = withDebounce(() => {
-    if (!gameActive) return;
-    if (!rolling) startRoll(); else stopAndJudge(false);
-  });
-  const onB = withDebounce(() => {
-    if (!gameActive || !rolling) return;
-    stopAndJudge(false);
-  });
+  function resetAll(){ modal.hidden=true; startRound(); }
 
-  btnA?.addEventListener("click", onA);
-  btnB?.addEventListener("click", onB);
-  window.addEventListener("keydown", (e) => {
-    if (e.key === "Enter" || e.key === " ") onA();                 // A
-    if (e.key.toLowerCase() === "b" || e.key === "Escape") onB();  // B
-  });
+  /* ===================== Wire ===================== */
+  btnStart.addEventListener("click", startRound);
+  btnReset.addEventListener("click", resetAll);
+  btnClose.addEventListener("click", () => { modal.hidden=true; });
+  btnAgain.addEventListener("click", () => { modal.hidden=true; startRound(); });
 
-  // --- Start buttons ---
-  startButtons?.forEach(btn => {
-    btn.addEventListener("click", async () => {
-      const m = btn.getAttribute("data-mode");
-      if (!modes[m]) return;
-      mode = m;
-
-      score = 0; lives = 3; mult = 1;
-      setGameActive(true);
-
-      setRailMode(mode);
-      renderGenMarkers(mode);
-
-      if (!currentId) currentId = randId();
-      await showInstant(currentId);
-
-      hideEnd(); hideStart(); newRule();
-    });
-  });
-
-  // --- Play Again ---
-  playAgain?.addEventListener("click", async () => {
-    setGameActive(false); mode = null;
-
-    clearGenMarkers(); setRailMode("easy"); // default look when idle
-
-    currentId = randId();
-    imgA.src = urlFor(currentId);
-    imgA.style.opacity = 0; imgB.style.opacity = 0;
-    if (timerEl){ timerEl.textContent = "—"; timerEl.classList.remove("warn"); }
-    setHUD(); hideEnd(); showStart();
-  });
-
-  // --- Initial boot ---
-  buildPokedexRail();
-
-  currentId = randId();
-  imgA.src = urlFor(currentId);
-  imgA.style.opacity = 0; imgB.style.opacity = 0;
-  if (timerEl){ timerEl.textContent = "—"; timerEl.classList.remove("warn"); }
-  setRailMode("easy"); renderGenMarkers("easy"); updateRail(currentId);
-  setGameActive(false); setHUD(); showStart();
-})();
+  // First paint
+  buildGrid();
