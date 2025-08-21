@@ -12,18 +12,20 @@
    =============================== */
 .revo-stage-wrap{
   display:grid;
-  grid-template-columns:auto 1fr;   /* rail then stage */
+  grid-template-columns:auto 1fr;         /* rail then stage */
   align-items:start;
-  column-gap:48px;                  /* breathing space */
-  padding-right: clamp(12px, 5vw, 56px); /* small right gutter */
+  column-gap:48px;                        /* breathing space */
+  padding-right: clamp(12px, 5vw, 56px);  /* small right gutter */
 }
 
 /* ===============================
-   Stage & Sprites
+   Stage & Sprites (responsive scale)
    =============================== */
+:root { --stage-max: min(70svh, 80vmin, 720px); }
+
 .revo-stage{
   position:relative;
-  width:min(80vmin,720px);
+  width: var(--stage-max);
   aspect-ratio:1/1;
   margin:16px auto;
   background:radial-gradient(120% 120% at 50% 55%, #121929 0%, #0b101b 60%, #070a12 100%);
@@ -33,15 +35,21 @@
   place-items:center;
   overflow:hidden;
 }
+
+/* Pokémon art */
 .revo-img{
   position:absolute;
-  max-width:80%; max-height:80%;
+  width: clamp(58%, 78%, 82%);  /* scale image with stage */
+  max-height: 82%;
+  object-fit: contain;
   image-rendering:auto;
   opacity:0; transition:opacity 80ms linear;
 }
 .revo-img.silhouette{
   filter:brightness(0) contrast(1000%) drop-shadow(0 0 10px rgba(255,255,255,.12));
 }
+
+/* Flash & Timer inside stage */
 .revo-flash{
   position:absolute; inset:0; pointer-events:none; opacity:0;
   background:radial-gradient(circle at 50% 50%, rgba(255,255,255,1) 0%, rgba(255,255,255,.6) 30%, rgba(255,255,255,0) 70%);
@@ -51,7 +59,8 @@
   padding:4px 8px; border-radius:8px;
   background:rgba(0,0,0,.5); border:1px solid rgba(255,255,255,.12);
   color:var(--text); font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
-  font-size:13px; line-height:1; pointer-events:none;
+  font-size: clamp(11px, 2.1vmin, 15px);
+  line-height:1; pointer-events:none;
 }
 .revo-timer.warn{ color:#f7768e; }
 
@@ -69,7 +78,7 @@
   border-radius:10px;
   background:rgba(0,0,0,.28);
   border:1px solid rgba(255,255,255,.10);
-  font-size:clamp(16px, 2.2vw, 22px);
+  font-size: clamp(14px, 2.4vmin, 24px); /* scales inside stage */
   display:none; /* hidden until game is active */
 }
 .revo-aim.lower{ color:#f5a2b2; }
@@ -83,7 +92,7 @@
   align-items:center; gap:8px; margin:8px 0 12px; font-size:14px;
 }
 .revo-hud .hud-left,
-.revo-hud .hud-center{ display:none !important; }
+.revo-hud .hud-center{ display:none !important; } /* remove clutter */
 .revo-hud.inactive .hud-right{ display:none; }
 .revo-hud .hud-right{justify-self:end; display:flex; gap:8px; align-items:baseline; flex-wrap:wrap; row-gap:4px;}
 .revo-hud .tag{color:var(--muted);}
@@ -100,7 +109,7 @@
 #controls img{ width:64px; height:64px; cursor:pointer; filter:brightness(.9); transition:transform .1s ease-in-out; }
 #controls img:active{ transform:scale(.95); }
 
-/* volume area below the game */
+/* volume area below the game (kept out of the tight stage area) */
 .revo-audio{
   display:flex;
   justify-content:flex-end;
@@ -114,12 +123,12 @@
 /* ===============================
    Overlays — START (rules)
    =============================== */
+/* All typography inside start overlay scales with viewport */
 .revo-start{
   position:absolute; inset:0; display:grid; place-items:center;
   padding:24px; gap:10px;
   background:radial-gradient(120% 120% at 50% 55%, rgba(7,10,18,.94) 0%, rgba(7,10,18,.88) 60%, rgba(7,10,18,.82) 100%);
   border-radius:16px; text-align:center;
-  /* scale down the whole rules block on small viewports */
   font-size: clamp(12px, 1.45vw, 15px);
   line-height: 1.55;
 }
@@ -131,9 +140,14 @@
 }
 .start-content{ position:relative; z-index:1; display:grid; justify-items:center; gap:12px; max-width:min(520px, 86%); }
 .revo-start .title{ margin:0 0 6px; font-size:clamp(18px,2.0vw,24px); font-weight:800; letter-spacing:.4px; color:#9ab4ff; text-shadow:0 1px 0 rgba(0,0,0,.25); }
-.rules-list{ margin:8px 0 6px; text-align:left; font-size:clamp(12px,1.5vw,14px); line-height:1.6; color:var(--muted); }
-.rules-list p{ margin:5px 0; }
-.rules-list .k{ display:inline-block; min-width:1.2em; font-weight:800; color:#7aa2f7; margin-right:4px; }
+
+/* One-line rule that scales on small screens */
+.rules-list{ margin:8px 0 6px; text-align:center; }
+.rules-list p{ 
+  font-size: clamp(12px, 1.8vw, 16px);
+  line-height: 1.45;
+  margin: 0;
+}
 .revo-start .subtitle.bigger{ margin:4px 0 6px; color:#b8c4ff; font-size:clamp(14px,1.7vw,17px); font-weight:700; }
 
 /* ===============================
@@ -197,7 +211,7 @@
    =============================== */
 .pokedex-rail{
   position:relative;
-  height:min(80vmin,720px);
+  height: var(--stage-max);
   width:56px;
   background:rgba(255,255,255,.06);
   border-radius:14px;
@@ -220,7 +234,7 @@
   transform:translateY(50%);
 }
 
-/* Midpoint GEN labels inside the bar */
+/* Midpoint GEN labels inside the bar (auto-compact on tiny widths) */
 .pokedex-rail .rail-mid-labels{
   position:absolute; inset:0; pointer-events:none; z-index:3;
 }
@@ -252,25 +266,13 @@
 .pokedex-rail--hidden .rail-track > *{ opacity:0; }
 
 /* ===============================
-   Viewport-fit sizing (mobile)
+   Responsive tweaks
    =============================== */
-:root { --stage-max: min(70svh, 80vmin, 720px); }
 
-.revo-stage { width: var(--stage-max); aspect-ratio: 1 / 1; margin: 10px auto; }
-.pokedex-rail { height: var(--stage-max); }
-
+/* Base tightened spacing */
 .revo-hud { margin: 6px 0 8px; }
 #controls { margin-top: 12px; }
 .revo-stage-wrap { column-gap: 36px; }
-
-/* small screens base tweaks */
-@media (max-width:520px){
-  .revo-stage-wrap{ column-gap:26px; }
-  .pokedex-rail{ width:46px; }
-  .pokedex-rail .rail-mid-label{ font-size:11px; }
-  .pokedex-rail .rail-needle{ right:-22px; }
-  .pokedex-rail .needle-label{ margin-left:6px; }
-}
 
 /* Medium narrow viewports (≤900w OR ≤750h) */
 @media (max-width: 900px), (max-height: 750px) {
@@ -317,3 +319,14 @@
 
 /* iOS safe-area guard */
 body { padding-bottom: max(env(safe-area-inset-bottom, 0px), 8px); }
+
+/* ===============================
+   Tiny feedback keyframes (used by JS)
+   =============================== */
+@keyframes revo-good { 0%{transform:scale(1)} 30%{transform:scale(1.18)} 100%{transform:scale(1)} }
+@keyframes revo-bad  { 0%{transform:scale(1)} 30%{transform:scale(0.88)} 100%{transform:scale(1)} }
+.revo-pulse-good{ animation:revo-good 320ms cubic-bezier(.2,1,.2,1); }
+.revo-pulse-bad { animation:revo-bad  320ms cubic-bezier(.2,1,.2,1); color:#f7768e !important; }
+
+/* Safety: hide empty img to avoid flicker */
+.revo-img[src=""]{ display:none; }
