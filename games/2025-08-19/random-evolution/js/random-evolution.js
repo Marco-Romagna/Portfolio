@@ -18,11 +18,7 @@ window.addEventListener("DOMContentLoaded", () => {
       state(){ return { DEBUG, qp, stored }; }
     };
 
-    dlog("boot", {
-      pageURL: window.location.href,
-      settingsURL: settingsURL.toString(),
-      debug: DEBUG
-    });
+    dlog("boot", { pageURL: window.location.href, settingsURL: settingsURL.toString(), debug: DEBUG });
 
     /* ---------- Inject minimal feedback styles ---------- */
     (function injectRevoFeedbackStyles(){
@@ -67,15 +63,19 @@ window.addEventListener("DOMContentLoaded", () => {
     const playAgain    = document.getElementById("play-again");
 
     const hud        = document.getElementById("hud");
-    const hudCurrent = document.getElementById("hud-current"); // may be absent (ok)
-    const hudRule    = document.getElementById("hud-rule");    // may be absent (ok)
+    const hudCurrent = document.getElementById("hud-current"); // optional
+    const hudRule    = document.getElementById("hud-rule");    // optional
     const hudScore   = document.getElementById("hud-score");
     const hudLives   = document.getElementById("hud-lives");
     const hudMult    = document.getElementById("hud-mult");
-    const hudMode    = document.getElementById("hud-mode");    // may be absent (ok)
+    const hudMode    = document.getElementById("hud-mode");    // optional
 
     const audioRow   = document.querySelector(".revo-audio");
     const titleEl    = document.getElementById("game-title");
+
+    // History rail
+    const historyWrap  = document.getElementById("revo-history");
+    const historyTrack = document.getElementById("history-track");
 
     // Ensure A/B controls are inside the stage
     if (controls && stage && !controls.classList.contains("ab-instage")) {
@@ -241,6 +241,10 @@ window.addEventListener("DOMContentLoaded", () => {
     let rolling    = false;
     let debouncing = false;
 
+    /* ---------- History state ---------- */
+    let history = [];        // array of {id, action, correct}
+    let histCapacity = 0;
+
     /* ---------- Helpers ---------- */
     const randId    = () => Math.floor(Math.random() * (end - start + 1)) + start;
     const pickOther = () => { let id = randId(); while (currentId != null && id === currentId) id = randId(); return id; };
@@ -260,11 +264,10 @@ window.addEventListener("DOMContentLoaded", () => {
       });
     }
 
-    /* ---------- NEW: hard stop + stage clear ---------- */
+    /* ---------- Hard stop + stage clear ---------- */
     function hardStopAll() {
-      // kill any in-flight loops immediately
       rolling = false;
-      session++;           // invalidates rollLoop/watchdog loops
+      session++;           // invalidates loops
       deadline = 0;
       dlog("hardStopAll", { session });
     }
@@ -339,7 +342,6 @@ window.addEventListener("DOMContentLoaded", () => {
       aimBanner.style.display = active ? "block" : "none";
       const isHigher = rule === "higher";
       const ref = (currentId != null) ? currentId : "—";
-      // (User requested no brackets around the text)
       aimBanner.textContent = `${isHigher ? "Higher" : "Lower"} than ${ref}`;
 
       aimBanner.classList.toggle("higher", isHigher);
@@ -388,6 +390,99 @@ window.addEventListener("DOMContentLoaded", () => {
       setHUD();
     }
 
+    /* ---------- History helpers ---------- */
+    function computeHistoryCapacity() {
+      if (!historyWrap) return 0;
+      const wrapRect = historyWrap.getBoundingClientRect();
+      const cs = getComputedStyle(document.documentElement);
+      const thumb = parseFloat(cs.getPropertyValue('--hist-thumb')) || 40;
+      const gap = parseFloat(cs.getPropertyValue('--hist-gap')) || 8;
+      const labelH = 14; // approximate height for the number under the image
+      const tileH = thumb + labelH + gap; // image + label + internal gap
+      const padding = gap * 2; // from .history-track padding
+      const innerHeight = wrapRect.height - padding;
+      const capacity = Math.max(1, Math.floor(innerHeight / tileH));
+      dlog("history:capacity", { wrapH: wrapRect.height, thumb, gap, labelH, capacity });
+      return capacity;
+    }
+
+    function trimHistoryDOM() {
+      // keep only first histCapacity items (newest at top)
+      const items = historyTrack?.querySelectorAll('.hist-item');
+      if (!items) return;
+      for (let i = items.length - 1; i >= histCapacity; i--) {
+        items[i]?.remove();
+      }
+    }
+
+    function clearHistory() {
+      history = [];
+      if (historyTrack) historyTrack.innerHTML = "";
+    }
+
+    function pushHistory(entry /* {id, action: 'accept'|'cancel', correct: bool} */) {
+      if (!historyTrack || !entry) return;
+
+      // Structure:
+      // <div.hist-item title="...">
+      //   <div.hist-imgwrap data-action data-correct>
+      //     <img.hist-thumb />
+      //   </div>
+      //   <div.hist-label>#304</div>
+      // </div>
+
+      const item = document.createElement('div');
+      item.className = 'hist-item';
+      item.title = `#${entry.id} • ${entry.action === 'accept' ? 'Accepted' : 'Canceled'} • ${entry.correct ? 'Correct' : 'Incorrect'}`;
+
+      const wrap = document.createElement('div');
+      wrap.className = 'hist-imgwrap';
+      wrap.setAttribute('data-action', entry.action);
+      wrap.setAttribute('data-correct', entry.correct ? 'true' : 'false');
+
+      const img = document.createElement('img');
+      img.className = 'hist-thumb';
+      img.alt = `#${entry.id} Pokémon`;
+      img.src = urlFor(entry.id);
+
+      wrap.appendChild(img);
+
+      const label = document.createElement('div');
+      label.className = 'hist-label';
+      label.textContent = `#${entry.id}`;
+
+      item.appendChild(wrap);
+      item.appendChild(label);
+
+      // Insert at the TOP
+      historyTrack.insertBefore(item, historyTrack.firstChild);
+
+      // Track state
+      history.unshift(entry);
+
+      // Trim to capacity (remove from bottom)
+      const items = historyTrack.querySelectorAll('.hist-item');
+      if (items.length > histCapacity) {
+        for (let i = items.length - 1; i >= histCapacity; i--) {
+          items[i]?.remove();
+        }
+        history = history.slice(0, histCapacity);
+      }
+    }
+
+    function updateHistoryCapacity() {
+      const newCap = computeHistoryCapacity();
+      if (newCap !== histCapacity) {
+        histCapacity = newCap;
+        trimHistoryDOM();
+        history = history.slice(0, histCapacity);
+      }
+    }
+
+    window.addEventListener('resize', () => {
+      requestAnimationFrame(updateHistoryCapacity);
+    });
+
     /* ---------- Stage helpers ---------- */
     async function showInstant(id) {
       currentId = id;
@@ -401,6 +496,7 @@ window.addEventListener("DOMContentLoaded", () => {
       if (timerEl) { timerEl.textContent = "—"; timerEl.classList.remove("warn"); }
       setHUD();
     }
+
     function updateTimer() {
       if (!timerEl || !rolling) return;
       const ms  = Math.max(0, deadline - now());
@@ -408,6 +504,7 @@ window.addEventListener("DOMContentLoaded", () => {
       timerEl.textContent = sec;
       timerEl.classList.toggle("warn", ms <= 3000);
     }
+
     function pop(el, durMs = 250) {
       el.style.transition = `transform ${durMs}ms cubic-bezier(.2,1,.2,1)`;
       el.style.transform  = "scale(0.9)";
@@ -436,6 +533,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
       imgB.src = preloadedUrl || urlFor(id);
     }
+
     async function rollLoop(mySession) {
       while (rolling && mySession === session) {
         const showB = imgB.style.opacity !== "1";
@@ -447,6 +545,7 @@ window.addEventListener("DOMContentLoaded", () => {
         await sleep(currentInterval());
       }
     }
+
     async function watchdogLoop(mySession) {
       while (rolling && mySession === session) {
         updateTimer();
@@ -458,8 +557,9 @@ window.addEventListener("DOMContentLoaded", () => {
         await sleep(60);
       }
     }
+
     async function startRoll() {
-      if (!gameActive) return; // extra guard
+      if (!gameActive) return; // guard
       session++;
       const mySession = session;
       rolling = true;
@@ -489,18 +589,22 @@ window.addEventListener("DOMContentLoaded", () => {
       let gained = false, lost = false;
 
       if (action === "cancel") {
-        if (!isCorrectDir) {
+        if (!isCorrectDir) {        // correctly rejected
           score += mult; mult += 1;
           AudioMgr.playOK();
           if (hudScore) { hudScore.classList.remove('revo-pulse-good'); void hudScore.offsetWidth; hudScore.classList.add('revo-pulse-good'); }
           gained = true;
-        } else {
+        } else {                    // wrongly rejected
           lives -= 1; mult = 1;
           AudioMgr.playBad();
           if (hudLives) { hudLives.classList.remove('revo-pulse-bad'); void hudLives.offsetWidth; hudLives.classList.add('revo-pulse-bad'); }
           lost = true;
         }
 
+        // Log encounter (background=cancel, rim by correctness)
+        pushHistory({ id: candidateId, action: 'cancel', correct: !isCorrectDir });
+
+        // Revert to current
         imgA.classList.remove("silhouette");
         imgB.classList.remove("silhouette");
         imgA.src = urlFor(currentId);
@@ -519,13 +623,10 @@ window.addEventListener("DOMContentLoaded", () => {
 
         if (lives <= 0) {
           if (finalScore) finalScore.textContent = String(score);
-
-          // **Hard stop & clear on game over**
           hardStopAll();
           setGameActive(false);
           showEnd();
           clearStageImages();
-
           dlog("game:over", { finalScore: score });
           return;
         }
@@ -565,6 +666,9 @@ window.addEventListener("DOMContentLoaded", () => {
         lost = true;
       }
 
+      // Log encounter (background=accept, rim by correctness)
+      pushHistory({ id: currentId, action: 'accept', correct: isCorrectDir });
+
       dlog("compare", {
         rule, current_before: prevCurrent, next: candidateId,
         current_after: currentId, isCorrectDir, action,
@@ -580,13 +684,10 @@ window.addEventListener("DOMContentLoaded", () => {
 
       if (lives <= 0) {
         if (finalScore) finalScore.textContent = String(score);
-
-        // **Hard stop & clear on game over**
         hardStopAll();
         setGameActive(false);
         showEnd();
         clearStageImages();
-
         dlog("game:over", { finalScore: score });
         return;
       }
@@ -636,6 +737,7 @@ window.addEventListener("DOMContentLoaded", () => {
         // start fresh
         hardStopAll();
         clearStageImages();
+        clearHistory(); // clear history on new game
 
         // Only now pick the first Pokémon and show it
         currentId = randId();
@@ -647,14 +749,19 @@ window.addEventListener("DOMContentLoaded", () => {
 
         dlog("mode:start", { mode: m });
         if (titleEl) titleEl.textContent = `Random Evolution (${cap(mode)})`;
+
+        // compute history capacity for current size
+        updateHistoryCapacity();
+
         newRule();
       });
     });
 
     playAgain?.addEventListener("click", async () => {
-      // On Play Again, return to start screen with **empty stage**
+      // On Play Again, return to start screen with empty stage & empty history
       hardStopAll();
       clearStageImages();
+      clearHistory();
 
       setGameActive(false);
       mode = null;
@@ -675,9 +782,12 @@ window.addEventListener("DOMContentLoaded", () => {
     hud?.classList.add("inactive");
     rail?.classList.add("pokedex-rail--hidden");
 
-    // **Empty stage on first load**
     currentId = null;
     clearStageImages();
+    clearHistory();
+
+    // initialize history capacity against current layout
+    updateHistoryCapacity();
 
     setGameActive(false);
     setHUD();

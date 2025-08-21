@@ -27,9 +27,10 @@
   <!-- Main -->
   <main class="container">
     <section class="panel">
+      <!-- Title (JS appends difficulty during gameplay) -->
       <h2 class="panel-title" id="game-title">Random Evolution</h2>
 
-      <!-- HUD (centered, slightly tighter pills ABOVE the stage) -->
+      <!-- HUD (pills above stage, centered & aligned to stage width) -->
       <div class="revo-hud inactive" id="hud">
         <div class="hud-pill">
           <span class="label">Score</span>
@@ -45,9 +46,9 @@
         </div>
       </div>
 
-      <!-- Stage wrapper: LEFT rail + RIGHT stage -->
+      <!-- Stage wrapper: LEFT rail + STAGE + RIGHT history -->
       <div class="revo-stage-wrap">
-        <!-- Pokédex rail (outside the stage) -->
+        <!-- Pokédex rail (left of stage) -->
         <div id="pokedex-rail" class="pokedex-rail">
           <div class="rail-track">
             <div class="rail-fill"></div>
@@ -60,10 +61,10 @@
           </div>
         </div>
 
-        <!-- The stage -->
+        <!-- Stage -->
         <div id="stage" class="revo-stage">
           <!-- Aim banner -->
-          <div id="aim" class="revo-aim" aria-hidden="true">[Higher than —]</div>
+          <div id="aim" class="revo-aim" aria-hidden="true">Higher than —</div>
 
           <!-- Pokémon art -->
           <img id="imgA" class="revo-img" alt="Current Pokémon">
@@ -105,6 +106,11 @@
             <img id="b-button" src="./assets/buttons/B_button.png" alt="B Button">
           </div>
         </div>
+
+        <!-- History rail (right of stage) -->
+        <aside id="revo-history" class="revo-history" aria-label="Encounter history">
+          <div class="history-track" id="history-track"></div>
+        </aside>
       </div>
 
       <!-- Volume row BELOW the stage -->
