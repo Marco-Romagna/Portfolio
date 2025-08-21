@@ -27,29 +27,21 @@
   <!-- Main -->
   <main class="container">
     <section class="panel">
-      <h2 class="panel-title">Random Evolution</h2>
+      <h2 class="panel-title" id="game-title">Random Evolution</h2>
 
-      <!-- HUD -->
+      <!-- HUD (centered, slightly tighter pills ABOVE the stage) -->
       <div class="revo-hud inactive" id="hud">
-        <div class="hud-left">
-          <span class="tag">Current</span>
-          <span id="hud-current" class="mono">#—</span>
+        <div class="hud-pill">
+          <span class="label">Score</span>
+          <span id="hud-score" class="value mono">0</span>
         </div>
-        <div class="hud-center">
-          <span class="tag">Aim</span>
-          <span id="hud-rule" class="rule">—</span>
-          <span class="tag">Mode</span>
-          <span id="hud-mode" class="mono">—</span>
+        <div class="hud-pill">
+          <span class="label">Mult</span>
+          <span id="hud-mult" class="value mono">x1</span>
         </div>
-        <div class="hud-right">
-          <span class="tag">Score</span>
-          <span id="hud-score" class="mono">0</span>
-          <span class="sep">•</span>
-          <span class="tag">Mult</span>
-          <span id="hud-mult" class="mono">x1</span>
-          <span class="sep">•</span>
-          <span class="tag">Lives</span>
-          <span id="hud-lives" class="mono">3</span>
+        <div class="hud-pill">
+          <span class="label">Lives</span>
+          <span id="hud-lives" class="value mono">3</span>
         </div>
       </div>
 
@@ -71,7 +63,7 @@
         <!-- The stage -->
         <div id="stage" class="revo-stage">
           <!-- Aim banner -->
-          <div id="aim" class="revo-aim" aria-hidden="true">Higher</div>
+          <div id="aim" class="revo-aim" aria-hidden="true">[Higher than —]</div>
 
           <!-- Pokémon art -->
           <img id="imgA" class="revo-img" alt="Current Pokémon">
