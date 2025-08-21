@@ -1,6 +1,5 @@
-
 /* ===============================
-   Random Evolution Styles (full, cleaned)
+   Random Evolution Styles
    =============================== */
 
 /* --- Base helpers --- */
@@ -41,7 +40,7 @@
    =============================== */
 .revo-stage{
   position:relative;
-  /* IMPORTANT: size against the column, not viewport (prevents iOS right overflow) */
+  /* size against column to avoid iOS overflow */
   width: min(var(--stage-max), 100%);
   aspect-ratio: 1 / 1;
   margin:16px auto;
@@ -129,13 +128,12 @@
   z-index:5;
   --ab: clamp(56px, 9vmin, 84px);
 }
-
 .ab-instage img{
   width: var(--ab);
   height: var(--ab);
   cursor: pointer;
   user-select: none;
-  /* ensure no extra styling sneaks in */
+  /* strip any leftover button styles */
   border: none !important;
   outline: none !important;
   background: none !important;
@@ -145,10 +143,7 @@
   transform: none !important;
   transition: transform .08s ease;
 }
-
-.ab-instage img:active{
-  transform: scale(.92);
-}
+.ab-instage img:active{ transform: scale(.92); }
 
 /* If some older rules targeted #a-button/#b-button with transforms, neutralize: */
 #ab-button, #a-button, #b-button { transform: none !important; }
