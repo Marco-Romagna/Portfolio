@@ -28,11 +28,28 @@ window.addEventListener("DOMContentLoaded", () => {
       debug: DEBUG
     });
 
+    /* ---------- Inject minimal feedback styles (score/lives pulse) ---------- */
+    (function injectRevoFeedbackStyles(){
+      if (document.querySelector('style[data-revo-feedback]')) return;
+      const css = `
+      @keyframes revo-good { 0%{transform:scale(1)} 30%{transform:scale(1.18)} 100%{transform:scale(1)} }
+      @keyframes revo-bad  { 0%{transform:scale(1)} 30%{transform:scale(0.88)} 100%{transform:scale(1)} }
+      .revo-pulse-good{ animation:revo-good 320ms cubic-bezier(.2,1,.2,1); }
+      .revo-pulse-bad { animation:revo-bad  320ms cubic-bezier(.2,1,.2,1); color:#f7768e !important; }
+      .revo-img[src=""]{ display:none; } /* safety: hide empty img to avoid flicker */
+      `;
+      const style = document.createElement('style');
+      style.setAttribute('data-revo-feedback','');
+      style.textContent = css;
+      document.head.appendChild(style);
+    })();
+
     /* ---------- Grab DOM ---------- */
-    const imgA    = document.getElementById("imgA");
-    const imgB    = document.getElementById("imgB");
-    const flash   = document.getElementById("flash");
-    const timerEl = document.getElementById("timer");
+    const stage  = document.getElementById("stage");
+    const imgA   = document.getElementById("imgA");
+    const imgB   = document.getElementById("imgB");
+    const flash  = document.getElementById("flash");
+    const timerEl= document.getElementById("timer");
 
     const rail        = document.getElementById("pokedex-rail");
     const railTrack   = rail?.querySelector(".rail-track");
@@ -58,6 +75,123 @@ window.addEventListener("DOMContentLoaded", () => {
     const hudLives   = document.getElementById("hud-lives");
     const hudMult    = document.getElementById("hud-mult");
     const hudMode    = document.getElementById("hud-mode");
+
+    /* ---------- Feedback helpers (pulses) ---------- */
+    function pulseOnce(el, cls){
+      if(!el) return;
+      el.classList.remove(cls);
+      void el.offsetWidth; // reflow restart
+      el.classList.add(cls);
+    }
+
+    /* ---------- Audio Manager (soft blips + mute/volume) ---------- */
+    const VOL_KEY = 'revo_volume';   // '0'..'1'
+    const MUTE_KEY= 'revo_muted';    // '0' or '1'
+    const AudioMgr = (() => {
+      let ctx = null;
+      let okEl = null, badEl = null;
+      let muted = localStorage.getItem(MUTE_KEY) === '1';
+      let volume = parseFloat(localStorage.getItem(VOL_KEY) ?? '0.5');
+      if (isNaN(volume)) volume = 0.5;
+
+      function ensureCtx(){
+        if (!ctx) {
+          try { ctx = new (window.AudioContext || window.webkitAudioContext)(); } catch(e){}
+        }
+      }
+      function loadTag(src){
+        const a = new Audio();
+        a.src = src;
+        a.preload = 'auto';
+        a.volume = muted ? 0 : volume;
+        return a;
+      }
+      function init() {
+        if (!okEl)  okEl  = loadTag('./assets/sfx/correct.mp3');
+        if (!badEl) badEl = loadTag('./assets/sfx/wrong.mp3');
+      }
+      function setMuted(m){
+        muted = !!m;
+        localStorage.setItem(MUTE_KEY, muted ? '1' : '0');
+        if (okEl)  okEl.volume  = muted ? 0 : volume;
+        if (badEl) badEl.volume = muted ? 0 : volume;
+      }
+      function setVolume(v){
+        volume = Math.max(0, Math.min(1, Number(v)||0));
+        localStorage.setItem(VOL_KEY, String(volume));
+        if (okEl)  okEl.volume  = muted ? 0 : volume;
+        if (badEl) badEl.volume = muted ? 0 : volume;
+      }
+      function beep(freq=880, durMs=140, type='sine'){
+        if (muted) return;
+        ensureCtx();
+        if (!ctx) return;
+        const g = ctx.createGain();
+        g.gain.value = 0.09 * volume;
+        g.connect(ctx.destination);
+        const o = ctx.createOscillator();
+        o.type = type;
+        o.frequency.value = freq;
+        o.connect(g);
+        o.start();
+        setTimeout(()=>{ o.stop(); g.disconnect(); }, durMs);
+      }
+      function playOK(){
+        if (okEl && okEl.readyState > 0) { try{ okEl.currentTime=0; okEl.play(); }catch{} }
+        else beep(1040,130,'sine');
+      }
+      function playBad(){
+        if (badEl && badEl.readyState > 0) { try{ badEl.currentTime=0; badEl.play(); }catch{} }
+        else beep(220,170,'square');
+      }
+      return { init, setMuted, setVolume, playOK, playBad, get muted(){return muted}, get volume(){return volume} };
+    })();
+
+    // Add volume UI into HUD (right block)
+    (function addVolumeUI(){
+      const right = document.querySelector('#hud .hud-right');
+      if (!right) return;
+      const wrap = document.createElement('span');
+      wrap.style.display = 'inline-flex';
+      wrap.style.alignItems = 'center';
+      wrap.style.gap = '6px';
+      wrap.style.marginLeft = '8px';
+
+      const btn = document.createElement('button');
+      btn.textContent = AudioMgr.muted ? '🔇' : '🔊';
+      btn.title = 'Toggle sound (M)';
+      btn.className = 'mode-btn';
+      btn.style.padding = '2px 8px';
+      btn.style.fontSize = '12px';
+
+      const rng = document.createElement('input');
+      rng.type = 'range';
+      rng.min = '0'; rng.max = '1'; rng.step = '0.05';
+      rng.value = String(AudioMgr.volume);
+      rng.title = 'Volume';
+      rng.style.width = '80px';
+      rng.addEventListener('input', () => AudioMgr.setVolume(rng.value));
+
+      btn.addEventListener('click', () => {
+        AudioMgr.setMuted(!AudioMgr.muted);
+        btn.textContent = AudioMgr.muted ? '🔇' : '🔊';
+      });
+
+      wrap.appendChild(btn);
+      wrap.appendChild(rng);
+      right.appendChild(wrap);
+
+      // keyboard shortcut M
+      window.addEventListener('keydown', (e)=>{
+        if (e.key.toLowerCase() === 'm') { btn.click(); }
+      });
+    })();
+
+    // Ensure audio initialized on first interaction (autoplay policies)
+    let audioInited = false;
+    function ensureAudioInit(){
+      if (!audioInited) { AudioMgr.init(); audioInited = true; }
+    }
 
     /* ---------- Settings ---------- */
     let settings;
@@ -363,9 +497,13 @@ window.addEventListener("DOMContentLoaded", () => {
 
         if (!isCorrectDir) {        // correctly rejected
           score += mult; mult += 1;
+          AudioMgr.playOK();
+          pulseOnce(hudScore, 'revo-pulse-good');
           gained = true;
         } else {                    // wrongly rejected
           lives -= 1; mult = 1;
+          AudioMgr.playBad();
+          pulseOnce(hudLives, 'revo-pulse-bad');
           lost = true;
         }
 
@@ -426,10 +564,14 @@ window.addEventListener("DOMContentLoaded", () => {
       if (isCorrectDir) {           // accepted correct evolution
         score += mult; mult += 1;
         currentId = candidateId;
+        AudioMgr.playOK();
+        pulseOnce(hudScore, 'revo-pulse-good');
         gained = true;
       } else {                      // accepted wrong evolution
         lives -= 1; mult = 1;
         currentId = candidateId;
+        AudioMgr.playBad();
+        pulseOnce(hudLives, 'revo-pulse-bad');
         lost = true;
       }
 
@@ -474,12 +616,14 @@ window.addEventListener("DOMContentLoaded", () => {
 
     const onA = withDebounce(() => {
       if (!gameActive) return;
+      ensureAudioInit();
       dlog("input:A", { rolling });
       if (!rolling) startRoll();
       else stopAndJudge("accept");
     });
     const onB = withDebounce(() => {
       if (!gameActive || !rolling) return;
+      ensureAudioInit();
       dlog("input:B");
       stopAndJudge("cancel");
     });
