@@ -278,40 +278,43 @@ window.addEventListener("DOMContentLoaded", () => {
       rail?.querySelector(".rail-mid-labels")?.remove();
     }
 
-    function renderRailDecor() {
-      const rail = document.getElementById("pokedex-rail");
-      rail.innerHTML = "";
+    function renderRailDecor(currentMode) {
+      if (!railTrack) return;
     
-      for (let i = 0; i < GEN_COUNT; i++) {
-        let lab = document.createElement("div");
-        lab.className = "rail-mid-label";
-        // add both "Gen 1" and "G1", and let CSS decide which to show
-        lab.innerHTML = `<span class="full">Gen ${i + 1}</span><span class="short">G${i + 1}</span>`;
-        rail.appendChild(lab);
-      }
-    }
-
-      // Midpoint overlay labels (skip for hard)
+      // Clear previous dividers/labels
+      clearRailDecor();
+    
+      // 1) Generation start dividers
+      GEN_STARTS.forEach(startNum => {
+        const pos = pctForDex(startNum);
+        const divider = document.createElement("div");
+        divider.className = "rail-divider";
+        divider.style.bottom = pos + "%";
+        railTrack.appendChild(divider);
+      });
+    
+      // 2) Midpoint overlay labels (skip on hard)
       if (currentMode === "hard") return;
-
+    
       const bounds = [...GEN_STARTS, MAX_DEX + 1];
       const wrap = document.createElement("div");
       wrap.className = "rail-mid-labels";
-
+    
       for (let i = 0; i < bounds.length - 1; i++) {
         const segStart = bounds[i];
         const next     = bounds[i + 1];
         const segEnd   = next - 1;
         const midDex   = Math.floor((segStart + segEnd) / 2);
         const pos      = pctForDex(midDex);
-
+    
         const lab = document.createElement("div");
         lab.className = "rail-mid-label";
         lab.style.bottom = pos + "%";
-        lab.textContent = `G${i + 1}`;
+        // full + short; CSS will choose which to show
+        lab.innerHTML = `<span class="full">Gen ${i + 1}</span><span class="short">G${i + 1}</span>`;
         wrap.appendChild(lab);
       }
-
+    
       rail.appendChild(wrap);
     }
 
