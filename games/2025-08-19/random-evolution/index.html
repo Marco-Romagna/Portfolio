@@ -6,7 +6,7 @@
   <title>Random Evolution • Game</title>
   <meta name="color-scheme" content="dark light" />
 
-  <!-- Site styles (path is from this file: games/2025-08-19/random-evolution/index.html) -->
+  <!-- Site styles (path is from this file) -->
   <link rel="stylesheet" href="../../../css/main.css">
   <!-- Game styles -->
   <link rel="stylesheet" href="../../../css/games/random-evolution/styles.css">
@@ -28,9 +28,8 @@
   <main class="container">
     <section class="panel">
       <h2 class="panel-title">Random Evolution</h2>
-      <p class="panel-subtitle">Decide if the next Pokémon’s Pokédex number is higher or lower!</p>
 
-      <!-- HUD (start inactive so left/right blocks are hidden) -->
+      <!-- HUD -->
       <div class="revo-hud inactive" id="hud">
         <div class="hud-left">
           <span class="tag">Current</span>
@@ -60,7 +59,7 @@
         <div id="pokedex-rail" class="pokedex-rail">
           <div class="rail-track">
             <div class="rail-fill"></div>
-            <!-- generation dividers/badges/labels are injected into .rail-track -->
+            <!-- generation dividers + midpoint labels injected via JS -->
           </div>
           <!-- Needle line + label for current dex -->
           <div class="rail-needle">
@@ -71,8 +70,12 @@
 
         <!-- The stage -->
         <div id="stage" class="revo-stage">
-          <img id="imgA" class="revo-img" alt="Current form">
-          <img id="imgB" class="revo-img" alt="Next form">
+          <!-- Aim banner -->
+          <div id="aim" class="revo-aim" aria-hidden="true">Higher</div>
+
+          <!-- Pokémon art -->
+          <img id="imgA" class="revo-img" alt="Current Pokémon">
+          <img id="imgB" class="revo-img" alt="Next Pokémon">
           <div id="flash" class="revo-flash"></div>
           <div id="timer" class="revo-timer">—</div>
 
@@ -80,15 +83,13 @@
           <div id="start-screen" class="revo-start">
             <div class="start-content">
               <h3 class="title">Do you know your Pokédex numbers?</h3>
-
               <div class="rules-list">
-                <p><span class="k">1.</span> Decide if the next Pokémon’s number is <strong>higher</strong> or <strong>lower</strong>.</p>
-                <p><span class="k">2.</span> You only have a few seconds to choose!</p>
-                <p><span class="k">3.</span> Press <strong>B</strong> to stop the evolution if it doesn’t match the Pokédex number direction.</p>
+                <p>
+                  Press <strong>A</strong> to advance when the Dex number is higher or lower,
+                  or <strong>B</strong> to cancel the evolution if it isn’t.
+                </p>
               </div>
-
               <p class="subtitle bigger">Choose your difficulty to begin.</p>
-
               <div class="btn-row big">
                 <button class="mode-btn easy"   data-mode="easy">Easy</button>
                 <button class="mode-btn medium" data-mode="medium">Medium</button>
@@ -105,13 +106,22 @@
               <button id="play-again" class="mode-btn">Play Again</button>
             </div>
           </div>
-        </div><!-- /revo-stage -->
-      </div><!-- /revo-stage-wrap -->
 
-      <!-- Controls (start hidden; JS reveals after difficulty pick) -->
-      <div id="controls" class="hidden">
-        <img id="a-button" src="./assets/buttons/A_button.png" alt="A Button">
-        <img id="b-button" src="./assets/buttons/B_button.png" alt="B Button">
+          <!-- A/B image buttons INSIDE the stage (bottom-right) -->
+          <div id="controls" class="hidden"
+               style="position:absolute; right:14px; bottom:14px; display:flex; gap:18px; align-items:center; pointer-events:auto;">
+            <img id="a-button" src="./assets/buttons/A_button.png" alt="A Button"
+                 style="width:64px;height:64px;cursor:pointer;user-select:none;">
+            <img id="b-button" src="./assets/buttons/B_button.png" alt="B Button"
+                 style="width:64px;height:64px;cursor:pointer;user-select:none;">
+          </div>
+        </div>
+      </div>
+
+      <!-- Volume row BELOW the stage -->
+      <div class="revo-audio">
+        <span class="tag">Sound</span>
+        <!-- JS injects mute button + range here -->
       </div>
     </section>
   </main>

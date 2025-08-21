@@ -1,5 +1,3 @@
-// games/2025-08-19/random-evolution/js/random-evolution.js
-
 window.addEventListener("DOMContentLoaded", () => {
   (async function () {
     /* ---------- Boot & Debug ---------- */
@@ -36,7 +34,7 @@ window.addEventListener("DOMContentLoaded", () => {
       @keyframes revo-bad  { 0%{transform:scale(1)} 30%{transform:scale(0.88)} 100%{transform:scale(1)} }
       .revo-pulse-good{ animation:revo-good 320ms cubic-bezier(.2,1,.2,1); }
       .revo-pulse-bad { animation:revo-bad  320ms cubic-bezier(.2,1,.2,1); color:#f7768e !important; }
-      .revo-img[src=""]{ display:none; } /* safety: hide empty img to avoid flicker */
+      .revo-img[src=""]{ display:none; } /* hide empty img to avoid flicker */
       `;
       const style = document.createElement('style');
       style.setAttribute('data-revo-feedback','');
@@ -45,11 +43,13 @@ window.addEventListener("DOMContentLoaded", () => {
     })();
 
     /* ---------- Grab DOM ---------- */
-    const stage  = document.getElementById("stage");
-    const imgA   = document.getElementById("imgA");
-    const imgB   = document.getElementById("imgB");
-    const flash  = document.getElementById("flash");
-    const timerEl= document.getElementById("timer");
+    const stage      = document.getElementById("stage");
+    const aimBanner  = document.getElementById("aim");
+
+    const imgA       = document.getElementById("imgA");
+    const imgB       = document.getElementById("imgB");
+    const flash      = document.getElementById("flash");
+    const timerEl    = document.getElementById("timer");
 
     const rail        = document.getElementById("pokedex-rail");
     const railTrack   = rail?.querySelector(".rail-track");
@@ -76,12 +76,12 @@ window.addEventListener("DOMContentLoaded", () => {
     const hudMult    = document.getElementById("hud-mult");
     const hudMode    = document.getElementById("hud-mode");
 
-    /* ---------- Feedback helpers (pulses) ---------- */
-    function pulseOnce(el, cls){
-      if(!el) return;
-      el.classList.remove(cls);
-      void el.offsetWidth; // reflow restart
-      el.classList.add(cls);
+    const audioRow   = document.querySelector(".revo-audio");
+
+    // Safety: make sure A/B controls are actually inside the stage
+    if (controls && stage && !controls.classList.contains("ab-instage")) {
+      controls.classList.add("ab-instage");
+      stage.appendChild(controls);
     }
 
     /* ---------- Audio Manager (soft blips + mute/volume) ---------- */
@@ -112,7 +112,7 @@ window.addEventListener("DOMContentLoaded", () => {
       }
       function setMuted(m){
         muted = !!m;
-        localStorage.setItem(MUTE_KEY, muted ? '1' : '0');
+        localStorage.setItem(MUTE_KEY, m ? '1' : '0');
         if (okEl)  okEl.volume  = muted ? 0 : volume;
         if (badEl) badEl.volume = muted ? 0 : volume;
       }
@@ -147,14 +147,18 @@ window.addEventListener("DOMContentLoaded", () => {
       return { init, setMuted, setVolume, playOK, playBad, get muted(){return muted}, get volume(){return volume} };
     })();
 
-    // Add volume UI into HUD (right block)
+    // Add volume UI BELOW the stage (in .revo-audio)
     (function addVolumeUI(){
-      const right = document.querySelector('#hud .hud-right');
-      if (!right) return;
+      // Remove any previous UI we might have injected somewhere else
+      document.querySelectorAll('[data-revo-audio-ui]').forEach(n => n.remove());
+
+      if (!audioRow) return;
+
       const wrap = document.createElement('span');
+      wrap.setAttribute('data-revo-audio-ui','');
       wrap.style.display = 'inline-flex';
       wrap.style.alignItems = 'center';
-      wrap.style.gap = '6px';
+      wrap.style.gap = '8px';
       wrap.style.marginLeft = '8px';
 
       const btn = document.createElement('button');
@@ -169,17 +173,19 @@ window.addEventListener("DOMContentLoaded", () => {
       rng.min = '0'; rng.max = '1'; rng.step = '0.05';
       rng.value = String(AudioMgr.volume);
       rng.title = 'Volume';
-      rng.style.width = '80px';
-      rng.addEventListener('input', () => AudioMgr.setVolume(rng.value));
+      rng.style.width = '140px';
 
       btn.addEventListener('click', () => {
         AudioMgr.setMuted(!AudioMgr.muted);
         btn.textContent = AudioMgr.muted ? '🔇' : '🔊';
       });
+      rng.addEventListener('input', () => AudioMgr.setVolume(rng.value));
 
       wrap.appendChild(btn);
       wrap.appendChild(rng);
-      right.appendChild(wrap);
+
+      // Put the controls right after the "Sound" label
+      audioRow.appendChild(wrap);
 
       // keyboard shortcut M
       window.addEventListener('keydown', (e)=>{
@@ -220,9 +226,9 @@ window.addEventListener("DOMContentLoaded", () => {
     const MAX_DEX    = end;
 
     const modes = {
-      easy:   { speedFactor: 0.4, limitMs: 16000 },
-      medium: { speedFactor: 0.8, limitMs: 11000 },
-      hard:   { speedFactor: 1.0, limitMs:  7000 }
+      easy:   { speedFactor: 0.4, limitMs: 16000, bias: 0.30 },
+      medium: { speedFactor: 0.8, limitMs: 11000, bias: 0.60 },
+      hard:   { speedFactor: 1.0, limitMs:  7000, bias: 0.85 }
     };
     const baseInterval  = 500;
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -236,7 +242,8 @@ window.addEventListener("DOMContentLoaded", () => {
     let score      = 0;
     let lives      = 3;
     let mult       = 1;
-    let rule       = "higher";
+    let rule       = "higher";      // "higher" | "lower"
+    let lastRule   = null;          // for alternating feel
 
     let session    = 0;
     let rolling    = false;
@@ -301,7 +308,7 @@ window.addEventListener("DOMContentLoaded", () => {
         const lab = document.createElement("div");
         lab.className = "rail-mid-label";
         lab.style.bottom = pos + "%";
-        lab.textContent = `GEN ${i + 1}`;
+        lab.textContent = `G${i + 1}`;
         wrap.appendChild(lab);
       }
 
@@ -325,12 +332,25 @@ window.addEventListener("DOMContentLoaded", () => {
       renderRailDecor(m || "easy");
     }
 
-    /* ---------- HUD ---------- */
+    /* ---------- HUD & Aim Banner ---------- */
+    function updateAim() {
+      if (!aimBanner) return;
+      const active = gameActive && !startScreen?.classList.contains("hidden") === false && endScreen?.classList.contains("hidden") === true;
+      // Show only when the game is active and overlays are hidden
+      aimBanner.style.display = active ? "block" : "none";
+      const isHigher = rule === "higher";
+      aimBanner.textContent = isHigher ? "Higher" : "Lower";
+      aimBanner.classList.toggle("higher", isHigher);
+      aimBanner.classList.toggle("lower", !isHigher);
+      aimBanner.setAttribute("aria-hidden", active ? "false" : "true");
+    }
+
     function setGameActive(active) {
       gameActive = active;
       controls?.classList.toggle("hidden", !active);
       hud?.classList.toggle("inactive", !active);
       rail?.classList.toggle("pokedex-rail--hidden", !active);
+      updateAim();
     }
 
     function setHUD() {
@@ -346,32 +366,28 @@ window.addEventListener("DOMContentLoaded", () => {
         hudRule.classList.toggle("lower",  gameActive && rule === "lower");
       }
       if (currentId != null) updateRail(currentId);
+      updateAim();
     }
 
-    /* ---------- Likely-direction weighting with difficulty ---------- */
-    // 0 = neutral (50/50), 1 = fully biased
-    function biasStrengthForMode(m) {
-      if (m === "easy")   return 0.30;
-      if (m === "medium") return 0.60;
-      if (m === "hard")   return 0.85;
-      return 0.50;
-    }
-
-    // High currentId → more "Lower"; low currentId → more "Higher"
+    /* ---------- Likely-direction weighting with light alternation ---------- */
     function pickRuleWeighted(currentDex, m) {
-      const s = biasStrengthForMode(m);
+      const s = modes[m]?.bias ?? 0.5;        // 0..1 bias strength
       const clamped = Math.max(1, Math.min(MAX_DEX, currentDex || 1));
-      const x = clamped / MAX_DEX;                 // 0..1 position in dex
-      const pLower = (1 - s) * 0.5 + s * x;        // increases with x
-      const roll = Math.random();
-      const chosen = (roll < pLower) ? "lower" : "higher";
+      const x = clamped / MAX_DEX;            // 0..1 position in dex
+      const pLower = (1 - s) * 0.5 + s * x;   // increases with x (high dex → more "lower")
+      let chosen = (Math.random() < pLower) ? "lower" : "higher";
+
+      // Light alternation so it doesn't stick forever
+      if (lastRule && Math.random() < 0.35) { // 35% chance to flip from last
+        chosen = (lastRule === "higher") ? "lower" : "higher";
+      }
+      lastRule = chosen;
 
       dlog("rule:pick", {
         mode: m, currentDex, x: +x.toFixed(3),
         biasStrength: s,
         pLower: +pLower.toFixed(3),
         pHigher: +(1 - pLower).toFixed(3),
-        roll: +roll.toFixed(3),
         chosen
       });
       return chosen;
@@ -379,7 +395,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
     function newRule() {
       rule = pickRuleWeighted(currentId, mode);
-      setHUD();
+      setHUD();       // includes updateAim()
     }
 
     /* ---------- Stage helpers ---------- */
@@ -413,10 +429,10 @@ window.addEventListener("DOMContentLoaded", () => {
       });
     }
 
-    const showStart = () => startScreen?.classList.remove("hidden");
-    const hideStart = () => startScreen?.classList.add("hidden");
-    const showEnd   = () => endScreen?.classList.remove("hidden");
-    const hideEnd   = () => endScreen?.classList.add("hidden");
+    const showStart = () => { startScreen?.classList.remove("hidden"); updateAim(); };
+    const hideStart = () => { startScreen?.classList.add("hidden");    updateAim(); };
+    const showEnd   = () => { endScreen?.classList.remove("hidden");   updateAim(); };
+    const hideEnd   = () => { endScreen?.classList.add("hidden");      updateAim(); };
 
     /* ---------- Rolling ---------- */
     async function prepRoll(id, preloadedUrl) {
@@ -490,43 +506,35 @@ window.addEventListener("DOMContentLoaded", () => {
 
       const prevCurrent = currentId;
       const isCorrectDir = (rule === "higher") ? (candidateId > currentId) : (candidateId < currentId);
+      let gained = false, lost = false;
 
-      // CANCEL path: instant revert (no flash/reveal)
       if (action === "cancel") {
-        let gained = false, lost = false;
-
+        // CANCEL path: instant revert (no reveal)
         if (!isCorrectDir) {        // correctly rejected
           score += mult; mult += 1;
           AudioMgr.playOK();
-          pulseOnce(hudScore, 'revo-pulse-good');
+          if (hudScore) { hudScore.classList.remove('revo-pulse-good'); void hudScore.offsetWidth; hudScore.classList.add('revo-pulse-good'); }
           gained = true;
         } else {                    // wrongly rejected
           lives -= 1; mult = 1;
           AudioMgr.playBad();
-          pulseOnce(hudLives, 'revo-pulse-bad');
+          if (hudLives) { hudLives.classList.remove('revo-pulse-bad'); void hudLives.offsetWidth; hudLives.classList.add('revo-pulse-bad'); }
           lost = true;
         }
 
-        // Snap back to current form immediately
         imgA.classList.remove("silhouette");
         imgB.classList.remove("silhouette");
-        imgA.src = urlFor(currentId);
+        imgA.src = urlFor(currentId); // snap back
         imgA.style.opacity = 1;
         imgB.style.opacity = 0;
-        imgB.src = ""; // clear candidate to prevent ghosting
+        imgB.src = ""; // clear candidate
         if (timerEl) { timerEl.textContent = "—"; timerEl.classList.remove("warn"); }
 
         dlog("compare", {
-          rule,
-          current_before: prevCurrent,
-          next: candidateId,
-          current_after: currentId,
-          isCorrectDir,
-          action: "cancel",
+          rule, current_before: prevCurrent, next: candidateId,
+          current_after: currentId, isCorrectDir, action,
           outcome: gained ? "point" : "life_lost"
         });
-        if (lost) dlog("life:lost", { score, mult, lives });
-        if (gained) dlog("score:update", { score, mult, lives });
 
         setHUD();
 
@@ -538,7 +546,7 @@ window.addEventListener("DOMContentLoaded", () => {
           return;
         }
         newRule();
-        return; // end cancel flow
+        return;
       }
 
       // ACCEPT/TIMEOUT path: keep reveal + flash (timeout behaves as accept)
@@ -559,29 +567,23 @@ window.addEventListener("DOMContentLoaded", () => {
       imgB.style.opacity = 1;
       pop(imgB, 250);
 
-      let gained = false, lost = false;
-
       if (isCorrectDir) {           // accepted correct evolution
         score += mult; mult += 1;
         currentId = candidateId;
         AudioMgr.playOK();
-        pulseOnce(hudScore, 'revo-pulse-good');
+        if (hudScore) { hudScore.classList.remove('revo-pulse-good'); void hudScore.offsetWidth; hudScore.classList.add('revo-pulse-good'); }
         gained = true;
       } else {                      // accepted wrong evolution
         lives -= 1; mult = 1;
         currentId = candidateId;
         AudioMgr.playBad();
-        pulseOnce(hudLives, 'revo-pulse-bad');
+        if (hudLives) { hudLives.classList.remove('revo-pulse-bad'); void hudLives.offsetWidth; hudLives.classList.add('revo-pulse-bad'); }
         lost = true;
       }
 
       dlog("compare", {
-        rule,
-        current_before: prevCurrent,
-        next: candidateId,
-        current_after: currentId,
-        isCorrectDir,
-        action,
+        rule, current_before: prevCurrent, next: candidateId,
+        current_after: currentId, isCorrectDir, action,
         outcome: gained ? "point" : "life_lost"
       });
 
@@ -589,11 +591,8 @@ window.addEventListener("DOMContentLoaded", () => {
       imgA.src = urlFor(currentId);
       imgA.style.opacity = 1;
       imgB.style.opacity = 0;
-      imgB.src = ""; // clear candidate to prevent ghosting
+      imgB.src = ""; // clear candidate
       setHUD();
-
-      if (lost) dlog("life:lost", { score, mult, lives });
-      if (gained) dlog("score:update", { score, mult, lives });
 
       if (lives <= 0) {
         if (finalScore) finalScore.textContent = String(score);
@@ -689,5 +688,7 @@ window.addEventListener("DOMContentLoaded", () => {
     hideEnd();
     showStart();
     applyRailModeClass(null);
+
+    dlog("ready");
   })();
 });
