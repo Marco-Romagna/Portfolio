@@ -6,7 +6,10 @@
   <title>Random Evolution • Game</title>
   <meta name="color-scheme" content="dark light" />
 
-  <!-- Site styles (path is from this file: games/2025-08-19/random-evolution/index.html) -->
+  <!-- Optional favicon to avoid 404 in console -->
+  <link rel="icon" href="../../../favicon.ico">
+
+  <!-- Site styles (path is from this file) -->
   <link rel="stylesheet" href="../../../css/main.css">
   <!-- Game styles -->
   <link rel="stylesheet" href="../../../css/games/random-evolution/styles.css">
@@ -28,11 +31,8 @@
   <main class="container">
     <section class="panel">
       <h2 class="panel-title">Random Evolution</h2>
-      <!-- (We hide this in CSS now to save vertical space)
-      <p class="panel-subtitle">Decide if the next Pokémon’s Pokédex number is higher or lower!</p>
-      -->
 
-      <!-- HUD (start inactive so right block is hidden) -->
+      <!-- HUD (right-side block only; left/center hidden via CSS when inactive) -->
       <div class="revo-hud inactive" id="hud">
         <div class="hud-left">
           <span class="tag">Current</span>
@@ -62,7 +62,7 @@
         <div id="pokedex-rail" class="pokedex-rail">
           <div class="rail-track">
             <div class="rail-fill"></div>
-            <!-- generation dividers and mid labels are injected via JS -->
+            <!-- generation dividers + midpoint labels injected via JS -->
           </div>
           <!-- Needle line + label for current dex -->
           <div class="rail-needle">
@@ -73,10 +73,10 @@
 
         <!-- The stage -->
         <div id="stage" class="revo-stage">
-          <!-- Animated “Higher/Lower” stamp (JS toggles) -->
+          <!-- Aim banner -->
           <div id="aim" class="revo-aim" aria-hidden="true">Higher</div>
 
-          <!-- Pokémon images -->
+          <!-- Pokémon art -->
           <img id="imgA" class="revo-img" alt="Current Pokémon">
           <img id="imgB" class="revo-img" alt="Next Pokémon">
           <div id="flash" class="revo-flash"></div>
@@ -86,13 +86,13 @@
           <div id="start-screen" class="revo-start">
             <div class="start-content">
               <h3 class="title">Do you know your Pokédex numbers?</h3>
-
               <div class="rules-list">
-                <p>Press <strong>A</strong> to advance when the Dex number is higher or lower, or <strong>B</strong> to cancel the evolution if it isn’t.</p>
+                <p>
+                  Press <strong>A</strong> to advance when the Dex number is higher or lower,
+                  or <strong>B</strong> to cancel the evolution if it isn’t.
+                </p>
               </div>
-
               <p class="subtitle bigger">Choose your difficulty to begin.</p>
-
               <div class="btn-row big">
                 <button class="mode-btn easy"   data-mode="easy">Easy</button>
                 <button class="mode-btn medium" data-mode="medium">Medium</button>
@@ -110,18 +110,18 @@
             </div>
           </div>
 
-          <!-- A/B controls INSIDE the stage (so they show & get the bezel) -->
+          <!-- A/B controls INSIDE the stage (staggered diagonal) -->
           <div id="controls" class="ab-instage hidden">
-            <img id="a-button" src="./assets/buttons/A_button.png" alt="A Button">
-            <img id="b-button" src="./assets/buttons/B_button.png" alt="B Button">
+            <button id="a-button" class="ab-btn a-btn" aria-label="Accept (A)">A</button>
+            <button id="b-button" class="ab-btn b-btn" aria-label="Cancel (B)">B</button>
           </div>
-        </div><!-- /revo-stage -->
-      </div><!-- /revo-stage-wrap -->
+        </div>
+      </div>
 
-      <!-- Volume row lives below the game; JS wires it up -->
+      <!-- Volume row lives BELOW the stage (kept out of the stage) -->
       <div class="revo-audio">
         <span class="tag">Sound</span>
-        <!-- the mute button & range are injected by JS -->
+        <!-- JS injects mute button + range here -->
       </div>
     </section>
   </main>
