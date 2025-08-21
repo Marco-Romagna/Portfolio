@@ -1,4 +1,3 @@
-// games/2025-08-19/random-evolution/js/random-evolution.js
 window.addEventListener("DOMContentLoaded", () => {
   (async function () {
     /* ---------- Boot & Debug ---------- */
@@ -113,7 +112,7 @@ window.addEventListener("DOMContentLoaded", () => {
       }
       function setMuted(m){
         muted = !!m;
-        localStorage.setItem(MUTE_KEY, muted ? '1' : '0');
+        localStorage.setItem(MUTE_KEY, m ? '1' : '0');
         if (okEl)  okEl.volume  = muted ? 0 : volume;
         if (badEl) badEl.volume = muted ? 0 : volume;
       }
@@ -333,12 +332,25 @@ window.addEventListener("DOMContentLoaded", () => {
       renderRailDecor(m || "easy");
     }
 
-    /* ---------- HUD ---------- */
+    /* ---------- HUD & Aim Banner ---------- */
+    function updateAim() {
+      if (!aimBanner) return;
+      const active = gameActive && !startScreen?.classList.contains("hidden") === false && endScreen?.classList.contains("hidden") === true;
+      // Show only when the game is active and overlays are hidden
+      aimBanner.style.display = active ? "block" : "none";
+      const isHigher = rule === "higher";
+      aimBanner.textContent = isHigher ? "Higher" : "Lower";
+      aimBanner.classList.toggle("higher", isHigher);
+      aimBanner.classList.toggle("lower", !isHigher);
+      aimBanner.setAttribute("aria-hidden", active ? "false" : "true");
+    }
+
     function setGameActive(active) {
       gameActive = active;
       controls?.classList.toggle("hidden", !active);
       hud?.classList.toggle("inactive", !active);
       rail?.classList.toggle("pokedex-rail--hidden", !active);
+      updateAim();
     }
 
     function setHUD() {
@@ -353,8 +365,8 @@ window.addEventListener("DOMContentLoaded", () => {
         hudRule.classList.toggle("higher", gameActive && rule === "higher");
         hudRule.classList.toggle("lower",  gameActive && rule === "lower");
       }
-      if (aimBanner) aimBanner.textContent = rule ? rule.toUpperCase() : "";
       if (currentId != null) updateRail(currentId);
+      updateAim();
     }
 
     /* ---------- Likely-direction weighting with light alternation ---------- */
@@ -383,7 +395,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
     function newRule() {
       rule = pickRuleWeighted(currentId, mode);
-      setHUD();
+      setHUD();       // includes updateAim()
     }
 
     /* ---------- Stage helpers ---------- */
@@ -417,10 +429,10 @@ window.addEventListener("DOMContentLoaded", () => {
       });
     }
 
-    const showStart = () => startScreen?.classList.remove("hidden");
-    const hideStart = () => startScreen?.classList.add("hidden");
-    const showEnd   = () => endScreen?.classList.remove("hidden");
-    const hideEnd   = () => endScreen?.classList.add("hidden");
+    const showStart = () => { startScreen?.classList.remove("hidden"); updateAim(); };
+    const hideStart = () => { startScreen?.classList.add("hidden");    updateAim(); };
+    const showEnd   = () => { endScreen?.classList.remove("hidden");   updateAim(); };
+    const hideEnd   = () => { endScreen?.classList.add("hidden");      updateAim(); };
 
     /* ---------- Rolling ---------- */
     async function prepRoll(id, preloadedUrl) {
@@ -501,12 +513,12 @@ window.addEventListener("DOMContentLoaded", () => {
         if (!isCorrectDir) {        // correctly rejected
           score += mult; mult += 1;
           AudioMgr.playOK();
-          if (hudScore) hudScore.classList.add('revo-pulse-good');
+          if (hudScore) { hudScore.classList.remove('revo-pulse-good'); void hudScore.offsetWidth; hudScore.classList.add('revo-pulse-good'); }
           gained = true;
         } else {                    // wrongly rejected
           lives -= 1; mult = 1;
           AudioMgr.playBad();
-          if (hudLives) hudLives.classList.add('revo-pulse-bad');
+          if (hudLives) { hudLives.classList.remove('revo-pulse-bad'); void hudLives.offsetWidth; hudLives.classList.add('revo-pulse-bad'); }
           lost = true;
         }
 
@@ -559,13 +571,13 @@ window.addEventListener("DOMContentLoaded", () => {
         score += mult; mult += 1;
         currentId = candidateId;
         AudioMgr.playOK();
-        if (hudScore) hudScore.classList.add('revo-pulse-good');
+        if (hudScore) { hudScore.classList.remove('revo-pulse-good'); void hudScore.offsetWidth; hudScore.classList.add('revo-pulse-good'); }
         gained = true;
       } else {                      // accepted wrong evolution
         lives -= 1; mult = 1;
         currentId = candidateId;
         AudioMgr.playBad();
-        if (hudLives) hudLives.classList.add('revo-pulse-bad');
+        if (hudLives) { hudLives.classList.remove('revo-pulse-bad'); void hudLives.offsetWidth; hudLives.classList.add('revo-pulse-bad'); }
         lost = true;
       }
 
