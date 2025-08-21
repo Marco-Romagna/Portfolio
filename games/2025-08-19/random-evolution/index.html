@@ -6,7 +6,7 @@
   <title>Random Evolution • Game</title>
   <meta name="color-scheme" content="dark light" />
 
-  <!-- Optional favicon to avoid 404 in console -->
+  <!-- Optional favicon to avoid 404 -->
   <link rel="icon" href="../../../favicon.ico">
 
   <!-- Site styles (path is from this file) -->
@@ -32,7 +32,7 @@
     <section class="panel">
       <h2 class="panel-title">Random Evolution</h2>
 
-      <!-- HUD (right-side block only; left/center hidden via CSS when inactive) -->
+      <!-- HUD -->
       <div class="revo-hud inactive" id="hud">
         <div class="hud-left">
           <span class="tag">Current</span>
@@ -110,15 +110,18 @@
             </div>
           </div>
 
-          <!-- A/B controls INSIDE the stage (staggered diagonal) -->
-          <div id="controls" class="ab-instage hidden">
-            <button id="a-button" class="ab-btn a-btn" aria-label="Accept (A)">A</button>
-            <button id="b-button" class="ab-btn b-btn" aria-label="Cancel (B)">B</button>
+          <!-- A/B image buttons INSIDE the stage (bottom-right) -->
+          <div id="controls" class="hidden"
+               style="position:absolute; right:14px; bottom:14px; display:flex; gap:18px; align-items:center; pointer-events:auto;">
+            <img id="a-button" src="./assets/buttons/A_button.png" alt="A Button"
+                 style="width:64px;height:64px;cursor:pointer;user-select:none;">
+            <img id="b-button" src="./assets/buttons/B_button.png" alt="B Button"
+                 style="width:64px;height:64px;cursor:pointer;user-select:none;">
           </div>
         </div>
       </div>
 
-      <!-- Volume row lives BELOW the stage (kept out of the stage) -->
+      <!-- Volume row BELOW the stage -->
       <div class="revo-audio">
         <span class="tag">Sound</span>
         <!-- JS injects mute button + range here -->
