@@ -10,6 +10,27 @@
   <link rel="stylesheet" href="../../../css/main.css">
   <!-- Game styles -->
   <link rel="stylesheet" href="../../../css/games/random-evolution/styles.css">
+
+  <style>
+    /* Scale the rules sentence for smaller screens */
+    .rules-list p {
+      font-size: 1rem;
+      line-height: 1.4;
+      text-align: center;
+    }
+
+    @media (max-width: 600px) {
+      .rules-list p {
+        font-size: 0.9rem;
+      }
+    }
+
+    @media (max-width: 400px) {
+      .rules-list p {
+        font-size: 0.8rem;
+      }
+    }
+  </style>
 </head>
 <body>
   <!-- Header -->
@@ -82,8 +103,7 @@
               <h3 class="title">Do you know your Pokédex numbers?</h3>
 
               <div class="rules-list">
-                <p><span class="k">1.</span> Decide if the next Pokémon’s number is <strong>higher</strong> or <strong>lower</strong>.</p>
-                <p><span class="k">2.</span> Press <strong>B</strong> to stop the evolution if it doesn’t match the Pokédex number direction.</p>
+                <p>Press <strong>A</strong> to advance when the Dex number is higher or lower, or <strong>B</strong> to cancel the evolution if it isn’t.</p>
               </div>
 
               <p class="subtitle bigger">Choose your difficulty to begin.</p>
