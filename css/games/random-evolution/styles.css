@@ -95,7 +95,7 @@
   background:rgba(0,0,0,.28);
   border:1px solid rgba(255,255,255,.10);
   font-size: clamp(14px, 2.4vmin, 24px);
-  display:none; /* toggled by JS */
+  display:none; /* JS turns this on during gameplay */
 }
 .revo-aim.lower{ color:#f5a2b2; }
 .revo-aim.higher{ color:#a9c4ff; }
@@ -280,6 +280,15 @@
   text-shadow:0 1px 0 rgba(0,0,0,.45);
   opacity:.9;
   white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+}
+
+/* Support both “Gen X” and “Gx” with CSS-only toggle */
+.pokedex-rail .rail-mid-label .full { display: inline; }
+.pokedex-rail .rail-mid-label .short { display: none; }
+
+@media (max-width: 520px){
+  .pokedex-rail .rail-mid-label .full { display: none; }
+  .pokedex-rail .rail-mid-label .short { display: inline; }
 }
 
 /* Needle & label */
