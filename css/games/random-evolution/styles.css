@@ -16,7 +16,7 @@
 :root{
   --stage-max: min(70svh, 80vmin, 720px);
   --rail-w: 56px;
-  --history-w: 56px;           /* NEW: history rail width */
+  --history-w: 56px;           /* history rail width */
   --hist-thumb: clamp(32px, 6vmin, 44px);
   --hist-gap: 8px;
 }
@@ -374,9 +374,27 @@
   height: 100%;
 }
 
-/* Individual history tiles */
+/* Individual history tiles (image over label) */
 .hist-item{
   position:relative;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+
+  /* Entrance micro animation */
+  transform: scale(0.96);
+  opacity: 0;
+  animation: hist-in 200ms cubic-bezier(.2,1,.2,1) forwards;
+}
+
+@keyframes hist-in {
+  to { transform: scale(1); opacity: 1; }
+}
+
+/* Image frame (holds background & rim) */
+.hist-imgwrap{
   width: 100%;
   height: var(--hist-thumb);
   border-radius: 10px;
@@ -389,22 +407,13 @@
   box-shadow:
     0 0 0 1px rgba(255,255,255,.04) inset,
     0 2px 10px rgba(0,0,0,.25);
-
-  /* Entrance micro animation */
-  transform: scale(0.96);
-  opacity: 0;
-  animation: hist-in 200ms cubic-bezier(.2,1,.2,1) forwards;
 }
 
-@keyframes hist-in {
-  to { transform: scale(1); opacity: 1; }
-}
-
-/* Background by action */
-.hist-item[data-action="cancel"]{
+/* Background by action (applies to the image wrapper) */
+.hist-imgwrap[data-action="cancel"]{
   background: rgba(255,255,255,.05);
 }
-.hist-item[data-action="accept"]{
+.hist-imgwrap[data-action="accept"]{
   background: linear-gradient(
     180deg,
     rgba(18,25,41,.65),
@@ -412,14 +421,14 @@
   );
 }
 
-/* Rim (correctness) via box-shadow tint */
-.hist-item[data-correct="true"]{
+/* Rim (correctness) via box-shadow tint on wrapper */
+.hist-imgwrap[data-correct="true"]{
   box-shadow:
     0 0 0 1px rgba(122,162,247,.25) inset,
     0 0 0 2px rgba(122,162,247,.18),
     0 4px 12px rgba(0,0,0,.28);
 }
-.hist-item[data-correct="false"]{
+.hist-imgwrap[data-correct="false"]{
   box-shadow:
     0 0 0 1px rgba(247,118,142,.30) inset,
     0 0 0 2px rgba(247,118,142,.20),
@@ -435,17 +444,12 @@
   pointer-events: none;
 }
 
-/* Dex badge (bottom-right) */
-.hist-badge{
-  position:absolute;
-  right: 4px;
-  bottom: 4px;
-  padding: 2px 5px;
-  border-radius: 6px;
-  font: 800 10px/1 ui-monospace,SFMono-Regular,Menlo,monospace;
-  color: #cfe0ff;
-  background: rgba(0,0,0,.45);
-  border: 1px solid rgba(255,255,255,.10);
+/* Dex label under image */
+.hist-label{
+  font: 800 clamp(9px, 1.6vmin, 11px)/1.1 ui-monospace,SFMono-Regular,Menlo,monospace;
+  color: var(--muted);
+  letter-spacing: .1px;
+  user-select: none;
 }
 
 /* Hide history on very tight screens if needed */
