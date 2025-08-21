@@ -4,16 +4,13 @@ window.addEventListener("DOMContentLoaded", () => {
     /* ---------- Boot & Debug ---------- */
     const settingsURL = new URL("./settings.json", document.baseURI);
 
-    // DEBUG is ON by default. Override with ?debug=0 or localStorage 'revo_debug' = '0'
-    const qp = new URLSearchParams(location.search).get("debug"); // "1" | "0" | null
-    const stored = localStorage.getItem("revo_debug");            // "1" | "0" | null
-    let DEBUG = true; // default on
+    const qp = new URLSearchParams(location.search).get("debug");
+    const stored = localStorage.getItem("revo_debug");
+    let DEBUG = true;
     if (qp === "1" || stored === "1") DEBUG = true;
     if (qp === "0" || stored === "0") DEBUG = false;
-
     const dlog = (...args) => { if (DEBUG) console.log("[REVO]", ...args); };
 
-    // Console helpers
     window.revoDebug = {
       on()    { localStorage.setItem("revo_debug","1"); location.reload(); },
       off()   { localStorage.setItem("revo_debug","0"); location.reload(); },
@@ -21,21 +18,17 @@ window.addEventListener("DOMContentLoaded", () => {
       state(){ return { DEBUG, qp, stored }; }
     };
 
-    dlog("boot", {
-      pageURL: window.location.href,
-      settingsURL: settingsURL.toString(),
-      debug: DEBUG
-    });
+    dlog("boot", { pageURL: location.href, settingsURL: settingsURL.toString(), debug: DEBUG });
 
-    /* ---------- Inject minimal feedback styles ---------- */
-    (function injectRevoFeedbackStyles(){
+    /* ---------- Inject tiny feedback styles ---------- */
+    (function(){
       if (document.querySelector('style[data-revo-feedback]')) return;
       const css = `
-      @keyframes revo-good { 0%{transform:scale(1)} 30%{transform:scale(1.18)} 100%{transform:scale(1)} }
-      @keyframes revo-bad  { 0%{transform:scale(1)} 30%{transform:scale(0.88)} 100%{transform:scale(1)} }
-      .revo-pulse-good{ animation:revo-good 320ms cubic-bezier(.2,1,.2,1); }
-      .revo-pulse-bad { animation:revo-bad  320ms cubic-bezier(.2,1,.2,1); color:#f7768e !important; }
-      .revo-img[src=""]{ display:none; } /* hide empty img to avoid flicker */
+        @keyframes revo-good { 0%{transform:scale(1)} 30%{transform:scale(1.18)} 100%{transform:scale(1)} }
+        @keyframes revo-bad  { 0%{transform:scale(1)} 30%{transform:scale(0.88)} 100%{transform:scale(1)} }
+        .revo-pulse-good{ animation:revo-good 320ms cubic-bezier(.2,1,.2,1); }
+        .revo-pulse-bad { animation:revo-bad  320ms cubic-bezier(.2,1,.2,1); color:#f7768e !important; }
+        .revo-img[src=""]{ display:none; }
       `;
       const style = document.createElement('style');
       style.setAttribute('data-revo-feedback','');
@@ -44,6 +37,10 @@ window.addEventListener("DOMContentLoaded", () => {
     })();
 
     /* ---------- Grab DOM ---------- */
+    const panelTitle = document.querySelector(".panel-title");
+    const originalTitle = panelTitle?.textContent ?? "Random Evolution";
+
+    const stage  = document.getElementById("stage");
     const imgA   = document.getElementById("imgA");
     const imgB   = document.getElementById("imgB");
     const flash  = document.getElementById("flash");
@@ -67,93 +64,51 @@ window.addEventListener("DOMContentLoaded", () => {
     const playAgain    = document.getElementById("play-again");
 
     const hud        = document.getElementById("hud");
-    const hudCurrent = document.getElementById("hud-current");
-    const hudRule    = document.getElementById("hud-rule");
     const hudScore   = document.getElementById("hud-score");
     const hudLives   = document.getElementById("hud-lives");
     const hudMult    = document.getElementById("hud-mult");
-    const hudMode    = document.getElementById("hud-mode");
+    const hudMode    = document.getElementById("hud-mode"); // not shown, but we keep text updated
 
-    /* ---------- Feedback helpers (pulses) ---------- */
-    function pulseOnce(el, cls){
-      if(!el) return;
-      el.classList.remove(cls);
-      void el.offsetWidth; // reflow restart
-      el.classList.add(cls);
-    }
+    /* ---------- Aim banner inside stage ---------- */
+    const aimBanner = document.createElement("div");
+    aimBanner.className = "revo-aim";
+    aimBanner.textContent = "—";
+    stage?.appendChild(aimBanner);
 
-    /* ---------- Audio Manager (soft blips + mute/volume) ---------- */
+    /* ---------- Feedback helpers ---------- */
+    function pulseOnce(el, cls){ if(!el) return; el.classList.remove(cls); void el.offsetWidth; el.classList.add(cls); }
+
+    /* ---------- Audio Manager (moved below game) ---------- */
     const VOL_KEY = 'revo_volume';   // '0'..'1'
     const MUTE_KEY= 'revo_muted';    // '0' or '1'
     const AudioMgr = (() => {
-      let ctx = null;
-      let okEl = null, badEl = null;
+      let ctx = null, okEl = null, badEl = null;
       let muted = localStorage.getItem(MUTE_KEY) === '1';
-      let volume = parseFloat(localStorage.getItem(VOL_KEY) ?? '0.5');
-      if (isNaN(volume)) volume = 0.5;
+      let volume = parseFloat(localStorage.getItem(VOL_KEY) ?? '0.5'); if (isNaN(volume)) volume = 0.5;
 
-      function ensureCtx(){
-        if (!ctx) {
-          try { ctx = new (window.AudioContext || window.webkitAudioContext)(); } catch(e){}
-        }
-      }
-      function loadTag(src){
-        const a = new Audio();
-        a.src = src;
-        a.preload = 'auto';
-        a.volume = muted ? 0 : volume;
-        return a;
-      }
-      function init() {
-        if (!okEl)  okEl  = loadTag('./assets/sfx/correct.mp3');
-        if (!badEl) badEl = loadTag('./assets/sfx/wrong.mp3');
-      }
-      function setMuted(m){
-        muted = !!m;
-        localStorage.setItem(MUTE_KEY, muted ? '1' : '0');
-        if (okEl)  okEl.volume  = muted ? 0 : volume;
-        if (badEl) badEl.volume = muted ? 0 : volume;
-      }
-      function setVolume(v){
-        volume = Math.max(0, Math.min(1, Number(v)||0));
-        localStorage.setItem(VOL_KEY, String(volume));
-        if (okEl)  okEl.volume  = muted ? 0 : volume;
-        if (badEl) badEl.volume = muted ? 0 : volume;
-      }
-      function beep(freq=880, durMs=140, type='sine'){
-        if (muted) return;
-        ensureCtx();
-        if (!ctx) return;
-        const g = ctx.createGain();
-        g.gain.value = 0.09 * volume;
-        g.connect(ctx.destination);
-        const o = ctx.createOscillator();
-        o.type = type;
-        o.frequency.value = freq;
-        o.connect(g);
-        o.start();
-        setTimeout(()=>{ o.stop(); g.disconnect(); }, durMs);
-      }
-      function playOK(){
-        if (okEl && okEl.readyState > 0) { try{ okEl.currentTime=0; okEl.play(); }catch{} }
-        else beep(1040,130,'sine');
-      }
-      function playBad(){
-        if (badEl && badEl.readyState > 0) { try{ badEl.currentTime=0; badEl.play(); }catch{} }
-        else beep(220,170,'square');
-      }
+      function ensureCtx(){ if (!ctx) { try { ctx = new (window.AudioContext || window.webkitAudioContext)(); } catch(e){} } }
+      function loadTag(src){ const a = new Audio(); a.src = src; a.preload = 'auto'; a.volume = muted ? 0 : volume; return a; }
+      function init(){ if (!okEl) okEl = loadTag('./assets/sfx/correct.mp3'); if (!badEl) badEl = loadTag('./assets/sfx/wrong.mp3'); }
+      function setMuted(m){ muted = !!m; localStorage.setItem(MUTE_KEY, muted ? '1' : '0'); if (okEl) okEl.volume = muted ? 0 : volume; if (badEl) badEl.volume = muted ? 0 : volume; }
+      function setVolume(v){ volume = Math.max(0, Math.min(1, Number(v)||0)); localStorage.setItem(VOL_KEY, String(volume));
+        if (okEl) okEl.volume = muted ? 0 : volume; if (badEl) badEl.volume = muted ? 0 : volume; }
+      function beep(freq=880, durMs=140, type='sine'){ if (muted) return; ensureCtx(); if (!ctx) return; const g = ctx.createGain();
+        g.gain.value = 0.09 * volume; g.connect(ctx.destination); const o = ctx.createOscillator(); o.type = type; o.frequency.value = freq; o.connect(g);
+        o.start(); setTimeout(()=>{ o.stop(); g.disconnect(); }, durMs); }
+      function playOK(){ if (okEl && okEl.readyState > 0) { try{ okEl.currentTime=0; okEl.play(); }catch{} } else beep(1040,130,'sine'); }
+      function playBad(){ if (badEl && badEl.readyState > 0) { try{ badEl.currentTime=0; badEl.play(); }catch{} } else beep(220,170,'square'); }
       return { init, setMuted, setVolume, playOK, playBad, get muted(){return muted}, get volume(){return volume} };
     })();
 
-    // Add volume UI into HUD (right block)
-    (function addVolumeUI(){
-      const right = document.querySelector('#hud .hud-right');
-      if (!right) return;
-      const wrap = document.createElement('span');
-      wrap.style.display = 'inline-flex';
-      wrap.style.alignItems = 'center';
-      wrap.style.gap = '6px';
-      wrap.style.marginLeft = '8px';
+    // Place audio UI BELOW the game (under A/B)
+    (function addVolumeBelow(){
+      const host = controls?.parentElement; // the .panel section
+      if (!host) return;
+      const wrap = document.createElement('div');
+      wrap.className = 'revo-audio';
+
+      const label = document.createElement('span');
+      label.textContent = 'Sound';
 
       const btn = document.createElement('button');
       btn.textContent = AudioMgr.muted ? '🔇' : '🔊';
@@ -163,33 +118,19 @@ window.addEventListener("DOMContentLoaded", () => {
       btn.style.fontSize = '12px';
 
       const rng = document.createElement('input');
-      rng.type = 'range';
-      rng.min = '0'; rng.max = '1'; rng.step = '0.05';
-      rng.value = String(AudioMgr.volume);
-      rng.title = 'Volume';
-      rng.style.width = '80px';
+      rng.type = 'range'; rng.min = '0'; rng.max = '1'; rng.step = '0.05'; rng.value = String(AudioMgr.volume);
+      rng.title = 'Volume'; rng.style.width = '120px';
+
       rng.addEventListener('input', () => AudioMgr.setVolume(rng.value));
+      btn.addEventListener('click', () => { AudioMgr.setMuted(!AudioMgr.muted); btn.textContent = AudioMgr.muted ? '🔇' : '🔊'; });
+      window.addEventListener('keydown', (e)=>{ if (e.key.toLowerCase() === 'm') btn.click(); });
 
-      btn.addEventListener('click', () => {
-        AudioMgr.setMuted(!AudioMgr.muted);
-        btn.textContent = AudioMgr.muted ? '🔇' : '🔊';
-      });
-
-      wrap.appendChild(btn);
-      wrap.appendChild(rng);
-      right.appendChild(wrap);
-
-      // keyboard shortcut M
-      window.addEventListener('keydown', (e)=>{
-        if (e.key.toLowerCase() === 'm') { btn.click(); }
-      });
+      wrap.appendChild(label); wrap.appendChild(btn); wrap.appendChild(rng);
+      host.appendChild(wrap);
     })();
 
-    // Ensure audio initialized on first interaction (autoplay policies)
     let audioInited = false;
-    function ensureAudioInit(){
-      if (!audioInited) { AudioMgr.init(); audioInited = true; }
-    }
+    function ensureAudioInit(){ if (!audioInited) { AudioMgr.init(); audioInited = true; } }
 
     /* ---------- Settings ---------- */
     let settings;
@@ -247,18 +188,8 @@ window.addEventListener("DOMContentLoaded", () => {
     const sleep     = (ms) => new Promise(r => setTimeout(r, ms));
     const now       = () => performance.now();
     const cap       = (s) => s ? s[0].toUpperCase() + s.slice(1) : "—";
-    const currentInterval = () =>
-      reducedMotion ? 240 : (baseInterval / (modes[mode]?.speedFactor || 1.0));
-
-    // Preload helper to avoid ghost images
-    function preloadImage(url) {
-      return new Promise((resolve, reject) => {
-        const im = new Image();
-        im.onload = () => resolve(true);
-        im.onerror = reject;
-        im.src = url;
-      });
-    }
+    const currentInterval = () => reducedMotion ? 240 : (baseInterval / (modes[mode]?.speedFactor || 1.0));
+    function preloadImage(url){ return new Promise((res, rej)=>{ const im = new Image(); im.onload=()=>res(true); im.onerror=rej; im.src=url; }); }
 
     /* ---------- Rail ---------- */
     const pctForDex = (n) => (Math.max(1, Math.min(MAX_DEX, n || 1)) / MAX_DEX) * 100;
@@ -268,12 +199,10 @@ window.addEventListener("DOMContentLoaded", () => {
       railTrack.querySelectorAll(".rail-divider").forEach(el => el.remove());
       rail?.querySelector(".rail-mid-labels")?.remove();
     }
-
     function renderRailDecor(currentMode) {
       if (!railTrack) return;
       clearRailDecor();
 
-      // Dividers
       GEN_STARTS.forEach(startNum => {
         const pos = pctForDex(startNum);
         const divider = document.createElement("div");
@@ -288,26 +217,19 @@ window.addEventListener("DOMContentLoaded", () => {
       const wrap = document.createElement("div");
       wrap.className = "rail-mid-labels";
 
-      // Compact labels on narrow screens
       const compact = window.matchMedia("(max-width: 520px)").matches || (rail?.clientWidth ?? 56) <= 48;
-
       for (let i = 0; i < bounds.length - 1; i++) {
-        const segStart = bounds[i];
-        const next     = bounds[i + 1];
-        const segEnd   = next - 1;
+        const segStart = bounds[i], next = bounds[i + 1], segEnd = next - 1;
         const midDex   = Math.floor((segStart + segEnd) / 2);
         const pos      = pctForDex(midDex);
-
         const lab = document.createElement("div");
         lab.className = "rail-mid-label";
         lab.style.bottom = pos + "%";
         lab.textContent = compact ? `G${i + 1}` : `GEN ${i + 1}`;
         wrap.appendChild(lab);
       }
-
       rail.appendChild(wrap);
     }
-
     function updateRail(dexNumber) {
       if (!rail || !railFill || !railNeedle || !needleLine || !needleLabel) return;
       rail.classList.remove("pokedex-rail--hidden");
@@ -317,7 +239,6 @@ window.addEventListener("DOMContentLoaded", () => {
       needleLine.style.width = "100%";
       needleLabel.textContent = `#${dexNumber ?? "—"}`;
     }
-
     function applyRailModeClass(m) {
       if (!rail) return;
       rail.classList.remove("easy", "medium", "hard");
@@ -325,7 +246,12 @@ window.addEventListener("DOMContentLoaded", () => {
       renderRailDecor(m || "easy");
     }
 
-    /* ---------- HUD ---------- */
+    /* ---------- HUD & Title ---------- */
+    function updateTitle() {
+      if (!panelTitle) return;
+      panelTitle.textContent = mode ? `${originalTitle} (${cap(mode)})` : originalTitle;
+    }
+
     function setGameActive(active) {
       gameActive = active;
       controls?.classList.toggle("hidden", !active);
@@ -333,54 +259,39 @@ window.addEventListener("DOMContentLoaded", () => {
       rail?.classList.toggle("pokedex-rail--hidden", !active);
     }
 
-    function setHUD() {
-      if (hudCurrent) hudCurrent.textContent = (gameActive && currentId) ? `#${String(currentId).padStart(3,"0")}` : "#—";
-      if (hudScore)   hudScore.textContent   = String(gameActive ? score : 0);
-      if (hudLives)   hudLives.textContent   = String(gameActive ? lives : 3);
-      if (hudMult)    hudMult.textContent    = `x${gameActive ? mult : 1}`;
-      if (hudMode)    hudMode.textContent    = cap(mode);
-      if (hudRule) {
-        const txt = gameActive ? (rule === "higher" ? "Higher" : "Lower") : "—";
-        hudRule.textContent = txt;
-        hudRule.classList.toggle("higher", gameActive && rule === "higher");
-        hudRule.classList.toggle("lower",  gameActive && rule === "lower");
-      }
-      if (currentId != null) updateRail(currentId);
+    function setAimBanner(){
+      aimBanner.textContent = rule === "higher" ? "Higher" : "Lower";
+      aimBanner.classList.toggle("higher", rule === "higher");
+      aimBanner.classList.toggle("lower",  rule === "lower");
     }
 
-    /* ---------- Likely-direction weighting with difficulty ---------- */
-    // 0 = neutral (50/50), 1 = fully biased
+    function setHUD() {
+      if (hudScore) hudScore.textContent = String(gameActive ? score : 0);
+      if (hudLives) hudLives.textContent = String(gameActive ? lives : 3);
+      if (hudMult)  hudMult.textContent  = `x${gameActive ? mult : 1}`;
+      if (hudMode)  hudMode.textContent  = cap(mode);
+      if (currentId != null) updateRail(currentId);
+      setAimBanner();
+    }
+
+    /* ---------- Weighted rule ---------- */
     function biasStrengthForMode(m) {
       if (m === "easy")   return 0.30;
       if (m === "medium") return 0.60;
       if (m === "hard")   return 0.85;
       return 0.50;
     }
-
-    // High currentId → more "Lower"; low currentId → more "Higher"
     function pickRuleWeighted(currentDex, m) {
       const s = biasStrengthForMode(m);
       const clamped = Math.max(1, Math.min(MAX_DEX, currentDex || 1));
-      const x = clamped / MAX_DEX;                 // 0..1 position
-      const pLower = (1 - s) * 0.5 + s * x;        // increases with x
+      const x = clamped / MAX_DEX;
+      const pLower = (1 - s) * 0.5 + s * x;
       const roll = Math.random();
       const chosen = (roll < pLower) ? "lower" : "higher";
-
-      dlog("rule:pick", {
-        mode: m, currentDex, x: +x.toFixed(3),
-        biasStrength: s,
-        pLower: +pLower.toFixed(3),
-        pHigher: +(1 - pLower).toFixed(3),
-        roll: +roll.toFixed(3),
-        chosen
-      });
+      dlog("rule:pick", { mode:m, currentDex, x:+x.toFixed(3), biasStrength:s, pLower:+pLower.toFixed(3), pHigher:+(1-pLower).toFixed(3), roll:+roll.toFixed(3), chosen });
       return chosen;
     }
-
-    function newRule() {
-      rule = pickRuleWeighted(currentId, mode);
-      setHUD();
-    }
+    function newRule() { rule = pickRuleWeighted(currentId, mode); setHUD(); }
 
     /* ---------- Stage helpers ---------- */
     async function showInstant(id) {
@@ -395,7 +306,6 @@ window.addEventListener("DOMContentLoaded", () => {
       if (timerEl) { timerEl.textContent = "—"; timerEl.classList.remove("warn"); }
       setHUD();
     }
-
     function updateTimer() {
       if (!timerEl || !rolling) return;
       const ms  = Math.max(0, deadline - now());
@@ -403,7 +313,6 @@ window.addEventListener("DOMContentLoaded", () => {
       timerEl.textContent = sec;
       timerEl.classList.toggle("warn", ms <= 3000);
     }
-
     function pop(el, durMs = 250) {
       el.style.transition = `transform ${durMs}ms cubic-bezier(.2,1,.2,1)`;
       el.style.transform  = "scale(0.9)";
@@ -412,7 +321,6 @@ window.addEventListener("DOMContentLoaded", () => {
         setTimeout(() => { el.style.transition = ""; el.style.transform = ""; }, durMs + 20);
       });
     }
-
     const showStart = () => startScreen?.classList.remove("hidden");
     const hideStart = () => startScreen?.classList.add("hidden");
     const showEnd   = () => endScreen?.classList.remove("hidden");
@@ -420,23 +328,16 @@ window.addEventListener("DOMContentLoaded", () => {
 
     /* ---------- Rolling ---------- */
     async function prepRoll(id, preloadedUrl) {
-      // Clear old candidate to avoid stale flashes
       imgB.src = "";
-
-      // Ensure current is set deterministically
       imgA.src = urlFor(currentId ?? randId());
       imgA.classList.remove("silhouette");
-
       imgB.classList.add("silhouette");
       imgA.style.opacity = 1;
       imgB.style.opacity = 0;
       flash.style.opacity = 0;
       if (timerEl) timerEl.classList.remove("warn");
-
-      // Set new candidate (preloaded)
       imgB.src = preloadedUrl || urlFor(id);
     }
-
     async function rollLoop(mySession) {
       while (rolling && mySession === session) {
         const showB = imgB.style.opacity !== "1";
@@ -448,19 +349,13 @@ window.addEventListener("DOMContentLoaded", () => {
         await sleep(currentInterval());
       }
     }
-
     async function watchdogLoop(mySession) {
       while (rolling && mySession === session) {
         updateTimer();
-        if (now() >= deadline) {
-          dlog("timeout:deadline", { at: now(), deadline, rule, currentId, candidateId });
-          await stopAndJudge("timeout");
-          break;
-        }
+        if (now() >= deadline) { dlog("timeout:deadline", { at: now(), deadline, rule, currentId, candidateId }); await stopAndJudge("timeout"); break; }
         await sleep(60);
       }
     }
-
     async function startRoll() {
       session++;
       const mySession = session;
@@ -468,10 +363,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
       candidateId = pickOther();
       const candUrl = urlFor(candidateId);
-
-      // PRELOAD candidate to avoid ghost silhouette
-      try { await preloadImage(candUrl); } catch (_) { /* ignore */ }
-
+      try { await preloadImage(candUrl); } catch (_) {}
       await prepRoll(candidateId, candUrl);
 
       deadline = now() + (modes[mode]?.limitMs || 7000);
@@ -481,8 +373,8 @@ window.addEventListener("DOMContentLoaded", () => {
       watchdogLoop(mySession);
     }
 
-    // --------- ACCEPT / CANCEL / TIMEOUT judge ----------
-    async function stopAndJudge(action /* "accept" | "cancel" | "timeout" */) {
+    // Judge: "accept" | "cancel" | "timeout"
+    async function stopAndJudge(action) {
       if (!rolling) return;
       session++;
       rolling = false;
@@ -490,142 +382,50 @@ window.addEventListener("DOMContentLoaded", () => {
       const prevCurrent = currentId;
       const isCorrectDir = (rule === "higher") ? (candidateId > currentId) : (candidateId < currentId);
 
-      // CANCEL: instant revert (no reveal)
       if (action === "cancel") {
         let gained = false, lost = false;
+        if (!isCorrectDir) { score += mult; mult += 1; AudioMgr.playOK();  pulseOnce(hudScore,'revo-pulse-good'); gained=true; }
+        else               { lives -= 1; mult  = 1; AudioMgr.playBad(); pulseOnce(hudLives,'revo-pulse-bad');  lost=true;  }
 
-        if (!isCorrectDir) {        // correctly rejected
-          score += mult; mult += 1;
-          AudioMgr.playOK();
-          pulseOnce(hudScore, 'revo-pulse-good');
-          gained = true;
-        } else {                    // wrongly rejected
-          lives -= 1; mult = 1;
-          AudioMgr.playBad();
-          pulseOnce(hudLives, 'revo-pulse-bad');
-          lost = true;
-        }
-
-        // Snap back to current form immediately
-        imgA.classList.remove("silhouette");
-        imgB.classList.remove("silhouette");
-        imgA.src = urlFor(currentId);
-        imgA.style.opacity = 1;
-        imgB.style.opacity = 0;
-        imgB.src = ""; // clear candidate
+        imgA.classList.remove("silhouette"); imgB.classList.remove("silhouette");
+        imgA.src = urlFor(currentId); imgA.style.opacity = 1; imgB.style.opacity = 0; imgB.src = "";
         if (timerEl) { timerEl.textContent = "—"; timerEl.classList.remove("warn"); }
 
-        dlog("compare", {
-          rule,
-          current_before: prevCurrent,
-          next: candidateId,
-          current_after: currentId,
-          isCorrectDir,
-          action: "cancel",
-          outcome: gained ? "point" : "life_lost"
-        });
-        if (lost) dlog("life:lost", { score, mult, lives });
-        if (gained) dlog("score:update", { score, mult, lives });
-
+        dlog("compare", { rule, current_before: prevCurrent, next: candidateId, current_after: currentId, isCorrectDir, action:"cancel", outcome: gained?"point":"life_lost" });
+        if (lost) dlog("life:lost", { score, mult, lives }); if (gained) dlog("score:update", { score, mult, lives });
         setHUD();
-
-        if (lives <= 0) {
-          if (finalScore) finalScore.textContent = String(score);
-          setGameActive(false);
-          showEnd();
-          dlog("game:over", { finalScore: score });
-          return;
-        }
-        newRule();
-        return;
+        if (lives <= 0) { if (finalScore) finalScore.textContent = String(score); setGameActive(false); showEnd(); dlog("game:over", { finalScore: score }); return; }
+        newRule(); return;
       }
 
-      // ACCEPT/TIMEOUT: reveal
-      imgA.classList.add("silhouette");
-      imgB.classList.add("silhouette");
-      imgA.style.opacity = 0;
-      imgB.style.opacity = 1;
-
+      // accept/timeout reveal
+      imgA.classList.add("silhouette"); imgB.classList.add("silhouette");
+      imgA.style.opacity = 0; imgB.style.opacity = 1;
       if (timerEl) { timerEl.textContent = "—"; timerEl.classList.remove("warn"); }
-
-      flash.style.opacity = 1;
-      await sleep(120);
-      flash.style.opacity = 0;
-
-      imgA.classList.remove("silhouette");
-      imgB.classList.remove("silhouette");
-      imgA.style.opacity = 0;
-      imgB.style.opacity = 1;
-      pop(imgB, 250);
+      flash.style.opacity = 1; await sleep(120); flash.style.opacity = 0;
+      imgA.classList.remove("silhouette"); imgB.classList.remove("silhouette");
+      imgA.style.opacity = 0; imgB.style.opacity = 1; pop(imgB, 250);
 
       let gained = false, lost = false;
+      if (isCorrectDir) { score += mult; mult += 1; currentId = candidateId; AudioMgr.playOK();  pulseOnce(hudScore,'revo-pulse-good'); gained=true; }
+      else              { lives -= 1; mult  = 1; currentId = candidateId; AudioMgr.playBad(); pulseOnce(hudLives,'revo-pulse-bad');  lost=true;  }
 
-      if (isCorrectDir) {
-        score += mult; mult += 1;
-        currentId = candidateId;
-        AudioMgr.playOK();
-        pulseOnce(hudScore, 'revo-pulse-good');
-        gained = true;
-      } else {
-        lives -= 1; mult = 1;
-        currentId = candidateId;
-        AudioMgr.playBad();
-        pulseOnce(hudLives, 'revo-pulse-bad');
-        lost = true;
-      }
-
-      dlog("compare", {
-        rule,
-        current_before: prevCurrent,
-        next: candidateId,
-        current_after: currentId,
-        isCorrectDir,
-        action,
-        outcome: gained ? "point" : "life_lost"
-      });
+      dlog("compare", { rule, current_before: prevCurrent, next: candidateId, current_after: currentId, isCorrectDir, action, outcome: gained?"point":"life_lost" });
 
       await sleep(280);
-      imgA.src = urlFor(currentId);
-      imgA.style.opacity = 1;
-      imgB.style.opacity = 0;
-      imgB.src = "";
+      imgA.src = urlFor(currentId); imgA.style.opacity = 1; imgB.style.opacity = 0; imgB.src = "";
       setHUD();
-
-      if (lost) dlog("life:lost", { score, mult, lives });
-      if (gained) dlog("score:update", { score, mult, lives });
-
-      if (lives <= 0) {
-        if (finalScore) finalScore.textContent = String(score);
-        setGameActive(false);
-        showEnd();
-        dlog("game:over", { finalScore: score });
-        return;
-      }
+      if (lost) dlog("life:lost", { score, mult, lives }); if (gained) dlog("score:update", { score, mult, lives });
+      if (lives <= 0) { if (finalScore) finalScore.textContent = String(score); setGameActive(false); showEnd(); dlog("game:over", { finalScore: score }); return; }
       newRule();
     }
 
-    /* ---------- Debounce & inputs ---------- */
+    /* ---------- Inputs ---------- */
     function withDebounce(fn, ms = 120) {
-      return (...args) => {
-        if (debouncing) return;
-        debouncing = true;
-        try { fn(...args); } finally { setTimeout(() => { debouncing = false; }, ms); }
-      };
+      return (...args) => { if (debouncing) return; debouncing = true; try { fn(...args); } finally { setTimeout(()=>{ debouncing=false; }, ms); } };
     }
-
-    const onA = withDebounce(() => {
-      if (!gameActive) return;
-      ensureAudioInit();
-      dlog("input:A", { rolling });
-      if (!rolling) startRoll();
-      else stopAndJudge("accept");
-    });
-    const onB = withDebounce(() => {
-      if (!gameActive || !rolling) return;
-      ensureAudioInit();
-      dlog("input:B");
-      stopAndJudge("cancel");
-    });
+    const onA = withDebounce(() => { if (!gameActive) return; ensureAudioInit(); dlog("input:A",{rolling}); if (!rolling) startRoll(); else stopAndJudge("accept"); });
+    const onB = withDebounce(() => { if (!gameActive||!rolling) return; ensureAudioInit(); dlog("input:B"); stopAndJudge("cancel"); });
 
     btnA?.addEventListener("click", onA);
     btnB?.addEventListener("click", onB);
@@ -639,8 +439,7 @@ window.addEventListener("DOMContentLoaded", () => {
       btn.addEventListener("click", async () => {
         const m = btn.getAttribute("data-mode");
         if (!modes[m]) return;
-        mode = m;
-        applyRailModeClass(mode);
+        mode = m; updateTitle(); applyRailModeClass(mode);
 
         score = 0; lives = 3; mult = 1;
         setGameActive(true);
@@ -648,8 +447,7 @@ window.addEventListener("DOMContentLoaded", () => {
         if (!currentId) currentId = randId();
         await showInstant(currentId);
 
-        hideEnd();
-        hideStart();
+        hideEnd(); hideStart();
         dlog("mode:start", { mode: m });
         newRule();
       });
@@ -657,8 +455,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
     playAgain?.addEventListener("click", async () => {
       setGameActive(false);
-      mode = null;
-      applyRailModeClass(null);
+      mode = null; updateTitle(); applyRailModeClass(null);
 
       currentId = randId();
       imgA.src = urlFor(currentId);
@@ -667,12 +464,10 @@ window.addEventListener("DOMContentLoaded", () => {
       if (timerEl) { timerEl.textContent = "—"; timerEl.classList.remove("warn"); }
       setHUD();
 
-      hideEnd();
-      showStart();
-      dlog("game:reset");
+      hideEnd(); showStart(); dlog("game:reset");
     });
 
-    /* ---------- Handle resize/orientation: relabel rail for compact mode ---------- */
+    /* ---------- Resize: refresh compact GEN labels ---------- */
     let _rdTimer = null;
     window.addEventListener('resize', () => {
       if (_rdTimer) cancelAnimationFrame(_rdTimer);
@@ -695,5 +490,6 @@ window.addEventListener("DOMContentLoaded", () => {
     hideEnd();
     showStart();
     applyRailModeClass(null);
+    updateTitle();
   })();
 });
