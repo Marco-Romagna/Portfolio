@@ -1,3 +1,4 @@
+
 // games/2025-08-19/random-evolution/js/random-evolution.js
 
 window.addEventListener("DOMContentLoaded", () => {
@@ -181,7 +182,7 @@ window.addEventListener("DOMContentLoaded", () => {
       renderRailDecor(m || "easy");
     }
 
-    /* ---------- Game UI ---------- */
+    /* ---------- HUD ---------- */
     function setGameActive(active) {
       gameActive = active;
       controls?.classList.toggle("hidden", !active);
@@ -204,38 +205,41 @@ window.addEventListener("DOMContentLoaded", () => {
       if (currentId != null) updateRail(currentId);
     }
 
-    /* ---------- Challenge-weighted rule picker ---------- */
+    /* ---------- SUGGESTION #1 + #2: Likely-direction weighting with difficulty ---------- */
+    // 0 = neutral (50/50), 1 = fully biased
     function biasStrengthForMode(m) {
-      // 0 = neutral (always 50/50), 1 = fully challenge-weighted
-      // Tune to taste
-      if (m === "easy")   return 0.25;
-      if (m === "medium") return 0.55;
+      if (m === "easy")   return 0.30;
+      if (m === "medium") return 0.60;
       if (m === "hard")   return 0.85;
-      return 0.5; // default
+      return 0.50;
     }
 
-    function pickRule(currentDex, m) {
-      // normalized position in the dex (0..1)
-      const x = Math.max(1, Math.min(MAX_DEX, currentDex || 1)) / MAX_DEX;
+    // High currentId → more "Lower"; low currentId → more "Higher"
+    function pickRuleWeighted(currentDex, m) {
       const s = biasStrengthForMode(m);
+      const clamped = Math.max(1, Math.min(MAX_DEX, currentDex || 1));
+      const x = clamped / MAX_DEX;                 // 0..1 position in dex
+      const pLower = (1 - s) * 0.5 + s * x;        // increases with x
+      const roll = Math.random();
+      const chosen = (roll < pLower) ? "lower" : "higher";
 
-      // pHigherNeutral = 0.5
-      // pHigherHard    = x  (contrarian: rarer outcome is favored)
-      // Mix by strength s
-      const pHigher = (1 - s) * 0.5 + s * x;
-
-      const r = Math.random();
-      const chosen = (r < pHigher) ? "higher" : "lower";
-
-      dlog("rule:pick", { currentDex, x: +x.toFixed(3), strength: s, pHigher: +pHigher.toFixed(3), roll: +r.toFixed(3), chosen });
+      dlog("rule:pick", {
+        mode: m, currentDex, x: +x.toFixed(3),
+        biasStrength: s,
+        pLower: +pLower.toFixed(3),
+        pHigher: +(1 - pLower).toFixed(3),
+        roll: +roll.toFixed(3),
+        chosen
+      });
       return chosen;
     }
 
     function newRule() {
-      rule = pickRule(currentId, mode);
+      rule = pickRuleWeighted(currentId, mode);
       setHUD();
     }
 
+    /* ---------- Stage helpers ---------- */
     async function showInstant(id) {
       currentId = id;
       imgA.src = urlFor(id);
@@ -322,15 +326,13 @@ window.addEventListener("DOMContentLoaded", () => {
     }
 
     // --------- ACCEPT / CANCEL / TIMEOUT judge ----------
+    // Timeout = "accept" (evolves): point if correct, life lost if wrong
     async function stopAndJudge(action /* "accept" | "cancel" | "timeout" */) {
       if (!rolling) return;
       session++;
       rolling = false;
 
-      // for logging clarity
       const prevCurrent = currentId;
-
-      // Evaluate whether candidate satisfies the rule
       const isCorrectDir = (rule === "higher") ? (candidateId > currentId) : (candidateId < currentId);
 
       // CANCEL path: instant revert (no flash/reveal)
@@ -375,10 +377,10 @@ window.addEventListener("DOMContentLoaded", () => {
           return;
         }
         newRule();
-        return; // important: end here for cancel flow
+        return; // end cancel flow
       }
 
-      // ACCEPT/TIMEOUT path: keep reveal + flash
+      // ACCEPT/TIMEOUT path: keep reveal + flash (timeout behaves as accept)
       imgA.classList.add("silhouette");
       imgB.classList.add("silhouette");
       imgA.style.opacity = 0;
