@@ -335,8 +335,11 @@ window.addEventListener("DOMContentLoaded", () => {
     /* ---------- HUD & Aim Banner ---------- */
     function updateAim() {
       if (!aimBanner) return;
-      const active = gameActive && !startScreen?.classList.contains("hidden") === false && endScreen?.classList.contains("hidden") === true;
-      // Show only when the game is active and overlays are hidden
+      const overlaysHidden =
+        startScreen?.classList.contains("hidden") &&
+        endScreen?.classList.contains("hidden");
+      const active = gameActive && overlaysHidden;
+    
       aimBanner.style.display = active ? "block" : "none";
       const isHigher = rule === "higher";
       aimBanner.textContent = isHigher ? "Higher" : "Lower";
@@ -344,6 +347,7 @@ window.addEventListener("DOMContentLoaded", () => {
       aimBanner.classList.toggle("lower", !isHigher);
       aimBanner.setAttribute("aria-hidden", active ? "false" : "true");
     }
+
 
     function setGameActive(active) {
       gameActive = active;
