@@ -5,7 +5,13 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Random Evolution • Game</title>
   <meta name="color-scheme" content="dark light" />
+
+  <!-- Optional (prevents favicon 404 in console). Put a real favicon here if you have one. -->
+  <link rel="icon" href="../../../favicon.ico">
+
+  <!-- Site styles (path is from this file: games/2025-08-19/random-evolution/index.html) -->
   <link rel="stylesheet" href="../../../css/main.css">
+  <!-- Game styles -->
   <link rel="stylesheet" href="../../../css/games/random-evolution/styles.css">
 </head>
 <body>
@@ -16,7 +22,7 @@
         <span class="dot"></span><span>Marco • Portfolio</span>
       </a>
       <nav class="links">
-        <a class="cta" href="https://www.linkedin.com/in/marco-romagna" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+        <a class="cta" href="https://www.linkedin.com/in/marco-romagna" target="_blank" rel="noopener">LinkedIn</a>
       </nav>
     </div>
   </header>
@@ -24,58 +30,106 @@
   <!-- Main -->
   <main class="container">
     <section class="panel">
-      <h2>Random Evolution</h2>
-      <div class="game-container">
-        
-        <!-- Left sidebar for Gens -->
-        <aside class="gens">
-          <button>G9</button>
-          <button>G8</button>
-          <button>G7</button>
-          <button>G6</button>
-          <button>G5</button>
-          <button>G4</button>
-          <button>G3</button>
-          <button class="active">G2</button>
-          <button>G1</button>
-        </aside>
+      <h2 class="panel-title">Random Evolution</h2>
+      <!-- (We hide this in CSS now to save vertical space)
+      <p class="panel-subtitle">Decide if the next Pokémon’s Pokédex number is higher or lower!</p>
+      -->
 
-        <!-- Game stage -->
-        <div id="stage" class="revo-stage">
-          <div id="overlay" class="overlay">
-            <h2>Do you know your Pokédex numbers?</h2>
-            <p class="subtext">Choose your difficulty to begin.</p>
-            <div class="difficulty">
-              <button class="easy">Easy</button>
-              <button class="medium">Medium</button>
-              <button class="hard">Hard</button>
-            </div>
-          </div>
-
-          <!-- Pokémon display -->
-          <div id="pokemon" class="pokemon hidden">
-            <img id="poke-img" alt="Pokémon">
-            <div id="dex-number"></div>
-          </div>
-
-          <!-- A/B controls inside stage -->
-          <div id="controls" class="ab-instage hidden">
-            <img id="b-button" src="../../../assets/buttons/B_button.png" alt="B Button">
-            <img id="a-button" src="../../../assets/buttons/A_button.png" alt="A Button">
-          </div>
+      <!-- HUD (start inactive so right block is hidden) -->
+      <div class="revo-hud inactive" id="hud">
+        <div class="hud-left">
+          <span class="tag">Current</span>
+          <span id="hud-current" class="mono">#—</span>
+        </div>
+        <div class="hud-center">
+          <span class="tag">Aim</span>
+          <span id="hud-rule" class="rule">—</span>
+          <span class="tag">Mode</span>
+          <span id="hud-mode" class="mono">—</span>
+        </div>
+        <div class="hud-right">
+          <span class="tag">Score</span>
+          <span id="hud-score" class="mono">0</span>
+          <span class="sep">•</span>
+          <span class="tag">Mult</span>
+          <span id="hud-mult" class="mono">x1</span>
+          <span class="sep">•</span>
+          <span class="tag">Lives</span>
+          <span id="hud-lives" class="mono">3</span>
         </div>
       </div>
 
-      <!-- Sound control -->
-      <div class="sound-control">
-        <label for="sound">Sound</label>
-        <button id="sound-toggle">🔇</button>
-        <input id="volume" type="range" min="0" max="1" step="0.01" value="0.5">
+      <!-- Stage wrapper: LEFT rail + RIGHT stage -->
+      <div class="revo-stage-wrap">
+        <!-- Pokédex rail (outside the stage) -->
+        <div id="pokedex-rail" class="pokedex-rail">
+          <div class="rail-track">
+            <div class="rail-fill"></div>
+            <!-- generation dividers and mid labels are injected via JS -->
+          </div>
+          <!-- Needle line + label for current dex -->
+          <div class="rail-needle">
+            <span class="needle-line"></span>
+            <span class="needle-label">#—</span>
+          </div>
+        </div>
+
+        <!-- The stage -->
+        <div id="stage" class="revo-stage">
+          <!-- Animated “Higher/Lower” stamp (JS toggles) -->
+          <div id="aim" class="revo-aim" aria-hidden="true">Higher</div>
+
+          <!-- Pokémon images -->
+          <img id="imgA" class="revo-img" alt="Current Pokémon">
+          <img id="imgB" class="revo-img" alt="Next Pokémon">
+          <div id="flash" class="revo-flash"></div>
+          <div id="timer" class="revo-timer">—</div>
+
+          <!-- Start overlay -->
+          <div id="start-screen" class="revo-start">
+            <div class="start-content">
+              <h3 class="title">Do you know your Pokédex numbers?</h3>
+
+              <div class="rules-list">
+                <p>Press <strong>A</strong> to advance when the Dex number is higher or lower, or <strong>B</strong> to cancel the evolution if it isn’t.</p>
+              </div>
+
+              <p class="subtitle bigger">Choose your difficulty to begin.</p>
+
+              <div class="btn-row big">
+                <button class="mode-btn easy"   data-mode="easy">Easy</button>
+                <button class="mode-btn medium" data-mode="medium">Medium</button>
+                <button class="mode-btn hard"   data-mode="hard">Hard</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- End overlay -->
+          <div id="end-screen" class="revo-end hidden">
+            <h3 class="title">Game Over</h3>
+            <p class="subtitle">Final score: <span id="final-score">0</span></p>
+            <div class="btn-row">
+              <button id="play-again" class="mode-btn">Play Again</button>
+            </div>
+          </div>
+
+          <!-- A/B controls INSIDE the stage (so they show & get the bezel) -->
+          <div id="controls" class="ab-instage hidden">
+            <img id="a-button" src="./assets/buttons/A_button.png" alt="A Button">
+            <img id="b-button" src="./assets/buttons/B_button.png" alt="B Button">
+          </div>
+        </div><!-- /revo-stage -->
+      </div><!-- /revo-stage-wrap -->
+
+      <!-- Volume row lives below the game; JS wires it up -->
+      <div class="revo-audio">
+        <span class="tag">Sound</span>
+        <!-- the mute button & range are injected by JS -->
       </div>
     </section>
   </main>
 
-  <!-- Scripts -->
-  <script src="../../../js/games/random-evolution/game.js"></script>
+  <!-- Game script (path is relative to this index.html) -->
+  <script src="./js/random-evolution.js" defer></script>
 </body>
 </html>
