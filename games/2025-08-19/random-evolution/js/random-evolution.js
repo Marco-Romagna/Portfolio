@@ -1,4 +1,3 @@
-
 // games/2025-08-19/random-evolution/js/random-evolution.js
 
 window.addEventListener("DOMContentLoaded", () => {
@@ -119,6 +118,16 @@ window.addEventListener("DOMContentLoaded", () => {
     const currentInterval = () =>
       reducedMotion ? 240 : (baseInterval / (modes[mode]?.speedFactor || 1.0));
 
+    // Preload helper to avoid ghost images
+    function preloadImage(url) {
+      return new Promise((resolve, reject) => {
+        const im = new Image();
+        im.onload = () => resolve(true);
+        im.onerror = reject;
+        im.src = url;
+      });
+    }
+
     /* ---------- Rail ---------- */
     const pctForDex = (n) => (Math.max(1, Math.min(MAX_DEX, n || 1)) / MAX_DEX) * 100;
 
@@ -205,7 +214,7 @@ window.addEventListener("DOMContentLoaded", () => {
       if (currentId != null) updateRail(currentId);
     }
 
-    /* ---------- SUGGESTION #1 + #2: Likely-direction weighting with difficulty ---------- */
+    /* ---------- Likely-direction weighting with difficulty ---------- */
     // 0 = neutral (50/50), 1 = fully biased
     function biasStrengthForMode(m) {
       if (m === "easy")   return 0.30;
@@ -276,15 +285,22 @@ window.addEventListener("DOMContentLoaded", () => {
     const hideEnd   = () => endScreen?.classList.add("hidden");
 
     /* ---------- Rolling ---------- */
-    async function prepRoll(id) {
+    async function prepRoll(id, preloadedUrl) {
+      // Clear old candidate to avoid stale flashes
+      imgB.src = "";
+
+      // Ensure current is set deterministically
       imgA.src = urlFor(currentId ?? randId());
-      imgB.src = urlFor(id);
       imgA.classList.remove("silhouette");
+
       imgB.classList.add("silhouette");
       imgA.style.opacity = 1;
       imgB.style.opacity = 0;
       flash.style.opacity = 0;
       if (timerEl) timerEl.classList.remove("warn");
+
+      // Set new candidate (preloaded)
+      imgB.src = preloadedUrl || urlFor(id);
     }
 
     async function rollLoop(mySession) {
@@ -317,10 +333,16 @@ window.addEventListener("DOMContentLoaded", () => {
       rolling = true;
 
       candidateId = pickOther();
-      await prepRoll(candidateId);
+      const candUrl = urlFor(candidateId);
+
+      // PRELOAD before assigning to imgB to avoid ghost silhouette
+      try { await preloadImage(candUrl); } catch (_) { /* ignore */ }
+
+      await prepRoll(candidateId, candUrl);
 
       deadline = now() + (modes[mode]?.limitMs || 7000);
       dlog("roll:start", { rule, currentId, candidateId, timeLimitMs: (modes[mode]?.limitMs || 7000) });
+
       rollLoop(mySession);
       watchdogLoop(mySession);
     }
@@ -353,6 +375,7 @@ window.addEventListener("DOMContentLoaded", () => {
         imgA.src = urlFor(currentId);
         imgA.style.opacity = 1;
         imgB.style.opacity = 0;
+        imgB.src = ""; // clear candidate to prevent ghosting
         if (timerEl) { timerEl.textContent = "—"; timerEl.classList.remove("warn"); }
 
         dlog("compare", {
@@ -424,6 +447,7 @@ window.addEventListener("DOMContentLoaded", () => {
       imgA.src = urlFor(currentId);
       imgA.style.opacity = 1;
       imgB.style.opacity = 0;
+      imgB.src = ""; // clear candidate to prevent ghosting
       setHUD();
 
       if (lost) dlog("life:lost", { score, mult, lives });
