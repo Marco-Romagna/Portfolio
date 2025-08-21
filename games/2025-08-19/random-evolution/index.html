@@ -29,27 +29,19 @@
     <section class="panel">
       <h2 class="panel-title">Random Evolution</h2>
 
-      <!-- HUD -->
+      <!-- HUD (centered, evenly spaced, ABOVE the stage; JS still updates the IDs) -->
       <div class="revo-hud inactive" id="hud">
-        <div class="hud-left">
-          <span class="tag">Current</span>
-          <span id="hud-current" class="mono">#—</span>
+        <div class="hud-pill">
+          <span class="label">Score</span>
+          <span id="hud-score" class="value mono">0</span>
         </div>
-        <div class="hud-center">
-          <span class="tag">Aim</span>
-          <span id="hud-rule" class="rule">—</span>
-          <span class="tag">Mode</span>
-          <span id="hud-mode" class="mono">—</span>
+        <div class="hud-pill">
+          <span class="label">Mult</span>
+          <span id="hud-mult" class="value mono">x1</span>
         </div>
-        <div class="hud-right">
-          <span class="tag">Score</span>
-          <span id="hud-score" class="mono">0</span>
-          <span class="sep">•</span>
-          <span class="tag">Mult</span>
-          <span id="hud-mult" class="mono">x1</span>
-          <span class="sep">•</span>
-          <span class="tag">Lives</span>
-          <span id="hud-lives" class="mono">3</span>
+        <div class="hud-pill">
+          <span class="label">Lives</span>
+          <span id="hud-lives" class="value mono">3</span>
         </div>
       </div>
 
