@@ -278,18 +278,18 @@ window.addEventListener("DOMContentLoaded", () => {
       rail?.querySelector(".rail-mid-labels")?.remove();
     }
 
-    function renderRailDecor(currentMode) {
-      if (!railTrack) return;
-      clearRailDecor();
-
-      // Dividers at generation starts
-      GEN_STARTS.forEach(startNum => {
-        const pos = pctForDex(startNum);
-        const divider = document.createElement("div");
-        divider.className = "rail-divider";
-        divider.style.bottom = pos + "%";
-        railTrack.appendChild(divider);
-      });
+    function renderRailDecor() {
+      const rail = document.getElementById("pokedex-rail");
+      rail.innerHTML = "";
+    
+      for (let i = 0; i < GEN_COUNT; i++) {
+        let lab = document.createElement("div");
+        lab.className = "rail-mid-label";
+        // add both "Gen 1" and "G1", and let CSS decide which to show
+        lab.innerHTML = `<span class="full">Gen ${i + 1}</span><span class="short">G${i + 1}</span>`;
+        rail.appendChild(lab);
+      }
+    }
 
       // Midpoint overlay labels (skip for hard)
       if (currentMode === "hard") return;
