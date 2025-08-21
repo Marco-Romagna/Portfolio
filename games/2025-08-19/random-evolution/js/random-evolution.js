@@ -3,7 +3,6 @@ window.addEventListener("DOMContentLoaded", () => {
     /* ---------- Boot & Debug ---------- */
     const settingsURL = new URL("./settings.json", document.baseURI);
 
-    // DEBUG control
     const qp = new URLSearchParams(location.search).get("debug");
     const stored = localStorage.getItem("revo_debug");
     let DEBUG = true;
@@ -74,7 +73,7 @@ window.addEventListener("DOMContentLoaded", () => {
     const audioRow   = document.querySelector(".revo-audio");
     const titleEl    = document.getElementById("game-title");
 
-    // NEW: History rail
+    // History rail
     const historyWrap  = document.getElementById("revo-history");
     const historyTrack = document.getElementById("history-track");
 
@@ -211,6 +210,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
     const base  = settings.sprites.base_url;
     const ext   = settings.sprites.file_extension || ".png";
+    theStart:
     const start = settings.sprites.range.start || 1;
     const end   = settings.sprites.range.end   || 1025;
 
@@ -265,7 +265,7 @@ window.addEventListener("DOMContentLoaded", () => {
       });
     }
 
-    /* ---------- NEW: hard stop + stage clear ---------- */
+    /* ---------- Hard stop + stage clear ---------- */
     function hardStopAll() {
       rolling = false;
       session++;           // invalidates loops
@@ -343,7 +343,6 @@ window.addEventListener("DOMContentLoaded", () => {
       aimBanner.style.display = active ? "block" : "none";
       const isHigher = rule === "higher";
       const ref = (currentId != null) ? currentId : "—";
-      // No brackets, per user preference:
       aimBanner.textContent = `${isHigher ? "Higher" : "Lower"} than ${ref}`;
 
       aimBanner.classList.toggle("higher", isHigher);
@@ -399,10 +398,12 @@ window.addEventListener("DOMContentLoaded", () => {
       const cs = getComputedStyle(document.documentElement);
       const thumb = parseFloat(cs.getPropertyValue('--hist-thumb')) || 40;
       const gap = parseFloat(cs.getPropertyValue('--hist-gap')) || 8;
+      const labelH = 14; // approximate height for the number under the image
+      const tileH = thumb + labelH + gap; // image + label + internal gap
       const padding = gap * 2; // from .history-track padding
       const innerHeight = wrapRect.height - padding;
-      const capacity = Math.max(1, Math.floor(innerHeight / (thumb + gap)));
-      dlog("history:capacity", { wrapH: wrapRect.height, thumb, gap, capacity });
+      const capacity = Math.max(1, Math.floor(innerHeight / tileH));
+      dlog("history:capacity", { wrapH: wrapRect.height, thumb, gap, labelH, capacity });
       return capacity;
     }
 
@@ -423,24 +424,36 @@ window.addEventListener("DOMContentLoaded", () => {
     function pushHistory(entry /* {id, action: 'accept'|'cancel', correct: bool} */) {
       if (!historyTrack || !entry) return;
 
-      // Create tile
+      // Structure:
+      // <div.hist-item title="...">
+      //   <div.hist-imgwrap data-action data-correct>
+      //     <img.hist-thumb />
+      //   </div>
+      //   <div.hist-label>#304</div>
+      // </div>
+
       const item = document.createElement('div');
       item.className = 'hist-item';
-      item.setAttribute('data-action', entry.action);
-      item.setAttribute('data-correct', entry.correct ? 'true' : 'false');
       item.title = `#${entry.id} • ${entry.action === 'accept' ? 'Accepted' : 'Canceled'} • ${entry.correct ? 'Correct' : 'Incorrect'}`;
+
+      const wrap = document.createElement('div');
+      wrap.className = 'hist-imgwrap';
+      wrap.setAttribute('data-action', entry.action);
+      wrap.setAttribute('data-correct', entry.correct ? 'true' : 'false');
 
       const img = document.createElement('img');
       img.className = 'hist-thumb';
       img.alt = `#${entry.id} Pokémon`;
       img.src = urlFor(entry.id);
 
-      const badge = document.createElement('span');
-      badge.className = 'hist-badge';
-      badge.textContent = `#${entry.id}`;
+      wrap.appendChild(img);
 
-      item.appendChild(img);
-      item.appendChild(badge);
+      const label = document.createElement('div');
+      label.className = 'hist-label';
+      label.textContent = `#${entry.id}`;
+
+      item.appendChild(wrap);
+      item.appendChild(label);
 
       // Insert at the TOP
       historyTrack.insertBefore(item, historyTrack.firstChild);
@@ -468,7 +481,6 @@ window.addEventListener("DOMContentLoaded", () => {
     }
 
     window.addEventListener('resize', () => {
-      // debounce-ish
       requestAnimationFrame(updateHistoryCapacity);
     });
 
@@ -578,7 +590,6 @@ window.addEventListener("DOMContentLoaded", () => {
       let gained = false, lost = false;
 
       if (action === "cancel") {
-        // Cancel path: no reveal
         if (!isCorrectDir) {        // correctly rejected
           score += mult; mult += 1;
           AudioMgr.playOK();
@@ -613,7 +624,6 @@ window.addEventListener("DOMContentLoaded", () => {
 
         if (lives <= 0) {
           if (finalScore) finalScore.textContent = String(score);
-          // Hard stop & keep history visible
           hardStopAll();
           setGameActive(false);
           showEnd();
@@ -675,7 +685,6 @@ window.addEventListener("DOMContentLoaded", () => {
 
       if (lives <= 0) {
         if (finalScore) finalScore.textContent = String(score);
-        // Hard stop & keep history visible
         hardStopAll();
         setGameActive(false);
         showEnd();
@@ -729,7 +738,7 @@ window.addEventListener("DOMContentLoaded", () => {
         // start fresh
         hardStopAll();
         clearStageImages();
-        clearHistory(); // NEW: clear history on new game
+        clearHistory(); // clear history on new game
 
         // Only now pick the first Pokémon and show it
         currentId = randId();
