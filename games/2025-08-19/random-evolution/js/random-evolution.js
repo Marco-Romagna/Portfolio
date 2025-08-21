@@ -210,7 +210,6 @@ window.addEventListener("DOMContentLoaded", () => {
 
     const base  = settings.sprites.base_url;
     const ext   = settings.sprites.file_extension || ".png";
-    theStart:
     const start = settings.sprites.range.start || 1;
     const end   = settings.sprites.range.end   || 1025;
 
