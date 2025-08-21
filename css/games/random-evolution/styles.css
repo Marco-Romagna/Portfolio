@@ -15,7 +15,7 @@
   grid-template-columns:auto 1fr;   /* rail then stage */
   align-items:start;
   column-gap:48px;                  /* breathing space */
-  padding-right: clamp(12px, 5vw, 56px); /* reserve a small right gutter */
+  padding-right: clamp(12px, 5vw, 56px); /* small right gutter */
 }
 
 /* ===============================
@@ -55,7 +55,7 @@
 }
 .revo-timer.warn{ color:#f7768e; }
 
-/* === Aim banner (big Higher / Lower inside stage) === */
+/* === Aim banner (shows only during gameplay) === */
 .revo-aim{
   position:absolute;
   top:12px; left:50%; transform:translateX(-50%);
@@ -70,21 +70,20 @@
   background:rgba(0,0,0,.28);
   border:1px solid rgba(255,255,255,.10);
   font-size:clamp(16px, 2.2vw, 22px);
+  display:none; /* hidden until game is active */
 }
 .revo-aim.lower{ color:#f5a2b2; }
 .revo-aim.higher{ color:#a9c4ff; }
 
 /* ===============================
-   HUD
+   HUD (only right side shown)
    =============================== */
 .revo-hud{
   display:grid; grid-template-columns:1fr auto 1fr;
   align-items:center; gap:8px; margin:8px 0 12px; font-size:14px;
 }
-/* hide left & center blocks (per request) */
-.revo-hud .hud-left{ display:none !important; }
+.revo-hud .hud-left,
 .revo-hud .hud-center{ display:none !important; }
-
 .revo-hud.inactive .hud-right{ display:none; }
 .revo-hud .hud-right{justify-self:end; display:flex; gap:8px; align-items:baseline; flex-wrap:wrap; row-gap:4px;}
 .revo-hud .tag{color:var(--muted);}
@@ -113,13 +112,16 @@
 }
 
 /* ===============================
-   Overlays — START
+   Overlays — START (rules)
    =============================== */
 .revo-start{
   position:absolute; inset:0; display:grid; place-items:center;
   padding:24px; gap:10px;
   background:radial-gradient(120% 120% at 50% 55%, rgba(7,10,18,.94) 0%, rgba(7,10,18,.88) 60%, rgba(7,10,18,.82) 100%);
   border-radius:16px; text-align:center;
+  /* scale down the whole rules block on small viewports */
+  font-size: clamp(12px, 1.45vw, 15px);
+  line-height: 1.55;
 }
 .revo-start::before{
   content:""; position:absolute; inset:8% 12%; pointer-events:none; border-radius:24px;
@@ -127,12 +129,12 @@
     radial-gradient(40% 60% at 25% 25%, rgba(122,162,247,.10), transparent 70%),
     radial-gradient(40% 60% at 75% 75%, rgba(247,118,142,.10), transparent 70%);
 }
-.start-content{ position:relative; z-index:1; display:grid; justify-items:center; gap:14px; max-width:520px; }
-.revo-start .title{ margin:0 0 6px; font-size:clamp(20px,2.4vw,28px); font-weight:800; letter-spacing:.4px; color:#9ab4ff; text-shadow:0 1px 0 rgba(0,0,0,.25); }
-.rules-list{ margin:10px 0 8px; text-align:left; font-size:14px; line-height:1.65; color:var(--muted); }
-.rules-list p{ margin:6px 0; }
+.start-content{ position:relative; z-index:1; display:grid; justify-items:center; gap:12px; max-width:min(520px, 86%); }
+.revo-start .title{ margin:0 0 6px; font-size:clamp(18px,2.0vw,24px); font-weight:800; letter-spacing:.4px; color:#9ab4ff; text-shadow:0 1px 0 rgba(0,0,0,.25); }
+.rules-list{ margin:8px 0 6px; text-align:left; font-size:clamp(12px,1.5vw,14px); line-height:1.6; color:var(--muted); }
+.rules-list p{ margin:5px 0; }
 .rules-list .k{ display:inline-block; min-width:1.2em; font-weight:800; color:#7aa2f7; margin-right:4px; }
-.revo-start .subtitle.bigger{ margin:6px 0 6px; color:#b8c4ff; font-size:clamp(15px,1.9vw,18px); font-weight:700; }
+.revo-start .subtitle.bigger{ margin:4px 0 6px; color:#b8c4ff; font-size:clamp(14px,1.7vw,17px); font-weight:700; }
 
 /* ===============================
    Overlays — END
@@ -250,7 +252,7 @@
 .pokedex-rail--hidden .rail-track > *{ opacity:0; }
 
 /* ===============================
-   Viewport-fit sizing (mobile friendly)
+   Viewport-fit sizing (mobile)
    =============================== */
 :root { --stage-max: min(70svh, 80vmin, 720px); }
 
@@ -270,10 +272,6 @@
   .pokedex-rail .needle-label{ margin-left:6px; }
 }
 
-/* =========================================
-   Responsive overrides (size down + keep controls visible)
-   ========================================= */
-
 /* Medium narrow viewports (≤900w OR ≤750h) */
 @media (max-width: 900px), (max-height: 750px) {
   :root { --stage-max: min(62svh, 76vmin, 640px); }
@@ -281,7 +279,7 @@
   .pokedex-rail { width: 50px; }
   .revo-hud { font-size: 13px; margin: 6px 0 8px; }
   .revo-hud .sep { display: none; }
-  .panel .panel-subtitle { display: none; } /* hide long subtitle */
+  .panel .panel-subtitle { display: none; }
   #controls { margin-top: 10px; }
   #controls img { width: 56px; height: 56px; }
 }
