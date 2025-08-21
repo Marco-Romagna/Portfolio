@@ -108,12 +108,10 @@
   max-width: min(var(--stage-max), 100%);
   margin: 8px auto 10px;
 
-  /* evenly-spaced items across the middle */
-  display: grid;
-  grid-auto-flow: column;
-  grid-auto-columns: 1fr;
-  place-items: center;
-  gap: clamp(10px, 2.4vw, 18px);
+  /* center the pills, keep them slightly closer (not touching) */
+  display: flex;
+  justify-content: center;
+  gap: clamp(6px, 1.5vw, 12px);
 
   font-size: 14px;
 }
@@ -361,7 +359,7 @@
   :root { --stage-max: min(58svh, 78vmin, 560px); }
   .revo-stage-wrap { column-gap: 18px; padding-right: 0; }  /* remove right gutter: fix iPhone push */
   .pokedex-rail .rail-mid-label { font-size: 10.5px; left: 6px; right: 6px; }
-  .revo-hud { font-size: 12.5px; gap: 12px; }
+  .revo-hud { font-size: 12.5px; gap: 10px; }
 }
 
 /* Extra small */
