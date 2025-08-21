@@ -340,7 +340,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
       // NEW: concise descriptive banner
       const ref = (currentId != null) ? currentId : "—";
-      aimBanner.textContent = `[${isHigher ? "Higher" : "Lower"} than ${ref}]`;
+      aimBanner.textContent = `${isHigher ? "Higher" : "Lower"} than ${ref}`;
 
       aimBanner.classList.toggle("higher", isHigher);
       aimBanner.classList.toggle("lower", !isHigher);
