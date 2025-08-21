@@ -1,5 +1,6 @@
+
 /* ===============================
-   Random Evolution Styles (full)
+   Random Evolution Styles (full, cleaned)
    =============================== */
 
 /* --- Base helpers --- */
@@ -115,43 +116,42 @@
 .revo-hud .sep{color:var(--muted); opacity:.7;}
 
 /* ===============================
-   Game Boy-style A/B inside the stage
+   A/B image buttons inside the stage (simple, no bezel)
    =============================== */
-#ab-placeholder{} /* (no-op, just to anchor this section if you search) */
-
 .ab-instage{
   position:absolute;
   right: clamp(10px, 2.5vmin, 16px);
   bottom: clamp(10px, 2.5vmin, 16px);
   display:flex;
-  align-items:flex-end;
-  gap: clamp(8px, 1.8vmin, 14px);
+  flex-direction: row;
+  align-items: center;
+  gap: clamp(10px, 2vmin, 16px);
   z-index:5;
-  /* expose sizes as vars for the bezel block */
   --ab: clamp(56px, 9vmin, 84px);
-  --gap: clamp(8px, 1.8vmin, 14px);
 }
 
 .ab-instage img{
   width: var(--ab);
   height: var(--ab);
-  border-radius: 50%;
-  box-shadow:
-    inset 0 0 0 2px rgba(0,0,0,.35),
-    inset 0 8px 14px rgba(255,255,255,.06),
-    0 3px 8px rgba(0,0,0,.35);
-  filter: brightness(.95) saturate(.95);
-  background: radial-gradient(120% 120% at 30% 30%, rgba(255,255,255,.08), rgba(0,0,0,.2));
-  transition: transform .08s ease, filter .12s ease;
-  cursor:pointer;
+  cursor: pointer;
+  user-select: none;
+  /* ensure no extra styling sneaks in */
+  border: none !important;
+  outline: none !important;
+  background: none !important;
+  box-shadow: none !important;
+  filter: none !important;
+  border-radius: 0 !important;
+  transform: none !important;
+  transition: transform .08s ease;
 }
 
-/* Classic stagger: B slightly left & lower, A slightly up & right */
-.ab-instage #b-button{ transform: translateY(6%) translateX(-6%); }
-.ab-instage #a-button{ transform: translateY(-2%) translateX(6%); }
+.ab-instage img:active{
+  transform: scale(.92);
+}
 
-/* press feedback */
-.ab-instage img:active{ transform: translateY(6%) scale(.95); }
+/* If some older rules targeted #a-button/#b-button with transforms, neutralize: */
+#ab-button, #a-button, #b-button { transform: none !important; }
 
 /* ===============================
    Controls (legacy — not used outside stage anymore)
@@ -357,86 +357,3 @@ body { padding-bottom: max(env(safe-area-inset-bottom, 0px), 8px); }
 
 /* Safety: hide empty img to avoid flicker */
 .revo-img[src=""]{ display:none; }
-
-/* ===============================
-   Game Boy SP-style A/B bezel (no HTML changes)
-   =============================== */
-.ab-instage{
-  --pad-x: 14px;                       /* capsule padding left/right */
-  --pad-y: 10px;                       /* capsule padding top/bottom */
-  --tilt: -12deg;                      /* slight tilt like GBA/SP */
-  --blue-1: #3b5ef0;                   /* bezel tint light */
-  --blue-2: #2742b8;                   /* bezel tint dark  */
-  --blue-3: #1a2e84;                   /* deep edge       */
-  --shine: rgba(255,255,255,.55);
-  --shadow: rgba(0,0,0,.35);
-}
-
-/* The blue “slot” background behind the two buttons */
-.ab-instage::before{
-  content:"";
-  position:absolute;
-  right: -6px;                         /* tiny overhang for depth */
-  bottom: -6px;
-  width: calc(var(--ab)*2 + var(--gap) + var(--pad-x)*2);
-  height: calc(var(--ab) + var(--pad-y)*2);
-  transform: rotate(var(--tilt));
-  border-radius: 999px;
-  background:
-    radial-gradient(140% 100% at 25% 20%, rgba(255,255,255,.22), transparent 45%),
-    linear-gradient(160deg, var(--blue-1), var(--blue-2) 70%),
-    repeating-linear-gradient( 0deg, rgba(255,255,255,.02) 0 2px, rgba(0,0,0,.02) 2px 4px);
-  box-shadow:
-    inset 0 0 0 2px rgba(255,255,255,.06),
-    inset 0 -10px 22px rgba(0,0,0,.35),
-    inset 0 12px 18px rgba(255,255,255,.08),
-    0 6px 14px var(--shadow);
-  outline: 1px solid rgba(255,255,255,.08);
-  z-index: 0;
-}
-
-/* A small glossy “ridge” highlight along the top of the capsule */
-.ab-instage::after{
-  content:"";
-  position:absolute;
-  right: calc(-6px + 6px);
-  bottom: calc(-6px + 6px);
-  width: calc(var(--ab)*2 + var(--gap) + var(--pad-x)*2 - 12px);
-  height: 38%;
-  transform: rotate(var(--tilt));
-  border-radius: 999px;
-  background: linear-gradient(to bottom, rgba(255,255,255,.24), rgba(255,255,255,0));
-  pointer-events:none;
-  mix-blend-mode: screen;
-  z-index: 1;
-}
-
-/* Slight tint and rim on the buttons so they feel embedded */
-.ab-instage img{
-  position: relative;
-  z-index: 2; /* above the capsule */
-  filter: brightness(.98) saturate(.96);
-  box-shadow:
-    inset 0 0 0 2px rgba(0,0,0,.35),
-    inset 0 10px 18px rgba(255,255,255,.08),
-    0 3px 8px rgba(0,0,0,.45);
-}
-
-/* Pressed feedback a touch deeper */
-.ab-instage img:active{
-  transform: translateY(6%) scale(.95);
-  filter: brightness(.94);
-  box-shadow:
-    inset 0 0 0 2px rgba(0,0,0,.5),
-    inset 0 6px 10px rgba(255,255,255,.06),
-    0 1px 4px rgba(0,0,0,.5);
-}
-
-/* Keep proportions on very tiny phones */
-@media (max-width: 420px){
-  .ab-instage{
-    --pad-x: 10px;
-    --pad-y: 8px;
-    --tilt: -10deg;
-  }
-}
