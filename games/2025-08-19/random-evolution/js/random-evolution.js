@@ -18,8 +18,6 @@ window.addEventListener("DOMContentLoaded", () => {
       state(){ return { DEBUG, qp, stored }; }
     };
 
-    dlog("boot", { pageURL: location.href, settingsURL: settingsURL.toString(), debug: DEBUG });
-
     /* ---------- Inject tiny feedback styles ---------- */
     (function(){
       if (document.querySelector('style[data-revo-feedback]')) return;
@@ -67,42 +65,39 @@ window.addEventListener("DOMContentLoaded", () => {
     const hudScore   = document.getElementById("hud-score");
     const hudLives   = document.getElementById("hud-lives");
     const hudMult    = document.getElementById("hud-mult");
-    const hudMode    = document.getElementById("hud-mode"); // not shown, but we keep text updated
+    const hudMode    = document.getElementById("hud-mode");
 
-    /* ---------- Aim banner inside stage ---------- */
+    /* ---------- Aim banner inside stage (hidden by default) ---------- */
     const aimBanner = document.createElement("div");
+    aimBanner.id = "directionLabel";
     aimBanner.className = "revo-aim";
     aimBanner.textContent = "—";
+    aimBanner.style.display = "none";
     stage?.appendChild(aimBanner);
 
     /* ---------- Feedback helpers ---------- */
     function pulseOnce(el, cls){ if(!el) return; el.classList.remove(cls); void el.offsetWidth; el.classList.add(cls); }
 
-    /* ---------- Audio Manager (moved below game) ---------- */
-    const VOL_KEY = 'revo_volume';   // '0'..'1'
-    const MUTE_KEY= 'revo_muted';    // '0' or '1'
+    /* ---------- Audio Manager (below game) ---------- */
+    const VOL_KEY = 'revo_volume';
+    const MUTE_KEY= 'revo_muted';
     const AudioMgr = (() => {
       let ctx = null, okEl = null, badEl = null;
       let muted = localStorage.getItem(MUTE_KEY) === '1';
       let volume = parseFloat(localStorage.getItem(VOL_KEY) ?? '0.5'); if (isNaN(volume)) volume = 0.5;
-
       function ensureCtx(){ if (!ctx) { try { ctx = new (window.AudioContext || window.webkitAudioContext)(); } catch(e){} } }
-      function loadTag(src){ const a = new Audio(); a.src = src; a.preload = 'auto'; a.volume = muted ? 0 : volume; return a; }
+      function loadTag(src){ const a = new Audio(); a.src = src; a.preload='auto'; a.volume = muted ? 0 : volume; return a; }
       function init(){ if (!okEl) okEl = loadTag('./assets/sfx/correct.mp3'); if (!badEl) badEl = loadTag('./assets/sfx/wrong.mp3'); }
-      function setMuted(m){ muted = !!m; localStorage.setItem(MUTE_KEY, muted ? '1' : '0'); if (okEl) okEl.volume = muted ? 0 : volume; if (badEl) badEl.volume = muted ? 0 : volume; }
-      function setVolume(v){ volume = Math.max(0, Math.min(1, Number(v)||0)); localStorage.setItem(VOL_KEY, String(volume));
-        if (okEl) okEl.volume = muted ? 0 : volume; if (badEl) badEl.volume = muted ? 0 : volume; }
-      function beep(freq=880, durMs=140, type='sine'){ if (muted) return; ensureCtx(); if (!ctx) return; const g = ctx.createGain();
-        g.gain.value = 0.09 * volume; g.connect(ctx.destination); const o = ctx.createOscillator(); o.type = type; o.frequency.value = freq; o.connect(g);
-        o.start(); setTimeout(()=>{ o.stop(); g.disconnect(); }, durMs); }
-      function playOK(){ if (okEl && okEl.readyState > 0) { try{ okEl.currentTime=0; okEl.play(); }catch{} } else beep(1040,130,'sine'); }
-      function playBad(){ if (badEl && badEl.readyState > 0) { try{ badEl.currentTime=0; badEl.play(); }catch{} } else beep(220,170,'square'); }
+      function setMuted(m){ muted = !!m; localStorage.setItem(MUTE_KEY, muted?'1':'0'); if (okEl) okEl.volume = muted?0:volume; if (badEl) badEl.volume = muted?0:volume; }
+      function setVolume(v){ volume = Math.max(0, Math.min(1, Number(v)||0)); localStorage.setItem(VOL_KEY, String(volume)); if (okEl) okEl.volume = muted?0:volume; if (badEl) badEl.volume = muted?0:volume; }
+      function beep(freq=880, durMs=140, type='sine'){ if (muted) return; ensureCtx(); if (!ctx) return; const g = ctx.createGain(); g.gain.value = 0.09 * volume; g.connect(ctx.destination); const o = ctx.createOscillator(); o.type=type; o.frequency.value=freq; o.connect(g); o.start(); setTimeout(()=>{ o.stop(); g.disconnect(); }, durMs); }
+      function playOK(){ if (okEl && okEl.readyState>0){ try{ okEl.currentTime=0; okEl.play(); }catch{} } else beep(1040,130,'sine'); }
+      function playBad(){ if (badEl && badEl.readyState>0){ try{ badEl.currentTime=0; badEl.play(); }catch{} } else beep(220,170,'square'); }
       return { init, setMuted, setVolume, playOK, playBad, get muted(){return muted}, get volume(){return volume} };
     })();
 
-    // Place audio UI BELOW the game (under A/B)
     (function addVolumeBelow(){
-      const host = controls?.parentElement; // the .panel section
+      const host = controls?.parentElement;
       if (!host) return;
       const wrap = document.createElement('div');
       wrap.className = 'revo-audio';
@@ -118,19 +113,19 @@ window.addEventListener("DOMContentLoaded", () => {
       btn.style.fontSize = '12px';
 
       const rng = document.createElement('input');
-      rng.type = 'range'; rng.min = '0'; rng.max = '1'; rng.step = '0.05'; rng.value = String(AudioMgr.volume);
-      rng.title = 'Volume'; rng.style.width = '120px';
+      rng.type='range'; rng.min='0'; rng.max='1'; rng.step='0.05'; rng.value=String(AudioMgr.volume);
+      rng.title='Volume'; rng.style.width='120px';
 
-      rng.addEventListener('input', () => AudioMgr.setVolume(rng.value));
-      btn.addEventListener('click', () => { AudioMgr.setMuted(!AudioMgr.muted); btn.textContent = AudioMgr.muted ? '🔇' : '🔊'; });
-      window.addEventListener('keydown', (e)=>{ if (e.key.toLowerCase() === 'm') btn.click(); });
+      rng.addEventListener('input', ()=>AudioMgr.setVolume(rng.value));
+      btn.addEventListener('click', ()=>{ AudioMgr.setMuted(!AudioMgr.muted); btn.textContent = AudioMgr.muted ? '🔇' : '🔊'; });
+      window.addEventListener('keydown', (e)=>{ if (e.key.toLowerCase()==='m') btn.click(); });
 
       wrap.appendChild(label); wrap.appendChild(btn); wrap.appendChild(rng);
       host.appendChild(wrap);
     })();
 
-    let audioInited = false;
-    function ensureAudioInit(){ if (!audioInited) { AudioMgr.init(); audioInited = true; } }
+    let audioInited=false;
+    function ensureAudioInit(){ if (!audioInited){ AudioMgr.init(); audioInited=true; } }
 
     /* ---------- Settings ---------- */
     let settings;
@@ -155,7 +150,7 @@ window.addEventListener("DOMContentLoaded", () => {
     const end   = settings.sprites.range.end   || 1025;
 
     /* ---------- Constants ---------- */
-    const GEN_STARTS = [1, 152, 252, 387, 494, 650, 722, 810, 906]; // Gens 1..9
+    const GEN_STARTS = [1, 152, 252, 387, 494, 650, 722, 810, 906];
     const MAX_DEX    = end;
 
     const modes = {
@@ -189,7 +184,7 @@ window.addEventListener("DOMContentLoaded", () => {
     const now       = () => performance.now();
     const cap       = (s) => s ? s[0].toUpperCase() + s.slice(1) : "—";
     const currentInterval = () => reducedMotion ? 240 : (baseInterval / (modes[mode]?.speedFactor || 1.0));
-    function preloadImage(url){ return new Promise((res, rej)=>{ const im = new Image(); im.onload=()=>res(true); im.onerror=rej; im.src=url; }); }
+    function preloadImage(url){ return new Promise((res, rej)=>{ const im=new Image(); im.onload=()=>res(true); im.onerror=rej; im.src=url; }); }
 
     /* ---------- Rail ---------- */
     const pctForDex = (n) => (Math.max(1, Math.min(MAX_DEX, n || 1)) / MAX_DEX) * 100;
@@ -246,7 +241,7 @@ window.addEventListener("DOMContentLoaded", () => {
       renderRailDecor(m || "easy");
     }
 
-    /* ---------- HUD & Title ---------- */
+    /* ---------- HUD / Title / Direction label ---------- */
     function updateTitle() {
       if (!panelTitle) return;
       panelTitle.textContent = mode ? `${originalTitle} (${cap(mode)})` : originalTitle;
@@ -257,12 +252,16 @@ window.addEventListener("DOMContentLoaded", () => {
       controls?.classList.toggle("hidden", !active);
       hud?.classList.toggle("inactive", !active);
       rail?.classList.toggle("pokedex-rail--hidden", !active);
+      // hide direction label when not playing
+      aimBanner.style.display = active ? "block" : "none";
     }
 
     function setAimBanner(){
-      aimBanner.textContent = rule === "higher" ? "Higher" : "Lower";
+      if (!gameActive) { aimBanner.style.display = "none"; return; }
+      aimBanner.textContent = rule === "higher" ? "HIGHER" : "LOWER";
       aimBanner.classList.toggle("higher", rule === "higher");
       aimBanner.classList.toggle("lower",  rule === "lower");
+      aimBanner.style.display = "block";
     }
 
     function setHUD() {
@@ -274,7 +273,7 @@ window.addEventListener("DOMContentLoaded", () => {
       setAimBanner();
     }
 
-    /* ---------- Weighted rule ---------- */
+    /* ---------- Rule weighting ---------- */
     function biasStrengthForMode(m) {
       if (m === "easy")   return 0.30;
       if (m === "medium") return 0.60;
@@ -286,9 +285,8 @@ window.addEventListener("DOMContentLoaded", () => {
       const clamped = Math.max(1, Math.min(MAX_DEX, currentDex || 1));
       const x = clamped / MAX_DEX;
       const pLower = (1 - s) * 0.5 + s * x;
-      const roll = Math.random();
-      const chosen = (roll < pLower) ? "lower" : "higher";
-      dlog("rule:pick", { mode:m, currentDex, x:+x.toFixed(3), biasStrength:s, pLower:+pLower.toFixed(3), pHigher:+(1-pLower).toFixed(3), roll:+roll.toFixed(3), chosen });
+      const chosen = (Math.random() < pLower) ? "lower" : "higher";
+      dlog("rule:pick", { mode:m, currentDex, chosen, pLower:+pLower.toFixed(3) });
       return chosen;
     }
     function newRule() { rule = pickRuleWeighted(currentId, mode); setHUD(); }
@@ -321,9 +319,9 @@ window.addEventListener("DOMContentLoaded", () => {
         setTimeout(() => { el.style.transition = ""; el.style.transform = ""; }, durMs + 20);
       });
     }
-    const showStart = () => startScreen?.classList.remove("hidden");
+    const showStart = () => { startScreen?.classList.remove("hidden"); aimBanner.style.display = "none"; };
     const hideStart = () => startScreen?.classList.add("hidden");
-    const showEnd   = () => endScreen?.classList.remove("hidden");
+    const showEnd   = () => { endScreen?.classList.remove("hidden"); aimBanner.style.display = "none"; };
     const hideEnd   = () => endScreen?.classList.add("hidden");
 
     /* ---------- Rolling ---------- */
@@ -352,7 +350,7 @@ window.addEventListener("DOMContentLoaded", () => {
     async function watchdogLoop(mySession) {
       while (rolling && mySession === session) {
         updateTimer();
-        if (now() >= deadline) { dlog("timeout:deadline", { at: now(), deadline, rule, currentId, candidateId }); await stopAndJudge("timeout"); break; }
+        if (now() >= deadline) { dlog("timeout:deadline", { currentId, candidateId, rule }); await stopAndJudge("timeout"); break; }
         await sleep(60);
       }
     }
@@ -367,7 +365,7 @@ window.addEventListener("DOMContentLoaded", () => {
       await prepRoll(candidateId, candUrl);
 
       deadline = now() + (modes[mode]?.limitMs || 7000);
-      dlog("roll:start", { rule, currentId, candidateId, timeLimitMs: (modes[mode]?.limitMs || 7000) });
+      dlog("roll:start", { rule, currentId, candidateId });
 
       rollLoop(mySession);
       watchdogLoop(mySession);
@@ -383,19 +381,19 @@ window.addEventListener("DOMContentLoaded", () => {
       const isCorrectDir = (rule === "higher") ? (candidateId > currentId) : (candidateId < currentId);
 
       if (action === "cancel") {
-        let gained = false, lost = false;
+        let gained=false, lost=false;
         if (!isCorrectDir) { score += mult; mult += 1; AudioMgr.playOK();  pulseOnce(hudScore,'revo-pulse-good'); gained=true; }
-        else               { lives -= 1; mult  = 1; AudioMgr.playBad(); pulseOnce(hudLives,'revo-pulse-bad');  lost=true;  }
+        else               { lives -= 1; mult  = 1; AudioMgr.playBad();   pulseOnce(hudLives,'revo-pulse-bad');  lost=true;  }
 
         imgA.classList.remove("silhouette"); imgB.classList.remove("silhouette");
         imgA.src = urlFor(currentId); imgA.style.opacity = 1; imgB.style.opacity = 0; imgB.src = "";
         if (timerEl) { timerEl.textContent = "—"; timerEl.classList.remove("warn"); }
 
-        dlog("compare", { rule, current_before: prevCurrent, next: candidateId, current_after: currentId, isCorrectDir, action:"cancel", outcome: gained?"point":"life_lost" });
-        if (lost) dlog("life:lost", { score, mult, lives }); if (gained) dlog("score:update", { score, mult, lives });
+        dlog("compare", { action:"cancel", rule, prevCurrent, candidateId, outcome: gained?"point":"life_lost" });
         setHUD();
-        if (lives <= 0) { if (finalScore) finalScore.textContent = String(score); setGameActive(false); showEnd(); dlog("game:over", { finalScore: score }); return; }
-        newRule(); return;
+        if (lives <= 0) { if (finalScore) finalScore.textContent = String(score); setGameActive(false); showEnd(); return; }
+        newRule();
+        return;
       }
 
       // accept/timeout reveal
@@ -406,17 +404,16 @@ window.addEventListener("DOMContentLoaded", () => {
       imgA.classList.remove("silhouette"); imgB.classList.remove("silhouette");
       imgA.style.opacity = 0; imgB.style.opacity = 1; pop(imgB, 250);
 
-      let gained = false, lost = false;
+      let gained=false, lost=false;
       if (isCorrectDir) { score += mult; mult += 1; currentId = candidateId; AudioMgr.playOK();  pulseOnce(hudScore,'revo-pulse-good'); gained=true; }
-      else              { lives -= 1; mult  = 1; currentId = candidateId; AudioMgr.playBad(); pulseOnce(hudLives,'revo-pulse-bad');  lost=true;  }
+      else              { lives -= 1; mult  = 1; currentId = candidateId; AudioMgr.playBad();   pulseOnce(hudLives,'revo-pulse-bad');  lost=true;  }
 
-      dlog("compare", { rule, current_before: prevCurrent, next: candidateId, current_after: currentId, isCorrectDir, action, outcome: gained?"point":"life_lost" });
+      dlog("compare", { action, rule, prevCurrent, candidateId, outcome: gained?"point":"life_lost" });
 
       await sleep(280);
       imgA.src = urlFor(currentId); imgA.style.opacity = 1; imgB.style.opacity = 0; imgB.src = "";
       setHUD();
-      if (lost) dlog("life:lost", { score, mult, lives }); if (gained) dlog("score:update", { score, mult, lives });
-      if (lives <= 0) { if (finalScore) finalScore.textContent = String(score); setGameActive(false); showEnd(); dlog("game:over", { finalScore: score }); return; }
+      if (lives <= 0) { if (finalScore) finalScore.textContent = String(score); setGameActive(false); showEnd(); return; }
       newRule();
     }
 
@@ -424,8 +421,8 @@ window.addEventListener("DOMContentLoaded", () => {
     function withDebounce(fn, ms = 120) {
       return (...args) => { if (debouncing) return; debouncing = true; try { fn(...args); } finally { setTimeout(()=>{ debouncing=false; }, ms); } };
     }
-    const onA = withDebounce(() => { if (!gameActive) return; ensureAudioInit(); dlog("input:A",{rolling}); if (!rolling) startRoll(); else stopAndJudge("accept"); });
-    const onB = withDebounce(() => { if (!gameActive||!rolling) return; ensureAudioInit(); dlog("input:B"); stopAndJudge("cancel"); });
+    const onA = withDebounce(() => { if (!gameActive) return; ensureAudioInit(); if (!rolling) startRoll(); else stopAndJudge("accept"); });
+    const onB = withDebounce(() => { if (!gameActive||!rolling) return; ensureAudioInit(); stopAndJudge("cancel"); });
 
     btnA?.addEventListener("click", onA);
     btnB?.addEventListener("click", onB);
@@ -448,7 +445,6 @@ window.addEventListener("DOMContentLoaded", () => {
         await showInstant(currentId);
 
         hideEnd(); hideStart();
-        dlog("mode:start", { mode: m });
         newRule();
       });
     });
@@ -464,7 +460,7 @@ window.addEventListener("DOMContentLoaded", () => {
       if (timerEl) { timerEl.textContent = "—"; timerEl.classList.remove("warn"); }
       setHUD();
 
-      hideEnd(); showStart(); dlog("game:reset");
+      hideEnd(); showStart();
     });
 
     /* ---------- Resize: refresh compact GEN labels ---------- */
@@ -485,7 +481,7 @@ window.addEventListener("DOMContentLoaded", () => {
     imgB.style.opacity = 0;
     if (timerEl) { timerEl.textContent = "—"; timerEl.classList.remove("warn"); }
 
-    setGameActive(false);
+    setGameActive(false);           // also hides the direction label
     setHUD();
     hideEnd();
     showStart();
