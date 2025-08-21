@@ -14,7 +14,7 @@
   display:grid;
   grid-template-columns:auto 1fr;   /* rail then stage */
   align-items:start;
-  column-gap:48px;                  /* room for left labels (overridden later for small screens) */
+  column-gap:48px;                  /* room for rail + breathing space (reduced in MQs) */
 }
 
 /* ===============================
@@ -161,44 +161,51 @@
 .revo-end .mode-btn:active{ transform:translateY(0); box-shadow:0 1px 0 rgba(0,0,0,.35), 0 0 0 2px rgba(255,255,255,.06) inset; }
 
 /* ===============================
-   Pokédex rail (outside stage) — new look
+   Pokédex rail (outside stage)
    =============================== */
 .pokedex-rail{
   position:relative;
   height:min(80vmin,720px);
-  width:56px;                               /* thicker bar */
-  background:rgba(255,255,255,.06);         /* muted */
+  width:56px;
+  background:rgba(255,255,255,.06);
   border-radius:14px;
   box-shadow:inset 0 0 0 1px rgba(255,255,255,.05),
              inset 0 8px 22px rgba(0,0,0,.35);
 }
 .pokedex-rail .rail-track{ position:relative; width:100%; height:100%; }
 
-/* Slightly transparent fill to keep dividers visible through it */
+/* Fill */
 .pokedex-rail .rail-fill{
   position:absolute; left:0; right:0; bottom:0; height:0%;
   background:linear-gradient(to top, rgba(79,172,254,.55), rgba(0,242,254,.55));
   border-radius:14px; z-index:1; transition:height 180ms ease-out;
 }
 
-/* generation dividers (sit above fill) */
+/* Dividers at generation starts (sit above fill) */
 .pokedex-rail .rail-divider{
   position:absolute; left:8px; right:8px; height:0; z-index:2;
   border-top:2px solid rgba(255,255,255,.18);
   transform:translateY(50%);
 }
 
-/* ---- Overlay midpoint GEN labels (outside the fill/track) ---- */
+/* ---- Midpoint GEN labels INSIDE the bar ---- */
 .pokedex-rail .rail-mid-labels{
   position:absolute; inset:0; pointer-events:none; z-index:3;
 }
 .pokedex-rail .rail-mid-label{
-  position:absolute; right:100%; margin-right:10px; transform:translateY(50%);
+  position:absolute;
+  left:8px; right:8px;             /* inside the bar */
+  transform:translateY(50%);
   font:800 12px/1 ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto;
-  color:#8f9bad; text-shadow:0 1px 0 rgba(0,0,0,.25);
+  color:#cfe0ff;
+  text-shadow:0 1px 0 rgba(0,0,0,.45);
+  opacity:.9;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
 }
 
-/* Needle on the RIGHT of the bar */
+/* Needle (on the right) */
 .pokedex-rail .rail-needle{ position:absolute; left:0; right:-26px; height:0; z-index:4; }
 .pokedex-rail .needle-line{
   position:absolute; left:0; right:0; top:-1px; height:0;
@@ -218,7 +225,7 @@
 @media (max-width:520px){
   .revo-stage-wrap{ column-gap:26px; }
   .pokedex-rail{ width:46px; }
-  .pokedex-rail .rail-mid-label{ font-size:11px; margin-right:8px; }
+  .pokedex-rail .rail-mid-label{ font-size:11px; }
   .pokedex-rail .rail-needle{ right:-22px; }
   .pokedex-rail .needle-label{ margin-left:6px; }
 }
@@ -227,28 +234,26 @@
    ===== Viewport-fit sizing =====
    (CSS-first, mobile friendly)
    =============================== */
-
-/* 1) Stage size tied to viewport height (mobile-safe svh) */
 :root {
+  /* Stage size tied to viewport height; leaves room for HUD + controls */
   --stage-max: min(70svh, 80vmin, 720px);
 }
 
-/* Stage and rail share the same vertical footprint */
 .revo-stage {
   width: var(--stage-max);
   aspect-ratio: 1 / 1;
-  margin: 10px auto; /* tightened */
+  margin: 10px auto;
 }
 .pokedex-rail {
   height: var(--stage-max);
 }
 
-/* Slightly reduce vertical gaps to save height */
+/* tighter spacing */
 .revo-hud { margin: 6px 0 8px; }
 #controls { margin-top: 12px; }
-.revo-stage-wrap { column-gap: 36px; } /* narrower by default */
+.revo-stage-wrap { column-gap: 36px; }
 
-/* Short viewports: progressively tighten */
+/* Short viewports */
 @media (max-height: 750px) {
   :root { --stage-max: min(66svh, 80vmin, 680px); }
   .revo-hud { font-size: 13px; margin: 4px 0 6px; }
@@ -270,16 +275,16 @@
 @media (max-height: 580px) {
   :root { --stage-max: min(58svh, 84vmin, 560px); }
   .revo-hud .hud-left, .revo-hud .hud-right { gap: 6px; }
-  .revo-hud .sep { display: none; } /* save a few px */
+  .revo-hud .sep { display: none; }
   #controls img { width: 46px; height: 46px; }
 }
 
-/* Small-width phones: keep labels readable and rail compact */
+/* Small-width phones */
 @media (max-width: 520px) {
-  :root { --stage-max: min(68svh, 92vmin, 640px); } /* lean more on width on narrow screens */
+  :root { --stage-max: min(68svh, 92vmin, 640px); }
   .pokedex-rail { width: 44px; }
   .revo-stage-wrap { column-gap: 22px; }
-  .rail-mid-label { font-size: 11px; }
+  .pokedex-rail .rail-mid-label{ font-size:11px; }
 }
 
 /* iOS safe-area guard */
