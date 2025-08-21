@@ -27,9 +27,9 @@
   <!-- Main -->
   <main class="container">
     <section class="panel">
-      <h2 class="panel-title">Random Evolution</h2>
+      <h2 class="panel-title" id="game-title">Random Evolution</h2>
 
-      <!-- HUD (centered, evenly spaced, ABOVE the stage; JS still updates the IDs) -->
+      <!-- HUD (centered, slightly tighter pills ABOVE the stage) -->
       <div class="revo-hud inactive" id="hud">
         <div class="hud-pill">
           <span class="label">Score</span>
@@ -63,7 +63,7 @@
         <!-- The stage -->
         <div id="stage" class="revo-stage">
           <!-- Aim banner -->
-          <div id="aim" class="revo-aim" aria-hidden="true">Higher</div>
+          <div id="aim" class="revo-aim" aria-hidden="true">[Higher than —]</div>
 
           <!-- Pokémon art -->
           <img id="imgA" class="revo-img" alt="Current Pokémon">
