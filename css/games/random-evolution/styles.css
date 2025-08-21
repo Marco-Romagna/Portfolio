@@ -14,7 +14,8 @@
   display:grid;
   grid-template-columns:auto 1fr;   /* rail then stage */
   align-items:start;
-  column-gap:48px;                  /* breathing space; reduced in MQs */
+  column-gap:48px;                  /* breathing space */
+  padding-right: clamp(12px, 5vw, 56px); /* reserve a small right gutter */
 }
 
 /* ===============================
@@ -64,7 +65,7 @@
 .revo-hud.inactive .hud-left, .revo-hud.inactive .hud-right{ display:none; }
 .revo-hud .hud-left{justify-self:start; display:flex; gap:8px; align-items:baseline;}
 .revo-hud .hud-center{justify-self:center; display:flex; gap:8px; align-items:baseline;}
-.revo-hud .hud-right{justify-self:end; display:flex; gap:8px; align-items:baseline;}
+.revo-hud .hud-right{justify-self:end; display:flex; gap:8px; align-items:baseline; flex-wrap:wrap; row-gap:4px;}
 .revo-hud .tag{color:var(--muted);}
 .revo-hud .mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;}
 .revo-hud .sep{color:var(--muted); opacity:.7;}
@@ -221,15 +222,6 @@
 /* Hide only contents while keeping the column reserved */
 .pokedex-rail--hidden .rail-track > *{ opacity:0; }
 
-/* small screens */
-@media (max-width:520px){
-  .revo-stage-wrap{ column-gap:26px; }
-  .pokedex-rail{ width:46px; }
-  .pokedex-rail .rail-mid-label{ font-size:11px; }
-  .pokedex-rail .rail-needle{ right:-22px; }
-  .pokedex-rail .needle-label{ margin-left:6px; }
-}
-
 /* ===============================
    ===== Viewport-fit sizing =====
    (CSS-first, mobile friendly)
@@ -244,33 +236,65 @@
 #controls { margin-top: 12px; }
 .revo-stage-wrap { column-gap: 36px; }
 
-/* Short viewports */
-@media (max-height: 750px) {
-  :root { --stage-max: min(64svh, 84vmin, 640px); }
-  .revo-hud { font-size: 13px; margin: 4px 0 6px; }
-  #controls img { width: 58px; height: 58px; }
-  .revo-stage { margin: 8px auto; }
+/* small screens base tweaks */
+@media (max-width:520px){
+  .revo-stage-wrap{ column-gap:26px; }
+  .pokedex-rail{ width:46px; }
+  .pokedex-rail .rail-mid-label{ font-size:11px; }
+  .pokedex-rail .rail-needle{ right:-22px; }
+  .pokedex-rail .needle-label{ margin-left:6px; }
+}
+
+/* =========================================
+   RESPONSIVE OVERRIDES (size down + keep controls visible)
+   ========================================= */
+
+/* Medium narrow viewports (≤900w OR ≤750h) */
+@media (max-width: 900px), (max-height: 750px) {
+  :root { --stage-max: min(62svh, 76vmin, 640px); }
+  .revo-stage-wrap { column-gap: 28px; }
   .pokedex-rail { width: 50px; }
-  .revo-stage-wrap { column-gap: 30px; }
-}
-
-@media (max-height: 660px) {
-  :root { --stage-max: min(60svh, 86vmin, 600px); }
-  .revo-hud { font-size: 12.5px; }
-  #controls img { width: 48px; height: 48px; }
-  .pokedex-rail { width: 46px; }
-  .revo-stage-wrap { column-gap: 24px; }
-  .revo-timer { transform: scale(.95); }
-}
-
-@media (max-height: 600px) {
-  :root { --stage-max: min(56svh, 88vmin, 560px); }
-  .revo-hud .hud-left, .revo-hud .hud-right { gap: 6px; }
+  .revo-hud { font-size: 13px; margin: 6px 0 8px; }
   .revo-hud .sep { display: none; }
+  .panel .panel-subtitle { display: none; } /* hide long subtitle */
+  #controls { margin-top: 10px; }
+  #controls img { width: 56px; height: 56px; }
+}
+
+/* Small phones / narrow windows (≤740w OR ≤680h) */
+@media (max-width: 740px), (max-height: 680px) {
+  :root { --stage-max: min(58svh, 78vmin, 560px); }
+  .revo-stage-wrap { column-gap: 24px; padding-right: clamp(12px, 4vw, 44px); }
+  .pokedex-rail { width: 46px; }
+  .pokedex-rail .rail-mid-label { font-size: 10.5px; left: 6px; right: 6px; }
+  .revo-hud { font-size: 12.5px; }
+  .revo-timer { transform: scale(.95); }
+  .revo-hud .hud-left, .revo-hud .hud-right { gap: 6px; }
+  #controls img { width: 50px; height: 50px; }
+}
+
+/* Extra small / short (≤620w OR ≤600h) */
+@media (max-width: 620px), (max-height: 600px) {
+  :root { --stage-max: min(54svh, 82vmin, 520px); }
+  .revo-stage-wrap { column-gap: 20px; padding-right: clamp(10px, 3.5vw, 36px); }
+  .pokedex-rail { width: 44px; }
+  .pokedex-rail .rail-mid-label { font-size: 10px; left: 4px; right: 4px; }
+  .revo-hud .tag { display: none; }          /* hide extra words */
+  .revo-hud .hud-center { gap: 6px; }
+  #controls { margin-top: 8px; position: sticky; bottom: env(safe-area-inset-bottom, 6px); }
   #controls img { width: 46px; height: 46px; }
 }
 
-/* Small-width phones: keep labels readable inside bar */
+/* Ultra small / very short (≤520w OR ≤540h) */
+@media (max-width: 520px), (max-height: 540px) {
+  :root { --stage-max: min(50svh, 84vmin, 480px); }
+  .revo-hud { font-size: 12px; margin: 4px 0 6px; }
+  .pokedex-rail { width: 42px; }
+  .pokedex-rail .rail-mid-label { font-size: 9.8px; }
+  #controls img { width: 42px; height: 42px; }
+}
+
+/* Keep GEN labels inside rail on mobile (Option A tuning) */
 @media (max-width: 520px){
   .pokedex-rail { width: 48px; }
   .pokedex-rail .rail-mid-label{
@@ -282,4 +306,4 @@
 }
 
 /* iOS safe-area guard */
-body { padding-bottom: env(safe-area-inset-bottom, 0); }
+body { padding-bottom: max(env(safe-area-inset-bottom, 0px), 8px); }
