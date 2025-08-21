@@ -280,9 +280,11 @@ window.addEventListener("DOMContentLoaded", () => {
 
     function renderRailDecor(currentMode) {
       if (!railTrack) return;
+    
+      // Clear previous dividers/labels
       clearRailDecor();
-
-      // Dividers at generation starts
+    
+      // 1) Generation start dividers
       GEN_STARTS.forEach(startNum => {
         const pos = pctForDex(startNum);
         const divider = document.createElement("div");
@@ -290,28 +292,29 @@ window.addEventListener("DOMContentLoaded", () => {
         divider.style.bottom = pos + "%";
         railTrack.appendChild(divider);
       });
-
-      // Midpoint overlay labels (skip for hard)
+    
+      // 2) Midpoint overlay labels (skip on hard)
       if (currentMode === "hard") return;
-
+    
       const bounds = [...GEN_STARTS, MAX_DEX + 1];
       const wrap = document.createElement("div");
       wrap.className = "rail-mid-labels";
-
+    
       for (let i = 0; i < bounds.length - 1; i++) {
         const segStart = bounds[i];
         const next     = bounds[i + 1];
         const segEnd   = next - 1;
         const midDex   = Math.floor((segStart + segEnd) / 2);
         const pos      = pctForDex(midDex);
-
+    
         const lab = document.createElement("div");
         lab.className = "rail-mid-label";
         lab.style.bottom = pos + "%";
-        lab.textContent = `G${i + 1}`;
+        // full + short; CSS will choose which to show
+        lab.innerHTML = `<span class="full">Gen ${i + 1}</span><span class="short">G${i + 1}</span>`;
         wrap.appendChild(lab);
       }
-
+    
       rail.appendChild(wrap);
     }
 
@@ -335,8 +338,11 @@ window.addEventListener("DOMContentLoaded", () => {
     /* ---------- HUD & Aim Banner ---------- */
     function updateAim() {
       if (!aimBanner) return;
-      const active = gameActive && !startScreen?.classList.contains("hidden") === false && endScreen?.classList.contains("hidden") === true;
-      // Show only when the game is active and overlays are hidden
+      const overlaysHidden =
+        startScreen?.classList.contains("hidden") &&
+        endScreen?.classList.contains("hidden");
+      const active = gameActive && overlaysHidden;
+    
       aimBanner.style.display = active ? "block" : "none";
       const isHigher = rule === "higher";
       aimBanner.textContent = isHigher ? "Higher" : "Lower";
@@ -344,6 +350,7 @@ window.addEventListener("DOMContentLoaded", () => {
       aimBanner.classList.toggle("lower", !isHigher);
       aimBanner.setAttribute("aria-hidden", active ? "false" : "true");
     }
+
 
     function setGameActive(active) {
       gameActive = active;
