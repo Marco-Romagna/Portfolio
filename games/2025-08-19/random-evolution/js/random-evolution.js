@@ -43,9 +43,4 @@ window.addEventListener("DOMContentLoaded", () => {
       }
     }
   });
-
-  // If your game instead starts after clicking mode buttons and calls some
-  // internal function to show the first Pokémon, just ensure you call:
-  //   RevoHistory.pushStart(currentId);
-  // immediately after you call your equivalent of `showInstant(currentId)`.
 });
