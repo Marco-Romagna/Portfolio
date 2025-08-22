@@ -32,14 +32,10 @@
   align-items: center;
   gap: 4px;
 
-  /* Entrance micro animation */
+  /* Entrance micro animation (keyframes are in animations.css) */
   transform: scale(0.96);
   opacity: 0;
   animation: hist-in 200ms cubic-bezier(.2,1,.2,1) forwards;
-}
-
-@keyframes hist-in {
-  to { transform: scale(1); opacity: 1; }
 }
 
 /* Image frame (holds background & rim) */
@@ -58,29 +54,19 @@
     0 2px 10px rgba(0,0,0,.25);
 }
 
-/* Background by action (applies to the image wrapper) */
+/* Background by action */
 .hist-imgwrap[data-action="cancel"]{
   background: rgba(255,255,255,.05);
 }
 .hist-imgwrap[data-action="accept"]{
-  background: linear-gradient(
-    180deg,
-    rgba(18,25,41,.65),
-    rgba(11,16,27,.65)
-  );
+  background: linear-gradient(180deg, rgba(18,25,41,.65), rgba(11,16,27,.65));
 }
-
-/* NEW: Background for the very first (neutral) entry */
+/* NEW: neutral start background */
 .hist-imgwrap[data-action="start"]{
-  /* darker than accept/cancel so it reads as neutral */
-  background: linear-gradient(
-    180deg,
-    rgba(10,14,24,.75),
-    rgba(7,10,18,.75)
-  );
+  background: linear-gradient(180deg, rgba(10,14,24,.75), rgba(7,10,18,.75));
 }
 
-/* Rim (correctness) via box-shadow tint on wrapper */
+/* Rim tint by correctness */
 .hist-imgwrap[data-correct="true"]{
   box-shadow:
     0 0 0 1px rgba(122,162,247,.25) inset,
@@ -93,8 +79,7 @@
     0 0 0 2px rgba(247,118,142,.20),
     0 4px 12px rgba(0,0,0,.28);
 }
-
-/* NEW: Neutral rim for the start entry */
+/* NEW: neutral rim */
 .hist-imgwrap[data-correct="neutral"]{
   box-shadow:
     0 0 0 1px rgba(255,255,255,.14) inset,
