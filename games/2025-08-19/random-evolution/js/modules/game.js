@@ -326,6 +326,9 @@
       currentId = randId();
       await showInstant(currentId);
 
+      /* NEW: add the very first Pokémon to history as neutral */
+      History.push(DOM, urlFor, { id: currentId, action: 'start', correct: 'neutral' });
+
       DOM.endScreen?.classList.add("hidden");
       DOM.startScreen?.classList.add("hidden");
       setGameActive(true);
