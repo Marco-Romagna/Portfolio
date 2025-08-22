@@ -6,9 +6,9 @@
   <title>Random Evolution • Game</title>
   <meta name="color-scheme" content="dark light" />
 
-  <!-- Site styles (path is from this file) -->
+  <!-- Site styles -->
   <link rel="stylesheet" href="../../../css/main.css">
-  <!-- Game styles -->
+  <!-- Game styles (now split, styles.css @imports the rest) -->
   <link rel="stylesheet" href="../../../css/games/random-evolution/styles.css">
 </head>
 <body>
@@ -27,10 +27,9 @@
   <!-- Main -->
   <main class="container">
     <section class="panel">
-      <!-- Title (JS appends difficulty during gameplay) -->
       <h2 class="panel-title" id="game-title">Random Evolution</h2>
 
-      <!-- HUD (pills above stage, centered & aligned to stage width) -->
+      <!-- HUD -->
       <div class="revo-hud inactive" id="hud">
         <div class="hud-pill">
           <span class="label">Score</span>
@@ -48,13 +47,11 @@
 
       <!-- Stage wrapper: LEFT rail + STAGE + RIGHT history -->
       <div class="revo-stage-wrap">
-        <!-- Pokédex rail (left of stage) -->
+        <!-- Pokédex rail -->
         <div id="pokedex-rail" class="pokedex-rail">
           <div class="rail-track">
             <div class="rail-fill"></div>
-            <!-- generation dividers + midpoint labels injected via JS -->
           </div>
-          <!-- Needle line + label for current dex -->
           <div class="rail-needle">
             <span class="needle-line"></span>
             <span class="needle-label">#—</span>
@@ -63,10 +60,8 @@
 
         <!-- Stage -->
         <div id="stage" class="revo-stage">
-          <!-- Aim banner -->
           <div id="aim" class="revo-aim" aria-hidden="true">Higher than —</div>
 
-          <!-- Pokémon art -->
           <img id="imgA" class="revo-img" alt="Current Pokémon">
           <img id="imgB" class="revo-img" alt="Next Pokémon">
           <div id="flash" class="revo-flash"></div>
@@ -100,28 +95,36 @@
             </div>
           </div>
 
-          <!-- A/B image buttons INSIDE the stage (bottom-right) -->
+          <!-- A/B image buttons INSIDE the stage -->
           <div id="controls" class="ab-instage hidden">
             <img id="a-button" src="./assets/buttons/A_button.png" alt="A Button">
             <img id="b-button" src="./assets/buttons/B_button.png" alt="B Button">
           </div>
         </div>
 
-        <!-- History rail (right of stage) -->
+        <!-- History rail -->
         <aside id="revo-history" class="revo-history" aria-label="Encounter history">
           <div class="history-track" id="history-track"></div>
         </aside>
       </div>
 
-      <!-- Volume row BELOW the stage -->
+      <!-- Volume row -->
       <div class="revo-audio">
         <span class="tag">Sound</span>
-        <!-- JS injects mute button + range here -->
       </div>
     </section>
   </main>
 
-  <!-- Game script (path is relative to this index.html) -->
+  <!-- JS modules (plain scripts, define window.Revo pieces) -->
+  <script src="./js/modules/util.js" defer></script>
+  <script src="./js/modules/audio.js" defer></script>
+  <script src="./js/modules/dom.js" defer></script>
+  <script src="./js/modules/rail.js" defer></script>
+  <script src="./js/modules/hud.js" defer></script>
+  <script src="./js/modules/history.js" defer></script>
+  <script src="./js/modules/game.js" defer></script>
+
+  <!-- Tiny boot that wires everything together -->
   <script src="./js/random-evolution.js" defer></script>
 </body>
 </html>
