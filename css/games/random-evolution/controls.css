@@ -1,0 +1,29 @@
+/* A/B image buttons inside the stage */
+.ab-instage{
+  position:absolute;
+  right: clamp(10px, 2.5vmin, 16px);
+  bottom: clamp(10px, 2.5vmin, 16px);
+  display:flex;
+  flex-direction: row;
+  align-items: center;
+  gap: clamp(10px, 2vmin, 16px);
+  z-index:5;
+  --ab: clamp(56px, 9vmin, 84px);
+}
+.ab-instage img{
+  width: var(--ab); height: var(--ab); cursor: pointer; user-select: none;
+  border: none !important; outline: none !important; background: none !important; box-shadow: none !important;
+  filter: none !important; border-radius: 0 !important; transform: none !important;
+  transition: transform .08s ease;
+}
+.ab-instage img:active{ transform: scale(.92); }
+#ab-button, #a-button, #b-button { transform: none !important; }
+
+/* Legacy controls off-stage */
+#controls:not(.ab-instage){ display:none !important; }
+
+/* Volume row */
+.revo-audio{
+  display:flex; justify-content:flex-end; align-items:center; gap:8px;
+  margin-top:10px; font-size:12px; opacity:.9;
+}
