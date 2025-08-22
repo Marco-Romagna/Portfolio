@@ -1,5 +1,5 @@
 /* Entry file that imports smaller chunks. Order matters. */
-@import url("./_vars.css");
+@import url("./vars.css");
 @import url("./stage.css");
 @import url("./hud.css");
 @import url("./controls.css");
