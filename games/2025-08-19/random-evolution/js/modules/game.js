@@ -1,3 +1,4 @@
+// games/2025-08-19/random-evolution/js/modules/game.js
 (function(){
   const root = window.Revo = window.Revo || {};
   const { Util, Audio, DOM, Rail, HUD, History } = root;
@@ -326,7 +327,7 @@
       currentId = randId();
       await showInstant(currentId);
 
-      /* NEW: add the very first Pokémon to history as neutral */
+      // Add the very first Pokémon to history as neutral
       History.push(DOM, urlFor, { id: currentId, action: 'start', correct: 'neutral' });
 
       DOM.endScreen?.classList.add("hidden");
