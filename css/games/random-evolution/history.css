@@ -32,10 +32,16 @@
   align-items: center;
   gap: 4px;
 
-  /* Entrance micro animation (keyframes are in animations.css) */
+  /* Entrance micro animation */
   transform: scale(0.96);
   opacity: 0;
   animation: hist-in 200ms cubic-bezier(.2,1,.2,1) forwards;
+}
+
+/* Required for the pop-in. If you centralize animations elsewhere,
+   keep a copy there or remove the animation above. */
+@keyframes hist-in {
+  to { transform: scale(1); opacity: 1; }
 }
 
 /* Image frame (holds background & rim) */
@@ -61,7 +67,7 @@
 .hist-imgwrap[data-action="accept"]{
   background: linear-gradient(180deg, rgba(18,25,41,.65), rgba(11,16,27,.65));
 }
-/* NEW: neutral start background */
+/* Neutral start background */
 .hist-imgwrap[data-action="start"]{
   background: linear-gradient(180deg, rgba(10,14,24,.75), rgba(7,10,18,.75));
 }
@@ -79,7 +85,7 @@
     0 0 0 2px rgba(247,118,142,.20),
     0 4px 12px rgba(0,0,0,.28);
 }
-/* NEW: neutral rim */
+/* Neutral rim */
 .hist-imgwrap[data-correct="neutral"]{
   box-shadow:
     0 0 0 1px rgba(255,255,255,.14) inset,
