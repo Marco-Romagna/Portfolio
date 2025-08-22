@@ -1,0 +1,42 @@
+/* Base helpers */
+.panel p { color: var(--muted); font-size: 15px; line-height: 1.5; }
+.hidden { display: none !important; }
+.revo-start.hidden, .revo-end.hidden { display: none; }
+.panel-subtitle { display: none !important; }
+
+/* Layout sizing vars */
+:root{
+  --stage-max: min(70svh, 80vmin, 720px);
+  --rail-w: 56px;
+  --history-w: 56px;
+  --hist-thumb: clamp(32px, 6vmin, 44px);
+  --hist-gap: 8px;
+}
+
+/* rail/history width tweaks */
+@media (max-width: 740px){
+  :root{ --rail-w: 46px; --history-w: 48px; --hist-gap: 7px; }
+}
+@media (max-width: 620px){
+  :root{ --rail-w: 44px; --history-w: 46px; --hist-gap: 6px; }
+}
+@media (max-width: 520px){
+  :root{ --rail-w: 42px; --history-w: 44px; --hist-gap: 6px; }
+}
+
+/* Responsive stage sizing tiers */
+@media (max-width: 900px), (max-height: 750px){
+  :root { --stage-max: min(62svh, 76vmin, 640px); }
+}
+@media (max-width: 740px), (max-height: 680px){
+  :root { --stage-max: min(58svh, 78vmin, 560px); }
+}
+@media (max-width: 620px), (max-height: 600px){
+  :root { --stage-max: min(54svh, 82vmin, 520px); }
+}
+@media (max-width: 520px), (max-height: 540px){
+  :root { --stage-max: min(50svh, 84vmin, 480px); }
+}
+
+/* iOS safe-area guard */
+body { padding-bottom: max(env(safe-area-inset-bottom, 0px), 8px); }
