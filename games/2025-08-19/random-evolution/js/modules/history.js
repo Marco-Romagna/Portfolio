@@ -1,117 +1,124 @@
-/* ===============================
-   History rail (RIGHT)
-   =============================== */
+// games/2025-08-19/random-evolution/js/modules/history.js
+// History rail manager used by Game.
+// API:
+//   History.push(DOM, urlFor, { id, action: 'accept'|'cancel'|'start', correct: true|false|'neutral' })
+//   History.clear(DOM)
+//   History.setCapacity(DOM)
 
-.revo-history{
-  position:relative;
-  height: var(--stage-max);
-  width: var(--history-w);
-  background:rgba(255,255,255,.06);
-  border-radius:14px;
-  box-shadow:
-    inset 0 0 0 1px rgba(255,255,255,.05),
-    inset 0 8px 22px rgba(0,0,0,.35);
-  overflow: hidden; /* no scrollbars; we rotate tiles in JS */
-}
+(function(){
+  const root = window.Revo = window.Revo || {};
+  const History = (() => {
+    let capacity = 0;
+    let state = []; // most-recent-first
 
-.revo-history .history-track{
-  position:relative;
-  display:flex;
-  flex-direction: column;
-  gap: var(--hist-gap);
-  padding: var(--hist-gap);
-  height: 100%;
-}
+    function els(DOM){
+      return {
+        wrap:  DOM.historyWrap  || document.getElementById("revo-history"),
+        track: DOM.historyTrack || document.getElementById("history-track"),
+      };
+    }
 
-/* Individual history tiles (image over label) */
-.hist-item{
-  position:relative;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
+    function computeCapacity(DOM){
+      const { wrap } = els(DOM);
+      if (!wrap) return 0;
 
-  /* Entrance micro animation */
-  transform: scale(0.96);
-  opacity: 0;
-  animation: hist-in 200ms cubic-bezier(.2,1,.2,1) forwards;
-}
+      const rect = wrap.getBoundingClientRect();
+      const cs = getComputedStyle(document.documentElement);
+      const thumb  = parseFloat(cs.getPropertyValue("--hist-thumb")) || 40;
+      const gap    = parseFloat(cs.getPropertyValue("--hist-gap")) || 8;
+      const labelH = 14; // rough text height
+      const tileH  = thumb + labelH + gap;
+      const padding= gap * 2; // .history-track padding
+      const innerH = rect.height - padding;
 
-/* Required for the pop-in. If you centralize animations elsewhere,
-   keep a copy there or remove the animation above. */
-@keyframes hist-in {
-  to { transform: scale(1); opacity: 1; }
-}
+      return Math.max(1, Math.floor(innerH / tileH));
+    }
 
-/* Image frame (holds background & rim) */
-.hist-imgwrap{
-  width: 100%;
-  height: var(--hist-thumb);
-  border-radius: 10px;
-  overflow: hidden;
-  display: grid;
-  place-items: center;
+    function trimDOM(DOM){
+      const { track } = els(DOM);
+      if (!track) return;
+      const items = track.querySelectorAll(".hist-item");
+      for (let i = items.length - 1; i >= capacity; i--){
+        items[i]?.remove();
+      }
+    }
 
-  /* Base frame */
-  border: 2px solid rgba(255,255,255,.08);
-  box-shadow:
-    0 0 0 1px rgba(255,255,255,.04) inset,
-    0 2px 10px rgba(0,0,0,.25);
-}
+    function setCapacity(DOM){
+      const next = computeCapacity(DOM);
+      if (next !== capacity){
+        capacity = next;
+        trimDOM(DOM);
+        state = state.slice(0, capacity);
+      }
+    }
 
-/* Background by action */
-.hist-imgwrap[data-action="cancel"]{
-  background: rgba(255,255,255,.05);
-}
-.hist-imgwrap[data-action="accept"]{
-  background: linear-gradient(180deg, rgba(18,25,41,.65), rgba(11,16,27,.65));
-}
-/* Neutral start background */
-.hist-imgwrap[data-action="start"]{
-  background: linear-gradient(180deg, rgba(10,14,24,.75), rgba(7,10,18,.75));
-}
+    function clear(DOM){
+      const { track } = els(DOM);
+      state = [];
+      if (track) track.innerHTML = "";
+    }
 
-/* Rim tint by correctness */
-.hist-imgwrap[data-correct="true"]{
-  box-shadow:
-    0 0 0 1px rgba(122,162,247,.25) inset,
-    0 0 0 2px rgba(122,162,247,.18),
-    0 4px 12px rgba(0,0,0,.28);
-}
-.hist-imgwrap[data-correct="false"]{
-  box-shadow:
-    0 0 0 1px rgba(247,118,142,.30) inset,
-    0 0 0 2px rgba(247,118,142,.20),
-    0 4px 12px rgba(0,0,0,.28);
-}
-/* Neutral rim */
-.hist-imgwrap[data-correct="neutral"]{
-  box-shadow:
-    0 0 0 1px rgba(255,255,255,.14) inset,
-    0 0 0 2px rgba(255,255,255,.10),
-    0 4px 12px rgba(0,0,0,.28);
-}
+    // entry.action: 'accept' | 'cancel' | 'start'
+    // entry.correct: true | false | 'neutral'
+    function push(DOM, urlFor, entry){
+      const { track } = els(DOM);
+      if (!track || !entry?.id) return;
 
-/* Thumbnail image */
-.hist-thumb{
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  image-rendering: auto;
-  pointer-events: none;
-}
+      const item = document.createElement("div");
+      item.className = "hist-item";
 
-/* Dex label under image */
-.hist-label{
-  font: 800 clamp(9px, 1.6vmin, 11px)/1.1 ui-monospace,SFMono-Regular,Menlo,monospace;
-  color: var(--muted);
-  letter-spacing: .1px;
-  user-select: none;
-}
+      const actionLabel =
+        entry.action === "accept" ? "Accepted" :
+        entry.action === "cancel" ? "Canceled" : "Start";
+      const correctnessLabel =
+        entry.correct === true  ? "Correct" :
+        entry.correct === false ? "Incorrect" : "Neutral";
 
-/* Hide history on very tight screens if needed */
-@media (max-width: 420px){
-  .revo-stage-wrap { grid-template-columns: auto 1fr; }
-  .revo-history { display:none; }
-}
+      item.title = `#${entry.id} • ${actionLabel} • ${correctnessLabel}`;
+
+      const wrap = document.createElement("div");
+      wrap.className = "hist-imgwrap";
+      wrap.setAttribute("data-action", entry.action || "accept");
+      wrap.setAttribute(
+        "data-correct",
+        entry.correct === true ? "true" : entry.correct === false ? "false" : "neutral"
+      );
+
+      const img = document.createElement("img");
+      img.className = "hist-thumb";
+      img.alt = `#${entry.id} Pokémon`;
+      img.src = urlFor(entry.id);
+
+      wrap.appendChild(img);
+
+      const label = document.createElement("div");
+      label.className = "hist-label";
+      label.textContent = `#${entry.id}`;
+
+      item.appendChild(wrap);
+      item.appendChild(label);
+
+      // Insert at top
+      track.insertBefore(item, track.firstChild);
+
+      // Ensure capacity is at least 1 before trimming
+      if (capacity === 0) {
+        capacity = computeCapacity(DOM) || 1;
+      }
+
+      // Track + trim
+      state.unshift(entry);
+      const items = track.querySelectorAll(".hist-item");
+      if (items.length > capacity){
+        for (let i = items.length - 1; i >= capacity; i--){
+          items[i]?.remove();
+        }
+        state = state.slice(0, capacity);
+      }
+    }
+
+    return { push, clear, setCapacity };
+  })();
+
+  root.History = History;
+})();
