@@ -5,11 +5,11 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Random Evolution • Game</title>
   <meta name="color-scheme" content="dark light" />
-  
   <link rel="icon" href="data:,">
+
   <!-- Site styles -->
   <link rel="stylesheet" href="../../../css/main.css">
-  <!-- Game styles (now split, styles.css @imports the rest) -->
+  <!-- Game styles (styles.css @imports the split CSS files) -->
   <link rel="stylesheet" href="../../../css/games/random-evolution/styles.css?v=revo3">
 </head>
 <body>
@@ -30,7 +30,7 @@
     <section class="panel">
       <h2 class="panel-title" id="game-title">Random Evolution</h2>
 
-      <!-- HUD -->
+      <!-- HUD (keeps layout space even when inactive; fades via hud.css) -->
       <div class="revo-hud inactive" id="hud">
         <div class="hud-pill">
           <span class="label">Score</span>
@@ -46,12 +46,14 @@
         </div>
       </div>
 
-      <!-- Stage wrapper: LEFT rail + STAGE + RIGHT history -->
-      <div class="revo-stage-wrap">
-        <!-- Pokédex rail -->
-        <div id="pokedex-rail" class="pokedex-rail">
+      <!-- Stage wrapper: LEFT rail + STAGE + RIGHT history
+           Start hidden (no flash) but preserve spacing via CSS -->
+      <div class="revo-stage-wrap rails-hidden">
+        <!-- Pokédex rail (start hidden) -->
+        <div id="pokedex-rail" class="pokedex-rail" aria-hidden="true">
           <div class="rail-track">
             <div class="rail-fill"></div>
+            <!-- generation dividers + midpoint labels injected via JS -->
           </div>
           <div class="rail-needle">
             <span class="needle-line"></span>
@@ -63,6 +65,7 @@
         <div id="stage" class="revo-stage">
           <div id="aim" class="revo-aim" aria-hidden="true">Higher than —</div>
 
+          <!-- Pokémon art -->
           <img id="imgA" class="revo-img" alt="Current Pokémon">
           <img id="imgB" class="revo-img" alt="Next Pokémon">
           <div id="flash" class="revo-flash"></div>
@@ -103,8 +106,8 @@
           </div>
         </div>
 
-        <!-- History rail -->
-        <aside id="revo-history" class="revo-history" aria-label="Encounter history">
+        <!-- History rail (start hidden) -->
+        <aside id="revo-history" class="revo-history" aria-label="Encounter history" aria-hidden="true">
           <div class="history-track" id="history-track"></div>
         </aside>
       </div>
@@ -112,11 +115,12 @@
       <!-- Volume row -->
       <div class="revo-audio">
         <span class="tag">Sound</span>
+        <!-- JS injects mute button + range -->
       </div>
     </section>
   </main>
 
-  <!-- JS modules (plain scripts, define window.Revo pieces) -->
+  <!-- JS modules (define window.Revo pieces) -->
   <script src="./js/modules/util.js" defer></script>
   <script src="./js/modules/audio.js" defer></script>
   <script src="./js/modules/dom.js" defer></script>
@@ -129,3 +133,4 @@
   <script src="./js/random-evolution.js" defer></script>
 </body>
 </html>
+
