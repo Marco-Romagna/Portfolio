@@ -317,14 +317,14 @@
       setGameActive(false);
       showEnd();
       clearStageImages();
-      hideRails(); // collapse visuals back to start look
+      hideRails(); // reset visuals back to start look
       dlog("game:over", { finalScore: score });
     }
 
     function setGameActive(active){
       gameActive = active;
       DOM.controls?.classList.toggle("hidden", !active);
-      HUD.setActive(DOM, active);
+      HUD.setActive(DOM, active); // HUD uses opacity/visibility to preserve spacing
     }
 
     function getPublicState(){
@@ -475,4 +475,3 @@
 
   root.Game = Game;
 })();
-
