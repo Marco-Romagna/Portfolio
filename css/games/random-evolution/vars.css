@@ -4,27 +4,39 @@
 .revo-start.hidden, .revo-end.hidden { display: none; }
 .panel-subtitle { display: none !important; }
 
-/* Layout sizing vars */
+/* ===============================
+   Layout sizing vars
+   =============================== */
 :root{
   --stage-max: min(70svh, 80vmin, 720px);
+
+  /* Left rail */
   --rail-w: 56px;
-  --history-w: 56px;
-  --hist-thumb: clamp(32px, 6vmin, 44px);
-  --hist-gap: 8px;
+
+  /* Right history rail (wider) */
+  --history-w: 84px;
+
+  /* Larger history thumbnails */
+  --hist-thumb: clamp(40px, 8vmin, 60px);
+
+  /* Slightly more spacing between tiles */
+  --hist-gap: 9px;
 }
 
-/* rail/history width tweaks */
+/* rail/history width tweaks by breakpoint */
 @media (max-width: 740px){
-  :root{ --rail-w: 46px; --history-w: 48px; --hist-gap: 7px; }
+  :root{ --rail-w: 46px; --history-w: 74px; --hist-gap: 8px; }
 }
 @media (max-width: 620px){
-  :root{ --rail-w: 44px; --history-w: 46px; --hist-gap: 6px; }
+  :root{ --rail-w: 44px; --history-w: 70px; --hist-gap: 7px; }
 }
 @media (max-width: 520px){
-  :root{ --rail-w: 42px; --history-w: 44px; --hist-gap: 6px; }
+  :root{ --rail-w: 42px; --history-w: 66px; --hist-gap: 6px; }
 }
 
-/* Responsive stage sizing tiers */
+/* ===============================
+   Responsive stage sizing tiers
+   =============================== */
 @media (max-width: 900px), (max-height: 750px){
   :root { --stage-max: min(62svh, 76vmin, 640px); }
 }
