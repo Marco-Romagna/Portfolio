@@ -1,12 +1,27 @@
+/* Stage wrapper (rail + stage + history) */
 .revo-stage-wrap{
   display:grid;
-  grid-template-columns:auto 1fr auto;
+  grid-template-columns:auto 1fr auto; /* left rail, stage, right history */
   align-items:start;
   column-gap:48px;
   padding-right: clamp(12px, 5vw, 56px);
   margin-inline:auto;
 }
 
+/* Keep spacing; allow fading rails in/out */
+.revo-stage-wrap .pokedex-rail,
+.revo-stage-wrap .revo-history{
+  transition: opacity 180ms ease;
+}
+
+/* Hidden state: rails invisible/unfocusable but layout preserved */
+.revo-stage-wrap.rails-hidden .pokedex-rail,
+.revo-stage-wrap.rails-hidden .revo-history{
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Stage */
 .revo-stage{
   position:relative;
   width: min(var(--stage-max), 100%);
