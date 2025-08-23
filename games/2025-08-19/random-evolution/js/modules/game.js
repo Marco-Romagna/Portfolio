@@ -113,6 +113,22 @@
       HUD.update(DOM, getPublicState());
     }
 
+    /* ===== Rails visibility helpers (preserve spacing) ===== */
+    function stageWrap(){ return document.querySelector('.revo-stage-wrap'); }
+    function hideRails(){
+      const wrap = stageWrap();
+      wrap?.classList.add('rails-hidden');
+      DOM.rail?.setAttribute('aria-hidden','true');
+      DOM.historyWrap?.setAttribute('aria-hidden','true');
+    }
+    function showRails(){
+      const wrap = stageWrap();
+      wrap?.classList.remove('rails-hidden');
+      DOM.rail?.setAttribute('aria-hidden','false');
+      DOM.historyWrap?.setAttribute('aria-hidden','false');
+      History.setCapacity(DOM); // recompute once visible
+    }
+
     function clearOverlays(){
       DOM.endScreen?.classList.add("hidden");
       DOM.startScreen?.classList.add("hidden");
@@ -301,6 +317,7 @@
       setGameActive(false);
       showEnd();
       clearStageImages();
+      hideRails(); // collapse visuals back to start look
       dlog("game:over", { finalScore: score });
     }
 
@@ -327,12 +344,14 @@
       currentId = randId();
       await showInstant(currentId);
 
-      // Add the very first Pokémon to history as neutral
+      // First Pokémon into history as neutral
       History.push(DOM, urlFor, { id: currentId, action: 'start', correct: 'neutral' });
 
       DOM.endScreen?.classList.add("hidden");
       DOM.startScreen?.classList.add("hidden");
       setGameActive(true);
+
+      showRails(); // reveal rails when game begins
 
       dlog("mode:start", { mode: m });
       if (DOM.titleEl) DOM.titleEl.textContent = `Random Evolution (${cap(mode)})`;
@@ -364,6 +383,9 @@
         DOM.endScreen?.classList.add("hidden");
         DOM.startScreen?.classList.remove("hidden");
         if (DOM.titleEl) DOM.titleEl.textContent = "Random Evolution";
+
+        hideRails(); // hide again when back at start
+
         dlog("game:reset");
       });
     }
@@ -395,7 +417,8 @@
     function firstPaint(){
       DOM.controls?.classList.add("hidden");
       DOM.hud?.classList.add("inactive");
-      DOM.rail?.classList.add("pokedex-rail--hidden");
+
+      hideRails(); // keep spacing, make rails invisible
 
       currentId = null;
       clearStageImages();
@@ -452,3 +475,4 @@
 
   root.Game = Game;
 })();
+
