@@ -19,6 +19,7 @@
     controls:    null,
     btnA:        null,
     btnB:        null,
+    evolveBtn:   null,
     startScreen: null,
     startButtons:null,
     endScreen:   null,
@@ -53,6 +54,7 @@
       this.controls  = $("controls");
       this.btnA      = $("a-button");
       this.btnB      = $("b-button");
+      this.evolveBtn = $("evolve-button");   // NEW
 
       this.startScreen  = $("start-screen");
       this.startButtons = this.startScreen?.querySelectorAll(".mode-btn");
@@ -61,12 +63,12 @@
       this.playAgain    = $("play-again");
 
       this.hud        = $("hud");
-      this.hudCurrent = $("hud-current"); // optional
-      this.hudRule    = $("hud-rule");    // optional
+      this.hudCurrent = $("hud-current");
+      this.hudRule    = $("hud-rule");
       this.hudScore   = $("hud-score");
       this.hudLives   = $("hud-lives");
       this.hudMult    = $("hud-mult");
-      this.hudMode    = $("hud-mode");    // optional
+      this.hudMode    = $("hud-mode");
 
       this.audioRow   = document.querySelector(".revo-audio");
       this.titleEl    = $("game-title");
@@ -74,7 +76,7 @@
       this.historyWrap  = $("revo-history");
       this.historyTrack = $("history-track");
 
-      // Ensure A/B controls are inside the stage
+      // Ensure A/B controls are inside the stage and centerable
       if (this.controls && this.stage && !this.controls.classList.contains("ab-instage")) {
         this.controls.classList.add("ab-instage");
         this.stage.appendChild(this.controls);
