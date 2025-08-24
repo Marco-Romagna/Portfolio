@@ -140,13 +140,13 @@
     function clearOverlays(){ DOM.endScreen?.classList.add("hidden"); DOM.startScreen?.classList.add("hidden"); }
     function showStart(){
       DOM.startScreen?.classList.remove("hidden");
-      showEvolve(false);      // ensure hidden on title
+      showEvolve(false);
       showDecision(false);
       HUD.update(DOM, getPublicState());
     }
     function showEnd(){
       DOM.endScreen?.classList.remove("hidden");
-      showEvolve(false);      // ensure hidden on game over
+      showEvolve(false);
       showDecision(false);
       HUD.update(DOM, getPublicState());
     }
@@ -223,19 +223,16 @@
 
       const prevCurrent = currentId;
       const isCorrectDir = (rule === "higher") ? (candidateId > currentId) : (candidateId < currentId);
-      let gained = false, lost = false;
 
       if (action === "cancel") {
         if (!isCorrectDir) {
           score += mult; mult += 1;
           AudioMgr.playOK();
           HUD.pulseGood(dom);
-          gained = true;
         } else {
           lives -= 1; mult = 1;
           AudioMgr.playBad();
           HUD.pulseBad(dom);
-          lost = true;
         }
         History.push(dom, urlFor, { id: candidateId, action: 'cancel', correct: !isCorrectDir });
 
@@ -247,20 +244,17 @@
         dom.imgB.src = "";
         if (dom.timer) { dom.timer.textContent = "—"; dom.timer.classList.remove("warn"); }
 
-        dlog("compare", { rule, current_before: prevCurrent, next: candidateId, current_after: currentId, isCorrectDir, action, outcome: gained ? "point" : "life_lost" });
-
         HUD.update(dom, getPublicState());
 
         if (lives <= 0) return endGame();
 
-        // back to idle decision
         newRule();
         showDecision(false);
         showEvolve(true);
         return;
       }
 
-      // accept / timeout
+      // accept / timeout path
       dom.imgA.classList.add("silhouette");
       dom.imgB.classList.add("silhouette");
       dom.imgA.style.opacity = 0;
@@ -290,8 +284,6 @@
 
       History.push(dom, urlFor, { id: currentId, action: 'accept', correct: isCorrectDir });
 
-      dlog("compare", { rule, current_before: prevCurrent, next: candidateId, current_after: currentId, isCorrectDir, action });
-
       await sleep(280);
       dom.imgA.src = urlFor(currentId);
       dom.imgA.style.opacity = 1;
@@ -302,7 +294,6 @@
       if (lives <= 0) return endGame();
       newRule();
 
-      // back to idle decision
       showDecision(false);
       showEvolve(true);
     }
@@ -381,22 +372,21 @@
       currentId = randId();
       await showInstant(currentId);
 
-      // First Pokémon into history as neutral
+      // first Pokémon as neutral in history
       History.push(DOM, urlFor, { id: currentId, action: 'start', correct: 'neutral' });
 
       DOM.endScreen?.classList.add("hidden");
       DOM.startScreen?.classList.add("hidden");
       setGameActive(true);
 
-      showRails(); // reveal rails when game begins
+      showRails();
 
-      dlog("mode:start", { mode: m });
       if (DOM.titleEl) DOM.titleEl.textContent = `Random Evolution (${cap(mode)})`;
 
       History.setCapacity(DOM);
       newRule();
 
-      // Idle state: evolve visible, A/B hidden
+      // idle state: evolve visible, A/B hidden
       showDecision(false);
       showEvolve(true);
     }
@@ -425,7 +415,7 @@
         DOM.startScreen?.classList.remove("hidden");
         if (DOM.titleEl) DOM.titleEl.textContent = "Random Evolution";
 
-        hideRails(); // hide again when back at start
+        hideRails();
 
         showEvolve(false);
         showDecision(false);
@@ -475,7 +465,7 @@
       DOM.startScreen?.classList.remove("hidden");
       Rail.applyModeClass(DOM, null);
 
-      showEvolve(false);   // keep hidden on title screen
+      showEvolve(false);
       showDecision(false);
 
       dlog("ready");
