@@ -1,3 +1,4 @@
+
 // games/2025-08-19/random-evolution/js/modules/game.js
 (function(){
   const root = window.Revo = window.Revo || {};
@@ -130,7 +131,26 @@
       History.setCapacity(DOM); // recompute once visible
     }
 
-    function showEvolve(show){ DOM.evolveBtn?.classList.toggle('hidden', !show); }
+    /* ===== Button visibility helpers ===== */
+    function showEvolve(show){
+      const el = DOM.evolveBtn;
+      if (!el) return;
+      // keep semantic class but also force inline display to win the cascade
+      el.classList.toggle('hidden', !show);
+      el.style.display = show ? 'block' : 'none';
+      if (show){
+        // ensure correct placement & stacking even if CSS was overridden elsewhere
+        el.style.position = 'absolute';
+        el.style.left = '50%';
+        el.style.bottom = '16px';
+        el.style.transform = 'translateX(-50%)';
+        el.style.width = 'clamp(200px, 35vmin, 380px)';
+        el.style.height = 'auto';
+        el.style.zIndex = '30';
+        el.style.pointerEvents = 'auto';
+      }
+    }
+
     function showDecision(show){
       if (!DOM.controls) return;
       DOM.controls.classList.toggle('hidden', !show);
