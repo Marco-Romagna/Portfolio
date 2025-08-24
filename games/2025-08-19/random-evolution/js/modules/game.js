@@ -51,9 +51,12 @@
     }
 
     function hardStopAll(){
-      rolling = false; session++; deadline = 0;
+      rolling = false;
+      session++;
+      deadline = 0;
       dlog("hardStopAll", { session });
     }
+
     function clearStageImages(){
       const dom = DOM;
       if (dom.imgA) { dom.imgA.src = ""; dom.imgA.style.opacity = 0; dom.imgA.classList.remove("silhouette"); }
@@ -124,26 +127,29 @@
       wrap?.classList.remove('rails-hidden');
       DOM.rail?.setAttribute('aria-hidden','false');
       DOM.historyWrap?.setAttribute('aria-hidden','false');
-      History.setCapacity(DOM);
+      History.setCapacity(DOM); // recompute once visible
     }
 
-    /* ===== Toggle helpers (inside-stage layout) ===== */
-    function showEvolve(show){
-      DOM.evolveBtn?.classList.toggle('hidden', !show);
-      if (show){
-        DOM.btnA?.classList.add('hidden');
-        DOM.btnB?.classList.add('hidden');
-      }
-    }
+    function showEvolve(show){ DOM.evolveBtn?.classList.toggle('hidden', !show); }
     function showDecision(show){
-      DOM.btnA?.classList.toggle('hidden', !show);
-      DOM.btnB?.classList.toggle('hidden', !show);
-      if (show) DOM.evolveBtn?.classList.add('hidden');
+      if (!DOM.controls) return;
+      DOM.controls.classList.toggle('hidden', !show);
+      DOM.controls.classList.toggle('center-split', show);
     }
 
     function clearOverlays(){ DOM.endScreen?.classList.add("hidden"); DOM.startScreen?.classList.add("hidden"); }
-    function showStart(){ DOM.startScreen?.classList.remove("hidden"); HUD.update(DOM, getPublicState()); }
-    function showEnd(){ DOM.endScreen?.classList.remove("hidden"); HUD.update(DOM, getPublicState()); }
+    function showStart(){
+      DOM.startScreen?.classList.remove("hidden");
+      showEvolve(false);      // ensure hidden on title
+      showDecision(false);
+      HUD.update(DOM, getPublicState());
+    }
+    function showEnd(){
+      DOM.endScreen?.classList.remove("hidden");
+      showEvolve(false);      // ensure hidden on game over
+      showDecision(false);
+      HUD.update(DOM, getPublicState());
+    }
 
     async function prepRoll(id, preloadedUrl){
       const dom = DOM;
@@ -191,7 +197,7 @@
       const mySession = session;
       rolling = true;
 
-      // Show A/B; hide Evolve
+      // toggle buttons
       showEvolve(false);
       showDecision(true);
 
@@ -217,11 +223,20 @@
 
       const prevCurrent = currentId;
       const isCorrectDir = (rule === "higher") ? (candidateId > currentId) : (candidateId < currentId);
+      let gained = false, lost = false;
 
       if (action === "cancel") {
-        if (!isCorrectDir) { score += mult; mult += 1; AudioMgr.playOK(); HUD.pulseGood(dom); }
-        else               { lives -= 1; mult = 1;   AudioMgr.playBad();  HUD.pulseBad(dom); }
-
+        if (!isCorrectDir) {
+          score += mult; mult += 1;
+          AudioMgr.playOK();
+          HUD.pulseGood(dom);
+          gained = true;
+        } else {
+          lives -= 1; mult = 1;
+          AudioMgr.playBad();
+          HUD.pulseBad(dom);
+          lost = true;
+        }
         History.push(dom, urlFor, { id: candidateId, action: 'cancel', correct: !isCorrectDir });
 
         dom.imgA.classList.remove("silhouette");
@@ -232,11 +247,14 @@
         dom.imgB.src = "";
         if (dom.timer) { dom.timer.textContent = "—"; dom.timer.classList.remove("warn"); }
 
-        HUD.update(dom, getPublicState());
-        if (lives <= 0) return endGame();
-        newRule();
+        dlog("compare", { rule, current_before: prevCurrent, next: candidateId, current_after: currentId, isCorrectDir, action, outcome: gained ? "point" : "life_lost" });
 
-        // Back to idle
+        HUD.update(dom, getPublicState());
+
+        if (lives <= 0) return endGame();
+
+        // back to idle decision
+        newRule();
         showDecision(false);
         showEvolve(true);
         return;
@@ -249,6 +267,7 @@
       dom.imgB.style.opacity = 1;
 
       if (dom.timer) { dom.timer.textContent = "—"; dom.timer.classList.remove("warn"); }
+
       dom.flash.style.opacity = 1; await sleep(120); dom.flash.style.opacity = 0;
 
       dom.imgA.classList.remove("silhouette");
@@ -257,11 +276,21 @@
       dom.imgB.style.opacity = 1;
       pop(dom.imgB, 250);
 
-      if (isCorrectDir) { score += mult; mult += 1; AudioMgr.playOK(); HUD.pulseGood(dom); }
-      else              { lives -= 1; mult = 1;   AudioMgr.playBad();  HUD.pulseBad(dom); }
-      currentId = candidateId;
+      if (isCorrectDir) {
+        score += mult; mult += 1;
+        currentId = candidateId;
+        AudioMgr.playOK();
+        HUD.pulseGood(dom);
+      } else {
+        lives -= 1; mult = 1;
+        currentId = candidateId;
+        AudioMgr.playBad();
+        HUD.pulseBad(dom);
+      }
 
       History.push(dom, urlFor, { id: currentId, action: 'accept', correct: isCorrectDir });
+
+      dlog("compare", { rule, current_before: prevCurrent, next: candidateId, current_after: currentId, isCorrectDir, action });
 
       await sleep(280);
       dom.imgA.src = urlFor(currentId);
@@ -273,7 +302,7 @@
       if (lives <= 0) return endGame();
       newRule();
 
-      // Back to idle
+      // back to idle decision
       showDecision(false);
       showEvolve(true);
     }
@@ -328,6 +357,10 @@
 
     function setGameActive(active){
       gameActive = active;
+      if (!active){
+        showEvolve(false);
+        showDecision(false);
+      }
       HUD.setActive(DOM, active);
     }
 
@@ -355,13 +388,15 @@
       DOM.startScreen?.classList.add("hidden");
       setGameActive(true);
 
-      showRails();
+      showRails(); // reveal rails when game begins
+
+      dlog("mode:start", { mode: m });
       if (DOM.titleEl) DOM.titleEl.textContent = `Random Evolution (${cap(mode)})`;
 
       History.setCapacity(DOM);
       newRule();
 
-      // Idle state: EVOLVE visible, A/B hidden
+      // Idle state: evolve visible, A/B hidden
       showDecision(false);
       showEvolve(true);
     }
@@ -390,7 +425,8 @@
         DOM.startScreen?.classList.remove("hidden");
         if (DOM.titleEl) DOM.titleEl.textContent = "Random Evolution";
 
-        hideRails();
+        hideRails(); // hide again when back at start
+
         showEvolve(false);
         showDecision(false);
 
@@ -423,7 +459,8 @@
     }
 
     function firstPaint(){
-      HUD.setActive(DOM, false);
+      DOM.controls?.classList.add("hidden");
+      DOM.hud?.classList.add("inactive");
 
       hideRails();
 
@@ -432,13 +469,14 @@
       History.clear(DOM);
       History.setCapacity(DOM);
 
+      setGameActive(false);
+      HUD.update(DOM, getPublicState());
       DOM.endScreen?.classList.add("hidden");
       DOM.startScreen?.classList.remove("hidden");
       Rail.applyModeClass(DOM, null);
 
-      // Controls initial: Evolve only
+      showEvolve(false);   // keep hidden on title screen
       showDecision(false);
-      showEvolve(true);
 
       dlog("ready");
     }
@@ -450,7 +488,7 @@
       init: async () => {
         DOM.grab();
 
-        // Inject minimal feedback styles once
+        // Inject feedback styles once
         if (!document.querySelector('style[data-revo-feedback]')){
           const css = `
             @keyframes revo-good { 0%{transform:scale(1)} 30%{transform:scale(1.18)} 100%{transform:scale(1)} }
