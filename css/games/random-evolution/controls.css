@@ -27,3 +27,40 @@
   display:flex; justify-content:flex-end; align-items:center; gap:8px;
   margin-top:10px; font-size:12px; opacity:.9;
 }
+
+/* center-bottom evolve image & centered A/B state ===== */
+
+/* Center-bottom evolve image */
+.evolve-img{
+  position:absolute;
+  left:50%;
+  bottom: clamp(10px, 2.5vmin, 16px);
+  transform: translateX(-50%);
+  width: clamp(180px, 36vmin, 360px);
+  height:auto;
+  z-index:6;
+  user-select:none;
+  cursor:pointer;
+  -webkit-user-drag: none;
+}
+.evolve-img.hidden{ display:none; }
+
+/* When deciding (A/B visible), center them under the stage */
+#controls.center-split{
+  left:50%;
+  right:auto;
+  transform: translateX(-50%);
+  justify-content: center;
+  gap: clamp(14px, 6vmin, 28px);
+}
+#controls.center-split img{
+  width: clamp(56px, 9vmin, 88px);
+  height: clamp(56px, 9vmin, 88px);
+}
+
+/* Optional: dim A/B when disabled (not used here, but handy) */
+.ab-instage.controls-disabled img{
+  opacity:.45;
+  filter:grayscale(.2);
+  pointer-events:none;
+}
