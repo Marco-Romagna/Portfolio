@@ -48,7 +48,7 @@
 
       <!-- Stage wrapper: LEFT rail + STAGE + RIGHT history -->
       <div class="revo-stage-wrap rails-hidden">
-        <!-- Pokédex rail (left) -->
+        <!-- Pokédex rail (start hidden) -->
         <div id="pokedex-rail" class="pokedex-rail" aria-hidden="true">
           <div class="rail-track">
             <div class="rail-fill"></div>
@@ -60,7 +60,7 @@
           </div>
         </div>
 
-        <!-- Stage (center column) -->
+        <!-- Stage -->
         <div id="stage" class="revo-stage">
           <div id="aim" class="revo-aim" aria-hidden="true">Higher than —</div>
 
@@ -98,17 +98,21 @@
             </div>
           </div>
 
-          <!-- ALL BUTTONS INSIDE THE STAGE (bottom center) -->
-          <div id="controls" class="ab-instage">
-            <!-- Center: EVOLVE (shown when idle) -->
-            <img id="evolve-button" class="evolve-img" src="./assets/buttons/Evolve_button.png" alt="Evolve">
-            <!-- A/B (shown during decision) -->
-            <img id="a-button" class="ab-btn hidden" src="./assets/buttons/A_Confirm_button.png" alt="A Confirm">
-            <img id="b-button" class="ab-btn hidden" src="./assets/buttons/B_Decline_button.png" alt="B Decline">
+          <!-- EVOLVE image (idle state) -->
+          <img
+            id="evolve-button"
+            class="evolve-img hidden"
+            src="./assets/buttons/Evolve_button.png"
+            alt="Evolve">
+
+          <!-- A/B image buttons INSIDE the stage (only during roll) -->
+          <div id="controls" class="ab-instage hidden">
+            <img id="a-button" src="./assets/buttons/A_Confirm_button.png" alt="A Confirm">
+            <img id="b-button" src="./assets/buttons/B_Decline_button.png" alt="B Decline">
           </div>
         </div>
 
-        <!-- History rail (right) -->
+        <!-- History rail (start hidden) -->
         <aside id="revo-history" class="revo-history" aria-label="Encounter history" aria-hidden="true">
           <div class="history-track" id="history-track"></div>
         </aside>
@@ -122,7 +126,7 @@
     </section>
   </main>
 
-  <!-- JS modules -->
+  <!-- JS modules (define window.Revo pieces) -->
   <script src="./js/modules/util.js" defer></script>
   <script src="./js/modules/audio.js" defer></script>
   <script src="./js/modules/dom.js" defer></script>
@@ -131,7 +135,7 @@
   <script src="./js/modules/history.js" defer></script>
   <script src="./js/modules/game.js" defer></script>
 
-  <!-- Tiny boot that wires everything together -->
+  <!-- Tiny boot -->
   <script src="./js/random-evolution.js" defer></script>
 </body>
 </html>
