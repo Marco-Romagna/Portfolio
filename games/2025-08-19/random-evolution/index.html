@@ -9,7 +9,7 @@
 
   <!-- Site styles -->
   <link rel="stylesheet" href="../../../css/main.css">
-  <!-- Game styles (styles.css @imports the split CSS files) -->
+  <!-- Game styles -->
   <link rel="stylesheet" href="../../../css/games/random-evolution/styles.css?v=revo3">
 </head>
 <body>
@@ -46,13 +46,13 @@
         </div>
       </div>
 
-      <!-- Stage wrapper: LEFT rail + STAGE STACK + RIGHT history -->
+      <!-- Stage wrapper: LEFT rail + STAGE + RIGHT history -->
       <div class="revo-stage-wrap rails-hidden">
         <!-- Pokédex rail (left) -->
         <div id="pokedex-rail" class="pokedex-rail" aria-hidden="true">
           <div class="rail-track">
             <div class="rail-fill"></div>
-            <!-- generation dividers + midpoint labels injected via JS -->
+            <!-- generation dividers injected via JS -->
           </div>
           <div class="rail-needle">
             <span class="needle-line"></span>
@@ -60,33 +60,18 @@
           </div>
         </div>
 
-        <!-- Stage stack: stage + overlays as siblings for clean layering -->
-        <div class="stage-stack">
-          <!-- Stage -->
-          <div id="stage" class="revo-stage">
-            <div id="aim" class="revo-aim" aria-hidden="true">Higher than —</div>
+        <!-- Stage -->
+        <div id="stage" class="revo-stage">
+          <div id="aim" class="revo-aim" aria-hidden="true">Higher than —</div>
 
-            <!-- Pokémon art -->
-            <img id="imgA" class="revo-img" alt="Current Pokémon">
-            <img id="imgB" class="revo-img" alt="Next Pokémon">
-            <div id="flash" class="revo-flash"></div>
-            <div id="timer" class="revo-timer">—</div>
+          <!-- Pokémon art -->
+          <img id="imgA" class="revo-img" alt="Current Pokémon">
+          <img id="imgB" class="revo-img" alt="Next Pokémon">
 
-            <!-- A/B image buttons INSIDE the stage (visible during roll) -->
-            <div id="controls" class="ab-instage hidden">
-              <img id="a-button" src="./assets/buttons/A_Confirm_button.png" alt="A Confirm">
-              <img id="b-button" src="./assets/buttons/B_Decline_button.png" alt="B Decline">
-            </div>
+          <div id="flash" class="revo-flash"></div>
+          <div id="timer" class="revo-timer">—</div>
 
-            <!-- EVOLVE image (idle state) INSIDE the stage -->
-            <img
-              id="evolve-button"
-              class="evolve-img hidden"
-              src="./assets/buttons/Evolve_button.png"
-              alt="Evolve">
-          </div>
-
-          <!-- Start overlay (sibling of stage; covers it) -->
+          <!-- Start overlay -->
           <div id="start-screen" class="revo-start">
             <div class="start-content">
               <h3 class="title">Do you know your Pokédex numbers?</h3>
@@ -105,7 +90,7 @@
             </div>
           </div>
 
-          <!-- End overlay (sibling of stage; covers it) -->
+          <!-- End overlay -->
           <div id="end-screen" class="revo-end hidden">
             <h3 class="title">Game Over</h3>
             <p class="subtitle">Final score: <span id="final-score">0</span></p>
@@ -113,6 +98,17 @@
               <button id="play-again" class="mode-btn">Play Again</button>
             </div>
           </div>
+
+          <!-- Buttons -->
+          <div id="controls" class="ab-instage hidden">
+            <img id="a-button" src="./assets/buttons/A_Confirm_button.png" alt="A Confirm">
+            <img id="b-button" src="./assets/buttons/B_Decline_button.png" alt="B Decline">
+          </div>
+          <img
+            id="evolve-button"
+            class="evolve-img hidden"
+            src="./assets/buttons/Evolve_button.png"
+            alt="Evolve">
         </div>
 
         <!-- History rail (right) -->
@@ -124,12 +120,12 @@
       <!-- Volume row -->
       <div class="revo-audio">
         <span class="tag">Sound</span>
-        <!-- JS injects mute button + range -->
+        <!-- JS injects mute + volume -->
       </div>
     </section>
   </main>
 
-  <!-- JS modules (define window.Revo pieces) -->
+  <!-- JS modules -->
   <script src="./js/modules/util.js" defer></script>
   <script src="./js/modules/audio.js" defer></script>
   <script src="./js/modules/dom.js" defer></script>
@@ -137,8 +133,6 @@
   <script src="./js/modules/hud.js" defer></script>
   <script src="./js/modules/history.js" defer></script>
   <script src="./js/modules/game.js" defer></script>
-
-  <!-- Tiny boot -->
   <script src="./js/random-evolution.js" defer></script>
 </body>
 </html>
