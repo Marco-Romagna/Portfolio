@@ -46,8 +46,7 @@
         </div>
       </div>
 
-      <!-- Stage wrapper: LEFT rail + STAGE + RIGHT history
-           Start hidden (no flash) but preserve spacing via CSS -->
+      <!-- Stage wrapper: LEFT rail + STAGE + RIGHT history -->
       <div class="revo-stage-wrap rails-hidden">
         <!-- Pokédex rail (start hidden) -->
         <div id="pokedex-rail" class="pokedex-rail" aria-hidden="true">
@@ -99,10 +98,18 @@
             </div>
           </div>
 
-          <!-- A/B image buttons INSIDE the stage -->
+          <!-- NEW: big evolve image button (center-bottom) -->
+          <img
+            id="evolve-button"
+            class="evolve-img hidden"
+            src="./assets/buttons/Evolve_button.png"
+            alt="Evolve Button"
+          >
+
+          <!-- Decision buttons (A = Confirm, B = Decline) -->
           <div id="controls" class="ab-instage hidden">
-            <img id="a-button" src="./assets/buttons/A_button.png" alt="A Button">
-            <img id="b-button" src="./assets/buttons/B_button.png" alt="B Button">
+            <img id="a-button" src="./assets/buttons/A_Confirm_button.png" alt="A Confirm Button">
+            <img id="b-button" src="./assets/buttons/B_Decline_button.png"  alt="B Decline Button">
           </div>
         </div>
 
@@ -133,4 +140,3 @@
   <script src="./js/random-evolution.js" defer></script>
 </body>
 </html>
-
