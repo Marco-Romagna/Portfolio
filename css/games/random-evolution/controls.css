@@ -1,79 +1,36 @@
-/* A/B image buttons INSIDE the stage */
+/* A/B image buttons INSIDE the stage (centered under art) */
 .ab-instage{
   position: absolute;
-  right: clamp(10px, 2.5vmin, 16px);
-  bottom: clamp(10px, 2.5vmin, 16px);
+  left: 50%;
+  bottom: clamp(14px, 2.8vmin, 22px);
+  transform: translateX(-50%);
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: clamp(10px, 2vmin, 16px);
-  z-index: 6;             /* above Pokémon art */
-  --ab: clamp(56px, 9vmin, 84px);
+  gap: clamp(22px, 9vmin, 64px);
+  z-index: 7;
+  --ab: clamp(72px, 12vmin, 120px);
 }
 .ab-instage img{
   width: var(--ab);
   height: var(--ab);
   cursor: pointer;
   user-select: none;
-  -webkit-user-drag: none;
-  border: none !important;
-  outline: none !important;
-  background: none !important;
-  box-shadow: none !important;
-  filter: none !important;
-  border-radius: 0 !important;
-  transform: none !important;
   transition: transform .08s ease;
 }
 .ab-instage img:active{ transform: scale(.92); }
 #ab-button, #a-button, #b-button { transform: none !important; }
 
-/* Legacy controls off-stage */
-#controls:not(.ab-instage){ display: none !important; }
-
-/* EVOLVE button: bottom-center inside stage */
+/* EVOLVE image — centered bottom inside the stage */
 .evolve-img{
   position: absolute;
   left: 50%;
-  bottom: clamp(10px, 3vmin, 20px);
+  bottom: clamp(14px, 2.8vmin, 22px);
   transform: translateX(-50%);
-  width: clamp(200px, 35vmin, 380px);
+  width: clamp(220px, 36vmin, 420px);
   height: auto;
-  z-index: 6;     /* at or above A/B */
   user-select: none;
   -webkit-user-drag: none;
-  cursor: pointer;
-  pointer-events: auto;
+  z-index: 6; /* under A/B so they can sit left/right if needed */
 }
 .evolve-img.hidden{ display: none; }
-
-/* When deciding (A/B visible), optionally center them under the stage */
-#controls.center-split{
-  left: 50%;
-  right: auto;
-  transform: translateX(-50%);
-  justify-content: center;
-  gap: clamp(20px, 10vmin, 60px);
-}
-#controls.center-split img{
-  width: clamp(72px, 12vmin, 120px);
-  height: clamp(72px, 12vmin, 120px);
-}
-
-/* Optional “disabled” look for A/B */
-.ab-instage.controls-disabled img{
-  opacity: .45;
-  filter: grayscale(.2);
-  pointer-events: none;
-}
-
-/* Volume row */
-.revo-audio{
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  gap: 8px;
-  margin-top: 10px;
-  font-size: 12px;
-  opacity: .9;
-}
