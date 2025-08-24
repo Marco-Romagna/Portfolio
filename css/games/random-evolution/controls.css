@@ -1,72 +1,48 @@
-/* A/B image buttons inside the stage */
-.ab-instage{
+/* ===============================
+   Controls row & audio row
+   =============================== */
+
+/* One shared controls row, centered at the bottom of the stage */
+#controls.control-row{
   position:absolute;
-  right: clamp(10px, 2.5vmin, 16px);
   bottom: clamp(10px, 2.5vmin, 16px);
+  left:50%;
+  transform: translateX(-50%);
   display:flex;
-  align-items: center;
-  gap: clamp(10px, 2vmin, 16px);
+  align-items:center;
+  justify-content:center;
+  gap: clamp(22px, 8vmin, 84px); /* spacing between A / EVOLVE / B */
   z-index:6;
-  --ab: clamp(56px, 9vmin, 84px);
 }
 
-/* Default (corner) images inside the row */
-.ab-instage img{
-  width: var(--ab);
-  height: var(--ab);
-  cursor: pointer;
-  user-select: none;
-  -webkit-user-drag: none;
+/* EVOLVE: larger and visually dominant */
+#controls.control-row .evolve-img{
+  width: clamp(220px, 36vmin, 380px);
+  height:auto;
+  cursor:pointer;
+  user-select:none;
+  -webkit-user-drag:none;
+  pointer-events:auto;
   transition: transform .08s ease;
 }
-.ab-instage img:active{ transform: scale(.92); }
-#ab-button, #a-button, #b-button { transform: none !important; }
+#controls.control-row .evolve-img:active{ transform: scale(.96); }
 
-/* Legacy controls off-stage */
-#controls:not(.ab-instage){ display:none !important; }
+/* A / B: smaller than evolve */
+#controls.control-row .ab-btn{
+  width: clamp(72px, 12vmin, 120px);
+  height: clamp(72px, 12vmin, 120px);
+  cursor:pointer;
+  user-select:none;
+  -webkit-user-drag:none;
+  transition: transform .08s ease;
+}
+#controls.control-row .ab-btn:active{ transform: scale(.92); }
 
-/* Volume row */
+/* Keep backwards-compat hidden utility (also defined globally) */
+.hidden{ display:none !important; }
+
+/* Volume row (unchanged) */
 .revo-audio{
   display:flex; justify-content:flex-end; align-items:center; gap:8px;
   margin-top:10px; font-size:12px; opacity:.9;
-}
-
-/* ===============================
-   Evolve + A/B in one baseline row
-   =============================== */
-
-/* Center the whole row when deciding */
-#controls.center-split{
-  left:50%;
-  right:auto;
-  transform: translateX(-50%);
-  justify-content: center;
-  gap: clamp(20px, 10vmin, 60px);
-}
-
-/* Evolve button image sizing (lives inside the row now) */
-.evolve-img{
-  width: clamp(180px, 34vmin, 340px);
-  height:auto;
-  user-select:none;
-  -webkit-user-drag: none;
-  cursor:pointer;
-}
-.evolve-img.hidden{ display:none; }
-
-/* A/B decision group */
-.decision-row{ display:flex; align-items:center; gap: clamp(20px, 10vmin, 60px); }
-.decision-row.hidden{ display:none; }
-
-/* Larger A/B when centered */
-#controls.center-split .decision-row img{
-  width: clamp(72px, 12vmin, 120px);
-  height: clamp(72px, 12vmin, 120px);
-}
-
-/* Optional: dim A/B when disabled */
-.ab-instage.controls-disabled img{
-  opacity:.45;
-  filter:grayscale(.2);
-  pointer-events:none;
 }
