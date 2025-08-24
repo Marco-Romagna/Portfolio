@@ -275,11 +275,13 @@
       if (DOM.finalScore) DOM.finalScore.textContent = String(score);
       hardStopAll();
       setGameActive(false);
+    
+      showEvolve(false);
+      showDecision(false);
+    
       showEnd();
       clearStageImages();
       hideRails();
-      showEvolve(false);
-      showDecision(false);
     }
 
     function setGameActive(active){
