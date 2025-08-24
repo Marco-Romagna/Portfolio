@@ -50,7 +50,10 @@
       };
     }
 
-    function hardStopAll(){ rolling = false; session++; deadline = 0; dlog("hardStopAll",{session}); }
+    function hardStopAll(){
+      rolling = false; session++; deadline = 0;
+      dlog("hardStopAll", { session });
+    }
     function clearStageImages(){
       const dom = DOM;
       if (dom.imgA) { dom.imgA.src = ""; dom.imgA.style.opacity = 0; dom.imgA.classList.remove("silhouette"); }
@@ -108,7 +111,7 @@
       HUD.update(DOM, getPublicState());
     }
 
-    /* ===== Rails visibility helpers ===== */
+    /* ===== Rails visibility helpers (preserve spacing) ===== */
     function stageWrap(){ return document.querySelector('.revo-stage-wrap'); }
     function hideRails(){
       const wrap = stageWrap();
@@ -124,23 +127,18 @@
       History.setCapacity(DOM);
     }
 
-    /* ===== Unified controls toggles (Evolve vs A/B) ===== */
+    /* ===== Toggle helpers (inside-stage layout) ===== */
     function showEvolve(show){
-      // Evolve is the big center button; A/B hidden while idle
       DOM.evolveBtn?.classList.toggle('hidden', !show);
       if (show){
         DOM.btnA?.classList.add('hidden');
         DOM.btnB?.classList.add('hidden');
-        DOM.controls?.classList.remove('hidden'); // keep the row visible
       }
     }
     function showDecision(show){
-      // When deciding, show A/B (sides), hide Evolve (center)
-      const toggle = (el, on) => el?.classList.toggle('hidden', !on);
-      toggle(DOM.btnA, show);
-      toggle(DOM.btnB, show);
+      DOM.btnA?.classList.toggle('hidden', !show);
+      DOM.btnB?.classList.toggle('hidden', !show);
       if (show) DOM.evolveBtn?.classList.add('hidden');
-      DOM.controls?.classList.remove('hidden');
     }
 
     function clearOverlays(){ DOM.endScreen?.classList.add("hidden"); DOM.startScreen?.classList.add("hidden"); }
@@ -193,7 +191,7 @@
       const mySession = session;
       rolling = true;
 
-      // Toggle: hide EVOLVE, show A/B
+      // Show A/B; hide Evolve
       showEvolve(false);
       showDecision(true);
 
@@ -221,11 +219,9 @@
       const isCorrectDir = (rule === "higher") ? (candidateId > currentId) : (candidateId < currentId);
 
       if (action === "cancel") {
-        if (!isCorrectDir) {
-          score += mult; mult += 1; AudioMgr.playOK(); HUD.pulseGood(dom);
-        } else {
-          lives -= 1; mult = 1;    AudioMgr.playBad();  HUD.pulseBad(dom);
-        }
+        if (!isCorrectDir) { score += mult; mult += 1; AudioMgr.playOK(); HUD.pulseGood(dom); }
+        else               { lives -= 1; mult = 1;   AudioMgr.playBad();  HUD.pulseBad(dom); }
+
         History.push(dom, urlFor, { id: candidateId, action: 'cancel', correct: !isCorrectDir });
 
         dom.imgA.classList.remove("silhouette");
@@ -238,21 +234,21 @@
 
         HUD.update(dom, getPublicState());
         if (lives <= 0) return endGame();
-
         newRule();
+
+        // Back to idle
         showDecision(false);
         showEvolve(true);
         return;
       }
 
-      // accept / timeout path
+      // accept / timeout
       dom.imgA.classList.add("silhouette");
       dom.imgB.classList.add("silhouette");
       dom.imgA.style.opacity = 0;
       dom.imgB.style.opacity = 1;
 
       if (dom.timer) { dom.timer.textContent = "—"; dom.timer.classList.remove("warn"); }
-
       dom.flash.style.opacity = 1; await sleep(120); dom.flash.style.opacity = 0;
 
       dom.imgA.classList.remove("silhouette");
@@ -277,6 +273,7 @@
       if (lives <= 0) return endGame();
       newRule();
 
+      // Back to idle
       showDecision(false);
       showEvolve(true);
     }
@@ -331,7 +328,6 @@
 
     function setGameActive(active){
       gameActive = active;
-      DOM.controls?.classList.toggle("hidden", !active);
       HUD.setActive(DOM, active);
     }
 
@@ -352,7 +348,7 @@
       currentId = randId();
       await showInstant(currentId);
 
-      // First Pokémon (neutral) into history
+      // First Pokémon into history as neutral
       History.push(DOM, urlFor, { id: currentId, action: 'start', correct: 'neutral' });
 
       DOM.endScreen?.classList.add("hidden");
@@ -365,7 +361,7 @@
       History.setCapacity(DOM);
       newRule();
 
-      // Idle: EVOLVE only
+      // Idle state: EVOLVE visible, A/B hidden
       showDecision(false);
       showEvolve(true);
     }
@@ -427,8 +423,7 @@
     }
 
     function firstPaint(){
-      DOM.controls?.classList.add("hidden");
-      DOM.hud?.classList.add("inactive");
+      HUD.setActive(DOM, false);
 
       hideRails();
 
@@ -437,14 +432,13 @@
       History.clear(DOM);
       History.setCapacity(DOM);
 
-      setGameActive(false);
-      HUD.update(DOM, getPublicState());
       DOM.endScreen?.classList.add("hidden");
       DOM.startScreen?.classList.remove("hidden");
       Rail.applyModeClass(DOM, null);
 
-      showEvolve(false);
+      // Controls initial: Evolve only
       showDecision(false);
+      showEvolve(true);
 
       dlog("ready");
     }
@@ -472,9 +466,15 @@
         }
 
         await loadSettings();
+
+        // Audio UI
         Audio.injectVolumeUI(DOM.audioRow);
+
+        // Inputs & start buttons
         bindInputs();
         wireStartButtons();
+
+        // First paint empty
         firstPaint();
       },
       getPublicState
