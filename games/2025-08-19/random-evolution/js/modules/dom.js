@@ -17,8 +17,9 @@
     needleLine:  null,
     needleLabel: null,
 
-    controls:    null,
-    evolveBtn:   null,
+    controls:    null,   // A/B buttons container (inside stage)
+    evolveBtn:   null,   // EVOLVE image (auto-injected if missing)
+    decisionRow: null,   // (unused helper, left for future)
     btnA:        null,
     btnB:        null,
 
@@ -57,17 +58,32 @@
       this.needleLine  = this.railNeedle?.querySelector(".needle-line");
       this.needleLabel = this.railNeedle?.querySelector(".needle-label");
 
-      this.controls  = $("controls");
-      this.evolveBtn = $("evolve-button");
-      this.btnA      = $("a-button");
-      this.btnB      = $("b-button");
+      // Controls (A/B) container
+      this.controls    = $("controls");
+      this.btnA        = $("a-button");
+      this.btnB        = $("b-button");
 
+      // EVOLVE button (image). If it's not in HTML, inject it.
+      this.evolveBtn   = $("evolve-button");
+      if (!this.evolveBtn && this.stage){
+        const img = document.createElement("img");
+        img.id = "evolve-button";
+        img.className = "evolve-img";
+        img.alt = "Evolve";
+        img.src = "./assets/buttons/Evolve_button.png"; // ensure this path exists
+        img.draggable = false;
+        this.stage.appendChild(img);
+        this.evolveBtn = img;
+      }
+
+      // Overlays
       this.startScreen  = $("start-screen");
       this.startButtons = this.startScreen?.querySelectorAll(".mode-btn");
       this.endScreen    = $("end-screen");
       this.finalScore   = $("final-score");
       this.playAgain    = $("play-again");
 
+      // HUD
       this.hud        = $("hud");
       this.hudCurrent = $("hud-current");
       this.hudRule    = $("hud-rule");
@@ -79,10 +95,11 @@
       this.audioRow   = document.querySelector(".revo-audio");
       this.titleEl    = $("game-title");
 
+      // History rail
       this.historyWrap  = $("revo-history");
       this.historyTrack = $("history-track");
 
-      /* Keep buttons INSIDE the stage */
+      // Ensure A/B controls live inside the stage and are styled correctly
       if (this.controls && this.stage && !this.controls.classList.contains("ab-instage")){
         this.controls.classList.add("ab-instage");
         this.stage.appendChild(this.controls);
