@@ -46,13 +46,13 @@
         </div>
       </div>
 
-      <!-- Stage wrapper (LEFT rail • STAGE • RIGHT history) -->
+      <!-- Stage wrapper: LEFT rail + STAGE + RIGHT history -->
       <div class="revo-stage-wrap rails-hidden">
-        <!-- Pokédex rail -->
+        <!-- Pokédex rail (left) -->
         <div id="pokedex-rail" class="pokedex-rail" aria-hidden="true">
           <div class="rail-track">
             <div class="rail-fill"></div>
-            <!-- dividers + labels injected -->
+            <!-- generation dividers + midpoint labels injected via JS -->
           </div>
           <div class="rail-needle">
             <span class="needle-line"></span>
@@ -60,7 +60,7 @@
           </div>
         </div>
 
-        <!-- Stage -->
+        <!-- Stage (center column) -->
         <div id="stage" class="revo-stage">
           <div id="aim" class="revo-aim" aria-hidden="true">Higher than —</div>
 
@@ -75,8 +75,10 @@
             <div class="start-content">
               <h3 class="title">Do you know your Pokédex numbers?</h3>
               <div class="rules-list">
-                <p>Press <strong>A</strong> to advance when the Dex number is higher or lower,
-                or <strong>B</strong> to cancel the evolution if it isn’t.</p>
+                <p>
+                  Press <strong>A</strong> to advance when the Dex number is higher or lower,
+                  or <strong>B</strong> to cancel the evolution if it isn’t.
+                </p>
               </div>
               <p class="subtitle bigger">Choose your difficulty to begin.</p>
               <div class="btn-row big">
@@ -95,19 +97,18 @@
               <button id="play-again" class="mode-btn">Play Again</button>
             </div>
           </div>
+
+          <!-- ALL BUTTONS INSIDE THE STAGE (bottom center) -->
+          <div id="controls" class="ab-instage">
+            <!-- Center: EVOLVE (shown when idle) -->
+            <img id="evolve-button" class="evolve-img" src="./assets/buttons/Evolve_button.png" alt="Evolve">
+            <!-- A/B (shown during decision) -->
+            <img id="a-button" class="ab-btn hidden" src="./assets/buttons/A_Confirm_button.png" alt="A Confirm">
+            <img id="b-button" class="ab-btn hidden" src="./assets/buttons/B_Decline_button.png" alt="B Decline">
+          </div>
         </div>
 
-        <!-- Controls row BELOW the stage (same baseline, no overlap) -->
-        <div id="controls" class="control-row hidden">
-          <img id="a-button" class="ab-btn hidden"
-               src="./assets/buttons/A_Confirm_button.png" alt="A Confirm">
-          <img id="evolve-button" class="evolve-img"
-               src="./assets/buttons/Evolve_button.png" alt="Evolve">
-          <img id="b-button" class="ab-btn hidden"
-               src="./assets/buttons/B_Decline_button.png" alt="B Decline">
-        </div>
-
-        <!-- History rail -->
+        <!-- History rail (right) -->
         <aside id="revo-history" class="revo-history" aria-label="Encounter history" aria-hidden="true">
           <div class="history-track" id="history-track"></div>
         </aside>
@@ -116,7 +117,7 @@
       <!-- Volume row -->
       <div class="revo-audio">
         <span class="tag">Sound</span>
-        <!-- JS injects mute + range -->
+        <!-- JS injects mute button + range -->
       </div>
     </section>
   </main>
@@ -130,7 +131,7 @@
   <script src="./js/modules/history.js" defer></script>
   <script src="./js/modules/game.js" defer></script>
 
-  <!-- Boot -->
+  <!-- Tiny boot that wires everything together -->
   <script src="./js/random-evolution.js" defer></script>
 </body>
 </html>
