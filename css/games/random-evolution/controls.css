@@ -34,16 +34,23 @@
 .evolve-img{
   position:absolute;
   left:50%;
-  bottom: clamp(4px, 2vmin, 12px);
+  bottom: 0;                   
   transform: translateX(-50%);
   width: clamp(180px, 34vmin, 340px);
   height:auto;
-  z-index:6;
+  z-index:3;                  
   user-select:none;
   cursor:pointer;
   -webkit-user-drag: none;
+  pointer-events: auto;
 }
 .evolve-img.hidden{ display:none; }
+
+/* Make sure Pokémon art layers above it */
+.revo-img{
+  position:absolute;
+  z-index:5;
+}
 
 /* When deciding (A/B visible), center them under the stage */
 #controls.center-split{
