@@ -1,6 +1,5 @@
 (function(){
   const root = window.Revo = window.Revo || {};
-
   const $ = (id) => document.getElementById(id);
 
   const DOM = {
@@ -17,9 +16,10 @@
     needleLine:  null,
     needleLabel: null,
     controls:    null,
+    evolveBtn:   null,
+    decisionRow: null,
     btnA:        null,
     btnB:        null,
-    evolveBtn:   null,
     startScreen: null,
     startButtons:null,
     endScreen:   null,
@@ -36,6 +36,7 @@
     titleEl:     null,
     historyWrap: null,
     historyTrack:null,
+
     grab(){
       this.stage      = $("stage");
       this.aim        = $("aim");
@@ -51,10 +52,11 @@
       this.needleLine  = this.railNeedle?.querySelector(".needle-line");
       this.needleLabel = this.railNeedle?.querySelector(".needle-label");
 
-      this.controls  = $("controls");
-      this.btnA      = $("a-button");
-      this.btnB      = $("b-button");
-      this.evolveBtn = $("evolve-button");   // NEW
+      this.controls    = $("controls");
+      this.evolveBtn   = $("evolve-button");
+      this.decisionRow = $("decision-row");
+      this.btnA        = $("a-button");
+      this.btnB        = $("b-button");
 
       this.startScreen  = $("start-screen");
       this.startButtons = this.startScreen?.querySelectorAll(".mode-btn");
@@ -76,8 +78,8 @@
       this.historyWrap  = $("revo-history");
       this.historyTrack = $("history-track");
 
-      // Ensure A/B controls are inside the stage and centerable
-      if (this.controls && this.stage && !this.controls.classList.contains("ab-instage")) {
+      // Ensure controls are inside stage
+      if (this.controls && this.stage && !this.controls.classList.contains("ab-instage")){
         this.controls.classList.add("ab-instage");
         this.stage.appendChild(this.controls);
       }
