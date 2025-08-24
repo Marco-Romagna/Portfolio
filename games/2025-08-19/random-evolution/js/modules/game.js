@@ -1,5 +1,3 @@
-
-// games/2025-08-19/random-evolution/js/modules/game.js
 (function(){
   const root = window.Revo = window.Revo || {};
   const { Util, Audio, DOM, Rail, HUD, History } = root;
@@ -51,43 +49,59 @@
       };
     }
 
-    function hardStopAll(){
-      rolling = false;
-      session++;
-      deadline = 0;
-      dlog("hardStopAll", { session });
+    /* ---------- rails visibility (preserve layout) ---------- */
+    function stageWrap(){ return document.querySelector('.revo-stage-wrap'); }
+    function hideRails(){
+      const wrap = stageWrap();
+      wrap?.classList.add('rails-hidden');
+      DOM.rail?.setAttribute('aria-hidden','true');
+      DOM.historyWrap?.setAttribute('aria-hidden','true');
+    }
+    function showRails(){
+      const wrap = stageWrap();
+      wrap?.classList.remove('rails-hidden');
+      DOM.rail?.setAttribute('aria-hidden','false');
+      DOM.historyWrap?.setAttribute('aria-hidden','false');
+      History.setCapacity(DOM);
     }
 
+    /* ---------- simple button visibility ---------- */
+    function showEvolve(show){ DOM.evolveBtn?.classList.toggle('hidden', !show); }
+    function showDecision(show){
+      if (!DOM.controls) return;
+      DOM.controls.classList.toggle('hidden', !show);
+      DOM.controls.classList.toggle('center-split', show);
+    }
+
+    /* ---------- stage helpers ---------- */
+    function hardStopAll(){ rolling = false; session++; deadline = 0; }
     function clearStageImages(){
-      const dom = DOM;
-      if (dom.imgA) { dom.imgA.src = ""; dom.imgA.style.opacity = 0; dom.imgA.classList.remove("silhouette"); }
-      if (dom.imgB) { dom.imgB.src = ""; dom.imgB.style.opacity = 0; dom.imgB.classList.remove("silhouette"); }
-      if (dom.flash) dom.flash.style.opacity = 0;
-      if (dom.timer) { dom.timer.textContent = "—"; dom.timer.classList.remove("warn"); }
+      if (DOM.imgA) { DOM.imgA.src = ""; DOM.imgA.style.opacity = 0; DOM.imgA.classList.remove("silhouette"); }
+      if (DOM.imgB) { DOM.imgB.src = ""; DOM.imgB.style.opacity = 0; DOM.imgB.classList.remove("silhouette"); }
+      if (DOM.flash) DOM.flash.style.opacity = 0;
+      if (DOM.timer) { DOM.timer.textContent = "—"; DOM.timer.classList.remove("warn"); }
       candidateId = null;
     }
 
     function showInstant(id){
-      const dom = DOM;
       currentId = id;
-      dom.imgA.src = urlFor(id);
-      dom.imgB.src = "";
-      dom.imgA.classList.remove("silhouette");
-      dom.imgB.classList.remove("silhouette");
-      dom.imgA.style.opacity = 1;
-      dom.imgB.style.opacity = 0;
-      dom.flash.style.opacity = 0;
-      if (dom.timer) { dom.timer.textContent = "—"; dom.timer.classList.remove("warn"); }
+      DOM.imgA.src = urlFor(id);
+      DOM.imgB.src = "";
+      DOM.imgA.classList.remove("silhouette");
+      DOM.imgB.classList.remove("silhouette");
+      DOM.imgA.style.opacity = 1;
+      DOM.imgB.style.opacity = 0;
+      DOM.flash.style.opacity = 0;
+      if (DOM.timer) { DOM.timer.textContent = "—"; DOM.timer.classList.remove("warn"); }
       HUD.update(DOM, getPublicState());
     }
 
     function updateTimer(){
-      const dom = DOM;
-      if (!dom.timer || !rolling) return;
+      if (!DOM.timer || !rolling) return;
       const ms  = Math.max(0, deadline - now());
       const sec = (ms / 1000).toFixed(1);
-      dom.timer.textContent = sec;
-      dom.timer.classList.toggle("warn", ms <= 3000);
+      DOM.timer.textContent = sec;
+      DOM.timer.classList.toggle("warn", ms <= 3000);
     }
 
     function pop(el, durMs = 250){
@@ -107,7 +121,6 @@
       let chosen = (Math.random() < pLower) ? "lower" : "higher";
       if (lastRule && Math.random() < 0.35) chosen = (lastRule === "higher") ? "lower" : "higher";
       lastRule = chosen;
-      dlog("rule:pick", { currentDex, chosen });
       return chosen;
     }
     function newRule(){
@@ -115,87 +128,29 @@
       HUD.update(DOM, getPublicState());
     }
 
-    /* ===== Rails visibility helpers (preserve spacing) ===== */
-    function stageWrap(){ return document.querySelector('.revo-stage-wrap'); }
-    function hideRails(){
-      const wrap = stageWrap();
-      wrap?.classList.add('rails-hidden');
-      DOM.rail?.setAttribute('aria-hidden','true');
-      DOM.historyWrap?.setAttribute('aria-hidden','true');
-    }
-    function showRails(){
-      const wrap = stageWrap();
-      wrap?.classList.remove('rails-hidden');
-      DOM.rail?.setAttribute('aria-hidden','false');
-      DOM.historyWrap?.setAttribute('aria-hidden','false');
-      History.setCapacity(DOM); // recompute once visible
-    }
-
-    /* ===== Button visibility helpers ===== */
-    function showEvolve(show){
-      const el = DOM.evolveBtn;
-      if (!el) return;
-      // keep semantic class but also force inline display to win the cascade
-      el.classList.toggle('hidden', !show);
-      el.style.display = show ? 'block' : 'none';
-      if (show){
-        // ensure correct placement & stacking even if CSS was overridden elsewhere
-        el.style.position = 'absolute';
-        el.style.left = '50%';
-        el.style.bottom = '16px';
-        el.style.transform = 'translateX(-50%)';
-        el.style.width = 'clamp(200px, 35vmin, 380px)';
-        el.style.height = 'auto';
-        el.style.zIndex = '30';
-        el.style.pointerEvents = 'auto';
-      }
-    }
-
-    function showDecision(show){
-      if (!DOM.controls) return;
-      DOM.controls.classList.toggle('hidden', !show);
-      DOM.controls.classList.toggle('center-split', show);
-    }
-
-    function clearOverlays(){ DOM.endScreen?.classList.add("hidden"); DOM.startScreen?.classList.add("hidden"); }
-    function showStart(){
-      DOM.startScreen?.classList.remove("hidden");
-      showEvolve(false);
-      showDecision(false);
-      HUD.update(DOM, getPublicState());
-    }
-    function showEnd(){
-      DOM.endScreen?.classList.remove("hidden");
-      showEvolve(false);
-      showDecision(false);
-      HUD.update(DOM, getPublicState());
-    }
-
     async function prepRoll(id, preloadedUrl){
-      const dom = DOM;
-      dom.imgB.src = "";
-      dom.imgA.src = urlFor(currentId ?? randId());
-      dom.imgA.classList.remove("silhouette");
+      DOM.imgB.src = "";
+      DOM.imgA.src = urlFor(currentId ?? randId());
+      DOM.imgA.classList.remove("silhouette");
 
-      dom.imgB.classList.add("silhouette");
-      dom.imgA.style.opacity = 1;
-      dom.imgB.style.opacity = 0;
-      dom.flash.style.opacity = 0;
-      if (dom.timer) dom.timer.classList.remove("warn");
+      DOM.imgB.classList.add("silhouette");
+      DOM.imgA.style.opacity = 1;
+      DOM.imgB.style.opacity = 0;
+      DOM.flash.style.opacity = 0;
+      if (DOM.timer) DOM.timer.classList.remove("warn");
 
-      dom.imgB.src = preloadedUrl || urlFor(id);
+      DOM.imgB.src = preloadedUrl || urlFor(id);
     }
 
     async function rollLoop(mySession){
       while (rolling && mySession === session){
-        const dom = DOM;
-        const showB = dom.imgB.style.opacity !== "1";
-        dom.imgA.classList.add("silhouette");
-        dom.imgB.classList.add("silhouette");
-        dom.imgA.style.opacity = showB ? 0 : 1;
-        dom.imgB.style.opacity = showB ? 1 : 0;
+        const showB = DOM.imgB.style.opacity !== "1";
+        DOM.imgA.classList.add("silhouette");
+        DOM.imgB.classList.add("silhouette");
+        DOM.imgA.style.opacity = showB ? 0 : 1;
+        DOM.imgB.style.opacity = showB ? 1 : 0;
         updateTimer();
-        await sleep(currentInterval());
+        await sleep(reducedMotion ? 240 : (500 / (modes[mode]?.speedFactor || 1.0)));
       }
     }
 
@@ -203,7 +158,6 @@
       while (rolling && mySession === session){
         updateTimer();
         if (now() >= deadline){
-          dlog("timeout:deadline", { at: now(), deadline, rule, currentId, candidateId });
           await stopAndJudge("timeout");
           break;
         }
@@ -213,59 +167,46 @@
 
     async function startRoll(){
       if (!gameActive || rolling) return;
-      session++;
-      const mySession = session;
-      rolling = true;
+      session++; rolling = true;
 
-      // toggle buttons
+      // UI: EVOLVE -> hidden, A/B -> visible
       showEvolve(false);
       showDecision(true);
 
       candidateId = pickOther();
       const candUrl = urlFor(candidateId);
-
-      try { await preloadImage(candUrl); } catch (_) {}
+      try { await preloadImage(candUrl); } catch {}
 
       await prepRoll(candidateId, candUrl);
 
       deadline = now() + (modes[mode]?.limitMs || 7000);
-      dlog("roll:start", { rule, currentId, candidateId, timeLimitMs: (modes[mode]?.limitMs || 7000) });
 
-      rollLoop(mySession);
-      watchdogLoop(mySession);
+      rollLoop(session);
+      watchdogLoop(session);
     }
 
     async function stopAndJudge(action /* "accept" | "cancel" | "timeout" */){
       if (!rolling) return;
-      session++;
-      rolling = false;
-      const dom = DOM;
+      session++; rolling = false;
 
       const prevCurrent = currentId;
       const isCorrectDir = (rule === "higher") ? (candidateId > currentId) : (candidateId < currentId);
 
       if (action === "cancel") {
-        if (!isCorrectDir) {
-          score += mult; mult += 1;
-          AudioMgr.playOK();
-          HUD.pulseGood(dom);
-        } else {
-          lives -= 1; mult = 1;
-          AudioMgr.playBad();
-          HUD.pulseBad(dom);
-        }
-        History.push(dom, urlFor, { id: candidateId, action: 'cancel', correct: !isCorrectDir });
+        if (!isCorrectDir) { score += mult; mult += 1; AudioMgr.playOK(); HUD.pulseGood(DOM); }
+        else { lives -= 1; mult = 1; AudioMgr.playBad(); HUD.pulseBad(DOM); }
 
-        dom.imgA.classList.remove("silhouette");
-        dom.imgB.classList.remove("silhouette");
-        dom.imgA.src = urlFor(currentId);
-        dom.imgA.style.opacity = 1;
-        dom.imgB.style.opacity = 0;
-        dom.imgB.src = "";
-        if (dom.timer) { dom.timer.textContent = "—"; dom.timer.classList.remove("warn"); }
+        History.push(DOM, urlFor, { id: candidateId, action: 'cancel', correct: !isCorrectDir });
 
-        HUD.update(dom, getPublicState());
+        DOM.imgA.classList.remove("silhouette");
+        DOM.imgB.classList.remove("silhouette");
+        DOM.imgA.src = urlFor(currentId);
+        DOM.imgA.style.opacity = 1;
+        DOM.imgB.style.opacity = 0;
+        DOM.imgB.src = "";
+        if (DOM.timer) { DOM.timer.textContent = "—"; DOM.timer.classList.remove("warn"); }
 
+        HUD.update(DOM, getPublicState());
         if (lives <= 0) return endGame();
 
         newRule();
@@ -274,42 +215,33 @@
         return;
       }
 
-      // accept / timeout path
-      dom.imgA.classList.add("silhouette");
-      dom.imgB.classList.add("silhouette");
-      dom.imgA.style.opacity = 0;
-      dom.imgB.style.opacity = 1;
+      // accept / timeout
+      DOM.imgA.classList.add("silhouette");
+      DOM.imgB.classList.add("silhouette");
+      DOM.imgA.style.opacity = 0;
+      DOM.imgB.style.opacity = 1;
 
-      if (dom.timer) { dom.timer.textContent = "—"; dom.timer.classList.remove("warn"); }
+      if (DOM.timer) { DOM.timer.textContent = "—"; DOM.timer.classList.remove("warn"); }
 
-      dom.flash.style.opacity = 1; await sleep(120); dom.flash.style.opacity = 0;
+      DOM.flash.style.opacity = 1; await sleep(120); DOM.flash.style.opacity = 0;
 
-      dom.imgA.classList.remove("silhouette");
-      dom.imgB.classList.remove("silhouette");
-      dom.imgA.style.opacity = 0;
-      dom.imgB.style.opacity = 1;
-      pop(dom.imgB, 250);
+      DOM.imgA.classList.remove("silhouette");
+      DOM.imgB.classList.remove("silhouette");
+      DOM.imgA.style.opacity = 0;
+      DOM.imgB.style.opacity = 1;
+      pop(DOM.imgB, 250);
 
-      if (isCorrectDir) {
-        score += mult; mult += 1;
-        currentId = candidateId;
-        AudioMgr.playOK();
-        HUD.pulseGood(dom);
-      } else {
-        lives -= 1; mult = 1;
-        currentId = candidateId;
-        AudioMgr.playBad();
-        HUD.pulseBad(dom);
-      }
+      if (isCorrectDir) { score += mult; mult += 1; currentId = candidateId; AudioMgr.playOK(); HUD.pulseGood(DOM); }
+      else { lives -= 1; mult = 1; currentId = candidateId; AudioMgr.playBad(); HUD.pulseBad(DOM); }
 
-      History.push(dom, urlFor, { id: currentId, action: 'accept', correct: isCorrectDir });
+      History.push(DOM, urlFor, { id: currentId, action: 'accept', correct: isCorrectDir });
 
       await sleep(280);
-      dom.imgA.src = urlFor(currentId);
-      dom.imgA.style.opacity = 1;
-      dom.imgB.style.opacity = 0;
-      dom.imgB.src = "";
-      HUD.update(dom, getPublicState());
+      DOM.imgA.src = urlFor(currentId);
+      DOM.imgA.style.opacity = 1;
+      DOM.imgB.style.opacity = 0;
+      DOM.imgB.src = "";
+      HUD.update(DOM, getPublicState());
 
       if (lives <= 0) return endGame();
       newRule();
@@ -319,24 +251,9 @@
     }
 
     function bindInputs(){
-      const onConfirm = withDebounce(() => {
-        if (!gameActive || !rolling) return;
-        ensureAudioInit();
-        dlog("input:A confirm");
-        stopAndJudge("accept");
-      });
-      const onCancel = withDebounce(() => {
-        if (!gameActive || !rolling) return;
-        ensureAudioInit();
-        dlog("input:B cancel");
-        stopAndJudge("cancel");
-      });
-      const onEvolve = withDebounce(() => {
-        if (!gameActive || rolling) return;
-        ensureAudioInit();
-        dlog("input:E evolve");
-        startRoll();
-      });
+      const onConfirm = withDebounce(() => { if (gameActive && rolling){ ensureAudioInit(); stopAndJudge("accept"); } });
+      const onCancel  = withDebounce(() => { if (gameActive && rolling){ ensureAudioInit(); stopAndJudge("cancel"); } });
+      const onEvolve  = withDebounce(() => { if (gameActive && !rolling){ ensureAudioInit(); startRoll(); } });
 
       DOM.btnA?.addEventListener("click", onConfirm);
       DOM.btnB?.addEventListener("click", onCancel);
@@ -363,28 +280,21 @@
       hideRails();
       showEvolve(false);
       showDecision(false);
-      dlog("game:over", { finalScore: score });
     }
 
     function setGameActive(active){
       gameActive = active;
-      if (!active){
-        showEvolve(false);
-        showDecision(false);
-      }
+      if (!active){ showEvolve(false); showDecision(false); }
       HUD.setActive(DOM, active);
     }
 
-    function getPublicState(){
-      return { mode, gameActive, currentId, candidateId, score, lives, mult, rule };
-    }
+    function getPublicState(){ return { mode, gameActive, currentId, candidateId, score, lives, mult, rule }; }
 
     async function startMode(m){
       mode = m;
       Rail.applyModeClass(DOM, mode);
 
       score = 0; lives = 3; mult = 1;
-
       hardStopAll();
       clearStageImages();
       History.clear(DOM);
@@ -392,21 +302,17 @@
       currentId = randId();
       await showInstant(currentId);
 
-      // first Pokémon as neutral in history
       History.push(DOM, urlFor, { id: currentId, action: 'start', correct: 'neutral' });
-
       DOM.endScreen?.classList.add("hidden");
       DOM.startScreen?.classList.add("hidden");
       setGameActive(true);
 
       showRails();
-
       if (DOM.titleEl) DOM.titleEl.textContent = `Random Evolution (${cap(mode)})`;
 
       History.setCapacity(DOM);
       newRule();
 
-      // idle state: evolve visible, A/B hidden
       showDecision(false);
       showEvolve(true);
     }
@@ -415,7 +321,6 @@
       DOM.startButtons?.forEach(btn => {
         btn.addEventListener("click", async () => {
           const m = btn.getAttribute("data-mode");
-          if (!modes[m]) return;
           await startMode(m);
         });
       });
@@ -436,11 +341,8 @@
         if (DOM.titleEl) DOM.titleEl.textContent = "Random Evolution";
 
         hideRails();
-
         showEvolve(false);
         showDecision(false);
-
-        dlog("game:reset");
       });
     }
 
@@ -487,8 +389,6 @@
 
       showEvolve(false);
       showDecision(false);
-
-      dlog("ready");
     }
 
     function boot(debugOn){ DEBUG = debugOn; }
@@ -514,15 +414,9 @@
         }
 
         await loadSettings();
-
-        // Audio UI
         Audio.injectVolumeUI(DOM.audioRow);
-
-        // Inputs & start buttons
         bindInputs();
         wireStartButtons();
-
-        // First paint empty
         firstPaint();
       },
       getPublicState
