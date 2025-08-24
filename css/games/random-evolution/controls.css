@@ -34,9 +34,9 @@
 .evolve-img{
   position:absolute;
   left:50%;
-  bottom: clamp(10px, 2.5vmin, 16px);
+  bottom: clamp(4px, 2vmin, 12px);
   transform: translateX(-50%);
-  width: clamp(180px, 36vmin, 360px);
+  width: clamp(180px, 34vmin, 340px);
   height:auto;
   z-index:6;
   user-select:none;
@@ -51,14 +51,14 @@
   right:auto;
   transform: translateX(-50%);
   justify-content: center;
-  gap: clamp(14px, 6vmin, 28px);
+  gap: clamp(20px, 10vmin, 60px);
 }
 #controls.center-split img{
-  width: clamp(56px, 9vmin, 88px);
-  height: clamp(56px, 9vmin, 88px);
+  width: clamp(72px, 12vmin, 120px);
+  height: clamp(72px, 12vmin, 120px);
 }
 
-/* Optional: dim A/B when disabled (not used here, but handy) */
+/* Optional: dim A/B when disabled */
 .ab-instage.controls-disabled img{
   opacity:.45;
   filter:grayscale(.2);
