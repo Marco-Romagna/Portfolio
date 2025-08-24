@@ -21,16 +21,17 @@
 .ab-instage img:active{ transform: scale(.92); }
 #ab-button, #a-button, #b-button { transform: none !important; }
 
-/* EVOLVE image — centered bottom inside the stage */
+/* EVOLVE image — bottom-center inside the stage */
 .evolve-img{
   position: absolute;
   left: 50%;
-  bottom: clamp(14px, 2.8vmin, 22px);
+  bottom: clamp(6px, 1.8vmin, 14px); 
   transform: translateX(-50%);
   width: clamp(220px, 36vmin, 420px);
   height: auto;
   user-select: none;
   -webkit-user-drag: none;
-  z-index: 6; /* under A/B so they can sit left/right if needed */
+  z-index: 6; 
+  pointer-events: auto;
 }
 .evolve-img.hidden{ display: none; }
