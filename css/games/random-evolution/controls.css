@@ -25,7 +25,7 @@
 .evolve-img{
   position: absolute;
   left: 50%;
-  --evolve-nudge: 120px; 
+  --evolve-nudge: 130px; 
   bottom: calc(clamp(6px, 1.8vmin, 14px) - var(--evolve-nudge));
   transform: translateX(-50%);
   width: clamp(220px, 36vmin, 420px);
