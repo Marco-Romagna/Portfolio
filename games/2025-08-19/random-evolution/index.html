@@ -9,7 +9,7 @@
 
   <!-- Site styles -->
   <link rel="stylesheet" href="../../../css/main.css">
-  <!-- Game styles (styles.css @imports the split CSS files) -->
+  <!-- Game styles -->
   <link rel="stylesheet" href="../../../css/games/random-evolution/styles.css?v=revo3">
 </head>
 <body>
@@ -46,7 +46,7 @@
         </div>
       </div>
 
-      <!-- Stage wrapper: LEFT rail + STAGE + RIGHT history -->
+      <!-- Stage wrapper -->
       <div class="revo-stage-wrap rails-hidden">
         <!-- Pokédex rail -->
         <div id="pokedex-rail" class="pokedex-rail" aria-hidden="true">
@@ -73,12 +73,6 @@
           <div id="start-screen" class="revo-start">
             <div class="start-content">
               <h3 class="title">Do you know your Pokédex numbers?</h3>
-              <div class="rules-list">
-                <p>
-                  Press <strong>A</strong> to advance when the Dex number is higher or lower,
-                  or <strong>B</strong> to cancel the evolution if it isn’t.
-                </p>
-              </div>
               <p class="subtitle bigger">Choose your difficulty to begin.</p>
               <div class="btn-row big">
                 <button class="mode-btn easy"   data-mode="easy">Easy</button>
@@ -97,19 +91,17 @@
             </div>
           </div>
 
-          <!-- One controls row (Evolve OR A/B sit here together) -->
-          <div id="controls" class="ab-instage hidden">
-            <!-- Evolve (idle) -->
-            <img id="evolve-button"
-                 class="evolve-img"
+          <!-- unified controls row -->
+          <div id="controls" class="control-row hidden">
+            <img id="a-button" class="ab-btn hidden"
+                 src="./assets/buttons/A_Confirm_button.png"
+                 alt="A Confirm">
+            <img id="evolve-button" class="evolve-img"
                  src="./assets/buttons/Evolve_button.png"
-                 alt="Evolve Button">
-
-            <!-- Confirm / Decline (rolling) -->
-            <div id="decision-row" class="decision-row hidden">
-              <img id="a-button" src="./assets/buttons/A_Confirm_button.png" alt="A Confirm Button">
-              <img id="b-button" src="./assets/buttons/B_Decline_button.png"  alt="B Decline Button">
-            </div>
+                 alt="Evolve">
+            <img id="b-button" class="ab-btn hidden"
+                 src="./assets/buttons/B_Decline_button.png"
+                 alt="B Decline">
           </div>
         </div>
 
