@@ -30,7 +30,7 @@
     <section class="panel">
       <h2 class="panel-title" id="game-title">Random Evolution</h2>
 
-      <!-- HUD (keeps layout space even when inactive; fades via hud.css) -->
+      <!-- HUD -->
       <div class="revo-hud inactive" id="hud">
         <div class="hud-pill">
           <span class="label">Score</span>
@@ -48,11 +48,10 @@
 
       <!-- Stage wrapper: LEFT rail + STAGE + RIGHT history -->
       <div class="revo-stage-wrap rails-hidden">
-        <!-- Pokédex rail (start hidden) -->
+        <!-- Pokédex rail -->
         <div id="pokedex-rail" class="pokedex-rail" aria-hidden="true">
           <div class="rail-track">
             <div class="rail-fill"></div>
-            <!-- generation dividers + midpoint labels injected via JS -->
           </div>
           <div class="rail-needle">
             <span class="needle-line"></span>
@@ -98,22 +97,23 @@
             </div>
           </div>
 
-          <!-- NEW: big evolve image button (center-bottom) -->
-          <img
-            id="evolve-button"
-            class="evolve-img hidden"
-            src="./assets/buttons/Evolve_button.png"
-            alt="Evolve Button"
-          >
-
-          <!-- Decision buttons (A = Confirm, B = Decline) -->
+          <!-- One controls row (Evolve OR A/B sit here together) -->
           <div id="controls" class="ab-instage hidden">
-            <img id="a-button" src="./assets/buttons/A_Confirm_button.png" alt="A Confirm Button">
-            <img id="b-button" src="./assets/buttons/B_Decline_button.png"  alt="B Decline Button">
+            <!-- Evolve (idle) -->
+            <img id="evolve-button"
+                 class="evolve-img"
+                 src="./assets/buttons/Evolve_button.png"
+                 alt="Evolve Button">
+
+            <!-- Confirm / Decline (rolling) -->
+            <div id="decision-row" class="decision-row hidden">
+              <img id="a-button" src="./assets/buttons/A_Confirm_button.png" alt="A Confirm Button">
+              <img id="b-button" src="./assets/buttons/B_Decline_button.png"  alt="B Decline Button">
+            </div>
           </div>
         </div>
 
-        <!-- History rail (start hidden) -->
+        <!-- History rail -->
         <aside id="revo-history" class="revo-history" aria-label="Encounter history" aria-hidden="true">
           <div class="history-track" id="history-track"></div>
         </aside>
@@ -122,12 +122,11 @@
       <!-- Volume row -->
       <div class="revo-audio">
         <span class="tag">Sound</span>
-        <!-- JS injects mute button + range -->
       </div>
     </section>
   </main>
 
-  <!-- JS modules (define window.Revo pieces) -->
+  <!-- JS modules -->
   <script src="./js/modules/util.js" defer></script>
   <script src="./js/modules/audio.js" defer></script>
   <script src="./js/modules/dom.js" defer></script>
@@ -136,7 +135,7 @@
   <script src="./js/modules/history.js" defer></script>
   <script src="./js/modules/game.js" defer></script>
 
-  <!-- Tiny boot that wires everything together -->
+  <!-- Boot -->
   <script src="./js/random-evolution.js" defer></script>
 </body>
 </html>
