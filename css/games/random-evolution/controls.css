@@ -21,17 +21,19 @@
 .ab-instage img:active{ transform: scale(.92); }
 #ab-button, #a-button, #b-button { transform: none !important; }
 
-/* EVOLVE image — bottom-center inside the stage */
+/* EVOLVE image — bottom-center inside the stage with compensation for PNG padding */
 .evolve-img{
   position: absolute;
   left: 50%;
-  bottom: clamp(6px, 1.8vmin, 14px); 
+  /* Pull it down by the PNG's transparent bottom padding */
+  --evolve-nudge: 42px; /* tweak between ~30–60px depending on the asset */
+  bottom: calc(clamp(6px, 1.8vmin, 14px) - var(--evolve-nudge));
   transform: translateX(-50%);
   width: clamp(220px, 36vmin, 420px);
   height: auto;
   user-select: none;
   -webkit-user-drag: none;
-  z-index: 6; 
+  z-index: 6;
   pointer-events: auto;
 }
 .evolve-img.hidden{ display: none; }
