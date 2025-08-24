@@ -46,9 +46,9 @@
         </div>
       </div>
 
-      <!-- Stage wrapper: LEFT rail + STAGE + RIGHT history -->
+      <!-- Stage wrapper: LEFT rail + STAGE STACK + RIGHT history -->
       <div class="revo-stage-wrap rails-hidden">
-        <!-- Pokédex rail (start hidden) -->
+        <!-- Pokédex rail (left) -->
         <div id="pokedex-rail" class="pokedex-rail" aria-hidden="true">
           <div class="rail-track">
             <div class="rail-fill"></div>
@@ -60,17 +60,33 @@
           </div>
         </div>
 
-        <!-- Stage -->
-        <div id="stage" class="revo-stage">
-          <div id="aim" class="revo-aim" aria-hidden="true">Higher than —</div>
+        <!-- Stage stack: stage + overlays as siblings for clean layering -->
+        <div class="stage-stack">
+          <!-- Stage -->
+          <div id="stage" class="revo-stage">
+            <div id="aim" class="revo-aim" aria-hidden="true">Higher than —</div>
 
-          <!-- Pokémon art -->
-          <img id="imgA" class="revo-img" alt="Current Pokémon">
-          <img id="imgB" class="revo-img" alt="Next Pokémon">
-          <div id="flash" class="revo-flash"></div>
-          <div id="timer" class="revo-timer">—</div>
+            <!-- Pokémon art -->
+            <img id="imgA" class="revo-img" alt="Current Pokémon">
+            <img id="imgB" class="revo-img" alt="Next Pokémon">
+            <div id="flash" class="revo-flash"></div>
+            <div id="timer" class="revo-timer">—</div>
 
-          <!-- Start overlay -->
+            <!-- A/B image buttons INSIDE the stage (visible during roll) -->
+            <div id="controls" class="ab-instage hidden">
+              <img id="a-button" src="./assets/buttons/A_Confirm_button.png" alt="A Confirm">
+              <img id="b-button" src="./assets/buttons/B_Decline_button.png" alt="B Decline">
+            </div>
+
+            <!-- EVOLVE image (idle state) INSIDE the stage -->
+            <img
+              id="evolve-button"
+              class="evolve-img hidden"
+              src="./assets/buttons/Evolve_button.png"
+              alt="Evolve">
+          </div>
+
+          <!-- Start overlay (sibling of stage; covers it) -->
           <div id="start-screen" class="revo-start">
             <div class="start-content">
               <h3 class="title">Do you know your Pokédex numbers?</h3>
@@ -89,7 +105,7 @@
             </div>
           </div>
 
-          <!-- End overlay -->
+          <!-- End overlay (sibling of stage; covers it) -->
           <div id="end-screen" class="revo-end hidden">
             <h3 class="title">Game Over</h3>
             <p class="subtitle">Final score: <span id="final-score">0</span></p>
@@ -97,22 +113,9 @@
               <button id="play-again" class="mode-btn">Play Again</button>
             </div>
           </div>
-
-          <!-- EVOLVE image (idle state) -->
-          <img
-            id="evolve-button"
-            class="evolve-img hidden"
-            src="./assets/buttons/Evolve_button.png"
-            alt="Evolve">
-
-          <!-- A/B image buttons INSIDE the stage (only during roll) -->
-          <div id="controls" class="ab-instage hidden">
-            <img id="a-button" src="./assets/buttons/A_Confirm_button.png" alt="A Confirm">
-            <img id="b-button" src="./assets/buttons/B_Decline_button.png" alt="B Decline">
-          </div>
         </div>
 
-        <!-- History rail (start hidden) -->
+        <!-- History rail (right) -->
         <aside id="revo-history" class="revo-history" aria-label="Encounter history" aria-hidden="true">
           <div class="history-track" id="history-track"></div>
         </aside>
