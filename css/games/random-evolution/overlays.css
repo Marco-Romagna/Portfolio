@@ -4,6 +4,9 @@
   background:radial-gradient(120% 120% at 50% 55%, rgba(7,10,18,.94) 0%, rgba(7,10,18,.88) 60%, rgba(7,10,18,.82) 100%);
   border-radius:16px; text-align:center;
   font-size: clamp(12px, 1.45vw, 15px); line-height: 1.55;
+
+  /* ensure overlays sit above buttons */
+  z-index: 50;
 }
 .revo-start::before{
   content:""; position:absolute; inset:8% 12%; pointer-events:none; border-radius:24px;
@@ -24,6 +27,9 @@
   padding:24px; gap:6px;
   background:radial-gradient(120% 120% at 50% 55%, rgba(7,10,18,.94) 0%, rgba(7,10,18,.88) 60%, rgba(7,10,18,.82) 100%);
   border-radius:16px; text-align:center;
+
+  /* ensure overlays sit above buttons */
+  z-index: 50;
 }
 .revo-end::before{
   content:""; position:absolute; inset:10% 14%; pointer-events:none; border-radius:24px;
