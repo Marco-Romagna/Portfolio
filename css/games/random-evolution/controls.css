@@ -4,16 +4,19 @@
   right: clamp(10px, 2.5vmin, 16px);
   bottom: clamp(10px, 2.5vmin, 16px);
   display:flex;
-  flex-direction: row;
   align-items: center;
   gap: clamp(10px, 2vmin, 16px);
-  z-index:5;
+  z-index:6;
   --ab: clamp(56px, 9vmin, 84px);
 }
+
+/* Default (corner) images inside the row */
 .ab-instage img{
-  width: var(--ab); height: var(--ab); cursor: pointer; user-select: none;
-  border: none !important; outline: none !important; background: none !important; box-shadow: none !important;
-  filter: none !important; border-radius: 0 !important; transform: none !important;
+  width: var(--ab);
+  height: var(--ab);
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-drag: none;
   transition: transform .08s ease;
 }
 .ab-instage img:active{ transform: scale(.92); }
@@ -29,36 +32,34 @@
 }
 
 /* ===============================
-   Center-bottom evolve image & centered A/B state
+   Evolve + A/B in one baseline row
    =============================== */
 
-/* Center-bottom evolve image (aligns to same baseline as A/B) */
-.evolve-img{
-  position:absolute;
-  left:50%;
-  bottom: clamp(10px, 2.5vmin, 16px);
-  transform: translateX(-50%);
-  width: clamp(180px, 34vmin, 340px);
-  height:auto;
-  z-index:6;
-  user-select:none;
-  cursor:pointer;
-  -webkit-user-drag: none;
-  pointer-events: auto;
-}
-.evolve-img.hidden{ display:none; }
-
-/* When deciding (A/B visible), center them under the stage */
+/* Center the whole row when deciding */
 #controls.center-split{
-  position:absolute;
-  bottom: clamp(10px, 2.5vmin, 16px);
   left:50%;
   right:auto;
   transform: translateX(-50%);
   justify-content: center;
   gap: clamp(20px, 10vmin, 60px);
 }
-#controls.center-split img{
+
+/* Evolve button image sizing (lives inside the row now) */
+.evolve-img{
+  width: clamp(180px, 34vmin, 340px);
+  height:auto;
+  user-select:none;
+  -webkit-user-drag: none;
+  cursor:pointer;
+}
+.evolve-img.hidden{ display:none; }
+
+/* A/B decision group */
+.decision-row{ display:flex; align-items:center; gap: clamp(20px, 10vmin, 60px); }
+.decision-row.hidden{ display:none; }
+
+/* Larger A/B when centered */
+#controls.center-split .decision-row img{
   width: clamp(72px, 12vmin, 120px);
   height: clamp(72px, 12vmin, 120px);
 }
