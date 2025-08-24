@@ -25,8 +25,7 @@
 .evolve-img{
   position: absolute;
   left: 50%;
-  /* Pull it down by the PNG's transparent bottom padding */
-  --evolve-nudge: 42px; /* tweak between ~30–60px depending on the asset */
+  --evolve-nudge: 120px; 
   bottom: calc(clamp(6px, 1.8vmin, 14px) - var(--evolve-nudge));
   transform: translateX(-50%);
   width: clamp(220px, 36vmin, 420px);
