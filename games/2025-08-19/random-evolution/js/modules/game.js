@@ -108,15 +108,38 @@
       HUD.update(DOM, getPublicState());
     }
 
-    /* ===== UI helpers ===== */
-    function showRails(){ document.querySelector('.revo-stage-wrap')?.classList.remove('rails-hidden'); DOM.rail?.setAttribute('aria-hidden','false'); DOM.historyWrap?.setAttribute('aria-hidden','false'); History.setCapacity(DOM); }
-    function hideRails(){ document.querySelector('.revo-stage-wrap')?.classList.add('rails-hidden'); DOM.rail?.setAttribute('aria-hidden','true'); DOM.historyWrap?.setAttribute('aria-hidden','true'); }
+    /* ===== Rails visibility helpers ===== */
+    function stageWrap(){ return document.querySelector('.revo-stage-wrap'); }
+    function hideRails(){
+      const wrap = stageWrap();
+      wrap?.classList.add('rails-hidden');
+      DOM.rail?.setAttribute('aria-hidden','true');
+      DOM.historyWrap?.setAttribute('aria-hidden','true');
+    }
+    function showRails(){
+      const wrap = stageWrap();
+      wrap?.classList.remove('rails-hidden');
+      DOM.rail?.setAttribute('aria-hidden','false');
+      DOM.historyWrap?.setAttribute('aria-hidden','false');
+      History.setCapacity(DOM);
+    }
 
-    function showEvolve(show){ DOM.evolveBtn?.classList.toggle('hidden', !show); }
+    /* ===== Unified controls toggles (Evolve vs A/B) ===== */
+    function showEvolve(show){
+      // show/hide the evolve image; keep the controls row itself visible
+      DOM.evolveBtn?.classList.toggle('hidden', !show);
+      if (show){
+        DOM.decisionRow?.classList.add('hidden');
+        DOM.controls?.classList.remove('center-split'); // default (corner) layout
+        DOM.controls?.classList.remove('hidden');
+      }
+    }
     function showDecision(show){
-      if (!DOM.controls) return;
-      DOM.controls.classList.toggle('hidden', !show);
-      DOM.controls.classList.toggle('center-split', show);
+      // show/hide A/B and center the whole controls row when deciding
+      DOM.decisionRow?.classList.toggle('hidden', !show);
+      DOM.controls?.classList.toggle('center-split', show);
+      DOM.controls?.classList.remove('hidden');
+      if (show) DOM.evolveBtn?.classList.add('hidden');
     }
 
     function clearOverlays(){ DOM.endScreen?.classList.add("hidden"); DOM.startScreen?.classList.add("hidden"); }
@@ -169,7 +192,7 @@
       const mySession = session;
       rolling = true;
 
-      // toggle buttons
+      // Toggle buttons: hide Evolve, show centered A/B
       showEvolve(false);
       showDecision(true);
 
@@ -195,19 +218,15 @@
 
       const prevCurrent = currentId;
       const isCorrectDir = (rule === "higher") ? (candidateId > currentId) : (candidateId < currentId);
-      let gained = false, lost = false;
+      let gained = false;
 
       if (action === "cancel") {
         if (!isCorrectDir) {
           score += mult; mult += 1;
-          AudioMgr.playOK();
-          HUD.pulseGood(dom);
-          gained = true;
+          AudioMgr.playOK(); HUD.pulseGood(dom); gained = true;
         } else {
           lives -= 1; mult = 1;
-          AudioMgr.playBad();
-          HUD.pulseBad(dom);
-          lost = true;
+          AudioMgr.playBad(); HUD.pulseBad(dom);
         }
         History.push(dom, urlFor, { id: candidateId, action: 'cancel', correct: !isCorrectDir });
 
@@ -222,10 +241,8 @@
         dlog("compare", { rule, current_before: prevCurrent, next: candidateId, current_after: currentId, isCorrectDir, action, outcome: gained ? "point" : "life_lost" });
 
         HUD.update(dom, getPublicState());
-
         if (lives <= 0) return endGame();
 
-        // back to idle decision
         newRule();
         showDecision(false);
         showEvolve(true);
@@ -251,15 +268,11 @@
       if (isCorrectDir) {
         score += mult; mult += 1;
         currentId = candidateId;
-        AudioMgr.playOK();
-        HUD.pulseGood(dom);
-        gained = true;
+        AudioMgr.playOK(); HUD.pulseGood(dom); gained = true;
       } else {
         lives -= 1; mult = 1;
         currentId = candidateId;
-        AudioMgr.playBad();
-        HUD.pulseBad(dom);
-        lost = true;
+        AudioMgr.playBad(); HUD.pulseBad(dom);
       }
 
       History.push(dom, urlFor, { id: currentId, action: 'accept', correct: isCorrectDir });
@@ -276,7 +289,6 @@
       if (lives <= 0) return endGame();
       newRule();
 
-      // back to idle decision
       showDecision(false);
       showEvolve(true);
     }
@@ -331,7 +343,8 @@
 
     function setGameActive(active){
       gameActive = active;
-      DOM.controls?.classList.toggle("hidden", !active); // managed by showDecision()
+      // The controls row is always present during game; individual pieces are toggled by helpers.
+      DOM.controls?.classList.toggle("hidden", !active);
       HUD.setActive(DOM, active);
     }
 
@@ -352,6 +365,7 @@
       currentId = randId();
       await showInstant(currentId);
 
+      // First Pokémon into history as neutral
       History.push(DOM, urlFor, { id: currentId, action: 'start', correct: 'neutral' });
 
       DOM.endScreen?.classList.add("hidden");
@@ -455,6 +469,7 @@
       init: async () => {
         DOM.grab();
 
+        // feedback animations (injected once)
         if (!document.querySelector('style[data-revo-feedback]')){
           const css = `
             @keyframes revo-good { 0%{transform:scale(1)} 30%{transform:scale(1.18)} 100%{transform:scale(1)} }
