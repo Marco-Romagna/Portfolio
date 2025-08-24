@@ -50,12 +50,7 @@
       };
     }
 
-    function hardStopAll(){
-      rolling = false;
-      session++;
-      deadline = 0;
-      dlog("hardStopAll", { session });
-    }
+    function hardStopAll(){ rolling = false; session++; deadline = 0; dlog("hardStopAll",{session}); }
     function clearStageImages(){
       const dom = DOM;
       if (dom.imgA) { dom.imgA.src = ""; dom.imgA.style.opacity = 0; dom.imgA.classList.remove("silhouette"); }
@@ -113,34 +108,20 @@
       HUD.update(DOM, getPublicState());
     }
 
-    /* ===== Rails visibility helpers (preserve spacing) ===== */
-    function stageWrap(){ return document.querySelector('.revo-stage-wrap'); }
-    function hideRails(){
-      const wrap = stageWrap();
-      wrap?.classList.add('rails-hidden');
-      DOM.rail?.setAttribute('aria-hidden','true');
-      DOM.historyWrap?.setAttribute('aria-hidden','true');
-    }
-    function showRails(){
-      const wrap = stageWrap();
-      wrap?.classList.remove('rails-hidden');
-      DOM.rail?.setAttribute('aria-hidden','false');
-      DOM.historyWrap?.setAttribute('aria-hidden','false');
-      History.setCapacity(DOM); // recompute once visible
+    /* ===== UI helpers ===== */
+    function showRails(){ document.querySelector('.revo-stage-wrap')?.classList.remove('rails-hidden'); DOM.rail?.setAttribute('aria-hidden','false'); DOM.historyWrap?.setAttribute('aria-hidden','false'); History.setCapacity(DOM); }
+    function hideRails(){ document.querySelector('.revo-stage-wrap')?.classList.add('rails-hidden'); DOM.rail?.setAttribute('aria-hidden','true'); DOM.historyWrap?.setAttribute('aria-hidden','true'); }
+
+    function showEvolve(show){ DOM.evolveBtn?.classList.toggle('hidden', !show); }
+    function showDecision(show){
+      if (!DOM.controls) return;
+      DOM.controls.classList.toggle('hidden', !show);
+      DOM.controls.classList.toggle('center-split', show);
     }
 
-    function clearOverlays(){
-      DOM.endScreen?.classList.add("hidden");
-      DOM.startScreen?.classList.add("hidden");
-    }
-    function showStart(){
-      DOM.startScreen?.classList.remove("hidden");
-      HUD.update(DOM, getPublicState());
-    }
-    function showEnd(){
-      DOM.endScreen?.classList.remove("hidden");
-      HUD.update(DOM, getPublicState());
-    }
+    function clearOverlays(){ DOM.endScreen?.classList.add("hidden"); DOM.startScreen?.classList.add("hidden"); }
+    function showStart(){ DOM.startScreen?.classList.remove("hidden"); HUD.update(DOM, getPublicState()); }
+    function showEnd(){ DOM.endScreen?.classList.remove("hidden"); HUD.update(DOM, getPublicState()); }
 
     async function prepRoll(id, preloadedUrl){
       const dom = DOM;
@@ -183,10 +164,14 @@
     }
 
     async function startRoll(){
-      if (!gameActive) return;
+      if (!gameActive || rolling) return;
       session++;
       const mySession = session;
       rolling = true;
+
+      // toggle buttons
+      showEvolve(false);
+      showDecision(true);
 
       candidateId = pickOther();
       const candUrl = urlFor(candidateId);
@@ -239,7 +224,11 @@
         HUD.update(dom, getPublicState());
 
         if (lives <= 0) return endGame();
+
+        // back to idle decision
         newRule();
+        showDecision(false);
+        showEvolve(true);
         return;
       }
 
@@ -286,28 +275,45 @@
 
       if (lives <= 0) return endGame();
       newRule();
+
+      // back to idle decision
+      showDecision(false);
+      showEvolve(true);
     }
 
     function bindInputs(){
-      const onA = withDebounce(() => {
-        if (!gameActive) return;
-        ensureAudioInit();
-        dlog("input:A", { rolling });
-        if (!rolling) startRoll();
-        else stopAndJudge("accept");
-      });
-      const onB = withDebounce(() => {
+      const onConfirm = withDebounce(() => {
         if (!gameActive || !rolling) return;
         ensureAudioInit();
-        dlog("input:B");
+        dlog("input:A confirm");
+        stopAndJudge("accept");
+      });
+      const onCancel = withDebounce(() => {
+        if (!gameActive || !rolling) return;
+        ensureAudioInit();
+        dlog("input:B cancel");
         stopAndJudge("cancel");
       });
+      const onEvolve = withDebounce(() => {
+        if (!gameActive || rolling) return;
+        ensureAudioInit();
+        dlog("input:E evolve");
+        startRoll();
+      });
 
-      DOM.btnA?.addEventListener("click", onA);
-      DOM.btnB?.addEventListener("click", onB);
+      DOM.btnA?.addEventListener("click", onConfirm);
+      DOM.btnB?.addEventListener("click", onCancel);
+      DOM.evolveBtn?.addEventListener("click", onEvolve);
+
       window.addEventListener("keydown", (e) => {
-        if (e.key === "Enter" || e.key === " ") onA();                // accept
-        if (e.key.toLowerCase() === "b" || e.key === "Escape") onB(); // cancel
+        if (!gameActive) return;
+        const k = e.key.toLowerCase();
+        if (!rolling) {
+          if (k === "enter" || k === " " || k === "e") onEvolve();
+        } else {
+          if (k === "enter" || k === " ") onConfirm();
+          if (k === "b" || k === "escape") onCancel();
+        }
       });
     }
 
@@ -317,14 +323,16 @@
       setGameActive(false);
       showEnd();
       clearStageImages();
-      hideRails(); // reset visuals back to start look
+      hideRails();
+      showEvolve(false);
+      showDecision(false);
       dlog("game:over", { finalScore: score });
     }
 
     function setGameActive(active){
       gameActive = active;
-      DOM.controls?.classList.toggle("hidden", !active);
-      HUD.setActive(DOM, active); // HUD uses opacity/visibility to preserve spacing
+      DOM.controls?.classList.toggle("hidden", !active); // managed by showDecision()
+      HUD.setActive(DOM, active);
     }
 
     function getPublicState(){
@@ -344,20 +352,21 @@
       currentId = randId();
       await showInstant(currentId);
 
-      // First Pokémon into history as neutral
       History.push(DOM, urlFor, { id: currentId, action: 'start', correct: 'neutral' });
 
       DOM.endScreen?.classList.add("hidden");
       DOM.startScreen?.classList.add("hidden");
       setGameActive(true);
 
-      showRails(); // reveal rails when game begins
-
-      dlog("mode:start", { mode: m });
+      showRails();
       if (DOM.titleEl) DOM.titleEl.textContent = `Random Evolution (${cap(mode)})`;
 
       History.setCapacity(DOM);
       newRule();
+
+      // Idle state: evolve visible, A/B hidden
+      showDecision(false);
+      showEvolve(true);
     }
 
     function wireStartButtons(){
@@ -384,7 +393,9 @@
         DOM.startScreen?.classList.remove("hidden");
         if (DOM.titleEl) DOM.titleEl.textContent = "Random Evolution";
 
-        hideRails(); // hide again when back at start
+        hideRails();
+        showEvolve(false);
+        showDecision(false);
 
         dlog("game:reset");
       });
@@ -418,7 +429,7 @@
       DOM.controls?.classList.add("hidden");
       DOM.hud?.classList.add("inactive");
 
-      hideRails(); // keep spacing, make rails invisible
+      hideRails();
 
       currentId = null;
       clearStageImages();
@@ -430,19 +441,20 @@
       DOM.endScreen?.classList.add("hidden");
       DOM.startScreen?.classList.remove("hidden");
       Rail.applyModeClass(DOM, null);
+
+      showEvolve(false);
+      showDecision(false);
+
       dlog("ready");
     }
 
-    function boot(debugOn){
-      DEBUG = debugOn;
-    }
+    function boot(debugOn){ DEBUG = debugOn; }
 
     return {
       boot,
       init: async () => {
         DOM.grab();
 
-        // Inject minimal feedback styles once
         if (!document.querySelector('style[data-revo-feedback]')){
           const css = `
             @keyframes revo-good { 0%{transform:scale(1)} 30%{transform:scale(1.18)} 100%{transform:scale(1)} }
@@ -458,15 +470,9 @@
         }
 
         await loadSettings();
-
-        // Audio UI
         Audio.injectVolumeUI(DOM.audioRow);
-
-        // Inputs & start buttons
         bindInputs();
         wireStartButtons();
-
-        // First paint empty
         firstPaint();
       },
       getPublicState
