@@ -1,45 +1,41 @@
 /* ===============================
-   Controls row & audio row
+   Controls row (under the stage) + Audio row
    =============================== */
 
-/* One shared controls row, centered at the bottom of the stage */
+/* Place controls in the middle column, just below the stage */
 #controls.control-row{
-  position:absolute;
-  bottom: clamp(10px, 2.5vmin, 16px);
-  left:50%;
-  transform: translateX(-50%);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  gap: clamp(22px, 8vmin, 84px); /* spacing between A / EVOLVE / B */
-  z-index:6;
+  grid-column: 2;
+  margin: 12px auto 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(22px, 8vmin, 84px);
 }
 
-/* EVOLVE: larger and visually dominant */
+/* EVOLVE: dominant center button */
 #controls.control-row .evolve-img{
   width: clamp(220px, 36vmin, 380px);
-  height:auto;
-  cursor:pointer;
-  user-select:none;
-  -webkit-user-drag:none;
-  pointer-events:auto;
+  height: auto;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-drag: none;
   transition: transform .08s ease;
 }
 #controls.control-row .evolve-img:active{ transform: scale(.96); }
 
-/* A / B: smaller than evolve */
+/* A / B on sides */
 #controls.control-row .ab-btn{
   width: clamp(72px, 12vmin, 120px);
   height: clamp(72px, 12vmin, 120px);
-  cursor:pointer;
-  user-select:none;
-  -webkit-user-drag:none;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-drag: none;
   transition: transform .08s ease;
 }
 #controls.control-row .ab-btn:active{ transform: scale(.92); }
 
-/* Keep backwards-compat hidden utility (also defined globally) */
-.hidden{ display:none !important; }
+/* Keep the legacy hidden helper available */
+.hidden{ display: none !important; }
 
 /* Volume row (unchanged) */
 .revo-audio{
