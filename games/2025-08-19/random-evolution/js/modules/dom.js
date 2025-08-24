@@ -17,10 +17,10 @@
     needleLine:  null,
     needleLabel: null,
 
-    controls:    null,   // unified row BELOW the stage
-    evolveBtn:   null,   // #evolve-button (center, big)
-    btnA:        null,   // #a-button (left)
-    btnB:        null,   // #b-button (right)
+    controls:    null,
+    evolveBtn:   null,
+    btnA:        null,
+    btnB:        null,
 
     startScreen: null,
     startButtons:null,
@@ -57,7 +57,6 @@
       this.needleLine  = this.railNeedle?.querySelector(".needle-line");
       this.needleLabel = this.railNeedle?.querySelector(".needle-label");
 
-      // Unified controls row (outside the stage)
       this.controls  = $("controls");
       this.evolveBtn = $("evolve-button");
       this.btnA      = $("a-button");
@@ -70,12 +69,12 @@
       this.playAgain    = $("play-again");
 
       this.hud        = $("hud");
-      this.hudCurrent = $("hud-current"); // optional
-      this.hudRule    = $("hud-rule");    // optional
+      this.hudCurrent = $("hud-current");
+      this.hudRule    = $("hud-rule");
       this.hudScore   = $("hud-score");
       this.hudLives   = $("hud-lives");
       this.hudMult    = $("hud-mult");
-      this.hudMode    = $("hud-mode");    // optional
+      this.hudMode    = $("hud-mode");
 
       this.audioRow   = document.querySelector(".revo-audio");
       this.titleEl    = $("game-title");
@@ -83,8 +82,11 @@
       this.historyWrap  = $("revo-history");
       this.historyTrack = $("history-track");
 
-      // IMPORTANT: do NOT move #controls into #stage.
-      // It must remain a sibling (in the middle column) so it sits below the stage.
+      /* Keep buttons INSIDE the stage */
+      if (this.controls && this.stage && !this.controls.classList.contains("ab-instage")){
+        this.controls.classList.add("ab-instage");
+        this.stage.appendChild(this.controls);
+      }
     }
   };
 
