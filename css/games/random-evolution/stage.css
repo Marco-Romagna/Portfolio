@@ -1,78 +1,101 @@
 /* Stage wrapper (rail + stage + history) */
-.revo-stage-wrap{
-  display:grid;
-  grid-template-columns:auto 1fr auto; /* left rail, stage, right history */
-  align-items:start;
-  column-gap:48px;
+.revo-stage-wrap {
+  display: grid;
+  grid-template-columns: auto 1fr auto; /* left rail, stage, right history */
+  align-items: start;
+  column-gap: 48px;
   padding-right: clamp(12px, 5vw, 56px);
-  margin-inline:auto;
+  margin-inline: auto;
 }
 
 /* Keep spacing; allow fading rails in/out */
 .revo-stage-wrap .pokedex-rail,
-.revo-stage-wrap .revo-history{
+.revo-stage-wrap .revo-history {
   transition: opacity 180ms ease;
 }
 
 /* Hidden state: rails invisible/unfocusable but layout preserved */
 .revo-stage-wrap.rails-hidden .pokedex-rail,
-.revo-stage-wrap.rails-hidden .revo-history{
+.revo-stage-wrap.rails-hidden .revo-history {
   opacity: 0;
   pointer-events: none;
 }
 
-/* Stage */
-.revo-stage{
-  position:relative;
+/* Stage (main game square) */
+.revo-stage {
+  position: relative;
   width: min(var(--stage-max), 100%);
   aspect-ratio: 1 / 1;
-  margin:16px auto;
-  background:radial-gradient(120% 120% at 50% 55%, #121929 0%, #0b101b 60%, #070a12 100%);
-  border:1px solid rgba(255,255,255,.08);
-  border-radius:16px;
-  display:grid;
-  place-items:center;
-  overflow:hidden;
+  margin: 16px auto;
+  background: radial-gradient(120% 120% at 50% 55%, #121929 0%, #0b101b 60%, #070a12 100%);
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 16px;
+  display: grid;
+  place-items: center;
+  overflow: hidden; /* keeps sprites/flash from overflowing */
 }
 
 /* Pokémon art */
-.revo-img{
-  position:absolute;
+.revo-img {
+  position: absolute;
   width: clamp(58%, 78%, 82%);
   max-height: 82%;
   object-fit: contain;
-  image-rendering:auto;
-  opacity:0; transition:opacity 80ms linear;
+  image-rendering: auto;
+  opacity: 0;
+  transition: opacity 80ms linear;
 }
-.revo-img.silhouette{
-  filter:brightness(0) contrast(1000%) drop-shadow(0 0 10px rgba(255,255,255,.12));
+.revo-img.silhouette {
+  filter: brightness(0) contrast(1000%) drop-shadow(0 0 10px rgba(255,255,255,.12));
 }
 
-/* Flash & Timer inside stage */
-.revo-flash{
-  position:absolute; inset:0; pointer-events:none; opacity:0;
-  background:radial-gradient(circle at 50% 50%, rgba(255,255,255,1) 0%, rgba(255,255,255,.6) 30%, rgba(255,255,255,0) 70%);
+/* Flash effect */
+.revo-flash {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  background: radial-gradient(circle at 50% 50%,
+    rgba(255,255,255,1) 0%,
+    rgba(255,255,255,.6) 30%,
+    rgba(255,255,255,0) 70%);
 }
-.revo-timer{
-  position:absolute; top:10px; right:12px;
-  padding:4px 8px; border-radius:8px;
-  background:rgba(0,0,0,.5); border:1px solid rgba(255,255,255,.12);
-  color:var(--text); font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+
+/* Timer */
+.revo-timer {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  padding: 4px 8px;
+  border-radius: 8px;
+  background: rgba(0,0,0,.5);
+  border: 1px solid rgba(255,255,255,.12);
+  color: var(--text);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   font-size: clamp(11px, 2.1vmin, 15px);
-  line-height:1; pointer-events:none;
+  line-height: 1;
+  pointer-events: none;
 }
-.revo-timer.warn{ color:#f7768e; }
+.revo-timer.warn { color: #f7768e; }
 
-/* Aim banner */
-.revo-aim{
-  position:absolute;
-  top:12px; left:50%; transform:translateX(-50%);
-  z-index:3; font-weight:900; letter-spacing:.3px; text-transform:uppercase;
-  color:#cfe0ff; text-shadow:0 2px 6px rgba(0,0,0,.45);
-  padding:4px 10px; border-radius:10px; background:rgba(0,0,0,.28);
-  border:1px solid rgba(255,255,255,.10);
+/* Aim banner (Higher / Lower than X) */
+.revo-aim {
+  position: absolute;
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 3;
+  font-weight: 900;
+  letter-spacing: .3px;
+  text-transform: uppercase;
+  color: #cfe0ff;
+  text-shadow: 0 2px 6px rgba(0,0,0,.45);
+  padding: 4px 10px;
+  border-radius: 10px;
+  background: rgba(0,0,0,.28);
+  border: 1px solid rgba(255,255,255,.10);
   font-size: clamp(14px, 2.4vmin, 24px);
-  display:none;
+  display: none;
 }
-.revo-aim.lower{ color:#f5a2b2; }
-.revo-aim.higher{ color:#a9c4ff; }
+.revo-aim.lower { color: #f5a2b2; }
+.revo-aim.higher { color: #a9c4ff; }
