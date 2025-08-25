@@ -43,7 +43,15 @@
       }
     }
 
-    function setCapacity(DOM){
+   function setCapacity(DOM){
+      const mobile = window.matchMedia("(max-width: 620px), (max-height: 600px)").matches;
+      if (mobile){
+        // Let the horizontal strip scroll; keep a soft cap so DOM doesn’t explode
+        capacity = 40;
+        trimDOM(DOM);
+        state = state.slice(0, capacity);
+        return;
+      }
       const next = computeCapacity(DOM);
       if (next !== capacity){
         capacity = next;
