@@ -411,15 +411,17 @@
       boot,
       init: async () => {
         DOM.grab();
-
-         // Add resize hook here
-        window.addEventListener('resize', () => {
+      
+        // Ensure mobile/desktop layout logic runs on load AND on resize
+        const onResize = () => {
           Rail.applyModeClass(DOM, Game.getPublicState().mode);
           History.setCapacity(DOM);
       
           const cur = Game.getPublicState().currentId;
           if (cur != null) Rail.update(DOM, cur);
-        });
+        };
+        window.addEventListener('resize', onResize);
+        onResize(); // run once immediately
       
         // Inject feedback styles once
         if (!document.querySelector('style[data-revo-feedback]')){
