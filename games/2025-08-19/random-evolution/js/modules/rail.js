@@ -3,17 +3,45 @@
 
   const GEN_STARTS = [1, 152, 252, 387, 494, 650, 722, 810, 906];
 
+  function isMobile(){
+    return window.matchMedia("(max-width: 620px), (max-height: 600px)").matches;
+  }
+  function genForDex(n){
+    for (let i = GEN_STARTS.length - 1; i >= 0; i--){
+      if (n >= GEN_STARTS[i]) return i + 1;
+    }
+    return 1;
+  }
+
   const Rail = {
     maxDex: 1025,
     setMax(end){ this.maxDex = end || 1025; },
     pctForDex(n){ return (Math.max(1, Math.min(this.maxDex, n || 1)) / this.maxDex) * 100; },
+
+    // --- Mobile overlay helpers ---
+    ensureStageOverlay(dom){
+      const stage = dom.stage;
+      if (!stage) return;
+      if (!stage.querySelector(".stage-rail-fill")){
+        const fill = document.createElement("div");
+        fill.className = "stage-rail-fill";
+        stage.appendChild(fill);
+      }
+      if (!stage.querySelector(".stage-rail-badge")){
+        const badge = document.createElement("div");
+        badge.className = "stage-rail-badge";
+        badge.id = "stage-rail-badge";
+        badge.textContent = "Gen —";
+        stage.appendChild(badge);
+      }
+    },
     clearDecor(dom){
       const { rail, railTrack } = dom;
-      if (!railTrack) return;
-      railTrack.querySelectorAll(".rail-divider").forEach(el => el.remove());
+      if (railTrack) railTrack.querySelectorAll(".rail-divider").forEach(el => el.remove());
       rail?.querySelector(".rail-mid-labels")?.remove();
     },
     renderDecor(dom, mode){
+      if (isMobile()) return; // no side-rail decor on mobile
       const { rail, railTrack } = dom;
       if (!railTrack) return;
       this.clearDecor(dom);
@@ -45,20 +73,48 @@
       }
     },
     update(dom, dexNumber){
-      const { rail, railFill, railNeedle, needleLine, needleLabel } = dom;
-      if (!rail || !railFill || !railNeedle || !needleLine || !needleLabel) return;
-      rail.classList.remove("pokedex-rail--hidden");
-      const pct = this.pctForDex(dexNumber);
-      railFill.style.height = pct + "%";
-      railNeedle.style.bottom = pct + "%";
-      needleLine.style.width = "100%";
-      needleLabel.textContent = `#${dexNumber ?? "—"}`;
+      const gen = genForDex(dexNumber ?? 1);
+
+      if (!isMobile()){
+        // desktop: keep the left rail behavior
+        const { rail, railFill, railNeedle, needleLine, needleLabel } = dom;
+        if (!rail || !railFill || !railNeedle || !needleLine || !needleLabel) return;
+        rail.classList.remove("pokedex-rail--hidden");
+        const pct = this.pctForDex(dexNumber);
+        railFill.style.height = pct + "%";
+        railNeedle.style.bottom = pct + "%";
+        needleLine.style.width = "100%";
+        needleLabel.textContent = `#${dexNumber ?? "—"}`;
+        return;
+      }
+
+      // mobile: paint on-stage overlay
+      this.ensureStageOverlay(dom);
+      const fill = dom.stage.querySelector(".stage-rail-fill");
+      const badge = dom.stage.querySelector(".stage-rail-badge");
+      if (fill){
+        // compute fill % *within the current generation range*
+        const i = gen - 1;
+        const start = GEN_STARTS[i];
+        const end   = (i + 1 < GEN_STARTS.length) ? (GEN_STARTS[i + 1] - 1) : this.maxDex;
+        const clamped = Math.max(start, Math.min(end, dexNumber || start));
+        const localPct = ((clamped - start) / (end - start)) * 100; // 0..100 inside gen
+        fill.style.setProperty("--rail-fill", `${localPct}%`);
+      }
+      if (badge){
+        // Easy/Medium: "Gen X" … Hard: "Gx"
+        const mode = window.Revo?.Game?.getPublicState()?.mode || "easy";
+        const text = (mode === "hard") ? `G${gen}` : `Gen ${gen}`;
+        badge.textContent = text;
+      }
     },
     applyModeClass(dom, mode){
-      const { rail } = dom;
-      if (!rail) return;
-      rail.classList.remove("easy","medium","hard");
-      if (mode) rail.classList.add(mode);
+      if (!isMobile()){
+        const { rail } = dom;
+        if (!rail) return;
+        rail.classList.remove("easy","medium","hard");
+        if (mode) rail.classList.add(mode);
+      }
       this.renderDecor(dom, mode || "easy");
     }
   };
