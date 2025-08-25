@@ -123,3 +123,11 @@
 .revo-stage-wrap.rails-hidden .revo-history .history-track {
   opacity: 0;
 }
+
+/* Keep desktop rail as-is … */
+
+/* Mobile: rail hidden (stage.css already sets display:none), just ensure no layout jump */
+@media (max-width: 620px), (max-height: 600px){
+  .pokedex-rail { display: none !important; }
+}
+
