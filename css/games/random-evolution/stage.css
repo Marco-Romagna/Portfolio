@@ -1,155 +1,183 @@
+/* =========================
+   Stage & rails (DESKTOP)
+   ========================= */
+
 /* Stage wrapper (rail + stage + history) */
-.revo-stage-wrap {
-  display: grid;
-  grid-template-columns: auto 1fr auto; /* left rail, stage, right history */
-  align-items: start;
-  column-gap: 48px;
+.revo-stage-wrap{
+  display:grid;
+  grid-template-columns:auto 1fr auto; /* left rail, stage, right history */
+  align-items:start;
+  column-gap:48px;
   padding-right: clamp(12px, 5vw, 56px);
-  margin-inline: auto;
+  margin-inline:auto;
 }
 
 /* Keep spacing; allow fading rails in/out */
 .revo-stage-wrap .pokedex-rail,
-.revo-stage-wrap .revo-history {
+.revo-stage-wrap .revo-history{
   transition: opacity 180ms ease;
 }
 
 /* Hidden state: rails invisible/unfocusable but layout preserved */
 .revo-stage-wrap.rails-hidden .pokedex-rail,
-.revo-stage-wrap.rails-hidden .revo-history {
+.revo-stage-wrap.rails-hidden .revo-history{
   opacity: 0;
   pointer-events: none;
 }
 
-/* Stage (main game square) */
-.revo-stage {
-  position: relative;
-  width: min(var(--stage-max), 100%);
+/* Stage */
+.revo-stage{
+  position:relative;
+  width: min(var(--stage-max, 980px), 100%);
   aspect-ratio: 1 / 1;
-  margin: 16px auto;
-  background: radial-gradient(120% 120% at 50% 55%, #121929 0%, #0b101b 60%, #070a12 100%);
-  border: 1px solid rgba(255,255,255,.08);
-  border-radius: 16px;
-  display: grid;
-  place-items: center;
-  overflow: hidden; /* keeps sprites/flash from overflowing */
+  margin:16px auto;
+  background:radial-gradient(120% 120% at 50% 55%, #121929 0%, #0b101b 60%, #070a12 100%);
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:16px;
+  display:grid;
+  place-items:center;
+  overflow:hidden;
+
+  /* defaults for mobile “generation band” (no-op on desktop) */
+  --gen-start: 0%;
+  --gen-end: 0%;
 }
 
 /* Pokémon art */
-.revo-img {
-  position: absolute;
+.revo-img{
+  position:absolute;
   width: clamp(58%, 78%, 82%);
   max-height: 82%;
   object-fit: contain;
-  image-rendering: auto;
-  opacity: 0;
-  transition: opacity 80ms linear;
+  image-rendering:auto;
+  opacity:0; transition:opacity 80ms linear;
+  z-index:5;
 }
-.revo-img.silhouette {
-  filter: brightness(0) contrast(1000%) drop-shadow(0 0 10px rgba(255,255,255,.12));
-}
-
-/* Flash effect */
-.revo-flash {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  opacity: 0;
-  background: radial-gradient(circle at 50% 50%,
-    rgba(255,255,255,1) 0%,
-    rgba(255,255,255,.6) 30%,
-    rgba(255,255,255,0) 70%);
+.revo-img.silhouette{
+  filter:brightness(0) contrast(1000%) drop-shadow(0 0 10px rgba(255,255,255,.12));
 }
 
-/* Timer */
-.revo-timer {
-  position: absolute;
-  top: 10px;
-  right: 12px;
-  padding: 4px 8px;
-  border-radius: 8px;
-  background: rgba(0,0,0,.5);
-  border: 1px solid rgba(255,255,255,.12);
-  color: var(--text);
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+/* Flash & Timer inside stage */
+.revo-flash{
+  position:absolute; inset:0; pointer-events:none; opacity:0;
+  background:radial-gradient(circle at 50% 50%, rgba(255,255,255,1) 0%, rgba(255,255,255,.6) 30%, rgba(255,255,255,0) 70%);
+  z-index:6;
+}
+.revo-timer{
+  position:absolute; top:10px; right:12px;
+  padding:4px 8px; border-radius:8px;
+  background:rgba(0,0,0,.5); border:1px solid rgba(255,255,255,.12);
+  color:var(--text); font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
   font-size: clamp(11px, 2.1vmin, 15px);
-  line-height: 1;
-  pointer-events: none;
+  line-height:1; pointer-events:none;
+  z-index:7;
 }
-.revo-timer.warn { color: #f7768e; }
+.revo-timer.warn{ color:#f7768e; }
 
-/* Aim banner (Higher / Lower than X) */
-.revo-aim {
-  position: absolute;
-  top: 12px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 3;
-  font-weight: 900;
-  letter-spacing: .3px;
-  text-transform: uppercase;
-  color: #cfe0ff;
-  text-shadow: 0 2px 6px rgba(0,0,0,.45);
-  padding: 4px 10px;
-  border-radius: 10px;
-  background: rgba(0,0,0,.28);
-  border: 1px solid rgba(255,255,255,.10);
+/* Aim banner */
+.revo-aim{
+  position:absolute;
+  top:12px; left:50%; transform:translateX(-50%);
+  z-index:7; font-weight:900; letter-spacing:.3px; text-transform:uppercase;
+  color:#cfe0ff; text-shadow:0 2px 6px rgba(0,0,0,.45);
+  padding:4px 10px; border-radius:10px; background:rgba(0,0,0,.28);
+  border:1px solid rgba(255,255,255,.10);
   font-size: clamp(14px, 2.4vmin, 24px);
-  display: none;
+  display:none;
 }
-.revo-aim.lower { color: #f5a2b2; }
-.revo-aim.higher { color: #a9c4ff; }
+.revo-aim.lower{ color:#f5a2b2; }
+.revo-aim.higher{ color:#a9c4ff; }
 
-/* --- Stage-as-rail overlay (only used on mobile via media queries below) --- */
-.stage-rail-fill {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  /* very subtle vertical fill; updated from JS with a CSS var */
-  background:
-    linear-gradient(
-      to top,
-      rgba(122,162,247, .10) 0%,
-      rgba(122,162,247, .10) var(--rail-fill, 0%),
-      rgba(0,0,0,0) var(--rail-fill, 0%),
-      rgba(0,0,0,0) 100%
-    );
-  transition: background 160ms ease;
-  z-index: 1; /* behind Pokémon, ahead of stage bg */
-}
+/* =========================
+   MOBILE / SMALL VIEWPORTS
+   ========================= */
 
-.stage-rail-badge {
-  position: absolute;
-  top: 10px;
-  left: 12px;
-  z-index: 6;
-  padding: 4px 8px;
-  font: 800 12px/1 ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto;
-  color: #cfe0ff;
-  text-shadow: 0 1px 0 rgba(0,0,0,.45);
-  background: rgba(0,0,0,.28);
-  border: 1px solid rgba(255,255,255,.12);
-  border-radius: 8px;
-  pointer-events: none;
-  display: none; /* desktop hidden; enabled in mobile MQ below */
-}
+@media (max-width: 860px){
+  /* Stack: Stage (big) then History (bottom). Hide rails. */
+  .revo-stage-wrap{
+    grid-template-columns: 1fr;
+    column-gap: 0;
+    row-gap: 12px;
+    padding-right: 0;
+  }
+  .revo-stage-wrap .pokedex-rail{ display:none !important; }
 
-/* Pokémon art sits above the overlay fill */
-.revo-img { z-index: 5; }
+  /* Stage: widen & grow vertically */
+  .revo-stage{
+    width: 100%;
+    max-width: 100%;
+    margin: 12px auto 6px;
+    aspect-ratio: auto;
+    min-height: min(72vh, 92svh);
+  }
 
-/* ---------- Mobile / small viewports ---------- */
-@media (max-width: 620px), (max-height: 600px){
-  /* Hide the side rails but keep grid columns */
-  .revo-stage-wrap .pokedex-rail { display: none; }
-  .revo-stage-wrap { column-gap: 16px; }
+  /* Light “generation band” overlay inside the stage.
+     You can set --gen-start / --gen-end from JS as percentages (0%–100%)
+     to tint the vertical slice for the current generation. */
+  .revo-stage::after{
+    content:"";
+    position:absolute; inset:0;
+    background:
+      linear-gradient(
+        to bottom,
+        transparent var(--gen-start),
+        rgba(122,162,247,.08) var(--gen-start),
+        rgba(122,162,247,.08) var(--gen-end),
+        transparent var(--gen-end)
+      );
+    pointer-events:none;
+    z-index:2;
+  }
 
-  /* Enable on-stage rail badge & fill */
-  .stage-rail-badge { display: inline-block; }
+  /* Pokémon can be a bit larger on mobile */
+  .revo-img{
+    width: clamp(66%, 86%, 96%);
+    max-height: 88%;
+  }
 
-  /* Make the stage a bit larger proportionally on mobile */
-  .revo-stage {
-    width: min(calc(var(--stage-max) + 40px), 100%);
-    margin: 12px auto;
+  /* History rail becomes a bottom strip (horizontal) */
+  .revo-history{
+    grid-column: 1;
+    width: 100%;
+    height: clamp(74px, 18vh, 120px);
+    border-radius: 14px;
+    overflow: hidden;
+  }
+  .revo-history .history-track{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    height: 100%;
+    scroll-snap-type: x proximity;
+  }
+  .revo-history .hist-item{
+    flex: 0 0 auto;
+    width: clamp(56px, 14vw, 90px);
+    scroll-snap-align: start;
+  }
+  .revo-history .hist-imgwrap{ width: 100%; }
+  .revo-history .hist-thumb{
+    width: 100%;
+    height: auto;
+  }
+
+  /* Optional “Gen X” badge in the stage (if you add the node) */
+  .stage-gen-badge{
+    position:absolute; top:10px; left:10px; z-index:7;
+    font-size:12px; font-weight:800; letter-spacing:.3px;
+    color:#bcd0ff; background:rgba(0,0,0,.35);
+    border:1px solid rgba(255,255,255,.10); border-radius:10px;
+    padding:4px 8px;
   }
 }
 
+/* Ultra-short landscape (e.g., phones sideways) */
+@media (max-height: 520px) and (orientation: landscape){
+  .revo-stage{
+    min-height: 64vh;
+  }
+}
