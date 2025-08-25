@@ -115,3 +115,36 @@
   .revo-stage-wrap { grid-template-columns: auto 1fr; }
   .revo-history { display:none; }
 }
+
+/* Desktop unchanged … */
+
+/* ---------- Mobile: history becomes a bottom strip ---------- */
+@media (max-width: 620px), (max-height: 600px){
+  .revo-history{
+    width: 100%;
+    height: auto;
+    min-height: 88px;
+    border-radius: 12px;
+    padding: 6px 8px;
+    grid-column: 1 / -1;           /* span under stage */
+  }
+  .revo-history .history-track{
+    display: flex;
+    flex-direction: row;            /* left→right */
+    align-items: center;
+    gap: 8px;
+    padding: 0 4px;
+    overflow-x: auto;               /* allow horizontal scroll if needed */
+    height: auto;
+  }
+  .hist-item{
+    width: auto;                    /* shrink to content */
+    transform: scale(1); opacity: 1; /* skip pop-in on tight space */
+    animation: none;
+  }
+  .hist-imgwrap{ width: 64px; height: 64px; }
+  .hist-label{
+    font-size: 10px;
+  }
+}
+
