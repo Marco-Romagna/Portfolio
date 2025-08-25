@@ -88,6 +88,32 @@
 .revo-aim.lower{ color:#f5a2b2; }
 .revo-aim.higher{ color:#a9c4ff; }
 
+/* ---------- In-stage buttons (desktop defaults) ---------- */
+#evolve-button.evolve-img{
+  position:absolute;
+  left:50%; transform:translateX(-50%);
+  bottom: 28px;
+  width: clamp(180px, 28vmin, 360px);
+  height:auto;
+  z-index:6;
+  -webkit-user-drag:none; user-select:none; pointer-events:auto;
+}
+#controls.ab-instage{
+  position:absolute;
+  left:50%; transform:translateX(-50%);
+  right:auto;
+  bottom: 18px;
+  display:flex; align-items:center;
+  gap: clamp(20px, 8vmin, 56px);
+  z-index:6;
+}
+#controls.ab-instage img{
+  width: clamp(72px, 12vmin, 120px);
+  height: clamp(72px, 12vmin, 120px);
+  transition: transform .08s ease;
+}
+#controls.ab-instage img:active{ transform: scale(.92); }
+
 /* =========================
    MOBILE / SMALL VIEWPORTS
    ========================= */
@@ -111,9 +137,7 @@
     min-height: min(72vh, 92svh);
   }
 
-  /* Light “generation band” overlay inside the stage.
-     You can set --gen-start / --gen-end from JS as percentages (0%–100%)
-     to tint the vertical slice for the current generation. */
+  /* Light “generation band” overlay inside the stage. */
   .revo-stage::after{
     content:"";
     position:absolute; inset:0;
@@ -160,12 +184,9 @@
     scroll-snap-align: start;
   }
   .revo-history .hist-imgwrap{ width: 100%; }
-  .revo-history .hist-thumb{
-    width: 100%;
-    height: auto;
-  }
+  .revo-history .hist-thumb{ width: 100%; height: auto; }
 
-  /* Optional “Gen X” badge in the stage (if you add the node) */
+  /* “Gen X” badge in the stage */
   .stage-gen-badge{
     position:absolute; top:10px; left:10px; z-index:7;
     font-size:12px; font-weight:800; letter-spacing:.3px;
@@ -173,11 +194,43 @@
     border:1px solid rgba(255,255,255,.10); border-radius:10px;
     padding:4px 8px;
   }
+
+  /* Keep evolve anchored bottom-center in portrait */
+  #evolve-button.evolve-img{
+    left:50%; transform:translateX(-50%);
+    bottom: clamp(10px, calc(env(safe-area-inset-bottom,0px) + 12px), 22px);
+    max-width: clamp(180px, 42vw, 360px);
+  }
+
+  /* A/B centered under Pokémon in portrait */
+  #controls.ab-instage{
+    left:50%; right:auto; transform:translateX(-50%);
+    bottom: clamp(8px, calc(env(safe-area-inset-bottom,0px) + 6px), 16px);
+    gap: clamp(18px, 9vw, 44px);
+  }
 }
 
-/* Ultra-short landscape (e.g., phones sideways) */
+/* ---------------- Phone LANDSCAPE (short height) ---------------- */
 @media (max-height: 520px) and (orientation: landscape){
-  .revo-stage{
-    min-height: 64vh;
+  .revo-stage{ min-height: 64vh; }
+
+  /* Move the buttons OFF the stage to the right, anchored to stage edge */
+  #evolve-button.evolve-img{
+    left: calc(100% + 22px);
+    top: 50%;
+    transform: translateY(-50%);   /* center vertically beside the stage */
+    bottom: auto;
+    max-width: clamp(180px, 34vmin, 360px);
+  }
+  #controls.ab-instage{
+    left: calc(100% + 22px);
+    right: auto;
+    top: calc(50% + 70px);          /* a bit below the evolve button */
+    transform: translateY(-50%);
+    gap: clamp(12px, 4vw, 20px);
+  }
+  #controls.ab-instage img{
+    width: clamp(58px, 10vmin, 84px);
+    height: clamp(58px, 10vmin, 84px);
   }
 }
