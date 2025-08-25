@@ -1,3 +1,4 @@
+// games/2025-08-19/random-evolution/js/modules/game.js
 (function(){
   const root = window.Revo = window.Revo || {};
   const { Util, Audio, DOM, Rail, HUD, History } = root;
@@ -65,12 +66,23 @@
       History.setCapacity(DOM);
     }
 
-    /* ---------- simple button visibility ---------- */
+    /* ---------- simple button & overlay visibility ---------- */
     function showEvolve(show){ DOM.evolveBtn?.classList.toggle('hidden', !show); }
     function showDecision(show){
       if (!DOM.controls) return;
       DOM.controls.classList.toggle('hidden', !show);
       DOM.controls.classList.toggle('center-split', show);
+    }
+    function showStart(){
+      DOM.startScreen?.classList.remove("hidden");
+      DOM.endScreen?.classList.add("hidden");
+      HUD.update(DOM, getPublicState());
+    }
+    function showEnd(){
+      DOM.endScreen?.classList.remove("hidden");
+      DOM.startScreen?.classList.add("hidden");
+      setTimeout(()=> DOM.playAgain?.focus(), 0);
+      HUD.update(DOM, getPublicState());
     }
 
     /* ---------- stage helpers ---------- */
@@ -150,7 +162,7 @@
         DOM.imgA.style.opacity = showB ? 0 : 1;
         DOM.imgB.style.opacity = showB ? 1 : 0;
         updateTimer();
-        await sleep(reducedMotion ? 240 : (500 / (modes[mode]?.speedFactor || 1.0)));
+        await sleep(currentInterval());
       }
     }
 
@@ -275,11 +287,11 @@
       if (DOM.finalScore) DOM.finalScore.textContent = String(score);
       hardStopAll();
       setGameActive(false);
-    
+
       showEvolve(false);
       showDecision(false);
-    
-      showEnd();
+
+      showEnd();           // <— now defined above
       clearStageImages();
       hideRails();
     }
