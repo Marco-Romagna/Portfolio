@@ -412,6 +412,15 @@
       init: async () => {
         DOM.grab();
 
+         // Add resize hook here
+        window.addEventListener('resize', () => {
+          Rail.applyModeClass(DOM, Game.getPublicState().mode);
+          History.setCapacity(DOM);
+      
+          const cur = Game.getPublicState().currentId;
+          if (cur != null) Rail.update(DOM, cur);
+        });
+      
         // Inject feedback styles once
         if (!document.querySelector('style[data-revo-feedback]')){
           const css = `
@@ -426,7 +435,7 @@
           style.textContent = css;
           document.head.appendChild(style);
         }
-
+      
         await loadSettings();
         Audio.injectVolumeUI(DOM.audioRow);
         bindInputs();
