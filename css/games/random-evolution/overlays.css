@@ -1,3 +1,5 @@
+/* overlays.css */
+
 .revo-start{
   position:absolute; inset:0; display:grid; place-items:center;
   padding:24px; gap:10px;
@@ -73,3 +75,11 @@
 }
 .revo-end .mode-btn:hover{ filter:brightness(1.08); transform:translateY(-1px); }
 .revo-end .mode-btn:active{ transform:translateY(0); box-shadow:0 1px 0 rgba(0,0,0,.35), 0 0 0 2px rgba(255,255,255,.06) inset; }
+
+/* -----------------------------
+   Safety: force-on helper
+   ----------------------------- */
+.revo-overlay-show{
+  display: grid !important;
+  z-index: 1000; /* ensure above sprites/controls */
+}
