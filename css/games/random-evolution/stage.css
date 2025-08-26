@@ -98,8 +98,8 @@ html, body { overflow-x: hidden; }
 #evolve-button.evolve-img{
   position:absolute;
   left:50%;
-  bottom: 14px;                        /* baseline same as A/B */
-  transform: translate(-75%, 165px);    /* extra nudge downwards */
+  bottom: 16px;                        /* baseline same as A/B */
+  transform: translate(-70%, 160px);    /* extra nudge downwards */
   width: clamp(180px, 28vmin, 360px);
   height:auto;
   z-index:6;
