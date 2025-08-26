@@ -99,7 +99,7 @@ html, body { overflow-x: hidden; }
   position:absolute;
   left:50%;
   bottom: 16px;                        /* baseline same as A/B */
-  transform: translate(-50%, 105px);    /* extra nudge downwards */
+  transform: translate(-50%, 110px);    /* extra nudge downwards */
   width: clamp(180px, 28vmin, 360px);
   height:auto;
   z-index:6;
