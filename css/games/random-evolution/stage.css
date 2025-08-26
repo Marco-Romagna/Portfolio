@@ -1,4 +1,4 @@
-/* --- global guard against subtle overflow --- */
+/* --- guard against subtle overflow --- */
 html, body { overflow-x: hidden; }
 
 /* Hidden by default; only used in mobile landscape */
@@ -17,6 +17,11 @@ html, body { overflow-x: hidden; }
   padding-right: clamp(12px, 5vw, 56px);
   margin-inline:auto;
 }
+
+/* Lock each area to a column (prevents auto-placement glitches) */
+.pokedex-rail { grid-column: 1; align-self: start; }
+.revo-stage   { grid-column: 2; align-self: start; }
+.revo-history { grid-column: 3; align-self: start; }
 
 /* Keep spacing; allow fading rails in/out */
 .revo-stage-wrap .pokedex-rail,
@@ -94,12 +99,15 @@ html, body { overflow-x: hidden; }
 .revo-aim.lower{ color:#f5a2b2; }
 .revo-aim.higher{ color:#a9c4ff; }
 
+/* Gen badge is mobile-only; hide by default */
+.stage-gen-badge{ display:none; }
+
 /* ---------- In-stage buttons (DESKTOP baseline) ---------- */
 #evolve-button.evolve-img{
   position:absolute;
   left:50%;
-  bottom: 16px;                        /* baseline same as A/B */
-  transform: translate(-50%, 110px);    /* extra nudge downwards */
+  bottom: 16px;                        /* baseline similar to A/B */
+  transform: translate(-50%, 110px);   /* extra nudge downwards (your preference) */
   width: clamp(180px, 28vmin, 360px);
   height:auto;
   z-index:6;
@@ -135,7 +143,33 @@ html, body { overflow-x: hidden; }
     padding-right: 0;
     max-width: 100%;
   }
+
+  /* On mobile the rail is hidden; history moves below stage */
   .revo-stage-wrap .pokedex-rail{ display:none !important; }
+  .revo-history{
+    grid-column: 1;
+    width: 100%;
+    min-width: 0;
+    height: clamp(74px, 18vh, 120px);
+    border-radius: 14px;
+    overflow: hidden;
+  }
+  .revo-history .history-track{
+    display:flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    height: 100%;
+    scroll-snap-type: x proximity;
+  }
+  .revo-history .hist-item{
+    flex: 0 0 auto;
+    width: clamp(56px, 14vw, 90px);
+    scroll-snap-align: start;
+  }
 
   /* Stage grows vertically and owns the width. */
   .revo-stage{
@@ -169,34 +203,9 @@ html, body { overflow-x: hidden; }
     max-height: 88%;
   }
 
-  /* History strip becomes horizontal at the bottom */
-  .revo-history{
-    grid-column: 1;
-    width: 100%;
-    min-width: 0;
-    height: clamp(74px, 18vh, 120px);
-    border-radius: 14px;
-    overflow: hidden;
-  }
-  .revo-history .history-track{
-    display:flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 10px;
-    padding: 10px 12px;
-    overflow-x: auto;
-    overflow-y: hidden;
-    height: 100%;
-    scroll-snap-type: x proximity;
-  }
-  .revo-history .hist-item{
-    flex: 0 0 auto;
-    width: clamp(56px, 14vw, 90px);
-    scroll-snap-align: start;
-  }
-
-  /* “Gen X” badge (top-left of the stage) */
+  /* “Gen X” badge (top-left of the stage) — visible on mobile */
   .stage-gen-badge{
+    display:block;
     position:absolute; top:10px; left:10px; z-index:7;
     font-size:12px; font-weight:800; letter-spacing:.3px;
     color:#bcd0ff; background:rgba(0,0,0,.35);
