@@ -231,10 +231,11 @@ html, body { overflow-x: hidden; }
   }
 }
 
-/* Desktop only: push EVOLVE closer to the stage bottom */
+/* DESKTOP ONLY — force EVOLVE lower */
 @media (min-width: 861px){
-  #evolve-button.evolve-img{
-    bottom: 2px !important;                 /* anchor almost on the edge */
-    transform: translate(-50%, 10px) !important; /* nudge further down */
+  .revo-stage #evolve-button.evolve-img{
+    bottom: -10px !important;                 /* allow it to sit slightly below the edge */
+    transform: translate(-50%, 28px) !important;  /* nudge it further down visually */
+    z-index: 6 !important;
   }
 }
