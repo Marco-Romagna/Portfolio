@@ -230,3 +230,11 @@ html, body { overflow-x: hidden; }
     grid-column:1 / -1; width:100%;
   }
 }
+
+/* Desktop only: lower the EVOLVE button */
+@media (min-width: 861px){
+  #evolve-button.evolve-img{
+    bottom: 10px !important;  /* closer to stage bottom */
+  }
+}
+
