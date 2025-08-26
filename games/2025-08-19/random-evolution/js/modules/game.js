@@ -94,9 +94,37 @@
       if (DOM.timer) { DOM.timer.textContent = "—"; DOM.timer.classList.remove("warn"); }
       candidateId = null;
     }
+    
+    function setStageGenDecor(dex){
+      // Basic Gen ranges; adjust if you support future gens
+      const gens = [
+        { n:1,  start:1,   end:151 },
+        { n:2,  start:152, end:251 },
+        { n:3,  start:252, end:386 },
+        { n:4,  start:387, end:493 },
+        { n:5,  start:494, end:649 },
+        { n:6,  start:650, end:721 },
+        { n:7,  start:722, end:809 },
+        { n:8,  start:810, end:905 },
+        { n:9,  start:906, end:1025 }
+      ];
+      const g = gens.find(g => dex >= g.start && dex <= g.end) || gens[0];
+    
+      // Percent positions for the vertical band (top/bottom)
+      const pct = (v) => `${(v / (Rail.maxDex || 1025)) * 100}%`;
+      DOM.stage?.style.setProperty('--gen-start', pct(g.start));
+      DOM.stage?.style.setProperty('--gen-end',   pct(g.end));
+    
+      // Badge text (mobile CSS shows it)
+      if (DOM.genBadge){
+        DOM.genBadge.textContent = `Gen ${g.n}`;
+        DOM.genBadge.setAttribute('aria-hidden', 'false');
+      }
+    }
 
     function showInstant(id){
       currentId = id;
+      setStageGenDecor(currentId);
       DOM.imgA.src = urlFor(id);
       DOM.imgB.src = "";
       DOM.imgA.classList.remove("silhouette");
@@ -106,6 +134,28 @@
       DOM.flash.style.opacity = 0;
       if (DOM.timer) { DOM.timer.textContent = "—"; DOM.timer.classList.remove("warn"); }
       HUD.update(DOM, getPublicState());
+    }
+    
+    function applyResponsiveLayout(){
+      const isSmall   = window.matchMedia('(max-width: 860px)').matches;
+      const isLand    = window.matchMedia('(orientation: landscape)').matches;
+      const wrap      = document.querySelector('.revo-stage-wrap');
+    
+      if (!wrap || !DOM.controls) return;
+    
+      const useDock = isSmall && isLand && window.innerHeight < 520;
+    
+      // Toggle wrapper class for CSS
+      wrap.classList.toggle('mobile-landscape', useDock);
+    
+      // Move controls to dock or back to stage
+      if (useDock && DOM.controlsDock && DOM.controlsDock !== DOM.controls.parentNode){
+        DOM.controlsDock.appendChild(DOM.controls);
+        DOM.controlsDock.setAttribute('aria-hidden', 'false');
+      } else if (!useDock && DOM.stage && DOM.stage !== DOM.controls.parentNode){
+        DOM.stage.appendChild(DOM.controls);
+        DOM.controlsDock?.setAttribute('aria-hidden', 'true');
+      }
     }
 
     function updateTimer(){
@@ -245,7 +295,8 @@
 
       if (isCorrectDir) { score += mult; mult += 1; currentId = candidateId; AudioMgr.playOK(); HUD.pulseGood(DOM); }
       else { lives -= 1; mult = 1; currentId = candidateId; AudioMgr.playBad(); HUD.pulseBad(DOM); }
-
+      
+      setStageGenDecor(currentId);
       History.push(DOM, urlFor, { id: currentId, action: 'accept', correct: isCorrectDir });
 
       await sleep(280);
@@ -329,6 +380,7 @@
 
       showDecision(false);
       showEvolve(true);
+      applyResponsiveLayout();                  // <-- re-evaluate layout after reset
     }
 
     function wireStartButtons(){
@@ -385,24 +437,44 @@
     }
 
     function firstPaint(){
+      // HUD & rails
       DOM.controls?.classList.add("hidden");
       DOM.hud?.classList.add("inactive");
-
       hideRails();
-
+    
+      // Reset state & visuals
       currentId = null;
       clearStageImages();
       History.clear(DOM);
       History.setCapacity(DOM);
-
+    
       setGameActive(false);
       HUD.update(DOM, getPublicState());
+    
+      // Overlays
       DOM.endScreen?.classList.add("hidden");
       DOM.startScreen?.classList.remove("hidden");
+    
+      // Rail visuals off until a mode starts
       Rail.applyModeClass(DOM, null);
-
+    
+      // Buttons hidden in idle
       showEvolve(false);
       showDecision(false);
+    
+      // Make sure controls live back inside the stage (not in the dock)
+      if (DOM.controls && DOM.stage && DOM.controls.parentNode !== DOM.stage){
+        DOM.stage.appendChild(DOM.controls);
+      }
+      DOM.controlsDock?.setAttribute('aria-hidden', 'true');
+    
+      // Clear mobile “generation band” & badge
+      DOM.stage?.style.setProperty('--gen-start', '0%');
+      DOM.stage?.style.setProperty('--gen-end',   '0%');
+      if (DOM.genBadge){
+        DOM.genBadge.textContent = '';
+        DOM.genBadge.setAttribute('aria-hidden', 'true');
+      }
     }
 
     function boot(debugOn){ DEBUG = debugOn; }
@@ -414,6 +486,7 @@
       
         // Ensure mobile/desktop layout logic runs on load AND on resize
         const onResize = () => {
+          applyResponsiveLayout();
           Rail.applyModeClass(DOM, Game.getPublicState().mode);
           History.setCapacity(DOM);
       
