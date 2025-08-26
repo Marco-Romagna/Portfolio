@@ -98,12 +98,14 @@ html, body { overflow-x: hidden; }
 #evolve-button.evolve-img{
   position:absolute;
   left:50%;
-  bottom: 28px;                        /* same baseline as A/B cluster */
-  transform: translate(-50%, 22px);    /* optical nudge to sit lower */
+  bottom: 18px;                        /* baseline same as A/B */
+  transform: translate(-50%, 45px);    /* extra nudge downwards */
   width: clamp(180px, 28vmin, 360px);
   height:auto;
   z-index:6;
-  -webkit-user-drag:none; user-select:none; pointer-events:auto;
+  -webkit-user-drag:none;
+  user-select:none;
+  pointer-events:auto;
 }
 #controls.ab-instage{
   position:absolute;
