@@ -82,6 +82,9 @@
       this.historyWrap  = $("revo-history");
       this.historyTrack = $("history-track");
 
+      this.genBadge    = $("gen-badge");
+      this.controlsDock= $("controls-dock");
+
       // Ensure A/B controls live inside the stage and have the instage class
       if (this.controls && this.stage && !this.controls.classList.contains("ab-instage")) {
         this.controls.classList.add("ab-instage");
