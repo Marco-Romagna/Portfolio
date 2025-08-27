@@ -1,9 +1,11 @@
-// games/random-evolution/js/modules/game.js
 (function(){
   const root = window.Revo = window.Revo || {};
   const { Util, Audio, DOM, Rail, HUD, History } = root;
   const { sleep, now, cap, randInt, preloadImage } = Util;
   const { AudioMgr } = Audio;
+
+  // Toggle to show a translucent debug overlay with the current layout state.
+  const DEBUG_OVERLAY = true;
 
   const Game = (() => {
     let DEBUG = true;
@@ -109,7 +111,7 @@
       ];
       const g = gens.find(g => dex >= g.start && dex <= g.end) || gens[0];
 
-      // Percent positions for vertical band (subtle background only)
+      // Percent positions for subtle background band
       const pct = (v) => `${(v / (Rail.maxDex || 1025)) * 100}%`;
       DOM.stage?.style.setProperty('--gen-start', pct(g.start));
       DOM.stage?.style.setProperty('--gen-end',   pct(g.end));
@@ -135,6 +137,30 @@
       HUD.update(DOM, getPublicState());
     }
 
+    /* ======= Debug overlay ======= */
+    let dbgEl = null;
+    function renderDebugOverlay(){
+      if (!DEBUG_OVERLAY) return;
+      const isSmall = window.matchMedia('(max-width: 860px)').matches;
+      const isLand  = window.matchMedia('(orientation: landscape)').matches;
+      const wrapHas = document.querySelector('.revo-stage-wrap')?.classList.contains('mobile-landscape');
+      const modeName = isSmall ? (isLand ? 'mobile-landscape' : 'mobile-portrait') : 'desktop';
+
+      if (!dbgEl){
+        dbgEl = document.createElement('div');
+        Object.assign(dbgEl.style, {
+          position:'fixed', top:'8px', left:'50%', transform:'translateX(-50%)',
+          padding:'6px 10px', borderRadius:'10px',
+          background:'rgba(0,0,0,.45)', border:'1px solid rgba(255,255,255,.12)',
+          color:'#cfe0ff', font:'600 12px ui-monospace, SFMono-Regular, Menlo, monospace',
+          zIndex:'9999', pointerEvents:'none', backdropFilter:'blur(4px)'
+        });
+        document.body.appendChild(dbgEl);
+      }
+      dbgEl.textContent = `layout: ${modeName} | wrap.mobile-landscape=${wrapHas ? 'yes':'no'}`;
+      dbgEl.style.display = 'block';
+    }
+
     /* ======= responsive twin-panels handling ======= */
     function applyResponsiveLayout(){
       const isSmall = window.matchMedia('(max-width: 860px)').matches;
@@ -142,9 +168,8 @@
       const wrap    = document.querySelector('.revo-stage-wrap');
       if (!wrap) return;
 
-      const useDock = isSmall && isLand; // no extra height gate; purely landscape narrow
+      const useDock = isSmall && isLand;
 
-      // Toggle wrapper class for CSS
       wrap.classList.toggle('mobile-landscape', useDock);
 
       // Move controls + evolve + aim to dock or back to stage
@@ -173,6 +198,8 @@
         }
         DOM.controlsDock?.setAttribute('aria-hidden', 'true');
       }
+
+      renderDebugOverlay();
     }
 
     function updateTimer(){
@@ -307,7 +334,6 @@
       DOM.imgB.classList.remove("silhouette");
       DOM.imgA.style.opacity = 0;
       DOM.imgB.style.opacity = 1;
-      const target = DOM.imgB; if (target) { target.style.transform = "scale(1.02)"; setTimeout(()=> target.style.transform = "", 180); }
 
       if (isCorrectDir) { score += mult; mult += 1; currentId = candidateId; AudioMgr.playOK(); HUD.pulseGood(DOM); }
       else { lives -= 1; mult = 1; currentId = candidateId; AudioMgr.playBad(); HUD.pulseBad(DOM); }
@@ -458,7 +484,7 @@
       DOM.hud?.classList.add("inactive");
       hideRails();
 
-      // Reset state & visuals
+      // Reset stage visuals
       currentId = null;
       clearStageImages();
       History.clear(DOM);
@@ -471,7 +497,6 @@
       DOM.endScreen?.classList.add("hidden");
       DOM.startScreen?.classList.remove("hidden");
 
-      // Rail visuals off until a mode starts
       Rail.applyModeClass(DOM, null);
 
       // Buttons hidden in idle
@@ -497,6 +522,8 @@
         DOM.genBadge.textContent = '';
         DOM.genBadge.setAttribute('aria-hidden', 'true');
       }
+
+      renderDebugOverlay();
     }
 
     function boot(debugOn){ DEBUG = debugOn; }
@@ -505,6 +532,7 @@
       boot,
       init: async () => {
         DOM.grab();
+
         const onResize = () => {
           applyResponsiveLayout();
           Rail.applyModeClass(DOM, Game.getPublicState().mode);
