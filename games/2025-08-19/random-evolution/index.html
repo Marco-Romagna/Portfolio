@@ -1,146 +1,127 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Random Evolution • Game</title>
-  <meta name="color-scheme" content="dark light" />
-  <link rel="icon" href="data:,">
+/* =========================================
+   MOBILE-ONLY OVERLAYS (DESKTOP UNCHANGED)
+   ========================================= */
 
-  <!-- Site styles -->
-  <link rel="stylesheet" href="../../../css/main.css">
-  <!-- Game styles -->
-  <link rel="stylesheet" href="../../../css/games/random-evolution/styles.css?v=revo3">
-</head>
-<body>
-  <!-- Header -->
-  <header class="header">
-    <div class="container nav">
-      <a class="brand" href="../../../index.html">
-        <span class="dot"></span><span>Marco • Portfolio</span>
-      </a>
-      <nav class="links">
-        <a class="cta" href="https://www.linkedin.com/in/marco-romagna" target="_blank" rel="noopener">LinkedIn</a>
-      </nav>
-    </div>
-  </header>
+/* ---------- Mobile Portrait ----------
+   - Keep overlay in the stage, centered
+   - Stack buttons vertically
+   - Tighten rules text to fit thin stages
+*/
+@media (max-width: 860px) and (orientation: portrait){
+  /* If your overlay uses #start-screen or .start-overlay, both are supported */
+  #start-screen,
+  .start-overlay{
+    /* do NOT position differently on desktop; only tighten mobile */
+    inset: 16px;
+    margin: 0 auto;
+    max-width: 100%;
+    display: grid;
+    grid-template-rows: auto 1fr auto; /* title | rules | actions */
+    padding: clamp(12px, 3vw, 18px);
+    overflow: hidden;
+  }
 
-  <!-- Main -->
-  <main class="container">
-    <section class="panel">
-      <h2 class="panel-title" id="game-title">Random Evolution</h2>
+  #start-screen .start-title,
+  .start-overlay .start-title{
+    text-align: center;
+    font-size: clamp(18px, 3.6vw, 28px);
+    margin: 2px 0 10px;
+  }
 
-      <!-- HUD -->
-      <div class="revo-hud inactive" id="hud">
-        <div class="hud-pill">
-          <span class="label">Score</span>
-          <span id="hud-score" class="value mono">0</span>
-        </div>
-        <div class="hud-pill">
-          <span class="label">Mult</span>
-          <span id="hud-mult" class="value mono">x1</span>
-        </div>
-        <div class="hud-pill">
-          <span class="label">Lives</span>
-          <span id="hud-lives" class="value mono">3</span>
-        </div>
-      </div>
+  #start-screen .start-rules,
+  .start-overlay .start-rules{
+    text-align: center;
+    font-size: clamp(12px, 3.2vw, 15px);
+    line-height: 1.25;
+    margin: 0 auto 8px;
+    max-width: 58ch;
+    padding-inline: clamp(6px, 3vw, 14px);
+    word-break: break-word;
+    overflow-wrap: anywhere;
+  }
 
-      <!-- Stage wrapper: LEFT rail + STAGE + RIGHT history -->
-      <div class="revo-stage-wrap rails-hidden">
-        <!-- Pokédex rail (left) -->
-        <div id="pokedex-rail" class="pokedex-rail" aria-hidden="true">
-          <div class="rail-track">
-            <div class="rail-fill"></div>
-            <!-- generation dividers injected via JS -->
-          </div>
-          <div class="rail-needle">
-            <span class="needle-line"></span>
-            <span class="needle-label">#—</span>
-          </div>
-        </div>
+  #start-screen .start-actions,
+  .start-overlay .start-actions{
+    display: flex;
+    flex-direction: column; /* STACKED */
+    align-items: center;
+    gap: clamp(10px, 3vw, 16px);
+    margin-top: 8px;
+  }
 
-        <!-- Stage -->
-        <div id="stage" class="revo-stage">
-          <!-- Gen badge now lives INSIDE the stage -->
-          <div id="gen-badge" class="stage-gen-badge" aria-hidden="true"></div>
+  #start-screen .start-actions .mode-btn,
+  .start-overlay .start-actions .mode-btn,
+  #start-screen .start-actions button,
+  .start-overlay .start-actions button{
+    width: min(420px, 90%);
+    min-width: 0;
+    padding: clamp(12px, 3vw, 16px) clamp(14px, 3.6vw, 22px);
+    font-size: clamp(14px, 3.4vw, 18px);
+    border-radius: 16px;
+  }
+}
 
-          <div id="aim" class="revo-aim" aria-hidden="true">Higher than —</div>
+/* ---------- Mobile Landscape ----------
+   - In twin-panels layout, position the start overlay over the RIGHT panel
+   - Stack buttons vertically
+   - Tighten rules text
+*/
+@media (max-width: 860px) and (orientation: landscape){
+  .revo-stage-wrap.mobile-landscape #start-screen,
+  .revo-stage-wrap.mobile-landscape .start-overlay{
+    /* visually sit over the right controls-dock panel */
+    left: auto;
+    right: clamp(8px, 2vw, 16px);
+    top: clamp(8px, 2vw, 16px);
+    bottom: clamp(8px, 2vw, 16px);
+    width: min(46vw, 520px);
+    margin: 0;
+    transform: none;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    padding: clamp(12px, 2.2vw, 18px);
+    overflow: hidden;
+  }
 
-          <!-- Pokémon art -->
-          <img id="imgA" class="revo-img" alt="Current Pokémon">
-          <img id="imgB" class="revo-img" alt="Next Pokémon">
+  .revo-stage-wrap.mobile-landscape #start-screen .start-title,
+  .revo-stage-wrap.mobile-landscape .start-overlay .start-title{
+    text-align: center;
+    font-size: clamp(18px, 2.6vw, 28px);
+    margin: 2px 0 10px;
+  }
 
-          <div id="flash" class="revo-flash"></div>
-          <div id="timer" class="revo-timer">—</div>
+  .revo-stage-wrap.mobile-landscape #start-screen .start-rules,
+  .revo-stage-wrap.mobile-landscape .start-overlay .start-rules{
+    text-align: center;
+    font-size: clamp(12px, 2vw, 15px);
+    line-height: 1.25;
+    margin: 0 auto 8px;
+    max-width: none;
+  }
 
-          <!-- Start Overlay (inside .revo-stage) -->
-          <div id="start-screen" class="start-overlay">
-            <button class="btn-close" type="button" aria-label="Close" hidden></button>
+  .revo-stage-wrap.mobile-landscape #start-screen .start-actions,
+  .revo-stage-wrap.mobile-landscape .start-overlay .start-actions{
+    display: flex;
+    flex-direction: column; /* STACKED */
+    align-items: center;
+    gap: clamp(10px, 2vw, 14px);
+    margin-top: 8px;
+  }
 
-            <h2 class="start-title">Choose your difficulty</h2>
+  .revo-stage-wrap.mobile-landscape #start-screen .start-actions .mode-btn,
+  .revo-stage-wrap.mobile-landscape .start-overlay .start-actions .mode-btn,
+  .revo-stage-wrap.mobile-landscape #start-screen .start-actions button,
+  .revo-stage-wrap.mobile-landscape .start-overlay .start-actions button{
+    width: min(360px, 90%);
+    padding: clamp(12px, 2.2vw, 16px) clamp(14px, 2.8vw, 20px);
+    font-size: clamp(14px, 2.4vw, 18px);
+    border-radius: 16px;
+  }
+}
 
-            <p class="start-rules">
-              Guess whether the next Pokémon's National Dex number is
-              <strong>higher</strong> or <strong>lower</strong> than the current one.
-              Correct guesses chain a multiplier — lose a life on a miss.
-              You’ve got limited time to decide each roll.
-            </p>
-
-            <div class="start-actions">
-              <button class="mode-btn" data-mode="easy"   type="button">Easy</button>
-              <button class="mode-btn" data-mode="medium" type="button">Medium</button>
-              <button class="mode-btn" data-mode="hard"   type="button">Hard</button>
-            </div>
-          </div>
-
-          <!-- End overlay -->
-          <div id="end-screen" class="revo-end hidden">
-            <h3 class="title">Game Over</h3>
-            <p class="subtitle">Final score: <span id="final-score">0</span></p>
-            <div class="btn-row">
-              <button id="play-again" class="mode-btn">Play Again</button>
-            </div>
-          </div>
-
-          <!-- Buttons in-stage -->
-          <div id="controls" class="ab-instage hidden">
-            <img id="a-button" src="./assets/buttons/A_Confirm_button.png" alt="A Confirm">
-            <img id="b-button" src="./assets/buttons/B_Decline_button.png" alt="B Decline">
-          </div>
-
-          <img
-            id="evolve-button"
-            class="evolve-img hidden"
-            src="./assets/buttons/Evolve_button.png"
-            alt="Evolve">
-        </div>
-
-        <!-- Controls dock (used in mobile landscape) -->
-        <div id="controls-dock" class="controls-dock" aria-hidden="true"></div>
-
-        <!-- History rail (right) -->
-        <aside id="revo-history" class="revo-history" aria-label="Encounter history" aria-hidden="true">
-          <div class="history-track" id="history-track"></div>
-        </aside>
-      </div>
-
-      <!-- Volume row -->
-      <div class="revo-audio">
-        <span class="tag">Sound</span>
-        <!-- JS injects mute + volume -->
-      </div>
-    </section>
-  </main>
-
-  <!-- JS modules -->
-  <script src="./js/modules/util.js" defer></script>
-  <script src="./js/modules/audio.js" defer></script>
-  <script src="./js/modules/dom.js" defer></script>
-  <script src="./js/modules/rail.js" defer></script>
-  <script src="./js/modules/hud.js" defer></script>
-  <script src="./js/modules/history.js" defer></script>
-  <script src="./js/modules/game.js" defer></script>
-  <script src="./js/random-evolution.js" defer></script>
-</body>
-</html>
+/* ---------- Safety: if overlay content ever overflows, allow inner scroll ----------
+   (non-desktop only; desktop remains as you styled it) */
+@media (max-width: 860px){
+  #start-screen .scroll,
+  .start-overlay .scroll{ overflow: auto; max-height: 100%; }
+}
