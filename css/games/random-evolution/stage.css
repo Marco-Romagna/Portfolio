@@ -99,7 +99,7 @@ html, body { overflow-x: hidden; }
 .revo-aim.lower{ color:#f5a2b2; }
 .revo-aim.higher{ color:#a9c4ff; }
 
-/* Gen badge —  shown on ALL sizes, opposite the timer (top-left) */
+/* Gen badge — ALWAYS visible when aria-hidden=false; opposite the timer */
 .stage-gen-badge{
   position:absolute; top:10px; left:10px; z-index:7;
   display:block;
@@ -110,7 +110,7 @@ html, body { overflow-x: hidden; }
   padding:4px 8px;
   pointer-events:none;
 }
-/* Hide when aria-hidden=true so it doesn't appear in idle screens */
+/* Hide when idle */
 .stage-gen-badge[aria-hidden="true"]{ display:none; }
 
 /* ---------- In-stage buttons (DESKTOP baseline) ---------- */
