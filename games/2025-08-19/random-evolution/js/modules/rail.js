@@ -18,20 +18,23 @@
     setMax(end){ this.maxDex = end || 1025; },
     pctForDex(n){ return (Math.max(1, Math.min(this.maxDex, n || 1)) / this.maxDex) * 100; },
 
-    // We no longer inject any on-stage rail elements on mobile.
+    // No mobile badge/fill injection anymore
+    ensureStageOverlay(dom){
+      const stage = dom.stage;
+      if (!stage) return;
+      stage.querySelectorAll(".stage-rail-badge,.stage-rail-fill").forEach(el => el.remove());
+    },
     clearDecor(dom){
       const { rail, railTrack } = dom;
       if (railTrack) railTrack.querySelectorAll(".rail-divider").forEach(el => el.remove());
       rail?.querySelector(".rail-mid-labels")?.remove();
     },
-
     renderDecor(dom, mode){
       if (isMobile()) return; // no side-rail decor on mobile
       const { rail, railTrack } = dom;
       if (!railTrack) return;
       this.clearDecor(dom);
 
-      // Generation dividers
       GEN_STARTS.forEach(startNum => {
         const pos = this.pctForDex(startNum);
         const divider = document.createElement("div");
@@ -39,10 +42,8 @@
         divider.style.bottom = pos + "%";
         railTrack.appendChild(divider);
       });
-
       if (mode === "hard") return;
 
-      // Mid labels
       const bounds = [...GEN_STARTS, this.maxDex + 1];
       const wrap = document.createElement("div");
       wrap.className = "rail-mid-labels";
@@ -60,32 +61,31 @@
         wrap.appendChild(lab);
       }
     },
-
     update(dom, dexNumber){
-      if (isMobile()){
-        // On mobile we rely on Game.setStageGenDecor() to paint the subtle background band.
+      const gen = genForDex(dexNumber ?? 1);
+
+      if (!isMobile()){
+        // desktop: left rail behavior
+        const { rail, railFill, railNeedle, needleLine, needleLabel } = dom;
+        if (!rail || !railFill || !railNeedle || !needleLine || !needleLabel) return;
+        rail.classList.remove("pokedex-rail--hidden");
+        const pct = this.pctForDex(dexNumber);
+        railFill.style.height = pct + "%";
+        railNeedle.style.bottom = pct + "%";
+        needleLine.style.width = "100%";
+        needleLabel.textContent = `#${dexNumber ?? "—"}`;
         return;
       }
 
-      // Desktop: update the left rail fill/needle
-      const { rail, railFill, railNeedle, needleLine, needleLabel } = dom;
-      if (!rail || !railFill || !railNeedle || !needleLine || !needleLabel) return;
-
-      rail.classList.remove("pokedex-rail--hidden");
-      const pct = this.pctForDex(dexNumber);
-      railFill.style.height = pct + "%";
-      railNeedle.style.bottom = pct + "%";
-      needleLine.style.width = "100%";
-      needleLabel.textContent = `#${dexNumber ?? "—"}`;
+      // mobile: no injected fill/badge; subtle band handled in Game.setStageGenDecor
+      this.ensureStageOverlay(dom);
     },
-
     applyModeClass(dom, mode){
       if (!isMobile()){
         const { rail } = dom;
-        if (rail){
-          rail.classList.remove("easy","medium","hard");
-          if (mode) rail.classList.add(mode);
-        }
+        if (!rail) return;
+        rail.classList.remove("easy","medium","hard");
+        if (mode) rail.classList.add(mode);
       }
       this.renderDecor(dom, mode || "easy");
     }
