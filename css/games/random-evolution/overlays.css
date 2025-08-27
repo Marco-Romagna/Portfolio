@@ -1,11 +1,13 @@
 /* ======================================================
-   BASE (shared across desktop & mobile) — visuals only
+   START OVERLAY — base visuals (desktop & mobile)
+   Only styles the start overlay and its own buttons.
+   Does NOT touch volume/play-again or generic <button>.
    ====================================================== */
 
 #start-screen,
 .start-overlay{
   position: absolute;
-  inset: 24px;                     /* lives inside stage */
+  inset: 24px;                              /* lives inside the stage */
   margin: auto;
   max-width: min(920px, 94%);
   background: radial-gradient(120% 120% at 50% 55%, #0d1423 0%, #0a101b 65%, #070b14 100%);
@@ -13,7 +15,7 @@
   border-radius: 20px;
   box-shadow: 0 10px 40px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.04);
   display: grid;
-  grid-template-rows: auto 1fr auto; /* title | rules | actions */
+  grid-template-rows: auto 1fr auto;        /* title | rules | actions */
   padding: clamp(14px, 2.4vw, 24px);
   color: #dfe7ff;
   z-index: 8;
@@ -53,11 +55,9 @@
   margin-top: 10px;
 }
 
-/* pill buttons */
+/* Only style the overlay's own mode buttons */
 #start-screen .start-actions .mode-btn,
-.start-overlay .start-actions .mode-btn,
-#start-screen .start-actions button,
-.start-overlay .start-actions button{
+.start-overlay .start-actions .mode-btn{
   -webkit-appearance: none;
   appearance: none;
   border: none;
@@ -75,18 +75,21 @@
 #start-screen .start-actions .mode-btn:active,
 .start-overlay .start-actions .mode-btn:active{ transform: scale(.97); }
 
-/* Optional flavor per mode (keeps your old vibe) */
-.start-actions .mode-btn[data-mode="easy"]{
+/* Thematic colors per mode */
+#start-screen .start-actions .mode-btn[data-mode="easy"],
+.start-overlay .start-actions .mode-btn[data-mode="easy"]{
   background: linear-gradient(180deg, #70f1a0 0%, #3ecf63 100%);
 }
-.start-actions .mode-btn[data-mode="medium"]{
+#start-screen .start-actions .mode-btn[data-mode="medium"],
+.start-overlay .start-actions .mode-btn[data-mode="medium"]{
   background: linear-gradient(180deg, #ffc76f 0%, #f59f3c 100%);
 }
-.start-actions .mode-btn[data-mode="hard"]{
+#start-screen .start-actions .mode-btn[data-mode="hard"],
+.start-overlay .start-actions .mode-btn[data-mode="hard"]{
   background: linear-gradient(180deg, #ffa0a0 0%, #f7768e 100%);
 }
 
-/* Close/minus pill (if present) */
+/* Optional close/minus pill (if present) */
 #start-screen .btn-close,
 .start-overlay .btn-close{
   position: absolute;
@@ -94,7 +97,7 @@
   z-index: 9;
 }
 
-/* Desktop centering — matches your original look */
+/* Desktop centering — keep your original look */
 @media (min-width: 861px){
   #start-screen,
   .start-overlay{
@@ -105,21 +108,25 @@
 }
 
 /* =========================================
-   MOBILE-ONLY (desktop unchanged layout)
+   MOBILE-ONLY LAYOUT (desktop unchanged)
    ========================================= */
 
 /* ---------- Mobile Portrait ----------
-   - Keep overlay in the stage, centered
-   - Stack buttons vertically
-   - Tighten rules to fit thin stages
+   - Buttons stacked vertically
+   - Rules tightened
 */
 @media (max-width: 860px) and (orientation: portrait){
-  #start-screen,
-  .start-overlay{
-    inset: 16px;
-    margin: 0 auto;
-    max-width: 100%;
-    grid-template-rows: auto 1fr auto;
+  #start-screen .start-actions,
+  .start-overlay .start-actions{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: clamp(10px, 3vw, 16px);
+  }
+
+  #start-screen .start-actions .mode-btn,
+  .start-overlay .start-actions .mode-btn{
+    width: min(420px, 90%);
   }
 
   #start-screen .start-rules,
@@ -127,27 +134,14 @@
     font-size: clamp(12px, 3.2vw, 15px);
     line-height: 1.25;
     padding-inline: clamp(6px, 3vw, 14px);
-  }
-
-  #start-screen .start-actions,
-  .start-overlay .start-actions{
-    flex-direction: column; /* STACKED */
-    gap: clamp(10px, 3vw, 16px);
-    margin-top: 8px;
-  }
-
-  #start-screen .start-actions .mode-btn,
-  .start-overlay .start-actions .mode-btn,
-  #start-screen .start-actions button,
-  .start-overlay .start-actions button{
-    width: min(420px, 90%);
+    max-width: 60ch;
+    margin-inline: auto;
   }
 }
 
 /* ---------- Mobile Landscape ----------
-   - In twin-panels layout, position over RIGHT panel
-   - Stack buttons vertically
-   - Tighten rules text
+   - In twin-panels layout, position overlay over RIGHT panel
+   - Buttons stacked vertically
 */
 @media (max-width: 860px) and (orientation: landscape){
   .revo-stage-wrap.mobile-landscape #start-screen,
@@ -159,8 +153,21 @@
     width: min(46vw, 520px);
     margin: 0;
     transform: none;
+    display: grid;
     grid-template-rows: auto 1fr auto;
     padding: clamp(12px, 2.2vw, 18px);
+  }
+
+  .revo-stage-wrap.mobile-landscape #start-screen .start-actions,
+  .revo-stage-wrap.mobile-landscape .start-overlay .start-actions{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: clamp(10px, 2vw, 14px);
+  }
+  .revo-stage-wrap.mobile-landscape #start-screen .start-actions .mode-btn,
+  .revo-stage-wrap.mobile-landscape .start-overlay .start-actions .mode-btn{
+    width: min(360px, 90%);
   }
 
   .revo-stage-wrap.mobile-landscape #start-screen .start-rules,
@@ -168,26 +175,11 @@
     font-size: clamp(12px, 2vw, 15px);
     line-height: 1.25;
     margin: 0 auto 8px;
-    max-width: none;
-  }
-
-  .revo-stage-wrap.mobile-landscape #start-screen .start-actions,
-  .revo-stage-wrap.mobile-landscape .start-overlay .start-actions{
-    flex-direction: column; /* STACKED */
-    align-items: center;
-    gap: clamp(10px, 2vw, 14px);
-    margin-top: 8px;
-  }
-
-  .revo-stage-wrap.mobile-landscape #start-screen .start-actions .mode-btn,
-  .revo-stage-wrap.mobile-landscape .start-overlay .start-actions .mode-btn,
-  .revo-stage-wrap.mobile-landscape #start-screen .start-actions button,
-  .revo-stage-wrap.mobile-landscape .start-overlay .start-actions button{
-    width: min(360px, 90%);
+    text-align: center;
   }
 }
 
-/* Safety: if content overflows, allow inner scroll (mobile) */
+/* Safety: inner scroll if content overflows (mobile only) */
 @media (max-width: 860px){
   #start-screen .scroll,
   .start-overlay .scroll{ overflow: auto; max-height: 100%; }
