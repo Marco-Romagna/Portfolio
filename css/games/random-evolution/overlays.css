@@ -1,178 +1,127 @@
-/* =========================
-   START / MODAL OVERLAYS
-   ========================= */
+/* =========================================
+   MOBILE-ONLY OVERLAYS (DESKTOP UNCHANGED)
+   ========================================= */
 
-/* Container — support both class and id just in case */
-.start-overlay,
-#start-overlay{
-  position: absolute;
-  inset: 24px;                      /* keep it inside the stage */
-  margin: auto;
-  max-width: min(920px, 94%);
-  background: radial-gradient(120% 120% at 50% 55%, #0d1423 0%, #0a101b 65%, #070b14 100%);
-  border: 1px solid rgba(255,255,255,.08);
-  border-radius: 20px;
-  box-shadow: 0 10px 40px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.04);
-  display: grid;
-  grid-template-rows: auto 1fr auto;  /* title | rules | actions */
-  padding: clamp(14px, 2.4vw, 24px);
-  color: #dfe7ff;
-  z-index: 8;
-  overflow: hidden;
-}
-
-/* Title */
-.start-overlay .start-title{
-  font-weight: 900;
-  letter-spacing: .2px;
-  text-align: center;
-  font-size: clamp(18px, 3.4vw, 36px);
-  color: #cfe0ff;
-  text-shadow: 0 2px 10px rgba(0,0,0,.45);
-  margin: 4px 0 12px;
-}
-
-/* Rules copy — tighter so it fits narrow stages */
-.start-overlay .start-rules{
-  align-self: start;
-  font-size: clamp(12px, 2.2vw, 16px);
-  line-height: clamp(1.2, 2.6vw, 1.35);
-  color: #b8c6e8;
-  text-align: center;
-  margin: 0 auto 8px;
-  max-width: 58ch;
-  word-break: break-word;
-  overflow-wrap: anywhere;
-}
-
-/* Actions wrapper (buttons) */
-.start-overlay .start-actions{
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: clamp(12px, 2vw, 18px);
-  margin-top: 10px;
-}
-
-/* Mode buttons — keep your existing button visuals, just sizing here */
-.start-overlay .start-actions .mode-btn,
-.start-overlay .start-actions button{
-  min-width: clamp(140px, 28vw, 220px);
-  padding: clamp(12px, 2.4vw, 16px) clamp(16px, 3vw, 22px);
-  font-size: clamp(14px, 2.6vw, 18px);
-  font-weight: 800;
-  border-radius: 16px;
-}
-
-/* Close/minus pill in top-right, if present */
-.start-overlay .close,
-.start-overlay .btn-close{
-  position: absolute;
-  top: 10px; right: 10px;
-  z-index: 9;
-}
-
-/* Desktop / large — center; buttons may be side-by-side */
-@media (min-width: 861px){
-  .start-overlay,
-  #start-overlay{
-    left: 50%;
-    transform: translateX(-50%);
-    width: min(720px, 86%);
-  }
-}
-
-/* =========================
-   MOBILE PORTRAIT
-   - Keep overlay centered but STACK actions vertically
-   - Tighten rules to always fit
-   ========================= */
+/* ---------- Mobile Portrait ----------
+   - Keep overlay in the stage, centered
+   - Stack buttons vertically
+   - Tighten rules text to fit thin stages
+*/
 @media (max-width: 860px) and (orientation: portrait){
-  .start-overlay,
-  #start-overlay{
+  /* If your overlay uses #start-screen or .start-overlay, both are supported */
+  #start-screen,
+  .start-overlay{
+    /* do NOT position differently on desktop; only tighten mobile */
     inset: 16px;
-    width: auto;
-    max-width: 100%;
     margin: 0 auto;
-    grid-template-rows: auto 1fr auto;
+    max-width: 100%;
+    display: grid;
+    grid-template-rows: auto 1fr auto; /* title | rules | actions */
+    padding: clamp(12px, 3vw, 18px);
+    overflow: hidden;
   }
 
+  #start-screen .start-title,
+  .start-overlay .start-title{
+    text-align: center;
+    font-size: clamp(18px, 3.6vw, 28px);
+    margin: 2px 0 10px;
+  }
+
+  #start-screen .start-rules,
   .start-overlay .start-rules{
+    text-align: center;
     font-size: clamp(12px, 3.2vw, 15px);
     line-height: 1.25;
+    margin: 0 auto 8px;
+    max-width: 58ch;
     padding-inline: clamp(6px, 3vw, 14px);
+    word-break: break-word;
+    overflow-wrap: anywhere;
   }
 
+  #start-screen .start-actions,
   .start-overlay .start-actions{
-    flex-direction: column;          /* STACKED */
-    gap: clamp(10px, 2.8vw, 14px);
+    display: flex;
+    flex-direction: column; /* STACKED */
+    align-items: center;
+    gap: clamp(10px, 3vw, 16px);
+    margin-top: 8px;
   }
 
+  #start-screen .start-actions .mode-btn,
   .start-overlay .start-actions .mode-btn,
+  #start-screen .start-actions button,
   .start-overlay .start-actions button{
     width: min(420px, 90%);
+    min-width: 0;
+    padding: clamp(12px, 3vw, 16px) clamp(14px, 3.6vw, 22px);
+    font-size: clamp(14px, 3.4vw, 18px);
+    border-radius: 16px;
   }
 }
 
-/* =========================
-   MOBILE LANDSCAPE
-   - Move overlay to the RIGHT panel area
-   - STACK actions vertically
-   - Keep rules tighter
-   ========================= */
+/* ---------- Mobile Landscape ----------
+   - In twin-panels layout, position the start overlay over the RIGHT panel
+   - Stack buttons vertically
+   - Tighten rules text
+*/
 @media (max-width: 860px) and (orientation: landscape){
-  /* When we are in the twin panel layout, attach the overlay to the right half */
-  .revo-stage-wrap.mobile-landscape .start-overlay,
-  .revo-stage-wrap.mobile-landscape #start-overlay{
-    /* Sit over the right "controls-dock" area visually */
+  .revo-stage-wrap.mobile-landscape #start-screen,
+  .revo-stage-wrap.mobile-landscape .start-overlay{
+    /* visually sit over the right controls-dock panel */
     left: auto;
-    right: clamp(10px, 2vw, 16px);
-    transform: none;
+    right: clamp(8px, 2vw, 16px);
+    top: clamp(8px, 2vw, 16px);
+    bottom: clamp(8px, 2vw, 16px);
     width: min(46vw, 520px);
-    height: auto;
-    inset: clamp(8px, 2vw, 14px) clamp(8px, 2vw, 14px);
     margin: 0;
+    transform: none;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    padding: clamp(12px, 2.2vw, 18px);
+    overflow: hidden;
   }
 
-  .revo-stage-wrap.mobile-landscape .start-overlay .start-rules,
-  .revo-stage-wrap.mobile-landscape #start-overlay .start-rules{
-    font-size: clamp(12px, 1.8vw, 15px);
-    line-height: 1.25;
-    max-width: none;
+  .revo-stage-wrap.mobile-landscape #start-screen .start-title,
+  .revo-stage-wrap.mobile-landscape .start-overlay .start-title{
     text-align: center;
+    font-size: clamp(18px, 2.6vw, 28px);
+    margin: 2px 0 10px;
   }
 
-  .revo-stage-wrap.mobile-landscape .start-overlay .start-actions,
-  .revo-stage-wrap.mobile-landscape #start-overlay .start-actions{
-    flex-direction: column;          /* STACKED */
+  .revo-stage-wrap.mobile-landscape #start-screen .start-rules,
+  .revo-stage-wrap.mobile-landscape .start-overlay .start-rules{
+    text-align: center;
+    font-size: clamp(12px, 2vw, 15px);
+    line-height: 1.25;
+    margin: 0 auto 8px;
+    max-width: none;
+  }
+
+  .revo-stage-wrap.mobile-landscape #start-screen .start-actions,
+  .revo-stage-wrap.mobile-landscape .start-overlay .start-actions{
+    display: flex;
+    flex-direction: column; /* STACKED */
+    align-items: center;
     gap: clamp(10px, 2vw, 14px);
+    margin-top: 8px;
   }
 
+  .revo-stage-wrap.mobile-landscape #start-screen .start-actions .mode-btn,
   .revo-stage-wrap.mobile-landscape .start-overlay .start-actions .mode-btn,
-  .revo-stage-wrap.mobile-landscape #start-overlay .start-actions .mode-btn,
-  .revo-stage-wrap.mobile-landscape .start-overlay .start-actions button,
-  .revo-stage-wrap.mobile-landscape #start-overlay .start-actions button{
-    width: 100%;
-    max-width: 360px;
-    align-self: center;
+  .revo-stage-wrap.mobile-landscape #start-screen .start-actions button,
+  .revo-stage-wrap.mobile-landscape .start-overlay .start-actions button{
+    width: min(360px, 90%);
+    padding: clamp(12px, 2.2vw, 16px) clamp(14px, 2.8vw, 20px);
+    font-size: clamp(14px, 2.4vw, 18px);
+    border-radius: 16px;
   }
 }
 
-/* =========================
-   SAFETY — if overlay ever gets too tall, make inner scrollable
-   ========================= */
-.start-overlay .scroll,
-#start-overlay .scroll{
-  overflow: auto;
-  max-height: 100%;
-}
-
-/* Optional: mild fade at edges if content overflows */
-.start-overlay::before,
-#start-overlay::before{
-  content: "";
-  position: absolute; inset: 0;
-  pointer-events: none;
-  border-radius: inherit;
-  box-shadow: inset 0 0 0 1px rgba(255,255,255,.04);
+/* ---------- Safety: if overlay content ever overflows, allow inner scroll ----------
+   (non-desktop only; desktop remains as you styled it) */
+@media (max-width: 860px){
+  #start-screen .scroll,
+  .start-overlay .scroll{ overflow: auto; max-height: 100%; }
 }
