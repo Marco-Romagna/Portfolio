@@ -226,6 +226,7 @@ html, body { overflow-x: hidden; }
    MOBILE — LANDSCAPE “Twin Panels”
    ========================= */
 @media (max-width: 860px) and (orientation: landscape){
+  /* Two equal columns for stage | dock, one row; history is row 2 */
   .revo-stage-wrap.mobile-landscape{
     grid-template-columns: 1fr 1fr;
     grid-auto-rows: 1fr;
@@ -234,6 +235,7 @@ html, body { overflow-x: hidden; }
     align-items: stretch;
   }
 
+  /* Place items explicitly to avoid staggering */
   .revo-stage-wrap.mobile-landscape .revo-stage{
     grid-column: 1; grid-row: 1;
     margin: 0;
@@ -256,6 +258,7 @@ html, body { overflow-x: hidden; }
     overflow:hidden;
   }
 
+  /* Controls & evolve bottom-centered inside the dock */
   .revo-stage-wrap.mobile-landscape #controls.ab-instage{
     position: absolute;
     left: 50%;
@@ -273,6 +276,7 @@ html, body { overflow-x: hidden; }
     z-index: 6;
   }
 
+  /* Aim banner top-centered in the dock */
   .revo-stage-wrap.mobile-landscape .revo-aim{
     position:absolute;
     top:12px; left:50%; transform:translateX(-50%);
@@ -280,6 +284,7 @@ html, body { overflow-x: hidden; }
     z-index:7;
   }
 
+  /* History spans both columns under the twin panels */
   .revo-stage-wrap.mobile-landscape .revo-history{
     grid-column: 1 / -1;
     grid-row: 2;
@@ -292,47 +297,58 @@ html, body { overflow-x: hidden; }
    MOBILE — PORTRAIT “Stage | History (right rail)”
    ========================= */
 @media (max-width: 860px) and (orientation: portrait){
+
   /* two columns: stage (flex) | history (fixed-ish width) */
   .revo-stage-wrap{
-    grid-template-columns: 1fr clamp(82px, 24vw, 120px);
+    display: grid;
+    grid-template-columns: 1fr clamp(90px, 26vw, 136px); /* stable touch targets */
+    grid-auto-rows: 1fr;
     column-gap: 12px;
     row-gap: 0;
     align-items: stretch;
     padding-right: 0;
+    overflow: visible;
   }
 
-  .revo-stage{
-    grid-column: 1; grid-row: 1;
-    margin: 12px 0;
-    width: 100%;
+  /* lock the stage to column 1, row 1 and stretch */
+  .revo-stage-wrap .revo-stage{
+    grid-column: 1 !important;
+    grid-row: 1 !important;
+    margin: 12px 0 !important;
+    width: 100% !important;
     aspect-ratio: auto;
     min-height: min(76vh, 92svh);
+    align-self: stretch;
   }
 
-  .revo-history{
-    grid-column: 2; grid-row: 1;
+  /* history as a right rail, always same row as stage */
+  .revo-stage-wrap .revo-history{
+    grid-column: 2 !important;
+    grid-row: 1 !important;
+    align-self: stretch;
     width: 100%;
     height: auto;
     min-height: min(76vh, 92svh);
     border-radius: 16px;
-    overflow: hidden;         /* let the inner track scroll */
+    overflow: hidden;
+    display: block !important;
   }
 
   /* vertical history rail on the right */
-  .revo-history .history-track{
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
+  .revo-stage-wrap .revo-history .history-track{
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
     gap: 8px;
     padding: 12px 8px;
     height: 100%;
-    overflow-y: auto;
-    overflow-x: hidden;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
     scroll-snap-type: y proximity;
   }
-  .revo-history .hist-item{
+  .revo-stage-wrap .revo-history .hist-item{
     flex: 0 0 auto;
-    width: 100%;
+    width: 100% !important;
     scroll-snap-align: start;
   }
 }
