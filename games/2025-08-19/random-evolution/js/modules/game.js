@@ -1,3 +1,4 @@
+// games/random-evolution/js/modules/game.js
 (function(){
   const root = window.Revo = window.Revo || {};
   const { Util, Audio, DOM, Rail, HUD, History } = root;
@@ -49,8 +50,8 @@
       };
     }
 
-    /* ---------- rails visibility ---------- */
-    const stageWrap = () => document.querySelector('.revo-stage-wrap');
+    /* ---------- rails visibility (preserve layout) ---------- */
+    function stageWrap(){ return document.querySelector('.revo-stage-wrap'); }
     function hideRails(){
       const wrap = stageWrap();
       wrap?.classList.add('rails-hidden');
@@ -108,12 +109,12 @@
       ];
       const g = gens.find(g => dex >= g.start && dex <= g.end) || gens[0];
 
-      // Subtle band inside real stage
+      // Percent positions for vertical band (subtle background only)
       const pct = (v) => `${(v / (Rail.maxDex || 1025)) * 100}%`;
       DOM.stage?.style.setProperty('--gen-start', pct(g.start));
       DOM.stage?.style.setProperty('--gen-end',   pct(g.end));
 
-      // Badge text
+      // Badge text (visible when active)
       if (DOM.genBadge){
         DOM.genBadge.textContent = `Gen ${g.n}`;
         DOM.genBadge.setAttribute('aria-hidden', 'false');
@@ -141,12 +142,12 @@
       const wrap    = document.querySelector('.revo-stage-wrap');
       if (!wrap) return;
 
-      // Landscape mobile twin-panels trigger
-      const useDock = isSmall && isLand;
+      const useDock = isSmall && isLand; // no extra height gate; purely landscape narrow
 
+      // Toggle wrapper class for CSS
       wrap.classList.toggle('mobile-landscape', useDock);
 
-      // Move controls, evolve, and aim into the right panel (dock)
+      // Move controls + evolve + aim to dock or back to stage
       if (useDock && DOM.controlsDock){
         if (DOM.controls && DOM.controls.parentNode !== DOM.controlsDock){
           DOM.controlsDock.appendChild(DOM.controls);
@@ -159,15 +160,16 @@
         }
         DOM.controlsDock.setAttribute('aria-hidden', 'false');
       } else {
-        // Return them to the real stage
-        if (DOM.controls && DOM.controls.parentNode !== DOM.stage){
-          DOM.stage.appendChild(DOM.controls);
-        }
-        if (DOM.evolveBtn && DOM.evolveBtn.parentNode !== DOM.stage){
-          DOM.stage.appendChild(DOM.evolveBtn);
-        }
-        if (DOM.aim && DOM.aim.parentNode !== DOM.stage){
-          DOM.stage.appendChild(DOM.aim);
+        if (DOM.stage){
+          if (DOM.controls && DOM.controls.parentNode !== DOM.stage){
+            DOM.stage.appendChild(DOM.controls);
+          }
+          if (DOM.evolveBtn && DOM.evolveBtn.parentNode !== DOM.stage){
+            DOM.stage.appendChild(DOM.evolveBtn);
+          }
+          if (DOM.aim && DOM.aim.parentNode !== DOM.stage){
+            DOM.stage.appendChild(DOM.aim);
+          }
         }
         DOM.controlsDock?.setAttribute('aria-hidden', 'true');
       }
@@ -246,6 +248,7 @@
       if (!gameActive || rolling) return;
       session++; rolling = true;
 
+      // UI: EVOLVE -> hidden, A/B -> visible
       showEvolve(false);
       showDecision(true);
 
@@ -261,7 +264,7 @@
       watchdogLoop(session);
     }
 
-    async function stopAndJudge(action){
+    async function stopAndJudge(action /* "accept" | "cancel" | "timeout" */){
       if (!rolling) return;
       session++; rolling = false;
 
@@ -304,6 +307,7 @@
       DOM.imgB.classList.remove("silhouette");
       DOM.imgA.style.opacity = 0;
       DOM.imgB.style.opacity = 1;
+      const target = DOM.imgB; if (target) { target.style.transform = "scale(1.02)"; setTimeout(()=> target.style.transform = "", 180); }
 
       if (isCorrectDir) { score += mult; mult += 1; currentId = candidateId; AudioMgr.playOK(); HUD.pulseGood(DOM); }
       else { lives -= 1; mult = 1; currentId = candidateId; AudioMgr.playBad(); HUD.pulseBad(DOM); }
@@ -392,7 +396,7 @@
 
       showDecision(false);
       showEvolve(true);
-      applyResponsiveLayout();
+      applyResponsiveLayout();  // re-evaluate layout after reset
     }
 
     function wireStartButtons(){
@@ -454,7 +458,7 @@
       DOM.hud?.classList.add("inactive");
       hideRails();
 
-      // Reset visuals
+      // Reset state & visuals
       currentId = null;
       clearStageImages();
       History.clear(DOM);
@@ -463,21 +467,30 @@
       setGameActive(false);
       HUD.update(DOM, getPublicState());
 
+      // Overlays
       DOM.endScreen?.classList.add("hidden");
       DOM.startScreen?.classList.remove("hidden");
 
+      // Rail visuals off until a mode starts
       Rail.applyModeClass(DOM, null);
 
+      // Buttons hidden in idle
       showEvolve(false);
       showDecision(false);
 
-      // Ensure controls, evolve, aim are in the stage initially
-      if (DOM.controls && DOM.controls.parentNode !== DOM.stage) DOM.stage.appendChild(DOM.controls);
-      if (DOM.evolveBtn && DOM.evolveBtn.parentNode !== DOM.stage) DOM.stage.appendChild(DOM.evolveBtn);
-      if (DOM.aim && DOM.aim.parentNode !== DOM.stage) DOM.stage.appendChild(DOM.aim);
+      // Ensure controls/aim start inside the stage
+      if (DOM.controls && DOM.stage && DOM.controls.parentNode !== DOM.stage){
+        DOM.stage.appendChild(DOM.controls);
+      }
+      if (DOM.evolveBtn && DOM.evolveBtn.parentNode !== DOM.stage){
+        DOM.stage.appendChild(DOM.evolveBtn);
+      }
+      if (DOM.aim && DOM.aim.parentNode !== DOM.stage){
+        DOM.stage.appendChild(DOM.aim);
+      }
       DOM.controlsDock?.setAttribute('aria-hidden', 'true');
 
-      // Clear mobile band & badge
+      // Reset subtle generation band & badge
       DOM.stage?.style.setProperty('--gen-start', '0%');
       DOM.stage?.style.setProperty('--gen-end',   '0%');
       if (DOM.genBadge){
