@@ -1,12 +1,11 @@
 /* --- guard against subtle overflow --- */
 html, body { overflow-x: hidden; }
 
-/* Hidden by default; only used in mobile landscape */
+/* Hidden by default; only used in mobile landscape (we'll style it below) */
 .controls-dock{ display:none; min-height:0; min-width:0; }
 
-/* Kill legacy mobile-injected elements unconditionally */
-.stage-rail-badge,
-.stage-rail-fill { display: none !important; }
+/* Remove any legacy mobile badge if it exists */
+.stage-rail-badge { display: none !important; }
 
 /* =========================
    DESKTOP (default ≥ 861px)
@@ -53,7 +52,7 @@ html, body { overflow-x: hidden; }
   place-items:center;
   overflow:hidden;
 
-  /* defaults for mobile “generation band” (no-op on desktop) */
+  /* defaults for mobile gen band */
   --gen-start: 0%;
   --gen-end: 0%;
 }
@@ -146,7 +145,7 @@ html, body { overflow-x: hidden; }
 #controls.ab-instage img:active{ transform: scale(.92); }
 
 /* =========================
-   MOBILE / SMALL VIEWPORTS
+   MOBILE / SMALL VIEWPORTS (portrait or narrow)
    ========================= */
 @media (max-width: 860px){
   .revo-stage-wrap{
@@ -192,7 +191,7 @@ html, body { overflow-x: hidden; }
     position: relative;
   }
 
-  /* Optional subtle generation band via custom properties (set in JS) */
+  /* Subtle generation band via custom properties */
   .revo-stage::after{
     content:"";
     position:absolute; inset:0;
@@ -228,47 +227,74 @@ html, body { overflow-x: hidden; }
 }
 
 /* =========================
-   MOBILE — LANDSCAPE SIDE DOCK
+   MOBILE — LANDSCAPE “Twin Panels”
    ========================= */
 @media (max-width: 860px) and (orientation: landscape){
+  /* Split into two equal panels: stage | control stage */
   .revo-stage-wrap.mobile-landscape{
-    grid-template-columns: 1fr min(30vw, 320px);
+    grid-template-columns: 1fr 1fr;
     column-gap: 14px;
     row-gap: 10px;
     align-items: stretch;
   }
 
+  /* Right “control stage” mirrors the stage look */
   .revo-stage-wrap.mobile-landscape .controls-dock{
-    display:flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: clamp(16px, 4vh, 28px);
+    display:block;
+    position: relative;
+    aspect-ratio: 1 / 1;
     background: radial-gradient(120% 120% at 50% 55%, #121929 0%, #0b101b 60%, #070a12 100%);
     border:1px solid rgba(255,255,255,.08);
     border-radius:16px;
-    padding: clamp(10px, 3vh, 18px);
+    overflow:hidden;
+    /* match stage inner padding feel */
   }
 
+  /* Move the A/B & Evolve to the same places as the real stage */
   .revo-stage-wrap.mobile-landscape #controls.ab-instage{
-    position: static;
-    transform: none;
-    bottom: auto;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 18px;
+    gap: clamp(18px, 6vmin, 36px);
   }
-
-  .revo-stage-wrap.mobile-landscape #controls.ab-instage img{
-    width: clamp(64px, 11vh, 96px);
-    height: clamp(64px, 11vh, 96px);
-  }
-
   .revo-stage-wrap.mobile-landscape #evolve-button{
-    transform: none;
-    bottom: auto;
-    width: clamp(220px, 36vh, 320px);
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 16px;
+    width: clamp(180px, 28vmin, 320px);
   }
 
+  /* The aim banner lives in the dock when in landscape */
+  .revo-stage-wrap.mobile-landscape .revo-aim{
+    position:absolute;
+    top:12px; left:50%; transform:translateX(-50%);
+    display:block;            /* ensure visible */
+    z-index:7;
+  }
+
+  /* History spans both columns below */
   .revo-stage-wrap.mobile-landscape .revo-history{
     grid-column: 1 / -1;
     width: 100%;
+  }
+
+  /* Show the mini “gen rail” overlay INSIDE the real stage */
+  .revo-stage-wrap.mobile-landscape .revo-stage::before{
+    content:"";
+    position:absolute; top:12px; bottom:12px; left:10px; width:8px;
+    border-radius:8px;
+    background: linear-gradient(to bottom, rgba(122,162,247,.15), rgba(122,162,247,.05));
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,.08);
+  }
+  .revo-stage-wrap.mobile-landscape .revo-stage .stage-rail-fill{
+    position:absolute; left:10px; bottom:12px; width:8px;
+    border-radius:8px;
+    height: var(--rail-fill, 0%);
+    background: linear-gradient(to top, #7aa2f7, rgba(122,162,247,.25));
+    box-shadow: 0 0 8px rgba(122,162,247,.35);
+    z-index:3;
+    display:block;
   }
 }
