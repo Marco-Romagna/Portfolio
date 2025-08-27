@@ -62,7 +62,7 @@
 
         <!-- Stage -->
         <div id="stage" class="revo-stage">
-          <!-- Gen badge now LIVES INSIDE the stage -->
+          <!-- Gen badge now lives INSIDE the stage -->
           <div id="gen-badge" class="stage-gen-badge" aria-hidden="true"></div>
 
           <div id="aim" class="revo-aim" aria-hidden="true">Higher than —</div>
@@ -74,22 +74,23 @@
           <div id="flash" class="revo-flash"></div>
           <div id="timer" class="revo-timer">—</div>
 
-          <!-- Start overlay -->
-          <div id="start-screen" class="revo-start">
-            <div class="start-content">
-              <h3 class="title">Do you know your Pokédex numbers?</h3>
-              <div class="rules-list">
-                <p>
-                  Press <strong>A</strong> to advance when the Dex number is higher or lower,
-                  or <strong>B</strong> to cancel the evolution if it isn’t.
-                </p>
-              </div>
-              <p class="subtitle bigger">Choose your difficulty to begin.</p>
-              <div class="btn-row big">
-                <button class="mode-btn easy"   data-mode="easy">Easy</button>
-                <button class="mode-btn medium" data-mode="medium">Medium</button>
-                <button class="mode-btn hard"   data-mode="hard">Hard</button>
-              </div>
+          <!-- Start Overlay (inside .revo-stage) -->
+          <div id="start-screen" class="start-overlay">
+            <button class="btn-close" type="button" aria-label="Close" hidden></button>
+
+            <h2 class="start-title">Choose your difficulty</h2>
+
+            <p class="start-rules">
+              Guess whether the next Pokémon's National Dex number is
+              <strong>higher</strong> or <strong>lower</strong> than the current one.
+              Correct guesses chain a multiplier — lose a life on a miss.
+              You’ve got limited time to decide each roll.
+            </p>
+
+            <div class="start-actions">
+              <button class="mode-btn" data-mode="easy"   type="button">Easy</button>
+              <button class="mode-btn" data-mode="medium" type="button">Medium</button>
+              <button class="mode-btn" data-mode="hard"   type="button">Hard</button>
             </div>
           </div>
 
@@ -102,11 +103,12 @@
             </div>
           </div>
 
-          <!-- Buttons -->
+          <!-- Buttons in-stage -->
           <div id="controls" class="ab-instage hidden">
             <img id="a-button" src="./assets/buttons/A_Confirm_button.png" alt="A Confirm">
             <img id="b-button" src="./assets/buttons/B_Decline_button.png" alt="B Decline">
           </div>
+
           <img
             id="evolve-button"
             class="evolve-img hidden"
