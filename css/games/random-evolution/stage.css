@@ -351,4 +351,11 @@ html, body { overflow-x: hidden; }
     width: 100% !important;
     scroll-snap-align: start;
   }
+   /* collapse the right rail before the game starts and after it ends */
+  .revo-stage-wrap.rails-hidden{
+    grid-template-columns: 1fr !important;   /* single column */
+  }
+  .revo-stage-wrap.rails-hidden .revo-history{
+    display: none !important;                 /* remove the rail entirely */
+  }
 }
