@@ -18,21 +18,17 @@
     setMax(end){ this.maxDex = end || 1025; },
     pctForDex(n){ return (Math.max(1, Math.min(this.maxDex, n || 1)) / this.maxDex) * 100; },
 
-    // --- Mobile overlay helpers ---
+    // --- Mobile overlay helpers (no more mobile badge here) ---
     ensureStageOverlay(dom){
       const stage = dom.stage;
       if (!stage) return;
+      // Remove any legacy mobile-injected badge if it exists
+      stage.querySelectorAll(".stage-rail-badge").forEach(el => el.remove());
+      // Keep the optional fill helper for mobile if we want it
       if (!stage.querySelector(".stage-rail-fill")){
         const fill = document.createElement("div");
         fill.className = "stage-rail-fill";
         stage.appendChild(fill);
-      }
-      if (!stage.querySelector(".stage-rail-badge")){
-        const badge = document.createElement("div");
-        badge.className = "stage-rail-badge";
-        badge.id = "stage-rail-badge";
-        badge.textContent = "Gen —";
-        stage.appendChild(badge);
       }
     },
     clearDecor(dom){
@@ -88,10 +84,9 @@
         return;
       }
 
-      // mobile: paint on-stage overlay
+      // mobile: paint on-stage overlay (fill bar only)
       this.ensureStageOverlay(dom);
       const fill = dom.stage.querySelector(".stage-rail-fill");
-      const badge = dom.stage.querySelector(".stage-rail-badge");
       if (fill){
         // compute fill % *within the current generation range*
         const i = gen - 1;
@@ -101,12 +96,7 @@
         const localPct = ((clamped - start) / (end - start)) * 100; // 0..100 inside gen
         fill.style.setProperty("--rail-fill", `${localPct}%`);
       }
-      if (badge){
-        // Easy/Medium: "Gen X" … Hard: "Gx"
-        const mode = window.Revo?.Game?.getPublicState()?.mode || "easy";
-        const text = (mode === "hard") ? `G${gen}` : `Gen ${gen}`;
-        badge.textContent = text;
-      }
+      // Gen label is handled by Game.setStageGenDecor via #gen-badge now.
     },
     applyModeClass(dom, mode){
       if (!isMobile()){
