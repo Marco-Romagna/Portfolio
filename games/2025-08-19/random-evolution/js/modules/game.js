@@ -96,7 +96,6 @@
     }
     
     function setStageGenDecor(dex){
-      // Basic Gen ranges; adjust if you support future gens
       const gens = [
         { n:1,  start:1,   end:151 },
         { n:2,  start:152, end:251 },
@@ -110,12 +109,12 @@
       ];
       const g = gens.find(g => dex >= g.start && dex <= g.end) || gens[0];
     
-      // Percent positions for the vertical band (top/bottom)
+      // Percent positions for vertical band
       const pct = (v) => `${(v / (Rail.maxDex || 1025)) * 100}%`;
       DOM.stage?.style.setProperty('--gen-start', pct(g.start));
       DOM.stage?.style.setProperty('--gen-end',   pct(g.end));
     
-      // Badge text (mobile CSS shows it)
+      // Badge text (visible when active)
       if (DOM.genBadge){
         DOM.genBadge.textContent = `Gen ${g.n}`;
         DOM.genBadge.setAttribute('aria-hidden', 'false');
@@ -136,24 +135,34 @@
       HUD.update(DOM, getPublicState());
     }
     
+    /* ======= NEW: responsive twin-panels handling ======= */
     function applyResponsiveLayout(){
-      const isSmall   = window.matchMedia('(max-width: 860px)').matches;
-      const isLand    = window.matchMedia('(orientation: landscape)').matches;
-      const wrap      = document.querySelector('.revo-stage-wrap');
-    
+      const isSmall = window.matchMedia('(max-width: 860px)').matches;
+      const isLand  = window.matchMedia('(orientation: landscape)').matches;
+      const wrap    = document.querySelector('.revo-stage-wrap');
       if (!wrap || !DOM.controls) return;
-    
+
       const useDock = isSmall && isLand && window.innerHeight < 520;
-    
+
       // Toggle wrapper class for CSS
       wrap.classList.toggle('mobile-landscape', useDock);
-    
-      // Move controls to dock or back to stage
-      if (useDock && DOM.controlsDock && DOM.controlsDock !== DOM.controls.parentNode){
-        DOM.controlsDock.appendChild(DOM.controls);
-        DOM.controlsDock.setAttribute('aria-hidden', 'false');
-      } else if (!useDock && DOM.stage && DOM.stage !== DOM.controls.parentNode){
-        DOM.stage.appendChild(DOM.controls);
+
+      // Move controls and aim to dock or back to stage
+      if (useDock && DOM.controlsDock){
+        if (DOM.controls.parentNode !== DOM.controlsDock){
+          DOM.controlsDock.appendChild(DOM.controls);
+          DOM.controlsDock.setAttribute('aria-hidden', 'false');
+        }
+        if (DOM.aim && DOM.aim.parentNode !== DOM.controlsDock){
+          DOM.controlsDock.appendChild(DOM.aim);
+        }
+      } else {
+        if (DOM.stage && DOM.controls.parentNode !== DOM.stage){
+          DOM.stage.appendChild(DOM.controls);
+        }
+        if (DOM.aim && DOM.aim.parentNode !== DOM.stage){
+          DOM.stage.appendChild(DOM.aim);
+        }
         DOM.controlsDock?.setAttribute('aria-hidden', 'true');
       }
     }
@@ -342,7 +351,7 @@
       showEvolve(false);
       showDecision(false);
 
-      showEnd();           // <— now defined above
+      showEnd();
       clearStageImages();
       hideRails();
     }
@@ -380,7 +389,7 @@
 
       showDecision(false);
       showEvolve(true);
-      applyResponsiveLayout();                  // <-- re-evaluate layout after reset
+      applyResponsiveLayout();  // re-evaluate layout after reset
     }
 
     function wireStartButtons(){
@@ -462,9 +471,12 @@
       showEvolve(false);
       showDecision(false);
     
-      // Make sure controls live back inside the stage (not in the dock)
+      // Make sure controls & aim live back inside the stage
       if (DOM.controls && DOM.stage && DOM.controls.parentNode !== DOM.stage){
         DOM.stage.appendChild(DOM.controls);
+      }
+      if (DOM.aim && DOM.aim.parentNode !== DOM.stage){
+        DOM.stage.appendChild(DOM.aim);
       }
       DOM.controlsDock?.setAttribute('aria-hidden', 'true');
     
@@ -483,33 +495,15 @@
       boot,
       init: async () => {
         DOM.grab();
-      
-        // Ensure mobile/desktop layout logic runs on load AND on resize
         const onResize = () => {
           applyResponsiveLayout();
           Rail.applyModeClass(DOM, Game.getPublicState().mode);
           History.setCapacity(DOM);
-      
           const cur = Game.getPublicState().currentId;
           if (cur != null) Rail.update(DOM, cur);
         };
         window.addEventListener('resize', onResize);
-        onResize(); // run once immediately
-      
-        // Inject feedback styles once
-        if (!document.querySelector('style[data-revo-feedback]')){
-          const css = `
-            @keyframes revo-good { 0%{transform:scale(1)} 30%{transform:scale(1.18)} 100%{transform:scale(1)} }
-            @keyframes revo-bad  { 0%{transform:scale(1)} 30%{transform:scale(0.88)} 100%{transform:scale(1)} }
-            .revo-pulse-good{ animation:revo-good 320ms cubic-bezier(.2,1,.2,1); }
-            .revo-pulse-bad { animation:revo-bad  320ms cubic-bezier(.2,1,.2,1); color:#f7768e !important; }
-            .revo-img[src=""]{ display:none; }
-          `;
-          const style = document.createElement('style');
-          style.setAttribute('data-revo-feedback','');
-          style.textContent = css;
-          document.head.appendChild(style);
-        }
+        onResize();
       
         await loadSettings();
         Audio.injectVolumeUI(DOM.audioRow);
