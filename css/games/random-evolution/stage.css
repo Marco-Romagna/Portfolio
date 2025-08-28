@@ -112,21 +112,20 @@ html, body { overflow-x: hidden; }
 .stage-gen-badge[aria-hidden="true"]{ display:none; }
 
 /* ---------- In-stage buttons (DESKTOP baseline) ---------- */
-/* Bring Evolve higher on desktop so it sits closer to A/B */
 #evolve-button.evolve-img{
   position:absolute;
   left:50%;
-  bottom: clamp(84px, 14vmin, 120px);  /* ↑ raised compared to before */
+  /* Old-style placement: centered horizontally, lifted well above the bottom.
+     This keeps it close to the A/B labels and off the Pokémon art. */
+  bottom: clamp(84px, 9vmin, 140px);
   transform: translateX(-50%);
-  width: clamp(220px, 36vmin, 420px);
+  width: clamp(180px, 28vmin, 360px);
   height:auto;
   z-index:6;
   -webkit-user-drag:none;
   user-select:none;
   pointer-events:auto;
 }
-#evolve-button.evolve-img.hidden{ display:none; }
-
 #controls.ab-instage{
   position:absolute;
   left:50%; transform:translateX(-50%);
@@ -211,10 +210,10 @@ html, body { overflow-x: hidden; }
     max-height: 88%;
   }
 
-  /* On mobile, keep the evolve button lower with safe-area padding */
+  /* On mobile we keep the button above the safe area, centered */
   #evolve-button.evolve-img{
+    transform: translateX(-50%);
     bottom: calc(env(safe-area-inset-bottom, 0px) + 20px);
-    width: clamp(180px, 28vmin, 360px);
   }
   #controls.ab-instage{
     position:absolute;
