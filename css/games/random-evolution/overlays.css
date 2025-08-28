@@ -1,139 +1,214 @@
-/* overlays.css — desktop preserved, mobile-only changes scoped;
-   difficulty colors kept on desktop and mobile */
+/* =========================
+   Random Evolution — Overlays
+   (Start screen + End screen)
+   ========================= */
 
-/* ========== DESKTOP (default ≥ 861px) ========== */
-
+/* ---- Start overlay (baseline = DESKTOP) ---- */
 .start-overlay{
   position:absolute;
-  inset: 24px;
+  inset:auto 0 0 0;          /* rely on centering via left/transform */
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  z-index:8;
+
+  /* Desktop: wide panel centered inside the stage */
+  width: clamp(560px, 88%, 980px);
+  max-height: calc(100% - 48px);
+  padding: clamp(18px, 2.6vw, 28px) clamp(18px, 3.4vw, 36px);
+
+  background:
+    radial-gradient(140% 120% at 50% 0%, rgba(0,0,0,.55) 0%, rgba(0,0,0,.72) 50%, rgba(0,0,0,.78) 100%),
+    linear-gradient(to bottom, rgba(255,255,255,.06), rgba(255,255,255,.01));
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 22px;
+  box-shadow:
+    0 18px 48px rgba(0,0,0,.45),
+    inset 0 1px 0 rgba(255,255,255,.06);
+  color: var(--text, #dfe7ff);
+
   display:flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
-  border-radius: 22px;
-  background: radial-gradient(140% 140% at 50% 20%, #0b1220 0%, #0a0f1b 60%, #090d17 100%);
-  box-shadow:
-    inset 0 0 0 1px rgba(255,255,255,.06),
-    0 18px 40px rgba(0,0,0,.45);
-  padding: clamp(18px, 3.4vmin, 28px);
+  justify-content: center;
+  gap: clamp(16px, 2.2vmin, 20px);
 }
 
+/* Title + rules */
 .start-title{
+  margin: 0 0 4px;
   font-weight: 900;
+  letter-spacing: .3px;
+  text-align: center;
   font-size: clamp(22px, 3.4vmin, 36px);
-  letter-spacing:.3px;
-  text-align:center;
-  color: var(--text-strong, #e8f0ff);
-  margin: 0 0 16px 0;
-  text-shadow: 0 2px 10px rgba(0,0,0,.35);
+  text-shadow: 0 2px 8px rgba(0,0,0,.35);
 }
-
 .start-rules{
-  max-width: min(820px, 86%);
+  margin: 0;
+  max-width: 62ch;                 /* roomy on desktop */
   text-align: center;
   line-height: 1.5;
-  color: var(--text-soft, #c9d6f3);
-  margin: 0 0 28px 0;
   font-size: clamp(14px, 1.8vmin, 18px);
+  opacity: .9;
 }
 
-/* desktop: horizontal buttons */
+/* Difficulty buttons row (desktop = horizontal) */
 .start-actions{
   display:flex;
-  gap: clamp(12px, 2.2vmin, 18px);
-  align-items:center;
-  justify-content:center;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(14px, 2vw, 22px);
+  width: 100%;
+  margin-top: clamp(10px, 1.5vmin, 14px);
 }
 
-/* Base button */
-.start-actions .mode-btn,
-.revo-end .mode-btn{
-  min-width: 180px;
-  padding: 16px 22px;
+/* Buttons */
+.mode-btn{
+  -webkit-appearance: none;
+  appearance: none;
+  border: 0;
+  cursor: pointer;
+  padding: clamp(12px, 1.6vmin, 14px) clamp(22px, 3.2vmin, 28px);
+  min-width: clamp(120px, 18vmin, 240px);
   border-radius: 16px;
-  font-weight: 800;
+  font-weight: 900;
   font-size: clamp(16px, 2vmin, 20px);
-  border: none;
-  color:#0a0f18; /* text color for bright buttons (easy/med/hard) */
-  box-shadow: 0 10px 24px rgba(0,0,0,.35), inset 0 0 0 1px rgba(255,255,255,.5);
-  transition: transform .08s ease, filter .08s ease;
+  color: #0c1220;
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,.25),
+    0 10px 20px rgba(0,0,0,.35);
+  transition: transform .08s ease, filter .12s ease, box-shadow .12s ease;
 }
-.start-actions .mode-btn:hover{ filter:brightness(1.04); transform:translateY(-1px); }
-.start-actions .mode-btn:active{ transform:scale(.98); }
+.mode-btn:active{ transform: translateY(1px) scale(.98); }
 
-/* Colored difficulties — kept on DESKTOP too (your preference) */
+/* Themed fills via data-mode */
 .mode-btn[data-mode="easy"]{
-  background: linear-gradient(#63e27e, #35c85a);
-  color:#04120a;
+  background: linear-gradient(180deg, #6BE178 0%, #27C64D 100%);
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,.22),
+    0 10px 24px rgba(39,198,77,.28);
 }
 .mode-btn[data-mode="medium"]{
-  background: linear-gradient(#febc62, #f39b2d);
-  color:#181003;
+  background: linear-gradient(180deg, #FFC166 0%, #FF9F2E 100%);
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,.22),
+    0 10px 24px rgba(255,159,46,.28);
 }
 .mode-btn[data-mode="hard"]{
-  background: linear-gradient(#ff7b84, #f35461);
-  color:#190407;
+  background: linear-gradient(180deg, #FF8080 0%, #F24A4A 100%);
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,.22),
+    0 10px 24px rgba(242,74,74,.28);
 }
 
-/* End screen button uses neutral look (you can recolor if you want) */
-.revo-end .mode-btn{
-  background: linear-gradient(#cfe0ff, #bcd0ff);
-  color:#0a0f18;
+/* Close button (icon area – already hidden by default) */
+.start-overlay .btn-close{
+  position:absolute; top:8px; right:10px;
+  width: 28px; height: 28px;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,.1);
+  background: rgba(0,0,0,.35);
 }
 
-/* ========== MOBILE (≤ 860px): shared tweaks ========== */
-@media (max-width: 860px){
+/* ---- End overlay ---- */
+.revo-end{
+  position:absolute;
+  inset:0;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap: 12px;
 
-  .start-overlay{
-    inset: 12px;
-    padding: clamp(12px, 3.5vw, 18px);
-    border-radius: 18px;
-  }
-
-  .start-title{
-    font-size: clamp(18px, 5vw, 26px);
-    margin-bottom: clamp(8px, 2.5vw, 12px);
-  }
-
-  .start-rules{
-    /* squeeze copy so it always fits thin stages */
-    max-width: 100%;
-    width: 100%;
-    margin-bottom: clamp(12px, 3.8vw, 18px);
-    font-size: clamp(12px, 3.6vw, 16px);
-  }
-
-  /* mobile: stack vertically */
-  .start-actions{
-    flex-direction: column;
-    gap: clamp(10px, 3.8vw, 14px);
-  }
-
-  .start-actions .mode-btn,
-  .revo-end .mode-btn{
-    width: min(92%, 560px);
-    min-width: 0;
-    padding: clamp(12px, 3.8vw, 16px) clamp(14px, 4.8vw, 20px);
-    border-radius: 16px;
-    font-size: clamp(15px, 4.2vw, 18px);
-  }
+  background: radial-gradient(110% 90% at 50% 30%, rgba(0,0,0,.35) 0%, rgba(0,0,0,.7) 65%, rgba(0,0,0,.85) 100%);
+  border-radius: 16px;
+  z-index: 9;
 }
+.revo-end.hidden{ display:none; }
+.revo-end .title{
+  margin:0; font-weight:900; letter-spacing:.3px;
+  font-size: clamp(22px, 3.2vmin, 34px);
+}
+.revo-end .subtitle{
+  margin:0; font-size: clamp(14px, 1.9vmin, 18px);
+  opacity:.9;
+}
+.revo-end .btn-row{ display:flex; gap:12px; }
+.revo-end .mode-btn{ min-width: 180px; }
 
-/* ========== MOBILE • PORTRAIT ========== */
+/* ============================================
+   MOBILE — PORTRAIT (stacked buttons + squeeze)
+   ============================================ */
 @media (max-width: 860px) and (orientation: portrait){
   .start-overlay{
-    /* centered sheet */
-    margin-inline: auto;
-    max-width: 94%;
+    width: 92%;
+    max-height: calc(100% - 32px);
+    padding: 18px 16px;
+    gap: 14px;
+  }
+  .start-title{
+    font-size: clamp(20px, 5.4vw, 28px);
+  }
+  .start-rules{
+    max-width: none;                 /* allow full width */
+    font-size: clamp(13px, 3.9vw, 16px);
+    line-height: 1.35;               /* squeeze to fit slim stages */
+    hyphens: auto;
+    word-break: normal;
+  }
+  .start-actions{
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+  }
+  .mode-btn{
+    width: 100%;
+    min-width: 0;
+    font-size: clamp(15px, 4.6vw, 18px);
+    padding: 12px 16px;
   }
 }
 
-/* ========== MOBILE • LANDSCAPE ========== */
+/* =================================================
+   MOBILE — LANDSCAPE “Twin Panels” (content to right)
+   ================================================= */
 @media (max-width: 860px) and (orientation: landscape){
-  /* Put the sheet toward the RIGHT half so the left is visually “the stage” */
-  .revo-stage-wrap.mobile-landscape .start-overlay{
-    margin-left: auto;             /* push to right */
-    width: clamp(320px, 48vw, 560px);
-    max-width: 560px;
+  /* Keep overlay centered, but layout its content so it reads as the right panel.
+     We split the overlay into two columns and place content in the right column. */
+  .start-overlay{
+    width: min(92%, 1040px);
+    padding: 16px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;     /* left visual | right content */
+    grid-auto-rows: min-content;
+    column-gap: 16px;
+    row-gap: 10px;
+    align-items: start;
   }
+
+  .start-title{ grid-column: 2; text-align: center; }
+  .start-rules{
+    grid-column: 2;
+    text-align: center;
+    max-width: none;
+    font-size: clamp(13px, 2.2vmin, 16px);
+    line-height: 1.35;
+  }
+  .start-actions{
+    grid-column: 2;
+    flex-direction: column;     /* vertical stack on the right */
+    align-items: stretch;
+    gap: 10px;
+    width: 100%;
+  }
+  .mode-btn{ width: 100%; min-width: 0; }
+}
+
+/* ======================
+   Small safety refinements
+   ====================== */
+@media (min-width: 861px){
+  /* ensure desktop buttons stay in one row when space allows */
+  .start-actions .mode-btn{ flex: 0 1 auto; }
 }
