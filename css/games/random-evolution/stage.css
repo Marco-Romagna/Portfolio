@@ -1,10 +1,10 @@
 /* --- guard against subtle overflow --- */
 html, body { overflow-x: hidden; }
 
-/* Mirror panel used only in mobile-landscape “twin panels” */
+/* Dock panel is hidden by default; shown in mobile landscape */
 .controls-dock{ display:none; min-height:0; min-width:0; }
 
-/* Remove any legacy mobile badge/fill that might conflict */
+/* Remove any legacy mobile badge/fill */
 .stage-rail-badge,
 .stage-rail-fill{ display:none !important; }
 
@@ -15,7 +15,7 @@ html, body { overflow-x: hidden; }
 /* Stage wrapper (rail • stage • history) */
 .revo-stage-wrap{
   display:grid;
-  grid-template-columns:auto 1fr auto;   /* left rail, stage, right history */
+  grid-template-columns:auto 1fr auto;  /* left rail, stage, right history */
   align-items:start;
   column-gap:48px;
   padding-right: clamp(12px, 5vw, 56px);
@@ -141,7 +141,7 @@ html, body { overflow-x: hidden; }
 #controls.ab-instage img:active{ transform: scale(.92); }
 
 /* =========================
-   MOBILE / SMALL VIEWPORTS
+   MOBILE / SMALL VIEWPORTS (portrait or narrow)
    ========================= */
 @media (max-width: 860px){
   .revo-stage-wrap{
@@ -152,10 +152,7 @@ html, body { overflow-x: hidden; }
     max-width: 100%;
   }
 
-  /* hide the left rail on small screens */
   .revo-stage-wrap .pokedex-rail{ display:none !important; }
-
-  /* history becomes a horizontal bar below the stage */
   .revo-history{
     grid-column: 1;
     width: 100%;
@@ -166,7 +163,7 @@ html, body { overflow-x: hidden; }
   }
   .revo-history .history-track{
     display:flex;
-    flex-direction: row;
+    flex-direction: row;     /* default small-screen = horizontal bar */
     align-items: center;
     gap: 10px;
     padding: 10px 12px;
@@ -229,7 +226,7 @@ html, body { overflow-x: hidden; }
    MOBILE — LANDSCAPE “Twin Panels”
    ========================= */
 @media (max-width: 860px) and (orientation: landscape){
-  /* Two equal columns for stage | dock, history on row 2 */
+  /* Two equal columns for stage | dock, one row; history is row 2 */
   .revo-stage-wrap.mobile-landscape{
     grid-template-columns: 1fr 1fr;
     grid-auto-rows: 1fr;
@@ -279,7 +276,7 @@ html, body { overflow-x: hidden; }
     z-index: 6;
   }
 
-  /* Aim banner top-centered in the dock (so hints live on the right) */
+  /* Aim banner top-centered in the dock */
   .revo-stage-wrap.mobile-landscape .revo-aim{
     position:absolute;
     top:12px; left:50%; transform:translateX(-50%);
@@ -293,24 +290,6 @@ html, body { overflow-x: hidden; }
     grid-row: 2;
     width: 100%;
     height: clamp(70px, 22vh, 130px);
-  }
-
-  /* small vertical progress stripe inside the real stage */
-  .revo-stage-wrap.mobile-landscape .revo-stage::before{
-    content:"";
-    position:absolute; top:12px; bottom:12px; left:10px; width:8px;
-    border-radius:8px;
-    background: linear-gradient(to bottom, rgba(122,162,247,.15), rgba(122,162,247,.05));
-    box-shadow: inset 0 0 0 1px rgba(255,255,255,.08);
-  }
-  .revo-stage-wrap.mobile-landscape .revo-stage .stage-rail-fill{
-    position:absolute; left:10px; bottom:12px; width:8px;
-    border-radius:8px;
-    height: var(--rail-fill, 0%);
-    background: linear-gradient(to top, #7aa2f7, rgba(122,162,247,.25));
-    box-shadow: 0 0 8px rgba(122,162,247,.35);
-    z-index:3;
-    display:block;
   }
 }
 
