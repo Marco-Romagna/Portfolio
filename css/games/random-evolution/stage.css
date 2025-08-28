@@ -117,7 +117,7 @@ html, body { overflow-x: hidden; }
   left:50%;
   /* Old-style placement: centered horizontally, lifted well above the bottom.
      This keeps it close to the A/B labels and off the Pokémon art. */
-  bottom: clamp(84px, 9vmin, 140px);
+  bottom: clamp(-1884px, -5.5vmin, 0px);
   transform: translateX(-50%);
   width: clamp(180px, 28vmin, 360px);
   height:auto;
