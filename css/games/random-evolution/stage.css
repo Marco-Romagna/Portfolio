@@ -115,7 +115,7 @@ html, body { overflow-x: hidden; }
 #evolve-button.evolve-img{
   position:absolute;
   left:50%;
-  bottom: 16px;
+  bottom: 14px;
   transform: translate(-50%, 110px);
   width: clamp(180px, 28vmin, 360px);
   height:auto;
