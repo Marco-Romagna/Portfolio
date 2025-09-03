@@ -304,7 +304,7 @@ html, body { overflow-x: hidden; }
   /* two columns: stage (flex) | history (fixed-ish width) */
   .revo-stage-wrap{
     display: grid;
-    grid-template-columns: 1fr clamp(90px, 26vw, 136px); /* stable touch targets */
+     grid-template-columns: minmax(0, 1fr) clamp(90px, 26vw, 136px);
     grid-auto-rows: 1fr;
     column-gap: 12px;
     row-gap: 0;
@@ -331,7 +331,7 @@ html, body { overflow-x: hidden; }
     align-self: stretch;
     width: 100%;
     height: auto;
-    min-height: min(76vh, 92svh);
+    min-height: min(76svh, 92svh);
     border-radius: 16px;
     overflow: hidden;
     display: block !important;
