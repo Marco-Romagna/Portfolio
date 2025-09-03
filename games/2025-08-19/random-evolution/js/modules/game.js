@@ -427,33 +427,32 @@
     }
 
     function wireStartButtons(){
+      // Resilient: any element with data-mode="easy|medium|hard" starts a run
+      document.addEventListener("click", (e) => {
+        const b = e.target.closest("[data-mode]");
+        if (!b) return;
+        const m = b.getAttribute("data-mode");
+        if (m === "easy" || m === "medium" || m === "hard"){
+          e.preventDefault();
+          startMode(m);
+        }
+      });
+    
+      // Your existing explicit buttons still work if you keep DOM.startButtons:
       DOM.startButtons?.forEach(btn => {
         btn.addEventListener("click", async () => {
           const m = btn.getAttribute("data-mode");
           await startMode(m);
         });
       });
-      DOM.playAgain?.addEventListener("click", async () => {
-        hardStopAll();
-        clearStageImages();
-        History.clear(DOM);
-
-        setGameActive(false);
-        mode = null;
-        Rail.applyModeClass(DOM, null);
-
-        score = 0; lives = 3; mult = 1; currentId = null; candidateId = null;
-        HUD.update(DOM, getPublicState());
-
-        DOM.endScreen?.classList.add("hidden");
-        DOM.startScreen?.classList.remove("hidden");
-        if (DOM.titleEl) DOM.titleEl.textContent = "Random Evolution";
-
-        hideRails();
-        showEvolve(false);
-        showDecision(false);
+    
+      // “End Game” / “Play Again” → behave like a refresh to the start screen
+      DOM.playAgain?.addEventListener("click", (e) => {
+        e.preventDefault();
+        resetToStart();
       });
     }
+
 
     async function loadSettings(){
       let url = new URL("./settings.json", document.baseURI);
@@ -526,7 +525,58 @@
 
       renderDebugOverlay();
     }
-
+    
+    // Return to the difficulty screen as if the page refreshed.
+    function resetToStart(){
+      // Stop any rolling/timers and mark game inactive
+      hardStopAll();
+      setGameActive(false);
+    
+      // Clear visuals and rails/history so nothing “bleeds” through
+      clearStageImages();
+      History.clear(DOM);
+      hideRails();
+    
+      // Reset counters and memory state
+      mode = null;
+      score = 0; mult = 1; lives = 3;
+      currentId = null; candidateId = null;
+      rule = "higher"; lastRule = null;
+    
+      // UI state: show difficulty, hide end screen and game-only controls
+      DOM.endScreen?.classList.add("hidden");
+      DOM.startScreen?.classList.remove("hidden");
+      if (DOM.titleEl) DOM.titleEl.textContent = "Random Evolution";
+      showEvolve(false);
+      showDecision(false);
+    
+      // Make sure controls/evolve/aim live back inside the stage (not the dock)
+      if (DOM.controls && DOM.stage && DOM.controls.parentNode !== DOM.stage){
+        DOM.stage.appendChild(DOM.controls);
+      }
+      if (DOM.evolveBtn && DOM.evolveBtn.parentNode !== DOM.stage){
+        DOM.stage.appendChild(DOM.evolveBtn);
+      }
+      if (DOM.aim && DOM.aim.parentNode !== DOM.stage){
+        DOM.stage.appendChild(DOM.aim);
+      }
+      DOM.controlsDock?.setAttribute("aria-hidden","true");
+    
+      // Reset subtle gen band + badge
+      DOM.stage?.style.setProperty("--gen-start","0%");
+      DOM.stage?.style.setProperty("--gen-end","0%");
+      if (DOM.genBadge){
+        DOM.genBadge.textContent = "";
+        DOM.genBadge.setAttribute("aria-hidden","true");
+      }
+    
+      // Layout & history sizes for the idle screen
+      applyResponsiveLayout();
+      History.setCapacity(DOM);
+    
+      // HUD snapshot for the idle state
+      HUD.update(DOM, getPublicState());
+    }
     function boot(debugOn){ DEBUG = debugOn; }
 
     return {
@@ -550,7 +600,9 @@
         wireStartButtons();
         firstPaint();
       },
-      getPublicState
+      getPublicState,
+      resetToStart,
+      startMode
     };
   })();
 
