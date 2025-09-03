@@ -297,48 +297,45 @@ html, body { overflow-x: hidden; }
 }
 
 /* =========================
-   MOBILE — PORTRAIT “Stage | History (right rail)”
+   MOBILE — PORTRAIT
    ========================= */
 @media (max-width: 860px) and (orientation: portrait){
 
-  /* two columns: stage (flex) | history (fixed-ish width) */
   .revo-stage-wrap{
-    display: grid;
     --history-w: clamp(76px, 23vw, 120px);
+    display: grid;
     grid-template-columns: minmax(0, 1fr) var(--history-w);
     grid-auto-rows: 1fr;
     column-gap: 8px;
     row-gap: 0;
-    align-items: stretch;
+    align-items: stretch;        /* keep both columns same height */
     padding-right: 0;
     overflow: visible;
   }
 
-  /* lock the stage to column 1, row 1 and stretch */
   .revo-stage-wrap .revo-stage{
     grid-column: 1 !important;
     grid-row: 1 !important;
     margin: 12px 0 !important;
     width: 100% !important;
     aspect-ratio: auto;
-    min-height: min(76vh, 92svh);
+    min-height: min(76vh, 92svh); /* optional: use 76svh if you prefer */
     align-self: stretch;
   }
 
-  /* history as a right rail, always same row as stage */
   .revo-stage-wrap .revo-history{
     grid-column: 2 !important;
     grid-row: 1 !important;
     align-self: stretch;
     width: 100%;
     height: auto;
-    min-height: min(76svh, 92svh);
+    min-height: unset;           /* don't fight the stage height */
     border-radius: 16px;
     overflow: hidden;
-    display: block !important;
+    display: flex !important;    /* flex so track fills full height */
+    flex-direction: column;
   }
 
-  /* vertical history rail on the right */
   .revo-stage-wrap .revo-history .history-track{
     display: flex !important;
     flex-direction: column !important;
@@ -350,22 +347,26 @@ html, body { overflow-x: hidden; }
     overflow-x: hidden !important;
     scroll-snap-type: y proximity;
   }
+
   .revo-stage-wrap .revo-history .hist-item{
     flex: 0 0 auto;
     width: 100% !important;
     scroll-snap-align: start;
   }
 
-  /* collapse the right rail before the game starts and after it ends */
+  /* collapse rail when game not active */
   .revo-stage-wrap.rails-hidden{
-    grid-template-columns: 1fr !important;   /* single column */
+    grid-template-columns: 1fr !important;
   }
   .revo-stage-wrap.rails-hidden .revo-history{
-    display: none !important;                 /* remove the rail entirely */
+    display: none !important;
   }
+
+  /* Lower the aim banner so it doesn’t overlap the Gen badge */
+  .revo-aim{ top: 42px; }
 }
 
-/* iPhone narrow portrait (12/13/14/15, SE): make rail + thumbs a bit smaller */
+/* iPhone narrow portrait */
 @media (max-width: 393px) and (orientation: portrait){
   .revo-stage-wrap{
     --history-w: clamp(68px, 24vw, 104px);
