@@ -427,7 +427,7 @@
     }
 
     function wireStartButtons(){
-      // Resilient: any element with data-mode="easy|medium|hard" starts a run
+      // Start: any element with data-mode="easy|medium|hard"
       document.addEventListener("click", (e) => {
         const b = e.target.closest("[data-mode]");
         if (!b) return;
@@ -438,7 +438,7 @@
         }
       });
     
-      // Your existing explicit buttons still work if you keep DOM.startButtons:
+      // Existing explicit start buttons (if you keep DOM.startButtons)
       DOM.startButtons?.forEach(btn => {
         btn.addEventListener("click", async () => {
           const m = btn.getAttribute("data-mode");
@@ -446,13 +446,26 @@
         });
       });
     
-      // “End Game” / “Play Again” → behave like a refresh to the start screen
+      // "Play Again" → clean reset to the difficulty screen
       DOM.playAgain?.addEventListener("click", (e) => {
         e.preventDefault();
         resetToStart();
       });
+    
+      // "End Game" support (use whichever you have):
+      // - wire DOM.endGame if your DOM.js exposes it
+      // - also delegate for common selectors so it "just works"
+      DOM.endGame?.addEventListener("click", (e) => {
+        e.preventDefault();
+        resetToStart();
+      });
+      document.addEventListener("click", (e) => {
+        const endBtn = e.target.closest('[data-action="end"], #end-game, .end-game');
+        if (!endBtn) return;
+        e.preventDefault();
+        resetToStart();
+      });
     }
-
 
     async function loadSettings(){
       let url = new URL("./settings.json", document.baseURI);
@@ -576,6 +589,22 @@
     
       // HUD snapshot for the idle state
       HUD.update(DOM, getPublicState());
+
+      // --- Hard reset HUD so it looks like a fresh page load ---
+      if (DOM.hudCurrent) DOM.hudCurrent.textContent = "#—";
+      if (DOM.hudScore)   DOM.hudScore.textContent   = "0";
+      if (DOM.hudLives)   DOM.hudLives.textContent   = "3";
+      if (DOM.hudMult)    DOM.hudMult.textContent    = "x1";
+      if (DOM.hudMode)    DOM.hudMode.textContent    = "—";
+      if (DOM.hudRule) {
+        DOM.hudRule.textContent = "—";
+        DOM.hudRule.classList.remove("higher","lower");
+      }
+      if (DOM.aim) {
+        DOM.aim.style.display = "none";
+        DOM.aim.setAttribute("aria-hidden","true");
+      }
+
     }
     function boot(debugOn){ DEBUG = debugOn; }
 
