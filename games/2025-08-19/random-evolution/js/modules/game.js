@@ -1,3 +1,4 @@
+// games/2025-08-19/random-evolution/js/modules/game.js
 (function(){
   const root = window.Revo = window.Revo || {};
   const { Util, Audio, DOM, Rail, HUD, History } = root;
@@ -415,7 +416,6 @@
       setGameActive(true);
 
       showRails();
-      
       if (DOM.titleEl) DOM.titleEl.textContent = `Random Evolution (${cap(mode)})`;
 
       History.setCapacity(DOM);
@@ -443,116 +443,4 @@
         Rail.applyModeClass(DOM, null);
 
         score = 0; lives = 3; mult = 1; currentId = null; candidateId = null;
-        HUD.update(DOM, getPublicState());
-
-        DOM.endScreen?.classList.add("hidden");
-        DOM.startScreen?.classList.remove("hidden");
-        if (DOM.titleEl) DOM.titleEl.textContent = "Random Evolution";
-
-        hideRails();
-        showEvolve(false);
-        showDecision(false);
-      });
-    }
-
-    async function loadSettings(){
-      let url = new URL("./settings.json", document.baseURI);
-      try {
-        const res = await fetch(url, { cache: "no-store" });
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        settings = await res.json();
-      } catch (err) {
-        console.error("[REVO] Failed to load settings.json", err);
-        settings = {
-          sprites: {
-            base_url: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/",
-            file_extension: ".png",
-            range: { start: 1, end: 1025 }
-          }
-        };
-      }
-      base  = settings.sprites.base_url;
-      ext   = settings.sprites.file_extension || ".png";
-      start = settings.sprites.range.start || 1;
-      end   = settings.sprites.range.end   || 1025;
-      Rail.setMax(end);
-      urlFor = (id) => `${base}${id}${ext}`;
-    }
-
-    function firstPaint(){
-      // HUD & rails
-      DOM.controls?.classList.add("hidden");
-      DOM.hud?.classList.add("inactive");
-      hideRails();
-
-      // Reset stage visuals
-      currentId = null;
-      clearStageImages();
-      History.clear(DOM);
-      History.setCapacity(DOM);
-
-      setGameActive(false);
-      HUD.update(DOM, getPublicState());
-
-      // Overlays
-      DOM.endScreen?.classList.add("hidden");
-      DOM.startScreen?.classList.remove("hidden");
-
-      Rail.applyModeClass(DOM, null);
-
-      // Buttons hidden in idle
-      showEvolve(false);
-      showDecision(false);
-
-      // Ensure controls/aim start inside the stage
-      if (DOM.controls && DOM.stage && DOM.controls.parentNode !== DOM.stage){
-        DOM.stage.appendChild(DOM.controls);
-      }
-      if (DOM.evolveBtn && DOM.evolveBtn.parentNode !== DOM.stage){
-        DOM.stage.appendChild(DOM.evolveBtn);
-      }
-      if (DOM.aim && DOM.aim.parentNode !== DOM.stage){
-        DOM.stage.appendChild(DOM.aim);
-      }
-      DOM.controlsDock?.setAttribute('aria-hidden', 'true');
-
-      // Reset subtle generation band & badge
-      DOM.stage?.style.setProperty('--gen-start', '0%');
-      DOM.stage?.style.setProperty('--gen-end',   '0%');
-      if (DOM.genBadge){
-        DOM.genBadge.textContent = '';
-        DOM.genBadge.setAttribute('aria-hidden', 'true');
-      }
-
-      renderDebugOverlay();
-    }
-
-    function boot(debugOn){ DEBUG = debugOn; }
-
-    return {
-      boot,
-      init: async () => {
-        DOM.grab();
-
-        const onResize = () => {
-          applyResponsiveLayout();
-          Rail.applyModeClass(DOM, Game.getPublicState().mode);
-          History.setCapacity(DOM);
-          const cur = Game.getPublicState().currentId;
-          if (cur != null) Rail.update(DOM, cur);
-        };
-        window.addEventListener('resize', onResize);
-        onResize();
-
-        await loadSettings();
-        Audio.injectVolumeUI(DOM.audioRow);
-        bindInputs();
-        wireStartButtons();
-        firstPaint();
-      },
-      getPublicState
-    };
-  })();
-
-  root.Game = Game;
-})();
+        HUD
