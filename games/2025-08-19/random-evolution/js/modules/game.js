@@ -88,6 +88,18 @@
     }
 
     /* ---------- stage helpers ---------- */
+
+    function clearGenDecor(){
+      // Remove the subtle band and hide the badge
+      DOM.stage?.style.setProperty('--gen-start', '0%');
+      DOM.stage?.style.setProperty('--gen-end',   '0%');
+      if (DOM.genBadge){
+        DOM.genBadge.textContent = '';
+        DOM.genBadge.setAttribute('aria-hidden','true');
+      }
+    }
+
+    
     function hardStopAll(){ rolling = false; session++; deadline = 0; }
     function clearStageImages(){
       if (DOM.imgA) { DOM.imgA.src = ""; DOM.imgA.style.opacity = 0; DOM.imgA.classList.remove("silhouette"); }
@@ -386,6 +398,7 @@
 
       showEnd();
       clearStageImages();
+      clearGenDecor();
       hideRails();
     }
 
@@ -492,31 +505,26 @@
     }
 
     function firstPaint(){
-      // HUD & rails
       DOM.controls?.classList.add("hidden");
       DOM.hud?.classList.add("inactive");
       hideRails();
-
-      // Reset stage visuals
+    
       currentId = null;
       clearStageImages();
       History.clear(DOM);
       History.setCapacity(DOM);
-
+    
       setGameActive(false);
       HUD.update(DOM, getPublicState());
-
-      // Overlays
+    
       DOM.endScreen?.classList.add("hidden");
       DOM.startScreen?.classList.remove("hidden");
-
+    
       Rail.applyModeClass(DOM, null);
-
-      // Buttons hidden in idle
+    
       showEvolve(false);
       showDecision(false);
-
-      // Ensure controls/aim start inside the stage
+    
       if (DOM.controls && DOM.stage && DOM.controls.parentNode !== DOM.stage){
         DOM.stage.appendChild(DOM.controls);
       }
@@ -527,43 +535,34 @@
         DOM.stage.appendChild(DOM.aim);
       }
       DOM.controlsDock?.setAttribute('aria-hidden', 'true');
-
-      // Reset subtle generation band & badge
-      DOM.stage?.style.setProperty('--gen-start', '0%');
-      DOM.stage?.style.setProperty('--gen-end',   '0%');
-      if (DOM.genBadge){
-        DOM.genBadge.textContent = '';
-        DOM.genBadge.setAttribute('aria-hidden', 'true');
-      }
-
+    
+      // Use helper instead of inline
+      resetStageGenDecor();
+    
       renderDebugOverlay();
     }
+
     
     // Return to the difficulty screen as if the page refreshed.
     function resetToStart(){
-      // Stop any rolling/timers and mark game inactive
       hardStopAll();
       setGameActive(false);
     
-      // Clear visuals and rails/history so nothing “bleeds” through
       clearStageImages();
       History.clear(DOM);
       hideRails();
     
-      // Reset counters and memory state
       mode = null;
       score = 0; mult = 1; lives = 3;
       currentId = null; candidateId = null;
       rule = "higher"; lastRule = null;
     
-      // UI state: show difficulty, hide end screen and game-only controls
       DOM.endScreen?.classList.add("hidden");
       DOM.startScreen?.classList.remove("hidden");
       if (DOM.titleEl) DOM.titleEl.textContent = "Random Evolution";
       showEvolve(false);
       showDecision(false);
     
-      // Make sure controls/evolve/aim live back inside the stage (not the dock)
       if (DOM.controls && DOM.stage && DOM.controls.parentNode !== DOM.stage){
         DOM.stage.appendChild(DOM.controls);
       }
@@ -575,22 +574,11 @@
       }
       DOM.controlsDock?.setAttribute("aria-hidden","true");
     
-      // Reset subtle gen band + badge
-      DOM.stage?.style.setProperty("--gen-start","0%");
-      DOM.stage?.style.setProperty("--gen-end","0%");
-      if (DOM.genBadge){
-        DOM.genBadge.textContent = "";
-        DOM.genBadge.setAttribute("aria-hidden","true");
-      }
-    
-      // Layout & history sizes for the idle screen
       applyResponsiveLayout();
       History.setCapacity(DOM);
-    
-      // HUD snapshot for the idle state
       HUD.update(DOM, getPublicState());
-
-      // --- Hard reset HUD so it looks like a fresh page load ---
+    
+      // (Optional) hard reset HUD text you added
       if (DOM.hudCurrent) DOM.hudCurrent.textContent = "#—";
       if (DOM.hudScore)   DOM.hudScore.textContent   = "0";
       if (DOM.hudLives)   DOM.hudLives.textContent   = "3";
@@ -604,8 +592,8 @@
         DOM.aim.style.display = "none";
         DOM.aim.setAttribute("aria-hidden","true");
       }
-
     }
+    
     function boot(debugOn){ DEBUG = debugOn; }
 
     return {
