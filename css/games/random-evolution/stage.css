@@ -375,3 +375,12 @@ html, body { overflow-x: hidden; }
     --hist-gap: 6px;
   }
 }
+
+/* Lower aim banner so it clears the Gen badge
+   on ALL narrow viewports (portrait + very small) */
+@media (max-width: 860px) and (orientation: portrait),
+       (max-width: 620px), (max-height: 600px) {
+  .revo-aim {
+    top: 42px;   /* below Gen badge */
+  }
+}
