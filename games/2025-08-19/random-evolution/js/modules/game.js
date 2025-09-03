@@ -415,7 +415,6 @@
       setGameActive(true);
 
       showRails();
-      console.log("[REVO] wrap classes:", document.querySelector(".revo-stage-wrap")?.className);
       
       if (DOM.titleEl) DOM.titleEl.textContent = `Random Evolution (${cap(mode)})`;
 
