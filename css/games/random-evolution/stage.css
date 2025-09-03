@@ -15,10 +15,9 @@ html, body { overflow-x: hidden; }
 /* Stage wrapper (rail • stage • history) */
 .revo-stage-wrap{
   display:grid;
-  grid-template-columns:auto 1fr auto;  /* left rail, stage, right history */
+ grid-template-columns: minmax(0, 1fr) clamp(90px, 26vw, 136px);
   align-items:start;
   column-gap:48px;
-  padding-right: clamp(12px, 5vw, 56px);
   margin-inline:auto;
 }
 
@@ -304,7 +303,7 @@ html, body { overflow-x: hidden; }
   /* two columns: stage (flex) | history (fixed-ish width) */
   .revo-stage-wrap{
     display: grid;
-    grid-template-columns: 1fr clamp(90px, 26vw, 136px); /* stable touch targets */
+    grid-template-columns: minmax(0, 1fr) clamp(90px, 26vw, 136px);
     grid-auto-rows: 1fr;
     column-gap: 12px;
     row-gap: 0;
@@ -320,10 +319,13 @@ html, body { overflow-x: hidden; }
     margin: 12px 0 !important;
     width: 100% !important;
     aspect-ratio: auto;
-    min-height: min(76vh, 92svh);
+    min-height: min(76svh, 92svh);
     align-self: stretch;
   }
-
+   /*ensure stage painted above rail)
+   .revo-stage-wrap .revo-stage{ z-index: 2; }
+   .revo-stage-wrap .revo-history{ z-index: 1; }
+   
   /* history as a right rail, always same row as stage */
   .revo-stage-wrap .revo-history{
     grid-column: 2 !important;
