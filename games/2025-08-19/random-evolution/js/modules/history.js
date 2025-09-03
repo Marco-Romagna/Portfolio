@@ -44,21 +44,27 @@
     }
 
    function setCapacity(DOM){
-      const mobile = window.matchMedia("(max-width: 620px), (max-height: 600px)").matches;
-      if (mobile){
-        // Let the horizontal strip scroll; keep a soft cap so DOM doesn’t explode
-        capacity = 40;
+      const { track } = els(DOM);
+      // Decide by *actual* layout, not breakpoints:
+      // if track is a horizontal row (bottom strip) => soft cap 40
+      // if track is a vertical column (right rail)  => compute by height
+      const dir = track ? getComputedStyle(track).flexDirection : "row";
+    
+      if (dir === "row") {
+        capacity = 40;              // horizontal thumbnail strip
         trimDOM(DOM);
         state = state.slice(0, capacity);
         return;
       }
-      const next = computeCapacity(DOM);
+    
+      const next = computeCapacity(DOM); // vertical rail capacity by height
       if (next !== capacity){
         capacity = next;
         trimDOM(DOM);
         state = state.slice(0, capacity);
       }
     }
+
 
     function clear(DOM){
       const { track } = els(DOM);
