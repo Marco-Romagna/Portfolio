@@ -364,3 +364,13 @@ html, body { overflow-x: hidden; }
     display: none !important;                 /* remove the rail entirely */
   }
 }
+
+/* iPhone narrow portrait (12/13/14/15, SE): make rail + thumbs a bit smaller */
+@media (max-width: 393px) and (orientation: portrait){
+  .revo-stage-wrap{
+    --history-w: clamp(68px, 24vw, 104px);
+    column-gap: 6px;
+    --hist-thumb: 52px;
+    --hist-gap: 6px;
+  }
+}
