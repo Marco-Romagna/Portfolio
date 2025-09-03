@@ -148,3 +148,44 @@
   }
 }
 
+/* ============================================================
+   PORTRAIT OVERRIDE: keep history as a RIGHT rail.
+   it overrides the ≤620px "bottom strip" rules 
+   ============================================================ */
+@media (max-width: 860px) and (orientation: portrait){
+  /* Two columns: stage | fixed-width right rail */
+  .revo-stage-wrap{
+    grid-template-columns: minmax(0,1fr) clamp(90px, 26vw, 136px) !important;
+  }
+
+  /* Stage stays in column 1 */
+  .revo-stage-wrap .revo-stage{
+    grid-column: 1 !important;
+    grid-row: 1 !important;
+    min-height: min(76svh, 92svh) !important;
+    align-self: stretch !important;
+  }
+
+  /* History becomes a vertical right rail in column 2 */
+  .revo-stage-wrap .revo-history{
+    grid-column: 2 !important;
+    grid-row: 1 !important;
+    width: var(--history-w) !important;
+    height: var(--stage-max) !important;
+    min-height: 0 !important;
+    border-radius: 16px !important;
+    display: block !important;
+    overflow: hidden !important;
+  }
+
+  /* Vertical track inside the rail */
+  .revo-stage-wrap .revo-history .history-track{
+    flex-direction: column !important;
+    height: 100% !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    gap: var(--hist-gap) !important;
+    padding: var(--hist-gap) !important;
+  }
+}
+
