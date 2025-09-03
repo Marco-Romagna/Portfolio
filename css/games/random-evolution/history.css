@@ -223,4 +223,41 @@
   }
   .revo-history .hist-label{ font-size: 8px; }
 }
+/* Keep right-rail in PORTRAIT even on very small screens */
+@media (max-width: 620px) and (orientation: portrait),
+       (max-height: 600px) and (orientation: portrait){
+  .revo-stage-wrap{
+    /* two columns: stage | right rail */
+    grid-template-columns: minmax(0, 1fr) var(--history-w);
+    align-items: stretch;
+  }
+  /* lock rail beside stage and match its height */
+  .revo-history{
+    grid-column: 2 !important;
+    grid-row: 1 !important;
+    display: flex !important;
+    flex-direction: column;
+    width: 100%;
+    height: auto !important;
+    min-height: min(76svh, 92svh) !important; /* match stage */
+    border-radius: 16px;
+    overflow: hidden;
+  }
+  .revo-history .history-track{
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    height: 100% !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    gap: 8px;
+    padding: 12px 8px;
+    scroll-snap-type: y proximity;
+  }
+  .revo-history .hist-item{
+    flex: 0 0 auto;
+    width: 100% !important;
+    scroll-snap-align: start;
+  }
+}
 
