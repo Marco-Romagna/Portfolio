@@ -31,20 +31,13 @@
   flex-direction: column;
   align-items: center;
   gap: 4px;
-
-  /* Entrance micro animation */
   transform: scale(0.96);
   opacity: 0;
   animation: hist-in 200ms cubic-bezier(.2,1,.2,1) forwards;
 }
+@keyframes hist-in { to { transform: scale(1); opacity: 1; } }
 
-/* Required for the pop-in. If you centralize animations elsewhere,
-   keep a copy there or remove the animation above. */
-@keyframes hist-in {
-  to { transform: scale(1); opacity: 1; }
-}
-
-/* Image frame (holds background & rim) */
+/* Image frame (background + rim) */
 .hist-imgwrap{
   width: 100%;
   height: var(--hist-thumb);
@@ -52,57 +45,34 @@
   overflow: hidden;
   display: grid;
   place-items: center;
-
-  /* Base frame */
   border: 2px solid rgba(255,255,255,.08);
   box-shadow:
     0 0 0 1px rgba(255,255,255,.04) inset,
     0 2px 10px rgba(0,0,0,.25);
 }
+.hist-imgwrap[data-action="cancel"]{ background: rgba(255,255,255,.05); }
+.hist-imgwrap[data-action="accept"]{ background: linear-gradient(180deg, rgba(18,25,41,.65), rgba(11,16,27,.65)); }
+.hist-imgwrap[data-action="start"] { background: linear-gradient(180deg, rgba(10,14,24,.75), rgba(7,10,18,.75)); }
 
-/* Background by action */
-.hist-imgwrap[data-action="cancel"]{
-  background: rgba(255,255,255,.05);
-}
-.hist-imgwrap[data-action="accept"]{
-  background: linear-gradient(180deg, rgba(18,25,41,.65), rgba(11,16,27,.65));
-}
-/* Neutral start background */
-.hist-imgwrap[data-action="start"]{
-  background: linear-gradient(180deg, rgba(10,14,24,.75), rgba(7,10,18,.75));
-}
-
-/* Rim tint by correctness */
+/* Rim tint */
 .hist-imgwrap[data-correct="true"]{
-  box-shadow:
-    0 0 0 1px rgba(122,162,247,.25) inset,
-    0 0 0 2px rgba(122,162,247,.18),
-    0 4px 12px rgba(0,0,0,.28);
+  box-shadow: 0 0 0 1px rgba(122,162,247,.25) inset,
+              0 0 0 2px rgba(122,162,247,.18),
+              0 4px 12px rgba(0,0,0,.28);
 }
 .hist-imgwrap[data-correct="false"]{
-  box-shadow:
-    0 0 0 1px rgba(247,118,142,.30) inset,
-    0 0 0 2px rgba(247,118,142,.20),
-    0 4px 12px rgba(0,0,0,.28);
+  box-shadow: 0 0 0 1px rgba(247,118,142,.30) inset,
+              0 0 0 2px rgba(247,118,142,.20),
+              0 4px 12px rgba(0,0,0,.28);
 }
-/* Neutral rim */
 .hist-imgwrap[data-correct="neutral"]{
-  box-shadow:
-    0 0 0 1px rgba(255,255,255,.14) inset,
-    0 0 0 2px rgba(255,255,255,.10),
-    0 4px 12px rgba(0,0,0,.28);
+  box-shadow: 0 0 0 1px rgba(255,255,255,.14) inset,
+              0 0 0 2px rgba(255,255,255,.10),
+              0 4px 12px rgba(0,0,0,.28);
 }
 
-/* Thumbnail image */
-.hist-thumb{
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  image-rendering: auto;
-  pointer-events: none;
-}
-
-/* Dex label under image */
+/* Thumbnail + label */
+.hist-thumb{ width: 100%; height: 100%; object-fit: cover; pointer-events: none; }
 .hist-label{
   font: 800 clamp(9px, 1.6vmin, 11px)/1.1 ui-monospace,SFMono-Regular,Menlo,monospace;
   color: var(--muted);
@@ -110,15 +80,13 @@
   user-select: none;
 }
 
-/* Hide history on very tight screens if needed */
+/* Hide on very tight screens if needed */
 @media (max-width: 420px){
   .revo-stage-wrap { grid-template-columns: auto 1fr; }
   .revo-history { display:none; }
 }
 
-/* Desktop unchanged … */
-
-/* ---------- Mobile: history becomes a bottom strip ---------- */
+/* ---------- Mobile: bottom strip (landscape / very short) ---------- */
 @media (max-width: 620px), (max-height: 600px){
   .revo-history{
     width: 100%;
@@ -126,138 +94,57 @@
     min-height: 88px;
     border-radius: 12px;
     padding: 6px 8px;
-    grid-column: 1 / -1;           /* span under stage */
+    grid-column: 1 / -1;
   }
   .revo-history .history-track{
-    display: flex;
-    flex-direction: row;            /* left→right */
+    flex-direction: row;
     align-items: center;
     gap: 8px;
     padding: 0 4px;
-    overflow-x: auto;               /* allow horizontal scroll if needed */
+    overflow-x: auto;
     height: auto;
   }
-  .hist-item{
-    width: auto;                    /* shrink to content */
-    transform: scale(1); opacity: 1; /* skip pop-in on tight space */
-    animation: none;
-  }
+  .hist-item{ width: auto; transform: scale(1); opacity: 1; animation: none; }
   .hist-imgwrap{ width: 64px; height: 64px; }
-  .hist-label{
-    font-size: 10px;
-  }
+  .hist-label{ font-size: 10px; }
 }
 
-/* ============================================================
-   PORTRAIT OVERRIDE: keep history as a RIGHT rail.
-   it overrides the ≤620px "bottom strip" rules 
-   ============================================================ */
+/* ---------- Portrait override: keep RIGHT rail and match stage height ---------- */
 @media (max-width: 860px) and (orientation: portrait){
-  /* Two columns: stage | fixed-width right rail */
-  .revo-stage-wrap{
-    grid-template-columns: minmax(0,1fr) var(--history-w) !important;
-  }
+  .revo-stage-wrap{ grid-template-columns: minmax(0,1fr) var(--history-w); align-items: stretch; }
 
-  /* Stage stays in column 1 */
-  .revo-stage-wrap .revo-stage{
-    grid-column: 1 !important;
-    grid-row: 1 !important;
-    min-height: min(76svh, 92svh) !important;
-    align-self: stretch !important;
-  }
-
-  /* History becomes a vertical right rail in column 2 */
   .revo-stage-wrap .revo-history{
-    grid-column: 2 !important;
-    grid-row: 1 !important;
-    width: var(--history-w) !important;
-    height: var(--stage-max) !important;
-    min-height: 0 !important;
-    border-radius: 16px !important;
-    display: block !important;
-    overflow: hidden !important;
+    grid-column: 2; grid-row: 1;
+    width: var(--history-w);
+    height: auto; min-height: unset;
+    align-self: stretch;
+    border-radius: 16px;
+    display: flex !important;
+    flex-direction: column;
+    overflow: hidden;
   }
 
-  /* Vertical track inside the rail */
   .revo-stage-wrap .revo-history .history-track{
     flex-direction: column !important;
     height: 100% !important;
-    overflow-y: auto !important;
-    overflow-x: hidden !important;
-    gap: var(--hist-gap) !important;
-    padding: var(--hist-gap) !important;
+    overflow-y: auto; overflow-x: hidden;
+    gap: var(--hist-gap); padding: var(--hist-gap);
+  }
+  .revo-stage-wrap .revo-history .hist-item{
+    width: 100% !important;
   }
 }
 
-/* ===== iPhone-tight portrait tuning (narrow widths) ===== */
-
-/* Tier 1: ≤430px — trim rail + gaps a little */
+/* iPhone/narrow portrait tuning */
 @media (max-width: 430px) and (orientation: portrait){
-  .revo-stage-wrap{
-    --history-w: clamp(64px, 24vw, 108px);
-    column-gap: 6px;
-    --hist-thumb: 56px;
-    --hist-gap: 6px;
-  }
+  .revo-stage-wrap{ --history-w: clamp(64px, 24vw, 108px); column-gap: 6px; --hist-thumb: 56px; --hist-gap: 6px; }
   .revo-history .hist-label{ font-size: 9px; }
 }
-
-/* Tier 2: ≤393px — iPhone 12/13/14/15/SE sizes */
 @media (max-width: 393px) and (orientation: portrait){
-  .revo-stage-wrap{
-    --history-w: clamp(58px, 23vw, 96px);
-    column-gap: 5px;
-    --hist-thumb: 50px;
-    --hist-gap: 5px;
-  }
+  .revo-stage-wrap{ --history-w: clamp(58px, 23vw, 96px); column-gap: 5px; --hist-thumb: 50px; --hist-gap: 5px; }
   .revo-history .hist-label{ font-size: 8.5px; }
 }
-
-/* Tier 3: ≤360px — ultra-tight (older/smaller phones) */
 @media (max-width: 360px) and (orientation: portrait){
-  .revo-stage-wrap{
-    --history-w: clamp(54px, 22vw, 90px);
-    column-gap: 4px;
-    --hist-thumb: 46px;
-    --hist-gap: 4px;
-  }
+  .revo-stage-wrap{ --history-w: clamp(54px, 22vw, 90px); column-gap: 4px; --hist-thumb: 46px; --hist-gap: 4px; }
   .revo-history .hist-label{ font-size: 8px; }
 }
-/* Keep right-rail in PORTRAIT even on very small screens */
-@media (max-width: 620px) and (orientation: portrait),
-       (max-height: 600px) and (orientation: portrait){
-  .revo-stage-wrap{
-    /* two columns: stage | right rail */
-    grid-template-columns: minmax(0, 1fr) var(--history-w);
-    align-items: stretch;
-  }
-  /* lock rail beside stage and match its height */
-  .revo-history{
-    grid-column: 2 !important;
-    grid-row: 1 !important;
-    display: flex !important;
-    flex-direction: column;
-    width: 100%;
-    height: auto !important;
-    min-height: min(76svh, 92svh) !important; /* match stage */
-    border-radius: 16px;
-    overflow: hidden;
-  }
-  .revo-history .history-track{
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: stretch !important;
-    height: 100% !important;
-    overflow-y: auto !important;
-    overflow-x: hidden !important;
-    gap: 8px;
-    padding: 12px 8px;
-    scroll-snap-type: y proximity;
-  }
-  .revo-history .hist-item{
-    flex: 0 0 auto;
-    width: 100% !important;
-    scroll-snap-align: start;
-  }
-}
-
