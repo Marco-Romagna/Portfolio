@@ -155,7 +155,7 @@
 @media (max-width: 860px) and (orientation: portrait){
   /* Two columns: stage | fixed-width right rail */
   .revo-stage-wrap{
-    grid-template-columns: minmax(0,1fr) clamp(90px, 26vw, 136px) !important;
+    grid-template-columns: minmax(0,1fr) var(--history-w) !important;
   }
 
   /* Stage stays in column 1 */
@@ -188,4 +188,5 @@
     padding: var(--hist-gap) !important;
   }
 }
+
 
