@@ -384,3 +384,18 @@ html, body { overflow-x: hidden; }
     top: 42px;   /* below Gen badge */
   }
 }
+
+/* When the stage is idle (start screen or game over),
+   do not show any in-stage art or controls. */
+.revo-stage.stage-idle .revo-img,
+.revo-stage.stage-idle .revo-aim,
+.revo-stage.stage-idle #controls,
+.revo-stage.stage-idle #evolve-button,
+.revo-stage.stage-idle .revo-flash {
+  display: none !important;
+}
+
+/* Also hide the gen badge whenever idle */
+.revo-stage.stage-idle .stage-gen-badge {
+  display: none !important;
+}
