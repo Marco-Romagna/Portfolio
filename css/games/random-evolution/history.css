@@ -165,6 +165,16 @@
   .revo-stage-wrap.rails-hidden .revo-history{
     display: none !important;
   }
+ /* Hide the scrollbar, keep touch scroll */
+   .revo-stage-wrap .revo-history .history-track{
+     scrollbar-width: none;          /* Firefox */
+     -ms-overflow-style: none;       /* IE/Edge legacy */
+     overscroll-behavior: contain;   /* no page bounce while scrolling */
+     -webkit-overflow-scrolling: touch; /* iOS momentum */
+   }
+   .revo-stage-wrap .revo-history .history-track::-webkit-scrollbar{
+     width:0; height:0; display:none; /* WebKit */
+   }
 }
 
 /* iPhone narrow portrait still inherits the same behavior; only tweak widths */
