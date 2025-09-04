@@ -89,6 +89,10 @@
 
     /* ---------- stage helpers ---------- */
 
+    function setStageIdle(on){
+      DOM.stage?.classList.toggle('stage-idle', !!on);
+    }
+    
     function clearGenDecor(){
       // Remove the subtle band and hide the badge
       DOM.stage?.style.setProperty('--gen-start', '0%');
@@ -400,6 +404,7 @@
       clearStageImages();
       clearGenDecor();
       hideRails();
+      setStageIdle(true); 
     }
 
     function setGameActive(active){
@@ -418,7 +423,7 @@
       hardStopAll();
       clearStageImages();
       History.clear(DOM);
-
+      setStageIdle(false); 
       currentId = randId();
       await showInstant(currentId);
 
@@ -513,7 +518,8 @@
       clearStageImages();
       History.clear(DOM);
       History.setCapacity(DOM);
-    
+
+      setStageIdle(true); 
       setGameActive(false);
       HUD.update(DOM, getPublicState());
     
@@ -550,6 +556,8 @@
     
       clearStageImages();
       History.clear(DOM);
+
+      setStageIdle(true); 
       hideRails();
     
       mode = null;
