@@ -111,40 +111,42 @@
 
 /* ---------- Portrait override: keep RIGHT rail and match stage height ---------- */
 @media (max-width: 860px) and (orientation: portrait){
-  .revo-stage-wrap{ grid-template-columns: minmax(0,1fr) var(--history-w); align-items: stretch; }
-
-  .revo-stage-wrap .revo-history{
-    grid-column: 2; grid-row: 1;
-    width: var(--history-w);
-    height: auto; min-height: unset;
-    align-self: stretch;
-    border-radius: 16px;
-    display: flex !important;
-    flex-direction: column;
-    overflow: hidden;
+  /* Two columns: stage | fixed-width right rail */
+  .revo-stage-wrap{
+    grid-template-columns: minmax(0,1fr) var(--history-w) !important;
+    align-items: start;   /* don't stretch both; stage is reference */
   }
 
+  /* Stage stays in column 1 */
+  .revo-stage-wrap .revo-stage{
+    grid-column: 1 !important;
+    grid-row: 1 !important;
+    min-height: min(76svh, 92svh) !important;
+    max-height: var(--stage-max) !important;
+    align-self: start !important;
+  }
+
+  /* History rail in column 2 */
+  .revo-stage-wrap .revo-history{
+    grid-column: 2 !important;
+    grid-row: 1 !important;
+    width: var(--history-w) !important;
+    height: var(--stage-max) !important;   /* match stage cap */
+    min-height: 0 !important;
+    border-radius: 16px !important;
+    display: flex !important;
+    flex-direction: column;
+    overflow-y: auto !important;           /* scroll internally */
+    overflow-x: hidden !important;
+  }
+
+  /* Vertical track inside the rail */
   .revo-stage-wrap .revo-history .history-track{
     flex-direction: column !important;
     height: 100% !important;
-    overflow-y: auto; overflow-x: hidden;
-    gap: var(--hist-gap); padding: var(--hist-gap);
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    gap: var(--hist-gap) !important;
+    padding: var(--hist-gap) !important;
   }
-  .revo-stage-wrap .revo-history .hist-item{
-    width: 100% !important;
-  }
-}
-
-/* iPhone/narrow portrait tuning */
-@media (max-width: 430px) and (orientation: portrait){
-  .revo-stage-wrap{ --history-w: clamp(64px, 24vw, 108px); column-gap: 6px; --hist-thumb: 56px; --hist-gap: 6px; }
-  .revo-history .hist-label{ font-size: 9px; }
-}
-@media (max-width: 393px) and (orientation: portrait){
-  .revo-stage-wrap{ --history-w: clamp(58px, 23vw, 96px); column-gap: 5px; --hist-thumb: 50px; --hist-gap: 5px; }
-  .revo-history .hist-label{ font-size: 8.5px; }
-}
-@media (max-width: 360px) and (orientation: portrait){
-  .revo-stage-wrap{ --history-w: clamp(54px, 22vw, 90px); column-gap: 4px; --hist-thumb: 46px; --hist-gap: 4px; }
-  .revo-history .hist-label{ font-size: 8px; }
 }
