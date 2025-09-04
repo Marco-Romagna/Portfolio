@@ -175,6 +175,16 @@
    .revo-stage-wrap .revo-history .history-track::-webkit-scrollbar{
      width:0; height:0; display:none; /* WebKit */
    }
+   /* Snap the list as you flick */
+   .revo-stage-wrap .revo-history .history-track{
+     scroll-snap-type: y proximity;   /* or 'mandatory' if you want stronger snaps */
+     scroll-padding-top: var(--hist-gap); /* keeps first item nicely aligned */
+   }
+   
+   /* Each item anchors a snap point */
+   .revo-stage-wrap .revo-history .hist-item{
+     scroll-snap-align: start;
+   }
 }
 
 /* iPhone narrow portrait still inherits the same behavior; only tweak widths */
