@@ -542,8 +542,9 @@
       }
       DOM.controlsDock?.setAttribute('aria-hidden', 'true');
     
-      // Use helper instead of inline
-      resetStageGenDecor();
+      // Clear badge + band
+      clearGenDecor();
+
     
       renderDebugOverlay();
     }
@@ -553,7 +554,8 @@
     function resetToStart(){
       hardStopAll();
       setGameActive(false);
-    
+      // Clear badge + band so the stage has no gen visuals in idle
+      clearGenDecor();
       clearStageImages();
       History.clear(DOM);
 
