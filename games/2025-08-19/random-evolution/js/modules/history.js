@@ -1,19 +1,17 @@
 // games/2025-08-19/random-evolution/js/modules/history.js
-// History rail manager used by Game.
+// History rail manager (most-recent-first).
 // API:
 //   History.push(DOM, urlFor, { id, action: 'accept'|'cancel'|'start', correct: true|false|'neutral' })
 //   History.clear(DOM)
-//   History.setCapacity(DOM)   // recompute & enforce capacity
-//   History.observe(DOM)       // (optional) bind observers + initial capacity
+//   History.setCapacity(DOM)
 
 (function(){
   const root = window.Revo = window.Revo || {};
-  const History = (() => {
-    let capacity = 0;            // how many tiles we keep in DOM/state
-    let state = [];              // most-recent-first
-    let _observersBound = false; // bind observers once
 
-    /* -------------------- DOM helpers -------------------- */
+  const History = (() => {
+    let capacity = 0;
+    let state = []; // most-recent-first
+
     function els(DOM){
       return {
         wrap:  DOM.historyWrap  || document.getElementById("revo-history"),
@@ -21,19 +19,17 @@
       };
     }
 
-    /* -------------------- Capacity math -------------------- */
-    // For vertical right rail: derive from available height and CSS vars
     function computeCapacity(DOM){
       const { wrap } = els(DOM);
       if (!wrap) return 0;
 
       const rect = wrap.getBoundingClientRect();
       const cs = getComputedStyle(document.documentElement);
-      const thumb  = parseFloat(cs.getPropertyValue("--hist-thumb")) || 40;
+      const thumb  = parseFloat(cs.getPropertyValue("--hist-thumb")) || 56;
       const gap    = parseFloat(cs.getPropertyValue("--hist-gap")) || 8;
-      const labelH = 14;                                  // approx label height
-      const tileH  = thumb + labelH + gap;                // one tile + gap
-      const padding= gap * 2;                             // .history-track padding
+      const labelH = 14; // rough label height
+      const tileH  = thumb + labelH + gap;
+      const padding= gap * 2; // .history-track padding (top+bottom)
       const innerH = rect.height - padding;
 
       return Math.max(1, Math.floor(innerH / tileH));
@@ -48,24 +44,22 @@
       }
     }
 
-    /* -------------------- Capacity controller -------------------- */
-    // Determines how many history tiles to keep/render, based on actual layout.
+    // Decide capacity by actual layout, not breakpoints:
+    // - if the track is a horizontal row (bottom strip) => soft cap 40
+    // - if the track is a vertical column (right rail)  => compute by height
     function setCapacity(DOM){
       const { track } = els(DOM);
       if (!track){ capacity = 0; return; }
 
-      // Read the layout CSS applied to the track
       const dir = (getComputedStyle(track).flexDirection || "row").trim();
-
-      if (dir === "row"){               // Bottom horizontal strip
-        capacity = 40;                  // soft cap; lets it scroll
+      if (dir === "row"){
+        capacity = 40;              // horizontal thumbnail strip
         trimDOM(DOM);
         state = state.slice(0, capacity);
         return;
       }
 
-      // Vertical right rail — compute from available height
-      const next = computeCapacity(DOM);
+      const next = computeCapacity(DOM);   // vertical rail
       if (next !== capacity){
         capacity = next;
         trimDOM(DOM);
@@ -73,48 +67,15 @@
       }
     }
 
-    /* -------------------- Observers (resize/orientation) -------------------- */
-    const _debounce = (fn, ms = 120) => {
-      let t;
-      return (...a) => { clearTimeout(t); t = setTimeout(() => fn(...a), ms); };
-    };
-
-    function _bindObservers(DOM){
-      if (_observersBound) return;
-      _observersBound = true;
-
-      // ResizeObserver on the history track (height/width changes)
-      const { wrap, track } = els(DOM);
-      const observed = track || wrap;
-      if (observed){
-        try{
-          const ro = new ResizeObserver(() => setCapacity(DOM));
-          ro.observe(observed);
-        }catch(_){}
-      }
-
-      // Window resize + orientation changes (address bar show/hide, rotate, etc.)
-      const onResize = _debounce(() => setCapacity(DOM), 120);
-      window.addEventListener("resize", onResize, { passive: true });
-
-      try{
-        const mqP = window.matchMedia("(orientation: portrait)");
-        const mqL = window.matchMedia("(orientation: landscape)");
-        mqP.addEventListener?.("change", () => setCapacity(DOM));
-        mqL.addEventListener?.("change", () => setCapacity(DOM));
-      }catch(_){}
-    }
-
-    function observe(DOM){
-      _bindObservers(DOM);
-      setCapacity(DOM); // prime
-    }
-
-    /* -------------------- Public ops -------------------- */
     function clear(DOM){
       const { track } = els(DOM);
       state = [];
-      if (track) track.innerHTML = "";
+      if (track) {
+        track.innerHTML = "";
+        // Ensure the scroll position is reset (portrait rail)
+        track.scrollTop = 0;
+        track.scrollLeft = 0;
+      }
     }
 
     // entry.action: 'accept' | 'cancel' | 'start'
@@ -122,6 +83,11 @@
     function push(DOM, urlFor, entry){
       const { track } = els(DOM);
       if (!track || !entry?.id) return;
+
+      // Ensure capacity is at least 1 (first run after layout)
+      if (capacity === 0) {
+        capacity = computeCapacity(DOM) || 1;
+      }
 
       const item = document.createElement("div");
       item.className = "hist-item";
@@ -156,16 +122,11 @@
       item.appendChild(wrap);
       item.appendChild(label);
 
-      // Insert at top
+      // Insert newest at the top
       track.insertBefore(item, track.firstChild);
-
-      // Ensure capacity is at least 1 before trimming
-      if (capacity === 0) {
-        capacity = computeCapacity(DOM) || 1;
-      }
-
-      // Track + trim to capacity
       state.unshift(entry);
+
+      // Trim to capacity
       const items = track.querySelectorAll(".hist-item");
       if (items.length > capacity){
         for (let i = items.length - 1; i >= capacity; i--){
@@ -173,9 +134,22 @@
         }
         state = state.slice(0, capacity);
       }
+
+      // Keep the most recent visible at the top (portrait/column).
+      // If it's horizontal (row), keep left aligned.
+      const dir = (getComputedStyle(track).flexDirection || "column").trim();
+      if (dir === "column"){
+        // Scroll to top without showing the bar (CSS hides it).
+        // 2 rAFs to ensure layout has applied.
+        requestAnimationFrame(() => requestAnimationFrame(() => {
+          track.scrollTop = 0;
+        }));
+      } else {
+        track.scrollLeft = 0;
+      }
     }
 
-    return { push, clear, setCapacity, observe };
+    return { push, clear, setCapacity };
   })();
 
   root.History = History;
