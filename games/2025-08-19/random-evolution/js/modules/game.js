@@ -5,10 +5,10 @@
   const { AudioMgr } = Audio;
 
   // Toggle to show a translucent debug overlay with the current layout state.
-  const DEBUG_OVERLAY = true;
+  const DEBUG_OVERLAY = false;
 
   const Game = (() => {
-    let DEBUG = true;
+    let DEBUG = false;
     let settings;
     let base, ext, start, end;
     let urlFor = (id) => `${base}${id}${ext}`;
