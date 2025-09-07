@@ -250,8 +250,11 @@ html, body { overflow-x: hidden; }
 
   .revo-stage-wrap.mobile-landscape .controls-dock{
     grid-column: 2; grid-row: 1;
-    display:block;
-    position: relative;
+    display:flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 8px;
     width: 100%;
     height: min(78vh, 92svh);
     aspect-ratio: 1 / 1;
@@ -259,39 +262,52 @@ html, body { overflow-x: hidden; }
     border:1px solid rgba(255,255,255,.08);
     border-radius:16px;
     overflow:hidden;
+  }
 
-    display: flex;
-    flex-direction: column;       /* stack children vertically */
-    justify-content: center;      /* center them vertically */
-    align-items: center;          /* center horizontally */
-    gap: clamp(12px, 4vmin, 28px); /* space between items */
+  /* Difficulty stack (only visible when idle in landscape) */
+  .revo-stage-wrap.mobile-landscape .diff-stack{
+    display:flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+    align-items: center;
+    margin-top: 12px;
+  }
+  .revo-stage-wrap.mobile-landscape .diff-stack .mode-btn{
+    width: 80%;
+    font-size: clamp(14px, 2.6vmin, 18px);
+    letter-spacing: 1px;
+    padding: 10px 0;
   }
 
   /* Controls & evolve bottom-centered inside the dock */
   .revo-stage-wrap.mobile-landscape #controls.ab-instage{
-    position: static;             /* no absolute positioning */
+    position: relative;
+    left: auto;
     transform: none;
     bottom: auto;
-    flex-direction: column;       /* stack buttons vertically */
-    gap: clamp(16px, 4vmin, 28px);
+    gap: clamp(18px, 6vmin, 36px);
+    margin-bottom: 12px;
     z-index: 6;
   }
-
   .revo-stage-wrap.mobile-landscape #evolve-button{
-    position: static;             /* no absolute positioning */
+    position: relative;
+    left: auto;
     transform: none;
     bottom: auto;
-    width: clamp(180px, 28vmin, 320px);
+    width: clamp(160px, 26vmin, 280px);
+    margin-bottom: 20px;
     z-index: 6;
   }
 
   /* Aim banner top-centered in the dock */
   .revo-stage-wrap.mobile-landscape .revo-aim{
-    position: static;
-    order: -1;                    /* put it at the top */
-    margin-bottom: auto;
+    position: relative;
+    top: auto; left: auto; transform:none;
     display:block;
-    z-index:7;
+    margin-bottom: 8px;
+    font-size: clamp(14px, 2.2vmin, 18px);
+    text-align: center;
   }
 
   /* History spans both columns under the twin panels */
