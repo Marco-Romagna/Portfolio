@@ -228,79 +228,70 @@ html, body { overflow-x: hidden; }
 /* =========================
    MOBILE — LANDSCAPE “Twin Panels”
    ========================= */
-/* =========================
-   MOBILE — LANDSCAPE “Twin Panels”
-   ========================= */
-@media (max-width: 860px) and (orientation: landscape){
-  /* Two equal columns for stage | dock, one row; history is row 2 */
-  .revo-stage-wrap.mobile-landscape{
-    grid-template-columns: 1fr 1fr;
-    grid-auto-rows: 1fr;
-    column-gap: 14px;
-    row-gap: 12px;
-    align-items: stretch;
-  }
 
-  /* Stage */
+@media (max-width: 860px) and (orientation: landscape){
+
+  /* Grid and dock stay as you have them */
+
+  /* Make the stage fill the left column (no forced square) and center content */
   .revo-stage-wrap.mobile-landscape .revo-stage{
     grid-column: 1; grid-row: 1;
     margin: 0;
     width: 100%;
-    aspect-ratio: 1 / 1;
-    min-height: unset;
-    height: min(78vh, 92svh);
-    padding: 10px; /* give breathing room */
-  }
-
-  /* Controls dock (right side) */
-  .revo-stage-wrap.mobile-landscape .controls-dock{
-    grid-column: 2; grid-row: 1;
-    display:flex;
-    flex-direction: column;
+    height: min(80vh, 92svh);   /* a bit taller for comfort */
+    aspect-ratio: auto;         /* <— was 1 / 1 (this was “smooshing” it) */
+    display: flex;
     align-items: center;
     justify-content: center;
-    gap: 16px;
+    padding: clamp(12px, 2.5vmin, 24px);
+  }
+
+  /* We put the title over the buttons; hide it inside the stage in landscape */
+  .revo-stage-wrap.mobile-landscape .revo-stage .start-title{
+    display: none;
+  }
+
+  /* Center the rules text inside the stage and give it a readable width */
+  .revo-stage-wrap.mobile-landscape .revo-stage .start-overlay{
+    position: static;         /* no absolute positioning; let flex center it */
+    width: min(640px, 92%);
+    max-width: 42ch;          /* comfortable measure */
+    margin: 0 auto;
+    text-align: center;
+    background: transparent;  /* keep the stage’s nice background */
+    box-shadow: none;
+    border: 0;
+  }
+
+  .revo-stage-wrap.mobile-landscape .revo-stage .start-rules{
+    font-size: clamp(13px, 1.9vmin, 16px);
+    line-height: 1.4;
+    color: var(--muted);
+    margin: 0 auto;
+    text-wrap: pretty;
+    /* optional soft backplate if you want more contrast:
+    background: rgba(0,0,0,.28);
+    border: 1px solid rgba(255,255,255,.08);
+    border-radius: 14px;
+    padding: clamp(10px, 1.8vmin, 16px);
+    */
+  }
+
+  /* Keep the docked controls in the right panel as you already have */
+  .revo-stage-wrap.mobile-landscape .controls-dock{
+    grid-column: 2; grid-row: 1;
+    display:block;
     position: relative;
     width: 100%;
-    height: min(78vh, 92svh);
+    height: min(80vh, 92svh);
     aspect-ratio: 1 / 1;
     background: radial-gradient(120% 120% at 50% 55%, #121929 0%, #0b101b 60%, #070a12 100%);
     border:1px solid rgba(255,255,255,.08);
     border-radius:16px;
     overflow:hidden;
-    padding: 12px;
   }
 
-  /* Difficulty stack inside dock */
-  .revo-stage-wrap.mobile-landscape .diff-stack{
-    display:flex;
-    flex-direction: column;
-    gap: 10px;
-    width: 100%;
-    max-width: 200px;
-  }
-
-  /* Buttons scale a bit smaller */
-  .revo-stage-wrap.mobile-landscape .diff-stack .mode-btn{
-    font-size: clamp(13px, 2.4vmin, 16px);
-    padding: 8px 10px;
-    text-align: center;
-  }
-
-  /* Start screen adjustments for landscape */
-  .revo-stage-wrap.mobile-landscape .start-title{
-    font-size: clamp(16px, 3vmin, 20px);
-    margin-bottom: 6px;
-    line-height: 1.2;
-  }
-
-  .revo-stage-wrap.mobile-landscape .start-rules{
-    font-size: clamp(12px, 2.2vmin, 14px);
-    line-height: 1.3;
-    margin-bottom: 10px;
-  }
-
-  /* Controls & evolve (if shown) */
+  /* Buttons in the dock (unchanged from your latest) */
   .revo-stage-wrap.mobile-landscape #controls.ab-instage{
     position: absolute;
     left: 50%;
@@ -314,27 +305,10 @@ html, body { overflow-x: hidden; }
     left: 50%;
     transform: translateX(-50%);
     bottom: 16px;
-    width: clamp(160px, 24vmin, 280px);
+    width: clamp(180px, 28vmin, 320px);
     z-index: 6;
   }
-
-  /* Aim banner top-centered in the dock */
-  .revo-stage-wrap.mobile-landscape .revo-aim{
-    position:absolute;
-    top:12px; left:50%; transform:translateX(-50%);
-    display:block;
-    z-index:7;
-  }
-
-  /* History spans both columns under the twin panels */
-  .revo-stage-wrap.mobile-landscape .revo-history{
-    grid-column: 1 / -1;
-    grid-row: 2;
-    width: 100%;
-    height: clamp(70px, 22vh, 130px);
-  }
 }
-
 /* =========================
    MOBILE — PORTRAIT
    ========================= */
