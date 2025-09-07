@@ -228,11 +228,9 @@ html, body { overflow-x: hidden; }
 /* =========================
    MOBILE — LANDSCAPE “Twin Panels”
    ========================= */
-/* =========================
-   MOBILE — LANDSCAPE “Twin Panels”
-   ========================= */
 @media (max-width: 860px) and (orientation: landscape){
-  /* Two equal columns for stage | dock, one row; history is row 2 */
+
+  /* two equal columns: stage | dock, history below */
   .revo-stage-wrap.mobile-landscape{
     grid-template-columns: 1fr 1fr;
     grid-auto-rows: 1fr;
@@ -241,7 +239,7 @@ html, body { overflow-x: hidden; }
     align-items: stretch;
   }
 
-  /* Stage takes left side */
+  /* Stage (left) */
   .revo-stage-wrap.mobile-landscape .revo-stage{
     grid-column: 1; grid-row: 1;
     margin: 0;
@@ -249,60 +247,96 @@ html, body { overflow-x: hidden; }
     aspect-ratio: 1 / 1;
     min-height: unset;
     height: min(78vh, 92svh);
+    padding: clamp(8px, 1.5vmin, 14px); /* gives text some breathing room */
   }
 
-  /* Dock on right side */
+  /* Dock (right) */
   .revo-stage-wrap.mobile-landscape .controls-dock{
     grid-column: 2; grid-row: 1;
-    display:flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+    display:block;
+    position: relative;
     width: 100%;
     height: min(78vh, 92svh);
+    aspect-ratio: 1 / 1;
     background: radial-gradient(120% 120% at 50% 55%, #121929 0%, #0b101b 60%, #070a12 100%);
     border:1px solid rgba(255,255,255,.08);
     border-radius:16px;
     overflow:hidden;
-    padding: 10px;
-    gap: 18px; /* space between stacked items */
+    padding: clamp(12px, 2vmin, 16px);
   }
 
-  /* Difficulty stack when inside dock */
-  .revo-stage-wrap.mobile-landscape .diff-stack{
-    display:flex;
+  /* ---------- Start overlay: tighten left column copy ---------- */
+
+  /* title inside the stage */
+  .revo-stage .start-overlay .start-title{
+    margin: 0 0 clamp(8px, 1.4vmin, 14px);
+    line-height: 1.1;
+    text-wrap: balance;
+    max-width: 92%;
+    font-size: clamp(18px, 3.8vmin, 26px); /* smaller for fit */
+    letter-spacing: .2px;
+  }
+
+  /* help text below title */
+  .revo-stage .start-overlay .start-rules{
+    margin: 0;
+    margin-top: clamp(6px, 1.2vmin, 10px);
+    max-width: 92%;
+    font-size: clamp(12px, 2.2vmin, 14px);
+    line-height: 1.25;
+    opacity: .95;
+    text-wrap: pretty;
+  }
+  .revo-stage .start-overlay .start-rules strong{
+    font-weight: 800;
+  }
+
+  /* we’re not using the actions on the left in landscape */
+  .revo-stage .start-overlay .start-actions{
+    display: none !important;
+  }
+
+  /* ---------- Difficulty Stack inside the DOCK ---------- */
+
+  /* stack lives in the dock during landscape (moved by JS) */
+  .controls-dock .diff-stack{
+    display: flex;
     flex-direction: column;
-    gap: 12px;
+    justify-content: center;
+    gap: clamp(10px, 2.6vmin, 16px);
+    height: 100%;
+  }
+
+  .controls-dock .diff-stack .mode-btn{
+    display: block;
     width: 100%;
-    align-items: stretch;
+    padding: clamp(10px, 3.2vmin, 16px) clamp(12px, 3.2vmin, 18px);
+    border-radius: 16px;
+    font-weight: 900;
+    letter-spacing: .2px;
+    font-size: clamp(14px, 3.2vmin, 18px);
+    border: 1px solid rgba(255,255,255,.14);
+    box-shadow: 0 10px 30px rgba(0,0,0,.25) inset,
+                0 10px 30px rgba(0,0,0,.28);
+    transition: transform .08s ease, filter .12s ease;
+    text-align: center;
   }
-  .revo-stage-wrap.mobile-landscape .diff-stack .mode-btn{
-    font-size: clamp(13px, 2.6vmin, 18px);
-    padding: 8px 6px;
-    letter-spacing: 1px;
-    white-space: normal;  /* allow wrapping */
-    word-break: break-word;
+  .controls-dock .diff-stack .mode-btn:active{ transform: scale(.98); }
+
+  .controls-dock .diff-stack [data-mode="easy"]{
+    background: linear-gradient(180deg, #3ed66b, #22a74c);
+    color:#06150c;
+  }
+  .controls-dock .diff-stack [data-mode="medium"]{
+    background: linear-gradient(180deg, #ffbf58, #d6962b);
+    color:#2a1a00;
+  }
+  .controls-dock .diff-stack [data-mode="hard"]{
+    background: linear-gradient(180deg, #ff6b6b, #d94444);
+    color:#2a0909;
   }
 
-  /* Controls & evolve bottom-centered inside the dock */
-  .revo-stage-wrap.mobile-landscape #controls.ab-instage{
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    bottom: 18px;
-    gap: clamp(18px, 6vmin, 36px);
-    z-index: 6;
-  }
-  .revo-stage-wrap.mobile-landscape #evolve-button{
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    bottom: 16px;
-    width: clamp(180px, 28vmin, 320px);
-    z-index: 6;
-  }
-
-  /* Aim banner top-centered in the dock */
+  /* ---------- Aim banner in dock when game running ---------- */
   .revo-stage-wrap.mobile-landscape .revo-aim{
     position:absolute;
     top:12px; left:50%; transform:translateX(-50%);
@@ -310,7 +344,7 @@ html, body { overflow-x: hidden; }
     z-index:7;
   }
 
-  /* History spans both columns under the twin panels */
+  /* ---------- History spans below both columns ---------- */
   .revo-stage-wrap.mobile-landscape .revo-history{
     grid-column: 1 / -1;
     grid-row: 2;
