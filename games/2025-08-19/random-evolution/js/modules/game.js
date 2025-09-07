@@ -88,6 +88,27 @@
     }
 
     /* ---------- stage helpers ---------- */
+  
+    function moveDifficultyToDockIfNeeded(){
+      const wrap = document.querySelector('.revo-stage-wrap');
+      const useDock = wrap?.classList.contains('mobile-landscape');
+      const { gameActive } = Game.getPublicState?.() || { gameActive:false };
+    
+      // The element that wraps your difficulty buttons (create this wrapper in HTML if you don't have one)
+      const stack = document.querySelector('.diff-stack');      // contains [data-mode] buttons
+      if (!stack) return;
+    
+      if (useDock && !gameActive && DOM.controlsDock && stack.parentNode !== DOM.controlsDock){
+        DOM.controlsDock.appendChild(stack);
+        DOM.controlsDock.setAttribute('aria-hidden','false');
+      }
+    
+      // When not using dock or game is active, push it back into the start screen
+      if ((!useDock || gameActive) && DOM.startScreen && stack.parentNode !== DOM.startScreen){
+        DOM.startScreen.appendChild(stack);
+        // in-game the dock is used for A/B etc.; let existing code manage its aria-hidden
+      }
+    }
 
     function setStageIdle(on){
       DOM.stage?.classList.toggle('stage-idle', !!on);
@@ -215,6 +236,7 @@
         DOM.controlsDock?.setAttribute('aria-hidden', 'true');
       }
 
+      moveDifficultyToDockIfNeeded();   
       renderDebugOverlay();
     }
 
@@ -424,6 +446,7 @@
       clearStageImages();
       History.clear(DOM);
       setStageIdle(false); 
+      moveDifficultyToDockIfNeeded();
       currentId = randId();
       await showInstant(currentId);
 
@@ -545,7 +568,7 @@
       // Clear badge + band
       clearGenDecor();
 
-    
+      moveDifficultyToDockIfNeeded();
       renderDebugOverlay();
     }
 
@@ -560,6 +583,7 @@
       History.clear(DOM);
 
       setStageIdle(true); 
+      moveDifficultyToDockIfNeeded();
       hideRails();
     
       mode = null;
