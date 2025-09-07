@@ -259,30 +259,37 @@ html, body { overflow-x: hidden; }
     border:1px solid rgba(255,255,255,.08);
     border-radius:16px;
     overflow:hidden;
+
+    display: flex;
+    flex-direction: column;       /* stack children vertically */
+    justify-content: center;      /* center them vertically */
+    align-items: center;          /* center horizontally */
+    gap: clamp(12px, 4vmin, 28px); /* space between items */
   }
 
   /* Controls & evolve bottom-centered inside the dock */
   .revo-stage-wrap.mobile-landscape #controls.ab-instage{
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    bottom: 18px;
-    gap: clamp(18px, 6vmin, 36px);
+    position: static;             /* no absolute positioning */
+    transform: none;
+    bottom: auto;
+    flex-direction: column;       /* stack buttons vertically */
+    gap: clamp(16px, 4vmin, 28px);
     z-index: 6;
   }
+
   .revo-stage-wrap.mobile-landscape #evolve-button{
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    bottom: 16px;
+    position: static;             /* no absolute positioning */
+    transform: none;
+    bottom: auto;
     width: clamp(180px, 28vmin, 320px);
     z-index: 6;
   }
 
   /* Aim banner top-centered in the dock */
   .revo-stage-wrap.mobile-landscape .revo-aim{
-    position:absolute;
-    top:12px; left:50%; transform:translateX(-50%);
+    position: static;
+    order: -1;                    /* put it at the top */
+    margin-bottom: auto;
     display:block;
     z-index:7;
   }
