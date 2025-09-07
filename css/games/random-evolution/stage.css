@@ -228,6 +228,9 @@ html, body { overflow-x: hidden; }
 /* =========================
    MOBILE — LANDSCAPE “Twin Panels”
    ========================= */
+/* =========================
+   MOBILE — LANDSCAPE “Twin Panels”
+   ========================= */
 @media (max-width: 860px) and (orientation: landscape){
   /* Two equal columns for stage | dock, one row; history is row 2 */
   .revo-stage-wrap.mobile-landscape{
@@ -238,7 +241,7 @@ html, body { overflow-x: hidden; }
     align-items: stretch;
   }
 
-  /* Place items explicitly to avoid staggering */
+  /* Stage takes left side */
   .revo-stage-wrap.mobile-landscape .revo-stage{
     grid-column: 1; grid-row: 1;
     margin: 0;
@@ -248,66 +251,63 @@ html, body { overflow-x: hidden; }
     height: min(78vh, 92svh);
   }
 
+  /* Dock on right side */
   .revo-stage-wrap.mobile-landscape .controls-dock{
     grid-column: 2; grid-row: 1;
     display:flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
-    padding: 16px 8px;
     width: 100%;
     height: min(78vh, 92svh);
-    aspect-ratio: 1 / 1;
     background: radial-gradient(120% 120% at 50% 55%, #121929 0%, #0b101b 60%, #070a12 100%);
     border:1px solid rgba(255,255,255,.08);
     border-radius:16px;
     overflow:hidden;
+    padding: 10px;
+    gap: 18px; /* space between stacked items */
   }
 
-  /* Difficulty stack (only visible when idle in landscape) */
+  /* Difficulty stack when inside dock */
   .revo-stage-wrap.mobile-landscape .diff-stack{
     display:flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 12px;
     width: 100%;
-    align-items: center;
-    margin-top: 12px;
+    align-items: stretch;
   }
   .revo-stage-wrap.mobile-landscape .diff-stack .mode-btn{
-    width: 80%;
-    font-size: clamp(14px, 2.6vmin, 18px);
+    font-size: clamp(13px, 2.6vmin, 18px);
+    padding: 8px 6px;
     letter-spacing: 1px;
-    padding: 10px 0;
+    white-space: normal;  /* allow wrapping */
+    word-break: break-word;
   }
 
   /* Controls & evolve bottom-centered inside the dock */
   .revo-stage-wrap.mobile-landscape #controls.ab-instage{
-    position: relative;
-    left: auto;
-    transform: none;
-    bottom: auto;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 18px;
     gap: clamp(18px, 6vmin, 36px);
-    margin-bottom: 12px;
     z-index: 6;
   }
   .revo-stage-wrap.mobile-landscape #evolve-button{
-    position: relative;
-    left: auto;
-    transform: none;
-    bottom: auto;
-    width: clamp(160px, 26vmin, 280px);
-    margin-bottom: 20px;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 16px;
+    width: clamp(180px, 28vmin, 320px);
     z-index: 6;
   }
 
   /* Aim banner top-centered in the dock */
   .revo-stage-wrap.mobile-landscape .revo-aim{
-    position: relative;
-    top: auto; left: auto; transform:none;
+    position:absolute;
+    top:12px; left:50%; transform:translateX(-50%);
     display:block;
-    margin-bottom: 8px;
-    font-size: clamp(14px, 2.2vmin, 18px);
-    text-align: center;
+    z-index:7;
   }
 
   /* History spans both columns under the twin panels */
