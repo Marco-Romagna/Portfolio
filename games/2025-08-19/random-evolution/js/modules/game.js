@@ -94,21 +94,43 @@
       const useDock = wrap?.classList.contains('mobile-landscape');
       const { gameActive } = Game.getPublicState?.() || { gameActive:false };
     
-      // The element that wraps your difficulty buttons (create this wrapper in HTML if you don't have one)
-      const stack = document.querySelector('.diff-stack');      // contains [data-mode] buttons
+      const stack = document.querySelector('.diff-stack'); // your [data-mode] buttons wrapper
+      const startTitle = document.querySelector('#start-screen .start-title');
+      const dockTitle  = document.querySelector('#dock-start-title');
+    
       if (!stack) return;
     
-      if (useDock && !gameActive && DOM.controlsDock && stack.parentNode !== DOM.controlsDock){
-        DOM.controlsDock.appendChild(stack);
+      if (useDock && !gameActive && DOM.controlsDock){
+        // move buttons into dock
+        if (stack.parentNode !== DOM.controlsDock){
+          DOM.controlsDock.appendChild(stack);
+        }
         DOM.controlsDock.setAttribute('aria-hidden','false');
-      }
     
-      // When not using dock or game is active, push it back into the start screen
-      if ((!useDock || gameActive) && DOM.startScreen && stack.parentNode !== DOM.startScreen){
-        DOM.startScreen.appendChild(stack);
-        // in-game the dock is used for A/B etc.; let existing code manage its aria-hidden
+        // mirror title into dock, hide the in-stage one
+        if (dockTitle && startTitle){
+          dockTitle.textContent = startTitle.textContent || 'Choose your difficulty';
+          dockTitle.hidden = false;
+          startTitle.setAttribute('aria-hidden','true');
+          startTitle.style.visibility = 'hidden';
+        }
+      } else {
+        // restore buttons to start screen when leaving landscape or starting game
+        if (DOM.startScreen && stack.parentNode !== DOM.startScreen){
+          DOM.startScreen.appendChild(stack);
+        }
+        // restore title visibility in stage
+        if (dockTitle){
+          dockTitle.hidden = true;
+          dockTitle.textContent = '';
+        }
+        if (startTitle){
+          startTitle.removeAttribute('aria-hidden');
+          startTitle.style.visibility = '';
+        }
       }
     }
+
 
     function setStageIdle(on){
       DOM.stage?.classList.toggle('stage-idle', !!on);
