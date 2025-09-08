@@ -1,26 +1,52 @@
 /* ===== WebGL placeholder ===== */
 .demo-wrap{
-  margin-top:12px;
+  margin-top:14px;
 }
 
+/* Big, responsive 16:9 area that looks like a canvas */
 .demo-placeholder{
   width:100%;
-  aspect-ratio:16/9;              /* keeps a nice widescreen box */
+  aspect-ratio:16/9;
   display:grid;
   place-items:center;
   background: rgba(255,255,255,.04);
-  border:1px solid rgba(255,255,255,.12);
-  border-radius:12px;
-  box-shadow: 0 6px 24px rgba(0,0,0,.25) inset;
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 12px;
+  box-shadow: inset 0 6px 24px rgba(0,0,0,.25);
   user-select:none;
+  position: relative;
+  overflow:hidden;
+}
+
+/* Subtle shimmer so it feels “loading” */
+.demo-placeholder::after{
+  content:"";
+  position:absolute; inset:0;
+  background: linear-gradient(100deg,
+    transparent 0%,
+    rgba(255,255,255,.06) 40%,
+    rgba(255,255,255,.10) 50%,
+    rgba(255,255,255,.06) 60%,
+    transparent 100%);
+  transform: translateX(-100%);
+  animation: demoShimmer 2.2s infinite;
+}
+@keyframes demoShimmer{
+  to { transform: translateX(100%); }
 }
 
 .demo-placeholder span{
-  color:var(--muted);
-  font-weight:600;
-  letter-spacing:.2px;
-  opacity:.9;
+  color: var(--muted);
+  font-weight: 600;
+  letter-spacing: .2px;
+  padding: 0 12px;
+  text-align:center;
 }
 
-/* Optional: make the main panel breathe a bit more */
+/* Make the panel breathe a bit so the box stands out */
 .panel { padding: 20px; }
+
+/* Mobile: allow slightly taller box if needed */
+@media (max-width: 560px){
+  .demo-placeholder{ aspect-ratio: 4/3; }
+}
