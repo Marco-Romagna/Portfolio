@@ -3,83 +3,53 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Unity Lobby (Matchmaking Prototype)</title>
+  <title>Unity Lobby • Project</title>
   <meta name="color-scheme" content="dark light" />
-  <link rel="stylesheet" href="styles.css" />
+
+  <!-- Global theme -->
+  <link rel="stylesheet" href="../../../css/main.css">
+
+  <!-- Project-specific styles -->
+  <link rel="stylesheet" href="../../../css/projects/unity-lobby/styles.css">
 </head>
 <body>
-  <!-- Site header (use your existing header if you prefer) -->
+  <!-- Header -->
   <header class="header">
     <div class="container nav">
-      <a class="brand" href="/Portfolio/">
+      <a class="brand" href="../../../index.html">
         <span class="dot"></span><span>Marco • Portfolio</span>
       </a>
       <nav class="links">
-        <a class="link" href="/Portfolio/projects/index.html">Projects</a>
-        <a class="link" href="/Portfolio/games/index.html">Games</a>
-        <a class="cta"  href="https://www.linkedin.com/in/marco-romagna" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+        <a class="link" href="../../../index.html#projects">Projects</a>
+        <a class="link" href="../../../index.html#games">Games</a>
+        <a class="cta" href="https://www.linkedin.com/in/marco-romagna" target="_blank" rel="noopener noreferrer">LinkedIn</a>
       </nav>
     </div>
   </header>
 
+  <!-- Main -->
   <main class="container">
     <section class="panel">
-      <h1>Unity Lobby (Matchmaking Prototype)</h1>
-      <p class="lead">This page will host a playable WebGL demo of the lobby flow. For now, this is a placeholder.</p>
+      <h2>Unity Lobby (Matchmaking Prototype)</h2>
+      <p class="muted">
+        This page will host a playable WebGL demo of the lobby flow.  
+        For now, this is a placeholder.
+      </p>
 
-      <!-- Unity-like WebGL player shell (placeholder) -->
-      <div class="unity-wrap">
-        <!-- Top bar -->
-        <div class="unity-topbar">
-          <div class="unity-title">Unity WebGL Player — Lobby Prototype</div>
-          <div class="unity-controls">
-            <label class="ctrl">
-              <span>Quality</span>
-              <select disabled>
-                <option>High</option>
-                <option>Medium</option>
-                <option>Low</option>
-              </select>
-            </label>
-            <button class="btn" disabled title="Fullscreen (placeholder)">⛶</button>
-          </div>
-        </div>
-
-        <!-- Stage -->
-        <div class="unity-stage">
-          <!-- Loading overlay -->
-          <div class="unity-loading" id="loader">
-            <div class="logo">Made with <span>Unity</span></div>
-            <div class="bar">
-              <div class="fill" id="barFill" style="width:0%"></div>
-            </div>
-            <div class="pct" id="pct">0%</div>
-            <div class="hint">Preparing placeholder…</div>
-          </div>
-
-          <!-- Placeholder canvas area -->
-          <div class="unity-placeholder" id="placeholder" hidden>
-            <div class="ph-content">
-              <div class="ph-title">WebGL demo placeholder</div>
-              <p>The lobby WebGL build will load here.</p>
-              <ul class="scope">
-                <li>Host realm</li>
-                <li>Password/realm name</li>
-                <li>Guest list</li>
-                <li>Close / leave</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-
-        <!-- Footer like Unity template -->
-        <div class="unity-footer">
-          <span class="badge">WebGL</span>
-          <span class="sep">•</span>
-          <span class="muted">Placeholder shell — replace with your <code>Build/</code> output later</span>
+      <!-- Unity WebGL placeholder -->
+      <div class="demo-wrap">
+        <div class="demo-placeholder">
+          <span class="muted">WebGL demo placeholder — lobby build will load here</span>
         </div>
       </div>
 
-      <p class="back">
-        <a href="/Portfolio/projects/index.html">← Back to Projects</a>
-      </p
+      <!-- Short scope summary -->
+      <p class="muted" style="margin-top:10px">
+        Scope: host realm → password/realm name → guest list → close/leave.
+      </p>
+
+      <a class="btn back" href="../../../index.html#projects">← Back to Projects</a>
+    </section>
+  </main>
+</body>
+</html>
