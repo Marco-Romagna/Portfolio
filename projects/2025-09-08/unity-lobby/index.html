@@ -1,47 +1,63 @@
-<!-- Unity WebGL placeholder -->
-<div class="unity-wrap">
-  <div class="unity-loading" id="loader">
-    <div class="logo">Made with <span>Unity</span></div>
-    <div class="bar"><div class="fill" id="barFill"></div></div>
-    <div class="pct" id="pct">0%</div>
-    <div class="hint">Preparing placeholder…</div>
-  </div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Unity Lobby • Project</title>
+  <meta name="color-scheme" content="dark light" />
 
-  <div class="unity-placeholder" id="placeholder">
-    <div class="ph-content">
-      <div class="ph-title">WebGL demo placeholder</div>
-      <p>The lobby WebGL build will load here.</p>
+  <!-- Global theme -->
+  <link rel="stylesheet" href="../../../css/main.css">
+
+  <!-- Project-specific styles -->
+  <link rel="stylesheet" href="../../../css/projects/unity-lobby/styles.css">
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="container nav">
+      <a class="brand" href="../../../index.html">
+        <span class="dot"></span><span>Marco • Portfolio</span>
+      </a>
+      <nav class="links">
+        <a class="link" href="../../../index.html#projects">Projects</a>
+        <a class="link" href="../../../index.html#games">Games</a>
+        <a class="cta" href="https://www.linkedin.com/in/marco-romagna" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+      </nav>
     </div>
-  </div>
-</div>
+  </header>
 
-<script>
-  // Fake loader animation
-  (function () {
-    const bar = document.getElementById('barFill');
-    const pct = document.getElementById('pct');
-    const loader = document.getElementById('loader');
-    const placeholder = document.getElementById('placeholder');
+  <!-- Main -->
+  <main class="container">
+    <section class="panel">
+      <h2>Unity Lobby (Matchmaking Prototype)</h2>
+      <p class="muted">
+        This page will host a playable WebGL demo of the lobby flow.<br>
+        For now, this is a placeholder.
+      </p>
 
-    placeholder.style.display = 'none'; // hide until finished
-    let p = 0;
-    const tick = () => {
-      p += Math.max(0.5, (100 - p) * 0.05);
-      if (p > 100) p = 100;
-      bar.style.width = p.toFixed(0) + '%';
-      pct.textContent = p.toFixed(0) + '%';
-      if (p < 100) {
-        requestAnimationFrame(tick);
-      } else {
-        setTimeout(() => {
-          loader.style.opacity = '0';
-          loader.addEventListener('transitionend', () => {
-            loader.hidden = true;
-            placeholder.style.display = 'grid'; // reveal after loading
-          }, { once: true });
-        }, 300);
-      }
-    };
-    requestAnimationFrame(tick);
-  })();
-</script>
+      <!-- Unity shell -->
+      <div class="unity-wrap">
+        <div class="unity-loading" id="loader">
+          <div class="logo">Made with <span>Unity</span></div>
+          <div class="bar"><div class="fill" id="barFill"></div></div>
+          <div class="pct" id="pct">0%</div>
+          <div class="hint">Preparing placeholder…</div>
+        </div>
+
+        <div class="unity-placeholder" id="placeholder">
+          <div class="ph-content">
+            <div class="ph-title">WebGL demo placeholder</div>
+            <p>The lobby WebGL build will load here.</p>
+          </div>
+        </div>
+      </div>
+
+      <a class="btn back" href="../../../index.html#projects">← Back to Projects</a>
+    </section>
+  </main>
+
+  <!-- External loader script -->
+  <script src="loader.js"></script>
+</body>
+</html>
