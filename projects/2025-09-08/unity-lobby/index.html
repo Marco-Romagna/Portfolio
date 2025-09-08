@@ -13,7 +13,7 @@
   <link rel="stylesheet" href="../../../css/projects/unity-lobby/styles.css">
 </head>
 <body>
-  <!-- Header -->
+  <!-- Header (kept from main.css) -->
   <header class="header">
     <div class="container nav">
       <a class="brand" href="../../../index.html">
@@ -32,24 +32,65 @@
     <section class="panel">
       <h2>Unity Lobby (Matchmaking Prototype)</h2>
       <p class="muted">
-        This page will host a playable WebGL demo of the lobby flow.  
+        This page will host a playable WebGL demo of the lobby flow.<br>
         For now, this is a placeholder.
       </p>
 
-      <!-- Unity WebGL placeholder -->
-      <div class="demo-wrap">
-        <div class="demo-placeholder">
-          <span class="muted">WebGL demo placeholder — lobby build will load here</span>
+      <!-- Unity-like placeholder -->
+      <div class="unity-wrap">
+        <div class="unity-loading" id="loader">
+          <div class="logo">Made with <span>Unity</span></div>
+          <div class="bar"><div class="fill" id="barFill"></div></div>
+          <div class="pct" id="pct">0%</div>
+          <div class="hint">Preparing placeholder…</div>
+        </div>
+
+        <div class="unity-placeholder" id="placeholder" hidden>
+          <div class="ph-content">
+            <div class="ph-title">WebGL demo placeholder</div>
+            <p>The lobby WebGL build will load here.</p>
+            <ul>
+              <li>Host realm</li>
+              <li>Password/realm name</li>
+              <li>Guest list</li>
+              <li>Close / leave</li>
+            </ul>
+          </div>
         </div>
       </div>
-
-      <!-- Short scope summary -->
-      <p class="muted" style="margin-top:10px">
-        Scope: host realm → password/realm name → guest list → close/leave.
-      </p>
 
       <a class="btn back" href="../../../index.html#projects">← Back to Projects</a>
     </section>
   </main>
+
+  <script>
+    // Fake loader animation
+    (function () {
+      const bar = document.getElementById('barFill');
+      const pct = document.getElementById('pct');
+      const loader = document.getElementById('loader');
+      const placeholder = document.getElementById('placeholder');
+
+      let p = 0;
+      const tick = () => {
+        p += Math.max(0.5, (100 - p) * 0.05);
+        if (p > 100) p = 100;
+        bar.style.width = p.toFixed(0) + '%';
+        pct.textContent = p.toFixed(0) + '%';
+        if (p < 100) {
+          requestAnimationFrame(tick);
+        } else {
+          setTimeout(() => {
+            loader.style.opacity = '0';
+            loader.addEventListener('transitionend', () => {
+              loader.hidden = true;
+              placeholder.hidden = false;
+            }, { once: true });
+          }, 300);
+        }
+      };
+      requestAnimationFrame(tick);
+    })();
+  </script>
 </body>
 </html>
