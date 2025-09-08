@@ -1,57 +1,58 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Portfolio</title>
-<meta name="color-scheme" content="dark light" />
-<link rel="stylesheet" href="css/main.css">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Unity Lobby • Project</title>
+  <meta name="color-scheme" content="dark light" />
+
+  <!-- Base so relative links work correctly -->
+  <base href="/Portfolio/">
+
+  <!-- Global theme -->
+  <link rel="stylesheet" href="css/main.css">
+
+  <!-- Project-specific styles -->
+  <link rel="stylesheet" href="projects/unity-lobby/styles.css">
 </head>
 <body>
+  <!-- Header -->
   <header class="header">
     <div class="container nav">
-      <div class="brand">
+      <a class="brand" href="index.html">
         <span class="dot"></span><span>Marco • Portfolio</span>
-      </div>
+      </a>
       <nav class="links">
-        <a class="link" href="#projects">Projects</a>
-        <a class="link" href="#games">Games</a>
-        <a class="cta"  href="https://www.linkedin.com/in/marco-romagna" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+        <a class="link" href="index.html#projects">Projects</a>
+        <a class="link" href="index.html#games">Games</a>
+        <a class="cta" href="https://www.linkedin.com/in/marco-romagna" target="_blank" rel="noopener noreferrer">LinkedIn</a>
       </nav>
     </div>
   </header>
 
+  <!-- Main -->
   <main class="container">
-      <section id="projects" class="panel">
-        <h2>Projects</h2>
-        <ul id="projects-list"></ul>
-      </section>
-    
-      <section id="games" class="panel">
-        <h2>Games</h2>
-        <ul id="games-list"></ul>
-      </section>
-    
-      <script>
-        async function loadList(jsonPath, ulId){
-          const ul = document.getElementById(ulId);
-          try {
-            const res = await fetch(jsonPath, { cache: 'no-store' });
-            const items = await res.json();
-            items.sort((a,b) => b.date.localeCompare(a.date));
-            ul.innerHTML = items.map(x =>
-              `<li><a href="${x.path}">${x.title} (${x.date})</a></li>`
-            ).join('') || '<li><em>No items yet.</em></li>';
-          } catch (e) {
-            ul.innerHTML = '<li><em>Could not load list.</em></li>';
-          }
-        }
-    
-        loadList('data/projects.json', 'projects-list');
-        loadList('data/games.json', 'games-list');
-      </script>
-    </main>
+    <section class="panel">
+      <h2>Unity Lobby (Matchmaking Prototype)</h2>
+      <p class="muted">
+        This page will host a playable WebGL demo of the lobby flow.  
+        For now, this is a placeholder.
+      </p>
 
-  
+      <!-- Placeholder area -->
+      <div class="demo-wrap">
+        <div class="demo-placeholder">
+          <span class="muted">WebGL demo placeholder — lobby build will load here</span>
+        </div>
+      </div>
+
+      <!-- Short scope summary -->
+      <p class="muted" style="margin-top:10px">
+        Scope: host realm → password/realm name → guest list → close/leave.
+      </p>
+
+      <a class="btn back" href="index.html#projects">← Back to Projects</a>
+    </section>
+  </main>
 </body>
 </html>
