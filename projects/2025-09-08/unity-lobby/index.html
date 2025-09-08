@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Unity Lobby • Project</title>
+  <meta name="color-scheme" content="dark light" />
+  <!-- IMPORTANT: everything below resolves relative to site root -->
+  <base href="/Portfolio/">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/projects/unity-lobby.css">
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="container nav">
+      <a class="brand" href="index.html">
+        <span class="dot"></span><span>Marco • Portfolio</span>
+      </a>
+      <nav class="links">
+        <a class="link" href="index.html#projects">Projects</a>
+        <a class="link" href="index.html#games">Games</a>
+        <a class="cta"  href="https://www.linkedin.com/in/marco-romagna" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main -->
+  <main class="container">
+    <section class="panel">
+      <h2>Unity Lobby (Matchmaking Prototype)</h2>
+      <p class="muted">Added: <time datetime="2025-09-08">2025-09-08</time></p>
+
+      <div class="grid">
+        <div class="card">
+          <h3 class="card-title">Overview</h3>
+          <p>
+            Lightweight lobby-based matchmaking flow for a Unity project: create/join realm, password-gated sessions, guest list,
+            and clean close rules. Built with future 1v1→3v3 scaling in mind.
+          </p>
+          <ul class="bullets">
+            <li>Password-protected “host realm” creation</li>
+            <li>Guest middle page with available realms & join flow</li>
+            <li>Session persistence: save/load realm name & password</li>
+            <li>Live roster count + usernames for host</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h3 class="card-title">Tech Notes</h3>
+          <ul class="kv">
+            <li><span>Engine</span><b>Unity (UI Toolkit)</b></li>
+            <li><span>Net model</span><b>Lobby-style (local-first concept)</b></li>
+            <li><span>Focus</span><b>Menus, flows, and persistence</b></li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h3 class="card-title">Links</h3>
+          <p class="muted">Add repo/demo when ready.</p>
+          <!-- Example placeholders:
+          <a class="btn" href="https://github.com/you/unity-lobby" target="_blank" rel="noopener">GitHub Repo</a>
+          <a class="btn" href="projects/2025-09-08/unity-lobby/build/">WebGL Demo</a>
+          -->
+        </div>
+      </div>
+
+      <details class="panel panel-sub">
+        <summary>Feature checklist</summary>
+        <ul class="checklist">
+          <li class="done">Set realm name (host)</li>
+          <li class="done">Display realm name (host/guest)</li>
+          <li class="done">Show session password from save (host)</li>
+          <li>Guest username entry</li>
+          <li>Guest leave flow</li>
+          <li>Nearby test host in dev mode</li>
+        </ul>
+      </details>
+
+      <a class="btn back" href="index.html#projects">← Back to Projects</a>
+    </section>
+  </main>
+</body>
+</html>
