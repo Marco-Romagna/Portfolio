@@ -70,3 +70,71 @@
   font-size: 18px;
   margin-bottom: 6px;
 }
+/* Unity WebGL shell */
+.unity-wrap {
+  position: relative;
+  aspect-ratio: 16/9;
+  min-height: 320px;
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 12px;
+  overflow: hidden;
+  margin-top: 14px;
+  background: linear-gradient(180deg,#1a1f2e,var(--panel));
+}
+
+/* Loader overlay */
+.unity-loading {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  text-align: center;
+  gap: 12px;
+  background: rgba(0,0,0,.7);
+  transition: opacity .35s ease;
+  z-index: 2;
+}
+.unity-loading .logo { font-weight: 700; }
+.unity-loading .logo span {
+  background: linear-gradient(90deg,#7aa2f7,#a2e3ff);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.bar {
+  width: 70%;
+  height: 12px;
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 999px;
+  overflow: hidden;
+  margin: 0 auto;
+}
+.fill {
+  height: 100%;
+  width: 0%;
+  background: var(--accent);
+  transition: width .2s ease;
+}
+.pct { font-weight: 600; }
+.hint { color: var(--muted); font-size: 14px; }
+
+/* Placeholder hidden until loader finishes */
+.unity-placeholder {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 16px;
+  z-index: 1;
+}
+.ph-content {
+  border: 1px dashed rgba(255,255,255,.2);
+  background: rgba(255,255,255,.03);
+  border-radius: 14px;
+  padding: 22px;
+  text-align: center;
+}
+.ph-title { font-weight: 700; margin-bottom: 6px; }
+
+
