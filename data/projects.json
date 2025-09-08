@@ -1,7 +1,12 @@
 [
   {
-      "title": "Portfolio Website",
-      "date": "2025-08-15",
-      "path": "projects/portfolio"
+    "title": "Unity Lobby",
+    "date": "2025-09-08",
+    "path": "projects/2025-09-08/unity-lobby/"
+  },
+  {
+    "title": "Portfolio Website",
+    "date": "2025-08-15",
+    "path": "projects/portfolio"
   }
 ]
