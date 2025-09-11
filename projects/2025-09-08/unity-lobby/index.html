@@ -36,22 +36,17 @@
         For now, this is a placeholder.
       </p>
 
-      <!-- Unity shell -->
+      <!-- Unity WebGL embed -->
       <div class="unity-wrap">
-        <div class="unity-loading" id="loader">
-          <div class="logo">Made with <span>Unity</span></div>
-          <div class="bar"><div class="fill" id="barFill"></div></div>
-          <div class="pct" id="pct">0%</div>
-          <div class="hint">Preparing placeholder…</div>
-        </div>
-
-        <div class="unity-placeholder" id="placeholder">
-          <div class="ph-content">
-            <div class="ph-title">WebGL demo placeholder</div>
-            <p>The lobby WebGL build will load here.</p>
-          </div>
-        </div>
+        <iframe
+          src="WebGL/index.html"
+          title="Unity Lobby WebGL"
+          loading="lazy"
+          style="width:100%; aspect-ratio: 16/9; border:0; background:#0f1115;"
+          allow="fullscreen"
+        ></iframe>
       </div>
+
 
       <a class="btn back" href="../../../index.html#projects">← Back to Projects</a>
     </section>
