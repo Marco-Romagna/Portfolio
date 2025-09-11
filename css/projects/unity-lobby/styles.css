@@ -1,140 +1,77 @@
-/* ===== Unity WebGL placeholder shell ===== */
-.unity-wrap {
-  position: relative;
-  aspect-ratio: 16/9;
-  min-height: 320px;
-  background: radial-gradient(120% 120% at 30% 20%, #1a1f2e, var(--panel));
-  border: 1px solid rgba(255,255,255,.08);
-  border-radius: 14px;
-  overflow: hidden;
+/* ===== WebGL placeholder (still available if you want to reuse it) ===== */
+.demo-wrap {
   margin-top: 14px;
 }
 
-/* Loader overlay */
-.unity-loading {
-  position: absolute;
-  inset: 0;
-  display: grid;
-  place-items: center;
-  text-align: center;
-  gap: 12px;
-  background: rgba(0,0,0,.6);
-  transition: opacity .35s ease;
-}
-.unity-loading .logo {
-  font-weight: 700;
-  letter-spacing: .2px;
-}
-.unity-loading .logo span {
-  background: linear-gradient(90deg,#7aa2f7,#a2e3ff);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-}
-.bar {
-  width: 70%;
-  height: 12px;
-  background: rgba(255,255,255,.06);
-  border: 1px solid rgba(255,255,255,.12);
-  border-radius: 999px;
-  overflow: hidden;
-  margin: 0 auto;
-}
-.fill {
-  height: 100%;
-  width: 0%;
-  background: var(--accent);
-  transition: width .2s ease;
-}
-.pct { font-weight: 600; }
-.hint { color: var(--muted); font-size: 14px; }
-
-/* Placeholder content */
-.unity-placeholder {
-  position: absolute;
-  inset: 0;
-  display: grid;
-  place-items: center;
-  padding: 16px;
-}
-.ph-content {
-  border: 1px dashed rgba(255,255,255,.2);
-  background: rgba(255,255,255,.03);
-  border-radius: 14px;
-  padding: 22px;
-  width: min(600px, 90%);
-  text-align: center;
-}
-.ph-title {
-  font-weight: 700;
-  font-size: 18px;
-  margin-bottom: 6px;
-}
-/* Unity WebGL shell */
-.unity-wrap {
-  position: relative;
+/* Big, responsive 16:9 area that looks like a canvas */
+.demo-placeholder {
+  width: 100%;
   aspect-ratio: 16/9;
-  min-height: 320px;
+  display: grid;
+  place-items: center;
+  background: rgba(255,255,255,.04);
   border: 1px solid rgba(255,255,255,.12);
   border-radius: 12px;
+  box-shadow: inset 0 6px 24px rgba(0,0,0,.25);
+  user-select: none;
+  position: relative;
   overflow: hidden;
+}
+
+/* Subtle shimmer so it feels “loading” */
+.demo-placeholder::after {
+  content: "";
+  position: absolute; inset: 0;
+  background: linear-gradient(100deg,
+    transparent 0%,
+    rgba(255,255,255,.06) 40%,
+    rgba(255,255,255,.10) 50%,
+    rgba(255,255,255,.06) 60%,
+    transparent 100%);
+  transform: translateX(-100%);
+  animation: demoShimmer 2.2s infinite;
+}
+@keyframes demoShimmer {
+  to { transform: translateX(100%); }
+}
+
+.demo-placeholder span {
+  color: var(--muted);
+  font-weight: 600;
+  letter-spacing: .2px;
+  padding: 0 12px;
+  text-align: center;
+}
+
+/* Make the panel breathe a bit so the box stands out */
+.panel { padding: 20px; }
+
+/* Mobile: allow slightly taller box if needed */
+@media (max-width: 560px) {
+  .demo-placeholder { aspect-ratio: 4/3; }
+}
+
+/* ===== Unity WebGL iframe embed ===== */
+.unity-wrap {
   margin-top: 14px;
-  background: linear-gradient(180deg,#1a1f2e,var(--panel));
-}
-
-/* Loader overlay */
-.unity-loading {
-  position: absolute;
-  inset: 0;
-  display: grid;
-  place-items: center;
-  text-align: center;
-  gap: 12px;
-  background: rgba(0,0,0,.7);
-  transition: opacity .35s ease;
-  z-index: 2;
-}
-.unity-loading .logo { font-weight: 700; }
-.unity-loading .logo span {
-  background: linear-gradient(90deg,#7aa2f7,#a2e3ff);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-}
-.bar {
-  width: 70%;
-  height: 12px;
-  background: rgba(255,255,255,.06);
-  border: 1px solid rgba(255,255,255,.12);
-  border-radius: 999px;
+  border-radius: 12px;
   overflow: hidden;
-  margin: 0 auto;
+  border: 1px solid rgba(255,255,255,.12);
+  box-shadow: inset 0 6px 24px rgba(0,0,0,.25);
+  background: #0f1115;
 }
-.fill {
-  height: 100%;
-  width: 0%;
-  background: var(--accent);
-  transition: width .2s ease;
-}
-.pct { font-weight: 600; }
-.hint { color: var(--muted); font-size: 14px; }
 
-/* Placeholder hidden until loader finishes */
-.unity-placeholder {
-  position: absolute;
-  inset: 0;
-  display: grid;
-  place-items: center;
-  padding: 16px;
-  z-index: 1;
+.unity-frame {
+  width: 100%;
+  height: clamp(760px, 88vh, 1200px); /* adjust min height so footer isn’t cut */
+  border: 0;
+  display: block;
+  background: #0f1115;
 }
-.ph-content {
-  border: 1px dashed rgba(255,255,255,.2);
-  background: rgba(255,255,255,.03);
-  border-radius: 14px;
-  padding: 22px;
-  text-align: center;
+
+/* Small screens: scale a bit tighter */
+@media (max-width: 720px) {
+  .unity-frame { height: clamp(560px, 88vh, 1200px); }
 }
-.ph-title { font-weight: 700; margin-bottom: 6px; }
 
 
