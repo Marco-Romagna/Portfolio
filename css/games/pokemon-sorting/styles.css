@@ -61,15 +61,16 @@
 /* ===== Cards row ===== */
 .cards-row {
   display: flex;
-  gap: 1.25rem;               
-  justify-content: center;
+  justify-content: space-evenly;   
+  gap: 1rem;                       
   align-items: flex-start;
-  padding: .5rem 1rem;        
+  padding: .5rem 1rem;
   border: 2px dashed var(--border-color, #ccc);
   border-radius: .75rem;
   margin-bottom: .75rem;
-  min-height: auto;           
+  min-height: auto;                
 }
+
 
 /* ===== Pokémon cards ===== */
 .pokemon-card {
