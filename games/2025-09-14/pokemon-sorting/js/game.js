@@ -1,7 +1,7 @@
 // Pokémon Sorting (Horizontal, scriptless version)
-// - No local JSON: we use National Dex IDs [1..1025]
-// - Gen is derived from ID ranges
-// - Only images are shown during play; name + stats fetched on "Lock In"
+// - Uses National Dex IDs [1..1025]
+// - Gen derived from ID ranges
+// - Only images shown during play; name + stats fetched on "Lock In"
 // - If Category = Random, we roll ONCE per round and show the picked stat in the hint
 
 window.addEventListener("DOMContentLoaded", () => {
@@ -36,11 +36,11 @@ window.addEventListener("DOMContentLoaded", () => {
   };
 
   const state = {
-    chosenStat: "random",     // user selection (could be "random")
-    roundStat: null,          // actual stat key for THIS round (hp/atk/.../total)
-    allowedGens: new Set([1,2]),
-    difficulty: 3,            // 3=Easy, 4=Medium, 5=Hard
-    roundIds: [],             // current round's IDs, left→right
+    chosenStat: "hp",        // DEFAULT to HP
+    roundStat: null,         // actual stat for THIS round
+    allowedGens: new Set([1]), // DEFAULT: only Gen 1 selected
+    difficulty: 3,           // 3=Easy, 4=Medium, 5=Hard
+    roundIds: [],            // current round's IDs, left→right
     locked: false,
   };
 
@@ -69,7 +69,7 @@ window.addEventListener("DOMContentLoaded", () => {
     o.value = opt.key; o.textContent = opt.label;
     statSelect.appendChild(o);
   });
-  statSelect.value = state.chosenStat;
+  statSelect.value = state.chosenStat; // HP by default
   statWrap.appendChild(statSelect);
 
   // Difficulty select
@@ -97,7 +97,7 @@ window.addEventListener("DOMContentLoaded", () => {
     const chip = el("label", "gen-chip");
     chip.innerHTML = `<input type="checkbox" value="${g}"><span>Gen ${g}</span>`;
     const input = chip.querySelector("input");
-    input.checked = state.allowedGens.has(g);
+    input.checked = state.allowedGens.has(g); // only Gen 1 starts checked
     gensList.appendChild(chip);
   });
 
@@ -135,7 +135,7 @@ window.addEventListener("DOMContentLoaded", () => {
      ========================= */
   statSelect.addEventListener("change", ()=>{
     state.chosenStat = statSelect.value;
-    // Do NOT change roundStat mid-round; it gets set on New Round
+    // roundStat is set on New Round; we only change the selection here
     refreshHint();
   });
 
@@ -171,8 +171,13 @@ window.addEventListener("DOMContentLoaded", () => {
   function lbl(t,forId){ const l=document.createElement("label"); l.textContent=t; if(forId) l.setAttribute("for",forId); return l; }
   function btn(t,cls){ const b=document.createElement("button"); b.textContent=t; if(cls) b.className=cls; return b; }
 
+  function capName(name){
+    if(!name) return "";
+    return name.charAt(0).toUpperCase() + name.slice(1); // simple & safe
+  }
+
   function refreshHint(){
-    const key = state.roundStat || state.chosenStat; // show actual rolled stat if available
+    const key = state.roundStat || state.chosenStat; // actual rolled stat if available
     const label = STAT_OPTIONS.find(s=>s.key===key)?.label || "Random Stat";
     statHint.textContent = `Comparing by: ${label} • (Low → Highest)`;
   }
@@ -217,7 +222,7 @@ window.addEventListener("DOMContentLoaded", () => {
     // Decide the actual stat for this round
     const statKey = pickStatKey();
     state.roundStat = statKey;          // store the rolled/selected stat
-    list.dataset.statKey = statKey;     // for convenience if you still reference dataset
+    list.dataset.statKey = statKey;     // convenience
     refreshHint();
 
     // Build pool by selected generations
@@ -276,7 +281,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
   async function revealAndScore(){
     const cards=[...list.querySelectorAll(".pokemon-card")];
-    const statKey = state.roundStat || list.dataset.statKey; // prefer the stored round stat
+    const statKey = state.roundStat || list.dataset.statKey;
 
     // Fetch name + stats for each card in parallel (faster)
     const results = await Promise.all(cards.map(async (c)=>{
@@ -291,7 +296,7 @@ window.addEventListener("DOMContentLoaded", () => {
         spe: data.stats.find(s=>s.stat.name==="speed").base_stat,
       };
       statsObj.total = statsObj.hp + statsObj.atk + statsObj.def + statsObj.spa + statsObj.spd + statsObj.spe;
-      return { card: c, id, name: data.name, stat: statsObj[statKey] };
+      return { card: c, id, name: capName(data.name), stat: statsObj[statKey] };
     }));
 
     // Update UI with revealed info
