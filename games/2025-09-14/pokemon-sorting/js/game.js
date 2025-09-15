@@ -99,12 +99,7 @@ window.addEventListener("DOMContentLoaded", () => {
   diffSelect.value = String(state.difficulty);
   diffWrap.appendChild(diffSelect);
 
-  /* ----- New Round (row1, right-aligned) ----- */
-  const actionsWrap = el("div", "control actions-wrap");
-  row1.appendChild(actionsWrap);
-  const newRoundBtn = btn("New Round", "new-round-btn");
-  actionsWrap.appendChild(newRoundBtn);
-
+  
   /* ----- Generations (row2) ----- */
   const gensWrap = el("div", "control gens-wrap");
   row2.appendChild(gensWrap);
@@ -141,11 +136,15 @@ window.addEventListener("DOMContentLoaded", () => {
 
   // Bottom bar
   const bottom = el("div", "bottom-bar");
+  const newRoundBtn = btn("New Round", "new-round-btn");
   const lockBtn = btn("Lock In", "lock-btn");
   const banner  = el("div", "result-banner");
+  
+  bottom.appendChild(newRoundBtn);
   bottom.appendChild(lockBtn);
   bottom.appendChild(banner);
   gameEl.appendChild(bottom);
+
 
   /* ===========
      Events
