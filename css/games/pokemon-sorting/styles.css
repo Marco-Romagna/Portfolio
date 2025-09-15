@@ -61,7 +61,7 @@
 /* ===== Cards row ===== */
 .cards-row {
   display: flex;
-  justify-content: space-between;;   
+  justify-content: center;;   
   gap: 1rem;                       
   align-items: flex-start;
   padding: .5rem 1rem;
