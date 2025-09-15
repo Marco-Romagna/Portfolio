@@ -2,25 +2,11 @@
 // - Preload 10 images per generation (kept topped up)
 // - Show Pokéball spinner while buffering; swap all images in at once each round
 // - Names/stats fetched only on Lock In
-// - Desktop-only guard
 
 window.addEventListener("DOMContentLoaded", () => {
   "use strict";
 
   const gameEl = document.getElementById("game");
-
-  /* ============== Desktop-only ============== */
-  const isTouch = "ontouchstart" in window || navigator.maxTouchPoints > 0;
-  const isSmall = window.matchMedia("(max-width: 780px)").matches;
-  if (isTouch || isSmall) {
-    gameEl.innerHTML = `
-      <div class="mobile-blocker">
-        <h2>Not available on mobile</h2>
-        <p>Please use a desktop or widen your window to play.</p>
-      </div>
-    `;
-    return;
-  }
 
   /* ============== Config ============== */
   const MAX_ID = 1025;
