@@ -43,7 +43,7 @@ window.addEventListener("DOMContentLoaded", () => {
   const state = {
     chosenStat: "random",
     allowedGens: new Set([1,2]),
-    difficulty: 5,   // 3 = Easy, 4 = Medium, 5 = Hard (default demo)
+    difficulty: 3,   // 3 = Easy, 4 = Medium, 5 = Hard (default demo)
     round: [],
     locked: false,
   };
