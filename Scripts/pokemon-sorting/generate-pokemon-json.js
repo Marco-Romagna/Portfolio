@@ -3,7 +3,6 @@
 // Run: node scripts/generate-pokemon-json.js
 
 import fs from "fs";
-import fetch from "node-fetch";
 
 // Total Pokémon count (Gen 9, Scarlet/Violet up to #1025)
 const MAX_ID = 1025;
