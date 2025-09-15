@@ -2,6 +2,7 @@
 // - No local JSON: we use National Dex IDs [1..1025]
 // - Gen is derived from ID ranges
 // - Only images are shown during play; name + stats fetched on "Lock In"
+// - If Category = Random, we roll ONCE per round and show the picked stat in the hint
 
 window.addEventListener("DOMContentLoaded", () => {
   "use strict";
@@ -35,10 +36,11 @@ window.addEventListener("DOMContentLoaded", () => {
   };
 
   const state = {
-    chosenStat: "random",
-    allowedGens: new Set([1,2]), // default visible
-    difficulty: 3,               // 3=Easy, 4=Medium, 5=Hard
-    roundIds: [],                // current round's IDs, left→right
+    chosenStat: "random",     // user selection (could be "random")
+    roundStat: null,          // actual stat key for THIS round (hp/atk/.../total)
+    allowedGens: new Set([1,2]),
+    difficulty: 3,            // 3=Easy, 4=Medium, 5=Hard
+    roundIds: [],             // current round's IDs, left→right
     locked: false,
   };
 
@@ -133,6 +135,7 @@ window.addEventListener("DOMContentLoaded", () => {
      ========================= */
   statSelect.addEventListener("change", ()=>{
     state.chosenStat = statSelect.value;
+    // Do NOT change roundStat mid-round; it gets set on New Round
     refreshHint();
   });
 
@@ -169,7 +172,8 @@ window.addEventListener("DOMContentLoaded", () => {
   function btn(t,cls){ const b=document.createElement("button"); b.textContent=t; if(cls) b.className=cls; return b; }
 
   function refreshHint(){
-    const label = STAT_OPTIONS.find(s=>s.key===state.chosenStat)?.label || "Random Stat";
+    const key = state.roundStat || state.chosenStat; // show actual rolled stat if available
+    const label = STAT_OPTIONS.find(s=>s.key===key)?.label || "Random Stat";
     statHint.textContent = `Comparing by: ${label} • (Low → Highest)`;
   }
 
@@ -210,8 +214,10 @@ window.addEventListener("DOMContentLoaded", () => {
      Game flow
      ========================= */
   function rollAndRenderRound(){
+    // Decide the actual stat for this round
     const statKey = pickStatKey();
-    list.dataset.statKey = statKey;
+    state.roundStat = statKey;          // store the rolled/selected stat
+    list.dataset.statKey = statKey;     // for convenience if you still reference dataset
     refreshHint();
 
     // Build pool by selected generations
@@ -270,7 +276,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
   async function revealAndScore(){
     const cards=[...list.querySelectorAll(".pokemon-card")];
-    const statKey=list.dataset.statKey;
+    const statKey = state.roundStat || list.dataset.statKey; // prefer the stored round stat
 
     // Fetch name + stats for each card in parallel (faster)
     const results = await Promise.all(cards.map(async (c)=>{
