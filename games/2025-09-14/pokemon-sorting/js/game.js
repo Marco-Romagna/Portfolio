@@ -1,6 +1,6 @@
-// Pokémon Sorting — per-gen preloading + spinner
-// - Preload 10 images per generation and keep pools topped up
-// - Show Pokéball spinner while any image buffers
+// Pokémon Sorting — per-gen preloading + uniform spinner + batch reveal
+// - Preload 10 images per generation (kept topped up)
+// - Show Pokéball spinner while buffering; swap all images in at once each round
 // - Names/stats fetched only on Lock In
 // - Desktop-only guard
 
@@ -44,6 +44,9 @@ window.addEventListener("DOMContentLoaded", () => {
       "https://cdn.jsdelivr.net/gh/PokeAPI/sprites@9683e1d7ffbab3401c1542e39d8105102153e6f9/sprites/pokemon/other/official-artwork/",
     ext: ".png",
   };
+
+  // Round buffer: show spinner for at least this long each round
+  const MIN_ROUND_BUFFER_MS = 800;
 
   const state = {
     chosenStat: "hp",           // default to HP
@@ -148,11 +151,10 @@ window.addEventListener("DOMContentLoaded", () => {
     if(state.allowedGens.size===0){ state.allowedGens.add(g); e.target.checked=true; }
     // We maintain pools for ALL gens, so no rebuild needed here.
   });
-  newRoundBtn.addEventListener("click", ()=>{
+  newRoundBtn.addEventListener("click", async ()=>{
     state.locked = false;
     banner.textContent = "";
-    list.innerHTML = "";
-    rollAndRenderRound();
+    await rollAndRenderRound(); // async now
   });
   lockBtn.addEventListener("click", async ()=>{
     if(state.locked) return;
@@ -185,6 +187,8 @@ window.addEventListener("DOMContentLoaded", () => {
     }
     return copy.slice(0,k);
   }
+
+  function delay(ms){ return new Promise(r => setTimeout(r, ms)); }
 
   function pickStatKey(){
     if(state.chosenStat!=="random") return state.chosenStat;
@@ -228,6 +232,15 @@ window.addEventListener("DOMContentLoaded", () => {
     return img;
   }
 
+  function whenImageReady(id){
+    const img = ImageCache.get(id) || preloadImage(id);
+    if (img.complete) return Promise.resolve(img);
+    return new Promise((resolve, reject) => {
+      img.addEventListener("load", () => resolve(img), { once: true });
+      img.addEventListener("error", reject, { once: true });
+    });
+  }
+
   function ensureGenPool(gen, target = PER_GEN_TARGET){
     if (!GenPools.has(gen)) GenPools.set(gen, new Set());
     const pool = GenPools.get(gen);
@@ -240,7 +253,7 @@ window.addEventListener("DOMContentLoaded", () => {
   }
 
   function kickoffPreloadAllGens(){
-    ALL_GENS.forEach(g => ensureGenPool(g)); // parallel-ish preload via <img> src
+    ALL_GENS.forEach(g => ensureGenPool(g)); // start warming all gens
   }
 
   function consumeFromPoolsForGens(gens, count){
@@ -267,7 +280,7 @@ window.addEventListener("DOMContentLoaded", () => {
   }
 
   /* ============== Game flow ============== */
-  function rollAndRenderRound(){
+  async function rollAndRenderRound(){
     const statKey = pickStatKey();
     state.roundStat = statKey;
     list.dataset.statKey = statKey;
@@ -279,7 +292,7 @@ window.addEventListener("DOMContentLoaded", () => {
     // Prefer preloaded
     let chosen = consumeFromPoolsForGens(gens, count);
 
-    // Fallback: if not enough, take from gen buckets and preload as we go
+    // Fallback if needed
     if (chosen.length < count) {
       const allowedIds = gens.flatMap(g => GenBuckets.get(g) || []);
       const need = count - chosen.length;
@@ -290,36 +303,40 @@ window.addEventListener("DOMContentLoaded", () => {
 
     state.roundIds = chosen;
 
-    // Render cards with spinner; swap image when ready
-    chosen.forEach(id=>{
+    // 1) Render placeholders/spinners immediately
+    list.innerHTML = "";
+    const cardMap = new Map(); // id -> card
+    chosen.forEach(id => {
       const card = el("div","pokemon-card");
       card.draggable = true;
       card.dataset.id = String(id);
-
       const spinner = el("div","pokeball-spinner");
       spinner.setAttribute("aria-label","Loading");
       card.appendChild(spinner);
-
-      const cached = ImageCache.get(id) || preloadImage(id);
-      if (cached.complete) {
-        swapInImage(card, cached);
-      } else {
-        cached.addEventListener("load", () => swapInImage(card, cached), { once:true });
-        cached.addEventListener("error", () => spinner.classList.add("error"), { once:true });
-      }
-
       list.appendChild(card);
+      cardMap.set(id, card);
     });
-
     enableHorizontalDrag(list);
-  }
 
-  function swapInImage(card, imgObj){
-    card.innerHTML = "";
-    const img = new Image();
-    img.src = imgObj.src;
-    img.alt = "#";
-    card.appendChild(img);
+    // 2) Kick off all loads and wait for them + minimum buffer time
+    const loadAll = Promise.allSettled(chosen.map(id => whenImageReady(id)));
+    await Promise.all([loadAll, delay(MIN_ROUND_BUFFER_MS)]);
+
+    // 3) Swap all at once (for those that loaded); keep spinner if any failed
+    chosen.forEach(id => {
+      const card = cardMap.get(id);
+      const cached = ImageCache.get(id);
+      if (cached && cached.complete) {
+        card.innerHTML = "";
+        const img = new Image();
+        img.src = cached.src;
+        img.alt = "#";
+        card.appendChild(img);
+      } else {
+        const sp = card.querySelector(".pokeball-spinner");
+        if (sp) sp.classList.add("error");
+      }
+    });
   }
 
   function enableHorizontalDrag(container){
@@ -420,5 +437,7 @@ window.addEventListener("DOMContentLoaded", () => {
   buildGenBuckets();         // make per-gen ID buckets
   kickoffPreloadAllGens();   // preload 10 per gen (in parallel)
   refreshHint();
+  // First render
   rollAndRenderRound();
 });
+
