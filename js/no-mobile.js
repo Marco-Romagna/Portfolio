@@ -2,8 +2,10 @@
 (() => {
   const MIN_WIDTH = 781; // required width in px
 
-  function createOverlay(message) {
+  function ensureStyle() {
+    if (document.getElementById("no-mobile-style")) return;
     const style = document.createElement("style");
+    style.id = "no-mobile-style";
     style.textContent = `
       .no-mobile-overlay {
         position: fixed; inset: 0;
@@ -20,33 +22,46 @@
       }
     `;
     document.head.appendChild(style);
+  }
 
-    const overlay = document.createElement("div");
-    overlay.className = "no-mobile-overlay";
-    overlay.innerHTML = message;
-    document.body.appendChild(overlay);
-    return overlay;
+  function showOverlay(html) {
+    ensureStyle();
+    let overlay = document.querySelector(".no-mobile-overlay");
+    if (!overlay) {
+      overlay = document.createElement("div");
+      overlay.className = "no-mobile-overlay";
+      document.body.appendChild(overlay);
+    }
+    overlay.innerHTML = html;
+  }
+
+  function removeOverlay() {
+    document.querySelector(".no-mobile-overlay")?.remove();
   }
 
   function updateOverlay() {
     const w = window.innerWidth;
     const screenW = screen.width; // physical device width
 
-    // Already wide enough? remove overlay
+    // Wide enough: no overlay
     if (w >= MIN_WIDTH) {
-      document.querySelector(".no-mobile-overlay")?.remove();
+      removeOverlay();
       return;
     }
 
-    // Case 1: Device itself is too small
+    // Case 1: Device itself too small
     if (screenW < MIN_WIDTH) {
-      createOverlay("<p>This screen size is not supported.</p>");
+      showOverlay(`
+        <p><strong>Not supported on this device</strong></p>
+        <p>Your screen is too small. Please use a desktop or larger tablet.</p>
+      `);
       return;
     }
 
     // Case 2: Can widen window
-    createOverlay(`
-      <p>Please widen your window to at least <strong>${MIN_WIDTH}px</strong>.</p>
+    showOverlay(`
+      <p><strong>Please widen your window</strong></p>
+      <p>Minimum required: ${MIN_WIDTH}px</p>
       <p>Current width: ${w}px</p>
     `);
   }
