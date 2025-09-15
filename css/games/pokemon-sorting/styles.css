@@ -60,15 +60,16 @@
 
 /* ===== Cards row ===== */
 .cards-row {
-  display: inline-flex;             
-  justify-content: center;          
-  gap: 1rem;                        
+  display: flex;                 
+  justify-content: center;        
+  gap: 1rem;
   align-items: flex-start;
-  padding: .5rem 1rem;              
+  padding: .5rem 1rem;
   border: 2px dashed var(--border-color, #ccc);
   border-radius: .75rem;
-  margin: 0 auto .75rem auto;       
-  width: auto;                      
+  margin: 0 auto .75rem auto;     
+  width: fit-content;             
+  min-height: auto;
 }
 
 
