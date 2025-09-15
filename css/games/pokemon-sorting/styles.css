@@ -1,54 +1,144 @@
-/* Bars & controls */
+/* ===== Layout bars ===== */
 .controls-bar, .bottom-bar {
-  display: flex; gap: 1rem; align-items: center; justify-content: space-between;
-  flex-wrap: wrap; margin-bottom: .75rem;
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  margin-bottom: .75rem;
 }
-.control { display: flex; gap: .5rem; align-items: center; }
-.gens-list { display: flex; gap: .5rem; flex-wrap: wrap; }
-.gen-chip { display: inline-flex; gap: .25rem; align-items: center; padding: .25rem .5rem;
-  border: 1px solid var(--border-color, #ccc); border-radius: .5rem; }
 
-/* Side labels to show LOWEST / HIGHEST clearly */
+.control {
+  display: flex;
+  gap: .5rem;
+  align-items: center;
+}
+
+.gens-list {
+  display: flex;
+  gap: .5rem;
+  flex-wrap: wrap;
+}
+
+.gen-chip {
+  display: inline-flex;
+  gap: .25rem;
+  align-items: center;
+  padding: .25rem .5rem;
+  border: 1px solid var(--border-color, #ccc);
+  border-radius: .5rem;
+  background: var(--panel-bg, #1e1f23);
+}
+
+/* ===== Side labels ===== */
 .sides-bar {
   display: grid;
   grid-template-columns: 1fr auto 1fr;
   align-items: center;
   margin: .25rem 0 .5rem;
+}
+
+.sides-bar .side {
+  display: flex;
+  justify-content: center;
+}
+
+.sides-bar .badge {
+  display: inline-block;
+  padding: .25rem .6rem;
+  border: 1px solid var(--border-color, #3a3f47);
+  border-radius: .5rem;
   font-weight: 800;
-  letter-spacing: .04em;
+  letter-spacing: .03em;
   text-transform: uppercase;
+  opacity: .9;
 }
-.sides-bar .side { display: flex; justify-content: center; }
-.sides-bar .low  { opacity: .8; }
-.sides-bar .high { opacity: .8; }
-.sides-bar .arrow { font-weight: 700; opacity: .7; }
 
-/* Cards as a horizontal row between the labels */
+.sides-bar .low  .badge   { background: rgba(220,53,69,.10); }
+.sides-bar .center .badge { background: rgba(128,128,128,.10); font-weight: 700; }
+.sides-bar .high .badge   { background: rgba(40,167,69,.10); }
+
+/* ===== Cards row ===== */
 .cards-row {
-  display: flex; gap: .75rem; justify-content: center; align-items: flex-start;
-  min-height: 140px; padding: .5rem;
+  display: flex;
+  gap: .75rem;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 140px;
+  padding: .5rem;
   border: 2px dashed var(--border-color, #ccc);
-  border-radius: .75rem; margin-bottom: .75rem;
+  border-radius: .75rem;
+  margin-bottom: .75rem;
 }
 
-/* Cards */
+/* ===== Pokémon cards ===== */
 .pokemon-card {
-  display: flex; flex-direction: column; align-items: center; gap: .25rem;
-  padding: .5rem; border: 2px solid var(--border-color, #ccc);
-  border-radius: .5rem; background: var(--panel-bg, #f9f9f9);
-  cursor: grab; user-select: none; width: 120px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .25rem;
+  padding: .5rem;
+  border: 2px solid var(--border-color, #ccc);
+  border-radius: .5rem;
+  background: var(--panel-bg, #f9f9f9);
+  cursor: grab;
+  user-select: none;
+  width: 120px;
+  transition: background .2s, border-color .2s;
 }
-.pokemon-card img { width: 96px; height: 96px; image-rendering: pixelated; }
-.pokemon-card.dragging { opacity: .6; border-style: dashed; }
-.pokemon-card p { font-weight: 700; font-size: .9rem; text-align: center; }
 
-/* Feedback */
-.pokemon-card.good { background: rgba(40,167,69,.15); border-color: rgb(40,167,69); }
-.pokemon-card.bad  { background: rgba(220,53,69,.15); border-color: rgb(220,53,69); }
+.pokemon-card img {
+  width: 96px;
+  height: 96px;
+  image-rendering: pixelated;
+}
 
+.pokemon-card.dragging {
+  opacity: .6;
+  border-style: dashed;
+}
+
+.pokemon-card p {
+  font-weight: 700;
+  font-size: .9rem;
+  text-align: center;
+}
+
+/* ===== Feedback after lock-in ===== */
+.pokemon-card.good {
+  background: rgba(40,167,69,.15);
+  border-color: rgb(40,167,69);
+}
+
+.pokemon-card.bad {
+  background: rgba(220,53,69,.15);
+  border-color: rgb(220,53,69);
+}
+
+/* ===== Buttons ===== */
 .new-round-btn, .lock-btn {
-  padding: .5rem 1rem; border: none; border-radius: .5rem; cursor: pointer;
-  background: var(--accent-color, #4caf50); color: #fff; font-weight: 600;
+  padding: .5rem 1rem;
+  border: none;
+  border-radius: .5rem;
+  cursor: pointer;
+  background: var(--accent-color, #4caf50);
+  color: #fff;
+  font-weight: 600;
+  transition: background .2s;
 }
-.result-banner { font-weight: 700; }
-.stat-hint { opacity: .8; font-weight: 600; }
+
+.new-round-btn:hover,
+.lock-btn:hover {
+  background: #3e9e43;
+}
+
+/* ===== Result banner & stat hint ===== */
+.result-banner {
+  font-weight: 700;
+  margin-left: 1rem;
+}
+
+.stat-hint {
+  opacity: .8;
+  font-weight: 600;
+}
