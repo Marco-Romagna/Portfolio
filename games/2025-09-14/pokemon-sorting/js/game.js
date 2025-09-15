@@ -2,7 +2,7 @@
 // Pokémon Sorting (Horizontal)
 // Arrange LEFT→RIGHT so LOW is on the LEFT and HIGHEST is on the RIGHT.
 // - Stats hidden until "Lock In"
-// - Top controls: stat (or Random), generation filters, difficulty (3/4/5)
+// - Top controls in two rows: Row 1 = Category + Difficulty + New Round, Row 2 = Generations
 
 window.addEventListener("DOMContentLoaded", () => {
   "use strict";
@@ -43,7 +43,7 @@ window.addEventListener("DOMContentLoaded", () => {
   const state = {
     chosenStat: "random",
     allowedGens: new Set([1,2]),
-    difficulty: 3,   // 3 = Easy, 4 = Medium, 5 = Hard (default demo)
+    difficulty: 3,   // 3 = Easy, 4 = Medium, 5 = Hard (default)
     round: [],
     locked: false,
   };
@@ -53,16 +53,24 @@ window.addEventListener("DOMContentLoaded", () => {
      ========================== */
   gameEl.innerHTML = "";
 
-  // Controls bar
+  // Controls container (column with two rows)
   const controls = el("div", "controls-bar");
   gameEl.appendChild(controls);
 
-  // Category select
+  // Row 1: Category • Difficulty • New Round
+  const row1 = el("div", "controls-row");
+  controls.appendChild(row1);
+
+  // Row 2: Generations
+  const row2 = el("div", "controls-row");
+  controls.appendChild(row2);
+
+  /* ----- Category (row1) ----- */
   const statWrap = el("div", "control stat-wrap");
-  controls.appendChild(statWrap);
+  row1.appendChild(statWrap);
   statWrap.appendChild(lbl("Category:", "stat-select"));
 
-  const statSelect = el("select");
+  const statSelect = el("select", "select--comfy");
   statSelect.id = "stat-select";
   STAT_OPTIONS.forEach(opt => {
     const o = document.createElement("option");
@@ -72,28 +80,12 @@ window.addEventListener("DOMContentLoaded", () => {
   statSelect.value = state.chosenStat;
   statWrap.appendChild(statSelect);
 
-  // Gen toggles
-  const gensWrap = el("div", "control gens-wrap");
-  controls.appendChild(gensWrap);
-  gensWrap.appendChild(span("Generations:"));
-
-  const gensList = el("div", "gens-list");
-  gensWrap.appendChild(gensList);
-  ALL_GENS.forEach(g => {
-    const id = `gen-${g}`;
-    const chip = el("label", "gen-chip");
-    chip.innerHTML = `<input type="checkbox" id="${id}" value="${g}"><span>Gen ${g}</span>`;
-    const input = chip.querySelector("input");
-    input.checked = state.allowedGens.has(g);
-    gensList.appendChild(chip);
-  });
-
-  // Difficulty
+  /* ----- Difficulty (row1) ----- */
   const diffWrap = el("div", "control diff-wrap");
-  controls.appendChild(diffWrap);
+  row1.appendChild(diffWrap);
   diffWrap.appendChild(lbl("Difficulty:", "diff-select"));
 
-  const diffSelect = el("select");
+  const diffSelect = el("select", "select--comfy");
   diffSelect.id = "diff-select";
   [
     {v:3, t:"Easy (3)"},
@@ -107,22 +99,36 @@ window.addEventListener("DOMContentLoaded", () => {
   diffSelect.value = String(state.difficulty);
   diffWrap.appendChild(diffSelect);
 
-  // Actions + hint
-  const actionsWrap = el("div", "control actions-wrap");
-  controls.appendChild(actionsWrap);
-  const newRoundBtn = btn("New Round", "new-round-btn");
-  actionsWrap.appendChild(newRoundBtn);
-  const statHint = el("div", "stat-hint");
-  actionsWrap.appendChild(statHint);
+  
+  /* ----- Generations (row2) ----- */
+  const gensWrap = el("div", "control gens-wrap");
+  row2.appendChild(gensWrap);
+  gensWrap.appendChild(span("Generations:"));
 
-  // Side labels bar: LOW | Drag | HIGHEST
+  const gensList = el("div", "gens-list");
+  gensWrap.appendChild(gensList);
+  ALL_GENS.forEach(g => {
+    const chip = el("label", "gen-chip");
+    chip.innerHTML = `<input type="checkbox" value="${g}"><span>Gen ${g}</span>`;
+    const input = chip.querySelector("input");
+    input.checked = state.allowedGens.has(g);
+    gensList.appendChild(chip);
+  });
+
+  // Side labels bar: LOW | DRAG | HIGHEST
   const sides = el("div", "sides-bar");
   sides.innerHTML = `
     <div class="side low"><span class="badge">LOW</span></div>
-    <div class="side center"><span class="badge">Drag</span></div>
+    <div class="side center"><span class="badge">DRAG</span></div>
     <div class="side high"><span class="badge">HIGHEST</span></div>
   `;
   gameEl.appendChild(sides);
+
+  // Centered hint bar
+  const hintBar = el("div", "hint-bar");
+  const statHint = el("div", "stat-hint");
+  hintBar.appendChild(statHint);
+  gameEl.appendChild(hintBar);
 
   // Cards row
   const list = el("div", "cards-row");
@@ -130,11 +136,15 @@ window.addEventListener("DOMContentLoaded", () => {
 
   // Bottom bar
   const bottom = el("div", "bottom-bar");
-  gameEl.appendChild(bottom);
+  const newRoundBtn = btn("New Round", "new-round-btn");
   const lockBtn = btn("Lock In", "lock-btn");
   const banner  = el("div", "result-banner");
+  
+  bottom.appendChild(newRoundBtn);
   bottom.appendChild(lockBtn);
   bottom.appendChild(banner);
+  gameEl.appendChild(bottom);
+
 
   /* ===========
      Events
