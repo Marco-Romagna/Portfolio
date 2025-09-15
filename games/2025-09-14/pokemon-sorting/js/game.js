@@ -1,6 +1,6 @@
 // games/2025-09-14/pokemon-sorting/js/game.js
-// Horizontal Pokémon Sorting
-// Arrange LEFT→RIGHT so LOWEST is on the LEFT and HIGHEST is on the RIGHT.
+// Pokémon Sorting (Horizontal)
+// Arrange LEFT→RIGHT so LOW is on the LEFT and HIGHEST is on the RIGHT.
 // - Stats hidden until "Lock In"
 // - Top controls: stat (or Random), generation filters, difficulty (3/4/5)
 
@@ -9,7 +9,9 @@ window.addEventListener("DOMContentLoaded", () => {
 
   const gameEl = document.getElementById("game");
 
-  // ===== Demo dataset (expand/replace later) =====
+  /* =========================
+     Demo dataset (expand later)
+     ========================= */
   const POKE = [
     P(1,  "Bulbasaur", 1, {hp:45, atk:49, def:49, spa:65, spd:65, spe:45}),
     P(4,  "Charmander",1, {hp:39, atk:52, def:43, spa:60, spd:50, spe:65}),
@@ -23,7 +25,9 @@ window.addEventListener("DOMContentLoaded", () => {
     return { id, name, gen, stats: {...s, total} };
   }
 
-  // ===== Config / State =====
+  /* ================
+     Config / State
+     ================ */
   const STAT_OPTIONS = [
     { key: "random",  label: "Random Stat" },
     { key: "hp",      label: "HP" },
@@ -39,19 +43,21 @@ window.addEventListener("DOMContentLoaded", () => {
   const state = {
     chosenStat: "random",
     allowedGens: new Set([1,2]),
-    difficulty: 3,           // 3 = Easy, 4 = Medium, 5 = Hard
+    difficulty: 5,   // 3 = Easy, 4 = Medium, 5 = Hard (default demo)
     round: [],
     locked: false,
   };
 
-  // ===== Layout skeleton =====
+  /* ==========================
+     Layout skeleton / Controls
+     ========================== */
   gameEl.innerHTML = "";
 
-  // Controls
+  // Controls bar
   const controls = el("div", "controls-bar");
   gameEl.appendChild(controls);
 
-  // Stat picker
+  // Category select
   const statWrap = el("div", "control stat-wrap");
   controls.appendChild(statWrap);
   statWrap.appendChild(lbl("Category:", "stat-select"));
@@ -109,12 +115,12 @@ window.addEventListener("DOMContentLoaded", () => {
   const statHint = el("div", "stat-hint");
   actionsWrap.appendChild(statHint);
 
-  // Side labels: Lowest ← → Highest
+  // Side labels bar: LOW | Drag | HIGHEST
   const sides = el("div", "sides-bar");
   sides.innerHTML = `
-    <div class="side low"><span>LOWEST</span></div>
-    <div class="side arrow"><span>← Drag →</span></div>
-    <div class="side high"><span>HIGHEST</span></div>
+    <div class="side low"><span class="badge">LOW</span></div>
+    <div class="side center"><span class="badge">Drag</span></div>
+    <div class="side high"><span class="badge">HIGHEST</span></div>
   `;
   gameEl.appendChild(sides);
 
@@ -130,7 +136,9 @@ window.addEventListener("DOMContentLoaded", () => {
   bottom.appendChild(lockBtn);
   bottom.appendChild(banner);
 
-  // ===== Events =====
+  /* ===========
+     Events
+     =========== */
   statSelect.addEventListener("change", () => {
     state.chosenStat = statSelect.value;
     refreshHint();
@@ -141,14 +149,15 @@ window.addEventListener("DOMContentLoaded", () => {
     const g = parseInt(e.target.value, 10);
     if (e.target.checked) state.allowedGens.add(g);
     else state.allowedGens.delete(g);
-    if (state.allowedGens.size === 0) { // keep at least one
+    // Ensure at least one gen remains selected
+    if (state.allowedGens.size === 0) {
       state.allowedGens.add(g);
       e.target.checked = true;
     }
   });
 
   diffSelect.addEventListener("change", () => {
-    state.difficulty = parseInt(diffSelect.value, 10);
+    state.difficulty = Math.min(5, Math.max(3, parseInt(diffSelect.value, 10)));
   });
 
   newRoundBtn.addEventListener("click", () => {
@@ -164,7 +173,9 @@ window.addEventListener("DOMContentLoaded", () => {
     revealAndScore();
   });
 
-  // ===== Helpers =====
+  /* ===========
+     Helpers
+     =========== */
   function el(tag, cls){ const d=document.createElement(tag); if(cls) d.className=cls; return d; }
   function span(t){ const s=document.createElement("span"); s.textContent=t; return s; }
   function lbl(t,forId){ const l=document.createElement("label"); l.textContent=t; if(forId) l.setAttribute("for",forId); return l; }
@@ -172,7 +183,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
   function refreshHint() {
     const label = STAT_OPTIONS.find(s => s.key === state.chosenStat)?.label || "Random Stat";
-    statHint.textContent = `Comparing by: ${label} • (Lowest → Highest)`;
+    statHint.textContent = `Comparing by: ${label} • (Low → Highest)`;
   }
 
   function getSpriteURL(id){
@@ -197,8 +208,10 @@ window.addEventListener("DOMContentLoaded", () => {
   function rollAndRenderRound() {
     const pool = POKE.filter(p => state.allowedGens.has(p.gen));
     const count = Math.min(Math.max(state.difficulty, 3), 5);
-    const chosen = (pool.length >= count) ? sample(pool, count)
-                  : (POKE.length >= count ? sample(POKE, count) : sample(POKE, Math.min(POKE.length, count)));
+    const chosen =
+      (pool.length >= count) ? sample(pool, count)
+      : (POKE.length >= count ? sample(POKE, count)
+      : sample(POKE, Math.min(POKE.length, count)));
     state.round = chosen;
 
     const statKey = pickStatKey();
@@ -276,7 +289,7 @@ window.addEventListener("DOMContentLoaded", () => {
       `;
     });
 
-    // Check LEFT→RIGHT ascending
+    // Check LEFT→RIGHT ascending (LOW → HIGHEST)
     const stats = cards.map(c => parseInt(c.dataset.stat, 10));
     const globallyCorrect = stats.every((s, i, arr) => i === arr.length - 1 || s <= arr[i + 1]);
 
@@ -294,7 +307,9 @@ window.addEventListener("DOMContentLoaded", () => {
       c.classList.add(good ? "good" : "bad");
     });
 
-    banner.textContent = globallyCorrect ? "✅ Correct order!" : "❌ Not quite — check the red cards.";
+    banner.textContent = globallyCorrect
+      ? "✅ Correct order!"
+      : "❌ Not quite — check the red cards.";
   }
 
   function labelForStat(k){
@@ -310,7 +325,7 @@ window.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // First round
+  // Boot first round
   refreshHint();
   rollAndRenderRound();
 });
