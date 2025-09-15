@@ -1,16 +1,15 @@
-// Pokémon Sorting (Horizontal, scriptless)
-// - Desktop-only blocker for small/touch devices
-// - No LOW/DRAG/HIGHEST badges; instructions live in page copy
-// - Gen derived from ID; stats fetched on Lock In
+// Pokémon Sorting — per-gen preloading + spinner
+// - Preload 10 images per generation and keep pools topped up
+// - Show Pokéball spinner while any image buffers
+// - Names/stats fetched only on Lock In
+// - Desktop-only guard
 
 window.addEventListener("DOMContentLoaded", () => {
   "use strict";
 
   const gameEl = document.getElementById("game");
 
-  /* =========================
-     Desktop-only guard
-     ========================= */
+  /* ============== Desktop-only ============== */
   const isTouch = "ontouchstart" in window || navigator.maxTouchPoints > 0;
   const isSmall = window.matchMedia("(max-width: 780px)").matches;
   if (isTouch || isSmall) {
@@ -20,12 +19,10 @@ window.addEventListener("DOMContentLoaded", () => {
         <p>Please use a desktop or widen your window to play.</p>
       </div>
     `;
-    return; // stop booting the game on mobile
+    return;
   }
 
-  /* =========================
-     Config
-     ========================= */
+  /* ============== Config ============== */
   const MAX_ID = 1025;
   const ALL_IDS = Array.from({ length: MAX_ID }, (_, i) => i + 1);
 
@@ -41,23 +38,29 @@ window.addEventListener("DOMContentLoaded", () => {
   ];
   const ALL_GENS = [1,2,3,4,5,6,7,8,9];
 
+  // Official artwork (commit-pinned)
   const SPRITES = {
-    base_url: "https://cdn.jsdelivr.net/gh/PokeAPI/sprites@9683e1d7ffbab3401c1542e39d8105102153e6f9/sprites/pokemon/other/official-artwork/",
+    base_url:
+      "https://cdn.jsdelivr.net/gh/PokeAPI/sprites@9683e1d7ffbab3401c1542e39d8105102153e6f9/sprites/pokemon/other/official-artwork/",
     ext: ".png",
   };
 
   const state = {
-    chosenStat: "hp",         // default to HP
-    roundStat: null,
-    allowedGens: new Set([1]),// default Gen 1 only
-    difficulty: 3,
+    chosenStat: "hp",           // default to HP
+    roundStat: null,            // actual stat key for this round
+    allowedGens: new Set([1]),  // default: only Gen 1 selected
+    difficulty: 3,              // 3..5
     roundIds: [],
     locked: false,
   };
 
-  /* =========================
-     Layout (controls + hint + cards + bottom)
-     ========================= */
+  /* ============== Preload manager ============== */
+  const PER_GEN_TARGET = 10;         // keep 10 images warm per generation
+  const ImageCache = new Map();      // id -> HTMLImageElement
+  const GenBuckets = new Map();      // gen -> number[] (all ids in gen)
+  const GenPools = new Map();        // gen -> Set<number> (currently preloaded)
+
+  /* ============== Layout ============== */
   gameEl.innerHTML = "";
 
   const controls = el("div", "controls-bar");
@@ -110,13 +113,13 @@ window.addEventListener("DOMContentLoaded", () => {
     gensList.appendChild(chip);
   });
 
-  // Hint (what stat we’re comparing)
+  // Hint
   const hintBar = el("div", "hint-bar");
   const statHint = el("div", "stat-hint");
   hintBar.appendChild(statHint);
   gameEl.appendChild(hintBar);
 
-  // Cards row
+  // Cards
   const list = el("div", "cards-row");
   gameEl.appendChild(list);
 
@@ -130,9 +133,7 @@ window.addEventListener("DOMContentLoaded", () => {
   bottom.appendChild(banner);
   gameEl.appendChild(bottom);
 
-  /* =========================
-     Events
-     ========================= */
+  /* ============== Events ============== */
   statSelect.addEventListener("change", ()=>{
     state.chosenStat = statSelect.value;
     refreshHint();
@@ -145,6 +146,7 @@ window.addEventListener("DOMContentLoaded", () => {
     const g = parseInt(e.target.value,10);
     e.target.checked ? state.allowedGens.add(g) : state.allowedGens.delete(g);
     if(state.allowedGens.size===0){ state.allowedGens.add(g); e.target.checked=true; }
+    // We maintain pools for ALL gens, so no rebuild needed here.
   });
   newRoundBtn.addEventListener("click", ()=>{
     state.locked = false;
@@ -158,9 +160,7 @@ window.addEventListener("DOMContentLoaded", () => {
     await revealAndScore();
   });
 
-  /* =========================
-     Helpers
-     ========================= */
+  /* ============== Helpers ============== */
   function el(tag, cls){ const d=document.createElement(tag); if(cls) d.className=cls; return d; }
   function span(t){ const s=document.createElement("span"); s.textContent=t; return s; }
   function lbl(t,forId){ const l=document.createElement("label"); l.textContent=t; if(forId) l.setAttribute("for",forId); return l; }
@@ -209,32 +209,117 @@ window.addEventListener("DOMContentLoaded", () => {
     return null;
   }
 
-  /* =========================
-     Game flow
-     ========================= */
+  /* ============== Per-gen preloading ============== */
+  function buildGenBuckets(){
+    ALL_GENS.forEach(g => GenBuckets.set(g, []));
+    for (const id of ALL_IDS) {
+      const g = genFromDex(id);
+      if (g) GenBuckets.get(g).push(id);
+    }
+  }
+
+  function preloadImage(id){
+    if (ImageCache.has(id)) return ImageCache.get(id);
+    const img = new Image();
+    img.decoding = "async";
+    img.loading = "eager";
+    img.src = getArtworkURL(id);
+    ImageCache.set(id, img);
+    return img;
+  }
+
+  function ensureGenPool(gen, target = PER_GEN_TARGET){
+    if (!GenPools.has(gen)) GenPools.set(gen, new Set());
+    const pool = GenPools.get(gen);
+    const bucket = GenBuckets.get(gen) || [];
+    const need = Math.max(0, target - pool.size);
+    if (need === 0) return;
+    const candidates = bucket.filter(id => !pool.has(id));
+    const picks = sample(candidates, Math.min(need, candidates.length));
+    picks.forEach(id => { pool.add(id); preloadImage(id); });
+  }
+
+  function kickoffPreloadAllGens(){
+    ALL_GENS.forEach(g => ensureGenPool(g)); // parallel-ish preload via <img> src
+  }
+
+  function consumeFromPoolsForGens(gens, count){
+    // union from selected gen pools
+    const union = [];
+    gens.forEach(g => {
+      const set = GenPools.get(g);
+      if (set) union.push(...set);
+    });
+    const unique = Array.from(new Set(union));
+    const take = sample(unique, Math.min(count, unique.length));
+
+    // remove taken from their pools
+    take.forEach(id => {
+      const g = genFromDex(id);
+      const pool = GenPools.get(g);
+      if (pool) pool.delete(id);
+    });
+
+    // top up those gens immediately
+    gens.forEach(g => ensureGenPool(g));
+
+    return take;
+  }
+
+  /* ============== Game flow ============== */
   function rollAndRenderRound(){
     const statKey = pickStatKey();
     state.roundStat = statKey;
     list.dataset.statKey = statKey;
     refreshHint();
 
-    const pool = ALL_IDS.filter(id => state.allowedGens.has(genFromDex(id)));
+    const gens = [...state.allowedGens];
     const count = Math.min(Math.max(state.difficulty,3),5);
-    const chosen = sample(pool, count);
+
+    // Prefer preloaded
+    let chosen = consumeFromPoolsForGens(gens, count);
+
+    // Fallback: if not enough, take from gen buckets and preload as we go
+    if (chosen.length < count) {
+      const allowedIds = gens.flatMap(g => GenBuckets.get(g) || []);
+      const need = count - chosen.length;
+      const extras = sample(allowedIds.filter(id => !chosen.includes(id)), need);
+      extras.forEach(id => preloadImage(id));
+      chosen = chosen.concat(extras);
+    }
+
     state.roundIds = chosen;
 
+    // Render cards with spinner; swap image when ready
     chosen.forEach(id=>{
       const card = el("div","pokemon-card");
       card.draggable = true;
       card.dataset.id = String(id);
-      const img = new Image();
-      img.src = getArtworkURL(id);
-      img.alt = `#${id}`;
-      card.appendChild(img);
+
+      const spinner = el("div","pokeball-spinner");
+      spinner.setAttribute("aria-label","Loading");
+      card.appendChild(spinner);
+
+      const cached = ImageCache.get(id) || preloadImage(id);
+      if (cached.complete) {
+        swapInImage(card, cached);
+      } else {
+        cached.addEventListener("load", () => swapInImage(card, cached), { once:true });
+        cached.addEventListener("error", () => spinner.classList.add("error"), { once:true });
+      }
+
       list.appendChild(card);
     });
 
     enableHorizontalDrag(list);
+  }
+
+  function swapInImage(card, imgObj){
+    card.innerHTML = "";
+    const img = new Image();
+    img.src = imgObj.src;
+    img.alt = "#";
+    card.appendChild(img);
   }
 
   function enableHorizontalDrag(container){
@@ -292,7 +377,7 @@ window.addEventListener("DOMContentLoaded", () => {
     results.forEach(({card, name, stat})=>{
       card.draggable=false;
       card.dataset.stat = String(stat);
-      const imgSrc = card.querySelector("img").src;
+      const imgSrc = card.querySelector("img")?.src || "";
       card.innerHTML = `
         <img src="${imgSrc}" alt="${name}">
         <p>${name} (${labelForStat(statKey)}: ${stat})</p>
@@ -331,9 +416,9 @@ window.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  /* =========================
-     Boot
-     ========================= */
+  /* ============== Boot ============== */
+  buildGenBuckets();         // make per-gen ID buckets
+  kickoffPreloadAllGens();   // preload 10 per gen (in parallel)
   refreshHint();
   rollAndRenderRound();
 });
