@@ -261,3 +261,31 @@
   margin: 0;
   opacity: .9;
 }
+
+/* Pokéball spinner */
+.pokeball-spinner {
+  position: relative;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 50% 50%, #ffffff 0 6px, transparent 6px) /* button */ ,
+    linear-gradient(#ef4444 0 50%, #f4f4f5 0 100%);                   /* red/white halves */
+  border: 2px solid #e5e7eb; /* outer rim */
+  animation: poke-spin 1s linear infinite;
+  box-shadow: inset 0 0 0 2px rgba(0,0,0,.08);
+}
+.pokeball-spinner::before {
+  content: "";
+  position: absolute;
+  top: calc(50% - 2px);
+  left: 4px;
+  right: 4px;
+  height: 4px;
+  background: #111827; /* black band */
+  border-radius: 2px;
+}
+@keyframes poke-spin {
+  to { transform: rotate(360deg); }
+}
+
