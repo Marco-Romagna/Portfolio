@@ -15,49 +15,76 @@
 }
 
 .control label {
-  font-weight: 600;
+  font-weight: 700;
   opacity: .95;
 }
 
-/* ===== Comfy select styling ===== */
-.select {
+/* ===== Comfy pill selects ===== */
+.select--comfy {
   appearance: none;
   -webkit-appearance: none;
   -moz-appearance: none;
-  padding: .45rem .9rem;
-  padding-right: 2.2rem;                  /* room for arrow */
+
+  font: inherit;
+  font-weight: 700;
+  line-height: 1;
+  font-size: 0.95rem;
+
+  padding: .65rem 2.4rem .65rem .9rem;
+  border-radius: .75rem;
   border: 1px solid var(--border-color, #3a3f47);
-  border-radius: .6rem;
-  background:
-    linear-gradient(transparent,transparent) padding-box,
-    linear-gradient(transparent,transparent) border-box;
   background-color: var(--panel-bg, #1e1f23);
-  font-weight: 600;
+
+  box-shadow:
+    0 1px 0 rgba(0,0,0,.25),
+    inset 0 0 0 9999px rgba(255,255,255,.02);
+
+  color: inherit;
   cursor: pointer;
-  position: relative;
+  transition: border-color .15s, box-shadow .15s, background-color .15s;
 
-  /* little down-arrow using SVG data URI */
   background-image:
-    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='22' height='22' viewBox='0 0 24 24' fill='none' stroke='%23aeb4bd' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>");
+    url("data:image/svg+xml;utf8,\
+<svg xmlns='http://www.w3.org/2000/svg' width='22' height='22' viewBox='0 0 24 24' fill='none' stroke='%23b9c0ca' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>");
   background-repeat: no-repeat;
-  background-position: right .6rem center;
+  background-position: right .7rem center;
+  background-size: 1.1rem;
+}
+.select--comfy:hover{
+  border-color:#4b5563;
+  box-shadow:
+    0 1px 0 rgba(0,0,0,.25),
+    inset 0 0 0 9999px rgba(255,255,255,.03);
+}
+.select--comfy:focus{
+  outline: none;
+  border-color: rgba(99,102,241,.6);
+  box-shadow:
+    0 0 0 3px rgba(99,102,241,.18),
+    0 1px 0 rgba(0,0,0,.25),
+    inset 0 0 0 9999px rgba(255,255,255,.03);
 }
 
-.select:hover {
-  border-color: #4b5563;
-}
-.select:focus {
-  outline: 2px solid rgba(99, 102, 241, .45);
-  outline-offset: 1px;
+@media (forced-colors: active){
+  .select--comfy{
+    appearance: auto;
+    background-image: none;
+    padding-right: .9rem;
+    border-radius: .5rem;
+    box-shadow: none;
+  }
 }
 
-/* ===== Gen chips (active state) ===== */
+@media (max-width: 480px){
+  .select--comfy{ padding: .55rem 2.1rem .55rem .75rem; font-size: .92rem; }
+}
+
+/* ===== Gen chips ===== */
 .gens-list {
   display: flex;
   gap: .5rem;
   flex-wrap: wrap;
 }
-
 .gen-chip {
   display: inline-flex;
   gap: .4rem;
@@ -68,8 +95,9 @@
   background: var(--panel-bg, #1e1f23);
   transition: border-color .15s, background .15s, box-shadow .15s;
   cursor: pointer;
+  position: relative;
 }
-.gen-chip input { /* hide default checkbox but keep accessible */
+.gen-chip input {
   position: absolute;
   opacity: 0;
   pointer-events: none;
@@ -80,16 +108,14 @@
   box-shadow: 0 0 0 2px rgba(99, 102, 241, .15) inset;
 }
 
-/* ===== Side labels (LOW | DRAG | HIGHEST) ===== */
+/* ===== Side labels ===== */
 .sides-bar {
   display: grid;
   grid-template-columns: 1fr auto 1fr;
   align-items: center;
   margin: .25rem 0 .25rem;
 }
-
 .sides-bar .side { display: flex; justify-content: center; }
-
 .sides-bar .badge {
   display: inline-block;
   padding: .3rem .7rem;
@@ -105,7 +131,7 @@
 .sides-bar .center .badge { background: rgba(128,128,128,.12); }
 .sides-bar .high .badge   { background: rgba(40,167,69,.12); }
 
-/* ===== Centered hint bar under the labels ===== */
+/* ===== Centered hint ===== */
 .hint-bar {
   display: flex;
   justify-content: center;
@@ -119,17 +145,17 @@
   border-radius: .5rem;
 }
 
-/* ===== Cards row (centered, fits content) ===== */
+/* ===== Cards row ===== */
 .cards-row {
   display: flex;
-  justify-content: center;     /* center Pokémon within the box */
+  justify-content: center;
   gap: 1.1rem;
   align-items: flex-start;
   padding: .6rem 1rem;
   border: 2px dashed var(--border-color, #ccc);
   border-radius: .75rem;
   margin: 0 auto .9rem;
-  width: fit-content;          /* border hugs content width */
+  width: fit-content;
 }
 
 /* ===== Pokémon cards ===== */
@@ -148,32 +174,22 @@
   transition: background .2s, border-color .2s, transform .06s;
 }
 .pokemon-card:active { transform: scale(.98); }
-
-.pokemon-card img {
-  width: 96px; height: 96px; image-rendering: pixelated;
-}
+.pokemon-card img { width: 96px; height: 96px; image-rendering: pixelated; }
 .pokemon-card.dragging { opacity: .6; border-style: dashed; }
+.pokemon-card p { font-weight: 700; font-size: .95rem; text-align: center; }
 
-.pokemon-card p {
-  font-weight: 700; font-size: .95rem; text-align: center;
-}
+/* Feedback after lock-in */
+.pokemon-card.good { background: rgba(40,167,69,.15); border-color: rgb(40,167,69); }
+.pokemon-card.bad  { background: rgba(220,53,69,.15); border-color: rgb(220,53,69); }
 
-/* ===== Feedback after lock-in ===== */
-.pokemon-card.good {
-  background: rgba(40,167,69,.15);
-  border-color: rgb(40,167,69);
-}
-.pokemon-card.bad  {
-  background: rgba(220,53,69,.15);
-  border-color: rgb(220,53,69);
-}
-
-/* ===== Buttons / bottom bar ===== */
+/* ===== Buttons ===== */
 .bottom-bar {
-  display: flex; gap: 1rem; align-items: center; justify-content: flex-start;
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  justify-content: flex-start;
   flex-wrap: wrap;
 }
-
 .new-round-btn, .lock-btn {
   padding: .55rem 1.05rem;
   border: none;
