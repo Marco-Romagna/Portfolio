@@ -1,7 +1,7 @@
 // no-mobile.js
 (() => {
   // Run only if small screen
-  if (!window.matchMedia("(max-width: 860px)").matches) return;
+  if (!window.matchMedia("(max-width: 720px)").matches) return;
 
   // Inject overlay
   const style = document.createElement("style");
