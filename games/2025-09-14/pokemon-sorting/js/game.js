@@ -43,7 +43,7 @@ window.addEventListener("DOMContentLoaded", () => {
   const state = {
     chosenStat: "random",
     allowedGens: new Set([1,2]),
-    difficulty: 3,   // 3 = Easy, 4 = Medium, 5 = Hard (default demo)
+    difficulty: 3,   // 3 = Easy, 4 = Medium, 5 = Hard (default)
     round: [],
     locked: false,
   };
@@ -62,7 +62,7 @@ window.addEventListener("DOMContentLoaded", () => {
   controls.appendChild(statWrap);
   statWrap.appendChild(lbl("Category:", "stat-select"));
 
-  const statSelect = el("select");
+  const statSelect = el("select", "select--comfy");
   statSelect.id = "stat-select";
   STAT_OPTIONS.forEach(opt => {
     const o = document.createElement("option");
@@ -93,7 +93,7 @@ window.addEventListener("DOMContentLoaded", () => {
   controls.appendChild(diffWrap);
   diffWrap.appendChild(lbl("Difficulty:", "diff-select"));
 
-  const diffSelect = el("select");
+  const diffSelect = el("select", "select--comfy");
   diffSelect.id = "diff-select";
   [
     {v:3, t:"Easy (3)"},
@@ -107,22 +107,26 @@ window.addEventListener("DOMContentLoaded", () => {
   diffSelect.value = String(state.difficulty);
   diffWrap.appendChild(diffSelect);
 
-  // Actions + hint
+  // Actions (no hint here anymore)
   const actionsWrap = el("div", "control actions-wrap");
   controls.appendChild(actionsWrap);
   const newRoundBtn = btn("New Round", "new-round-btn");
   actionsWrap.appendChild(newRoundBtn);
-  const statHint = el("div", "stat-hint");
-  actionsWrap.appendChild(statHint);
 
-  // Side labels bar: LOW | Drag | HIGHEST
+  // Side labels bar: LOW | DRAG | HIGHEST
   const sides = el("div", "sides-bar");
   sides.innerHTML = `
     <div class="side low"><span class="badge">LOW</span></div>
-    <div class="side center"><span class="badge">Drag</span></div>
+    <div class="side center"><span class="badge">DRAG</span></div>
     <div class="side high"><span class="badge">HIGHEST</span></div>
   `;
   gameEl.appendChild(sides);
+
+  // Centered hint bar (moved from actions area)
+  const hintBar = el("div", "hint-bar");
+  const statHint = el("div", "stat-hint");
+  hintBar.appendChild(statHint);
+  gameEl.appendChild(hintBar);
 
   // Cards row
   const list = el("div", "cards-row");
