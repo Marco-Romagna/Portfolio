@@ -1,34 +1,27 @@
-
-/* Pokémon Sorting styles */
-
-#game {
-  margin-top: 1rem;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
 .pokemon-card {
-  padding: 1rem;
+  padding: 0.5rem;
   border: 2px solid var(--border-color, #ccc);
   border-radius: 0.5rem;
   background: var(--panel-bg, #f9f9f9);
   cursor: grab;
   user-select: none;
   text-align: center;
-  font-weight: bold;
+  width: 120px;
+  margin: 0 auto;
+}
+
+.pokemon-card img {
+  width: 96px;
+  height: 96px;
 }
 
 .pokemon-card.dragging {
   opacity: 0.6;
   border-style: dashed;
 }
-.lock-btn {
-  padding: 0.5rem 1rem;
-  font-size: 1rem;
-  border-radius: 0.5rem;
-  border: none;
-  background: var(--accent-color, #4caf50);
-  color: white;
-  cursor: pointer;
+
+.pokemon-card p {
+  margin-top: 0.25rem;
+  font-size: 0.9rem;
+  font-weight: bold;
 }
