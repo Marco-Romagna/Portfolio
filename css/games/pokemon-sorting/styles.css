@@ -25,3 +25,20 @@
   font-size: 0.9rem;
   font-weight: bold;
 }
+
+/* Lock-in feedback */
+.pokemon-card.good {
+  background: rgba(40, 167, 69, 0.15);
+  border-color: rgb(40, 167, 69);
+}
+
+.pokemon-card.bad {
+  background: rgba(220, 53, 69, 0.15);
+  border-color: rgb(220, 53, 69);
+}
+
+.result-banner {
+  margin-top: 0.5rem;
+  font-weight: 700;
+  text-align: center;
+}
