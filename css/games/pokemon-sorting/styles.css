@@ -242,3 +242,22 @@
 .new-round-btn:active, .lock-btn:active { transform: translateY(1px); }
 
 .result-banner { font-weight: 700; }
+
+.mobile-blocker{
+  max-width: 680px;
+  margin: 2.5rem auto;
+  padding: 1.25rem 1rem;
+  border: 1px solid var(--border-color, #3a3f47);
+  border-radius: .75rem;
+  background: var(--panel-bg, #1e1f23);
+  text-align: center;
+  box-shadow: 0 2px 10px rgba(0,0,0,.35);
+}
+.mobile-blocker h2{
+  margin: 0 0 .35rem;
+  font-weight: 800;
+}
+.mobile-blocker p{
+  margin: 0;
+  opacity: .9;
+}
