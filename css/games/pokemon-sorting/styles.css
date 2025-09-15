@@ -23,3 +23,12 @@
   opacity: 0.6;
   border-style: dashed;
 }
+.lock-btn {
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  border-radius: 0.5rem;
+  border: none;
+  background: var(--accent-color, #4caf50);
+  color: white;
+  cursor: pointer;
+}
