@@ -1,22 +1,28 @@
 window.addEventListener("DOMContentLoaded", () => {
   const gameEl = document.getElementById("game");
 
-  // Placeholder Pokémon data
+  // Placeholder Pokémon data (using official sprite URLs for demo)
   const pokemon = [
-    { name: "Bulbasaur", stat: 45 },
-    { name: "Charmander", stat: 39 },
-    { name: "Squirtle", stat: 44 }
+    { name: "Bulbasaur", stat: 45, img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png" },
+    { name: "Charmander", stat: 39, img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/4.png" },
+    { name: "Squirtle", stat: 44, img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/7.png" }
   ];
 
-  // Render Pokémon cards (stats hidden)
+  // Render Pokémon cards (image only)
   pokemon.forEach(p => {
     const card = document.createElement("div");
     card.className = "pokemon-card";
-    card.textContent = p.name;
     card.draggable = true;
+
+    const img = document.createElement("img");
+    img.src = p.img;
+    img.alt = p.name;
+
+    card.appendChild(img);
     gameEl.appendChild(card);
 
-    // Store stat for later
+    // Store hidden data for later
+    card.dataset.name = p.name;
     card.dataset.stat = p.stat;
   });
 
@@ -26,22 +32,22 @@ window.addEventListener("DOMContentLoaded", () => {
   button.className = "lock-btn";
   gameEl.appendChild(button);
 
-  // Drag & drop support
+  // Drag & drop
   let dragged;
   gameEl.addEventListener("dragstart", e => {
-    if (e.target.classList.contains("pokemon-card")) {
-      dragged = e.target;
-      e.target.classList.add("dragging");
+    if (e.target.closest(".pokemon-card")) {
+      dragged = e.target.closest(".pokemon-card");
+      dragged.classList.add("dragging");
     }
   });
-  gameEl.addEventListener("dragend", e => {
+  gameEl.addEventListener("dragend", () => {
     if (dragged) dragged.classList.remove("dragging");
   });
   gameEl.addEventListener("dragover", e => {
     e.preventDefault();
     const afterElement = getDragAfterElement(gameEl, e.clientY);
     if (afterElement == null) {
-      gameEl.insertBefore(dragged, button); // drop before button
+      gameEl.insertBefore(dragged, button);
     } else {
       gameEl.insertBefore(dragged, afterElement);
     }
@@ -64,13 +70,16 @@ window.addEventListener("DOMContentLoaded", () => {
   button.addEventListener("click", () => {
     const cards = [...document.querySelectorAll(".pokemon-card")];
     const order = cards.map(c => ({
-      name: c.textContent,
+      name: c.dataset.name,
       stat: parseInt(c.dataset.stat, 10)
     }));
 
-    // Reveal stats
+    // Reveal stats + names
     cards.forEach(c => {
-      c.textContent = `${c.textContent} (Stat: ${c.dataset.stat})`;
+      c.innerHTML = `
+        <img src="${c.querySelector("img").src}" alt="${c.dataset.name}">
+        <p>${c.dataset.name} (Stat: ${c.dataset.stat})</p>
+      `;
     });
 
     // Check correctness (descending order)
