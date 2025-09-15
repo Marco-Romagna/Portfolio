@@ -1,8 +1,7 @@
-// Pokémon Sorting (Horizontal, scriptless version)
-// - Uses National Dex IDs [1..1025]
-// - Gen derived from ID ranges
-// - Only images shown during play; name + stats fetched on "Lock In"
-// - If Category = Random, we roll ONCE per round and show the picked stat in the hint
+// Pokémon Sorting (Horizontal, scriptless)
+// - Desktop-only blocker for small/touch devices
+// - No LOW/DRAG/HIGHEST badges; instructions live in page copy
+// - Gen derived from ID; stats fetched on Lock In
 
 window.addEventListener("DOMContentLoaded", () => {
   "use strict";
@@ -10,9 +9,24 @@ window.addEventListener("DOMContentLoaded", () => {
   const gameEl = document.getElementById("game");
 
   /* =========================
+     Desktop-only guard
+     ========================= */
+  const isTouch = "ontouchstart" in window || navigator.maxTouchPoints > 0;
+  const isSmall = window.matchMedia("(max-width: 780px)").matches;
+  if (isTouch || isSmall) {
+    gameEl.innerHTML = `
+      <div class="mobile-blocker">
+        <h2>Not available on mobile</h2>
+        <p>Please use a desktop or widen your window to play.</p>
+      </div>
+    `;
+    return; // stop booting the game on mobile
+  }
+
+  /* =========================
      Config
      ========================= */
-  const MAX_ID = 1025; // current National Dex max
+  const MAX_ID = 1025;
   const ALL_IDS = Array.from({ length: MAX_ID }, (_, i) => i + 1);
 
   const STAT_OPTIONS = [
@@ -25,27 +39,24 @@ window.addEventListener("DOMContentLoaded", () => {
     { key: "spe",    label: "Speed" },
     { key: "total",  label: "Total" },
   ];
-
   const ALL_GENS = [1,2,3,4,5,6,7,8,9];
 
-  // Official artwork CDN (commit pinned for stability)
   const SPRITES = {
-    base_url:
-      "https://cdn.jsdelivr.net/gh/PokeAPI/sprites@9683e1d7ffbab3401c1542e39d8105102153e6f9/sprites/pokemon/other/official-artwork/",
+    base_url: "https://cdn.jsdelivr.net/gh/PokeAPI/sprites@9683e1d7ffbab3401c1542e39d8105102153e6f9/sprites/pokemon/other/official-artwork/",
     ext: ".png",
   };
 
   const state = {
-    chosenStat: "hp",        // DEFAULT to HP
-    roundStat: null,         // actual stat for THIS round
-    allowedGens: new Set([1]), // DEFAULT: only Gen 1 selected
-    difficulty: 3,           // 3=Easy, 4=Medium, 5=Hard
-    roundIds: [],            // current round's IDs, left→right
+    chosenStat: "hp",         // default to HP
+    roundStat: null,
+    allowedGens: new Set([1]),// default Gen 1 only
+    difficulty: 3,
+    roundIds: [],
     locked: false,
   };
 
   /* =========================
-     Layout (two control rows)
+     Layout (controls + hint + cards + bottom)
      ========================= */
   gameEl.innerHTML = "";
 
@@ -57,11 +68,10 @@ window.addEventListener("DOMContentLoaded", () => {
   controls.appendChild(row1);
   controls.appendChild(row2);
 
-  // Category select
+  // Category
   const statWrap = el("div", "control stat-wrap");
   row1.appendChild(statWrap);
   statWrap.appendChild(lbl("Category:", "stat-select"));
-
   const statSelect = el("select", "select--comfy");
   statSelect.id = "stat-select";
   STAT_OPTIONS.forEach(opt => {
@@ -69,14 +79,13 @@ window.addEventListener("DOMContentLoaded", () => {
     o.value = opt.key; o.textContent = opt.label;
     statSelect.appendChild(o);
   });
-  statSelect.value = state.chosenStat; // HP by default
+  statSelect.value = state.chosenStat;
   statWrap.appendChild(statSelect);
 
-  // Difficulty select
+  // Difficulty
   const diffWrap = el("div", "control diff-wrap");
   row1.appendChild(diffWrap);
   diffWrap.appendChild(lbl("Difficulty:", "diff-select"));
-
   const diffSelect = el("select", "select--comfy");
   diffSelect.id = "diff-select";
   [{v:3,t:"Easy (3)"},{v:4,t:"Medium (4)"},{v:5,t:"Hard (5)"}].forEach(d=>{
@@ -87,7 +96,7 @@ window.addEventListener("DOMContentLoaded", () => {
   diffSelect.value = String(state.difficulty);
   diffWrap.appendChild(diffSelect);
 
-  // Row 2: generation chips
+  // Generations
   const gensWrap = el("div", "control gens-wrap");
   row2.appendChild(gensWrap);
   gensWrap.appendChild(span("Generations:"));
@@ -97,20 +106,11 @@ window.addEventListener("DOMContentLoaded", () => {
     const chip = el("label", "gen-chip");
     chip.innerHTML = `<input type="checkbox" value="${g}"><span>Gen ${g}</span>`;
     const input = chip.querySelector("input");
-    input.checked = state.allowedGens.has(g); // only Gen 1 starts checked
+    input.checked = state.allowedGens.has(g);
     gensList.appendChild(chip);
   });
 
-  // Side badges
-  const sides = el("div", "sides-bar");
-  sides.innerHTML = `
-    <div class="side low"><span class="badge">LOW</span></div>
-    <div class="side center"><span class="badge">DRAG</span></div>
-    <div class="side high"><span class="badge">HIGHEST</span></div>
-  `;
-  gameEl.appendChild(sides);
-
-  // Hint bar
+  // Hint (what stat we’re comparing)
   const hintBar = el("div", "hint-bar");
   const statHint = el("div", "stat-hint");
   hintBar.appendChild(statHint);
@@ -120,7 +120,7 @@ window.addEventListener("DOMContentLoaded", () => {
   const list = el("div", "cards-row");
   gameEl.appendChild(list);
 
-  // Bottom bar (centered)
+  // Bottom actions
   const bottom = el("div", "bottom-bar");
   const newRoundBtn = btn("New Round", "new-round-btn");
   const lockBtn = btn("Lock In", "lock-btn");
@@ -135,32 +135,27 @@ window.addEventListener("DOMContentLoaded", () => {
      ========================= */
   statSelect.addEventListener("change", ()=>{
     state.chosenStat = statSelect.value;
-    // roundStat is set on New Round; we only change the selection here
     refreshHint();
   });
-
   diffSelect.addEventListener("change", ()=>{
     state.difficulty = Math.min(5, Math.max(3, parseInt(diffSelect.value,10)));
   });
-
   gensList.addEventListener("change",(e)=>{
     if(!e.target.matches('input[type="checkbox"]')) return;
     const g = parseInt(e.target.value,10);
     e.target.checked ? state.allowedGens.add(g) : state.allowedGens.delete(g);
     if(state.allowedGens.size===0){ state.allowedGens.add(g); e.target.checked=true; }
   });
-
   newRoundBtn.addEventListener("click", ()=>{
     state.locked = false;
     banner.textContent = "";
     list.innerHTML = "";
     rollAndRenderRound();
   });
-
   lockBtn.addEventListener("click", async ()=>{
     if(state.locked) return;
     state.locked = true;
-    await revealAndScore(); // fetches name + stats then scores
+    await revealAndScore();
   });
 
   /* =========================
@@ -173,11 +168,11 @@ window.addEventListener("DOMContentLoaded", () => {
 
   function capName(name){
     if(!name) return "";
-    return name.charAt(0).toUpperCase() + name.slice(1); // simple & safe
+    return name.charAt(0).toUpperCase() + name.slice(1);
   }
 
   function refreshHint(){
-    const key = state.roundStat || state.chosenStat; // actual rolled stat if available
+    const key = state.roundStat || state.chosenStat;
     const label = STAT_OPTIONS.find(s=>s.key===key)?.label || "Random Stat";
     statHint.textContent = `Comparing by: ${label} • (Low → Highest)`;
   }
@@ -201,7 +196,6 @@ window.addEventListener("DOMContentLoaded", () => {
     return `${SPRITES.base_url}${id}${SPRITES.ext}`;
   }
 
-  // Derive generation from National Dex
   function genFromDex(id){
     if(id<=151) return 1;
     if(id<=251) return 2;
@@ -219,19 +213,16 @@ window.addEventListener("DOMContentLoaded", () => {
      Game flow
      ========================= */
   function rollAndRenderRound(){
-    // Decide the actual stat for this round
     const statKey = pickStatKey();
-    state.roundStat = statKey;          // store the rolled/selected stat
-    list.dataset.statKey = statKey;     // convenience
+    state.roundStat = statKey;
+    list.dataset.statKey = statKey;
     refreshHint();
 
-    // Build pool by selected generations
     const pool = ALL_IDS.filter(id => state.allowedGens.has(genFromDex(id)));
     const count = Math.min(Math.max(state.difficulty,3),5);
     const chosen = sample(pool, count);
     state.roundIds = chosen;
 
-    // Render cards (images only)
     chosen.forEach(id=>{
       const card = el("div","pokemon-card");
       card.draggable = true;
@@ -283,7 +274,6 @@ window.addEventListener("DOMContentLoaded", () => {
     const cards=[...list.querySelectorAll(".pokemon-card")];
     const statKey = state.roundStat || list.dataset.statKey;
 
-    // Fetch name + stats for each card in parallel (faster)
     const results = await Promise.all(cards.map(async (c)=>{
       const id = parseInt(c.dataset.id,10);
       const data = await fetch(`https://pokeapi.co/api/v2/pokemon/${id}`).then(r=>r.json());
@@ -299,7 +289,6 @@ window.addEventListener("DOMContentLoaded", () => {
       return { card: c, id, name: capName(data.name), stat: statsObj[statKey] };
     }));
 
-    // Update UI with revealed info
     results.forEach(({card, name, stat})=>{
       card.draggable=false;
       card.dataset.stat = String(stat);
@@ -310,7 +299,6 @@ window.addEventListener("DOMContentLoaded", () => {
       `;
     });
 
-    // Score: ascending left→right
     const stats = cards.map(c => parseInt(c.dataset.stat,10));
     const allCorrect = stats.every((s,i,arr)=> i===arr.length-1 || s<=arr[i+1]);
 
