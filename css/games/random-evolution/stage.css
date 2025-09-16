@@ -1,3 +1,4 @@
+
 /* --- guard against subtle overflow --- */
 html, body { overflow-x: hidden; }
 
@@ -18,7 +19,8 @@ html, body { overflow-x: hidden; }
   grid-template-columns:auto 1fr auto;  /* left rail, stage, right history */
   align-items:start;
   column-gap:48px;
-  padding-right: clamp(12px, 5vw, 56px);
+  /* FIX 1: equal side gutters so the grid centers */
+  padding: 0 clamp(12px, 5vw, 56px);
   margin-inline:auto;
 }
 
@@ -38,7 +40,11 @@ html, body { overflow-x: hidden; }
 /* Stage */
 .revo-stage{
   position:relative;
-  width: min(var(--stage-max, 980px), 100%);
+  /* FIX 2: never let rails/gaps/gutters squeeze the stage */
+  width: min(
+    var(--stage-max, 980px),
+    calc(100vw - (var(--rail-w,56px) + var(--history-w,84px) + 2*48px + 2*clamp(12px,5vw,56px)))
+  );
   aspect-ratio: 1 / 1;
   margin:16px auto;
   background:radial-gradient(120% 120% at 50% 55%, #121929 0%, #0b101b 60%, #070a12 100%);

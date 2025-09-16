@@ -8,7 +8,8 @@
    Layout sizing vars
    =============================== */
 :root{
-  --stage-max: min(70svh, 80vmin, 720px);
+  --stage-max: min(76svh, 86vmin, 820px);
+}
 
   /* Left rail */
   --rail-w: 56px;
