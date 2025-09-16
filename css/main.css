@@ -47,7 +47,7 @@ body.site .container{ max-width:1080px; }
   align-items:center;
   gap:16px;
   min-height:56px;      /* consistent vertical rhythm */
-  padding:10px 0;
+  padding:10px 16px;    /* ⬅️ added equal left/right spacing */
 }
 
 .brand{
