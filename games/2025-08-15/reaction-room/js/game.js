@@ -1,5 +1,4 @@
-/ games/2025-08-15/reaction-room/js/game.js
-// (Save as game.js; replace your current file.)
+
 
 window.addEventListener('DOMContentLoaded', () => {
   /* ===================== Config ===================== */
