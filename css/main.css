@@ -17,11 +17,17 @@ html, body {
   line-height: 1.5;
 }
 
-/* Container */
+/* Only cap containers inside portfolio pages */
+body.site .container {
+  max-width:1080px;
+  margin:0 auto;
+  padding:0 16px;
+}
+
+/* Default .container: games can expand full width */
 .container {
-  max-width: 900px;
-  margin: 0 auto;
-  padding: 0 16px;
+  margin:0 auto;
+  padding:0;
 }
 
 /* =========================
