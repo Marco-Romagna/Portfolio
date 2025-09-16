@@ -2,16 +2,22 @@
   {
     "title": "Reaction Room",
     "date": "2025-08-15",
-    "path": "games/2025-08-15/reaction-room"
+    "path": "games/2025-08-15/reaction-room/",
+    "image": "games/2025-08-15/reaction-room/thumb.jpg",
+    "tags": ["Reaction", "Grid", "Speed"]
   },
   {
     "title": "Random Evolution",
     "date": "2025-08-19",
-    "path": "games/2025-08-19/random-evolution"
+    "path": "games/2025-08-19/random-evolution/",
+    "image": "games/2025-08-19/random-evolution/thumb.jpg",
+    "tags": ["Pokemon", "Guessing", "Silhouette", "PokeDex"]
   },
   {
     "title": "Pokemon Sorting",
     "date": "2025-09-14",
-    "path": "games/2025-09-14/pokemon-sorting"
+    "path": "games/2025-09-14/pokemon-sorting/",
+    "image": "games/2025-09-14/pokemon-sorting/thumb.jpg",
+    "tags": ["Sorting", "Stats", "Pokemon"]
   }
 ]
