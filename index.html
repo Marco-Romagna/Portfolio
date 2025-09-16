@@ -1,57 +1,100 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Portfolio</title>
-<meta name="color-scheme" content="dark light" />
-<link rel="stylesheet" href="css/main.css">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Marco • Portfolio</title>
+  <meta name="color-scheme" content="dark light" />
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="css/main.css">
 </head>
 <body>
+  <!-- Header -->
   <header class="header">
     <div class="container nav">
-      <div class="brand">
+      <a class="brand" href="index.html">
         <span class="dot"></span><span>Marco • Portfolio</span>
-      </div>
+      </a>
       <nav class="links">
-        <a class="link" href="#projects">Projects</a>
-        <a class="link" href="#games">Games</a>
-        <a class="cta"  href="https://www.linkedin.com/in/marco-romagna" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+        <a class="cta" href="https://www.linkedin.com/in/marco-romagna"
+           target="_blank" rel="noopener noreferrer">LinkedIn</a>
       </nav>
     </div>
   </header>
 
+  <!-- Main -->
   <main class="container">
-      <section id="projects" class="panel">
-        <h2>Projects</h2>
-        <ul id="projects-list"></ul>
-      </section>
-    
-      <section id="games" class="panel">
-        <h2>Games</h2>
-        <ul id="games-list"></ul>
-      </section>
-    
-      <script>
-        async function loadList(jsonPath, ulId){
-          const ul = document.getElementById(ulId);
-          try {
-            const res = await fetch(jsonPath, { cache: 'no-store' });
-            const items = await res.json();
-            items.sort((a,b) => b.date.localeCompare(a.date));
-            ul.innerHTML = items.map(x =>
-              `<li><a href="${x.path}">${x.title} (${x.date})</a></li>`
-            ).join('') || '<li><em>No items yet.</em></li>';
-          } catch (e) {
-            ul.innerHTML = '<li><em>Could not load list.</em></li>';
-          }
-        }
-    
-        loadList('data/projects.json', 'projects-list');
-        loadList('data/games.json', 'games-list');
-      </script>
-    </main>
+    <!-- Projects -->
+    <section id="projects" class="panel">
+      <h2>Projects</h2>
+      <ul id="projects-list"></ul>
+    </section>
 
-  
+    <!-- Games -->
+    <section id="games" class="panel">
+      <h2>Games</h2>
+      <ul id="games-list" class="card-grid"></ul>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer container">
+    <p>&copy; 2025 Marco Romagna</p>
+  </footer>
+
+  <!-- Script -->
+  <script>
+    // ========== RENDER HELPERS ==========
+    function renderSimpleItem(x){
+      return `<li><a href="${x.path}">${x.title} (${x.date})</a></li>`;
+    }
+
+    function renderGameCard(x){
+      const img = x.image || "";
+      const tags = Array.isArray(x.tags) ? x.tags.slice(0,4) : [];
+
+      const thumb = img
+        ? `<a class="card-thumb" href="${x.path}" aria-label="${x.title}">
+             <img loading="lazy" src="${img}" alt="${x.title} thumbnail">
+           </a>`
+        : `<a class="card-thumb no-thumb" href="${x.path}" aria-label="${x.title}">
+             <span class="no-thumb-mark">🎮</span>
+           </a>`;
+
+      const tagBadges = tags.map(t => `<span class="tag">${t}</span>`).join("");
+
+      return `
+        <li class="card">
+          ${thumb}
+          <div class="card-body">
+            <a class="card-title" href="${x.path}">${x.title}</a>
+            ${tags.length ? `<div class="card-tags">${tagBadges}</div>` : ``}
+          </div>
+        </li>
+      `;
+    }
+
+    async function loadList(jsonPath, targetId, mode="simple"){
+      const el = document.getElementById(targetId);
+      try {
+        const res = await fetch(jsonPath, { cache: "no-store" });
+        const items = await res.json();
+        items.sort((a,b) => b.date.localeCompare(a.date));
+
+        if (mode === "cards") {
+          el.innerHTML = items.map(renderGameCard).join("") || "<li><em>No items yet.</em></li>";
+        } else {
+          el.innerHTML = items.map(renderSimpleItem).join("") || "<li><em>No items yet.</em></li>";
+        }
+      } catch {
+        el.innerHTML = "<li><em>Could not load list.</em></li>";
+      }
+    }
+
+    // Load projects & games
+    loadList("data/projects.json", "projects-list", "simple");
+    loadList("data/games.json", "games-list", "cards");
+  </script>
 </body>
 </html>
