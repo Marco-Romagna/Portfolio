@@ -1,177 +1,160 @@
 /* =========================
-   Base & Typography
+   Global theme & resets (safe for games)
    ========================= */
 :root {
-  --bg: #0d1117;
-  --text: #e6edf3;
-  --muted: #8b949e;
-  --accent: #7aa2f7;
+  --bg:#0f1115;
+  --panel:#161a24;
+  --text:#e6edf3;
+  --muted:#9aa4b2;
+  --accent:#7aa2f7;
 }
 
-html, body {
-  margin: 0;
-  padding: 0;
-  background: var(--bg);
-  color: var(--text);
-  font-family: system-ui, sans-serif;
-  line-height: 1.5;
+* { box-sizing:border-box; }
+
+html,body {
+  margin:0;
+  font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+  background:var(--bg);
+  color:var(--text);
 }
 
-/* Default container: keep the padding so game UIs don’t shift */
+a {
+  color:inherit;
+  text-decoration:none;
+}
+
+/* Keep a small gutter everywhere so UIs don’t “pull” */
 .container {
   margin: 0 auto;
   padding: 0 16px;
 }
 
-/* Only portfolio pages get the max-width cap */
+/* =========================
+   Portfolio-only chrome (scoped to body.site)
+   ========================= */
+
+/* Width cap only on portfolio pages */
 body.site .container {
-  max-width: 1080px;
+  max-width:1080px;
 }
 
-/* =========================
-   Header
-   ========================= */
-.header {
-  border-bottom: 1px solid rgba(255,255,255,.08);
-  margin-bottom: 1rem;
-}
-.header .nav {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 14px 0;
-}
-.brand {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-weight: bold;
-  color: var(--text);
-  text-decoration: none;
-}
-.brand .dot {
-  width: 10px; height: 10px;
-  background: var(--accent);
-  border-radius: 50%;
-}
-.links a {
-  color: var(--accent);
-  text-decoration: none;
-  font-weight: 500;
-}
-.links a:hover { text-decoration: underline; }
-
-/* =========================
-   Sections
-   ========================= */
-.panel { margin-bottom: 2rem; }
-.panel h2 {
-  font-size: 1.4rem;
-  margin-bottom: .6rem;
+/* Sticky header (portfolio) */
+body.site .header {
+  position:sticky;
+  top:0;
+  z-index:50;
+  background:rgba(15,17,21,.8);
+  backdrop-filter:blur(8px);
+  border-bottom:1px solid rgba(255,255,255,.08);
 }
 
-/* =========================
-   Projects list
-   ========================= */
-#projects-list {
-  list-style: none;
-  padding: 0;
+body.site .nav {
+  height:56px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
 }
-#projects-list li {
-  margin-bottom: .4rem;
-}
-#projects-list a {
-  color: var(--accent);
-  text-decoration: none;
-}
-#projects-list a:hover { text-decoration: underline; }
 
-/* =========================
-   Games Card Grid
-   ========================= */
-.card-grid {
+body.site .brand {
+  display:flex;
+  align-items:center;
+  gap:10px;
+  font-weight:800;
+  letter-spacing:.2px;
+}
+
+body.site .dot {
+  width:10px;
+  height:10px;
+  border-radius:999px;
+  background:var(--accent);
+  box-shadow:0 0 0 5px rgba(122,162,247,.3);
+}
+
+body.site .links {
+  display:flex;
+  gap:10px;
+}
+
+body.site .link {
+  padding:8px 10px;
+  border-radius:10px;
+  color:var(--muted);
+}
+
+body.site .link:hover {
+  background:rgba(255,255,255,.06);
+  color:var(--text);
+}
+
+body.site .cta {
+  padding:8px 12px;
+  border-radius:10px;
+  background:var(--accent);
+  color:#0b1020;
+  font-weight:700;
+}
+
+/* Sections/panels (portfolio) */
+body.site main {
+  padding:28px 0 48px;
+}
+
+body.site section {
+  margin:28px 0 40px;
+}
+
+body.site h2 {
+  margin:0;
+  font-size:clamp(18px,3vw,24px);
+}
+
+body.site .panel {
+  background:linear-gradient(180deg,#1a1f2e,var(--panel));
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:16px;
+  padding:16px;
+}
+
+/* Reset list styles inside portfolio panels */
+body.site .panel ul {
   list-style: none;
   padding: 0;
   margin: 16px 0 0;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-  gap: 14px;
 }
 
-/* Card */
-.card {
-  display: grid;
-  grid-template-rows: auto 1fr;
+/* Card look for items (portfolio) */
+body.site .panel li {
+  margin: 8px 0;
+  padding: 12px 16px;
   background: rgba(255,255,255,.04);
   border: 1px solid rgba(255,255,255,.08);
-  border-radius: 14px;
-  overflow: clip;
-  transition: transform .15s ease, background .15s ease, border-color .15s ease;
+  border-radius: 12px;
+  transition: transform .15s ease, background .15s ease;
 }
-.card:hover { background: rgba(255,255,255,.06); transform: translateY(-2px); }
 
-/* Thumbnail */
-.card-thumb {
-  display: block;
-  aspect-ratio: 16 / 9;
-  background: rgba(255,255,255,.04);
+body.site .panel li:hover {
+  background: rgba(255,255,255,.08);
+  transform: translateY(-2px);
 }
-.card-thumb img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
-.card-thumb.no-thumb {
-  display: grid;
-  place-items: center;
-  color: var(--muted);
-  font-size: 28px;
-}
-.no-thumb-mark { filter: saturate(.7) opacity(.85); }
 
-/* Body */
-.card-body { padding: 10px 14px 14px; }
-.card-title {
-  display: inline-block;
+/* Links inside cards (portfolio) */
+body.site .panel li a {
+  display: block;
   color: var(--accent);
-  font-weight: 700;
-  line-height: 1.2;
+  font-weight: 600;
 }
-.card-title:hover { text-decoration: underline; }
 
-/* Tags */
-.card-tags {
-  display: flex;
-  gap: 6px;
-  flex-wrap: wrap;
-  margin-top: 8px;
-}
-.tag {
-  font-size: 12px;
-  padding: 2px 8px;
-  border-radius: 999px;
-  background: rgba(122,162,247,.16);
-  border: 1px solid rgba(122,162,247,.35);
+/* Optional: scope this tweak so it never surprises game HUDs */
+body.site .revo-hud #mode-select {
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.12);
   color: var(--text);
+  border-radius: 8px;
+  padding: 4px 8px;
+  font-size: 13px;
+}
+body.site .revo-hud #mode-select:focus {
+  outline: none;
 }
 
-/* =========================
-   Footer
-   ========================= */
-.footer {
-  border-top: 1px solid rgba(255,255,255,.08);
-  padding: 1rem 0;
-  font-size: .85rem;
-  color: var(--muted);
-  text-align: center;
-}
-
-/* =========================
-   Focus
-   ========================= */
-a:focus {
-  outline: 2px solid rgba(122,162,247,.9);
-  outline-offset: 2px;
-  border-radius: 10px;
-}
