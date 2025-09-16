@@ -1,12 +1,5 @@
 [
   {
-    "title": "Reaction Room",
-    "date": "2025-08-15",
-    "path": "games/2025-08-15/reaction-room/",
-    "image": "games/2025-08-15/reaction-room/thumb.png",
-    "tags": ["Reaction", "Grid", "Speed"]
-  },
-  {
     "title": "Random Evolution",
     "date": "2025-08-19",
     "path": "games/2025-08-19/random-evolution/",
