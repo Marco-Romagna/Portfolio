@@ -8,8 +8,8 @@
    Layout sizing vars
    =============================== */
 :root{
-  /* ↑ bumped so the stage can grow on roomy screens */
   --stage-max: min(76svh, 86vmin, 820px);
+}
 
   /* Left rail */
   --rail-w: 56px;
