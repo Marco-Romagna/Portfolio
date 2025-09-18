@@ -28,7 +28,7 @@
     <!-- Projects -->
     <section id="projects" class="panel">
       <h2>Projects</h2>
-      <ul id="projects-list"></ul>
+      <ul id="projects-list" class="list-grid"></ul>
     </section>
 
     <!-- Games -->
@@ -46,10 +46,28 @@
   <!-- Script -->
   <script>
     // ========== RENDER HELPERS ==========
+
+    // Legacy simple item (kept in case you want a plain list elsewhere)
     function renderSimpleItem(x){
       return `<li><a href="${x.path}">${x.title} (${x.date})</a></li>`;
     }
 
+    // Projects with tags
+    function renderProjectItem(x){
+      const tags = Array.isArray(x.tags) ? x.tags.slice(0,4) : [];
+      const tagBadges = tags.map(t => `<span class="tag">${t}</span>`).join("");
+      return `
+        <li class="project-item card">
+          <div class="card-body">
+            <a class="card-title" href="${x.path}">${x.title}</a>
+            <div class="muted">${x.date}</div>
+            ${tags.length ? `<div class="card-tags">${tagBadges}</div>` : ``}
+          </div>
+        </li>
+      `;
+    }
+
+    // Game cards
     function renderGameCard(x){
       const img = x.image || "";
       const tags = Array.isArray(x.tags) ? x.tags.slice(0,4) : [];
@@ -75,6 +93,7 @@
       `;
     }
 
+    // Generic loader with mode switch
     async function loadList(jsonPath, targetId, mode="simple"){
       const el = document.getElementById(targetId);
       try {
@@ -82,18 +101,23 @@
         const items = await res.json();
         items.sort((a,b) => b.date.localeCompare(a.date));
 
+        let html = "";
         if (mode === "cards") {
-          el.innerHTML = items.map(renderGameCard).join("") || "<li><em>No items yet.</em></li>";
+          html = items.map(renderGameCard).join("");
+        } else if (mode === "projects") {
+          html = items.map(renderProjectItem).join("");
         } else {
-          el.innerHTML = items.map(renderSimpleItem).join("") || "<li><em>No items yet.</em></li>";
+          html = items.map(renderSimpleItem).join("");
         }
+
+        el.innerHTML = html || "<li><em>No items yet.</em></li>";
       } catch {
         el.innerHTML = "<li><em>Could not load list.</em></li>";
       }
     }
 
-    // Load projects & games
-    loadList("data/projects.json", "projects-list", "simple");
+    // Load projects (with tags) & games
+    loadList("data/projects.json", "projects-list", "projects");
     loadList("data/games.json", "games-list", "cards");
   </script>
 </body>
