@@ -2,7 +2,7 @@
   const $ = (sel) => document.querySelector(sel);
 
   async function loadDemo() {
-    const res = await fetch("./data/poketracker-demo.json", { cache: "no-store" });
+    const res = await fetch("./poketracker-demo.json", { cache: "no-store" });
     return res.ok ? res.json() : [];
   }
 
