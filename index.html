@@ -28,7 +28,7 @@
     <!-- Projects -->
     <section id="projects" class="panel">
       <h2>Projects</h2>
-      <ul id="projects-list" class="list-grid"></ul>
+      <ul id="projects-list" class="card-grid"></ul>
     </section>
 
     <!-- Games -->
@@ -47,17 +47,24 @@
   <script>
     // ========== RENDER HELPERS ==========
 
-    // Legacy simple item (kept in case you want a plain list elsewhere)
-    function renderSimpleItem(x){
-      return `<li><a href="${x.path}">${x.title} (${x.date})</a></li>`;
-    }
-
-    // Projects with tags
-    function renderProjectItem(x){
+    // Projects with image + tags
+    function renderProjectCard(x){
+      const img = x.image || "";
       const tags = Array.isArray(x.tags) ? x.tags.slice(0,4) : [];
+
+      const thumb = img
+        ? `<a class="card-thumb" href="${x.path}" aria-label="${x.title}">
+             <img loading="lazy" src="${img}" alt="${x.title} thumbnail">
+           </a>`
+        : `<a class="card-thumb no-thumb" href="${x.path}" aria-label="${x.title}">
+             <span class="no-thumb-mark">📁</span>
+           </a>`;
+
       const tagBadges = tags.map(t => `<span class="tag">${t}</span>`).join("");
+
       return `
-        <li class="project-item card">
+        <li class="card">
+          ${thumb}
           <div class="card-body">
             <a class="card-title" href="${x.path}">${x.title}</a>
             <div class="muted">${x.date}</div>
@@ -67,7 +74,7 @@
       `;
     }
 
-    // Game cards
+    // Games with image + tags
     function renderGameCard(x){
       const img = x.image || "";
       const tags = Array.isArray(x.tags) ? x.tags.slice(0,4) : [];
@@ -94,7 +101,7 @@
     }
 
     // Generic loader with mode switch
-    async function loadList(jsonPath, targetId, mode="simple"){
+    async function loadList(jsonPath, targetId, mode="cards"){
       const el = document.getElementById(targetId);
       try {
         const res = await fetch(jsonPath, { cache: "no-store" });
@@ -102,12 +109,10 @@
         items.sort((a,b) => b.date.localeCompare(a.date));
 
         let html = "";
-        if (mode === "cards") {
+        if (mode === "projects") {
+          html = items.map(renderProjectCard).join("");
+        } else if (mode === "games") {
           html = items.map(renderGameCard).join("");
-        } else if (mode === "projects") {
-          html = items.map(renderProjectItem).join("");
-        } else {
-          html = items.map(renderSimpleItem).join("");
         }
 
         el.innerHTML = html || "<li><em>No items yet.</em></li>";
@@ -116,9 +121,9 @@
       }
     }
 
-    // Load projects (with tags) & games
+    // Load projects & games
     loadList("data/projects.json", "projects-list", "projects");
-    loadList("data/games.json", "games-list", "cards");
+    loadList("data/games.json", "games-list", "games");
   </script>
 </body>
 </html>
