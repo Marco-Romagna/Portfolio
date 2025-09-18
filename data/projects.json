@@ -3,6 +3,7 @@
     "title": "PokeTracker — Pokémon Trends Dashboard",
     "path": "projects/2025-09-18/poketracker/index.html",
     "date": "2025-09-18",
-    "tags": ["Supabase", "Automation", "Data Visualization"]
+    "image": "images/projects/poketracker-thumb.png",
+    "tags": ["Supabase", "Data Visualization", "Automation"]
   }
 ]
