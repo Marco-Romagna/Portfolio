@@ -1,0 +1,36 @@
+/* =========================
+   PokeTracker styles
+   ========================= */
+
+/* Local demo list */
+.demo-list {
+  list-style: none;
+  padding: 0;
+  margin: .5rem 0 0;
+}
+
+.demo-row {
+  display: grid;
+  grid-template-columns: 48px 1fr 64px;
+  gap: .5rem;
+  align-items: center;
+  padding: .5rem .75rem;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface);
+  margin-bottom: .4rem;
+}
+
+.demo-row .rank {
+  color: var(--muted);
+  font-weight: 700;
+}
+
+.demo-row .name {
+  font-weight: 600;
+}
+
+.demo-row .score {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
