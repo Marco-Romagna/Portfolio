@@ -6,8 +6,10 @@
   <title>PokeTracker • In Progress</title>
   <meta name="color-scheme" content="dark light" />
 
-  <!-- Global styles -->
+  <!-- Global site styles -->
   <link rel="stylesheet" href="../../../css/main.css">
+  <!-- Project-specific styles -->
+  <link rel="stylesheet" href="../../../css/projects/poketracker/styles.css">
 </head>
 <body class="site">
   <!-- Header -->
@@ -17,7 +19,8 @@
         <span class="dot"></span><span>Marco • Portfolio</span>
       </a>
       <nav class="links">
-        <a class="cta" href="https://www.linkedin.com/in/marco-romagna" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+        <a class="cta" href="https://www.linkedin.com/in/marco-romagna"
+           target="_blank" rel="noopener noreferrer">LinkedIn</a>
       </nav>
     </div>
   </header>
@@ -28,9 +31,17 @@
       <h1>PokeTracker</h1>
       <p><em>In progress.</em></p>
       <p class="muted">
-        Light summary: a small dashboard that aggregates official Pokémon popularity data and trend signals into a single view.
-        Uses Supabase for storage and scheduled pulls, plus simple charts for visualization.
+        Light summary: a dashboard that aggregates Pokémon popularity data 
+        (official surveys & trend signals) into a single view. 
+        Currently seeded with demo data.
       </p>
+    </section>
+
+    <!-- Demo section -->
+    <section class="panel">
+      <h2>Top Pokémon (demo)</h2>
+      <p class="muted">Week: <span id="demo-week">—</span></p>
+      <ul id="top-list" class="demo-list"></ul>
     </section>
   </main>
 
@@ -39,7 +50,7 @@
     <p>&copy; 2025 Marco Romagna</p>
   </footer>
 
-  <!-- No-mobile guard -->
-  <script src="../../../js/no-mobile.js"></script>
+  <!-- Project script -->
+  <script src="./js/app.js"></script>
 </body>
 </html>
