@@ -5,5 +5,12 @@
     "path": "games/2025-09-14/pokemon-sorting/",
     "image": "games/2025-09-14/pokemon-sorting/thumb.png",
     "tags": ["Pokemon", "Sorting", "Stats"]
+  },
+  {
+    "title": "KanaDevelopment",
+    "date": "2025-09-20",
+    "path": "games/2025-09-20/kana-development/",
+    "image": "games/2025-09-20/kana-development/thumb.png",
+    "tags": ["Japanese", "Kana", "Learning"]
   }
 ]
