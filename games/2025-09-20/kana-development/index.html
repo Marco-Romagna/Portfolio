@@ -5,91 +5,14 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>KanaDevelopment • Game</title>
 
-  <!-- Site styles -->
+  <!-- Global site styles -->
   <link rel="stylesheet" href="../../../css/main.css">
-  <style>
-    /* Page-local styles (kept tiny; uses your variables) */
-    .game-wrap { padding: 16px; }
-    .toolbar {
-      display: flex; gap: 8px; flex-wrap: wrap; align-items: center;
-      margin-bottom: 12px;
-    }
-    .toolbar label { color: var(--muted); font-size: .95rem; }
-    .pill {
-      padding: 6px 10px; border-radius: 999px;
-      border: 1px solid var(--border); background: var(--surface);
-      cursor: pointer; user-select: none;
-    }
-    .pill[aria-pressed="true"] {
-      border-color: color-mix(in oklab, var(--accent) 55%, transparent);
-      background: color-mix(in oklab, var(--accent) 16%, transparent);
-    }
-
-    .stage {
-      display: grid; gap: 14px;
-      grid-template-columns: 1fr;
-      max-width: 720px;
-      margin: 0 auto;
-    }
-
-    .card-big {
-      display: grid; place-items: center;
-      aspect-ratio: 16/9;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      font-size: clamp(48px, 12vw, 140px);
-      font-weight: 800;
-      letter-spacing: 2px;
-    }
-    .kana-sub {
-      margin-top: -10px;
-      font-size: clamp(16px, 2.5vw, 22px);
-      color: var(--muted);
-      font-weight: 600;
-    }
-
-    .choices {
-      display: grid; gap: 10px;
-      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-    }
-    .choice {
-      padding: 12px 14px;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      font-weight: 700;
-      cursor: pointer;
-      text-align: center;
-      transition: transform .08s ease, background .12s ease, border-color .12s ease;
-    }
-    .choice:hover { transform: translateY(-1px); }
-    .choice.correct {
-      border-color: #2ea043;
-      background: color-mix(in oklab, #2ea043 14%, transparent);
-    }
-    .choice.wrong {
-      border-color: #f85149;
-      background: color-mix(in oklab, #f85149 14%, transparent);
-    }
-
-    .footer-bar {
-      display: flex; justify-content: space-between; align-items: center;
-      gap: 10px; margin-top: 8px;
-      color: var(--muted);
-      font-size: .95rem;
-    }
-    .btn {
-      padding: 8px 12px; border-radius: 10px;
-      background: color-mix(in oklab, var(--accent) 18%, transparent);
-      border: 1px solid color-mix(in oklab, var(--accent) 40%, transparent);
-      color: var(--text); font-weight: 700; cursor: pointer;
-    }
-  </style>
+  <!-- Game-specific styles -->
+  <link rel="stylesheet" href="../../../css/games/kana-development/styles.css">
 </head>
 
 <body>
-  <!-- Header (same look/feel as portfolio) -->
+  <!-- Header -->
   <header class="header">
     <div class="container nav">
       <a class="brand" href="../../../index.html">
@@ -115,7 +38,6 @@
         <span style="width:12px"></span>
         <label>Set:</label>
         <button id="btn-set-a" class="pill" aria-pressed="true">a-row (a i u e o)</button>
-        <!-- Future: add K-row, S-row, etc. -->
       </div>
 
       <!-- Stage -->
@@ -140,107 +62,8 @@
   </main>
 
   <!-- Game logic -->
-  <script>
-    // Minimal dataset (expand later)
-    const HIRA = [
-      { k: "あ", r: "a" }, { k: "い", r: "i" }, { k: "う", r: "u" },
-      { k: "え", r: "e" }, { k: "お", r: "o" }
-    ];
-    const KATA = [
-      { k: "ア", r: "a" }, { k: "イ", r: "i" }, { k: "ウ", r: "u" },
-      { k: "エ", r: "e" }, { k: "オ", r: "o" }
-    ];
-
-    const state = {
-      mode: "hira",     // "hira" | "kata"
-      pool: HIRA,       // reference to current array
-      score: 0,
-      total: 0,
-      current: null     // {k, r}
-    };
-
-    const $ = sel => document.querySelector(sel);
-    const kanaChar = $("#kanaChar");
-    const kanaMeta = $("#kanaMeta");
-    const choicesEl = $("#choices");
-    const scoreEl = $("#score");
-    const totalEl = $("#total");
-
-    function pick(arr, n) {
-      // simple unique sample
-      const idxs = Array.from(arr.keys());
-      for (let i = idxs.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [idxs[i], idxs[j]] = [idxs[j], idxs[i]];
-      }
-      return idxs.slice(0, n).map(i => arr[i]);
-    }
-
-    function nextQuestion() {
-      state.total++;
-      totalEl.textContent = state.total;
-
-      // 1 correct + 3 distractors (or fewer if dataset small)
-      const correct = state.pool[Math.floor(Math.random() * state.pool.length)];
-      const distractors = state.pool.filter(x => x.r !== correct.r);
-      const options = [correct, ...pick(distractors, Math.min(3, distractors.length))];
-      // shuffle
-      for (let i = options.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [options[i], options[j]] = [options[j], options[i]];
-      }
-
-      state.current = correct;
-      kanaChar.textContent = correct.k;
-      kanaMeta.textContent = (state.mode === "hira" ? "Hiragana" : "Katakana") + " • " + correct.r;
-
-      // render options
-      choicesEl.innerHTML = "";
-      options.forEach(o => {
-        const b = document.createElement("button");
-        b.className = "choice";
-        b.type = "button";
-        b.textContent = o.r;
-        b.addEventListener("click", () => handleChoice(b, o));
-        choicesEl.appendChild(b);
-      });
-    }
-
-    function handleChoice(btn, chosen) {
-      // lock all buttons
-      [...choicesEl.children].forEach(c => c.disabled = true);
-
-      if (chosen.r === state.current.r) {
-        btn.classList.add("correct");
-        state.score++;
-        scoreEl.textContent = state.score;
-      } else {
-        btn.classList.add("wrong");
-        // highlight correct one
-        [...choicesEl.children].forEach(c => {
-          if (c.textContent === state.current.r) c.classList.add("correct");
-        });
-      }
-    }
-
-    // UI wiring
-    $("#btn-next").addEventListener("click", () => nextQuestion());
-
-    function setMode(mode) {
-      state.mode = mode;
-      state.pool = (mode === "hira") ? HIRA : KATA;
-      $("#btn-hira").setAttribute("aria-pressed", mode === "hira" ? "true" : "false");
-      $("#btn-kata").setAttribute("aria-pressed", mode === "kata" ? "true" : "false");
-      nextQuestion();
-    }
-    $("#btn-hira").addEventListener("click", () => setMode("hira"));
-    $("#btn-kata").addEventListener("click", () => setMode("kata"));
-
-    // boot
-    nextQuestion();
-  </script>
-
-  <!-- No-mobile overlay (your script) -->
+  <script src="game.js"></script>
+  <!-- No-mobile overlay -->
   <script src="../../../js/no-mobile.js"></script>
 </body>
 </html>
