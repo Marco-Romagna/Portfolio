@@ -3,15 +3,13 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>KanaDevelopment • Game</title>
+  <title>KanaDevelopment • Summary</title>
 
-  <!-- Global site styles -->
+  <!-- Global site styles only -->
   <link rel="stylesheet" href="../../../css/main.css">
-  <!-- Game-specific styles -->
-  <link rel="stylesheet" href="../../../css/games/kana-development/styles.css">
 </head>
 
-<body>
+<body class="site">
   <!-- Header -->
   <header class="header">
     <div class="container nav">
@@ -24,46 +22,34 @@
     </div>
   </header>
 
-  <main class="game-wrap container">
+  <!-- Main -->
+  <main class="container">
     <section class="panel">
       <h2>KanaDevelopment</h2>
-      <p class="muted">Quick drills for <strong>hiragana</strong> & <strong>katakana</strong>. Pick the correct romaji.</p>
+      <p class="muted">
+        A lightweight practice space for Japanese kana. This page is a placeholder with a brief summary only,
+        styled using the site’s global stylesheet. Interactive features will be added later.
+      </p>
+    </section>
 
-      <!-- Controls -->
-      <div class="toolbar" role="group" aria-label="Mode selector">
-        <label>Script:</label>
-        <button id="btn-hira" class="pill" aria-pressed="true">Hiragana</button>
-        <button id="btn-kata" class="pill" aria-pressed="false">Katakana</button>
-
-        <span style="width:12px"></span>
-        <label>Set:</label>
-        <button id="btn-set-a" class="pill" aria-pressed="true">a-row (a i u e o)</button>
-      </div>
-
-      <!-- Stage -->
-      <div class="stage">
-        <div class="card-big" id="kanaCard" aria-live="polite" aria-atomic="true">
-          <div>
-            <div id="kanaChar">あ</div>
-            <div class="kana-sub" id="kanaMeta">Hiragana • a</div>
-          </div>
-        </div>
-
-        <div class="choices" id="choices"></div>
-
-        <div class="footer-bar">
-          <div id="status">Score: <strong id="score">0</strong> / <span id="total">0</span></div>
-          <div>
-            <button class="btn" id="btn-next">Next</button>
-          </div>
-        </div>
-      </div>
+    <section class="panel">
+      <h2>Summary</h2>
+      <p>
+        KanaDevelopment focuses on quick recognition of <strong>hiragana</strong> and <strong>katakana</strong>.
+        The goal is to build speed and accuracy through short sessions. Future updates will introduce drills,
+        progress tracking, and configurable character sets.
+      </p>
     </section>
   </main>
 
-  <!-- Game logic -->
-  <script src="game.js"></script>
-  <!-- No-mobile overlay -->
-  <script src="../../../js/no-mobile.js"></script>
+  <!-- Footer -->
+  <footer class="footer">
+    © <span id="year"></span> Marco Romagna • All rights reserved
+  </footer>
+
+  <script>
+    // tiny nicety to keep the footer current, no extra files
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
 </body>
 </html>
