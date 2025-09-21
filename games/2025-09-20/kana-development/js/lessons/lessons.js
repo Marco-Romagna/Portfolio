@@ -19,29 +19,99 @@
 
   const startBtn = $('#part-1 .actions [data-action="advance"]');
 
-  // ------- data sets -------
-  const H = ['あ','い','う','え','お'];
-  const K = ['ア','イ','ウ','エ','オ'];
-  const ROMA_ALL = {
-    'あ':'a','い':'i','う':'u','え':'e','お':'o',
-    'ア':'a','イ':'i','ウ':'u','エ':'e','オ':'o'
-  };
-  const PAIR = { 'あ':'ア','い':'イ','う':'ウ','え':'エ','お':'オ', 'ア':'あ','イ':'い','ウ':'う','エ':'え','オ':'お' };
+  // ------- master sets -------
+  const H_VOW = ['あ','い','う','え','お'];
+  const K_VOW = ['ア','イ','ウ','エ','オ'];
 
-  let KANA = H;
-  let ROMA = { 'あ':'a','い':'i','う':'u','え':'e','お':'o' };
-  if (lessonId === '1-2') {
-    KANA = K;
-    ROMA = { 'ア':'a','イ':'i','ウ':'u','エ':'e','オ':'o' };
-  } else if (lessonId === '1-3') {
-    KANA = [...H, ...K]; // mixed
-    ROMA = ROMA_ALL;
+  const H_KA  = ['か','き','く','け','こ'];
+  const K_KA  = ['カ','キ','ク','ケ','コ'];
+
+  const H_GA  = ['が','ぎ','ぐ','げ','ご'];
+  const K_GA  = ['ガ','ギ','グ','ゲ','ゴ'];
+
+  // Romaji map (merge all we need)
+  const ROMA = {
+    // vowels
+    'あ':'a','い':'i','う':'u','え':'e','お':'o',
+    'ア':'a','イ':'i','ウ':'u','エ':'e','オ':'o',
+    // ka row
+    'か':'ka','き':'ki','く':'ku','け':'ke','こ':'ko',
+    'カ':'ka','キ':'ki','ク':'ku','ケ':'ke','コ':'ko',
+    // ga row
+    'が':'ga','ぎ':'gi','ぐ':'gu','げ':'ge','ご':'go',
+    'ガ':'ga','ギ':'gi','グ':'gu','ゲ':'ge','ゴ':'go'
+  };
+
+  // Cross-script pairs we need (for mixed identify)
+  const PAIR = {
+    // vowels
+    'あ':'ア','い':'イ','う':'ウ','え':'エ','お':'オ',
+    'ア':'あ','イ':'い','ウ':'う','エ':'え','オ':'お',
+    // ka
+    'か':'カ','き':'キ','く':'ク','け':'ケ','こ':'コ',
+    'カ':'か','キ':'き','ク':'く','ケ':'け','コ':'こ',
+    // ga
+    'が':'ガ','ぎ':'ギ','ぐ':'グ','げ':'ゲ','ご':'ゴ',
+    'ガ':'が','ギ':'ぎ','グ':'ぐ','ゲ':'げ','ゴ':'ご'
+  };
+
+  // ------- pick datasets per lesson -------
+  let KANA = H_VOW.slice();     // default 1-1
+  let MIXED_TYPE = false;       // mixed identify (needs PAIR)
+  let GOAL_IDENT = 15;          // part 2 goal
+  let GOAL_TYPE  = 15;          // part 3 goal
+  let COMBO_LAST = 5;           // part 3 last N points use combos
+  let WORLD1_COMBO_RULES = false; // world 1 extra rules for combos
+  let REQUIRE_MIXED_SCRIPTS_IN_COMBO = false; // 1-3 only
+
+  // World 1
+  if (lessonId === '1-1') {                 // H vowels
+    KANA = H_VOW.slice();
+    GOAL_IDENT = 15; GOAL_TYPE = 15; COMBO_LAST = 5;
+    WORLD1_COMBO_RULES = true;
+  } else if (lessonId === '1-2') {          // K vowels
+    KANA = K_VOW.slice();
+    GOAL_IDENT = 15; GOAL_TYPE = 15; COMBO_LAST = 5;
+    WORLD1_COMBO_RULES = true;
+  } else if (lessonId === '1-3') {          // mixed vowels
+    KANA = [...H_VOW, ...K_VOW];
+    MIXED_TYPE = true;
+    GOAL_IDENT = 20; GOAL_TYPE = 20; COMBO_LAST = 10; // per your spec
+    WORLD1_COMBO_RULES = true;
+    REQUIRE_MIXED_SCRIPTS_IN_COMBO = true;
+  }
+
+  // World 2 (K row + dakuten G row)
+  else if (lessonId === '2-1') {            // H ka-row
+    KANA = H_KA.slice();
+    GOAL_IDENT = 15; GOAL_TYPE = 15; COMBO_LAST = 5;
+  } else if (lessonId === '2-2') {          // K ka-row
+    KANA = K_KA.slice();
+    GOAL_IDENT = 15; GOAL_TYPE = 15; COMBO_LAST = 5;
+  } else if (lessonId === '2-3') {          // Mixed ka-row
+    KANA = [...H_KA, ...K_KA];
+    MIXED_TYPE = true;
+    GOAL_IDENT = 20; GOAL_TYPE = 20; COMBO_LAST = 10; // mirror mixed difficulty
+  } else if (lessonId === '2-4') {          // Type ka-row
+    KANA = [...H_KA, ...K_KA]; // typing can show either script
+    GOAL_IDENT = 15; GOAL_TYPE = 15; COMBO_LAST = 5;
+  } else if (lessonId === '2-5') {          // H ga-row
+    KANA = H_GA.slice();
+    GOAL_IDENT = 15; GOAL_TYPE = 15; COMBO_LAST = 5;
+  } else if (lessonId === '2-6') {          // K ga-row
+    KANA = K_GA.slice();
+    GOAL_IDENT = 15; GOAL_TYPE = 15; COMBO_LAST = 5;
+  } else if (lessonId === '2-7') {          // Mixed ga-row
+    KANA = [...H_GA, ...K_GA];
+    MIXED_TYPE = true;
+    GOAL_IDENT = 20; GOAL_TYPE = 20; COMBO_LAST = 10;
+  } else if (lessonId === '2-8') {          // Type ga-row
+    KANA = [...H_GA, ...K_GA];
+    GOAL_IDENT = 15; GOAL_TYPE = 15; COMBO_LAST = 5;
   }
 
   // ------- state -------
   let current   = 1;
-  let part2Done = false;
-  let part3Done = false;
 
   // ------- nav / progress -------
   function showPart(idx) {
@@ -58,25 +128,21 @@
   }
 
   // --------------------------------------------
-  // Part 1 — Preview (for 1-3, show pairs)
+  // Part 1 — Preview (make pairs when MIXED_TYPE)
   // --------------------------------------------
   (function initPart1() {
-    if (lessonId !== '1-3') return;
+    if (!MIXED_TYPE) return; // only show fancy pairs on mixed lessons
     const part1 = $('#part-1');
     if (!part1) return;
     const grid = $('.kana-grid', part1);
     if (!grid) return;
 
-    const PAIRS = [
-      { h:'あ', k:'ア', r:'a' },
-      { h:'い', k:'イ', r:'i' },
-      { h:'う', k:'ウ', r:'u' },
-      { h:'え', k:'エ', r:'e' },
-      { h:'お', k:'オ', r:'o' },
-    ];
+    // Build pairs from the hiragana half in KANA that also has a katakana pair
+    const hOnly = KANA.filter(g => /[\u3040-\u309F]/.test(g)); // hiragana range
+    const rows = hOnly.map(h => ({ h, k: PAIR[h], r: ROMA[h] })).filter(p => !!p.k);
 
     grid.innerHTML = '';
-    PAIRS.forEach(p => {
+    rows.forEach(p => {
       const card = document.createElement('article');
       card.className = 'pair-card';
       card.innerHTML = `
@@ -91,21 +157,21 @@
     });
 
     const title = $('#part-1 .part-title');
-    if (title) title.textContent = 'Mixed Vowels — Preview';
+    if (title) title.textContent = 'Mixed — Preview';
   })();
 
   // Part 1 → Part 2
   startBtn?.addEventListener('click', () => showPart(2));
 
   // ==========================================================
-  // Part 2 — Identify
-  // 1-1/1-2: same-script identify to 15
-  // 1-3: cross-script identify to 20 (H ↔ K counterpart)
-  // Anti-repeat: no same prompt twice; no per-slot option repeats
-  // Weighted by errors; lock each round (no correction)
+  // Part 2 — Identify (±1 meter, lock per round)
+  // mixed lessons: cross-script match (use PAIR)
+  // anti-repeat: no same prompt twice; no per-slot repeats
   // ==========================================================
-  const part2 = $('#part-2');
-  if (part2) {
+  (function initPart2() {
+    const part2 = $('#part-2');
+    if (!part2) return;
+
     const grid       = $('.quiz-options', part2);
     const feedback   = $('.quiz-feedback .feedback-text', part2);
     const promptEl   = $('.prompt-text .prompt-target', part2);
@@ -115,7 +181,7 @@
     const meterLabel = $('.quiz-progress .meter-label', part2);
     const nextBtn    = $('[data-action="next-part"]', part2);
 
-    const GOAL = (lessonId === '1-3') ? 20 : 15;
+    const GOAL = GOAL_IDENT;
     let progressPts = 0;
 
     const THEMES = ['theme-dark', 'theme-light', 'theme-sepia', 'theme-high'];
@@ -184,7 +250,7 @@
     }
 
     function pickPromptGlyph() {
-      if (lessonId !== '1-3') {
+      if (!MIXED_TYPE) {
         if (unseen.size > 0) {
           let choices = Array.from(unseen);
           if (choices.length > 1) choices = choices.filter(k => k !== lastPromptGlyph);
@@ -193,7 +259,9 @@
         return pickWeighted(weights, lastPromptGlyph);
       }
       // mixed: prompt from one script, answer from the other
-      const pool = Math.random() < 0.5 ? H : K;
+      const poolH = KANA.filter(g => /[\u3040-\u309F]/.test(g));
+      const poolK = KANA.filter(g => /[\u30A0-\u30FF]/.test(g));
+      const pool = Math.random() < 0.5 ? poolH : poolK;
       const poolWeights = Object.fromEntries(pool.map(g => [g, weights[g] || 1]));
       const unseenPool = pool.filter(g => unseen.has(g));
       if (unseenPool.length) {
@@ -211,8 +279,8 @@
       const promptGlyph = pickPromptGlyph();
       lastPromptGlyph = promptGlyph;
 
-      if (lessonId === '1-3') {
-        const isH = H.includes(promptGlyph);
+      if (MIXED_TYPE) {
+        const isH = /[\u3040-\u309F]/.test(promptGlyph);
         const otherLabel = isH ? 'katakana' : 'hiragana';
         if (promptText) {
           promptText.innerHTML = `Which <strong>${otherLabel}</strong> matches <strong class="prompt-target">“${promptGlyph}”</strong>?`;
@@ -226,9 +294,11 @@
 
       // Build options
       let options = [];
-      if (lessonId === '1-3') {
+      if (MIXED_TYPE) {
         const correct = PAIR[promptGlyph];
-        const pool = H.includes(promptGlyph) ? K : H;
+        const pool = /[\u3040-\u309F]/.test(promptGlyph)
+          ? KANA.filter(g => /[\u30A0-\u30FF]/.test(g))
+          : KANA.filter(g => /[\u3040-\u309F]/.test(g));
         const distractors = sample(pool.filter(g => g !== correct), 3);
         options = [correct, ...distractors];
       } else {
@@ -260,22 +330,16 @@
       const all = $$('.option', part2);
       all.forEach(b => { b.classList.add('is-disabled'); b.disabled = true; });
 
-      let isCorrect = false;
-      if (lessonId === '1-3') {
-        isCorrect = (choice === PAIR[promptGlyph]);
-      } else {
-        isCorrect = (choice === promptGlyph);
-      }
+      let isCorrect = MIXED_TYPE ? (choice === PAIR[promptGlyph]) : (choice === promptGlyph);
 
       if (isCorrect) {
         btn.classList.add('is-correct');
         setFeedback('Nice! That’s correct.');
 
-        const GOAL = (lessonId === '1-3') ? 20 : 15;
         progressPts = Math.min(GOAL, progressPts + 1);
         unseen.delete(promptGlyph);
 
-        if (lessonId === '1-3') {
+        if (MIXED_TYPE) {
           const counterpart = PAIR[promptGlyph];
           if (weights[promptGlyph]  !== undefined) weights[promptGlyph]  = Math.max(1, weights[promptGlyph]  - 1);
           if (weights[counterpart]  !== undefined) weights[counterpart]  = Math.max(1, weights[counterpart]  - 1);
@@ -287,7 +351,7 @@
 
         setTimeout(() => {
           if (progressPts >= GOAL) {
-            part2Done = true;
+            const nextBtn = $('[data-action="next-part"]', part2);
             nextBtn?.classList.remove('is-hidden');
             setFeedback('Part complete! Tap Next to continue.');
           } else {
@@ -299,7 +363,7 @@
         setFeedback('Try another.');
 
         progressPts = Math.max(0, progressPts - 1);
-        if (lessonId === '1-3') {
+        if (MIXED_TYPE) {
           const counterpart = PAIR[promptGlyph];
           if (weights[promptGlyph]  !== undefined) weights[promptGlyph]  = (weights[promptGlyph]  || 1) + 2;
           if (weights[counterpart]  !== undefined) weights[counterpart]  = (weights[counterpart]  || 1) + 2;
@@ -312,22 +376,22 @@
       }
     }
 
-    nextBtn?.addEventListener('click', () => showPart(3));
+    $('[data-action="next-part"]', part2)?.addEventListener('click', () => showPart(3));
 
     progressPts = 0; updateMeter(); nextQuestion();
-  }
+  })();
 
   // ==========================================================
-  // Part 3 — Type (romaji) with COMBO MODE
-  // Goals: 1-1/1-2 → 15 (combos start at 10), 1-3 → 20 (combos start at 10; last 10)
-  // No same glyph twice in a row (single mode); weighted by mistakes
-  // Combo mode: 3 kana displayed together (same style); user can type the
-  // full remaining string OR one-by-one across Enter presses. Never repeat
-  // the exact previous combo. For ALL lessons: 3 are DISTINCT.
-  // For 1-3: combo must include at least 1 hiragana and 1 katakana.
+  // Part 3 — Type (romaji) with combo mode
+  // 1-1/1-2: GOAL 15, combos last 5
+  // 1-3:    GOAL 20, combos last 10, 3 glyphs must be distinct + mixed scripts
+  // World 1 combos: all three glyphs must be different
+  // No same glyph twice in a row; weighted by mistakes; locked per round
   // ==========================================================
-  const part3 = $('#part-3');
-  if (part3) {
+  (function initPart3() {
+    const part3 = $('#part-3');
+    if (!part3) return;
+
     const wrapper    = $('.type-glyph-wrapper', part3);
     const input      = $('#type-input', part3);
     const meter      = $('.quiz-progress .meter', part3);
@@ -350,9 +414,8 @@
       actionBtn.classList.add('is-hidden');
     }
 
-    const GOAL = (lessonId === '1-3') ? 20 : 15;
-    // IMPORTANT: 1-3 uses last 10 points for combos; others last 5
-    const COMBO_THRESHOLD = (lessonId === '1-3') ? (GOAL - 10) : (GOAL - 5);
+    const GOAL = GOAL_TYPE;
+    const COMBO_THRESHOLD = GOAL - COMBO_LAST;
 
     let progressPts = 0;
     let roundLocked = false;
@@ -370,18 +433,6 @@
 
     const THEMES = ['theme-dark','theme-light','theme-sepia','theme-high'];
 
-    function pickWeighted(map, avoid=null, tries=10) {
-      const entries = Object.entries(map);
-      const total = entries.reduce((s, [,w]) => s + w, 0);
-      let best = entries[entries.length - 1][0];
-      for (let t = 0; t < tries; t++) {
-        let r = Math.random() * total;
-        for (const [key, w] of entries) { r -= w; if (r <= 0) { best = key; break; } }
-        if (!avoid || best !== avoid) return best;
-      }
-      return best;
-    }
-
     function updateMeter() {
       const clamped = Math.max(0, Math.min(GOAL, progressPts));
       const pct = Math.round((clamped / GOAL) * 100);
@@ -397,6 +448,19 @@
       wrapper.classList.add(pick);
     }
 
+    // weighted pick with avoidance
+    function pickWeighted(map, avoid=null, tries=10) {
+      const entries = Object.entries(map);
+      const total = entries.reduce((s, [,w]) => s + w, 0);
+      let best = entries[entries.length - 1][0];
+      for (let t = 0; t < tries; t++) {
+        let r = Math.random() * total;
+        for (const [key, w] of entries) { r -= w; if (r <= 0) { best = key; break; } }
+        if (!avoid || best !== avoid) return best;
+      }
+      return best;
+    }
+
     function renderGlyph(kana) {
       wrapper.innerHTML = '';
       const span = document.createElement('span');
@@ -406,17 +470,7 @@
       wrapper.appendChild(span);
     }
 
-    // Helpers to detect script
-    function isHiragana(ch) {
-      const code = ch.charCodeAt(0);
-      return code >= 0x3040 && code <= 0x309F;
-    }
-    function isKatakana(ch) {
-      const code = ch.charCodeAt(0);
-      return (code >= 0x30A0 && code <= 0x30FF) || (code >= 0x31F0 && code <= 0x31FF);
-    }
-
-    // --- single pick with no immediate repeat ---
+    // single pick with no immediate repeat; unseen first
     function pickNextKana() {
       const unseenArr = Array.from(unseen);
       if (unseenArr.length) {
@@ -427,60 +481,63 @@
       return pickWeighted(weights, lastKana);
     }
 
-    // --- combo generation:
-    //   • ALL lessons: 3 DISTINCT kana (no duplicates anywhere)
-    //   • 1-3: must include at least 1 hiragana and 1 katakana
-    //   • first avoids lastKana
-    //   • not equal to lastComboKey
+    // helpers for script detection
+    const isH = g => /[\u3040-\u309F]/.test(g);
+    const isK = g => /[\u30A0-\u30FF]/.test(g);
+
+    // build a 3-kana combo under rules:
+    // - first avoids lastKana
+    // - no adjacent duplicates
+    // - World 1 combos: all three glyphs must be different
+    // - For 1-3 specifically: include at least one H and at least one K
+    // - not equal to lastComboKey
     function makeCombo() {
-      const needMixedScripts = (lessonId === '1-3');
       for (let attempt = 0; attempt < 80; attempt++) {
-        // first avoids lastKana
-        const pool = [...KANA];
-        const firstChoices = pool.filter(k => k !== lastKana);
-        const first = firstChoices[Math.floor(Math.random() * firstChoices.length)];
+        const seq = [];
+        let first = pickNextKana();
+        seq.push(first);
 
-        // pick remaining two from remaining pool (to force all distinct)
-        const remaining1 = pool.filter(k => k !== first);
-        const second = remaining1[Math.floor(Math.random() * remaining1.length)];
-        const remaining2 = remaining1.filter(k => k !== second);
-        const third  = remaining2[Math.floor(Math.random() * remaining2.length)];
+        let second = pickWeighted(weights);
+        for (let t=0; t<12 && second === seq[seq.length-1]; t++) second = pickWeighted(weights);
+        seq.push(second);
 
-        const seq = [first, second, third];
+        let third = pickWeighted(weights);
+        for (let t=0; t<12 && third === seq[seq.length-1]; t++) third = pickWeighted(weights);
+        seq.push(third);
 
-        // enforce "distinct" for ALL lessons
-        if (new Set(seq).size !== 3) continue;
-
-        // for 1-3, require at least one H and one K
-        if (needMixedScripts) {
-          const hasH = seq.some(isHiragana);
-          const hasK = seq.some(isKatakana);
-          if (!hasH || !hasK) continue;
+        if (WORLD1_COMBO_RULES) {
+          // all distinct
+          if (new Set(seq).size !== 3) continue;
+          if (REQUIRE_MIXED_SCRIPTS_IN_COMBO) {
+            const hasH = seq.some(isH);
+            const hasK = seq.some(isK);
+            if (!(hasH && hasK)) continue;
+          }
         }
 
         const key = seq.join('');
-        if (key === lastComboKey) continue;
-
-        return { seq, key };
+        if (key !== lastComboKey) return { seq, key };
       }
-      // Fallback: best-effort distinct trio
-      const distinct = [...new Set(KANA)];
-      const seq = distinct.slice(0, 3);
+      // fallback (looser)
+      const seq = [pickNextKana(), pickWeighted(weights), pickWeighted(weights)];
       return { seq, key: seq.join('') };
     }
 
-    // render combo (all same color/fonts; spaced clearly)
+    // render combo (all same color/fonts; invisible spacers)
     function renderComboDisplay() {
       const cont = document.createElement('div');
       cont.className = 'combo-seq';
-      cont.style.display = 'flex';
-      cont.style.gap = '18px';
-      cont.style.alignItems = 'center';
-      comboSeq.forEach(k => {
+      comboSeq.forEach((k, idx) => {
         const s = document.createElement('span');
         s.className = 'kana-glyph type-glyph';
         s.textContent = k;
         cont.appendChild(s);
+        if (idx < comboSeq.length - 1) {
+          const spacer = document.createElement('span');
+          spacer.textContent = ' ';
+          spacer.style.opacity = '0';
+          cont.appendChild(spacer);
+        }
       });
       wrapper.innerHTML = '';
       wrapper.appendChild(cont);
@@ -551,7 +608,6 @@
 
           setTimeout(() => {
             if (progressPts >= GOAL) {
-              part3Done = true;
               actionBtn?.classList.remove('is-hidden');
             } else {
               newRound();
@@ -581,7 +637,6 @@
 
           setTimeout(() => {
             if (progressPts >= GOAL) {
-              part3Done = true;
               actionBtn?.classList.remove('is-hidden');
             } else {
               newRound();
@@ -610,7 +665,6 @@
 
             setTimeout(() => {
               if (progressPts >= GOAL) {
-                part3Done = true;
                 actionBtn?.classList.remove('is-hidden');
               } else {
                 newRound();
@@ -640,19 +694,29 @@
     actionBtn?.addEventListener('click', () => showPart(4));
 
     progressPts = 0; updateMeter(); newRound();
-  }
+  })();
 
   // ==========================================================
-  // Part 4 — Speak (placeholder for ALL lessons for now)
+  // Part 4 — Speak (placeholder for now, all lessons)
   // ==========================================================
-  const part4 = $('#part-4');
-  if (part4) {
+  (function initPart4() {
+    const part4 = $('#part-4');
+    if (!part4) return;
+
     const panel = $('.speak-panel', part4);
     if (panel) {
-      const sampleGlyph =
-        lessonId === '1-2' ? 'ア' :
-        lessonId === '1-3' ? (Math.random() < 0.5 ? 'あ' : 'ア') :
-        'あ';
+      // Pick a sample glyph that fits the lesson vibe
+      let sample = 'あ';
+      if (lessonId.startsWith('1-2')) sample = 'ア';
+      else if (lessonId === '1-3') sample = Math.random() < 0.5 ? 'あ' : 'ア';
+      else if (lessonId === '2-2' || lessonId === '2-6') sample = 'カ';
+      else if (lessonId === '2-3') sample = Math.random() < 0.5 ? 'か' : 'カ';
+      else if (lessonId === '2-4') sample = 'く';
+      else if (lessonId === '2-5') sample = 'が';
+      else if (lessonId === '2-6') sample = 'ガ';
+      else if (lessonId === '2-7') sample = Math.random() < 0.5 ? 'ぎ' : 'ギ';
+      else if (lessonId === '2-8') sample = 'ぐ';
+
       panel.innerHTML = `
         <div class="speak-placeholder" style="
           display:grid;
@@ -662,7 +726,7 @@
           padding:16px;
           text-align:center;
         ">
-          <div class="kana-glyph speak-glyph" aria-hidden="true">${sampleGlyph}</div>
+          <div class="kana-glyph speak-glyph" aria-hidden="true">${sample}</div>
           <p class="muted" style="margin:0;">
             Speaking practice is <strong>in progress</strong>.
           </p>
@@ -673,7 +737,7 @@
       `;
     }
 
-    // Local Finish button at bottom
+    // Local Finish button at bottom (same place as Part 2/3 Next)
     let finishBtn = $('[data-action="finish-lesson"]', part4);
     if (!finishBtn) {
       const actions = document.createElement('div');
@@ -689,7 +753,7 @@
     finishBtn?.addEventListener('click', () => {
       window.location.href = '../index.html';
     });
-  }
+  })();
 
   // Boot on Part 1
   showPart(1);
