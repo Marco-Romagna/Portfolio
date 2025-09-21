@@ -7,7 +7,7 @@
 
   <!-- Global site styles -->
   <link rel="stylesheet" href="../../../css/main.css">
-  <!-- Tiny page styles (just to make text-thumbs look like icons) -->
+  <!-- Game-specific styles -->
   <link rel="stylesheet" href="../../../css/games/kana-development/styles.css">
 </head>
 
@@ -49,24 +49,34 @@
     <section class="panel world">
       <h2 class="world-title"></h2>
       <p class="muted world-desc"></p>
-      <ul class="card-grid levels-grid"></ul>
+      <ul class="levels-list"></ul>
     </section>
   </template>
 
-  <template id="tpl-level-card">
-    <li class="card">
-      <a class="card-thumb no-thumb">
-        <span class="no-thumb-mark"></span>
-      </a>
-      <div class="card-body">
-        <a class="card-title"></a>
-        <div class="card-tags"></div>
-        <p class="muted desc"></p>
+  <template id="tpl-level-row">
+    <li class="level-row card">
+      <!-- Clickable header -->
+      <button class="level-head" type="button" aria-expanded="false">
+        <span class="level-icon no-thumb-mark"></span>
+        <span class="level-title"></span>
+        <span class="chev" aria-hidden="true">▸</span>
+      </button>
+
+      <!-- Collapsible body -->
+      <div class="level-body" hidden>
+        <div class="level-media">
+          <div class="level-thumb kana-thumb"></div>
+        </div>
+        <div class="level-info">
+          <p class="level-desc muted"></p>
+          <div class="level-tags"></div>
+          <a class="btn" data-role="start" href="#">Open Lesson</a>
+        </div>
       </div>
     </li>
   </template>
 
-  <!-- Scripts (all external) -->
+  <!-- Scripts -->
   <script src="js/stages.js"></script>
   <script src="js/render.js"></script>
   <script src="js/init.js"></script>
