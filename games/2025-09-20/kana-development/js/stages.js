@@ -15,7 +15,7 @@ window.KANA_STAGES = {
       href: "lessons/1-1.html",
       tags: ["Beginner", "Recommended"],
       desc: "あ い う え お — recognize and pronounce the five hiragana vowels.",
-      thumb: "images/levels/1-1.png"
+      thumb: "あ"
     },
     {
       code: "1-2",
@@ -23,7 +23,7 @@ window.KANA_STAGES = {
       href: "lessons/1-2.html",
       tags: ["Beginner"],
       desc: "ア イ ウ エ オ — learn the katakana counterparts.",
-      thumb: "images/levels/1-2.png"
+      thumb: "ア"
     }
   ]
 };
