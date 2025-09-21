@@ -233,3 +233,40 @@ body.site.mode-light, body.site {
 .lesson[data-lesson-id="1-1"] #part-2 [data-action="reshuffle"] {
   display: none !important;
 }
+/* ===== Part 2: meter + layout (Lesson 1-1) ===== */
+.lesson[data-lesson-id="1-1"] #part-2 .quiz-options {
+  grid-template-columns: repeat(2, minmax(260px, 1fr));
+}
+
+.lesson[data-lesson-id="1-1"] #part-2 .quiz-progress {
+  display: grid;
+  gap: 8px;
+  justify-items: center;
+  margin: 8px 0 6px;
+  color: color-mix(in oklab, var(--kp-text) 80%, var(--kp-muted));
+}
+
+.lesson[data-lesson-id="1-1"] #part-2 .meter {
+  width: min(560px, 90%);
+  height: 10px;
+  background: var(--kp-surface-2);
+  border: 1px solid var(--kp-border);
+  border-radius: 999px;
+  overflow: hidden;
+}
+.lesson[data-lesson-id="1-1"] #part-2 .meter-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--kp-accent), var(--kp-accent-2));
+  transition: width .2s ease;
+}
+.lesson[data-lesson-id="1-1"] #part-2 .meter-label {
+  font-size: .95rem;
+}
+
+.lesson[data-lesson-id="1-1"] #part-2 [data-action="next-part"].is-hidden {
+  display: none !important;
+}
+
+/* hide any leftover “New Options” if present */
+.lesson[data-lesson-id="1-1"] #part-2 [data-action="reshuffle"] { display: none !important; }
