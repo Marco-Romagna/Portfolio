@@ -1,70 +1,70 @@
 /* =========================================================
    Theme tokens
    ========================================================= */
-:root{
-  --kp-bg:#0f172a;
-  --kp-surface:#111827;
-  --kp-surface-2:#0b1224;
-  --kp-text:#e5e7eb;
-  --kp-muted:#9ca3af;
-  --kp-accent:#7c3aed;
-  --kp-accent-2:#22d3ee;
-  --kp-correct:#10b981;
-  --kp-wrong:#ef4444;
-  --kp-warn:#f59e0b;
-  --kp-border:#1f2937;
+:root {
+  --kp-bg: #0f172a;
+  --kp-surface: #111827;
+  --kp-surface-2: #0b1224;
+  --kp-text: #e5e7eb;
+  --kp-muted: #9ca3af;
+  --kp-accent: #7c3aed;
+  --kp-accent-2: #22d3ee;
+  --kp-correct: #10b981;
+  --kp-wrong: #ef4444;
+  --kp-warn: #f59e0b;
+  --kp-border: #1f2937;
 
-  --kp-radius:14px;
-  --kp-gap:14px;
-  --kp-shadow:0 10px 30px rgba(0,0,0,.35);
+  --kp-radius: 14px;
+  --kp-gap: 14px;
+  --kp-shadow: 0 10px 30px rgba(0,0,0,.35);
 }
 
 /* =========================================================
    Page basics
    ========================================================= */
 body.site.mode-light,
-body.site{
-  background:var(--kp-bg);
-  color:var(--kp-text);
+body.site {
+  background: var(--kp-bg);
+  color: var(--kp-text);
 }
 
 /* =========================================================
    Progress header (steps + thin progressbar)
    ========================================================= */
-.lesson-progress{ margin:18px 0 12px; }
+.lesson-progress { margin: 18px 0 12px; }
 
-.steps{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:var(--kp-gap);
-  list-style:none;
-  padding:0;
-  margin:0 0 8px;
+.steps {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--kp-gap);
+  list-style: none;
+  padding: 0;
+  margin: 0 0 8px;
 }
-.step{
-  background:var(--kp-surface);
-  border:1px solid var(--kp-border);
-  border-radius:var(--kp-radius);
-  padding:10px 12px;
-  text-align:center;
-  box-shadow:var(--kp-shadow);
-  transition:transform .15s ease,border-color .15s ease;
+.step {
+  background: var(--kp-surface);
+  border: 1px solid var(--kp-border);
+  border-radius: var(--kp-radius);
+  padding: 10px 12px;
+  text-align: center;
+  box-shadow: var(--kp-shadow);
+  transition: transform .15s ease, border-color .15s ease;
 }
-.step .step-label{ font-weight:700; display:block; }
-.step .step-sub{ color:var(--kp-muted); font-size:.9rem; }
-.step.is-active{ border-color:var(--kp-accent); transform:translateY(-2px); }
+.step .step-label { font-weight: 700; display: block; }
+.step .step-sub   { color: var(--kp-muted); font-size: .9rem; }
+.step.is-active   { border-color: var(--kp-accent); transform: translateY(-2px); }
 
-.progressbar{
-  height:6px;
-  background:var(--kp-surface-2);
-  border-radius:999px;
-  overflow:hidden;
-  border:1px solid var(--kp-border);
+.progressbar {
+  height: 6px;
+  background: var(--kp-surface-2);
+  border-radius: 999px;
+  overflow: hidden;
+  border: 1px solid var(--kp-border);
 }
-.progressbar-fill{
-  height:100%;
-  width:0%;
-  background:linear-gradient(90deg,var(--kp-accent),var(--kp-accent-2));
+.progressbar-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--kp-accent), var(--kp-accent-2));
 }
 
 /* =========================================================
@@ -74,266 +74,377 @@ body.site{
 .quiz-panel,
 .type-panel,
 .speak-panel,
-.panel{
-  background:var(--kp-surface);
-  border:1px solid var(--kp-border);
-  border-radius:var(--kp-radius);
-  box-shadow:var(--kp-shadow);
+.panel {
+  background: var(--kp-surface);
+  border: 1px solid var(--kp-border);
+  border-radius: var(--kp-radius);
+  box-shadow: var(--kp-shadow);
 }
 
-.kana-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(120px,1fr));
-  gap:var(--kp-gap);
-  margin-top:var(--kp-gap);
+.kana-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: var(--kp-gap);
+  margin-top: var(--kp-gap);
 }
-.kana-card{ padding:16px; display:grid; place-items:center; cursor:pointer; }
-.kana-glyph{ font-size:clamp(64px,10vw,120px); line-height:1; }
-.kana-sub{ color:var(--kp-muted); margin-top:6px; font-size:1.1rem; }
+.kana-card { padding: 16px; display: grid; place-items: center; cursor: pointer; }
+.kana-glyph { font-size: clamp(64px, 10vw, 120px); line-height: 1; }
+.kana-sub   { color: var(--kp-muted); margin-top: 6px; font-size: 1.1rem; }
 
-.part-title{ margin:0 0 12px; }
+.part-title { margin: 0 0 12px; }
 
-.actions{
-  display:flex;
-  gap:var(--kp-gap);
-  justify-content:center;
-  margin-top:12px;
+.actions {
+  display: flex;
+  gap: var(--kp-gap);
+  justify-content: center;
+  margin-top: 12px;
 }
 
-.btn{
-  background:var(--kp-surface-2);
-  color:var(--kp-text);
-  border:1px solid var(--kp-border);
-  padding:10px 14px;
-  border-radius:10px;
-  cursor:pointer;
-  font-weight:600;
+.btn {
+  background: var(--kp-surface-2);
+  color: var(--kp-text);
+  border: 1px solid var(--kp-border);
+  padding: 10px 14px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
 }
-.btn.primary{ background:var(--kp-accent); border-color:transparent; }
-.btn.ghost{ background:transparent; }
-.btn[disabled]{ opacity:.5; cursor:not-allowed; }
+.btn.primary { background: var(--kp-accent); border-color: transparent; }
+.btn.ghost   { background: transparent; }
+.btn[disabled] { opacity: .5; cursor: not-allowed; }
 
 /* Show only the active part */
-.lesson-part{ display:none; padding:16px; }
-.lesson-part.is-visible{ display:block; }
+.lesson-part { display: none; padding: 16px; }
+.lesson-part.is-visible { display: block; }
 
-/* Sticky global CTA (generally hidden because we use local buttons) */
-.lesson-cta{
-  position:sticky;
-  bottom:0;
-  display:flex;
-  justify-content:center;
-  padding:16px 0 8px;
-  background:linear-gradient(to top,rgba(0,0,0,.25),rgba(0,0,0,0));
+/* Sticky global CTA (used on some parts) */
+.lesson-cta {
+  position: sticky;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  padding: 16px 0 8px;
+  background: linear-gradient(to top, rgba(0,0,0,.25), rgba(0,0,0,0));
 }
-.lesson-cta .btn{ min-width:140px; }
-.is-hidden{ display:none !important; }
+.lesson-cta .btn { min-width: 140px; }
+.is-hidden { display: none !important; }
 
 /* =========================================================
-   Part 2 — Base quiz styles (generic)
+   Part 2 — Base quiz styles
    ========================================================= */
-.quiz-panel{ padding:16px; }
-.quiz-prompt{ text-align:center; margin-bottom:10px; }
-.prompt-text{ color:var(--kp-muted); }
-.prompt-text .prompt-target{ color:var(--kp-text); }
+.quiz-panel   { padding: 16px; }
+.quiz-prompt  { text-align: center; margin-bottom: 10px; }
+.prompt-text  { color: var(--kp-muted); }
+.prompt-text .prompt-target { color: var(--kp-text); }
 
-.quiz-options{
-  display:grid;
-  grid-template-columns:repeat(2,minmax(120px,1fr));
-  gap:var(--kp-gap);
-  margin:12px 0;
-}
-
-.option{
-  font-size:clamp(38px,7vw,64px);
-  line-height:1;
-  padding:16px;
-  background:var(--kp-surface-2);
-  border:2px solid var(--kp-border);
-  border-radius:var(--kp-radius);
-  cursor:pointer;
-  text-align:center;
-  transition:transform .1s ease,border-color .1s ease,background-color .1s ease;
-}
-.option:hover{ transform:translateY(-1px); border-color:var(--kp-accent); }
-.option.is-correct{
-  border-color:var(--kp-correct);
-  box-shadow:0 0 0 3px color-mix(in oklab,var(--kp-correct) 30%,transparent);
-}
-.option.is-wrong{
-  border-color:var(--kp-wrong);
-  box-shadow:0 0 0 3px color-mix(in oklab,var(--kp-wrong) 30%,transparent);
+.quiz-options {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(120px, 1fr));
+  gap: var(--kp-gap);
+  margin: 12px 0;
 }
 
-/* Feedback + meta */
-.quiz-feedback{ text-align:center; min-height:20px; color:var(--kp-muted); }
-.quiz-meta{ display:flex; gap:16px; justify-content:center; color:var(--kp-muted); }
+.option {
+  font-size: clamp(38px, 7vw, 64px);
+  line-height: 1;
+  padding: 16px;
+  background: var(--kp-surface-2);
+  border: 2px solid var(--kp-border);
+  border-radius: var(--kp-radius);
+  cursor: pointer;
+  text-align: center;
+  transition: transform .1s ease, border-color .1s ease, background-color .1s ease;
+}
+.option:hover { transform: translateY(-1px); border-color: var(--kp-accent); }
+.option.is-correct {
+  border-color: var(--kp-correct);
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--kp-correct) 30%, transparent);
+}
+.option.is-wrong {
+  border-color: var(--kp-wrong);
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--kp-wrong) 30%, transparent);
+}
+
+.quiz-feedback { text-align: center; min-height: 20px; color: var(--kp-muted); }
+.quiz-meta     { display: flex; gap: 16px; justify-content: center; color: var(--kp-muted); }
 
 /* =========================================================
-   Part 3 — Base typing styles (generic)
+   Part 3 — Base typing styles
    ========================================================= */
-.type-panel{ padding:16px; text-align:center; }
-.type-glyph-wrapper{ margin:4px 0 8px; }
-.type-glyph{ display:inline-block; font-size:clamp(80px,12vw,140px); line-height:1; }
+.type-panel          { padding: 16px; text-align: center; }
+.type-glyph-wrapper  { margin: 4px 0 8px; }
+.type-glyph          { display: inline-block; font-size: clamp(80px, 12vw, 140px); line-height: 1; }
 
-.type-input{
-  width:220px;
-  max-width:80%;
-  background:var(--kp-surface-2);
-  border:1px solid var(--kp-border);
-  color:var(--kp-text);
-  border-radius:10px;
-  padding:10px 12px;
-  text-align:center;
-  font-size:1.1rem;
+.type-input {
+  width: 220px;
+  max-width: 80%;
+  background: var(--kp-surface-2);
+  border: 1px solid var(--kp-border);
+  color: var(--kp-text);
+  border-radius: 10px;
+  padding: 10px 12px;
+  text-align: center;
+  font-size: 1.1rem;
 }
 
-.type-label,#type-help{ color:var(--kp-muted); }
-.type-glyph.state-idle{ color:var(--kp-text); }
-.type-glyph.state-correct{ color:var(--kp-correct); }
-.type-glyph.state-wrong{ color:var(--kp-wrong); }
-.type-meta{ margin-top:8px; color:var(--kp-muted); }
+.type-label, #type-help { color: var(--kp-muted); }
+.type-glyph.state-idle    { color: var(--kp-text); }
+.type-glyph.state-correct { color: var(--kp-correct); }
+.type-glyph.state-wrong   { color: var(--kp-wrong); }
+.type-meta { margin-top: 8px; color: var(--kp-muted); }
 
 /* =========================================================
    Part 4 — Speak (placeholder)
    ========================================================= */
-.speak-panel{ padding:16px; text-align:center; }
-.speak-glyph{ display:inline-block; font-size:clamp(80px,12vw,140px); }
-.speak-controls{ display:flex; gap:var(--kp-gap); justify-content:center; margin:10px 0; }
-.speak-status .status-line{ color:var(--kp-muted); }
+.speak-panel     { padding: 16px; text-align: center; }
+.speak-glyph     { display: inline-block; font-size: clamp(80px, 12vw, 140px); }
+.speak-controls  { display: flex; gap: var(--kp-gap); justify-content: center; margin: 10px 0; }
+.speak-status .status-line { color: var(--kp-muted); }
 
 /* =========================================================
-   Global “nice” upgrades applied to any lesson id 1-* or 2-*
-   (so World 1 and World 2 look consistent)
+   Lesson 1-1 and 1-2 — Hiragana/Katakana Vowels
    ========================================================= */
+:where(.lesson[data-lesson-id="1-1"], .lesson[data-lesson-id="1-2"]) .lesson-progress .progressbar { display: none; }
+:where(.lesson[data-lesson-id="1-1"], .lesson[data-lesson-id="1-2"]) #part-1 .kana-grid { margin-bottom: 2.5rem; }
 
-/* Hide thin progressbar (steps alone are enough) */
-:where(.lesson[data-lesson-id^="1-"], .lesson[data-lesson-id^="2-"]) .lesson-progress .progressbar{ display:none; }
+:where(.lesson[data-lesson-id="1-1"], .lesson[data-lesson-id="1-2"]) #part-2 .quiz-panel {
+  padding: 22px;
+  background: color-mix(in oklab, var(--kp-surface) 90%, black);
+  border: 1px solid var(--kp-border);
+  border-radius: var(--kp-radius);
+  box-shadow: var(--kp-shadow);
+}
+:where(.lesson[data-lesson-id="1-1"], .lesson[data-lesson-id="1-2"]) #part-2 .prompt-text {
+  font-size: 1.35rem; font-weight: 600; color: var(--kp-text); letter-spacing: .2px; text-align: center;
+}
+:where(.lesson[data-lesson-id="1-1"], .lesson[data-lesson-id="1-2"]) #part-2 .prompt-text .prompt-target {
+  font-size: 1.6rem; font-weight: 800;
+}
+:where(.lesson[data-lesson-id="1-1"], .lesson[data-lesson-id="1-2"]) #part-2 .quiz-options {
+  grid-template-columns: repeat(2, minmax(260px, 1fr)); gap: 18px; margin: 18px 0 12px;
+}
+:where(.lesson[data-lesson-id="1-1"], .lesson[data-lesson-id="1-2"]) #part-2 .option {
+  font-size: clamp(52px, 8vw, 96px); padding: 22px 18px; border-radius: 16px; border: 2px solid var(--kp-border);
+  user-select: none; transition: transform .08s ease, border-color .12s ease, box-shadow .12s ease, background-color .12s ease, color .12s ease;
+}
+:where(.lesson[data-lesson-id="1-1"], .lesson[data-lesson-id="1-2"]) #part-2 .option.theme-dark  { background:#0b1224; color:#e5e7eb; border-color:#2b3447; }
+:where(.lesson[data-lesson-id="1-1"], .lesson[data-lesson-id="1-2"]) #part-2 .option.theme-light { background:#f3f4f6; color:#0b1224; border-color:#cbd5e1; }
+:where(.lesson[data-lesson-id="1-1"], .lesson[data-lesson-id="1-2"]) #part-2 .option.theme-sepia { background:#f6eedb; color:#3b2f1a; border-color:#e3d4b4; }
+:where(.lesson[data-lesson-id="1-1"], .lesson[data-lesson-id="1-2"]) #part-2 .option.theme-high  { background:#000; color:#fff; border-color:#ffffffa8; }
+:where(.lesson[data-lesson-id="1-1"], .lesson[data-lesson-id="1-2"]) #part-2 .option.is-disabled { pointer-events: none; opacity: .55; }
 
-/* Part 1 extra spacing (where present) */
-:where(.lesson[data-lesson-id^="1-"], .lesson[data-lesson-id^="2-"]) #part-1 .kana-grid{ margin-bottom:2.5rem; }
-
-/* Part 2 upgrades */
-:where(.lesson[data-lesson-id^="1-"], .lesson[data-lesson-id^="2-"]) #part-2 .quiz-panel{
-  padding:22px;
-  background:color-mix(in oklab,var(--kp-surface) 90%, black);
-  border:1px solid var(--kp-border);
-  border-radius:var(--kp-radius);
-  box-shadow:var(--kp-shadow);
+:where(.lesson[data-lesson-id="1-1"], .lesson[data-lesson-id="1-2"]) #part-2 .quiz-progress {
+  display: grid; gap: 8px; justify-items: center; margin: 8px 0 6px;
+  color: color-mix(in oklab, var(--kp-text) 80%, var(--kp-muted));
 }
-:where(.lesson[data-lesson-id^="1-"], .lesson[data-lesson-id^="2-"]) #part-2 .prompt-text{
-  font-size:1.35rem; font-weight:600; color:var(--kp-text); letter-spacing:.2px; text-align:center;
+:where(.lesson[data-lesson-id="1-1"], .lesson[data-lesson-id="1-2"]) #part-2 .meter {
+  width: min(560px, 90%); height: 10px; background: var(--kp-surface-2); border: 1px solid var(--kp-border);
+  border-radius: 999px; overflow: hidden;
 }
-:where(.lesson[data-lesson-id^="1-"], .lesson[data-lesson-id^="2-"]) #part-2 .quiz-options{
-  grid-template-columns:repeat(2,minmax(260px,1fr));
-  gap:18px;
-  margin:18px 0 12px;
-}
-:where(.lesson[data-lesson-id^="1-"], .lesson[data-lesson-id^="2-"]) #part-2 .option{
-  font-size:clamp(52px,8vw,96px);
-  padding:22px 18px;
-  border-radius:16px;
-  border:2px solid var(--kp-border);
-  user-select:none;
-  transition:transform .08s ease,border-color .12s ease,box-shadow .12s ease,background-color .12s ease,color .12s ease;
-}
-:where(.lesson[data-lesson-id^="1-"], .lesson[data-lesson-id^="2-"]) #part-2 .option.theme-dark { background:#0b1224; color:#e5e7eb; border-color:#2b3447; }
-:where(.lesson[data-lesson-id^="1-"], .lesson[data-lesson-id^="2-"]) #part-2 .option.theme-light{ background:#f3f4f6; color:#0b1224; border-color:#cbd5e1; }
-:where(.lesson[data-lesson-id^="1-"], .lesson[data-lesson-id^="2-"]) #part-2 .option.theme-sepia{ background:#f6eedb; color:#3b2f1a; border-color:#e3d4b4; }
-:where(.lesson[data-lesson-id^="1-"], .lesson[data-lesson-id^="2-"]) #part-2 .option.theme-high { background:#000;    color:#fff;   border-color:#ffffffa8; }
-:where(.lesson[data-lesson-id^="1-"], .lesson[data-lesson-id^="2-"]) #part-2 .option.is-disabled{ pointer-events:none; opacity:.55; }
-
-:where(.lesson[data-lesson-id^="1-"], .lesson[data-lesson-id^="2-"]) #part-2 .quiz-progress{
-  display:grid; gap:8px; justify-items:center; margin:8px 0 6px;
-  color:color-mix(in oklab,var(--kp-text) 80%, var(--kp-muted));
-}
-:where(.lesson[data-lesson-id^="1-"], .lesson[data-lesson-id^="2-"]) #part-2 .meter{
-  width:min(560px,90%); height:10px; background:var(--kp-surface-2); border:1px solid var(--kp-border);
-  border-radius:999px; overflow:hidden;
-}
-:where(.lesson[data-lesson-id^="1-"], .lesson[data-lesson-id^="2-"]) #part-2 .meter-fill{
-  height:100%; width:0%; background:linear-gradient(90deg,var(--kp-accent),var(--kp-accent-2)); transition:width .2s ease;
+:where(.lesson[data-lesson-id="1-1"], .lesson[data-lesson-id="1-2"]) #part-2 .meter-fill {
+  height: 100%; width: 0%; background: linear-gradient(90deg, var(--kp-accent), var(--kp-accent-2)); transition: width .2s ease;
 }
 
-/* Part 3 upgrades */
-:where(.lesson[data-lesson-id^="1-"], .lesson[data-lesson-id^="2-"]) #part-3 .quiz-progress{
-  display:grid; gap:8px; justify-items:center; margin:16px 0 6px;
-  color:color-mix(in oklab,var(--kp-text) 80%, var(--kp-muted));
+:where(.lesson[data-lesson-id="1-1"], .lesson[data-lesson-id="1-2"]) #part-3 .quiz-progress {
+  display: grid; gap: 8px; justify-items: center; margin: 16px 0 6px;
+  color: color-mix(in oklab, var(--kp-text) 80%, var(--kp-muted));
 }
-:where(.lesson[data-lesson-id^="1-"], .lesson[data-lesson-id^="2-"]) #part-3 .meter{
-  width:min(560px,90%); height:10px; background:var(--kp-surface-2); border:1px solid var(--kp-border);
-  border-radius:999px; overflow:hidden;
+:where(.lesson[data-lesson-id="1-1"], .lesson[data-lesson-id="1-2"]) #part-3 .meter {
+  width: min(560px, 90%); height: 10px; background: var(--kp-surface-2); border: 1px solid var(--kp-border);
+  border-radius: 999px; overflow: hidden;
 }
-:where(.lesson[data-lesson-id^="1-"], .lesson[data-lesson-id^="2-"]) #part-3 .meter-fill{
-  height:100%; width:0%; background:linear-gradient(90deg,var(--kp-accent),var(--kp-accent-2)); transition:width .2s ease;
+:where(.lesson[data-lesson-id="1-1"], .lesson[data-lesson-id="1-2"]) #part-3 .meter-fill {
+  height: 100%; width: 0%; background: linear-gradient(90deg, var(--kp-accent), var(--kp-accent-2)); transition: width .2s ease;
 }
-:where(.lesson[data-lesson-id^="1-"], .lesson[data-lesson-id^="2-"]) #part-3 .type-glyph-wrapper{
-  display:grid; place-items:center; padding:24px; border-radius:var(--kp-radius);
-  border:1px solid var(--kp-border); margin:6px 0 12px;
+:where(.lesson[data-lesson-id="1-1"], .lesson[data-lesson-id="1-2"]) #part-3 .type-glyph-wrapper {
+  display: grid; place-items: center; padding: 24px; border-radius: var(--kp-radius);
+  border: 1px solid var(--kp-border); margin: 6px 0 12px;
 }
-:where(.lesson[data-lesson-id^="1-"], .lesson[data-lesson-id^="2-"]) #part-3 .type-glyph-wrapper.theme-dark { background:#0b1224; color:#e5e7eb; border-color:#2b3447; }
-:where(.lesson[data-lesson-id^="1-"], .lesson[data-lesson-id^="2-"]) #part-3 .type-glyph-wrapper.theme-light{ background:#f3f4f6; color:#0b1224; border-color:#cbd5e1; }
-:where(.lesson[data-lesson-id^="1-"], .lesson[data-lesson-id^="2-"]) #part-3 .type-glyph-wrapper.theme-sepia{ background:#f6eedb; color:#3b2f1a; border-color:#e3d4b4; }
-:where(.lesson[data-lesson-id^="1-"], .lesson[data-lesson-id^="2-"]) #part-3 .type-glyph-wrapper.theme-high { background:#000;    color:#fff;   border-color:#ffffffa8; }
+:where(.lesson[data-lesson-id="1-1"], .lesson[data-lesson-id="1-2"]) #part-3 .type-glyph-wrapper.theme-dark  { background:#0b1224; color:#e5e7eb; border-color:#2b3447; }
+:where(.lesson[data-lesson-id="1-1"], .lesson[data-lesson-id="1-2"]) #part-3 .type-glyph-wrapper.theme-light { background:#f3f4f6; color:#0b1224; border-color:#cbd5e1; }
+:where(.lesson[data-lesson-id="1-1"], .lesson[data-lesson-id="1-2"]) #part-3 .type-glyph-wrapper.theme-sepia { background:#f6eedb; color:#3b2f1a; border-color:#e3d4b4; }
+:where(.lesson[data-lesson-id="1-1"], .lesson[data-lesson-id="1-2"]) #part-3 .type-glyph-wrapper.theme-high  { background:#000; color:#fff; border-color:#ffffffa8; }
 
-:where(.lesson[data-lesson-id^="1-"], .lesson[data-lesson-id^="2-"]) #part-3 .type-input{
-  width:min(380px,90%);
-  margin:0 auto;
-  display:block;
-  background:#0e152a;
-  border:1px solid #1e2a42;
-  color:var(--kp-text);
-  border-radius:999px;
-  padding:12px 16px;
-  font-size:1.05rem;
-  text-align:center;
-  outline:none;
-  transition:box-shadow .15s ease,border-color .15s ease,background-color .15s ease;
+:where(.lesson[data-lesson-id="1-1"], .lesson[data-lesson-id="1-2"]) #part-3 .type-input {
+  width: min(380px, 90%); margin: 0 auto; display: block; background: #0e152a; border: 1px solid #1e2a42;
+  color: var(--kp-text); border-radius: 999px; padding: 12px 16px; font-size: 1.05rem; text-align: center; outline: none;
+  transition: box-shadow .15s ease, border-color .15s ease, background-color .15s ease;
 }
-:where(.lesson[data-lesson-id^="1-"], .lesson[data-lesson-id^="2-"]) #part-3 .type-input:focus{
-  border-color:var(--kp-accent);
-  box-shadow:0 0 0 4px color-mix(in oklab,var(--kp-accent) 25%, transparent);
-  background:#0c1124;
+:where(.lesson[data-lesson-id="1-1"], .lesson[data-lesson-id="1-2"]) #part-3 .type-input:focus {
+  border-color: var(--kp-accent); box-shadow: 0 0 0 4px color-mix(in oklab, var(--kp-accent) 25%, transparent); background: #0c1124;
 }
 
 /* =========================================================
-   Lesson 1-3 — Pair preview cards (unique to mixed vowels)
+   Lesson 1-3 — Mixed Vowels
    ========================================================= */
-.lesson[data-lesson-id="1-3"] #part-1 .kana-grid{
-  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-  gap:16px;
-  margin-bottom:2.5rem;
+.lesson[data-lesson-id="1-3"] .lesson-progress .progressbar { display: none; }
+
+.lesson[data-lesson-id="1-3"] #part-1 .kana-grid {
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+  margin-bottom: 2.5rem;
 }
-.lesson[data-lesson-id="1-3"] #part-1 .pair-card{
-  background:var(--kp-surface);
-  border:1px solid var(--kp-border);
-  border-radius:var(--kp-radius);
-  box-shadow:var(--kp-shadow);
-  padding:14px 12px;
-  display:grid;
-  gap:8px;
+.lesson[data-lesson-id="1-3"] #part-1 .pair-card {
+  background: var(--kp-surface);
+  border: 1px solid var(--kp-border);
+  border-radius: var(--kp-radius);
+  box-shadow: var(--kp-shadow);
+  padding: 14px 12px;
+  display: grid;
+  gap: 8px;
 }
-.lesson[data-lesson-id="1-3"] #part-1 .pair-row{
-  display:grid;
-  grid-template-columns:1fr auto 1fr;
-  align-items:center;
-  gap:8px;
+.lesson[data-lesson-id="1-3"] #part-1 .pair-row {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 8px;
 }
-.lesson[data-lesson-id="1-3"] #part-1 .glyph{
-  font-size:clamp(54px,9vw,100px);
-  line-height:1;
-  text-align:center;
+.lesson[data-lesson-id="1-3"] #part-1 .glyph {
+  font-size: clamp(54px, 9vw, 100px);
+  line-height: 1;
+  text-align: center;
 }
-.lesson[data-lesson-id="1-3"] #part-1 .link{
-  color:var(--kp-muted);
-  font-size:1.2rem;
-  text-align:center;
+.lesson[data-lesson-id="1-3"] #part-1 .link {
+  color: var(--kp-muted);
+  font-size: 1.2rem;
+  text-align: center;
 }
-.lesson[data-lesson-id="1-3"] #part-1 .pair-romaji{
-  text-align:center;
-  color:var(--kp-muted);
-  font-weight:600;
-  letter-spacing:.2px;
-  font-size:1.05rem;
+.lesson[data-lesson-id="1-3"] #part-1 .pair-romaji {
+  text-align: center;
+  color: var(--kp-muted);
+  font-weight: 600;
+  letter-spacing: .2px;
+  font-size: 1.05rem;
 }
 
+.lesson[data-lesson-id="1-3"] #part-2 .quiz-panel {
+  padding: 22px;
+  background: color-mix(in oklab, var(--kp-surface) 90%, black);
+  border: 1px solid var(--kp-border);
+  border-radius: var(--kp-radius);
+  box-shadow: var(--kp-shadow);
+}
+.lesson[data-lesson-id="1-3"] #part-2 .prompt-text {
+  font-size: 1.35rem; font-weight: 600; color: var(--kp-text); letter-spacing: .2px; text-align: center;
+}
+.lesson[data-lesson-id="1-3"] #part-2 .quiz-options {
+  grid-template-columns: repeat(2, minmax(260px, 1fr));
+  gap: 18px;
+  margin: 18px 0 12px;
+}
+.lesson[data-lesson-id="1-3"] #part-2 .option {
+  font-size: clamp(52px, 8vw, 96px);
+  padding: 22px 18px;
+  border-radius: 16px;
+  border: 2px solid var(--kp-border);
+  user-select: none;
+  transition: transform .08s ease, border-color .12s ease, box-shadow .12s ease, background-color .12s ease, color .12s ease;
+}
+.lesson[data-lesson-id="1-3"] #part-2 .option.theme-dark  { background:#0b1224; color:#e5e7eb; border-color:#2b3447; }
+.lesson[data-lesson-id="1-3"] #part-2 .option.theme-light { background:#f3f4f6; color:#0b1224; border-color:#cbd5e1; }
+.lesson[data-lesson-id="1-3"] #part-2 .option.theme-sepia { background:#f6eedb; color:#3b2f1a; border-color:#e3d4b4; }
+.lesson[data-lesson-id="1-3"] #part-2 .option.theme-high  { background:#000; color:#fff; border-color:#ffffffa8; }
+.lesson[data-lesson-id="1-3"] #part-2 .option.is-disabled { pointer-events: none; opacity: .55; }
+
+.lesson[data-lesson-id="1-3"] #part-2 .quiz-progress {
+  display: grid; gap: 8px; justify-items: center; margin: 8px 0 6px;
+  color: color-mix(in oklab, var(--kp-text) 80%, var(--kp-muted));
+}
+.lesson[data-lesson-id="1-3"] #part-2 .meter {
+  width: min(560px, 90%); height: 10px; background: var(--kp-surface-2); border: 1px solid var(--kp-border);
+  border-radius: 999px; overflow: hidden;
+}
+.lesson[data-lesson-id="1-3"] #part-2 .meter-fill {
+  height: 100%; width: 0%; background: linear-gradient(90deg, var(--kp-accent), var(--kp-accent-2)); transition: width .2s ease;
+}
+.lesson[data-lesson-id="1-3"] #part-2 .meter-label { font-size: .95rem; }
+
+.lesson[data-lesson-id="1-3"] #part-3 .quiz-progress {
+  display: grid; gap: 8px; justify-items: center; margin: 16px 0 6px;
+  color: color-mix(in oklab, var(--kp-text) 80%, var(--kp-muted));
+}
+.lesson[data-lesson-id="1-3"] #part-3 .meter {
+  width: min(560px, 90%); height: 10px; background: var(--kp-surface-2); border: 1px solid var(--kp-border);
+  border-radius: 999px; overflow: hidden;
+}
+.lesson[data-lesson-id="1-3"] #part-3 .meter-fill {
+  height: 100%; width: 0%; background: linear-gradient(90deg, var(--kp-accent), var(--kp-accent-2)); transition: width .2s ease;
+}
+.lesson[data-lesson-id="1-3"] #part-3 .type-glyph-wrapper {
+  display: grid; place-items: center; padding: 24px; border-radius: var(--kp-radius);
+  border: 1px solid var(--kp-border); margin: 6px 0 12px;
+}
+.lesson[data-lesson-id="1-3"] #part-3 .type-glyph-wrapper.theme-dark  { background:#0b1224; color:#e5e7eb; border-color:#2b3447; }
+.lesson[data-lesson-id="1-3"] #part-3 .type-glyph-wrapper.theme-light { background:#f3f4f6; color:#0b1224; border-color:#cbd5e1; }
+.lesson[data-lesson-id="1-3"] #part-3 .type-glyph-wrapper.theme-sepia { background:#f6eedb; color:#3b2f1a; border-color:#e3d4b4; }
+.lesson[data-lesson-id="1-3"] #part-3 .type-glyph-wrapper.theme-high  { background:#000; color:#fff; border-color:#ffffffa8; }
+.lesson[data-lesson-id="1-3"] #part-3 .type-input {
+  width: min(380px, 90%); margin: 0 auto; display: block; background: #0e152a; border: 1px solid #1e2a42;
+  color: var(--kp-text); border-radius: 999px; padding: 12px 16px; font-size: 1.05rem; text-align: center; outline: none;
+  transition: box-shadow .15s ease, border-color .15s ease, background-color .15s ease;
+}
+.lesson[data-lesson-id="1-3"] #part-3 .type-input:focus {
+  border-color: var(--kp-accent); box-shadow: 0 0 0 4px color-mix(in oklab, var(--kp-accent) 25%, transparent); background: #0c1124;
+}
+
+/* =========================================================
+   Lesson 1-4 — Type Vowels (romaji only)
+   ========================================================= */
+.lesson[data-lesson-id="1-4"] .lesson-progress .progressbar { display: none; }
+.lesson[data-lesson-id="1-4"] #part-1 .kana-grid { margin-bottom: 2.5rem; }
+
+.lesson[data-lesson-id="1-4"] #part-2 .type-glyph-wrapper {
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  border-radius: var(--kp-radius);
+  border: 1px solid var(--kp-border);
+  margin: 6px 0 12px;
+}
+.lesson[data-lesson-id="1-4"] #part-2 .type-glyph-wrapper.theme-dark  { background:#0b1224; color:#e5e7eb; border-color:#2b3447; }
+.lesson[data-lesson-id="1-4"] #part-2 .type-glyph-wrapper.theme-light { background:#f3f4f6; color:#0b1224; border-color:#cbd5e1; }
+.lesson[data-lesson-id="1-4"] #part-2 .type-glyph-wrapper.theme-sepia { background:#f6eedb; color:#3b2f1a; border-color:#e3d4b4; }
+.lesson[data-lesson-id="1-4"] #part-2 .type-glyph-wrapper.theme-high  { background:#000; color:#fff; border-color:#ffffffa8; }
+
+.lesson[data-lesson-id="1-4"] #part-2 .type-input {
+  width: min(380px, 90%);
+  margin: 0 auto;
+  display: block;
+  background: #0e152a;
+  border: 1px solid #1e2a42;
+  color: var(--kp-text);
+  border-radius: 999px;
+  padding: 12px 16px;
+  font-size: 1.05rem;
+  text-align: center;
+  outline: none;
+  transition: box-shadow .15s ease, border-color .15s ease, background-color .15s ease;
+}
+.lesson[data-lesson-id="1-4"] #part-2 .type-input:focus {
+  border-color: var(--kp-accent);
+  box-shadow: 0 0 0 4px color-mix(in oklab, var(--kp-accent) 25%, transparent);
+  background: #0c1124;
+}
+
+.lesson[data-lesson-id="1-4"] #part-2 .quiz-progress {
+  display: grid;
+  gap: 8px;
+  justify-items: center;
+  margin: 16px 0 6px;
+  color: color-mix(in oklab, var(--kp-text) 80%, var(--kp-muted));
+}
+.lesson[data-lesson-id="1-4"] #part-2 .meter {
+  width: min(560px, 90%);
+  height: 10px;
+  background: var(--kp-surface-2);
+  border: 1px solid var(--kp-border);
+  border-radius: 999px;
+  overflow: hidden;
+}
+.lesson[data-lesson-id="1-4"] #part-2 .meter-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--kp-accent), var(--kp-accent-2));
+  transition: width .2s ease;
+}
+.lesson[data-lesson-id="1-4"] #part-2 .meter-label { font-size: .95rem; }
