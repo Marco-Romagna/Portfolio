@@ -12,7 +12,7 @@ window.KANA_STAGES = {
   {
     code: "1-1",
     title: "1-1 — Hiragana Vowels",
-    href: "js/lessons/1-1.js",
+    href: "js/lessons/1-1.html",
     thumb: "あ"
   },
   {
