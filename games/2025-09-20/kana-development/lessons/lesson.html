@@ -9,6 +9,7 @@
   <link rel="stylesheet" href="../../../../css/games/kana-development/styles.css">
   <link rel="stylesheet" href="../../../../css/games/kana-development/lessons.css">
 </head>
+
 <body class="site mode-light">
   <header class="header">
     <div class="container nav">
@@ -16,9 +17,11 @@
     </div>
   </header>
 
-  <main id="lesson-root" class="container game-wrap lesson"></main>
+  <main class="container game-wrap lesson" data-lesson-id="" data-total-parts="4">
+    <!-- JS will inject parts here -->
+  </main>
 
-  <script src="../js/stages.js"></script>
-  <script src="../js/lessons.js"></script>
+  <script defer src="../js/stages.js"></script>
+  <script defer src="../js/lessons.js"></script>
 </body>
 </html>
