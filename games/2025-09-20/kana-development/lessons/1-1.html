@@ -5,13 +5,12 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>1-1 — Hiragana Vowels</title>
 
-  <!-- Global + lesson styles -->
+  <!-- Styles -->
   <link rel="stylesheet" href="../../../../css/main.css">
   <link rel="stylesheet" href="../../../../css/games/kana-development/lessons.css">
 </head>
 
-<body class="site">
-  <!-- Header -->
+<body class="site mode-light"> <!-- fixed to white card/dark text for this page -->
   <header class="header">
     <div class="container nav">
       <a class="brand" href="../index.html">
@@ -20,94 +19,42 @@
     </div>
   </header>
 
-  <!-- Lesson -->
   <main class="container game-wrap">
     <section class="stage">
-      <!-- Flashcard (appearance controlled by card-mode.js) -->
+      <!-- Flashcard -->
       <div class="card-big">
         あ
         <div class="kana-sub">a</div>
       </div>
 
-      <!-- Intro text -->
-      <div class="muted" style="text-align:center">Tap a vowel to hear it.</div>
+      <!-- Reserved slot for future audio UI (kept empty for now) -->
+      <div class="audio-slot" aria-hidden="true"></div>
 
-      <!-- The five vowels (click to play sound) -->
-      <div class="choices" id="vowelBtns">
-        <button class="choice" data-romaji="a">あ</button>
-        <button class="choice" data-romaji="i">い</button>
-        <button class="choice" data-romaji="u">う</button>
-        <button class="choice" data-romaji="e">え</button>
-        <button class="choice" data-romaji="o">お</button>
+      <!-- Instruction -->
+      <p class="muted center">Tap a vowel.</p>
+
+      <!-- Vowels -->
+      <div class="choices choices-wide" id="vowelBtns">
+        <button class="choice">あ</button>
+        <button class="choice">い</button>
+        <button class="choice">う</button>
+        <button class="choice">え</button>
+        <button class="choice">お</button>
       </div>
 
-      <!-- Footer -->
+      <!-- Footer / nav -->
       <div class="footer-bar">
         <span>Level 1-1 — Hiragana Vowels</span>
-        <a class="btn" href="1-2.html">Next: 1-2</a>
+        <a class="btn" href="1-2.html">Next</a>
       </div>
     </section>
   </main>
 
-  <!-- Footer -->
   <footer class="footer">
     © <span id="year"></span> Marco Romagna • All rights reserved
   </footer>
 
-  <!-- Scripts -->
-  <script>
-    // footer year
-    document.getElementById("year").textContent = new Date().getFullYear();
-
-    // Simple audio: use Web Speech (ja-JP). Falls back to romaji if no jp voice available.
-    (function setupVowelAudio(){
-      const btns = document.querySelectorAll('#vowelBtns .choice');
-
-      function speakKana(kana, romaji){
-        try {
-          const u = new SpeechSynthesisUtterance(kana);
-          u.lang = 'ja-JP';
-          u.rate = 0.9;
-          u.pitch = 1.0;
-
-          // Prefer a Japanese voice if present
-          const voices = speechSynthesis.getVoices();
-          const jp = voices.find(v => v.lang && v.lang.toLowerCase().startsWith('ja'));
-          if (jp) u.voice = jp;
-
-          // If no Japanese voice at all, speak the romaji so it's not silent
-          if (!jp) u.text = romaji;
-
-          speechSynthesis.cancel(); // stop any previous
-          speechSynthesis.speak(u);
-        } catch (e) {
-          // As a last resort, do nothing (no alert spam for learners)
-          console.warn('Speech synthesis not available:', e);
-        }
-      }
-
-      // Some browsers populate voices asynchronously
-      if (typeof speechSynthesis !== 'undefined') {
-        speechSynthesis.onvoiceschanged = () => {};
-      }
-
-      btns.forEach(b => {
-        b.addEventListener('click', () => {
-          const kana = b.textContent.trim();
-          const romaji = b.dataset.romaji || '';
-          speakKana(kana, romaji);
-
-          // also reflect current kana on the flashcard
-          const card = document.querySelector('.card-big');
-          const sub  = card?.querySelector('.kana-sub');
-          if (card) card.firstChild.nodeValue = kana; // update main glyph
-          if (sub)  sub.textContent = romaji;
-        });
-      });
-    })();
-  </script>
-
-  <!-- Dev-controlled mode (light/dark/sepia/auto/cycle) -->
-  <script src="../js/card-mode.js"></script>
+  <!-- Scripts: split, minimal (no audio yet) -->
+  <script src="../js/lesson-1-1.js"></script>
 </body>
 </html>
