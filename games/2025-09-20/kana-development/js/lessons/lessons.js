@@ -6,6 +6,7 @@
   const lesson = $('.lesson');
   if (!lesson) return;
 
+  const lessonId   = lesson.dataset.lessonId || '1-1';
   const totalParts = Number(lesson.dataset.totalParts || 4);
   const parts      = $$('.lesson-part');
   const steps      = $$('.steps .step');
@@ -20,15 +21,18 @@
   // Part 1 local Start
   const startBtn = $('#part-1 .actions [data-action="advance"]');
 
-  // ------- lesson data (for 1-1) -------
-  const KANA = ['あ','い','う','え','お'];
-  const ROMA = { 'あ':'a','い':'i','う':'u','え':'e','お':'o' };
+  // ------- lesson data (Hiragana 1-1, Katakana 1-2) -------
+  let KANA = ['あ','い','う','え','お'];
+  let ROMA = { 'あ':'a','い':'i','う':'u','え':'e','お':'o' };
+  if (lessonId === '1-2') {
+    KANA = ['ア','イ','ウ','エ','オ'];
+    ROMA = { 'ア':'a','イ':'i','ウ':'u','エ':'e','オ':'o' };
+  }
 
   // ------- state -------
   let current   = 1;
   let part2Done = false;
   let part3Done = false;
-  let part4Done = false;
 
   // ------- nav / progress -------
   function showPart(idx) {
@@ -41,8 +45,8 @@
     if (fill) fill.style.width = `${pct}%`;
     if (progress) progress.setAttribute('aria-valuenow', String(pct));
 
-    // Hide sticky CTA on parts with local buttons
-    if (current === 1 || current === 2 || current === 3 || current === 4) hideCTA();
+    // Hide sticky CTA on all parts; we use local Next/Finish
+    hideCTA();
   }
 
   // Sticky CTA click (fallback)
@@ -137,7 +141,7 @@
         }
         if (ok) return perm;
       }
-      // fallback: try swapping to break conflicts
+      // fallback: swap to break conflicts
       const perm = [...opts];
       for (let i = 0; i < perm.length; i++) {
         if (perm[i] === prevOptionAtIndex[i]) {
@@ -202,7 +206,7 @@
         setTimeout(() => {
           if (progressPts >= GOAL) {
             part2Done = true;
-            nextBtn?.classList.remove('is-hidden');
+            nextBtn?.classList.remove('is-hidden'); // show local Next under panel
             setFeedback('Part complete! Tap Next to continue.');
           } else {
             nextQuestion();
@@ -235,7 +239,7 @@
   // ==========================================================
   const part3 = $('#part-3');
   if (part3) {
-    const wrapper    = $('.type-glyph-wrapper', part3);  // render glyphs/combo inside this node
+    const wrapper    = $('.type-glyph-wrapper', part3);  // render glyphs or combo here
     const input      = $('#type-input', part3);
     const meter      = $('.quiz-progress .meter', part3);
     const meterFill  = $('.quiz-progress .meter-fill', part3);
@@ -315,19 +319,21 @@
 
     // --- COMBO GENERATION ---
     function makeCombo() {
-      // generate a 3-kana sequence: no consecutive duplicates,
-      // first element avoids lastKanaP3; and not equal to lastComboKey
+      // 3-kana sequence: no immediate duplicates; first avoids lastKanaP3;
+      // not equal to lastComboKey
       for (let attempt = 0; attempt < 50; attempt++) {
         const seq = [];
         let first = pickNextKanaAvoidRepeat();
         seq.push(first);
-        // ensure next two are not equal to immediate predecessor
+
         let second = pickWeighted(weights);
         for (let t=0; t<10 && second === seq[seq.length-1]; t++) second = pickWeighted(weights);
         seq.push(second);
+
         let third = pickWeighted(weights);
         for (let t=0; t<10 && third === seq[seq.length-1]; t++) third = pickWeighted(weights);
         seq.push(third);
+
         const key = seq.join('');
         if (key !== lastComboKey) return { seq, key };
       }
@@ -450,7 +456,7 @@
         const expectedAll = expectedComboRemaining();
 
         if (val === expectedAll) {
-          // User typed the whole remaining combo correctly in one go
+          // whole remaining combo correct
           comboActive = false;
           comboSeq.forEach(k => {
             unseen.delete(k);
@@ -469,7 +475,7 @@
           }, 200);
 
         } else if (val === expectedOne) {
-          // Step-by-step: advance within combo
+          // step-by-step advancement
           comboIdx += 1;
           if (comboIdx < 3) {
             renderComboDisplay();
@@ -532,6 +538,7 @@
     // Replace the panel contents with a simple placeholder
     const panel = $('.speak-panel', part4);
     if (panel) {
+      const sampleGlyph = KANA[0] || 'あ';
       panel.innerHTML = `
         <div class="speak-placeholder" style="
           display:grid;
@@ -541,7 +548,7 @@
           padding:16px;
           text-align:center;
         ">
-          <div class="kana-glyph speak-glyph" aria-hidden="true">あ</div>
+          <div class="kana-glyph speak-glyph" aria-hidden="true">${sampleGlyph}</div>
           <p class="muted" style="margin:0;">
             Speaking practice is <strong>in progress</strong>.
           </p>
@@ -551,8 +558,8 @@
         </div>
       `;
     }
-  
-    // Local Finish button (same spot as Part 2/3 “Next”)
+
+    // Local Finish button (same area as Part 2/3 Next)
     let finishBtn = $('[data-action="finish-lesson"]', part4);
     if (!finishBtn) {
       const actions = document.createElement('div');
@@ -573,3 +580,4 @@
   // Boot on Part 1
   showPart(1);
 })();
+
