@@ -1,4 +1,5 @@
-window.KANA_LEVELS = {
+// Worlds + Levels data
+window.KANA_STAGES = {
   worlds: [
     {
       code: "1",
