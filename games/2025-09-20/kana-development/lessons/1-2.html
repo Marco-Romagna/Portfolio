@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>1-2 — Katakana Vowels</title>
+
+  <!-- Existing site styles -->
+  <link rel="stylesheet" href="../../../../css/main.css">
+  <link rel="stylesheet" href="../../../../css/games/kana-development/styles.css">
+  <link rel="stylesheet" href="../../../../css/games/kana-development/lessons.css">
+</head>
+
+<body class="site mode-light">
+  <header class="header">
+    <div class="container nav">
+      <a class="brand" href="../index.html">
+        <span class="dot"></span><span>Kana Development</span>
+      </a>
+    </div>
+  </header>
+
+  <!-- (We keep the global sticky CTA hidden for this lesson; parts have local Next/Finish) -->
+  <div class="lesson-cta is-hidden">
+    <button class="btn primary" data-action="advance">Next</button>
+  </div>
+
+  <main
+    class="container game-wrap lesson"
+    data-lesson-id="1-2"
+    data-total-parts="4">
+
+    <!-- Progress / steps -->
+    <nav class="lesson-progress" aria-label="Lesson progress">
+      <ol class="steps">
+        <li class="step is-active" data-part="1">
+          <span class="step-label">Part 1</span>
+          <span class="step-sub">Preview</span>
+        </li>
+        <li class="step" data-part="2">
+          <span class="step-label">Part 2</span>
+          <span class="step-sub">Identify</span>
+        </li>
+        <li class="step" data-part="3">
+          <span class="step-label">Part 3</span>
+          <span class="step-sub">Typing</span>
+        </li>
+        <li class="step" data-part="4">
+          <span class="step-label">Part 4</span>
+          <span class="step-sub">Speak</span>
+        </li>
+      </ol>
+      <div class="progressbar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+        <div class="progressbar-fill" style="width: 0%"></div>
+      </div>
+    </nav>
+
+    <!-- PART 1 -->
+    <section id="part-1" class="lesson-part is-visible" data-part-index="1" aria-labelledby="part1-title">
+      <h1 id="part1-title" class="part-title">Katakana Vowels — Preview</h1>
+
+      <div class="kana-grid">
+        <article class="card-big kana-card" data-kana="ア" data-romaji="a">
+          <span class="kana-glyph">ア</span>
+          <span class="kana-sub">a</span>
+        </article>
+        <article class="card-big kana-card" data-kana="イ" data-romaji="i">
+          <span class="kana-glyph">イ</span>
+          <span class="kana-sub">i</span>
+        </article>
+        <article class="card-big kana-card" data-kana="ウ" data-romaji="u">
+          <span class="kana-glyph">ウ</span>
+          <span class="kana-sub">u</span>
+        </article>
+        <article class="card-big kana-card" data-kana="エ" data-romaji="e">
+          <span class="kana-glyph">エ</span>
+          <span class="kana-sub">e</span>
+        </article>
+        <article class="card-big kana-card" data-kana="オ" data-romaji="o">
+          <span class="kana-glyph">オ</span>
+          <span class="kana-sub">o</span>
+        </article>
+      </div>
+
+      <div class="actions center">
+        <button class="btn primary" data-action="advance">Start</button>
+      </div>
+    </section>
+
+    <!-- PART 2 -->
+    <section id="part-2" class="lesson-part" data-part-index="2" aria-labelledby="part2-title">
+      <h2 id="part2-title" class="part-title">Identify — Pick the Correct Vowel</h2>
+
+      <div class="quiz-panel" data-state="idle">
+        <div class="quiz-prompt">
+          <p class="prompt-text">Which kana is <strong class="prompt-target" data-type="romaji">“a”</strong>?</p>
+        </div>
+
+        <div class="quiz-options"></div>
+
+        <div class="quiz-progress">
+          <div class="meter" role="progressbar" aria-valuemin="0" aria-valuemax="15" aria-valuenow="0">
+            <div class="meter-fill" style="width:0%"></div>
+          </div>
+          <div class="meter-label">Progress: 0 / 15</div>
+        </div>
+
+        <div class="quiz-feedback" aria-live="polite">
+          <p class="feedback-text">Pick the right one to continue…</p>
+        </div>
+
+        <div class="actions">
+          <button class="btn primary is-hidden" data-action="next-part">Next</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- PART 3 -->
+    <section id="part-3" class="lesson-part" data-part-index="3" aria-labelledby="part3-title">
+      <h2 id="part3-title" class="part-title">Typing — Enter the Phonetic</h2>
+
+      <div class="type-panel">
+        <div class="type-glyph-wrapper">
+          <span class="kana-glyph type-glyph" data-current-kana="ア">ア</span>
+        </div>
+
+        <label class="type-label" for="type-input">Type the romaji:</label>
+        <input id="type-input" class="type-input" type="text" inputmode="latin" placeholder="" aria-describedby="type-help" />
+        <p id="type-help" class="muted">Press Enter to submit.</p>
+
+        <div class="quiz-progress">
+          <div class="meter" role="progressbar" aria-valuemin="0" aria-valuemax="15" aria-valuenow="0">
+            <div class="meter-fill" style="width:0%"></div>
+          </div>
+          <div class="meter-label">Progress: 0 / 15</div>
+        </div>
+
+        <!-- local Next gets injected by JS when complete -->
+      </div>
+    </section>
+
+    <!-- PART 4 (placeholder) -->
+    <section id="part-4" class="lesson-part" data-part-index="4" aria-labelledby="part4-title">
+      <h2 id="part4-title" class="part-title">Speak — Say the Vowel</h2>
+
+      <div class="speak-panel">
+        <div class="speak-placeholder" style="display:grid;place-items:center;gap:10px;min-height:220px;padding:16px;text-align:center;">
+          <div class="kana-glyph speak-glyph" aria-hidden="true">ア</div>
+          <p class="muted" style="margin:0;">Speaking practice is <strong>in progress</strong>.</p>
+          <p class="muted" style="margin:0;">Thanks for testing! You can finish the lesson for now.</p>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button class="btn primary" data-action="finish-lesson">Finish</button>
+      </div>
+    </section>
+
+  </main>
+
+  <script defer src="../js/lessons/lessons.js"></script>
+</body>
+</html>

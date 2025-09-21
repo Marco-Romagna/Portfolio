@@ -27,13 +27,6 @@ window.KANA_STAGES = {
     href: "lessons/1-3.html",
     thumb: "あ+ア",
     class: "icon-sm"
-  },
-  {
-    code: "1-4",
-    title: "1-4 — Mixed Vowels (No Hints)",
-    href: "lessons/1-4.html",
-    thumb: "あ+ア",
-    class: "icon-sm"
   }
 ]
 
