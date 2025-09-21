@@ -1,8 +1,9 @@
 (() => {
+  // ------- helpers -------
   const $  = (s, r = document) => r.querySelector(s);
   const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
 
-  const lesson = $('.lesson');
+  const lesson   = $('.lesson');
   if (!lesson) return;
 
   const totalParts = Number(lesson.dataset.totalParts || 4);
@@ -11,20 +12,31 @@
   const progress   = $('.progressbar');
   const fill       = $('.progressbar-fill');
 
-  // Center CTA
+  // Global sticky CTA (used for Next/Finish on parts >= 2)
   const cta = $('.lesson-cta [data-action="advance"]');
-  const showCTA = (label) => { cta.textContent = label; cta.classList.remove('is-hidden'); };
-  const hideCTA = () => cta.classList.add('is-hidden');
+  const showCTA = (label) => {
+    if (!cta) return;
+    cta.textContent = label;
+    cta.closest('.lesson-cta')?.classList.remove('is-hidden');
+  };
+  const hideCTA = () => {
+    cta?.closest('.lesson-cta')?.classList.add('is-hidden');
+  };
 
-  // 1-1 data (could be read from data-* later)
-  const KANA = ['あ','い','う','え','お'];
-  const ROMA = { 'あ':'a','い':'i','う':'u','え':'e','お':'o' };
+  // Part 1 local Start button (moved into Part 1 actions)
+  const startBtn = $('#part-1 .actions [data-action="advance"]');
 
-  let current = 1;
+  // ------- lesson data (for 1-1) -------
+  const KANA = ['あ', 'い', 'う', 'え', 'お'];
+  const ROMA = { 'あ': 'a', 'い': 'i', 'う': 'u', 'え': 'e', 'お': 'o' };
+
+  // ------- state -------
+  let current   = 1;
   let part2Done = false;
   let part3Done = false;
   let part4Done = false;
 
+  // ------- nav / progress -------
   function showPart(idx) {
     current = Math.min(Math.max(idx, 1), totalParts);
 
@@ -35,21 +47,20 @@
     if (fill) fill.style.width = `${pct}%`;
     if (progress) progress.setAttribute('aria-valuenow', String(pct));
 
-    // CTA rules
+    // CTA rules: hide on Part 1 (local Start), show as needed for later parts
     if (current === 1) {
-      showCTA('Start');
+      hideCTA();
     } else if (current === 2) {
       part2Done ? showCTA('Next') : hideCTA();
     } else if (current === 3) {
       part3Done ? showCTA('Next') : hideCTA();
     } else if (current === 4) {
-      // Part 4 can proceed anytime
       showCTA(part4Done ? 'Finish' : 'Next');
     }
   }
 
-  // Single CTA click
-  cta.addEventListener('click', () => {
+  // Global CTA click (Next / Finish)
+  cta?.addEventListener('click', () => {
     if (current < totalParts) {
       showPart(current + 1);
     } else {
@@ -58,7 +69,14 @@
     }
   });
 
-  // ===== Part 2: Identify (auto-next question; show CTA when complete) =====
+  // Part 1 local Start → go to Part 2
+  startBtn?.addEventListener('click', () => {
+    showPart(2);
+  });
+
+  // ==========================================================
+  // Part 2: Identify — Pick the Correct Vowel
+  // ==========================================================
   const part2 = $('#part-2');
   if (part2) {
     const grid      = $('.quiz-options', part2);
@@ -66,9 +84,9 @@
     const counterEl = $('.quiz-meta .counter', part2);
     const streakEl  = $('.quiz-meta .streak', part2);
 
-    let needed = Number(counterEl?.dataset.needed || 5);
+    let needed       = Number(counterEl?.dataset.needed || 5);
     let correctSoFar = 0;
-    let streak = 0;
+    let streak       = 0;
 
     const sample = (arr, n) => {
       const a = [...arr];
@@ -83,17 +101,22 @@
       if (counterEl) counterEl.textContent = `${correctSoFar} / ${needed} correct`;
       if (streakEl)  streakEl.textContent  = `Streak: ${streak}`;
     }
+
     function setFeedback(t) { if (feedback) feedback.textContent = t; }
-    function clearStates() { $$('.option', part2).forEach(b => b.classList.remove('is-correct','is-wrong')); }
+
+    function clearStates() {
+      $$('.option', part2).forEach(b => b.classList.remove('is-correct', 'is-wrong'));
+    }
 
     function setRound() {
-      const correctKana = KANA[Math.floor(Math.random() * KANA.length)];
+      const correctKana  = KANA[Math.floor(Math.random() * KANA.length)];
       const targetRomaji = ROMA[correctKana];
-      const prompt = $('.prompt-text .prompt-target', part2);
+      const prompt       = $('.prompt-text .prompt-target', part2);
+
       if (prompt) { prompt.dataset.type = 'romaji'; prompt.textContent = `“${targetRomaji}”`; }
 
       const opts = sample(KANA, Math.min(4, KANA.length));
-      if (!opts.includes(correctKana)) opts[Math.floor(Math.random()*opts.length)] = correctKana;
+      if (!opts.includes(correctKana)) opts[Math.floor(Math.random() * opts.length)] = correctKana;
       const shuffled = sample(opts, opts.length);
 
       grid.innerHTML = '';
@@ -131,15 +154,20 @@
       }
     }
 
-    // optional manual reshuffle
     const reshuffleBtn = $('[data-action="reshuffle"]', part2);
-    if (reshuffleBtn) reshuffleBtn.addEventListener('click', () => { clearStates(); setRound(); setFeedback('Options reshuffled…'); });
+    reshuffleBtn?.addEventListener('click', () => {
+      clearStates();
+      setRound();
+      setFeedback('Options reshuffled…');
+    });
 
     // init
     correctSoFar = 0; streak = 0; updateMeta(); setRound();
   }
 
-  // ===== Part 3: Typing (auto-next glyph; show CTA when complete) =====
+  // ==========================================================
+  // Part 3: Typing — Enter the Phonetic
+  // ==========================================================
   const part3 = $('#part-3');
   if (part3) {
     const glyph     = $('.type-glyph', part3);
@@ -147,13 +175,15 @@
     const checkBtn  = $('[data-action="check-typing"]', part3);
     const counterEl = $('.type-meta .counter', part3);
 
-    let needed = Number(counterEl?.dataset.needed || 5);
+    let needed       = Number(counterEl?.dataset.needed || 5);
     let correctSoFar = 0;
 
-    function updateMeta() { if (counterEl) counterEl.textContent = `${correctSoFar} / ${needed}`; }
+    function updateMeta() {
+      if (counterEl) counterEl.textContent = `${correctSoFar} / ${needed}`;
+    }
 
     function newRound() {
-      glyph.classList.remove('state-correct','state-wrong');
+      glyph.classList.remove('state-correct', 'state-wrong');
       input.value = '';
       const kana = KANA[Math.floor(Math.random() * KANA.length)];
       glyph.dataset.currentKana = kana;
@@ -162,16 +192,17 @@
     }
 
     function evaluate() {
-      const kana = glyph.dataset.currentKana;
+      const kana     = glyph.dataset.currentKana;
       const expected = ROMA[kana];
-      const val = (input.value || '').trim().toLowerCase();
+      const val      = (input.value || '').trim().toLowerCase();
 
-      glyph.classList.remove('state-correct','state-wrong');
+      glyph.classList.remove('state-correct', 'state-wrong');
       if (!val) return;
 
       if (val === expected) {
         glyph.classList.add('state-correct');
         correctSoFar += 1; updateMeta();
+
         setTimeout(() => {
           if (correctSoFar >= needed) {
             part3Done = true;
@@ -185,37 +216,44 @@
       }
     }
 
-    if (checkBtn) checkBtn.addEventListener('click', evaluate);
+    checkBtn?.addEventListener('click', evaluate);
     if (input) {
-      input.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); evaluate(); } });
-      input.addEventListener('input', () => glyph.classList.remove('state-correct','state-wrong'));
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') { e.preventDefault(); evaluate(); }
+      });
+      input.addEventListener('input', () => glyph.classList.remove('state-correct', 'state-wrong'));
     }
 
     correctSoFar = 0; updateMeta(); newRound();
   }
 
-  // ===== Part 4: Speak =====
+  // ==========================================================
+  // Part 4: Speak — Say the Vowel
+  // ==========================================================
   const part4 = $('#part-4');
   if (part4) {
-    const status = $('.status-line', part4);
-    const micBtn = $('[data-action="mic-toggle"]', part4);
+    const status   = $('.status-line', part4);
+    const micBtn   = $('[data-action="mic-toggle"]', part4);
     const tryAgain = $('[data-action="try-again"]', part4);
 
-    if (micBtn) {
-      micBtn.addEventListener('click', () => {
-        const pressed = micBtn.getAttribute('aria-pressed') === 'true';
-        micBtn.setAttribute('aria-pressed', String(!pressed));
-        if (status) status.textContent = !pressed ? 'Mic: listening…' : 'Mic: off';
-      });
-    }
-    if (tryAgain) tryAgain.addEventListener('click', () => { if (status) status.textContent = 'Try again queued.'; });
+    micBtn?.addEventListener('click', () => {
+      const pressed = micBtn.getAttribute('aria-pressed') === 'true';
+      micBtn.setAttribute('aria-pressed', String(!pressed));
+      if (status) status.textContent = !pressed ? 'Mic: listening…' : 'Mic: off';
+      part4Done = true;
+      showCTA('Finish');
+    });
 
-    // You said part 4 can proceed when ready → allow Next immediately; mark done on first action.
+    tryAgain?.addEventListener('click', () => {
+      if (status) status.textContent = 'Try again queued.';
+      part4Done = true;
+      showCTA('Finish');
+    });
+
+    // Allow Next immediately on Part 4
     showCTA('Next');
-    tryAgain?.addEventListener('click', () => { part4Done = true; });
-    micBtn?.addEventListener('click', () => { part4Done = true; });
   }
 
-  // Start on Part 1
+  // Boot on Part 1
   showPart(1);
 })();
