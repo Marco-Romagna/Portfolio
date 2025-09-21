@@ -48,28 +48,52 @@ body.site.mode-light, body.site {
   height: 6px; background: var(--kp-surface-2);
   border-radius: 999px; overflow: hidden; border: 1px solid var(--kp-border);
 }
-.progressbar-fill { height: 100%; width: 0%; background: linear-gradient(90deg, var(--kp-accent), var(--kp-accent-2)); }
+.progressbar-fill {
+  height: 100%; width: 0%;
+  background: linear-gradient(90deg, var(--kp-accent), var(--kp-accent-2));
+}
 
 /* ===== Shared cards / panels ===== */
-.card-big.kana-card, .quiz-panel, .type-panel, .speak-panel, .panel {
+.card-big.kana-card,
+.quiz-panel,
+.type-panel,
+.speak-panel,
+.panel {
   background: var(--kp-surface);
   border: 1px solid var(--kp-border);
   border-radius: var(--kp-radius);
   box-shadow: var(--kp-shadow);
 }
 .kana-grid {
-  display: grid; grid-template-columns: repeat(auto-fit, minmax(120px,1fr));
-  gap: var(--kp-gap); margin-top: var(--kp-gap);
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px,1fr));
+  gap: var(--kp-gap);
+  margin-top: var(--kp-gap);
 }
-.kana-card { padding: 16px; display: grid; place-items: center; cursor: pointer; }
+.kana-card {
+  padding: 16px;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+}
 .kana-glyph { font-size: clamp(64px, 10vw, 120px); line-height: 1; }
 .kana-sub { color: var(--kp-muted); margin-top: 6px; font-size: 1.1rem; }
 
 .part-title { margin: 0 0 12px; }
-.actions { display: flex; gap: var(--kp-gap); justify-content: center; margin-top: 12px; }
+.actions {
+  display: flex;
+  gap: var(--kp-gap);
+  justify-content: center;
+  margin-top: 12px;
+}
 .btn {
-  background: var(--kp-surface-2); color: var(--kp-text); border: 1px solid var(--kp-border);
-  padding: 10px 14px; border-radius: 10px; cursor: pointer; font-weight: 600;
+  background: var(--kp-surface-2);
+  color: var(--kp-text);
+  border: 1px solid var(--kp-border);
+  padding: 10px 14px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
 }
 .btn.primary { background: var(--kp-accent); border-color: transparent; }
 .btn.ghost { background: transparent; }
@@ -89,24 +113,46 @@ body.site.mode-light, body.site {
   gap: var(--kp-gap); margin: 12px 0;
 }
 .option {
-  font-size: clamp(38px, 7vw, 64px); line-height: 1; padding: 16px;
-  background: var(--kp-surface-2); border: 2px solid var(--kp-border);
-  border-radius: var(--kp-radius); cursor: pointer; text-align: center;
+  font-size: clamp(38px, 7vw, 64px); line-height: 1;
+  padding: 16px;
+  background: var(--kp-surface-2);
+  border: 2px solid var(--kp-border);
+  border-radius: var(--kp-radius);
+  cursor: pointer;
+  text-align: center;
   transition: transform .1s ease, border-color .1s ease, background-color .1s ease;
 }
 .option:hover { transform: translateY(-1px); border-color: var(--kp-accent); }
-.option.is-correct { border-color: var(--kp-correct); box-shadow: 0 0 0 3px color-mix(in oklab, var(--kp-correct) 30%, transparent); }
-.option.is-wrong   { border-color: var(--kp-wrong);   box-shadow: 0 0 0 3px color-mix(in oklab, var(--kp-wrong) 30%, transparent); }
+.option.is-correct {
+  border-color: var(--kp-correct);
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--kp-correct) 30%, transparent);
+}
+.option.is-wrong {
+  border-color: var(--kp-wrong);
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--kp-wrong) 30%, transparent);
+}
 .quiz-feedback { text-align: center; min-height: 20px; color: var(--kp-muted); }
-.quiz-meta { display: flex; gap: 16px; justify-content: center; color: var(--kp-muted); }
+.quiz-meta {
+  display: flex; gap: 16px; justify-content: center; color: var(--kp-muted);
+}
 
 /* ===== Part 3: Type ===== */
 .type-panel { padding: 16px; text-align: center; }
 .type-glyph-wrapper { margin: 4px 0 8px; }
-.type-glyph { display: inline-block; font-size: clamp(80px, 12vw, 140px); line-height: 1; }
+.type-glyph {
+  display: inline-block;
+  font-size: clamp(80px, 12vw, 140px);
+  line-height: 1;
+}
 .type-input {
-  width: 220px; max-width: 80%; background: var(--kp-surface-2); border: 1px solid var(--kp-border); color: var(--kp-text);
-  border-radius: 10px; padding: 10px 12px; text-align: center; font-size: 1.1rem;
+  width: 220px; max-width: 80%;
+  background: var(--kp-surface-2);
+  border: 1px solid var(--kp-border);
+  color: var(--kp-text);
+  border-radius: 10px;
+  padding: 10px 12px;
+  text-align: center;
+  font-size: 1.1rem;
 }
 .type-label, #type-help { color: var(--kp-muted); }
 .type-glyph.state-idle    { color: var(--kp-text); }
@@ -116,8 +162,15 @@ body.site.mode-light, body.site {
 
 /* ===== Part 4: Speak ===== */
 .speak-panel { padding: 16px; text-align: center; }
-.speak-glyph { display: inline-block; font-size: clamp(80px, 12vw, 140px); }
-.speak-controls { display: flex; gap: var(--kp-gap); justify-content: center; margin: 10px 0; }
+.speak-glyph {
+  display: inline-block;
+  font-size: clamp(80px, 12vw, 140px);
+}
+.speak-controls {
+  display: flex; gap: var(--kp-gap);
+  justify-content: center;
+  margin: 10px 0;
+}
 .speak-status .status-line { color: var(--kp-muted); }
 
 .lesson-cta {
@@ -130,3 +183,8 @@ body.site.mode-light, body.site {
 }
 .lesson-cta .btn { min-width: 140px; }
 .is-hidden { display: none !important; }
+
+/* ===== Lesson 1-1 tweak ===== */
+.lesson[data-lesson-id="1-1"] #part-1 .kana-grid {
+  margin-bottom: 2.5rem; /* gives extra space before Start button */
+}
