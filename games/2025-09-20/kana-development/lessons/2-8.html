@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>2-8 — Type G-row</title>
+
+  <link rel="stylesheet" href="../../../../css/main.css">
+  <link rel="stylesheet" href="../../../../css/games/kana-development/styles.css">
+  <link rel="stylesheet" href="../../../../css/games/kana-development/lessons.css">
+</head>
+<body class="site mode-light">
+  <header class="header">
+    <div class="container nav">
+      <a class="brand" href="../index.html"><span class="dot"></span><span>Kana Development</span></a>
+    </div>
+  </header>
+
+  <main class="container game-wrap lesson" data-lesson-id="2-8" data-total-parts="4">
+    <nav class="lesson-progress" aria-label="Lesson progress">
+      <ol class="steps">
+        <li class="step is-active" data-part="1"><span class="step-label">Part 1</span><span class="step-sub">Preview</span></li>
+        <li class="step" data-part="2"><span class="step-label">Part 2</span><span class="step-sub">Identify</span></li>
+        <li class="step" data-part="3"><span class="step-label">Part 3</span><span class="step-sub">Typing</span></li>
+        <li class="step" data-part="4"><span class="step-label">Part 4</span><span class="step-sub">Speak</span></li>
+      </ol>
+      <div class="progressbar"><div class="progressbar-fill" style="width:0%"></div></div>
+    </nav>
+
+    <section id="part-1" class="lesson-part is-visible" data-part-index="1" aria-labelledby="p1-title">
+      <h1 id="p1-title" class="part-title">Type Practice — G-row Preview</h1>
+      <div class="kana-grid">
+        <article class="card-big kana-card"><span class="kana-glyph">が</span><span class="kana-sub">ga</span></article>
+        <article class="card-big kana-card"><span class="kana-glyph">ぎ</span><span class="kana-sub">gi</span></article>
+        <article class="card-big kana-card"><span class="kana-glyph">ぐ</span><span class="kana-sub">gu</span></article>
+        <article class="card-big kana-card"><span class="kana-glyph">げ</span><span class="kana-sub">ge</span></article>
+        <article class="card-big kana-card"><span class="kana-glyph">ご</span><span class="kana-sub">go</span></article>
+      </div>
+      <div class="actions center"><button class="btn primary" data-action="advance">Start</button></div>
+    </section>
+
+    <section id="part-2" class="lesson-part" data-part-index="2" aria-labelledby="p2-title">
+      <h2 id="p2-title" class="part-title">Identify — Quick Warmup</h2>
+      <div class="quiz-panel">
+        <div class="quiz-prompt"><p class="prompt-text">Which kana is <strong class="prompt-target" data-type="romaji">“ga”</strong>?</p></div>
+        <div class="quiz-options"></div>
+        <div class="quiz-progress"><div class="meter"><div class="meter-fill" style="width:0%"></div></div><div class="meter-label">Progress: 0</div></div>
+        <div class="quiz-feedback"><p class="feedback-text">Pick the right one to continue…</p></div>
+        <div class="actions"><button class="btn primary is-hidden" data-action="next-part">Next</button></div>
+      </div>
+    </section>
+
+    <section id="part-3" class="lesson-part" data-part-index="3" aria-labelledby="p3-title">
+      <h2 id="p3-title" class="part-title">Typing — Enter the Romaji</h2>
+      <div class="type-panel">
+        <div class="type-glyph-wrapper"></div>
+        <label class="type-label" for="type-input">Type the romaji:</label>
+        <input id="type-input" class="type-input" type="text" inputmode="latin" aria-describedby="type-help" />
+        <p id="type-help" class="muted">Press Enter.</p>
+        <div class="quiz-progress"><div class="meter"><div class="meter-fill" style="width:0%"></div></div><div class="meter-label">Progress: 0</div></div>
+      </div>
+    </section>
+
+    <section id="part-4" class="lesson-part" data-part-index="4" aria-labelledby="p4-title">
+      <h2 id="p4-title" class="part-title">Speak — Say the Kana</h2>
+      <div class="speak-panel"></div>
+    </section>
+  </main>
+
+  <script defer src="../js/lessons/lessons.js"></script>
+</body>
+</html>
