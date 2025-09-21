@@ -3,8 +3,9 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>KanaDevelopment • Lessons</title>
+  <title>KanaDevelopment • Stages</title>
 
+  <!-- Global site styles -->
   <link rel="stylesheet" href="../../../css/main.css">
 </head>
 
@@ -21,29 +22,36 @@
     </div>
   </header>
 
+  <!-- Main -->
   <main class="container">
     <!-- Summary -->
     <section class="panel">
       <h2>KanaDevelopment</h2>
       <p class="muted">
-        Start with Level <strong>1A (recommended)</strong> for hiragana vowels, then continue to Level 1B for katakana.
-        Use the template below to manage/add lessons without touching layout code.
+        Progress through <strong>Worlds</strong> (stages). Each world contains several short levels. 
+        Start with <strong>World&nbsp;1</strong> to learn the vowel sounds in hiragana and katakana.
       </p>
     </section>
 
-    <!-- Lesson Levels (render target) -->
-    <section class="panel">
-      <h2>Lesson Levels</h2>
-      <ul id="levels-grid" class="card-grid"></ul>
-    </section>
+    <!-- Worlds container -->
+    <div id="worlds-root"></div>
   </main>
 
+  <!-- Footer -->
   <footer class="footer">
     © <span id="year"></span> Marco Romagna • All rights reserved
   </footer>
 
-  <!-- Card template (uses main.css classes) -->
-  <template id="level-card-tpl">
+  <!-- Templates -->
+  <template id="tpl-world">
+    <section class="panel world">
+      <h2 class="world-title"></h2>
+      <p class="muted world-desc"></p>
+      <ul class="card-grid levels-grid"></ul>
+    </section>
+  </template>
+
+  <template id="tpl-level-card">
     <li class="card">
       <a class="card-thumb no-thumb">
         <span class="no-thumb-mark"></span>
@@ -56,69 +64,63 @@
     </li>
   </template>
 
-  <!-- Minimal data + renderer -->
+  <!-- Data -->
+  <script src="js/stages.js"></script>
+
+  <!-- Render logic -->
   <script>
-    // --- Data: edit this array to add/change lessons ---
-    const LEVELS = [
-      {
-        code: "1A",
-        title: "Level 1A — Hiragana Vowels",
-        href: "lessons/level-1a.html",
-        tags: ["Beginner", "Recommended"],
-        desc: "Learn the five hiragana vowels: あ (a), い (i), う (u), え (e), お (o)."
-      },
-      {
-        code: "1B",
-        title: "Level 1B — Katakana Vowels",
-        href: "lessons/level-1b.html",
-        tags: ["Beginner"],
-        desc: "Learn the five katakana vowels: ア (a), イ (i), ウ (u), エ (e), オ (o)."
-      }
-    ];
+    function renderWorlds(worlds) {
+      const root = document.getElementById("worlds-root");
+      const worldTpl = document.getElementById("tpl-world");
+      const levelTpl = document.getElementById("tpl-level-card");
+      root.innerHTML = "";
 
-    // --- Render ---
-    function renderLevels(levels) {
-      const grid = document.getElementById("levels-grid");
-      const tpl = document.getElementById("level-card-tpl");
+      worlds.forEach(w => {
+        const wNode = worldTpl.content.cloneNode(true);
+        wNode.querySelector(".world-title").textContent = w.title;
+        wNode.querySelector(".world-desc").textContent = w.desc;
 
-      grid.innerHTML = "";
-      levels.forEach(lv => {
-        const node = tpl.content.cloneNode(true);
+        const grid = wNode.querySelector(".levels-grid");
+        w.levels.forEach(lv => {
+          const lNode = levelTpl.content.cloneNode(true);
 
-        // Thumb + code label
-        const thumb = node.querySelector(".card-thumb");
-        thumb.href = lv.href;
-        node.querySelector(".no-thumb-mark").textContent = lv.code;
+          const thumb = lNode.querySelector(".card-thumb");
+          thumb.href = lv.href;
+          lNode.querySelector(".no-thumb-mark").textContent = lv.code;
 
-        // Title link
-        const title = node.querySelector(".card-title");
-        title.href = lv.href;
-        title.textContent = lv.title;
+          const title = lNode.querySelector(".card-title");
+          title.href = lv.href;
+          title.textContent = lv.title;
 
-        // Tags
-        const tagsWrap = node.querySelector(".card-tags");
-        if (lv.tags?.length) {
-          lv.tags.forEach(t => {
+          const tags = lNode.querySelector(".card-tags");
+          (lv.tags || []).forEach(t => {
             const span = document.createElement("span");
             span.className = "tag";
             span.textContent = t;
-            tagsWrap.appendChild(span);
+            tags.appendChild(span);
           });
-        }
 
-        // Description
-        node.querySelector(".desc").textContent = lv.desc;
+          lNode.querySelector(".desc").textContent = lv.desc;
+          grid.appendChild(lNode);
+        });
 
-        grid.appendChild(node);
+        root.appendChild(wNode);
       });
     }
 
     // Boot
-    document.getElementById("year").textContent = new Date().getFullYear();
-    renderLevels(LEVELS);
+    (function init() {
+      document.getElementById("year").textContent = new Date().getFullYear();
 
-    // Optional: expose for quick console tweaks
-    window.KanaLevels = { LEVELS, render: () => renderLevels(LEVELS) };
+      const { worlds, levels } = window.KANA_STAGES;
+      const levelIndex = Object.fromEntries(levels.map(l => [l.code, l]));
+      const merged = worlds.map(w => ({
+        ...w,
+        levels: w.levels.map(code => levelIndex[code]).filter(Boolean)
+      }));
+
+      renderWorlds(merged);
+    })();
   </script>
 </body>
 </html>
