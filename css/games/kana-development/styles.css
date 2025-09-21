@@ -95,3 +95,12 @@
   font-weight: 700;
   cursor: pointer;
 }
+
+/* Make the text "thumbnail" look like a big centered icon */
+  .card-thumb.no-thumb { display: grid; place-items: center; }
+  .card-thumb.no-thumb .no-thumb-mark{
+    font-size: clamp(40px, 9vw, 110px);
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: .5px;
+  }
