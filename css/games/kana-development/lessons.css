@@ -117,7 +117,7 @@ body.site {
 .lesson-part { display: none; padding: 16px; }
 .lesson-part.is-visible { display: block; }
 
-/* Sticky global CTA (still available, but we’ll rely on local buttons for P3/P4) */
+/* Sticky global CTA (used on some parts) */
 .lesson-cta {
   position: sticky;
   bottom: 0;
@@ -175,7 +175,6 @@ body.site {
 .type-glyph-wrapper  { margin: 4px 0 8px; }
 .type-glyph          { display: inline-block; font-size: clamp(80px, 12vw, 140px); line-height: 1; }
 
-/* Input: clean & focused */
 .type-input {
   width: 220px;
   max-width: 80%;
@@ -189,6 +188,9 @@ body.site {
 }
 
 .type-label, #type-help { color: var(--kp-muted); }
+.type-glyph.state-idle    { color: var(--kp-text); }
+.type-glyph.state-correct { color: var(--kp-correct); }
+.type-glyph.state-wrong   { color: var(--kp-wrong); }
 .type-meta { margin-top: 8px; color: var(--kp-muted); }
 
 /* =========================================================
@@ -200,19 +202,20 @@ body.site {
 .speak-status .status-line { color: var(--kp-muted); }
 
 /* =========================================================
-   Lesson 1-1 specific tweaks
+   Lesson-scoped upgrades
+   (apply to both 1-1 Hiragana Vowels and 1-2 Katakana Vowels)
    ========================================================= */
+:where(.lesson[data-lesson-id="1-1"], .lesson[data-lesson-id="1-2"]) .lesson-progress .progressbar {
+  display: none;
+}
 
-/* Part 1: push Start lower under the grid */
-.lesson[data-lesson-id="1-1"] #part-1 .kana-grid {
+/* Part 1 spacing */
+:where(.lesson[data-lesson-id="1-1"], .lesson[data-lesson-id="1-2"]) #part-1 .kana-grid {
   margin-bottom: 2.5rem;
 }
 
-/* Hide the thin top progress bar (steps alone are enough) */
-.lesson[data-lesson-id="1-1"] .lesson-progress .progressbar { display: none; }
-
 /* ---------- Part 2: Readability & Meter ---------- */
-.lesson[data-lesson-id="1-1"] #part-2 .quiz-panel {
+:where(.lesson[data-lesson-id="1-1"], .lesson[data-lesson-id="1-2"]) #part-2 .quiz-panel {
   padding: 22px;
   background: color-mix(in oklab, var(--kp-surface) 90%, black);
   border: 1px solid var(--kp-border);
@@ -221,26 +224,27 @@ body.site {
 }
 
 /* Bigger question & target */
-.lesson[data-lesson-id="1-1"] #part-2 .prompt-text {
+:where(.lesson[data-lesson-id="1-1"], .lesson[data-lesson-id="1-2"]) #part-2 .prompt-text {
   font-size: 1.35rem;
   font-weight: 600;
   color: var(--kp-text);
   letter-spacing: .2px;
+  text-align: center;
 }
-.lesson[data-lesson-id="1-1"] #part-2 .prompt-text .prompt-target {
+:where(.lesson[data-lesson-id="1-1"], .lesson[data-lesson-id="1-2"]) #part-2 .prompt-text .prompt-target {
   font-size: 1.6rem;
   font-weight: 800;
 }
 
 /* Larger grid + spacing */
-.lesson[data-lesson-id="1-1"] #part-2 .quiz-options {
+:where(.lesson[data-lesson-id="1-1"], .lesson[data-lesson-id="1-2"]) #part-2 .quiz-options {
   grid-template-columns: repeat(2, minmax(260px, 1fr));
   gap: 18px;
   margin: 18px 0 12px;
 }
 
-/* Bigger/clearer options */
-.lesson[data-lesson-id="1-1"] #part-2 .option {
+/* Bigger/clearer options + transitions */
+:where(.lesson[data-lesson-id="1-1"], .lesson[data-lesson-id="1-2"]) #part-2 .option {
   font-size: clamp(52px, 8vw, 96px);
   padding: 22px 18px;
   border-radius: 16px;
@@ -249,15 +253,15 @@ body.site {
   transition: transform .08s ease, border-color .12s ease, box-shadow .12s ease, background-color .12s ease, color .12s ease;
 }
 
-/* Per-option contrast themes (ALL FOUR) */
-.lesson[data-lesson-id="1-1"] #part-2 .option.theme-dark  { background:#0b1224; color:#e5e7eb; border-color:#2b3447; }
-.lesson[data-lesson-id="1-1"] #part-2 .option.theme-light { background:#f3f4f6; color:#0b1224; border-color:#cbd5e1; }
-.lesson[data-lesson-id="1-1"] #part-2 .option.theme-sepia { background:#f6eedb; color:#3b2f1a; border-color:#e3d4b4; }
-.lesson[data-lesson-id="1-1"] #part-2 .option.theme-high  { background:#000;    color:#fff;    border-color:#ffffffa8; }
+/* Per-option contrast themes */
+:where(.lesson[data-lesson-id="1-1"], .lesson[data-lesson-id="1-2"]) #part-2 .option.theme-dark  { background:#0b1224; color:#e5e7eb; border-color:#2b3447; }
+:where(.lesson[data-lesson-id="1-1"], .lesson[data-lesson-id="1-2"]) #part-2 .option.theme-light { background:#f3f4f6; color:#0b1224; border-color:#cbd5e1; }
+:where(.lesson[data-lesson-id="1-1"], .lesson[data-lesson-id="1-2"]) #part-2 .option.theme-sepia { background:#f6eedb; color:#3b2f1a; border-color:#e3d4b4; }
+:where(.lesson[data-lesson-id="1-1"], .lesson[data-lesson-id="1-2"]) #part-2 .option.theme-high  { background:#000;    color:#fff;    border-color:#ffffffa8; }
 
-/* Hover/focus cues */
-.lesson[data-lesson-id="1-1"] #part-2 .option:hover,
-.lesson[data-lesson-id="1-1"] #part-2 .option:focus-visible {
+/* Hover/focus */
+:where(.lesson[data-lesson-id="1-1"], .lesson[data-lesson-id="1-2"]) #part-2 .option:hover,
+:where(.lesson[data-lesson-id="1-1"], .lesson[data-lesson-id="1-2"]) #part-2 .option:focus-visible {
   transform: translateY(-2px);
   border-color: var(--kp-accent);
   outline: none;
@@ -265,24 +269,24 @@ body.site {
 }
 
 /* Correctness rings */
-.lesson[data-lesson-id="1-1"] #part-2 .option.is-correct {
+:where(.lesson[data-lesson-id="1-1"], .lesson[data-lesson-id="1-2"]) #part-2 .option.is-correct {
   border-color: var(--kp-correct);
   box-shadow: 0 0 0 4px color-mix(in oklab, var(--kp-correct) 35%, transparent);
 }
-.lesson[data-lesson-id="1-1"] #part-2 .option.is-wrong {
+:where(.lesson[data-lesson-id="1-1"], .lesson[data-lesson-id="1-2"]) #part-2 .option.is-wrong {
   border-color: var(--kp-wrong);
   box-shadow: 0 0 0 4px color-mix(in oklab, var(--kp-wrong) 35%, transparent);
 }
 
-/* Meter (Part 2) */
-.lesson[data-lesson-id="1-1"] #part-2 .quiz-progress {
+/* Meta/meter */
+:where(.lesson[data-lesson-id="1-1"], .lesson[data-lesson-id="1-2"]) #part-2 .quiz-progress {
   display: grid;
   gap: 8px;
   justify-items: center;
   margin: 8px 0 6px;
   color: color-mix(in oklab, var(--kp-text) 80%, var(--kp-muted));
 }
-.lesson[data-lesson-id="1-1"] #part-2 .meter {
+:where(.lesson[data-lesson-id="1-1"], .lesson[data-lesson-id="1-2"]) #part-2 .meter {
   width: min(560px, 90%);
   height: 10px;
   background: var(--kp-surface-2);
@@ -290,32 +294,29 @@ body.site {
   border-radius: 999px;
   overflow: hidden;
 }
-.lesson[data-lesson-id="1-1"] #part-2 .meter-fill {
+:where(.lesson[data-lesson-id="1-1"], .lesson[data-lesson-id="1-2"]) #part-2 .meter-fill {
   height: 100%;
   width: 0%;
   background: linear-gradient(90deg, var(--kp-accent), var(--kp-accent-2));
   transition: width .2s ease;
 }
-.lesson[data-lesson-id="1-1"] #part-2 .meter-label { font-size: .95rem; }
+:where(.lesson[data-lesson-id="1-1"], .lesson[data-lesson-id="1-2"]) #part-2 .meter-label { font-size: .95rem; }
 
-/* Hide “New Options” if present */
-.lesson[data-lesson-id="1-1"] #part-2 [data-action="reshuffle"] { display: none !important; }
-
-/* Lock state after a pick */
-.lesson[data-lesson-id="1-1"] #part-2 .option.is-disabled {
+/* Lock state after pick */
+:where(.lesson[data-lesson-id="1-1"], .lesson[data-lesson-id="1-2"]) #part-2 .option.is-disabled {
   pointer-events: none;
   opacity: .55;
 }
 
-/* ---------- Part 3: Minimalist input + meter + themed wrapper ---------- */
-.lesson[data-lesson-id="1-1"] #part-3 .quiz-progress {
+/* ---------- Part 3: meter + themes (Typing) ---------- */
+:where(.lesson[data-lesson-id="1-1"], .lesson[data-lesson-id="1-2"]) #part-3 .quiz-progress {
   display: grid;
   gap: 8px;
   justify-items: center;
   margin: 16px 0 6px;
   color: color-mix(in oklab, var(--kp-text) 80%, var(--kp-muted));
 }
-.lesson[data-lesson-id="1-1"] #part-3 .meter {
+:where(.lesson[data-lesson-id="1-1"], .lesson[data-lesson-id="1-2"]) #part-3 .meter {
   width: min(560px, 90%);
   height: 10px;
   background: var(--kp-surface-2);
@@ -323,15 +324,15 @@ body.site {
   border-radius: 999px;
   overflow: hidden;
 }
-.lesson[data-lesson-id="1-1"] #part-3 .meter-fill {
+:where(.lesson[data-lesson-id="1-1"], .lesson[data-lesson-id="1-2"]) #part-3 .meter-fill {
   height: 100%;
   width: 0%;
   background: linear-gradient(90deg, var(--kp-accent), var(--kp-accent-2));
   transition: width .2s ease;
 }
 
-/* Glyph wrapper themes (same palette as Part 2) */
-.lesson[data-lesson-id="1-1"] #part-3 .type-glyph-wrapper {
+/* Themed glyph wrapper (same palette as Part 2) */
+:where(.lesson[data-lesson-id="1-1"], .lesson[data-lesson-id="1-2"]) #part-3 .type-glyph-wrapper {
   display: grid;
   place-items: center;
   padding: 24px;
@@ -339,26 +340,13 @@ body.site {
   border: 1px solid var(--kp-border);
   margin: 6px 0 12px;
 }
-.lesson[data-lesson-id="1-1"] #part-3 .type-glyph-wrapper.theme-dark  { background:#0b1224; color:#e5e7eb; border-color:#2b3447; }
-.lesson[data-lesson-id="1-1"] #part-3 .type-glyph-wrapper.theme-light { background:#f3f4f6; color:#0b1224; border-color:#cbd5e1; }
-.lesson[data-lesson-id="1-1"] #part-3 .type-glyph-wrapper.theme-sepia { background:#f6eedb; color:#3b2f1a; border-color:#e3d4b4; }
-.lesson[data-lesson-id="1-1"] #part-3 .type-glyph-wrapper.theme-high  { background:#000;    color:#fff;    border-color:#ffffffa8; }
+:where(.lesson[data-lesson-id="1-1"], .lesson[data-lesson-id="1-2"]) #part-3 .type-glyph-wrapper.theme-dark  { background:#0b1224; color:#e5e7eb; border-color:#2b3447; }
+:where(.lesson[data-lesson-id="1-1"], .lesson[data-lesson-id="1-2"]) #part-3 .type-glyph-wrapper.theme-light { background:#f3f4f6; color:#0b1224; border-color:#cbd5e1; }
+:where(.lesson[data-lesson-id="1-1"], .lesson[data-lesson-id="1-2"]) #part-3 .type-glyph-wrapper.theme-sepia { background:#f6eedb; color:#3b2f1a; border-color:#e3d4b4; }
+:where(.lesson[data-lesson-id="1-1"], .lesson[data-lesson-id="1-2"]) #part-3 .type-glyph-wrapper.theme-high  { background:#000;    color:#fff;    border-color:#ffffffa8; }
 
-/* >>> Make the kana inherit the wrapper color (fix contrast on light themes) */
-.lesson[data-lesson-id="1-1"] #part-3 .type-glyph {
-  color: currentColor;   /* no forced light color on light backgrounds */
-}
-
-/* Minimal input look (nicer pill) */
-.lesson[data-lesson-id="1-1"] #part-3 .type-label {
-  display: block;
-  text-align: center;
-  margin: 8px 0 6px;
-  color: color-mix(in oklab, var(--kp-text) 75%, var(--kp-muted));
-  font-weight: 600;
-  letter-spacing: .2px;
-}
-.lesson[data-lesson-id="1-1"] #part-3 .type-input {
+/* Minimalist input for typing */
+:where(.lesson[data-lesson-id="1-1"], .lesson[data-lesson-id="1-2"]) #part-3 .type-input {
   width: min(380px, 90%);
   margin: 0 auto;
   display: block;
@@ -372,14 +360,8 @@ body.site {
   outline: none;
   transition: box-shadow .15s ease, border-color .15s ease, background-color .15s ease;
 }
-.lesson[data-lesson-id="1-1"] #part-3 .type-input:focus {
+:where(.lesson[data-lesson-id="1-1"], .lesson[data-lesson-id="1-2"]) #part-3 .type-input:focus {
   border-color: var(--kp-accent);
   box-shadow: 0 0 0 4px color-mix(in oklab, var(--kp-accent) 25%, transparent);
   background: #0c1124;
-}
-
-/* Lock input briefly after submit */
-.lesson[data-lesson-id="1-1"] #part-3 .type-input.is-locked {
-  opacity: .7;
-  pointer-events: none;
 }
