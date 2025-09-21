@@ -25,13 +25,13 @@ window.KANA_STAGES = {
     code: "1-3",
     title: "1-3 — Mixed Vowels (Both Scripts)",
     href: "lessons/1-3.html",
-    thumb: "あ/ア"
+    thumb: "あ+ア"
   },
   {
     code: "1-4",
     title: "1-4 — Mixed Vowels (No Hints)",
     href: "lessons/1-4.html",
-    thumb: "あ/ア"
+    thumb: "あ+ア"
   }
 ]
 
