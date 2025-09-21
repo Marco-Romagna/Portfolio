@@ -18,7 +18,11 @@ function renderWorlds(worlds) {
       const head  = node.querySelector(".level-head");
       const icon  = node.querySelector(".level-icon");
       const title = node.querySelector(".level-title");
-
+      
+      // If a special class was set in stages.js, apply it
+      if (lv.class) {
+        icon.classList.add(lv.class);
+      }
       // Optional bits we remove (collapse UI)
       node.querySelector(".level-body")?.remove();
       node.querySelector(".chev")?.remove();
