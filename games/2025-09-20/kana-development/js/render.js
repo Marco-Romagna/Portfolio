@@ -13,14 +13,14 @@ function renderWorlds(worlds) {
     w.levels.forEach(lv => {
       const lNode = levelTpl.content.cloneNode(true);
 
-      // Card link targets
+      // Links
       const thumb = lNode.querySelector(".card-thumb");
       const title = lNode.querySelector(".card-title");
       thumb.href = lv.href;
       title.href = lv.href;
       title.textContent = lv.title;
 
-      // Text-based thumbnail (kana or fallback to code)
+      // Thumbnail (text, for now)
       const mark = lNode.querySelector(".no-thumb-mark");
       mark.textContent = lv.thumb || lv.code;
 
@@ -43,5 +43,5 @@ function renderWorlds(worlds) {
   });
 }
 
-// expose globally if needed
+// expose for reuse
 window.renderWorlds = renderWorlds;
