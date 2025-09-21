@@ -228,6 +228,8 @@
   // ==========================================================
   // Part 3: Typing — adaptive + meter + local Next (bottom)
   //   + no same kana twice in a row
+  //   + FINAL-5 MODE: each point requires a 3-kana combo in a row
+  //     (combo never equals the exact previous combo)
   // ==========================================================
   const part3 = $('#part-3');
   if (part3) {
@@ -252,11 +254,19 @@
     }
 
     const GOAL = 15;
+    const COMBO_THRESHOLD = GOAL - 5; // last 5 points use 3-kana combos
+
     let progressPts = 0;
     let roundLocked = false;
 
     // Track last kana to avoid immediate repeat
     let lastKanaP3 = null;
+
+    // Combo state
+    let comboActive = false;
+    let comboSeq = [];   // array of 3 kana
+    let comboIdx = 0;    // 0..2
+    let lastComboKey = null; // prevent repeat of exact previous combo
 
     const weights = Object.fromEntries(KANA.map(k => [k, 1]));
     const unseen  = new Set(KANA);
@@ -302,51 +312,168 @@
       return cand;
     }
 
+    // --- COMBO GENERATION ---
+    function makeCombo() {
+      // generate a 3-kana sequence: no consecutive duplicates,
+      // first element also avoids lastKanaP3; and not equal to lastComboKey
+      for (let attempt = 0; attempt < 50; attempt++) {
+        const seq = [];
+        // first
+        let first = pickNextKanaAvoidRepeat();
+        seq.push(first);
+        // second
+        let second = pickWeighted(weights);
+        let tries = 0;
+        while ((second === seq[seq.length - 1]) && tries < 10) {
+          second = pickWeighted(weights); tries++;
+        }
+        seq.push(second);
+        // third
+        let third = pickWeighted(weights);
+        tries = 0;
+        while ((third === seq[seq.length - 1]) && tries < 10) {
+          third = pickWeighted(weights); tries++;
+        }
+        seq.push(third);
+
+        const key = seq.join('');
+        if (key !== lastComboKey) return { seq, key };
+      }
+      // fallback: just return something
+      const seq = [pickNextKanaAvoidRepeat(), pickWeighted(weights), pickWeighted(weights)];
+      return { seq, key: seq.join('') };
+    }
+
+    function startComboRound() {
+      const { seq, key } = makeCombo();
+      comboActive = true;
+      comboSeq = seq;
+      comboIdx = 0;
+      lastComboKey = key;
+
+      // display first kana of combo
+      glyph.dataset.currentKana = comboSeq[0];
+      glyph.textContent = comboSeq[0];
+      lastKanaP3 = comboSeq[0];
+
+      setThemeRandom();
+      input.focus();
+    }
+
+    function startSingleRound() {
+      comboActive = false;
+      input.classList.remove('is-locked');
+      input.value = '';
+
+      const kana = pickNextKanaAvoidRepeat();
+      glyph.dataset.currentKana = kana;
+      glyph.textContent = kana;
+      lastKanaP3 = kana;
+
+      setThemeRandom();
+      input.focus();
+    }
+
     function newRound() {
       roundLocked = false;
       input.classList.remove('is-locked');
       input.value = '';
 
-      const kana = pickNextKanaAvoidRepeat();
-
-      glyph.dataset.currentKana = kana;
-      glyph.textContent = kana;
-
-      lastKanaP3 = kana;
-      setThemeRandom();
-      input.focus();
+      if (progressPts >= COMBO_THRESHOLD) {
+        startComboRound();
+      } else {
+        startSingleRound();
+      }
     }
 
     function evaluate() {
       if (roundLocked) return;
 
-      const kana     = glyph.dataset.currentKana;
-      const expected = ROMA[kana];
-      const val      = (input.value || '').trim().toLowerCase();
+      const val = (input.value || '').trim().toLowerCase();
       if (!val) return;
 
       roundLocked = true;
       input.classList.add('is-locked');
 
-      if (val === expected) {
-        progressPts = Math.min(GOAL, progressPts + 1);
-        unseen.delete(kana);
-        weights[kana] = Math.max(1, weights[kana] - 1);
-        updateMeter();
+      if (!comboActive) {
+        // --- normal single-kana round ---
+        const kana     = glyph.dataset.currentKana;
+        const expected = ROMA[kana];
 
-        setTimeout(() => {
-          if (progressPts >= GOAL) {
-            part3Done = true;
-            nextBtn?.classList.remove('is-hidden');   // show local Next
-          } else {
-            newRound();
-          }
-        }, 280);
+        if (val === expected) {
+          progressPts = Math.min(GOAL, progressPts + 1);
+          unseen.delete(kana);
+          weights[kana] = Math.max(1, weights[kana] - 1);
+          updateMeter();
+
+          setTimeout(() => {
+            if (progressPts >= GOAL) {
+              part3Done = true;
+              // show local Next
+              $('[data-action="next-part"]', part3)?.classList.remove('is-hidden');
+            } else {
+              newRound();
+            }
+          }, 260);
+        } else {
+          progressPts = Math.max(0, progressPts - 1);
+          weights[kana] = (weights[kana] || 1) + 2;
+          updateMeter();
+          setTimeout(() => { newRound(); }, 360);
+        }
       } else {
-        progressPts = Math.max(0, progressPts - 1);
-        weights[kana] = (weights[kana] || 1) + 2;
-        updateMeter();
-        setTimeout(() => { newRound(); }, 380);
+        // --- combo mode ---
+        const currentKana = comboSeq[comboIdx];
+        const expected = ROMA[currentKana];
+
+        if (val === expected) {
+          // advance within combo
+          comboIdx += 1;
+          if (comboIdx < 3) {
+            // show next kana in combo
+            const nextKana = comboSeq[comboIdx];
+            glyph.dataset.currentKana = nextKana;
+            glyph.textContent = nextKana;
+            lastKanaP3 = nextKana;
+
+            // clear and unlock input for next sub-step
+            setTimeout(() => {
+              roundLocked = false;
+              input.classList.remove('is-locked');
+              input.value = '';
+              input.focus();
+            }, 120);
+          } else {
+            // finished the 3-kana combo successfully → +1 progress
+            comboActive = false;
+
+            // adjust weights (reward all three)
+            comboSeq.forEach(k => {
+              unseen.delete(k);
+              weights[k] = Math.max(1, weights[k] - 1);
+            });
+
+            progressPts = Math.min(GOAL, progressPts + 1);
+            updateMeter();
+
+            setTimeout(() => {
+              if (progressPts >= GOAL) {
+                part3Done = true;
+                $('[data-action="next-part"]', part3)?.classList.remove('is-hidden');
+              } else {
+                newRound();
+              }
+            }, 260);
+          }
+        } else {
+          // combo failed → -1 progress, increase weight of the kana we failed on
+          weights[currentKana] = (weights[currentKana] || 1) + 2;
+          progressPts = Math.max(0, progressPts - 1);
+          updateMeter();
+
+          comboActive = false;
+          setTimeout(() => { newRound(); }, 360);
+        }
       }
     }
 
