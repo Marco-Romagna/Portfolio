@@ -34,6 +34,12 @@ window.KANA_STAGES = {
     thumb: "あ+ア",
     class: "icon-sm"
   },
+  {
+    code: "1-4",
+    title: "1-4 — Type Vowels (romaji)",
+    href: "lessons/1-4.html",
+    thumb: "a"
+  },
   {                                                       // World 2
     code: "2-1",
     title: "2-1 — Hiragana K (かきくけこ)",
