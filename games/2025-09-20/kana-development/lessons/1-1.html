@@ -21,10 +21,7 @@
     </div>
   </header>
 
-  <!-- Single centered CTA (shows “Start” on Part 1, “Next” when a part is complete) -->
-  <div class="lesson-cta">
-    <button class="btn primary" data-action="advance">Start</button>
-  </div>
+  <!-- Removed: .lesson-cta with Start button -->
 
   <main class="container game-wrap lesson" data-lesson-id="1-1" data-total-parts="4">
 
@@ -57,7 +54,7 @@
     <section id="part-1" class="lesson-part is-visible" data-part-index="1" aria-labelledby="part1-title">
       <h1 id="part1-title" class="part-title">Hiragana Vowels — Preview</h1>
 
-      <p class="muted center">Tap each card to flip between kana and romaji.</p>
+      <!-- Removed the flip instruction text -->
 
       <div class="kana-grid">
         <!-- Static UI placeholders; data hooks for JS to fill or animate -->
@@ -84,7 +81,8 @@
       </div>
 
       <div class="actions center">
-        <button class="btn primary" data-action="start-quiz">Start Quiz</button>
+        <!-- Moved the Start button here and kept its original data-action -->
+        <button class="btn primary" data-action="advance">Start</button>
       </div>
     </section>
 
@@ -94,15 +92,10 @@
 
       <div class="quiz-panel" data-state="idle">
         <div class="quiz-prompt">
-          <!-- Example prompt types (UI only): -->
-          <!-- Type A: Ask for kana by romaji -->
           <p class="prompt-text">Which kana is <strong class="prompt-target" data-type="romaji">“a”</strong>?</p>
-          <!-- Type B (alternate): Ask for romaji by kana -->
-          <!-- <p class="prompt-text">What is the romaji for <strong class="prompt-target" data-type="kana">“あ”</strong>?</p> -->
         </div>
 
         <div class="quiz-options">
-          <!-- Four options, randomized order. Use .option and state classes colored via lessons.css -->
           <button class="option" data-value="あ">あ</button>
           <button class="option" data-value="い">い</button>
           <button class="option" data-value="う">う</button>
@@ -110,7 +103,6 @@
         </div>
 
         <div class="quiz-feedback" aria-live="polite">
-          <!-- Add colored states via lessons.css: .is-correct, .is-wrong -->
           <p class="feedback-text">Pick the right one to continue…</p>
         </div>
 
@@ -131,7 +123,6 @@
 
       <div class="type-panel">
         <div class="type-glyph-wrapper">
-          <!-- Color changes controlled via lessons.css classes: .state-idle, .state-correct, .state-wrong -->
           <span class="kana-glyph type-glyph state-idle" data-current-kana="あ">あ</span>
         </div>
 
@@ -162,14 +153,12 @@
         <p class="muted center">When ready, say the vowel for the character shown.</p>
 
         <div class="speak-controls">
-          <!-- UI only; JS can wire to Web Speech API later -->
           <button class="btn" data-action="mic-toggle" aria-pressed="false">Start / Stop Mic</button>
           <button class="btn" data-action="play-audio">Play Example</button>
         </div>
 
         <div class="speak-status" aria-live="polite">
           <p class="status-line" data-status="idle">Mic: off</p>
-          <!-- Possible statuses: listening / processing / matched / mismatch -->
         </div>
 
         <div class="actions">
@@ -178,7 +167,6 @@
         </div>
 
         <div class="speak-meta">
-          <!-- Track how many correct pronunciations achieved -->
           <span class="counter" data-correct="0" data-needed="2">0 / 2 said correctly</span>
         </div>
       </div>
@@ -186,7 +174,6 @@
 
   </main>
 
-<script defer src="../js/lessons/lessons.js"></script>
-
+  <script defer src="../js/lessons/lessons.js"></script>
 </body>
 </html>
