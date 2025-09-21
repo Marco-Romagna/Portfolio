@@ -13,8 +13,9 @@ window.KANA_STAGES = {
       code: "1-1",
       title: "1-1 — Hiragana Vowels",
       href: "lessons/1-1.html",
-      tags: ["Beginner", "Recommended"],
+      tags: ["Beginner"],
       desc: "あ い う え お — recognize and pronounce the five hiragana vowels.",
+      // text thumbnail for now (clean, representative)
       thumb: "あ"
     },
     {
