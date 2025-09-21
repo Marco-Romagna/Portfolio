@@ -26,7 +26,7 @@
 
   // ------- lesson data (for 1-1) -------
   const KANA = ['あ', 'い', 'う', 'え', 'お'];
-  const ROMA = { 'あ': 'a', 'い': 'i', 'う': 'u', 'え': 'e', 'お': 'o' };
+  const ROMA = { 'あ':'a','い':'i','う':'u','え':'e','お':'o' };
 
   // ------- state -------
   let current   = 1;
@@ -92,8 +92,7 @@
       const total = entries.reduce((s, [, w]) => s + w, 0);
       let r = Math.random() * total;
       for (const [key, w] of entries) {
-        r -= w;
-        if (r <= 0) return key;
+        r -= w; if (r <= 0) return key;
       }
       return entries[entries.length - 1][0];
     }
@@ -139,9 +138,13 @@
       const others  = sample(KANA.filter(k => k !== correctKana), 3);
       const options = sample([correctKana, ...others], 4);
 
+      // Shuffle themes so all 4 appear over time
+      const shuffledThemes = [...THEMES].sort(() => Math.random() - 0.5);
+
       options.forEach((k, i) => {
+        const theme = shuffledThemes[i % shuffledThemes.length];
         const b = document.createElement('button');
-        b.className = `option ${THEMES[i % THEMES.length]}`;
+        b.className = `option ${theme}`;
         b.dataset.value = k;
         b.textContent = k;
         b.addEventListener('click', () => onPick(k, correctKana, b));
@@ -248,7 +251,7 @@
       input.classList.remove('is-locked');
       input.value = '';
 
-      // pick next kana (guarantee first pass, then weighted)
+      // pick next kana (ensure each appears at least once, then weighted)
       let kana;
       if (unseen.size) {
         const arr = Array.from(unseen);
@@ -308,7 +311,6 @@
           evaluate();
         }
       });
-      // keep glyph neutral (no state clearing needed)
     }
 
     progressPts = 0; updateMeter(); newRound();
