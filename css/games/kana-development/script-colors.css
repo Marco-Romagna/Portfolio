@@ -1,0 +1,28 @@
+/* =========================
+   Kana Development — Script Colors
+   Used for World 1-3 (color-coded practice)
+   ========================= */
+
+/* Hiragana rows */
+.level-icon.hira {
+  border-color: #3da9fc;
+  background: color-mix(in oklab, #3da9fc 15%, transparent);
+}
+
+/* Katakana rows */
+.level-icon.kata {
+  border-color: #9d4edd;
+  background: color-mix(in oklab, #9d4edd 15%, transparent);
+}
+
+/* Both scripts together */
+.level-icon.both {
+  border-color: var(--accent);
+  background: color-mix(in oklab, var(--accent) 15%, transparent);
+}
+
+/* Disable hints (used in World 1-4) */
+.no-hint .level-icon {
+  border-color: var(--border);
+  background: var(--surface);
+}
