@@ -12,26 +12,26 @@ window.KANA_STAGES = {
   {
     code: "1-1",
     title: "1-1 — Hiragana Vowels",
-    href: "js/lessons/1-1.html",
+    href: "lessons/1-1.html",
     thumb: "あ"
   },
   {
     code: "1-2",
     title: "1-2 — Katakana Vowels",
-    href: "js/lessons/1-2.html",
+    href: "lessons/1-2.html",
     thumb: "ア"
   },
   {
     code: "1-3",
     title: "1-3 — Mixed Vowels (Both Scripts)",
-    href: "js/lessons/1-3.html",
+    href: "lessons/1-3.html",
     thumb: "あ+ア",
     class: "icon-sm"
   },
   {
     code: "1-4",
     title: "1-4 — Mixed Vowels (No Hints)",
-    href: "js/lessons/1-4.html",
+    href: "lessons/1-4.html",
     thumb: "あ+ア",
     class: "icon-sm"
   }
