@@ -25,7 +25,7 @@
   const startBtn = $('#part-1 .actions [data-action="advance"]');
 
   // ------- lesson data (for 1-1) -------
-  const KANA = ['あ', 'い', 'う', 'え', 'お'];
+  const KANA = ['あ','い','う','え','お'];
   const ROMA = { 'あ':'a','い':'i','う':'u','え':'e','お':'o' };
 
   // ------- state -------
@@ -68,6 +68,8 @@
 
   // ==========================================================
   // Part 2: Identify — Adaptive, ±1 meter to 15, lock per round
+  //   + no same target twice in a row
+  //   + no option repeats in the same slot as previous round
   // ==========================================================
   const part2 = $('#part-2');
   if (part2) {
@@ -87,13 +89,15 @@
 
     let roundLocked = false;
 
+    // NEW: remember last target and last options by slot index
+    let lastCorrectKana = null;
+    let prevOptionAtIndex = [null, null, null, null];
+
     function pickWeighted(map) {
       const entries = Object.entries(map);
       const total = entries.reduce((s, [, w]) => s + w, 0);
       let r = Math.random() * total;
-      for (const [key, w] of entries) {
-        r -= w; if (r <= 0) return key;
-      }
+      for (const [key, w] of entries) { r -= w; if (r <= 0) return key; }
       return entries[entries.length - 1][0];
     }
 
@@ -120,28 +124,71 @@
 
     const THEMES = ['theme-dark', 'theme-light', 'theme-sepia', 'theme-high'];
 
+    // Ensure next correct kana is not the same as last round (when possible)
+    function pickNextCorrect() {
+      if (unseen.size > 0) {
+        // Prefer unseen first, avoid repeating last if >1 unseen left
+        let choices = Array.from(unseen);
+        if (choices.length > 1) choices = choices.filter(k => k !== lastCorrectKana);
+        return choices[Math.floor(Math.random() * choices.length)];
+      }
+      // Weighted with a few attempts to avoid lastCorrectKana
+      let cand = pickWeighted(weights);
+      let tries = 0;
+      while (cand === lastCorrectKana && tries < 10) {
+        cand = pickWeighted(weights);
+        tries++;
+      }
+      return cand;
+    }
+
+    // Arrange options so that options[i] !== prevOptionAtIndex[i]
+    function arrangeOptionsNoSlotRepeat(opts) {
+      const attempts = 50;
+      for (let t = 0; t < attempts; t++) {
+        const perm = sample(opts, opts.length); // shuffled copy
+        let ok = true;
+        for (let i = 0; i < perm.length; i++) {
+          if (prevOptionAtIndex[i] === perm[i]) { ok = false; break; }
+        }
+        if (ok) return perm;
+      }
+      // Fallback: do minimal swaps to break conflicts
+      const perm = [...opts];
+      for (let i = 0; i < perm.length; i++) {
+        if (perm[i] === prevOptionAtIndex[i]) {
+          // find a j to swap that also doesn't create a conflict
+          for (let j = i + 1; j < perm.length; j++) {
+            if (perm[j] !== prevOptionAtIndex[i] && perm[i] !== prevOptionAtIndex[j]) {
+              [perm[i], perm[j]] = [perm[j], perm[i]];
+              break;
+            }
+          }
+        }
+      }
+      return perm;
+    }
+
     function nextQuestion() {
       roundLocked = false;
       grid.innerHTML = '';
 
-      // choose the correct kana (ensure each appears at least once)
-      let correctKana;
-      if (unseen.size > 0) {
-        const arr = Array.from(unseen);
-        correctKana = arr[Math.floor(Math.random() * arr.length)];
-      } else {
-        correctKana = pickWeighted(weights);
-      }
+      // choose the correct kana with no immediate repeat
+      const correctKana = pickNextCorrect();
 
       if (prompt) { prompt.dataset.type = 'romaji'; prompt.textContent = `“${ROMA[correctKana]}”`; }
 
+      // 4 options (1 correct + 3 others)
       const others  = sample(KANA.filter(k => k !== correctKana), 3);
-      const options = sample([correctKana, ...others], 4);
+      const rawOptions = [correctKana, ...others];
 
-      // Shuffle themes so all 4 appear over time
+      // NEW: prevent same kana in same slot as previous round
+      const orderedOptions = arrangeOptionsNoSlotRepeat(rawOptions);
+
+      // Shuffle themes so we see all 4 over time
       const shuffledThemes = [...THEMES].sort(() => Math.random() - 0.5);
 
-      options.forEach((k, i) => {
+      orderedOptions.forEach((k, i) => {
         const theme = shuffledThemes[i % shuffledThemes.length];
         const b = document.createElement('button');
         b.className = `option ${theme}`;
@@ -150,6 +197,10 @@
         b.addEventListener('click', () => onPick(k, correctKana, b));
         grid.appendChild(b);
       });
+
+      // Update trackers for next round comparisons
+      prevOptionAtIndex = orderedOptions.slice();
+      lastCorrectKana = correctKana;
 
       setFeedback('Pick the right one to continue…');
     }
@@ -215,7 +266,6 @@
     let progressPts = 0;
     let roundLocked = false;
 
-    // weights + unseen (same behavior as Part 2)
     const weights = Object.fromEntries(KANA.map(k => [k, 1]));
     const unseen  = new Set(KANA);
 
@@ -225,9 +275,7 @@
       const entries = Object.entries(map);
       const total = entries.reduce((s, [,w]) => s + w, 0);
       let r = Math.random() * total;
-      for (const [key, w] of entries) {
-        r -= w; if (r <= 0) return key;
-      }
+      for (const [key, w] of entries) { r -= w; if (r <= 0) return key; }
       return entries[entries.length - 1][0];
     }
 
@@ -251,7 +299,6 @@
       input.classList.remove('is-locked');
       input.value = '';
 
-      // pick next kana (ensure each appears at least once, then weighted)
       let kana;
       if (unseen.size) {
         const arr = Array.from(unseen);
@@ -278,8 +325,6 @@
       roundLocked = true;
       input.classList.add('is-locked');
 
-      // keep glyph neutral: no success/error classes at all
-
       if (val === expected) {
         progressPts = Math.min(GOAL, progressPts + 1);
         unseen.delete(kana);
@@ -289,21 +334,20 @@
         setTimeout(() => {
           if (progressPts >= GOAL) {
             part3Done = true;
-            showCTA('Next');            // reveal top CTA to continue
+            showCTA('Next');
           } else {
             newRound();
           }
         }, 280);
       } else {
         progressPts = Math.max(0, progressPts - 1);
-        weights[kana] = (weights[kana] || 1) + 2;  // wrong → more frequent
+        weights[kana] = (weights[kana] || 1) + 2;
         updateMeter();
 
-        setTimeout(() => { newRound(); }, 380);    // auto-advance; no correction
+        setTimeout(() => { newRound(); }, 380);
       }
     }
 
-    // Enter submits; no other buttons
     if (input) {
       input.addEventListener('keydown', (e) => {
         if (e.key === 'Enter') {
