@@ -67,7 +67,7 @@
   startBtn?.addEventListener('click', () => showPart(2));
 
   // ==========================================================
-  // Part 2: Identify — Adaptive, ±1 meter to 15
+  // Part 2: Identify — Adaptive, ±1 meter to 15, lock per round
   // ==========================================================
   const part2 = $('#part-2');
   if (part2) {
@@ -86,6 +86,9 @@
     // Per-kana weights (start at 1), and a set of unseen kana to guarantee first pass
     const weights = Object.fromEntries(KANA.map(k => [k, 1]));
     const unseen  = new Set(KANA);
+
+    // lock state: once a choice is made (right/wrong), don't allow correcting that round
+    let roundLocked = false;
 
     // utility: weighted random pick
     function pickWeighted(map) {
@@ -112,10 +115,11 @@
     function setFeedback(t) { if (feedback) feedback.textContent = t; }
 
     function updateMeter() {
-      const pct = Math.max(0, Math.min(100, Math.round((progressPts / GOAL) * 100)));
-      meter?.setAttribute('aria-valuenow', String(Math.max(0, Math.min(GOAL, progressPts))));
+      const clamped = Math.max(0, Math.min(GOAL, progressPts));
+      const pct = Math.round((clamped / GOAL) * 100);
+      meter?.setAttribute('aria-valuenow', String(clamped));
       if (meterFill) meterFill.style.width = `${pct}%`;
-      if (meterLabel) meterLabel.textContent = `Progress: ${Math.max(0, Math.min(GOAL, progressPts))} / ${GOAL}`;
+      if (meterLabel) meterLabel.textContent = `Progress: ${clamped} / ${GOAL}`;
     }
 
     function clearStates() { $$('.option', part2).forEach(b => b.classList.remove('is-correct','is-wrong')); }
@@ -124,6 +128,7 @@
     const THEMES = ['theme-dark', 'theme-light', 'theme-sepia', 'theme-high'];
 
     function nextQuestion() {
+      roundLocked = false;
       grid.innerHTML = '';
 
       // choose the correct kana
@@ -155,6 +160,13 @@
     }
 
     function onPick(choice, correctKana, btn) {
+      if (roundLocked) return;               // ignore extra clicks
+      roundLocked = true;
+
+      // disable all options immediately so they can't correct this round
+      const all = $$('.option', part2);
+      all.forEach(b => { b.classList.add('is-disabled'); b.disabled = true; });
+
       clearStates();
       if (choice === correctKana) {
         btn.classList.add('is-correct');
@@ -173,15 +185,22 @@
             nextBtn?.classList.remove('is-hidden'); // show local Next
             setFeedback('Part complete! Tap Next to continue.');
           } else {
-            nextQuestion();
+            nextQuestion();                 // move on automatically
           }
-        }, 350);
+        }, 400);
       } else {
         btn.classList.add('is-wrong');
         setFeedback('Try another.');
-        progressPts = Math.max(0, progressPts - 1);       // wrong → -1
-        weights[correctKana] = (weights[correctKana] || 1) + 2; // wrong → more frequent
+
+        // wrong → -1 progress and boost that kana to show up again later
+        progressPts = Math.max(0, progressPts - 1);
+        weights[correctKana] = (weights[correctKana] || 1) + 2;       // more frequent
         updateMeter();
+
+        // don't allow correcting this item; move on after a short pause
+        setTimeout(() => {
+          nextQuestion();
+        }, 500);
       }
     }
 
