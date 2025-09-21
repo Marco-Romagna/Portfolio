@@ -79,18 +79,14 @@
     const meterLabel = $('.quiz-progress .meter-label', part2);
     const nextBtn    = $('[data-action="next-part"]', part2);
 
-    // progress target
     const GOAL = 15;
     let progressPts = 0;
 
-    // Per-kana weights (start at 1), and a set of unseen kana to guarantee first pass
     const weights = Object.fromEntries(KANA.map(k => [k, 1]));
     const unseen  = new Set(KANA);
 
-    // lock state: once a choice is made (right/wrong), don't allow correcting that round
     let roundLocked = false;
 
-    // utility: weighted random pick
     function pickWeighted(map) {
       const entries = Object.entries(map);
       const total = entries.reduce((s, [, w]) => s + w, 0);
@@ -99,10 +95,9 @@
         r -= w;
         if (r <= 0) return key;
       }
-      return entries[entries.length - 1][0]; // fallback
+      return entries[entries.length - 1][0];
     }
 
-    // shuffle copy and slice n
     function sample(arr, n) {
       const a = [...arr];
       for (let i = a.length - 1; i > 0; i--) {
@@ -124,14 +119,13 @@
 
     function clearStates() { $$('.option', part2).forEach(b => b.classList.remove('is-correct','is-wrong')); }
 
-    // rotate high-readability themes
     const THEMES = ['theme-dark', 'theme-light', 'theme-sepia', 'theme-high'];
 
     function nextQuestion() {
       roundLocked = false;
       grid.innerHTML = '';
 
-      // choose the correct kana
+      // choose the correct kana (ensure each appears at least once)
       let correctKana;
       if (unseen.size > 0) {
         const arr = Array.from(unseen);
@@ -140,11 +134,9 @@
         correctKana = pickWeighted(weights);
       }
 
-      // ensure prompt shows romaji
       if (prompt) { prompt.dataset.type = 'romaji'; prompt.textContent = `“${ROMA[correctKana]}”`; }
 
-      // 4 options: include correct + 3 others
-      const others = sample(KANA.filter(k => k !== correctKana), 3);
+      const others  = sample(KANA.filter(k => k !== correctKana), 3);
       const options = sample([correctKana, ...others], 4);
 
       options.forEach((k, i) => {
@@ -160,10 +152,10 @@
     }
 
     function onPick(choice, correctKana, btn) {
-      if (roundLocked) return;               // ignore extra clicks
+      if (roundLocked) return;
       roundLocked = true;
 
-      // disable all options immediately so they can't correct this round
+      // disable all options so they can't correct this round
       const all = $$('.option', part2);
       all.forEach(b => { b.classList.add('is-disabled'); b.disabled = true; });
 
@@ -172,10 +164,9 @@
         btn.classList.add('is-correct');
         setFeedback('Nice! That’s correct.');
 
-        // progress + weighting
         progressPts = Math.min(GOAL, progressPts + 1);
         unseen.delete(correctKana);
-        weights[correctKana] = Math.max(1, weights[correctKana] - 1); // right → less frequent
+        weights[correctKana] = Math.max(1, weights[correctKana] - 1);
 
         updateMeter();
 
@@ -185,34 +176,28 @@
             nextBtn?.classList.remove('is-hidden'); // show local Next
             setFeedback('Part complete! Tap Next to continue.');
           } else {
-            nextQuestion();                 // move on automatically
+            nextQuestion();
           }
         }, 400);
       } else {
         btn.classList.add('is-wrong');
         setFeedback('Try another.');
 
-        // wrong → -1 progress and boost that kana to show up again later
         progressPts = Math.max(0, progressPts - 1);
-        weights[correctKana] = (weights[correctKana] || 1) + 2;       // more frequent
+        weights[correctKana] = (weights[correctKana] || 1) + 2;
         updateMeter();
 
-        // don't allow correcting this item; move on after a short pause
-        setTimeout(() => {
-          nextQuestion();
-        }, 500);
+        setTimeout(() => { nextQuestion(); }, 500);
       }
     }
 
-    // local Next → go to Part 3
     nextBtn?.addEventListener('click', () => showPart(3));
 
-    // init
     progressPts = 0; updateMeter(); nextQuestion();
   }
-  
+
   // ==========================================================
-  // Part 3: Typing — Enter the Phonetic (adaptive + meter)
+  // Part 3: Typing — Enter the Phonetic (adaptive + meter, neutral glyph)
   // ==========================================================
   const part3 = $('#part-3');
   if (part3) {
@@ -222,17 +207,17 @@
     const meter      = $('.quiz-progress .meter', part3);
     const meterFill  = $('.quiz-progress .meter-fill', part3);
     const meterLabel = $('.quiz-progress .meter-label', part3);
-  
+
     const GOAL = 15;
     let progressPts = 0;
     let roundLocked = false;
-  
+
     // weights + unseen (same behavior as Part 2)
-    const weights = Object.fromEntries(['あ','い','う','え','お'].map(k => [k, 1]));
-    const unseen  = new Set(['あ','い','う','え','お']);
-  
+    const weights = Object.fromEntries(KANA.map(k => [k, 1]));
+    const unseen  = new Set(KANA);
+
     const THEMES = ['theme-dark','theme-light','theme-sepia','theme-high'];
-  
+
     function pickWeighted(map) {
       const entries = Object.entries(map);
       const total = entries.reduce((s, [,w]) => s + w, 0);
@@ -242,7 +227,7 @@
       }
       return entries[entries.length - 1][0];
     }
-  
+
     function updateMeter() {
       const clamped = Math.max(0, Math.min(GOAL, progressPts));
       const pct = Math.round((clamped / GOAL) * 100);
@@ -250,19 +235,19 @@
       if (meterFill) meterFill.style.width = `${pct}%`;
       if (meterLabel) meterLabel.textContent = `Progress: ${clamped} / ${GOAL}`;
     }
-  
+
     function setThemeRandom() {
       if (!wrapper) return;
       wrapper.classList.remove(...THEMES);
       const pick = THEMES[Math.floor(Math.random() * THEMES.length)];
       wrapper.classList.add(pick);
     }
-  
+
     function newRound() {
       roundLocked = false;
       input.classList.remove('is-locked');
       input.value = '';
-  
+
       // pick next kana (guarantee first pass, then weighted)
       let kana;
       if (unseen.size) {
@@ -271,53 +256,50 @@
       } else {
         kana = pickWeighted(weights);
       }
-  
+
       glyph.dataset.currentKana = kana;
       glyph.textContent = kana;
-  
+
       setThemeRandom();
       input.focus();
     }
-  
+
     function evaluate() {
       if (roundLocked) return;
+
       const kana     = glyph.dataset.currentKana;
-      const expected = { 'あ':'a','い':'i','う':'u','え':'e','お':'o' }[kana];
+      const expected = ROMA[kana];
       const val      = (input.value || '').trim().toLowerCase();
-  
       if (!val) return;
-  
+
       roundLocked = true;
       input.classList.add('is-locked');
-  
-      glyph.classList.remove('state-correct','state-wrong');
-  
+
+      // keep glyph neutral: no success/error classes at all
+
       if (val === expected) {
-        glyph.classList.add('state-correct');
         progressPts = Math.min(GOAL, progressPts + 1);
         unseen.delete(kana);
         weights[kana] = Math.max(1, weights[kana] - 1);
         updateMeter();
-  
+
         setTimeout(() => {
           if (progressPts >= GOAL) {
             part3Done = true;
-            showCTA('Next');            // show top CTA to continue
+            showCTA('Next');            // reveal top CTA to continue
           } else {
             newRound();
           }
-        }, 320);
+        }, 280);
       } else {
-        glyph.classList.add('state-wrong');
         progressPts = Math.max(0, progressPts - 1);
         weights[kana] = (weights[kana] || 1) + 2;  // wrong → more frequent
         updateMeter();
-  
-        // move on after short delay; no correcting this round
-        setTimeout(() => { newRound(); }, 420);
+
+        setTimeout(() => { newRound(); }, 380);    // auto-advance; no correction
       }
     }
-  
+
     // Enter submits; no other buttons
     if (input) {
       input.addEventListener('keydown', (e) => {
@@ -326,9 +308,9 @@
           evaluate();
         }
       });
-      input.addEventListener('input', () => glyph.classList.remove('state-correct','state-wrong'));
+      // keep glyph neutral (no state clearing needed)
     }
-  
+
     progressPts = 0; updateMeter(); newRound();
   }
 
