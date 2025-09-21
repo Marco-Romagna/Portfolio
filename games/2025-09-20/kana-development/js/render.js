@@ -1,7 +1,7 @@
 function renderWorlds(worlds) {
   const root = document.getElementById("worlds-root");
   const worldTpl = document.getElementById("tpl-world");
-  const levelTpl = document.getElementById("tpl-level-card");
+  const rowTpl = document.getElementById("tpl-level-row");
   root.innerHTML = "";
 
   worlds.forEach(w => {
@@ -9,39 +9,61 @@ function renderWorlds(worlds) {
     wNode.querySelector(".world-title").textContent = w.title;
     wNode.querySelector(".world-desc").textContent = w.desc;
 
-    const grid = wNode.querySelector(".levels-grid");
+    const list = wNode.querySelector(".levels-list");
+
     w.levels.forEach(lv => {
-      const lNode = levelTpl.content.cloneNode(true);
+      const node = rowTpl.content.cloneNode(true);
 
-      // Links
-      const thumb = lNode.querySelector(".card-thumb");
-      const title = lNode.querySelector(".card-title");
-      thumb.href = lv.href;
-      title.href = lv.href;
+      // Header bits
+      const head = node.querySelector(".level-head");
+      const icon = node.querySelector(".level-icon");
+      const title = node.querySelector(".level-title");
+      const body  = node.querySelector(".level-body");
+      const btnStart = node.querySelector('[data-role="start"]');
+
+      icon.textContent = lv.thumb || lv.code;   // kana or fallback
       title.textContent = lv.title;
+      btnStart.href = lv.href;
 
-      // Thumbnail (text, for now)
-      const mark = lNode.querySelector(".no-thumb-mark");
-      mark.textContent = lv.thumb || lv.code;
+      // Expanded content
+      const media = node.querySelector(".level-thumb");
+      const desc  = node.querySelector(".level-desc");
+      const tags  = node.querySelector(".level-tags");
 
-      // Tags
-      const tagsWrap = lNode.querySelector(".card-tags");
+      desc.textContent = lv.desc || "";
+
+      // If you add lv.image (e.g. "assets/levels/1-1.png") we use <img>, else big kana
+      if (lv.image && /\.(png|jpe?g|gif|svg)$/i.test(lv.image)) {
+        media.classList.remove("kana-thumb");
+        const img = document.createElement("img");
+        img.src = lv.image;
+        img.alt = lv.title;
+        media.appendChild(img);
+      } else {
+        media.classList.add("kana-thumb");
+        media.setAttribute("data-kana", lv.thumb || lv.code);
+      }
+
+      // Tags only in expanded view
       (lv.tags || []).forEach(t => {
         const span = document.createElement("span");
         span.className = "tag";
         span.textContent = t;
-        tagsWrap.appendChild(span);
+        tags.appendChild(span);
       });
 
-      // Description
-      lNode.querySelector(".desc").textContent = lv.desc;
+      // Accordion toggle
+      head.addEventListener("click", () => {
+        const expanded = head.getAttribute("aria-expanded") === "true";
+        head.setAttribute("aria-expanded", String(!expanded));
+        body.hidden = expanded;
+      });
 
-      grid.appendChild(lNode);
+      list.appendChild(node);
     });
 
     root.appendChild(wNode);
   });
 }
 
-// expose for reuse
 window.renderWorlds = renderWorlds;
