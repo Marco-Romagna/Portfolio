@@ -1,0 +1,37 @@
+/* Container */
+.game-wrap { padding: 16px; }
+.stage { display: grid; gap: 14px; max-width: 720px; margin: 0 auto; }
+
+/* Smaller flashcard */
+.card-big{
+  display: grid;
+  place-items: center;
+  width: 240px;                 /* compact tile */
+  height: 180px;
+  margin: 0 auto;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: var(--surface);   /* default; overridden by mode vars */
+  font-size: 72px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+/* Subtext */
+.kana-sub{ margin-top: 6px; font-size: 18px; color: var(--muted); }
+
+/* --- Card color modes via CSS variables --- */
+:root{
+  --card-bg: var(--surface);
+  --card-fg: var(--text);
+}
+.card-big{ background: var(--card-bg); color: var(--card-fg); }
+
+/* Attach one of these classes to <body> (or set via JS) */
+.mode-light { --card-bg:#fff;     --card-fg:#000; }
+.mode-dark  { --card-bg:#000;     --card-fg:#fff; }
+.mode-sepia { --card-bg:#f4ecd8;  --card-fg:#2b2b2b; }
+
+/* Choices (same look as your site) */
+.choices{ display:grid; gap:10px; grid-template-columns:repeat(auto-fill,minmax(140px,1fr)); }
+.choice{ padding:12px 14px; border-radius:12px; border:1px solid var(--border); background:var(--surface); font-weight:700; cursor:pointer; text-align:center; }
