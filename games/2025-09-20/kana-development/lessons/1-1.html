@@ -5,12 +5,11 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>1-1 — Hiragana Vowels</title>
 
-  <!-- Styles -->
   <link rel="stylesheet" href="../../../../css/main.css">
   <link rel="stylesheet" href="../../../../css/games/kana-development/lessons.css">
 </head>
 
-<body class="site mode-light"> <!-- fixed to white card/dark text for this page -->
+<body class="site mode-light">
   <header class="header">
     <div class="container nav">
       <a class="brand" href="../index.html">
@@ -20,20 +19,15 @@
   </header>
 
   <main class="container game-wrap">
-    <section class="stage">
-      <!-- Flashcard -->
+    <!-- INTRO -->
+    <section class="stage" id="intro">
       <div class="card-big">
-        あ
-        <div class="kana-sub">a</div>
+        <span class="kana-glyph">あ</span>
+        <div class="kana-sub" id="kanaRomaji">a</div>
       </div>
 
-      <!-- Reserved slot for future audio UI (kept empty for now) -->
-      <div class="audio-slot" aria-hidden="true"></div>
-
-      <!-- Instruction -->
       <p class="muted center">Tap a vowel.</p>
 
-      <!-- Vowels -->
       <div class="choices choices-wide" id="vowelBtns">
         <button class="choice">あ</button>
         <button class="choice">い</button>
@@ -42,10 +36,19 @@
         <button class="choice">お</button>
       </div>
 
-      <!-- Footer / nav -->
       <div class="footer-bar">
         <span>Level 1-1 — Hiragana Vowels</span>
-        <a class="btn" href="1-2.html">Next</a>
+        <button class="btn" id="nextBtn" type="button">Next</button>
+      </div>
+    </section>
+
+    <!-- ACTIVITY (placeholder for now) -->
+    <section class="stage" id="activity" hidden>
+      <h3 class="center">1-1 Activity</h3>
+      <p class="muted center">We’ll build this next. (This view replaced a page redirect.)</p>
+
+      <div class="footer-bar">
+        <button class="btn" id="backBtn" type="button">Back</button>
       </div>
     </section>
   </main>
@@ -54,7 +57,7 @@
     © <span id="year"></span> Marco Romagna • All rights reserved
   </footer>
 
-  <!-- Scripts: split, minimal (no audio yet) -->
+  <!-- Scripts -->
   <script src="../js/lesson-1-1.js"></script>
 </body>
 </html>
