@@ -251,6 +251,139 @@ body.site {
   transition: transform .08s ease, border-color .12s ease, box-shadow .12s ease, background-color .12s ease, color .12s ease;
 }
 
-/* Per-option contrast themes */
+/* Per-option contrast themes (ALL FOUR) */
 .lesson[data-lesson-id="1-1"] #part-2 .option.theme-dark  { background:#0b1224; color:#e5e7eb; border-color:#2b3447; }
-.lesson[data-lesson-id="1-1"] #part-2 .option.theme-light { background:#f3f4f6; color:#0b1224;
+.lesson[data-lesson-id="1-1"] #part-2 .option.theme-light { background:#f3f4f6; color:#0b1224; border-color:#cbd5e1; }
+.lesson[data-lesson-id="1-1"] #part-2 .option.theme-sepia { background:#f6eedb; color:#3b2f1a; border-color:#e3d4b4; }
+.lesson[data-lesson-id="1-1"] #part-2 .option.theme-high  { background:#000;    color:#fff;    border-color:#ffffffa8; }
+
+/* Hover/focus cues */
+.lesson[data-lesson-id="1-1"] #part-2 .option:hover,
+.lesson[data-lesson-id="1-1"] #part-2 .option:focus-visible {
+  transform: translateY(-2px);
+  border-color: var(--kp-accent);
+  outline: none;
+  box-shadow: 0 0 0 4px color-mix(in oklab, var(--kp-accent) 30%, transparent);
+}
+
+/* Correctness rings */
+.lesson[data-lesson-id="1-1"] #part-2 .option.is-correct {
+  border-color: var(--kp-correct);
+  box-shadow: 0 0 0 4px color-mix(in oklab, var(--kp-correct) 35%, transparent);
+}
+.lesson[data-lesson-id="1-1"] #part-2 .option.is-wrong {
+  border-color: var(--kp-wrong);
+  box-shadow: 0 0 0 4px color-mix(in oklab, var(--kp-wrong) 35%, transparent);
+}
+
+/* Meter (Part 2) */
+.lesson[data-lesson-id="1-1"] #part-2 .quiz-progress {
+  display: grid;
+  gap: 8px;
+  justify-items: center;
+  margin: 8px 0 6px;
+  color: color-mix(in oklab, var(--kp-text) 80%, var(--kp-muted));
+}
+.lesson[data-lesson-id="1-1"] #part-2 .meter {
+  width: min(560px, 90%);
+  height: 10px;
+  background: var(--kp-surface-2);
+  border: 1px solid var(--kp-border);
+  border-radius: 999px;
+  overflow: hidden;
+}
+.lesson[data-lesson-id="1-1"] #part-2 .meter-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--kp-accent), var(--kp-accent-2));
+  transition: width .2s ease;
+}
+.lesson[data-lesson-id="1-1"] #part-2 .meter-label { font-size: .95rem; }
+
+/* Hide “New Options” if present */
+.lesson[data-lesson-id="1-1"] #part-2 [data-action="reshuffle"] { display: none !important; }
+
+/* Lock state after a pick */
+.lesson[data-lesson-id="1-1"] #part-2 .option.is-disabled {
+  pointer-events: none;
+  opacity: .55;
+}
+
+/* ---------- Part 3: Minimalist input + meter + themed wrapper ---------- */
+.lesson[data-lesson-id="1-1"] #part-3 .quiz-progress {
+  display: grid;
+  gap: 8px;
+  justify-items: center;
+  margin: 16px 0 6px;
+  color: color-mix(in oklab, var(--kp-text) 80%, var(--kp-muted));
+}
+.lesson[data-lesson-id="1-1"] #part-3 .meter {
+  width: min(560px, 90%);
+  height: 10px;
+  background: var(--kp-surface-2);
+  border: 1px solid var(--kp-border);
+  border-radius: 999px;
+  overflow: hidden;
+}
+.lesson[data-lesson-id="1-1"] #part-3 .meter-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--kp-accent), var(--kp-accent-2));
+  transition: width .2s ease;
+}
+
+/* Glyph wrapper themes (same palette) */
+.lesson[data-lesson-id="1-1"] #part-3 .type-glyph-wrapper {
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  border-radius: var(--kp-radius);
+  border: 1px solid var(--kp-border);
+  margin: 6px 0 12px;
+}
+.lesson[data-lesson-id="1-1"] #part-3 .type-glyph-wrapper.theme-dark  { background:#0b1224; color:#e5e7eb; border-color:#2b3447; }
+.lesson[data-lesson-id="1-1"] #part-3 .type-glyph-wrapper.theme-light { background:#f3f4f6; color:#0b1224; border-color:#cbd5e1; }
+.lesson[data-lesson-id="1-1"] #part-3 .type-glyph-wrapper.theme-sepia { background:#f6eedb; color:#3b2f1a; border-color:#e3d4b4; }
+.lesson[data-lesson-id="1-1"] #part-3 .type-glyph-wrapper.theme-high  { background:#000;    color:#fff;    border-color:#ffffffa8; }
+
+/* Minimal input look */
+.lesson[data-lesson-id="1-1"] #part-3 .type-label {
+  display: block;
+  text-align: center;
+  margin: 8px 0 6px;
+  color: color-mix(in oklab, var(--kp-text) 75%, var(--kp-muted));
+  font-weight: 600;
+  letter-spacing: .2px;
+}
+.lesson[data-lesson-id="1-1"] #part-3 .type-input {
+  width: min(380px, 90%);
+  margin: 0 auto;
+  display: block;
+  background: #0e152a;
+  border: 1px solid #1e2a42;
+  color: var(--kp-text);
+  border-radius: 999px;
+  padding: 12px 16px;
+  font-size: 1.05rem;
+  text-align: center;
+  outline: none;
+  transition: box-shadow .15s ease, border-color .15s ease, background-color .15s ease;
+}
+.lesson[data-lesson-id="1-1"] #part-3 .type-input:focus {
+  border-color: var(--kp-accent);
+  box-shadow: 0 0 0 4px color-mix(in oklab, var(--kp-accent) 25%, transparent);
+  background: #0c1124;
+}
+
+/* Keep glyph neutral (no color changes for states) */
+.lesson[data-lesson-id="1-1"] #part-3 .type-glyph,
+.lesson[data-lesson-id="1-1"] #part-3 .type-glyph.state-correct,
+.lesson[data-lesson-id="1-1"] #part-3 .type-glyph.state-wrong {
+  color: var(--kp-text);
+}
+
+/* Lock input briefly after submit */
+.lesson[data-lesson-id="1-1"] #part-3 .type-input.is-locked {
+  opacity: .7;
+  pointer-events: none;
+}
