@@ -525,15 +525,34 @@
   }
 
   // ==========================================================
-  // Part 4: Speak — local Finish button at bottom
+  // Part 4: Speak — Placeholder (feature in progress)
   // ==========================================================
   const part4 = $('#part-4');
   if (part4) {
-    const status   = $('.status-line', part4);
-    const micBtn   = $('[data-action="mic-toggle"]', part4);
-    const tryAgain = $('[data-action="try-again"]', part4);
-
-    // local Finish at bottom
+    // Replace the panel contents with a simple placeholder
+    const panel = $('.speak-panel', part4);
+    if (panel) {
+      panel.innerHTML = `
+        <div class="speak-placeholder" style="
+          display:grid;
+          place-items:center;
+          gap:10px;
+          min-height:220px;
+          padding:16px;
+          text-align:center;
+        ">
+          <div class="kana-glyph speak-glyph" aria-hidden="true">あ</div>
+          <p class="muted" style="margin:0;">
+            Speaking practice is <strong>in progress</strong>.
+          </p>
+          <p class="muted" style="margin:0;">
+            Thanks for testing! You can finish the lesson for now.
+          </p>
+        </div>
+      `;
+    }
+  
+    // Local Finish button (same spot as Part 2/3 “Next”)
     let finishBtn = $('[data-action="finish-lesson"]', part4);
     if (!finishBtn) {
       const actions = document.createElement('div');
@@ -545,18 +564,6 @@
       actions.appendChild(finishBtn);
       part4.appendChild(actions);
     }
-
-    micBtn?.addEventListener('click', () => {
-      const pressed = micBtn.getAttribute('aria-pressed') === 'true';
-      micBtn.setAttribute('aria-pressed', String(!pressed));
-      if (status) status.textContent = !pressed ? 'Mic: listening…' : 'Mic: off';
-      part4Done = true;
-    });
-
-    tryAgain?.addEventListener('click', () => {
-      if (status) status.textContent = 'Try again queued.';
-      part4Done = true;
-    });
 
     finishBtn?.addEventListener('click', () => {
       window.location.href = '../index.html';
