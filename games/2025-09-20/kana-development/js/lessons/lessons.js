@@ -230,12 +230,12 @@
   //   + no same kana twice in a row
   //   + FINAL-5 MODE: each point requires a 3-kana combo in a row
   //     (combo never equals the exact previous combo)
-  //     → visibly show all three kana; current one is highlighted
+  //     → shows all three kana with identical styling
+  //     → accepts whole-string ("oua") OR step-by-step ("o", then "u", then "a")
   // ==========================================================
   const part3 = $('#part-3');
   if (part3) {
-    const glyph      = $('.type-glyph', part3);          // single-glyph span (we reuse/hide/replace content)
-    const wrapper    = $('.type-glyph-wrapper', part3);  // we render combo UI inside this node
+    const wrapper    = $('.type-glyph-wrapper', part3);  // render glyphs/combo inside this node
     const input      = $('#type-input', part3);
     const meter      = $('.quiz-progress .meter', part3);
     const meterFill  = $('.quiz-progress .meter-fill', part3);
@@ -335,29 +335,25 @@
       return { seq, key: seq.join('') };
     }
 
-    // --- COMBO RENDERING ---
+    // --- COMBO RENDERING (all same color) ---
     function renderComboDisplay() {
       const cont = document.createElement('div');
       cont.className = 'combo-seq';
-    
-      comboSeq.forEach((k) => {
+      comboSeq.forEach((k, idx) => {
         const s = document.createElement('span');
         s.className = 'kana-glyph type-glyph';
         s.textContent = k;
-        // all glyphs same style now
         cont.appendChild(s);
-    
-        // optional spacing between glyphs
-        const spacer = document.createElement('span');
-        spacer.textContent = ' ';
-        spacer.style.opacity = '0';
-        cont.appendChild(spacer);
+        if (idx < comboSeq.length - 1) {
+          const spacer = document.createElement('span');
+          spacer.textContent = ' ';
+          spacer.style.opacity = '0';
+          cont.appendChild(spacer);
+        }
       });
-    
       wrapper.innerHTML = '';
       wrapper.appendChild(cont);
     }
-
 
     function renderSingleGlyph(kana) {
       wrapper.innerHTML = '';
@@ -378,7 +374,6 @@
       setThemeRandom();
       renderComboDisplay();
 
-      // for evaluate() we still want a current-kana source
       lastKanaP3 = comboSeq[0];
       input.focus();
     }
@@ -406,6 +401,11 @@
       } else {
         startSingleRound();
       }
+    }
+
+    // Helper: full remaining combo romaji
+    function expectedComboRemaining() {
+      return comboSeq.slice(comboIdx).map(k => ROMA[k]).join('');
     }
 
     function evaluate() {
@@ -444,14 +444,34 @@
           setTimeout(() => { newRound(); }, 300);
         }
       } else {
-        // --- combo mode ---
+        // --- combo mode: accept full remaining string OR step-by-step ---
         const currentKana = comboSeq[comboIdx];
-        const expected = ROMA[currentKana];
+        const expectedOne = ROMA[currentKana];
+        const expectedAll = expectedComboRemaining();
 
-        if (val === expected) {
+        if (val === expectedAll) {
+          // User typed the whole remaining combo correctly in one go
+          comboActive = false;
+          comboSeq.forEach(k => {
+            unseen.delete(k);
+            weights[k] = Math.max(1, weights[k] - 1);
+          });
+          progressPts = Math.min(GOAL, progressPts + 1);
+          updateMeter();
+
+          setTimeout(() => {
+            if (progressPts >= GOAL) {
+              part3Done = true;
+              $('[data-action="next-part"]', part3)?.classList.remove('is-hidden');
+            } else {
+              newRound();
+            }
+          }, 200);
+
+        } else if (val === expectedOne) {
+          // Step-by-step: advance within combo
           comboIdx += 1;
           if (comboIdx < 3) {
-            // advance visual
             renderComboDisplay();
             lastKanaP3 = comboSeq[comboIdx];
             setTimeout(() => {
@@ -461,7 +481,6 @@
               input.focus();
             }, 100);
           } else {
-            // finished combo successfully
             comboActive = false;
             comboSeq.forEach(k => {
               unseen.delete(k);
@@ -480,7 +499,7 @@
             }, 200);
           }
         } else {
-          // combo failed
+          // wrong
           weights[currentKana] = (weights[currentKana] || 1) + 2;
           progressPts = Math.max(0, progressPts - 1);
           updateMeter();
