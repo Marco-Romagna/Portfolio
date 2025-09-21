@@ -94,30 +94,33 @@
     <!-- PART 2: Multiple-choice quiz (pick the correct vowel) -->
     <section id="part-2" class="lesson-part" data-part-index="2" aria-labelledby="part2-title">
       <h2 id="part2-title" class="part-title">Identify — Pick the Correct Vowel</h2>
-
+    
       <div class="quiz-panel" data-state="idle">
         <div class="quiz-prompt">
           <p class="prompt-text">Which kana is <strong class="prompt-target" data-type="romaji">“a”</strong>?</p>
         </div>
-
-        <div class="quiz-options">
-          <button class="option" data-value="あ">あ</button>
-          <button class="option" data-value="い">い</button>
-          <button class="option" data-value="う">う</button>
-          <button class="option" data-value="え">え</button>
+    
+        <div class="quiz-options"></div>
+    
+        <!-- Progress meter replaces 5/5 + streak -->
+        <div class="quiz-progress" aria-live="polite">
+          <div class="meter" role="progressbar" aria-valuemin="0" aria-valuemax="15" aria-valuenow="0">
+            <div class="meter-fill" style="width: 0%"></div>
+          </div>
+          <div class="meter-label">Progress: 0 / 15</div>
         </div>
-
+    
         <div class="quiz-feedback" aria-live="polite">
           <p class="feedback-text">Pick the right one to continue…</p>
         </div>
-
-        <div class="quiz-meta">
-          <span class="counter" data-correct="0" data-needed="5">0 / 5 correct</span>
-          <span class="streak" data-streak="0">Streak: 0</span>
+    
+        <!-- Local NEXT button under panel -->
+        <div class="actions center">
+          <button class="btn primary is-hidden" data-action="next-part">Next</button>
         </div>
-
       </div>
     </section>
+
 
     <!-- PART 3: Type the phonetic (romaji) for the shown kana -->
     <section id="part-3" class="lesson-part" data-part-index="3" aria-labelledby="part3-title">
