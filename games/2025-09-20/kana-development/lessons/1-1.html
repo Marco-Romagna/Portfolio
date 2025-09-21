@@ -3,11 +3,13 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>1-1 — Hiragana Vowels</title>
+  <title>1-1 — Hiragana Vowels (UI Skeleton)</title>
 
-  <link rel="stylesheet" href="../../../../css/main.css">
-  <link rel="stylesheet" href="../../../../css/games/kana-development/stages.css">
-  <link rel="stylesheet" href="../../../../css/games/kana-development/lessons.css">
+  <!-- Existing site styles -->
+  <link rel="stylesheet" href="../../css/main.css">
+  <link rel="stylesheet" href="../../css/games/kana-development/styles.css">
+  <!-- Lesson-specific overrides (colors/states for parts 2–4) -->
+  <link rel="stylesheet" href="../../css/games/kana-development/lessons.css">
 </head>
 
 <body class="site mode-light">
@@ -19,46 +21,177 @@
     </div>
   </header>
 
-  <main class="container game-wrap">
-    <!-- INTRO -->
-    <section class="stage" id="intro">
-      <div class="card-big">
-        <span class="kana-glyph">あ</span>
-        <div class="kana-sub" id="kanaRomaji">a</div>
+  <main class="container game-wrap lesson" data-lesson-id="1-1" data-total-parts="4">
+
+    <!-- Progress Bar / Steps (UI only) -->
+    <nav class="lesson-progress" aria-label="Lesson progress">
+      <ol class="steps">
+        <li class="step is-active" data-part="1">
+          <span class="step-label">Part 1</span>
+          <span class="step-sub">Preview</span>
+        </li>
+        <li class="step" data-part="2">
+          <span class="step-label">Part 2</span>
+          <span class="step-sub">Quiz</span>
+        </li>
+        <li class="step" data-part="3">
+          <span class="step-label">Part 3</span>
+          <span class="step-sub">Type</span>
+        </li>
+        <li class="step" data-part="4">
+          <span class="step-label">Part 4</span>
+          <span class="step-sub">Speak</span>
+        </li>
+      </ol>
+      <div class="progressbar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+        <div class="progressbar-fill" style="width: 0%"></div>
+      </div>
+    </nav>
+
+    <!-- PART 1: Show each new kana (Hiragana vowels) -->
+    <section id="part-1" class="lesson-part is-visible" data-part-index="1" aria-labelledby="part1-title">
+      <h1 id="part1-title" class="part-title">Hiragana Vowels — Preview</h1>
+
+      <p class="muted center">Tap each card to flip between kana and romaji.</p>
+
+      <div class="kana-grid">
+        <!-- Static UI placeholders; data hooks for JS to fill or animate -->
+        <article class="card-big kana-card" data-kana="あ" data-romaji="a">
+          <span class="kana-glyph">あ</span>
+          <span class="kana-sub">a</span>
+        </article>
+        <article class="card-big kana-card" data-kana="い" data-romaji="i">
+          <span class="kana-glyph">い</span>
+          <span class="kana-sub">i</span>
+        </article>
+        <article class="card-big kana-card" data-kana="う" data-romaji="u">
+          <span class="kana-glyph">う</span>
+          <span class="kana-sub">u</span>
+        </article>
+        <article class="card-big kana-card" data-kana="え" data-romaji="e">
+          <span class="kana-glyph">え</span>
+          <span class="kana-sub">e</span>
+        </article>
+        <article class="card-big kana-card" data-kana="お" data-romaji="o">
+          <span class="kana-glyph">お</span>
+          <span class="kana-sub">o</span>
+        </article>
       </div>
 
-      <p class="muted center">Tap a vowel.</p>
-
-      <div class="choices choices-wide" id="vowelBtns">
-        <button class="choice">あ</button>
-        <button class="choice">い</button>
-        <button class="choice">う</button>
-        <button class="choice">え</button>
-        <button class="choice">お</button>
-      </div>
-
-      <div class="footer-bar">
-        <span>Level 1-1 — Hiragana Vowels</span>
-        <button class="btn" id="nextBtn" type="button">Next</button>
+      <div class="actions center">
+        <button class="btn primary" data-action="start-quiz">Start Quiz</button>
       </div>
     </section>
 
-    <!-- ACTIVITY (placeholder for now) -->
-    <section class="stage" id="activity" hidden>
-      <h3 class="center">1-1 Activity</h3>
-      <p class="muted center">We’ll build this next. (This view replaced a page redirect.)</p>
+    <!-- PART 2: Multiple-choice quiz (pick the correct vowel) -->
+    <section id="part-2" class="lesson-part" data-part-index="2" aria-labelledby="part2-title">
+      <h2 id="part2-title" class="part-title">Quiz — Pick the Correct Vowel</h2>
 
-      <div class="footer-bar">
-        <button class="btn" id="backBtn" type="button">Back</button>
+      <div class="quiz-panel" data-state="idle">
+        <div class="quiz-prompt">
+          <!-- Example prompt types (UI only): -->
+          <!-- Type A: Ask for kana by romaji -->
+          <p class="prompt-text">Which kana is <strong class="prompt-target" data-type="romaji">“a”</strong>?</p>
+          <!-- Type B (alternate): Ask for romaji by kana -->
+          <!-- <p class="prompt-text">What is the romaji for <strong class="prompt-target" data-type="kana">“あ”</strong>?</p> -->
+        </div>
+
+        <div class="quiz-options">
+          <!-- Four options, randomized order. Use .option and state classes colored via lessons.css -->
+          <button class="option" data-value="あ">あ</button>
+          <button class="option" data-value="い">い</button>
+          <button class="option" data-value="う">う</button>
+          <button class="option" data-value="え">え</button>
+        </div>
+
+        <div class="quiz-feedback" aria-live="polite">
+          <!-- Add colored states via lessons.css: .is-correct, .is-wrong -->
+          <p class="feedback-text">Pick the right one to continue…</p>
+        </div>
+
+        <div class="quiz-meta">
+          <span class="counter" data-correct="0" data-needed="5">0 / 5 correct</span>
+          <span class="streak" data-streak="0">Streak: 0</span>
+        </div>
+
+        <div class="actions">
+          <button class="btn ghost" data-action="reshuffle">New Options</button>
+          <button class="btn primary" data-action="continue" disabled>Continue</button>
+        </div>
       </div>
     </section>
+
+    <!-- PART 3: Type the phonetic (romaji) for the shown kana -->
+    <section id="part-3" class="lesson-part" data-part-index="3" aria-labelledby="part3-title">
+      <h2 id="part3-title" class="part-title">Type — Enter the Phonetic</h2>
+
+      <div class="type-panel">
+        <div class="type-glyph-wrapper">
+          <!-- Color changes controlled via lessons.css classes: .state-idle, .state-correct, .state-wrong -->
+          <span class="kana-glyph type-glyph state-idle" data-current-kana="あ">あ</span>
+        </div>
+
+        <label class="type-label" for="type-input">Type the romaji:</label>
+        <input id="type-input" class="type-input" type="text" inputmode="latin" placeholder="a / e / i / o / u" aria-describedby="type-help" />
+        <p id="type-help" class="muted">Press Enter or click Check.</p>
+
+        <div class="actions">
+          <button class="btn" data-action="check-typing">Check</button>
+          <button class="btn ghost" data-action="skip">Skip</button>
+          <button class="btn primary" data-action="continue" disabled>Continue</button>
+        </div>
+
+        <div class="type-meta">
+          <span class="counter" data-correct="0" data-needed="5">0 / 5 correct</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- PART 4: Speak the vowel shown (mic interaction UI only) -->
+    <section id="part-4" class="lesson-part" data-part-index="4" aria-labelledby="part4-title">
+      <h2 id="part4-title" class="part-title">Speak — Say the Vowel</h2>
+
+      <div class="speak-panel">
+        <div class="speak-glyph-wrapper">
+          <span class="kana-glyph speak-glyph" data-current-kana="あ">あ</span>
+        </div>
+
+        <p class="muted center">When ready, say the vowel for the character shown.</p>
+
+        <div class="speak-controls">
+          <!-- UI only; JS can wire to Web Speech API later -->
+          <button class="btn" data-action="mic-toggle" aria-pressed="false">Start / Stop Mic</button>
+          <button class="btn" data-action="play-audio">Play Example</button>
+        </div>
+
+        <div class="speak-status" aria-live="polite">
+          <p class="status-line" data-status="idle">Mic: off</p>
+          <!-- Possible statuses: listening / processing / matched / mismatch -->
+        </div>
+
+        <div class="actions">
+          <button class="btn ghost" data-action="try-again">Try Again</button>
+          <button class="btn primary" data-action="proceed">Proceed</button>
+        </div>
+
+        <div class="speak-meta">
+          <!-- Track how many correct pronunciations achieved -->
+          <span class="counter" data-correct="0" data-needed="2">0 / 2 said correctly</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Global lesson nav (UI only) -->
+    <footer class="lesson-footer">
+      <div class="lesson-nav">
+        <button class="btn ghost" data-action="prev" aria-label="Previous part">◀ Prev</button>
+        <span class="lesson-position"><strong class="pos-current">1</strong>/<span class="pos-total">4</span></span>
+        <button class="btn" data-action="next" aria-label="Next part">Next ▶</button>
+      </div>
+    </footer>
+
   </main>
 
-  <footer class="footer">
-    © <span id="year"></span> Marco Romagna • All rights reserved
-  </footer>
-
-  <!-- Scripts -->
-  <script src="../js/lessons/1-1.js"></script>
+<script src="../../js/games/kana-development/lessons.js"></script>
 </body>
 </html>
