@@ -12,7 +12,7 @@
   const progress   = $('.progressbar');
   const fill       = $('.progressbar-fill');
 
-  // Sticky CTA still exists but we hide it on parts using local buttons
+  // Sticky CTA exists but we hide it on parts using local buttons
   const cta = $('.lesson-cta [data-action="advance"]');
   const showCTA = (label) => { if (cta) { cta.textContent = label; cta.closest('.lesson-cta')?.classList.remove('is-hidden'); } };
   const hideCTA = () => { cta?.closest('.lesson-cta')?.classList.add('is-hidden'); };
@@ -137,7 +137,7 @@
         }
         if (ok) return perm;
       }
-      // fallback: try to break conflicts by swapping
+      // fallback: try swapping to break conflicts
       const perm = [...opts];
       for (let i = 0; i < perm.length; i++) {
         if (perm[i] === prevOptionAtIndex[i]) {
@@ -230,11 +230,12 @@
   //   + no same kana twice in a row
   //   + FINAL-5 MODE: each point requires a 3-kana combo in a row
   //     (combo never equals the exact previous combo)
+  //     → visibly show all three kana; current one is highlighted
   // ==========================================================
   const part3 = $('#part-3');
   if (part3) {
-    const glyph      = $('.type-glyph', part3);
-    const wrapper    = $('.type-glyph-wrapper', part3);
+    const glyph      = $('.type-glyph', part3);          // single-glyph span (we reuse/hide/replace content)
+    const wrapper    = $('.type-glyph-wrapper', part3);  // we render combo UI inside this node
     const input      = $('#type-input', part3);
     const meter      = $('.quiz-progress .meter', part3);
     const meterFill  = $('.quiz-progress .meter-fill', part3);
@@ -264,8 +265,8 @@
 
     // Combo state
     let comboActive = false;
-    let comboSeq = [];   // array of 3 kana
-    let comboIdx = 0;    // 0..2
+    let comboSeq = [];     // array of 3 kana
+    let comboIdx = 0;      // 0..2
     let lastComboKey = null; // prevent repeat of exact previous combo
 
     const weights = Object.fromEntries(KANA.map(k => [k, 1]));
@@ -315,33 +316,56 @@
     // --- COMBO GENERATION ---
     function makeCombo() {
       // generate a 3-kana sequence: no consecutive duplicates,
-      // first element also avoids lastKanaP3; and not equal to lastComboKey
+      // first element avoids lastKanaP3; and not equal to lastComboKey
       for (let attempt = 0; attempt < 50; attempt++) {
         const seq = [];
-        // first
         let first = pickNextKanaAvoidRepeat();
         seq.push(first);
-        // second
+        // ensure next two are not equal to immediate predecessor
         let second = pickWeighted(weights);
-        let tries = 0;
-        while ((second === seq[seq.length - 1]) && tries < 10) {
-          second = pickWeighted(weights); tries++;
-        }
+        for (let t=0; t<10 && second === seq[seq.length-1]; t++) second = pickWeighted(weights);
         seq.push(second);
-        // third
         let third = pickWeighted(weights);
-        tries = 0;
-        while ((third === seq[seq.length - 1]) && tries < 10) {
-          third = pickWeighted(weights); tries++;
-        }
+        for (let t=0; t<10 && third === seq[seq.length-1]; t++) third = pickWeighted(weights);
         seq.push(third);
-
         const key = seq.join('');
         if (key !== lastComboKey) return { seq, key };
       }
-      // fallback: just return something
       const seq = [pickNextKanaAvoidRepeat(), pickWeighted(weights), pickWeighted(weights)];
       return { seq, key: seq.join('') };
+    }
+
+    // --- COMBO RENDERING ---
+    function renderComboDisplay() {
+      // Show three glyphs together; highlight current index
+      // We reuse the "type-glyph" class for sizing
+      const cont = document.createElement('div');
+      cont.className = 'combo-seq';
+      comboSeq.forEach((k, i) => {
+        const s = document.createElement('span');
+        s.className = 'kana-glyph type-glyph';
+        s.textContent = k;
+        // lightweight visual cue: current gets slight opacity boost, others dim
+        s.style.opacity = i < comboIdx ? '0.45' : (i === comboIdx ? '1' : '0.7');
+        cont.appendChild(s);
+        if (i < 2) {
+          const spacer = document.createElement('span');
+          spacer.textContent = '  ';
+          spacer.style.opacity = '0';
+          cont.appendChild(spacer);
+        }
+      });
+      wrapper.innerHTML = '';
+      wrapper.appendChild(cont);
+    }
+
+    function renderSingleGlyph(kana) {
+      wrapper.innerHTML = '';
+      const s = document.createElement('span');
+      s.className = 'kana-glyph type-glyph';
+      s.dataset.currentKana = kana;
+      s.textContent = kana;
+      wrapper.appendChild(s);
     }
 
     function startComboRound() {
@@ -351,12 +375,11 @@
       comboIdx = 0;
       lastComboKey = key;
 
-      // display first kana of combo
-      glyph.dataset.currentKana = comboSeq[0];
-      glyph.textContent = comboSeq[0];
-      lastKanaP3 = comboSeq[0];
-
       setThemeRandom();
+      renderComboDisplay();
+
+      // for evaluate() we still want a current-kana source
+      lastKanaP3 = comboSeq[0];
       input.focus();
     }
 
@@ -366,11 +389,10 @@
       input.value = '';
 
       const kana = pickNextKanaAvoidRepeat();
-      glyph.dataset.currentKana = kana;
-      glyph.textContent = kana;
+      setThemeRandom();
+      renderSingleGlyph(kana);
       lastKanaP3 = kana;
 
-      setThemeRandom();
       input.focus();
     }
 
@@ -397,7 +419,8 @@
 
       if (!comboActive) {
         // --- normal single-kana round ---
-        const kana     = glyph.dataset.currentKana;
+        const currentSpan = wrapper.querySelector('.type-glyph');
+        const kana = currentSpan?.dataset.currentKana || currentSpan?.textContent || '';
         const expected = ROMA[kana];
 
         if (val === expected) {
@@ -409,17 +432,16 @@
           setTimeout(() => {
             if (progressPts >= GOAL) {
               part3Done = true;
-              // show local Next
               $('[data-action="next-part"]', part3)?.classList.remove('is-hidden');
             } else {
               newRound();
             }
-          }, 260);
+          }, 200);
         } else {
           progressPts = Math.max(0, progressPts - 1);
           weights[kana] = (weights[kana] || 1) + 2;
           updateMeter();
-          setTimeout(() => { newRound(); }, 360);
+          setTimeout(() => { newRound(); }, 300);
         }
       } else {
         // --- combo mode ---
@@ -427,32 +449,24 @@
         const expected = ROMA[currentKana];
 
         if (val === expected) {
-          // advance within combo
           comboIdx += 1;
           if (comboIdx < 3) {
-            // show next kana in combo
-            const nextKana = comboSeq[comboIdx];
-            glyph.dataset.currentKana = nextKana;
-            glyph.textContent = nextKana;
-            lastKanaP3 = nextKana;
-
-            // clear and unlock input for next sub-step
+            // advance visual
+            renderComboDisplay();
+            lastKanaP3 = comboSeq[comboIdx];
             setTimeout(() => {
               roundLocked = false;
               input.classList.remove('is-locked');
               input.value = '';
               input.focus();
-            }, 120);
+            }, 100);
           } else {
-            // finished the 3-kana combo successfully → +1 progress
+            // finished combo successfully
             comboActive = false;
-
-            // adjust weights (reward all three)
             comboSeq.forEach(k => {
               unseen.delete(k);
               weights[k] = Math.max(1, weights[k] - 1);
             });
-
             progressPts = Math.min(GOAL, progressPts + 1);
             updateMeter();
 
@@ -463,16 +477,15 @@
               } else {
                 newRound();
               }
-            }, 260);
+            }, 200);
           }
         } else {
-          // combo failed → -1 progress, increase weight of the kana we failed on
+          // combo failed
           weights[currentKana] = (weights[currentKana] || 1) + 2;
           progressPts = Math.max(0, progressPts - 1);
           updateMeter();
-
           comboActive = false;
-          setTimeout(() => { newRound(); }, 360);
+          setTimeout(() => { newRound(); }, 300);
         }
       }
     }
