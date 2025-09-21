@@ -12,7 +12,7 @@
   const progress   = $('.progressbar');
   const fill       = $('.progressbar-fill');
 
-  // Global sticky CTA (Next/Finish for parts except Part 2)
+  // Global sticky CTA (kept, but we’ll prefer local Next/Finish for P3/P4)
   const cta = $('.lesson-cta [data-action="advance"]');
   const showCTA = (label) => {
     if (!cta) return;
@@ -45,19 +45,19 @@
     if (fill) fill.style.width = `${pct}%`;
     if (progress) progress.setAttribute('aria-valuenow', String(pct));
 
-    // CTA rules
+    // CTA rules: hide the sticky one for parts that use local buttons
     if (current === 1) {
-      hideCTA();                    // Part 1 uses local Start
+      hideCTA();
     } else if (current === 2) {
-      hideCTA();                    // Part 2 uses local Next (under panel)
+      hideCTA();
     } else if (current === 3) {
-      part3Done ? showCTA('Next') : hideCTA();
+      hideCTA();
     } else if (current === 4) {
-      showCTA(part4Done ? 'Finish' : 'Next');
+      hideCTA();
     }
   }
 
-  // Global CTA click (Next / Finish)
+  // Sticky CTA click (still works if shown)
   cta?.addEventListener('click', () => {
     if (current < totalParts) showPart(current + 1);
     else window.location.href = '../index.html';
@@ -89,7 +89,6 @@
 
     let roundLocked = false;
 
-    // NEW: remember last target and last options by slot index
     let lastCorrectKana = null;
     let prevOptionAtIndex = [null, null, null, null];
 
@@ -124,15 +123,12 @@
 
     const THEMES = ['theme-dark', 'theme-light', 'theme-sepia', 'theme-high'];
 
-    // Ensure next correct kana is not the same as last round (when possible)
     function pickNextCorrect() {
       if (unseen.size > 0) {
-        // Prefer unseen first, avoid repeating last if >1 unseen left
         let choices = Array.from(unseen);
         if (choices.length > 1) choices = choices.filter(k => k !== lastCorrectKana);
         return choices[Math.floor(Math.random() * choices.length)];
       }
-      // Weighted with a few attempts to avoid lastCorrectKana
       let cand = pickWeighted(weights);
       let tries = 0;
       while (cand === lastCorrectKana && tries < 10) {
@@ -142,22 +138,19 @@
       return cand;
     }
 
-    // Arrange options so that options[i] !== prevOptionAtIndex[i]
     function arrangeOptionsNoSlotRepeat(opts) {
       const attempts = 50;
       for (let t = 0; t < attempts; t++) {
-        const perm = sample(opts, opts.length); // shuffled copy
+        const perm = sample(opts, opts.length);
         let ok = true;
         for (let i = 0; i < perm.length; i++) {
           if (prevOptionAtIndex[i] === perm[i]) { ok = false; break; }
         }
         if (ok) return perm;
       }
-      // Fallback: do minimal swaps to break conflicts
       const perm = [...opts];
       for (let i = 0; i < perm.length; i++) {
         if (perm[i] === prevOptionAtIndex[i]) {
-          // find a j to swap that also doesn't create a conflict
           for (let j = i + 1; j < perm.length; j++) {
             if (perm[j] !== prevOptionAtIndex[i] && perm[i] !== prevOptionAtIndex[j]) {
               [perm[i], perm[j]] = [perm[j], perm[i]];
@@ -173,19 +166,15 @@
       roundLocked = false;
       grid.innerHTML = '';
 
-      // choose the correct kana with no immediate repeat
       const correctKana = pickNextCorrect();
 
       if (prompt) { prompt.dataset.type = 'romaji'; prompt.textContent = `“${ROMA[correctKana]}”`; }
 
-      // 4 options (1 correct + 3 others)
       const others  = sample(KANA.filter(k => k !== correctKana), 3);
       const rawOptions = [correctKana, ...others];
 
-      // NEW: prevent same kana in same slot as previous round
       const orderedOptions = arrangeOptionsNoSlotRepeat(rawOptions);
 
-      // Shuffle themes so we see all 4 over time
       const shuffledThemes = [...THEMES].sort(() => Math.random() - 0.5);
 
       orderedOptions.forEach((k, i) => {
@@ -198,7 +187,6 @@
         grid.appendChild(b);
       });
 
-      // Update trackers for next round comparisons
       prevOptionAtIndex = orderedOptions.slice();
       lastCorrectKana = correctKana;
 
@@ -209,7 +197,6 @@
       if (roundLocked) return;
       roundLocked = true;
 
-      // disable all options so they can't correct this round
       const all = $$('.option', part2);
       all.forEach(b => { b.classList.add('is-disabled'); b.disabled = true; });
 
@@ -227,7 +214,7 @@
         setTimeout(() => {
           if (progressPts >= GOAL) {
             part2Done = true;
-            nextBtn?.classList.remove('is-hidden'); // show local Next
+            nextBtn?.classList.remove('is-hidden');
             setFeedback('Part complete! Tap Next to continue.');
           } else {
             nextQuestion();
@@ -251,7 +238,7 @@
   }
 
   // ==========================================================
-  // Part 3: Typing — Enter the Phonetic (adaptive + meter, neutral glyph)
+  // Part 3: Typing — Adaptive + meter + local Next (same place as Part 2)
   // ==========================================================
   const part3 = $('#part-3');
   if (part3) {
@@ -261,6 +248,19 @@
     const meter      = $('.quiz-progress .meter', part3);
     const meterFill  = $('.quiz-progress .meter-fill', part3);
     const meterLabel = $('.quiz-progress .meter-label', part3);
+
+    // Create a local Next button under the panel if it doesn’t exist
+    let nextBtn = $('[data-action="next-part"]', part3);
+    if (!nextBtn) {
+      const actions = document.createElement('div');
+      actions.className = 'actions';
+      nextBtn = document.createElement('button');
+      nextBtn.className = 'btn primary is-hidden';
+      nextBtn.dataset.action = 'next-part';
+      nextBtn.textContent = 'Next';
+      actions.appendChild(nextBtn);
+      part3.appendChild(actions);
+    }
 
     const GOAL = 15;
     let progressPts = 0;
@@ -289,8 +289,9 @@
 
     function setThemeRandom() {
       if (!wrapper) return;
-      wrapper.classList.remove(...THEMES);
-      const pick = THEMES[Math.floor(Math.random() * THEMES.length)];
+      const THEMES_ALL = [...THEMES];
+      wrapper.classList.remove(...THEMES_ALL);
+      const pick = THEMES_ALL[Math.floor(Math.random() * THEMES_ALL.length)];
       wrapper.classList.add(pick);
     }
 
@@ -334,7 +335,7 @@
         setTimeout(() => {
           if (progressPts >= GOAL) {
             part3Done = true;
-            showCTA('Next');
+            nextBtn?.classList.remove('is-hidden');   // show local Next
           } else {
             newRound();
           }
@@ -343,11 +344,11 @@
         progressPts = Math.max(0, progressPts - 1);
         weights[kana] = (weights[kana] || 1) + 2;
         updateMeter();
-
         setTimeout(() => { newRound(); }, 380);
       }
     }
 
+    // Enter submits; no other buttons
     if (input) {
       input.addEventListener('keydown', (e) => {
         if (e.key === 'Enter') {
@@ -357,11 +358,13 @@
       });
     }
 
+    nextBtn?.addEventListener('click', () => showPart(4));
+
     progressPts = 0; updateMeter(); newRound();
   }
 
   // ==========================================================
-  // Part 4: Speak — Say the Vowel
+  // Part 4: Speak — local Finish button at bottom (same place)
   // ==========================================================
   const part4 = $('#part-4');
   if (part4) {
@@ -369,22 +372,36 @@
     const micBtn   = $('[data-action="mic-toggle"]', part4);
     const tryAgain = $('[data-action="try-again"]', part4);
 
+    // Create local Finish button
+    let finishBtn = $('[data-action="finish-lesson"]', part4);
+    if (!finishBtn) {
+      const actions = document.createElement('div');
+      actions.className = 'actions';
+      finishBtn = document.createElement('button');
+      finishBtn.className = 'btn primary';
+      finishBtn.dataset.action = 'finish-lesson';
+      finishBtn.textContent = 'Finish';
+      actions.appendChild(finishBtn);
+      part4.appendChild(actions);
+    }
+
+    // Interactions (optional)
     micBtn?.addEventListener('click', () => {
       const pressed = micBtn.getAttribute('aria-pressed') === 'true';
       micBtn.setAttribute('aria-pressed', String(!pressed));
       if (status) status.textContent = !pressed ? 'Mic: listening…' : 'Mic: off';
       part4Done = true;
-      showCTA('Finish');
     });
 
     tryAgain?.addEventListener('click', () => {
       if (status) status.textContent = 'Try again queued.';
       part4Done = true;
-      showCTA('Finish');
     });
 
-    // Allow Next immediately on Part 4
-    showCTA('Next');
+    finishBtn?.addEventListener('click', () => {
+      // End lesson
+      window.location.href = '../index.html';
+    });
   }
 
   // Boot on Part 1
