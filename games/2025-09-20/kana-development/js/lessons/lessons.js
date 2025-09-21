@@ -210,62 +210,126 @@
     // init
     progressPts = 0; updateMeter(); nextQuestion();
   }
-
+  
   // ==========================================================
-  // Part 3: Typing — Enter the Phonetic
+  // Part 3: Typing — Enter the Phonetic (adaptive + meter)
   // ==========================================================
   const part3 = $('#part-3');
   if (part3) {
-    const glyph     = $('.type-glyph', part3);
-    const input     = $('#type-input', part3);
-    const checkBtn  = $('[data-action="check-typing"]', part3);
-    const counterEl = $('.type-meta .counter', part3);
-
-    let needed       = Number(counterEl?.dataset.needed || 5);
-    let correctSoFar = 0;
-
-    function updateMeta() { if (counterEl) counterEl.textContent = `${correctSoFar} / ${needed}`; }
-
+    const glyph      = $('.type-glyph', part3);
+    const wrapper    = $('.type-glyph-wrapper', part3);
+    const input      = $('#type-input', part3);
+    const meter      = $('.quiz-progress .meter', part3);
+    const meterFill  = $('.quiz-progress .meter-fill', part3);
+    const meterLabel = $('.quiz-progress .meter-label', part3);
+  
+    const GOAL = 15;
+    let progressPts = 0;
+    let roundLocked = false;
+  
+    // weights + unseen (same behavior as Part 2)
+    const weights = Object.fromEntries(['あ','い','う','え','お'].map(k => [k, 1]));
+    const unseen  = new Set(['あ','い','う','え','お']);
+  
+    const THEMES = ['theme-dark','theme-light','theme-sepia','theme-high'];
+  
+    function pickWeighted(map) {
+      const entries = Object.entries(map);
+      const total = entries.reduce((s, [,w]) => s + w, 0);
+      let r = Math.random() * total;
+      for (const [key, w] of entries) {
+        r -= w; if (r <= 0) return key;
+      }
+      return entries[entries.length - 1][0];
+    }
+  
+    function updateMeter() {
+      const clamped = Math.max(0, Math.min(GOAL, progressPts));
+      const pct = Math.round((clamped / GOAL) * 100);
+      meter?.setAttribute('aria-valuenow', String(clamped));
+      if (meterFill) meterFill.style.width = `${pct}%`;
+      if (meterLabel) meterLabel.textContent = `Progress: ${clamped} / ${GOAL}`;
+    }
+  
+    function setThemeRandom() {
+      if (!wrapper) return;
+      wrapper.classList.remove(...THEMES);
+      const pick = THEMES[Math.floor(Math.random() * THEMES.length)];
+      wrapper.classList.add(pick);
+    }
+  
     function newRound() {
-      glyph.classList.remove('state-correct','state-wrong');
+      roundLocked = false;
+      input.classList.remove('is-locked');
       input.value = '';
-      const kana = ['あ','い','う','え','お'][Math.floor(Math.random()*5)];
+  
+      // pick next kana (guarantee first pass, then weighted)
+      let kana;
+      if (unseen.size) {
+        const arr = Array.from(unseen);
+        kana = arr[Math.floor(Math.random()*arr.length)];
+      } else {
+        kana = pickWeighted(weights);
+      }
+  
       glyph.dataset.currentKana = kana;
       glyph.textContent = kana;
+  
+      setThemeRandom();
       input.focus();
     }
-
+  
     function evaluate() {
+      if (roundLocked) return;
       const kana     = glyph.dataset.currentKana;
       const expected = { 'あ':'a','い':'i','う':'u','え':'e','お':'o' }[kana];
       const val      = (input.value || '').trim().toLowerCase();
-
-      glyph.classList.remove('state-correct','state-wrong');
+  
       if (!val) return;
-
+  
+      roundLocked = true;
+      input.classList.add('is-locked');
+  
+      glyph.classList.remove('state-correct','state-wrong');
+  
       if (val === expected) {
         glyph.classList.add('state-correct');
-        correctSoFar += 1; updateMeta();
+        progressPts = Math.min(GOAL, progressPts + 1);
+        unseen.delete(kana);
+        weights[kana] = Math.max(1, weights[kana] - 1);
+        updateMeter();
+  
         setTimeout(() => {
-          if (correctSoFar >= needed) {
+          if (progressPts >= GOAL) {
             part3Done = true;
-            showCTA('Next');
+            showCTA('Next');            // show top CTA to continue
           } else {
             newRound();
           }
-        }, 300);
+        }, 320);
       } else {
         glyph.classList.add('state-wrong');
+        progressPts = Math.max(0, progressPts - 1);
+        weights[kana] = (weights[kana] || 1) + 2;  // wrong → more frequent
+        updateMeter();
+  
+        // move on after short delay; no correcting this round
+        setTimeout(() => { newRound(); }, 420);
       }
     }
-
-    checkBtn?.addEventListener('click', evaluate);
+  
+    // Enter submits; no other buttons
     if (input) {
-      input.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); evaluate(); } });
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          evaluate();
+        }
+      });
       input.addEventListener('input', () => glyph.classList.remove('state-correct','state-wrong'));
     }
-
-    correctSoFar = 0; updateMeta(); newRound();
+  
+    progressPts = 0; updateMeter(); newRound();
   }
 
   // ==========================================================
