@@ -14,14 +14,16 @@ window.KANA_STAGES = {
       title: "1-1 — Hiragana Vowels",
       href: "lessons/1-1.html",
       tags: ["Beginner", "Recommended"],
-      desc: "あ い う え お — recognize and pronounce the five hiragana vowels."
+      desc: "あ い う え お — recognize and pronounce the five hiragana vowels.",
+      thumb: "あ"
     },
     {
       code: "1-2",
       title: "1-2 — Katakana Vowels",
       href: "lessons/1-2.html",
       tags: ["Beginner"],
-      desc: "ア イ ウ エ オ — learn the katakana counterparts."
+      desc: "ア イ ウ エ オ — learn the katakana counterparts.",
+      thumb: "ア"
     }
   ]
 };
