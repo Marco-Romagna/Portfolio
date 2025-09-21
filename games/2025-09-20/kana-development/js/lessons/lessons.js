@@ -3,7 +3,7 @@
   const $  = (s, r = document) => r.querySelector(s);
   const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
 
-  const lesson   = $('.lesson');
+  const lesson = $('.lesson');
   if (!lesson) return;
 
   const totalParts = Number(lesson.dataset.totalParts || 4);
@@ -108,21 +108,27 @@
       $$('.option', part2).forEach(b => b.classList.remove('is-correct', 'is-wrong'));
     }
 
+    // rotate high-readability themes across options
+    const THEMES = ['theme-dark', 'theme-light', 'theme-sepia', 'theme-high'];
+
     function setRound() {
       const correctKana  = KANA[Math.floor(Math.random() * KANA.length)];
       const targetRomaji = ROMA[correctKana];
       const prompt       = $('.prompt-text .prompt-target', part2);
 
+      // ask "Which kana is “x”?"
       if (prompt) { prompt.dataset.type = 'romaji'; prompt.textContent = `“${targetRomaji}”`; }
 
+      // choose options, guarantee the correct one is included, shuffle
       const opts = sample(KANA, Math.min(4, KANA.length));
       if (!opts.includes(correctKana)) opts[Math.floor(Math.random() * opts.length)] = correctKana;
       const shuffled = sample(opts, opts.length);
 
+      // build option buttons with themed classes
       grid.innerHTML = '';
-      shuffled.forEach(k => {
+      shuffled.forEach((k, i) => {
         const b = document.createElement('button');
-        b.className = 'option';
+        b.className = `option ${THEMES[i % THEMES.length]}`;
         b.dataset.value = k;
         b.textContent = k;
         b.addEventListener('click', () => onPick(k, correctKana, b));
@@ -154,6 +160,7 @@
       }
     }
 
+    // "New Options" is optional; CSS hides it for this lesson. Keep null-safe.
     const reshuffleBtn = $('[data-action="reshuffle"]', part2);
     reshuffleBtn?.addEventListener('click', () => {
       clearStates();
