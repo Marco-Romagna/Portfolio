@@ -1,3 +1,4 @@
+// render.js — header-only rows, whole row navigates to lv.href
 function renderWorlds(worlds) {
   const root = document.getElementById("worlds-root");
   const worldTpl = document.getElementById("tpl-world");
@@ -7,56 +8,42 @@ function renderWorlds(worlds) {
   worlds.forEach(w => {
     const wNode = worldTpl.content.cloneNode(true);
     wNode.querySelector(".world-title").textContent = w.title;
-    wNode.querySelector(".world-desc").textContent = w.desc;
-
+    wNode.querySelector(".world-desc").textContent = w.desc || "";
     const list = wNode.querySelector(".levels-list");
 
-    w.levels.forEach(lv => {
+    (w.levels || []).forEach(lv => {
       const node = rowTpl.content.cloneNode(true);
 
-      // Header bits
-      const head = node.querySelector(".level-head");
-      const icon = node.querySelector(".level-icon");
+      // Bits we keep
+      const head  = node.querySelector(".level-head");
+      const icon  = node.querySelector(".level-icon");
       const title = node.querySelector(".level-title");
-      const body  = node.querySelector(".level-body");
-      const btnStart = node.querySelector('[data-role="start"]');
 
-      icon.textContent = lv.thumb || lv.code;   // kana or fallback
-      title.textContent = lv.title;
-      btnStart.href = lv.href;
+      // Optional bits we remove (collapse UI)
+      node.querySelector(".level-body")?.remove();
+      node.querySelector(".chev")?.remove();
 
-      // Expanded content
-      const media = node.querySelector(".level-thumb");
-      const desc  = node.querySelector(".level-desc");
-      const tags  = node.querySelector(".level-tags");
+      // Fill header
+      icon.textContent = lv.thumb || lv.code || "";
+      title.textContent = lv.title || lv.code || "";
 
-      desc.textContent = lv.desc || "";
+      // Make the entire header act like a link
+      const href = lv.href || "#";
+      head.setAttribute("role", "link");
+      head.setAttribute("aria-expanded", "false"); // no accordion behavior
+      head.tabIndex = 0;
+      if (href && href !== "#") head.title = `Open: ${lv.title || lv.code}`;
 
-      // If you add lv.image (e.g. "assets/levels/1-1.png") we use <img>, else big kana
-      if (lv.image && /\.(png|jpe?g|gif|svg)$/i.test(lv.image)) {
-        media.classList.remove("kana-thumb");
-        const img = document.createElement("img");
-        img.src = lv.image;
-        img.alt = lv.title;
-        media.appendChild(img);
-      } else {
-        media.classList.add("kana-thumb");
-        media.setAttribute("data-kana", lv.thumb || lv.code);
+      // Click/keyboard navigate
+      function go() {
+        if (href && href !== "#") window.location.href = href;
       }
-
-      // Tags only in expanded view
-      (lv.tags || []).forEach(t => {
-        const span = document.createElement("span");
-        span.className = "tag";
-        span.textContent = t;
-        tags.appendChild(span);
-      });
-
-      // Accordion toggle
-      head.addEventListener("click", () => {
-        const expanded = head.getAttribute("aria-expanded") === "true";
-        head.setAttribute("aria-expanded", String(!expanded));
-        body.hidden = expanded;
+      head.addEventListener("click", go);
+      head.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          go();
+        }
       });
 
       list.appendChild(node);
