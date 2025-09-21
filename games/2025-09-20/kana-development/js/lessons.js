@@ -11,10 +11,20 @@
   const lesson = $('.lesson');
   if (!lesson) return;
 
-  const lessonId   = String(lesson.dataset.lessonId || '1-1');
-  const totalParts = Number(lesson.dataset.totalParts || 4);
+  // ========= set lessonId + totalParts from URL =========
+  const params = new URLSearchParams(window.location.search);
+  const qId = params.get('id') || '1-1';
+  lesson.dataset.lessonId = qId;
+
+  const [, suffixStr] = qId.split('-');
+  const suffix = Number(suffixStr);
+  lesson.dataset.totalParts = (suffix === 4 || suffix === 8) ? 3 : 4;
+
+  const lessonId   = lesson.dataset.lessonId;
+  const totalParts = Number(lesson.dataset.totalParts);
+
   const parts      = $$('.lesson-part');
-  const steps      = $$('.steps .step');
+  const stepsList  = $('.steps');
   const progress   = $('.progressbar');
   const fill       = $('.progressbar-fill');
 
@@ -25,7 +35,7 @@
   function showPart(idx) {
     const current = Math.min(Math.max(idx, 1), totalParts);
     parts.forEach(p => p.classList.toggle('is-visible', Number(p.dataset.partIndex) === current));
-    steps.forEach(s => s.classList.toggle('is-active', Number(s.dataset.part) === current));
+    $$('.steps .step').forEach(s => s.classList.toggle('is-active', Number(s.dataset.part) === current));
     const pct = totalParts > 1 ? Math.round((current - 1) / (totalParts - 1) * 100) : 100;
     if (fill) fill.style.width = `${pct}%`;
     if (progress) progress.setAttribute('aria-valuenow', String(pct));
@@ -92,11 +102,29 @@
   const WORLD1_COMBO_RULES = (WORLD === 1);
   const REQUIRE_MIXED_SCRIPTS_IN_COMBO = (WORLD === 1 && SUFFIX === 3);
 
+  // ========= build steps dynamically =========
+  (function initSteps() {
+    if (!stepsList) return;
+    stepsList.innerHTML = '';
+    const labels = IS_TYPING_ONLY
+      ? ['Preview','Typing','Finish']
+      : ['Preview','Identify','Typing','Speak'];
+    labels.forEach((label, idx) => {
+      const li = document.createElement('li');
+      li.className = `step ${idx===0 ? 'is-active' : ''}`;
+      li.dataset.part = (idx+1);
+      li.innerHTML = `<span class="step-label">Part ${idx+1}</span><span class="step-sub">${label}</span>`;
+      stepsList.appendChild(li);
+    });
+  })();
+
   // ========= Part 1 (Preview) =========
   (function initPart1() {
     if (!(SUFFIX === 3 || SUFFIX === 7)) return;
     const part1 = $('#part-1'); if (!part1) return;
-    const grid = $('.kana-grid', part1); if (!grid) return;
+    const grid = document.createElement('div');
+    grid.className = 'kana-grid';
+    part1.appendChild(grid);
 
     const hiraganaPool = KANA.filter(g => /[\u3040-\u309F]/.test(g));
     const pairs = hiraganaPool.map(h => ({ h, k: PAIR[h], r: ROMA[h] })).filter(p => !!p.k);
@@ -120,6 +148,18 @@
     const part2 = $('#part-2'); if (!part2) return;
 
     if (IS_TYPING_ONLY) { initTyping(part2, GOAL_TYPE, true); return; }
+
+    // scaffold
+    part2.innerHTML = `
+      <h2 class="part-title">Identify</h2>
+      <div class="quiz-panel">
+        <div class="quiz-prompt"><p class="prompt-text">Which kana is <strong class="prompt-target"></strong>?</p></div>
+        <div class="quiz-options"></div>
+        <div class="quiz-progress"><div class="meter"><div class="meter-fill"></div></div><div class="meter-label"></div></div>
+        <div class="quiz-feedback"><p class="feedback-text"></p></div>
+        <div class="actions"><button class="btn primary is-hidden" data-action="next-part">Next</button></div>
+      </div>
+    `;
 
     const grid       = $('.quiz-options', part2);
     const feedback   = $('.quiz-feedback .feedback-text', part2);
@@ -171,12 +211,14 @@
   (function initPart3(){if(IS_TYPING_ONLY)return;const part3=$('#part-3');if(!part3)return;initTyping(part3,GOAL_TYPE,false);})();
 
   // ========= Part 4 (Speak placeholder) =========
-  (function initPart4(){const part4=$('#part-4');if(!part4)return;const panel=$('.speak-panel',part4);if(panel){let sample=(KANA[0]||'あ');panel.innerHTML=`<div class="speak-placeholder"><div class="kana-glyph speak-glyph">${sample}</div><p class="muted">Speaking practice is in progress.</p><button class="btn primary" data-action="finish-lesson">Finish</button></div>`;}part4.querySelector('[data-action="finish-lesson"]')?.addEventListener('click',()=>{window.location.href='../index.html';});})();
+  (function initPart4(){const part4=$('#part-4');if(!part4)return;const panel=document.createElement('div');panel.className='speak-panel';panel.innerHTML=`<div class="kana-glyph speak-glyph">${KANA[0]||'あ'}</div><p class="muted">Speaking practice is in progress.</p><button class="btn primary" data-action="finish-lesson">Finish</button>`;part4.appendChild(panel);panel.querySelector('[data-action="finish-lesson"]').addEventListener('click',()=>{window.location.href='../index.html';});})();
 
   // ========= Typing engine =========
   function initTyping(scopeEl,GOAL,isPart2){
-    const wrapper=$('.type-glyph-wrapper',scopeEl);const input=$('#type-input',scopeEl);
-    const meterFill=$('.quiz-progress .meter-fill',scopeEl);const meterLabel=$('.quiz-progress .meter-label',scopeEl);
+    const wrapper=$('.type-glyph-wrapper',scopeEl)||document.createElement('div');if(!wrapper.classList.contains('type-glyph-wrapper')){wrapper.className='type-glyph-wrapper';scopeEl.appendChild(wrapper);}
+    const input=$('#type-input',scopeEl)||document.createElement('input');if(!input.id){input.id='type-input';input.className='type-input';input.setAttribute('autocomplete','off');scopeEl.appendChild(input);}
+    const meterFill=$('.quiz-progress .meter-fill',scopeEl)||document.createElement('div');if(!meterFill.classList.contains('meter-fill')){const m=document.createElement('div');m.className='quiz-progress';m.innerHTML='<div class="meter"><div class="meter-fill"></div></div><div class="meter-label"></div>';scopeEl.appendChild(m);}
+    const meterLabel=$('.quiz-progress .meter-label',scopeEl);
     let actionBtn=$('[data-action="next-part"]',scopeEl);if(actionBtn)actionBtn.classList.add('is-hidden');
     const THEMES=['theme-dark','theme-light','theme-sepia','theme-high'];
     const weights=Object.fromEntries(KANA.map(k=>[k,1]));const unseen=new Set(KANA);
