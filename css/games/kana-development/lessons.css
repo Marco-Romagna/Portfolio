@@ -329,4 +329,52 @@ body.site.mode-light, body.site {
   pointer-events: none;
 }
 
+/* Hide the thin top progress bar for this lesson (steps are enough) */
+.lesson[data-lesson-id="1-1"] .lesson-progress .progressbar { display: none; }
+
+/* Part 3 — minimalist input + tidy layout */
+.lesson[data-lesson-id="1-1"] #part-3 .type-label {
+  display: block;
+  text-align: center;
+  margin: 8px 0 6px;
+  color: color-mix(in oklab, var(--kp-text) 75%, var(--kp-muted));
+  font-weight: 600;
+  letter-spacing: .2px;
+}
+
+.lesson[data-lesson-id="1-1"] #part-3 .type-input {
+  width: min(380px, 90%);
+  margin: 0 auto;
+  display: block;
+  background: #0e152a;
+  border: 1px solid #1e2a42;
+  color: var(--kp-text);
+  border-radius: 999px;
+  padding: 12px 16px;
+  font-size: 1.05rem;
+  text-align: center;
+  outline: none;
+  transition: box-shadow .15s ease, border-color .15s ease, background-color .15s ease;
+}
+.lesson[data-lesson-id="1-1"] #part-3 .type-input:focus {
+  border-color: var(--kp-accent);
+  box-shadow: 0 0 0 4px color-mix(in oklab, var(--kp-accent) 25%, transparent);
+  background: #0c1124;
+}
+
+/* No state color pop on the glyph anymore — keep neutral */
+.lesson[data-lesson-id="1-1"] #part-3 .type-glyph {
+  color: var(--kp-text);
+}
+.lesson[data-lesson-id="1-1"] #part-3 .type-glyph.state-correct,
+.lesson[data-lesson-id="1-1"] #part-3 .type-glyph.state-wrong {
+  color: var(--kp-text); /* neutralize any previous state colors */
+}
+
+/* Keep the themed wrapper, but make it calmer */
+.lesson[data-lesson-id="1-1"] #part-3 .type-glyph-wrapper {
+  padding: 24px;
+  border-radius: var(--kp-radius);
+  border: 1px solid var(--kp-border);
+}
 
