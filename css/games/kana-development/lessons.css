@@ -117,7 +117,7 @@ body.site {
 .lesson-part { display: none; padding: 16px; }
 .lesson-part.is-visible { display: block; }
 
-/* Sticky global CTA (used on some parts) */
+/* Sticky global CTA (still available, but we’ll rely on local buttons for P3/P4) */
 .lesson-cta {
   position: sticky;
   bottom: 0;
@@ -175,6 +175,7 @@ body.site {
 .type-glyph-wrapper  { margin: 4px 0 8px; }
 .type-glyph          { display: inline-block; font-size: clamp(80px, 12vw, 140px); line-height: 1; }
 
+/* Input: clean & focused */
 .type-input {
   width: 220px;
   max-width: 80%;
@@ -188,9 +189,6 @@ body.site {
 }
 
 .type-label, #type-help { color: var(--kp-muted); }
-.type-glyph.state-idle    { color: var(--kp-text); }
-.type-glyph.state-correct { color: var(--kp-correct); }
-.type-glyph.state-wrong   { color: var(--kp-wrong); }
 .type-meta { margin-top: 8px; color: var(--kp-muted); }
 
 /* =========================================================
@@ -332,7 +330,7 @@ body.site {
   transition: width .2s ease;
 }
 
-/* Glyph wrapper themes (same palette) */
+/* Glyph wrapper themes (same palette as Part 2) */
 .lesson[data-lesson-id="1-1"] #part-3 .type-glyph-wrapper {
   display: grid;
   place-items: center;
@@ -346,7 +344,12 @@ body.site {
 .lesson[data-lesson-id="1-1"] #part-3 .type-glyph-wrapper.theme-sepia { background:#f6eedb; color:#3b2f1a; border-color:#e3d4b4; }
 .lesson[data-lesson-id="1-1"] #part-3 .type-glyph-wrapper.theme-high  { background:#000;    color:#fff;    border-color:#ffffffa8; }
 
-/* Minimal input look */
+/* >>> Make the kana inherit the wrapper color (fix contrast on light themes) */
+.lesson[data-lesson-id="1-1"] #part-3 .type-glyph {
+  color: currentColor;   /* no forced light color on light backgrounds */
+}
+
+/* Minimal input look (nicer pill) */
 .lesson[data-lesson-id="1-1"] #part-3 .type-label {
   display: block;
   text-align: center;
@@ -373,13 +376,6 @@ body.site {
   border-color: var(--kp-accent);
   box-shadow: 0 0 0 4px color-mix(in oklab, var(--kp-accent) 25%, transparent);
   background: #0c1124;
-}
-
-/* Keep glyph neutral (no color changes for states) */
-.lesson[data-lesson-id="1-1"] #part-3 .type-glyph,
-.lesson[data-lesson-id="1-1"] #part-3 .type-glyph.state-correct,
-.lesson[data-lesson-id="1-1"] #part-3 .type-glyph.state-wrong {
-  color: var(--kp-text);
 }
 
 /* Lock input briefly after submit */
