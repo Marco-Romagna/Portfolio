@@ -121,31 +121,34 @@
       </div>
     </section>
 
-
     <!-- PART 3: Type the phonetic (romaji) for the shown kana -->
     <section id="part-3" class="lesson-part" data-part-index="3" aria-labelledby="part3-title">
       <h2 id="part3-title" class="part-title">Typing — Enter the Phonetic</h2>
-
+    
       <div class="type-panel">
         <div class="type-glyph-wrapper">
           <span class="kana-glyph type-glyph state-idle" data-current-kana="あ">あ</span>
         </div>
-
+    
         <label class="type-label" for="type-input">Type the romaji:</label>
-        <input id="type-input" class="type-input" type="text" inputmode="latin" placeholder="a / e / i / o / u" aria-describedby="type-help" />
-        <p id="type-help" class="muted">Press Enter or click Check.</p>
-
-        <div class="actions">
-          <button class="btn" data-action="check-typing">Check</button>
-          <button class="btn ghost" data-action="skip">Skip</button>
+        <input id="type-input" class="type-input" type="text" inputmode="latin" aria-describedby="type-help" />
+        <p id="type-help" class="muted">Press Enter to submit.</p>
+    
+        <!-- Progress meter like Part 2 -->
+        <div class="quiz-progress" aria-live="polite">
+          <div class="meter" role="progressbar" aria-valuemin="0" aria-valuemax="15" aria-valuenow="0">
+            <div class="meter-fill" style="width: 0%"></div>
+          </div>
+          <div class="meter-label">Progress: 0 / 15</div>
         </div>
-
+    
         <div class="type-meta">
-          <span class="counter" data-correct="0" data-needed="5">0 / 5 correct</span>
+          <!-- Removed 0/5 counter; we use the meter now -->
         </div>
       </div>
     </section>
 
+    
     <!-- PART 4: Speak the vowel shown (mic interaction UI only) -->
     <section id="part-4" class="lesson-part" data-part-index="4" aria-labelledby="part4-title">
       <h2 id="part4-title" class="part-title">Speak — Say the Vowel</h2>
