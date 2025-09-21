@@ -13,15 +13,13 @@
   const progress   = $('.progressbar');
   const fill       = $('.progressbar-fill');
 
-  // Sticky CTA exists but we hide it on parts using local buttons
+  // We use local buttons at the bottom; keep global CTA hidden
   const cta = $('.lesson-cta [data-action="advance"]');
-  const showCTA = (label) => { if (cta) { cta.textContent = label; cta.closest('.lesson-cta')?.classList.remove('is-hidden'); } };
   const hideCTA = () => { cta?.closest('.lesson-cta')?.classList.add('is-hidden'); };
 
-  // Part 1 local Start
   const startBtn = $('#part-1 .actions [data-action="advance"]');
 
-  // ------- lesson data sets -------
+  // ------- data sets -------
   const H = ['あ','い','う','え','お'];
   const K = ['ア','イ','ウ','エ','オ'];
   const ROMA_ALL = {
@@ -30,10 +28,8 @@
   };
   const PAIR = { 'あ':'ア','い':'イ','う':'ウ','え':'エ','お':'オ', 'ア':'あ','イ':'い','ウ':'う','エ':'え','オ':'お' };
 
-  // ------- per-lesson selection -------
   let KANA = H;
   let ROMA = { 'あ':'a','い':'i','う':'u','え':'e','お':'o' };
-
   if (lessonId === '1-2') {
     KANA = K;
     ROMA = { 'ア':'a','イ':'i','ウ':'u','エ':'e','オ':'o' };
@@ -58,11 +54,10 @@
     if (fill) fill.style.width = `${pct}%`;
     if (progress) progress.setAttribute('aria-valuenow', String(pct));
 
-    // We use local buttons at the bottom for all parts
-    hideCTA();
+    hideCTA(); // always use local buttons
   }
 
-  // Sticky CTA click (fallback)
+  // fallback (unused)
   cta?.addEventListener('click', () => {
     if (current < totalParts) showPart(current + 1);
     else window.location.href = '../index.html';
@@ -70,7 +65,7 @@
 
   // --------------------------------------------
   // Part 1 — Preview
-  // For 1-3, render paired cards (H + K + romaji)
+  // For 1-3, render pairs (hiragana ⇄ katakana) with romaji
   // --------------------------------------------
   (function initPart1() {
     if (lessonId !== '1-3') return;
@@ -103,7 +98,6 @@
       grid.appendChild(card);
     });
 
-    // Update title
     const title = $('#part-1 .part-title');
     if (title) title.textContent = 'Mixed Vowels — Preview';
   })();
@@ -114,8 +108,9 @@
   // ==========================================================
   // Part 2 — Identify
   // 1-1/1-2: same-script identify to 15
-  // 1-3: cross-script identify to 20 (match counterpart)
-  // Anti-repeat: no same prompt twice, no per-slot option repeats
+  // 1-3: cross-script identify to 20 (H ↔ K counterpart)
+  // Anti-repeat: no same prompt twice; no per-slot option repeats
+  // Weighted by errors; lock each round (no correction)
   // ==========================================================
   const part2 = $('#part-2');
   if (part2) {
@@ -181,7 +176,7 @@
         }
         if (ok) return perm;
       }
-      // fallback: minimal swaps to break conflicts
+      // fallback swap
       const perm = [...opts];
       for (let i = 0; i < perm.length; i++) {
         if (perm[i] === prevOptionAtIndex[i]) {
@@ -205,7 +200,7 @@
         }
         return pickWeighted(weights, lastPromptGlyph);
       }
-      // mixed: pick from one script, answer from the other
+      // mixed: prompt from one script, answer from the other
       const pool = Math.random() < 0.5 ? H : K;
       const poolWeights = Object.fromEntries(pool.map(g => [g, weights[g] || 1]));
       const unseenPool = pool.filter(g => unseen.has(g));
@@ -240,10 +235,8 @@
       // Build options
       let options = [];
       if (lessonId === '1-3') {
-        // options from the counterpart script
-        const isH = H.includes(promptGlyph);
         const correct = PAIR[promptGlyph];
-        const pool = isH ? K : H;
+        const pool = H.includes(promptGlyph) ? K : H;
         const distractors = sample(pool.filter(g => g !== correct), 3);
         options = [correct, ...distractors];
       } else {
@@ -265,7 +258,6 @@
       });
 
       prevOptionAtIndex = orderedOptions.slice();
-
       setFeedback('Pick the right one to continue…');
     }
 
@@ -278,8 +270,7 @@
 
       let isCorrect = false;
       if (lessonId === '1-3') {
-        const expected = PAIR[promptGlyph];
-        isCorrect = (choice === expected);
+        isCorrect = (choice === PAIR[promptGlyph]);
       } else {
         isCorrect = (choice === promptGlyph);
       }
@@ -304,7 +295,7 @@
         setTimeout(() => {
           if (progressPts >= GOAL) {
             part2Done = true;
-            nextBtn?.classList.remove('is-hidden'); // show local Next
+            nextBtn?.classList.remove('is-hidden');
             setFeedback('Part complete! Tap Next to continue.');
           } else {
             nextQuestion();
@@ -335,32 +326,31 @@
 
   // ==========================================================
   // Part 3 — Type (romaji)
-  // 1-1/1-2 target 15; 1-3 target 20
-  // Weighted random; no same glyph twice in a row
-  // Local Next/Finish at the bottom (like Part 2)
+  // 1-1/1-2: goal 15; 1-3: goal 20
+  // Weighted, no same glyph twice in a row; bottom Next/Finish
+  // (keeps neutral glyph color; random theme wrapper)
   // ==========================================================
   const part3 = $('#part-3');
   if (part3) {
-    const wrapper    = $('.type-glyph-wrapper', part3);  // render glyph here
+    const wrapper    = $('.type-glyph-wrapper', part3);
     const input      = $('#type-input', part3);
     const meter      = $('.quiz-progress .meter', part3);
     const meterFill  = $('.quiz-progress .meter-fill', part3);
     const meterLabel = $('.quiz-progress .meter-label', part3);
 
-    // Ensure local Next/Finish at bottom
+    // local action button
     let actionBtn = $('[data-action="next-part"]', part3);
     if (!actionBtn) {
       const actions = document.createElement('div');
       actions.className = 'actions';
       actionBtn = document.createElement('button');
       actionBtn.className = 'btn primary is-hidden';
-      actionBtn.dataset.action = (lessonId === '1-3') ? 'finish-lesson' : 'next-part';
-      actionBtn.textContent = (lessonId === '1-3') ? 'Finish' : 'Next';
+      actionBtn.dataset.action = 'next-part';
+      actionBtn.textContent = 'Next';
       actions.appendChild(actionBtn);
       part3.appendChild(actions);
     } else {
-      actionBtn.dataset.action = (lessonId === '1-3') ? 'finish-lesson' : 'next-part';
-      actionBtn.textContent = (lessonId === '1-3') ? 'Finish' : 'Next';
+      actionBtn.textContent = 'Next';
       actionBtn.classList.add('is-hidden');
     }
 
@@ -454,7 +444,7 @@
         setTimeout(() => {
           if (progressPts >= GOAL) {
             part3Done = true;
-            actionBtn?.classList.remove('is-hidden'); // reveal Next/Finish
+            actionBtn?.classList.remove('is-hidden');
           } else {
             newRound();
           }
@@ -476,27 +466,23 @@
       }
     });
 
-    // Button action
-    actionBtn?.addEventListener('click', () => {
-      if (lessonId === '1-3') {
-        window.location.href = '../index.html'; // finish
-      } else {
-        showPart(4);
-      }
-    });
+    // Next → Part 4
+    actionBtn?.addEventListener('click', () => showPart(4));
 
     progressPts = 0; updateMeter(); newRound();
   }
 
   // ==========================================================
-  // Part 4 — Speak (placeholder for 1-1 / 1-2 only)
-  // 1-3 has only 3 parts, so Part 4 can be absent.
+  // Part 4 — Speak (placeholder for ALL lessons for now)
   // ==========================================================
   const part4 = $('#part-4');
   if (part4) {
     const panel = $('.speak-panel', part4);
     if (panel) {
-      const sampleGlyph = (lessonId === '1-2') ? 'ア' : 'あ';
+      const sampleGlyph =
+        lessonId === '1-2' ? 'ア' :
+        lessonId === '1-3' ? (Math.random() < 0.5 ? 'あ' : 'ア') :
+        'あ';
       panel.innerHTML = `
         <div class="speak-placeholder" style="
           display:grid;
