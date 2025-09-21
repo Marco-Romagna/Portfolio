@@ -5,9 +5,8 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>1-1 — Hiragana Vowels</title>
 
-  <!-- Global site styles -->
+  <!-- Global + lesson styles -->
   <link rel="stylesheet" href="../../../../css/main.css">
-  <!-- Lesson-specific styles -->
   <link rel="stylesheet" href="../../../../css/games/kana-development/lessons.css">
 </head>
 
@@ -21,27 +20,31 @@
     </div>
   </header>
 
-  <!-- Main lesson area -->
+  <!-- Lesson -->
   <main class="container game-wrap">
     <section class="stage">
-      <!-- Flashcard -->
+      <!-- Flashcard (appearance controlled by card-mode.js) -->
       <div class="card-big">
         あ
         <div class="kana-sub">a</div>
       </div>
 
-      <!-- Choices -->
-      <div class="choices">
-        <button class="choice">a</button>
-        <button class="choice">i</button>
-        <button class="choice">u</button>
-        <button class="choice">e</button>
-        <button class="choice">o</button>
+      <!-- Intro text -->
+      <div class="muted" style="text-align:center">Tap a vowel to hear it.</div>
+
+      <!-- The five vowels (click to play sound) -->
+      <div class="choices" id="vowelBtns">
+        <button class="choice" data-romaji="a">あ</button>
+        <button class="choice" data-romaji="i">い</button>
+        <button class="choice" data-romaji="u">う</button>
+        <button class="choice" data-romaji="e">え</button>
+        <button class="choice" data-romaji="o">お</button>
       </div>
 
-      <!-- Footer bar -->
+      <!-- Footer -->
       <div class="footer-bar">
         <span>Level 1-1 — Hiragana Vowels</span>
+        <a class="btn" href="1-2.html">Next: 1-2</a>
       </div>
     </section>
   </main>
@@ -53,9 +56,58 @@
 
   <!-- Scripts -->
   <script>
-    // update footer year
+    // footer year
     document.getElementById("year").textContent = new Date().getFullYear();
+
+    // Simple audio: use Web Speech (ja-JP). Falls back to romaji if no jp voice available.
+    (function setupVowelAudio(){
+      const btns = document.querySelectorAll('#vowelBtns .choice');
+
+      function speakKana(kana, romaji){
+        try {
+          const u = new SpeechSynthesisUtterance(kana);
+          u.lang = 'ja-JP';
+          u.rate = 0.9;
+          u.pitch = 1.0;
+
+          // Prefer a Japanese voice if present
+          const voices = speechSynthesis.getVoices();
+          const jp = voices.find(v => v.lang && v.lang.toLowerCase().startsWith('ja'));
+          if (jp) u.voice = jp;
+
+          // If no Japanese voice at all, speak the romaji so it's not silent
+          if (!jp) u.text = romaji;
+
+          speechSynthesis.cancel(); // stop any previous
+          speechSynthesis.speak(u);
+        } catch (e) {
+          // As a last resort, do nothing (no alert spam for learners)
+          console.warn('Speech synthesis not available:', e);
+        }
+      }
+
+      // Some browsers populate voices asynchronously
+      if (typeof speechSynthesis !== 'undefined') {
+        speechSynthesis.onvoiceschanged = () => {};
+      }
+
+      btns.forEach(b => {
+        b.addEventListener('click', () => {
+          const kana = b.textContent.trim();
+          const romaji = b.dataset.romaji || '';
+          speakKana(kana, romaji);
+
+          // also reflect current kana on the flashcard
+          const card = document.querySelector('.card-big');
+          const sub  = card?.querySelector('.kana-sub');
+          if (card) card.firstChild.nodeValue = kana; // update main glyph
+          if (sub)  sub.textContent = romaji;
+        });
+      });
+    })();
   </script>
+
+  <!-- Dev-controlled mode (light/dark/sepia/auto/cycle) -->
   <script src="../js/card-mode.js"></script>
 </body>
 </html>
