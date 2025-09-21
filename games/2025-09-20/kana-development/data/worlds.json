@@ -1,0 +1,10 @@
+{
+  "worlds": [
+    {
+      "code": "1",
+      "title": "World 1 — Vowels",
+      "desc": "Start here. Learn the five core vowels in both scripts.",
+      "levels": ["1-1", "1-2"]
+    }
+  ]
+}
