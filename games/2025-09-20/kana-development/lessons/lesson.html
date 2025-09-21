@@ -5,23 +5,45 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Kana Lesson</title>
 
+  <!-- Site styles -->
   <link rel="stylesheet" href="../../../../css/main.css">
   <link rel="stylesheet" href="../../../../css/games/kana-development/styles.css">
   <link rel="stylesheet" href="../../../../css/games/kana-development/lessons.css">
 </head>
-
 <body class="site mode-light">
+
+  <!-- Site header -->
   <header class="header">
     <div class="container nav">
-      <a class="brand" href="../index.html"><span class="dot"></span><span>Kana Development</span></a>
+      <a class="brand" href="index.html">
+        <span class="dot"></span><span>Kana Development</span>
+      </a>
     </div>
   </header>
 
-  <main class="container game-wrap lesson" data-lesson-id="" data-total-parts="4">
-    <!-- JS will inject parts here -->
+  <!-- Sticky CTA (hidden unless JS unhides) -->
+  <div class="lesson-cta is-hidden">
+    <button class="btn primary" data-action="advance">Next</button>
+  </div>
+
+  <!-- Main lesson container -->
+  <main class="container game-wrap lesson" data-lesson-id="" data-total-parts="">
+    <!-- Progress steps (JS will populate labels and count) -->
+    <nav class="lesson-progress" aria-label="Lesson progress">
+      <ol class="steps"></ol>
+      <div class="progressbar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+        <div class="progressbar-fill"></div>
+      </div>
+    </nav>
+
+    <!-- Placeholder sections for Parts 1–4 -->
+    <section id="part-1" class="lesson-part is-visible" data-part-index="1"></section>
+    <section id="part-2" class="lesson-part" data-part-index="2"></section>
+    <section id="part-3" class="lesson-part" data-part-index="3"></section>
+    <section id="part-4" class="lesson-part" data-part-index="4"></section>
   </main>
 
-  <script defer src="../js/stages.js"></script>
+  <!-- Universal lesson logic -->
   <script defer src="../js/lessons.js"></script>
 </body>
 </html>
