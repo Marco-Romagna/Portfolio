@@ -270,3 +270,11 @@ body.site.mode-light, body.site {
 
 /* hide any leftover “New Options” if present */
 .lesson[data-lesson-id="1-1"] #part-2 [data-action="reshuffle"] { display: none !important; }
+
+
+/* Lock state after a pick (no correcting the same question) */
+.lesson[data-lesson-id="1-1"] #part-2 .option.is-disabled {
+  pointer-events: none;
+  opacity: .55;
+}
+
