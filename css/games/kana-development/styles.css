@@ -97,10 +97,15 @@
 }
 
 /* Make the text "thumbnail" look like a big centered icon */
-  .card-thumb.no-thumb { display: grid; place-items: center; text-decoration: none; color: inherit; }
-  .card-thumb.no-thumb .no-thumb-mark{
-    font-size: clamp(40px, 9vw, 110px);
-    font-weight: 800;
-    line-height: 1;
-    letter-spacing: .5px;
-  }
+.card-thumb.no-thumb {
+  display: grid;
+  place-items: center;
+  text-decoration: none; /* remove underline */
+  color: inherit;        /* inherit surrounding text color */
+}
+.card-thumb.no-thumb .no-thumb-mark {
+  font-size: clamp(40px, 9vw, 110px);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: .5px;
+}
