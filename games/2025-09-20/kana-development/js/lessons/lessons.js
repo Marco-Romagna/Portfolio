@@ -271,6 +271,7 @@
         btn.classList.add('is-correct');
         setFeedback('Nice! That’s correct.');
 
+        const GOAL = (lessonId === '1-3') ? 20 : 15;
         progressPts = Math.min(GOAL, progressPts + 1);
         unseen.delete(promptGlyph);
 
@@ -317,12 +318,13 @@
   }
 
   // ==========================================================
-  // Part 3 — Type (romaji) with FINAL-5 COMBO MODE
-  // Goals: 1-1/1-2 → 15 (combos start at 10), 1-3 → 20 (combos at 15)
-  // No same glyph twice in a row; weighted by mistakes
+  // Part 3 — Type (romaji) with COMBO MODE
+  // Goals: 1-1/1-2 → 15 (combos start at 10), 1-3 → 20 (combos start at 10; last 10)
+  // No same glyph twice in a row (single mode); weighted by mistakes
   // Combo mode: 3 kana displayed together (same style); user can type the
   // full remaining string OR one-by-one across Enter presses. Never repeat
-  // the exact previous combo.
+  // the exact previous combo. For ALL lessons: 3 are DISTINCT.
+  // For 1-3: combo must include at least 1 hiragana and 1 katakana.
   // ==========================================================
   const part3 = $('#part-3');
   if (part3) {
@@ -349,7 +351,8 @@
     }
 
     const GOAL = (lessonId === '1-3') ? 20 : 15;
-    const COMBO_THRESHOLD = GOAL - 5;
+    // IMPORTANT: 1-3 uses last 10 points for combos; others last 5
+    const COMBO_THRESHOLD = (lessonId === '1-3') ? (GOAL - 10) : (GOAL - 5);
 
     let progressPts = 0;
     let roundLocked = false;
@@ -403,6 +406,16 @@
       wrapper.appendChild(span);
     }
 
+    // Helpers to detect script
+    function isHiragana(ch) {
+      const code = ch.charCodeAt(0);
+      return code >= 0x3040 && code <= 0x309F;
+    }
+    function isKatakana(ch) {
+      const code = ch.charCodeAt(0);
+      return (code >= 0x30A0 && code <= 0x30FF) || (code >= 0x31F0 && code <= 0x31FF);
+    }
+
     // --- single pick with no immediate repeat ---
     function pickNextKana() {
       const unseenArr = Array.from(unseen);
@@ -414,43 +427,60 @@
       return pickWeighted(weights, lastKana);
     }
 
-    // --- combo generation: 3 kana, no adjacent duplicates, first avoids lastKana, not equal to lastComboKey ---
+    // --- combo generation:
+    //   • ALL lessons: 3 DISTINCT kana (no duplicates anywhere)
+    //   • 1-3: must include at least 1 hiragana and 1 katakana
+    //   • first avoids lastKana
+    //   • not equal to lastComboKey
     function makeCombo() {
-      for (let attempt = 0; attempt < 60; attempt++) {
-        const seq = [];
-        let first = pickNextKana();
-        seq.push(first);
+      const needMixedScripts = (lessonId === '1-3');
+      for (let attempt = 0; attempt < 80; attempt++) {
+        // first avoids lastKana
+        const pool = [...KANA];
+        const firstChoices = pool.filter(k => k !== lastKana);
+        const first = firstChoices[Math.floor(Math.random() * firstChoices.length)];
 
-        let second = pickWeighted(weights);
-        for (let t=0; t<10 && second === seq[seq.length-1]; t++) second = pickWeighted(weights);
-        seq.push(second);
+        // pick remaining two from remaining pool (to force all distinct)
+        const remaining1 = pool.filter(k => k !== first);
+        const second = remaining1[Math.floor(Math.random() * remaining1.length)];
+        const remaining2 = remaining1.filter(k => k !== second);
+        const third  = remaining2[Math.floor(Math.random() * remaining2.length)];
 
-        let third = pickWeighted(weights);
-        for (let t=0; t<10 && third === seq[seq.length-1]; t++) third = pickWeighted(weights);
-        seq.push(third);
+        const seq = [first, second, third];
+
+        // enforce "distinct" for ALL lessons
+        if (new Set(seq).size !== 3) continue;
+
+        // for 1-3, require at least one H and one K
+        if (needMixedScripts) {
+          const hasH = seq.some(isHiragana);
+          const hasK = seq.some(isKatakana);
+          if (!hasH || !hasK) continue;
+        }
 
         const key = seq.join('');
-        if (key !== lastComboKey) return { seq, key };
+        if (key === lastComboKey) continue;
+
+        return { seq, key };
       }
-      const seq = [pickNextKana(), pickWeighted(weights), pickWeighted(weights)];
+      // Fallback: best-effort distinct trio
+      const distinct = [...new Set(KANA)];
+      const seq = distinct.slice(0, 3);
       return { seq, key: seq.join('') };
     }
 
-    // render combo (all same color/fonts; spaces are invisible spacers)
+    // render combo (all same color/fonts; spaced clearly)
     function renderComboDisplay() {
       const cont = document.createElement('div');
       cont.className = 'combo-seq';
-      comboSeq.forEach((k, idx) => {
+      cont.style.display = 'flex';
+      cont.style.gap = '18px';
+      cont.style.alignItems = 'center';
+      comboSeq.forEach(k => {
         const s = document.createElement('span');
         s.className = 'kana-glyph type-glyph';
         s.textContent = k;
         cont.appendChild(s);
-        if (idx < comboSeq.length - 1) {
-          const spacer = document.createElement('span');
-          spacer.textContent = ' ';
-          spacer.style.opacity = '0';
-          cont.appendChild(spacer);
-        }
       });
       wrapper.innerHTML = '';
       wrapper.appendChild(cont);
