@@ -12,18 +12,16 @@
   const progress   = $('.progressbar');
   const fill       = $('.progressbar-fill');
 
-  // Global sticky CTA (used for Next/Finish on parts >= 2)
+  // Global sticky CTA (Next/Finish for parts except Part 2)
   const cta = $('.lesson-cta [data-action="advance"]');
   const showCTA = (label) => {
     if (!cta) return;
     cta.textContent = label;
     cta.closest('.lesson-cta')?.classList.remove('is-hidden');
   };
-  const hideCTA = () => {
-    cta?.closest('.lesson-cta')?.classList.add('is-hidden');
-  };
+  const hideCTA = () => { cta?.closest('.lesson-cta')?.classList.add('is-hidden'); };
 
-  // Part 1 local Start button (moved into Part 1 actions)
+  // Part 1 local Start button
   const startBtn = $('#part-1 .actions [data-action="advance"]');
 
   // ------- lesson data (for 1-1) -------
@@ -47,11 +45,11 @@
     if (fill) fill.style.width = `${pct}%`;
     if (progress) progress.setAttribute('aria-valuenow', String(pct));
 
-    // CTA rules: hide on Part 1 (local Start), show as needed for later parts
+    // CTA rules
     if (current === 1) {
-      hideCTA();
+      hideCTA();                    // Part 1 uses local Start
     } else if (current === 2) {
-      part2Done ? showCTA('Next') : hideCTA();
+      hideCTA();                    // Part 2 uses local Next (under panel)
     } else if (current === 3) {
       part3Done ? showCTA('Next') : hideCTA();
     } else if (current === 4) {
@@ -61,72 +59,90 @@
 
   // Global CTA click (Next / Finish)
   cta?.addEventListener('click', () => {
-    if (current < totalParts) {
-      showPart(current + 1);
-    } else {
-      // Finished lesson — go back to stage index
-      window.location.href = '../index.html';
-    }
+    if (current < totalParts) showPart(current + 1);
+    else window.location.href = '../index.html';
   });
 
   // Part 1 local Start → go to Part 2
-  startBtn?.addEventListener('click', () => {
-    showPart(2);
-  });
+  startBtn?.addEventListener('click', () => showPart(2));
 
   // ==========================================================
-  // Part 2: Identify — Pick the Correct Vowel
+  // Part 2: Identify — Adaptive, ±1 meter to 15
   // ==========================================================
   const part2 = $('#part-2');
   if (part2) {
-    const grid      = $('.quiz-options', part2);
-    const feedback  = $('.quiz-feedback .feedback-text', part2);
-    const counterEl = $('.quiz-meta .counter', part2);
-    const streakEl  = $('.quiz-meta .streak', part2);
+    const grid       = $('.quiz-options', part2);
+    const feedback   = $('.quiz-feedback .feedback-text', part2);
+    const prompt     = $('.prompt-text .prompt-target', part2);
+    const meter      = $('.quiz-progress .meter', part2);
+    const meterFill  = $('.quiz-progress .meter-fill', part2);
+    const meterLabel = $('.quiz-progress .meter-label', part2);
+    const nextBtn    = $('[data-action="next-part"]', part2);
 
-    let needed       = Number(counterEl?.dataset.needed || 5);
-    let correctSoFar = 0;
-    let streak       = 0;
+    // progress target
+    const GOAL = 15;
+    let progressPts = 0;
 
-    const sample = (arr, n) => {
+    // Per-kana weights (start at 1), and a set of unseen kana to guarantee first pass
+    const weights = Object.fromEntries(KANA.map(k => [k, 1]));
+    const unseen  = new Set(KANA);
+
+    // utility: weighted random pick
+    function pickWeighted(map) {
+      const entries = Object.entries(map);
+      const total = entries.reduce((s, [, w]) => s + w, 0);
+      let r = Math.random() * total;
+      for (const [key, w] of entries) {
+        r -= w;
+        if (r <= 0) return key;
+      }
+      return entries[entries.length - 1][0]; // fallback
+    }
+
+    // shuffle copy and slice n
+    function sample(arr, n) {
       const a = [...arr];
       for (let i = a.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [a[i], a[j]] = [a[j], a[i]];
       }
       return a.slice(0, n);
-    };
-
-    function updateMeta() {
-      if (counterEl) counterEl.textContent = `${correctSoFar} / ${needed} correct`;
-      if (streakEl)  streakEl.textContent  = `Streak: ${streak}`;
     }
 
     function setFeedback(t) { if (feedback) feedback.textContent = t; }
 
-    function clearStates() {
-      $$('.option', part2).forEach(b => b.classList.remove('is-correct', 'is-wrong'));
+    function updateMeter() {
+      const pct = Math.max(0, Math.min(100, Math.round((progressPts / GOAL) * 100)));
+      meter?.setAttribute('aria-valuenow', String(Math.max(0, Math.min(GOAL, progressPts))));
+      if (meterFill) meterFill.style.width = `${pct}%`;
+      if (meterLabel) meterLabel.textContent = `Progress: ${Math.max(0, Math.min(GOAL, progressPts))} / ${GOAL}`;
     }
 
-    // rotate high-readability themes across options
+    function clearStates() { $$('.option', part2).forEach(b => b.classList.remove('is-correct','is-wrong')); }
+
+    // rotate high-readability themes
     const THEMES = ['theme-dark', 'theme-light', 'theme-sepia', 'theme-high'];
 
-    function setRound() {
-      const correctKana  = KANA[Math.floor(Math.random() * KANA.length)];
-      const targetRomaji = ROMA[correctKana];
-      const prompt       = $('.prompt-text .prompt-target', part2);
-
-      // ask "Which kana is “x”?"
-      if (prompt) { prompt.dataset.type = 'romaji'; prompt.textContent = `“${targetRomaji}”`; }
-
-      // choose options, guarantee the correct one is included, shuffle
-      const opts = sample(KANA, Math.min(4, KANA.length));
-      if (!opts.includes(correctKana)) opts[Math.floor(Math.random() * opts.length)] = correctKana;
-      const shuffled = sample(opts, opts.length);
-
-      // build option buttons with themed classes
+    function nextQuestion() {
       grid.innerHTML = '';
-      shuffled.forEach((k, i) => {
+
+      // choose the correct kana
+      let correctKana;
+      if (unseen.size > 0) {
+        const arr = Array.from(unseen);
+        correctKana = arr[Math.floor(Math.random() * arr.length)];
+      } else {
+        correctKana = pickWeighted(weights);
+      }
+
+      // ensure prompt shows romaji
+      if (prompt) { prompt.dataset.type = 'romaji'; prompt.textContent = `“${ROMA[correctKana]}”`; }
+
+      // 4 options: include correct + 3 others
+      const others = sample(KANA.filter(k => k !== correctKana), 3);
+      const options = sample([correctKana, ...others], 4);
+
+      options.forEach((k, i) => {
         const b = document.createElement('button');
         b.className = `option ${THEMES[i % THEMES.length]}`;
         b.dataset.value = k;
@@ -134,6 +150,7 @@
         b.addEventListener('click', () => onPick(k, correctKana, b));
         grid.appendChild(b);
       });
+
       setFeedback('Pick the right one to continue…');
     }
 
@@ -142,34 +159,37 @@
       if (choice === correctKana) {
         btn.classList.add('is-correct');
         setFeedback('Nice! That’s correct.');
-        streak += 1; correctSoFar += 1; updateMeta();
+
+        // progress + weighting
+        progressPts = Math.min(GOAL, progressPts + 1);
+        unseen.delete(correctKana);
+        weights[correctKana] = Math.max(1, weights[correctKana] - 1); // right → less frequent
+
+        updateMeter();
 
         setTimeout(() => {
-          if (correctSoFar >= needed) {
+          if (progressPts >= GOAL) {
             part2Done = true;
-            showCTA('Next');
+            nextBtn?.classList.remove('is-hidden'); // show local Next
             setFeedback('Part complete! Tap Next to continue.');
           } else {
-            setRound();
+            nextQuestion();
           }
-        }, 400);
+        }, 350);
       } else {
         btn.classList.add('is-wrong');
         setFeedback('Try another.');
-        streak = 0; updateMeta();
+        progressPts = Math.max(0, progressPts - 1);       // wrong → -1
+        weights[correctKana] = (weights[correctKana] || 1) + 2; // wrong → more frequent
+        updateMeter();
       }
     }
 
-    // "New Options" is optional; CSS hides it for this lesson. Keep null-safe.
-    const reshuffleBtn = $('[data-action="reshuffle"]', part2);
-    reshuffleBtn?.addEventListener('click', () => {
-      clearStates();
-      setRound();
-      setFeedback('Options reshuffled…');
-    });
+    // local Next → go to Part 3
+    nextBtn?.addEventListener('click', () => showPart(3));
 
     // init
-    correctSoFar = 0; streak = 0; updateMeta(); setRound();
+    progressPts = 0; updateMeter(); nextQuestion();
   }
 
   // ==========================================================
@@ -185,14 +205,12 @@
     let needed       = Number(counterEl?.dataset.needed || 5);
     let correctSoFar = 0;
 
-    function updateMeta() {
-      if (counterEl) counterEl.textContent = `${correctSoFar} / ${needed}`;
-    }
+    function updateMeta() { if (counterEl) counterEl.textContent = `${correctSoFar} / ${needed}`; }
 
     function newRound() {
-      glyph.classList.remove('state-correct', 'state-wrong');
+      glyph.classList.remove('state-correct','state-wrong');
       input.value = '';
-      const kana = KANA[Math.floor(Math.random() * KANA.length)];
+      const kana = ['あ','い','う','え','お'][Math.floor(Math.random()*5)];
       glyph.dataset.currentKana = kana;
       glyph.textContent = kana;
       input.focus();
@@ -200,16 +218,15 @@
 
     function evaluate() {
       const kana     = glyph.dataset.currentKana;
-      const expected = ROMA[kana];
+      const expected = { 'あ':'a','い':'i','う':'u','え':'e','お':'o' }[kana];
       const val      = (input.value || '').trim().toLowerCase();
 
-      glyph.classList.remove('state-correct', 'state-wrong');
+      glyph.classList.remove('state-correct','state-wrong');
       if (!val) return;
 
       if (val === expected) {
         glyph.classList.add('state-correct');
         correctSoFar += 1; updateMeta();
-
         setTimeout(() => {
           if (correctSoFar >= needed) {
             part3Done = true;
@@ -225,10 +242,8 @@
 
     checkBtn?.addEventListener('click', evaluate);
     if (input) {
-      input.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter') { e.preventDefault(); evaluate(); }
-      });
-      input.addEventListener('input', () => glyph.classList.remove('state-correct', 'state-wrong'));
+      input.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); evaluate(); } });
+      input.addEventListener('input', () => glyph.classList.remove('state-correct','state-wrong'));
     }
 
     correctSoFar = 0; updateMeta(); newRound();
