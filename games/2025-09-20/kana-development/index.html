@@ -3,9 +3,8 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>KanaDevelopment • Summary</title>
+  <title>KanaDevelopment • Lessons</title>
 
-  <!-- Global site styles only -->
   <link rel="stylesheet" href="../../../css/main.css">
 </head>
 
@@ -22,24 +21,104 @@
     </div>
   </header>
 
-  <!-- Main -->
   <main class="container">
+    <!-- Summary -->
     <section class="panel">
       <h2>KanaDevelopment</h2>
       <p class="muted">
-        A lightweight practice space for Japanese kana. This page is a placeholder with a brief summary only,
-        styled using the site’s global stylesheet. Interactive features will be added later.
+        Start with Level <strong>1A (recommended)</strong> for hiragana vowels, then continue to Level 1B for katakana.
+        Use the template below to manage/add lessons without touching layout code.
       </p>
+    </section>
+
+    <!-- Lesson Levels (render target) -->
+    <section class="panel">
+      <h2>Lesson Levels</h2>
+      <ul id="levels-grid" class="card-grid"></ul>
     </section>
   </main>
 
-  <!-- Footer -->
   <footer class="footer">
     © <span id="year"></span> Marco Romagna • All rights reserved
   </footer>
 
+  <!-- Card template (uses main.css classes) -->
+  <template id="level-card-tpl">
+    <li class="card">
+      <a class="card-thumb no-thumb">
+        <span class="no-thumb-mark"></span>
+      </a>
+      <div class="card-body">
+        <a class="card-title"></a>
+        <div class="card-tags"></div>
+        <p class="muted desc"></p>
+      </div>
+    </li>
+  </template>
+
+  <!-- Minimal data + renderer -->
   <script>
+    // --- Data: edit this array to add/change lessons ---
+    const LEVELS = [
+      {
+        code: "1A",
+        title: "Level 1A — Hiragana Vowels",
+        href: "lessons/level-1a.html",
+        tags: ["Beginner", "Recommended"],
+        desc: "Learn the five hiragana vowels: あ (a), い (i), う (u), え (e), お (o)."
+      },
+      {
+        code: "1B",
+        title: "Level 1B — Katakana Vowels",
+        href: "lessons/level-1b.html",
+        tags: ["Beginner"],
+        desc: "Learn the five katakana vowels: ア (a), イ (i), ウ (u), エ (e), オ (o)."
+      }
+    ];
+
+    // --- Render ---
+    function renderLevels(levels) {
+      const grid = document.getElementById("levels-grid");
+      const tpl = document.getElementById("level-card-tpl");
+
+      grid.innerHTML = "";
+      levels.forEach(lv => {
+        const node = tpl.content.cloneNode(true);
+
+        // Thumb + code label
+        const thumb = node.querySelector(".card-thumb");
+        thumb.href = lv.href;
+        node.querySelector(".no-thumb-mark").textContent = lv.code;
+
+        // Title link
+        const title = node.querySelector(".card-title");
+        title.href = lv.href;
+        title.textContent = lv.title;
+
+        // Tags
+        const tagsWrap = node.querySelector(".card-tags");
+        if (lv.tags?.length) {
+          lv.tags.forEach(t => {
+            const span = document.createElement("span");
+            span.className = "tag";
+            span.textContent = t;
+            tagsWrap.appendChild(span);
+          });
+        }
+
+        // Description
+        node.querySelector(".desc").textContent = lv.desc;
+
+        grid.appendChild(node);
+      });
+    }
+
+    // Boot
     document.getElementById("year").textContent = new Date().getFullYear();
+    renderLevels(LEVELS);
+
+    // Optional: expose for quick console tweaks
+    window.KanaLevels = { LEVELS, render: () => renderLevels(LEVELS) };
   </script>
 </body>
 </html>
