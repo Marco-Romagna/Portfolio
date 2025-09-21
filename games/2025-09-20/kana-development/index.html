@@ -7,6 +7,8 @@
 
   <!-- Global site styles -->
   <link rel="stylesheet" href="../../../css/main.css">
+  <!-- Tiny page styles (just to make text-thumbs look like icons) -->
+  <link rel="stylesheet" href="../../../css/games/kana-development/styles.css">
 </head>
 
 <body class="site">
@@ -28,8 +30,8 @@
     <section class="panel">
       <h2>KanaDevelopment</h2>
       <p class="muted">
-        Progress through <strong>Worlds</strong> (stages). Each world contains several short levels. 
-        Start with <strong>World&nbsp;1</strong> to learn the vowel sounds in hiragana and katakana.
+        Progress through <strong>Worlds</strong> (stages). Each world contains short, focused levels.
+        Start with <strong>World&nbsp;1</strong> for vowel basics in hiragana and katakana.
       </p>
     </section>
 
@@ -64,63 +66,9 @@
     </li>
   </template>
 
-  <!-- Data -->
+  <!-- Scripts (all external) -->
   <script src="js/stages.js"></script>
-
-  <!-- Render logic -->
-  <script>
-    function renderWorlds(worlds) {
-      const root = document.getElementById("worlds-root");
-      const worldTpl = document.getElementById("tpl-world");
-      const levelTpl = document.getElementById("tpl-level-card");
-      root.innerHTML = "";
-
-      worlds.forEach(w => {
-        const wNode = worldTpl.content.cloneNode(true);
-        wNode.querySelector(".world-title").textContent = w.title;
-        wNode.querySelector(".world-desc").textContent = w.desc;
-
-        const grid = wNode.querySelector(".levels-grid");
-        w.levels.forEach(lv => {
-          const lNode = levelTpl.content.cloneNode(true);
-
-          const thumb = lNode.querySelector(".card-thumb");
-          thumb.href = lv.href;
-          lNode.querySelector(".no-thumb-mark").textContent = lv.code;
-
-          const title = lNode.querySelector(".card-title");
-          title.href = lv.href;
-          title.textContent = lv.title;
-
-          const tags = lNode.querySelector(".card-tags");
-          (lv.tags || []).forEach(t => {
-            const span = document.createElement("span");
-            span.className = "tag";
-            span.textContent = t;
-            tags.appendChild(span);
-          });
-
-          lNode.querySelector(".desc").textContent = lv.desc;
-          grid.appendChild(lNode);
-        });
-
-        root.appendChild(wNode);
-      });
-    }
-
-    // Boot
-    (function init() {
-      document.getElementById("year").textContent = new Date().getFullYear();
-
-      const { worlds, levels } = window.KANA_STAGES;
-      const levelIndex = Object.fromEntries(levels.map(l => [l.code, l]));
-      const merged = worlds.map(w => ({
-        ...w,
-        levels: w.levels.map(code => levelIndex[code]).filter(Boolean)
-      }));
-
-      renderWorlds(merged);
-    })();
-  </script>
+  <script src="js/render.js"></script>
+  <script src="js/init.js"></script>
 </body>
 </html>
