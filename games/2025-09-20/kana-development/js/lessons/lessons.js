@@ -337,27 +337,27 @@
 
     // --- COMBO RENDERING ---
     function renderComboDisplay() {
-      // Show three glyphs together; highlight current index
-      // We reuse the "type-glyph" class for sizing
       const cont = document.createElement('div');
       cont.className = 'combo-seq';
-      comboSeq.forEach((k, i) => {
+    
+      comboSeq.forEach((k) => {
         const s = document.createElement('span');
         s.className = 'kana-glyph type-glyph';
         s.textContent = k;
-        // lightweight visual cue: current gets slight opacity boost, others dim
-        s.style.opacity = i < comboIdx ? '0.45' : (i === comboIdx ? '1' : '0.7');
+        // all glyphs same style now
         cont.appendChild(s);
-        if (i < 2) {
-          const spacer = document.createElement('span');
-          spacer.textContent = '  ';
-          spacer.style.opacity = '0';
-          cont.appendChild(spacer);
-        }
+    
+        // optional spacing between glyphs
+        const spacer = document.createElement('span');
+        spacer.textContent = ' ';
+        spacer.style.opacity = '0';
+        cont.appendChild(spacer);
       });
+    
       wrapper.innerHTML = '';
       wrapper.appendChild(cont);
     }
+
 
     function renderSingleGlyph(kana) {
       wrapper.innerHTML = '';
