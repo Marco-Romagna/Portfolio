@@ -79,7 +79,13 @@
     GOAL_IDENT = 20; GOAL_TYPE = 20; COMBO_LAST = 10; // per your spec
     WORLD1_COMBO_RULES = true;
     REQUIRE_MIXED_SCRIPTS_IN_COMBO = true;
+  } else if (lessonId === '1-4') {  // Type vowels
+    KANA = [...H_VOW, ...K_VOW]; 
+    GOAL_IDENT = 0;               // no identify
+    GOAL_TYPE  = 15;              // typing to 15
+    COMBO_LAST = 5;               // last 5 use combos
   }
+
 
   // World 2 (K row + dakuten G row)
   else if (lessonId === '2-1') {            // H ka-row
