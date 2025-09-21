@@ -709,7 +709,7 @@
       let sample = 'あ';
       if (lessonId.startsWith('1-2')) sample = 'ア';
       else if (lessonId === '1-3') sample = Math.random() < 0.5 ? 'あ' : 'ア';
-      else if (lessonId === '2-2' || lessonId === '2-6') sample = 'カ';
+      else if (lessonId === '2-2') sample = 'カ';
       else if (lessonId === '2-3') sample = Math.random() < 0.5 ? 'か' : 'カ';
       else if (lessonId === '2-4') sample = 'く';
       else if (lessonId === '2-5') sample = 'が';
