@@ -115,7 +115,7 @@
   }
 
   // ======================================================
-  // Part 3 — Typing (English → Kana input)
+  // Part 3 — Typing (English → Kana input, themed like Kana Part 3)
   // ======================================================
   async function initPart3(words) {
     const part3 = $('#part-3');
@@ -147,7 +147,11 @@
 
     function newRound(){
       current=words[Math.floor(Math.random()*words.length)];
-      wrapper.innerHTML=`<span class="kana-glyph">${current.gloss_en}</span>`;
+      // Apply random theme each round
+      wrapper.classList.remove(...THEMES);
+      wrapper.classList.add(THEMES[Math.floor(Math.random()*THEMES.length)]);
+      // Show ENGLISH prompt in the panel
+      wrapper.innerHTML=`<span class="type-glyph">${current.gloss_en}</span>`;
       input.value='';
     }
 
