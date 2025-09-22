@@ -1,4 +1,3 @@
-
 // ==========================================================
 // Universal lessons.js
 // Handles ALL lessons (1-1 … 2-8 and beyond)
@@ -109,6 +108,19 @@
   const WORLD1_COMBO_RULES = (WORLD === 1);
   const REQUIRE_MIXED_SCRIPTS_IN_COMBO = (WORLD === 1 && SUFFIX === 3);
 
+  // helpers for script & sound checks
+  const isHira = ch => /[\u3040-\u309F]/.test(ch);
+  const isKata = ch => /[\u30A0-\u30FF]/.test(ch);
+  const sameSound = (a,b) => ROMA[a] && ROMA[a] === ROMA[b];
+  const differentScript = (a,b) => (isHira(a) && isKata(b)) || (isKata(a) && isHira(b));
+
+  // pick from pool while avoiding immediate repeat
+  function pickAvoidRepeat(pool, last) {
+    const avail = pool.length > 1 ? pool.filter(g => g !== last) : pool.slice();
+    const src = avail.length ? avail : pool;
+    return src[Math.floor(Math.random()*src.length)];
+  }
+
   // ========= steps (dynamic) =========
   (function initSteps() {
     if (!stepsList) return;
@@ -140,7 +152,7 @@
       grid.className = 'kana-grid';
       part1.appendChild(grid);
 
-      const hiraganaPool = KANA.filter(g => /[\u3040-\u309F]/.test(g));
+      const hiraganaPool = KANA.filter(g => isHira(g));
       const pairs = hiraganaPool.map(h => ({ h, k: PAIR[h], r: ROMA[h] })).filter(p => !!p.k);
 
       pairs.forEach(p => {
@@ -250,7 +262,8 @@
         if(c.length>1) c=c.filter(k=>k!==lastPromptGlyph);
         return c[Math.floor(Math.random()*c.length)];
       }
-      return KANA[Math.floor(Math.random()*KANA.length)];
+      // pool exhausted → still avoid immediate repeat
+      return pickAvoidRepeat(KANA, lastPromptGlyph);
     }
 
     function nextQuestion(){
@@ -258,7 +271,7 @@
       const promptGlyph=pickPromptGlyph();lastPromptGlyph=promptGlyph;
 
       if(MIXED_TYPE){
-        const isH=/[\u3040-\u309F]/.test(promptGlyph);
+        const isH=isHira(promptGlyph);
         const otherLabel=isH?'katakana':'hiragana';
         promptText.innerHTML=`Which <strong>${otherLabel}</strong> matches <strong class="prompt-target">“${promptGlyph}”</strong>?`;
       } else {
@@ -269,9 +282,9 @@
       let options=[];
       if(MIXED_TYPE){
         const correct=PAIR[promptGlyph];
-        const pool=/[\u3040-\u309F]/.test(promptGlyph)
-          ? KANA.filter(g=>/[\u30A0-\u30FF]/.test(g))
-          : KANA.filter(g=>/[\u3040-\u309F]/.test(g));
+        const pool=isHira(promptGlyph)
+          ? KANA.filter(g=>isKata(g))
+          : KANA.filter(g=>isHira(g));
         options=[correct,...sample(pool.filter(g=>g!==correct),3)];
       } else {
         const correct=promptGlyph;
@@ -417,7 +430,7 @@
     let lastKana=null;
     let comboActive=false;
     let comboSeq=[];
-    let comboIdx=0;
+    let lastComboSeq=null; // for position anti-repeat
     let lastComboKey=null;
 
     function updateMeter(){
@@ -430,35 +443,55 @@
       wrapper.classList.add(THEMES[Math.floor(Math.random()*THEMES.length)]);
     }
     function pickNextKana(){
-      const unseenArr=Array.from(unseen);
-      if(unseenArr.length){
-        let c=unseenArr;
-        if(c.length>1) c=c.filter(k=>k!==lastKana);
-        return c[Math.floor(Math.random()*c.length)];
-      }
-      return KANA[Math.floor(Math.random()*KANA.length)];
+      const pool = Array.from(unseen).length ? Array.from(unseen) : KANA.slice();
+      return pickAvoidRepeat(pool, lastKana);
     }
+
+    // Build a 3-glyph combo respecting all constraints
     function makeCombo(){
-      for(let attempt=0;attempt<80;attempt++){
-        const seq=[pickNextKana(),pickNextKana(),pickNextKana()];
-        if(WORLD1_COMBO_RULES && new Set(seq).size!==3) continue;
-        if(REQUIRE_MIXED_SCRIPTS_IN_COMBO){
-          const hasH=seq.some(g=>/[\u3040-\u309F]/.test(g));
-          const hasK=seq.some(g=>/[\u30A0-\u30FF]/.test(g));
-          if(!(hasH&&hasK)) continue;
+      for(let attempt=0;attempt<120;attempt++){
+        const a = pickAvoidRepeat(KANA, lastKana);
+        const b = pickAvoidRepeat(KANA.filter(x=>x!==a), null);
+        const c = pickAvoidRepeat(KANA.filter(x=>x!==a && x!==b), null);
+        const seq=[a,b,c];
+
+        // 1) no duplicate glyphs in the combo
+        if(new Set(seq).size !== 3) continue;
+
+        // 2) mixed-type position rule:
+        //    don't place same *sound in same position* as the last combo,
+        //    unless in MIXED_TYPE and script differs (hira<->kata)
+        if(lastComboSeq){
+          let violatesPos=false;
+          for(let i=0;i<3;i++){
+            if(sameSound(seq[i], lastComboSeq[i]) && !(MIXED_TYPE && differentScript(seq[i], lastComboSeq[i]))){
+              violatesPos=true; break;
+            }
+          }
+          if(violatesPos) continue;
         }
+
+        // 3) avoid producing same exact combo key as last
         const key=seq.join('');
-        if(key!==lastComboKey) return {seq,key};
+        if(key===lastComboKey) continue;
+
+        return {seq,key};
       }
-      return {seq:[pickNextKana(),pickNextKana(),pickNextKana()], key:'fallback'};
+      // fallback (still keep unique glyphs)
+      const pool = KANA.slice();
+      const a = pickAvoidRepeat(pool, lastKana);
+      const b = pickAvoidRepeat(pool.filter(x=>x!==a), null);
+      const c = pickAvoidRepeat(pool.filter(x=>x!==a && x!==b), null);
+      return {seq:[a,b,c], key:'fallback'};
     }
+
     function renderGlyph(k){ wrapper.innerHTML=`<span class="kana-glyph type-glyph" data-current-kana="${k}">${k}</span>`; }
-    function renderComboDisplay(){ wrapper.innerHTML=comboSeq.map(k=>`<span class="kana-glyph type-glyph">${k}</span>`).join(' '); }
+    function renderComboDisplay(){ wrapper.innerHTML=comboSeq.map(k=>`<span class="kana-glyph type-glyph">${k}</span>`).join(''); }
 
     function newRound(){
       if(progressPts>=COMBO_THRESHOLD){
         const {seq,key}=makeCombo();
-        comboSeq=seq; comboIdx=0; lastComboKey=key;
+        comboSeq=seq; lastComboSeq=seq.slice(); lastComboKey=key;
         comboActive=true; setThemeRandom(); renderComboDisplay();
       }else{
         comboActive=false;
@@ -484,8 +517,10 @@
         }else{
           progressPts=Math.max(0,progressPts-1);
           updateMeter();
+          // still avoid immediate repeat next round
           newRound();
         }
+        lastKana=kana;
       }else{
         const expectedAll=comboSeq.map(k=>ROMA[k]).join('');
         if(val===expectedAll){
