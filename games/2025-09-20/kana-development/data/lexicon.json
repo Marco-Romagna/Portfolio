@@ -1,0 +1,146 @@
+[
+  {
+    "id": "ai",
+    "kana": "あい",
+    "romaji": "ai",
+    "gloss": "vowel drill",
+    "tags": ["w1", "vowel", "drill"]
+  },
+  {
+    "id": "ie",
+    "kana": "いえ",
+    "romaji": "ie",
+    "gloss": "vowel drill",
+    "tags": ["w1", "vowel", "drill"]
+  },
+  {
+    "id": "ue",
+    "kana": "うえ",
+    "romaji": "ue",
+    "gloss": "vowel drill",
+    "tags": ["w1", "vowel", "drill"]
+  },
+  {
+    "id": "oi",
+    "kana": "おい",
+    "romaji": "oi",
+    "gloss": "vowel drill",
+    "tags": ["w1", "vowel", "drill"]
+  },
+  {
+    "id": "ao",
+    "kana": "あお",
+    "romaji": "ao",
+    "gloss": "vowel drill",
+    "tags": ["w1", "vowel", "drill"]
+  },
+  {
+    "id": "ui",
+    "kana": "うい",
+    "romaji": "ui",
+    "gloss": "vowel drill",
+    "tags": ["w1", "vowel", "drill"]
+  },
+  {
+    "id": "io",
+    "kana": "いお",
+    "romaji": "io",
+    "gloss": "vowel drill",
+    "tags": ["w1", "vowel", "drill"]
+  },
+  {
+    "id": "ei",
+    "kana": "えい",
+    "romaji": "ei",
+    "gloss": "vowel drill",
+    "tags": ["w1", "vowel", "drill"]
+  },
+
+  /* ---------- World 2 (K row) ---------- */
+  {
+    "id": "ika",
+    "kana": "いか",
+    "romaji": "ika",
+    "gloss": "squid",
+    "tags": ["w2", "k-row", "noun", "common"]
+  },
+  {
+    "id": "ike",
+    "kana": "いけ",
+    "romaji": "ike",
+    "gloss": "pond",
+    "tags": ["w2", "k-row", "noun", "common"]
+  },
+  {
+    "id": "eki",
+    "kana": "えき",
+    "romaji": "eki",
+    "gloss": "station",
+    "tags": ["w2", "k-row", "noun", "common"]
+  },
+  {
+    "id": "kiku",
+    "kana": "きく",
+    "romaji": "kiku",
+    "gloss": "to listen / chrysanthemum",
+    "tags": ["w2", "k-row", "verb", "common"]
+  },
+  {
+    "id": "aka",
+    "kana": "あか",
+    "romaji": "aka",
+    "gloss": "red",
+    "tags": ["w2", "k-row", "adj", "common"]
+  },
+  {
+    "id": "kako",
+    "kana": "かこ",
+    "romaji": "kako",
+    "gloss": "past (time)",
+    "tags": ["w2", "k-row", "noun"]
+  },
+  {
+    "id": "koe",
+    "kana": "こえ",
+    "romaji": "koe",
+    "gloss": "voice",
+    "tags": ["w2", "k-row", "noun", "common"]
+  },
+  {
+    "id": "oki",
+    "kana": "おき",
+    "romaji": "oki",
+    "gloss": "open sea / off shore",
+    "tags": ["w2", "k-row", "noun"]
+  },
+
+  /* ---------- World 2 (G row / dakuten) ---------- */
+  {
+    "id": "kagi",
+    "kana": "かぎ",
+    "romaji": "kagi",
+    "gloss": "key",
+    "tags": ["w2", "g-row", "noun", "common", "dakuten"]
+  },
+  {
+    "id": "goma",
+    "kana": "ごま",
+    "romaji": "goma",
+    "gloss": "sesame",
+    "tags": ["w2", "g-row", "noun", "dakuten"]
+  },
+  {
+    "id": "kage",
+    "kana": "かげ",
+    "romaji": "kage",
+    "gloss": "shadow",
+    "tags": ["w2", "g-row", "noun", "dakuten"]
+  },
+  {
+    "id": "age",
+    "kana": "あげ",
+    "romaji": "age",
+    "gloss": "deep-fry / raise",
+    "tags": ["w2", "g-row", "verb", "dakuten"]
+  }
+]
