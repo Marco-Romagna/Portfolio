@@ -1,15 +1,11 @@
 {
   "sets": {
     "w1_vowels_showcase": ["ai", "ie", "ue", "oi", "ao", "ui", "io", "ei"],
-
     "w2_k_core": ["ika", "ike", "eki", "kiku", "aka", "kako", "koe", "oki"],
     "w2_g_core": ["kagi", "goma", "kage", "age"],
-
-    /* Example “review playlists” (mix any sets you want) */
     "review_w1_w2_light": ["ai", "ie", "ue", "ika", "kiku", "kagi", "goma"],
     "review_w2_all": ["ika", "ike", "eki", "kiku", "aka", "kako", "koe", "oki", "kagi", "goma", "kage", "age"]
   },
-
   "worlds": {
     "1": {
       "code": "1",
@@ -22,9 +18,9 @@
       "code": "2",
       "title": "World 2 — K / G Rows",
       "levels": {
-        "2-4": ["w2_k_core"],   /* “lesson check” for base K */
-        "2-8": ["w2_g_core"],   /* “lesson check” for G (dakuten) */
-        "2-R": ["review_w1_w2_light"]  /* optional: a custom review level */
+        "2-4": ["w2_k_core"],
+        "2-8": ["w2_g_core"],
+        "2-R": ["review_w1_w2_light"]
       }
     }
   }
