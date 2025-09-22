@@ -113,11 +113,9 @@ body.site {
 .btn.ghost   { background: transparent; }
 .btn[disabled] { opacity: .5; cursor: not-allowed; }
 
-/* Show only the active part */
 .lesson-part { display: none; padding: 16px; }
 .lesson-part.is-visible { display: block; }
 
-/* Sticky global CTA (used on some parts) */
 .lesson-cta {
   position: sticky;
   bottom: 0;
@@ -165,6 +163,38 @@ body.site {
   box-shadow: 0 0 0 3px color-mix(in oklab, var(--kp-wrong) 30%, transparent);
 }
 
+/* Themed option cards for Part 2 (Identify) */
+.lesson #part-2 .option.theme-dark  {
+  background:#0b1224;
+  color:#e5e7eb;
+  border-color:#2b3447;
+}
+.lesson #part-2 .option.theme-light {
+  background:#f3f4f6;
+  color:#0b1224;
+  border-color:#cbd5e1;
+}
+.lesson #part-2 .option.theme-sepia {
+  background:#f6eedb;
+  color:#3b2f1a;
+  border-color:#e3d4b4;
+}
+.lesson #part-2 .option.theme-high  {
+  background:#000;
+  color:#fff;
+  border-color:#ffffffa8;
+}
+
+/* Keep hover consistent on themed options */
+.lesson #part-2 .option.theme-dark:hover  { border-color:#7c3aed; }
+.lesson #part-2 .option.theme-light:hover { border-color:#7c3aed; }
+.lesson #part-2 .option.theme-sepia:hover { border-color:#7c3aed; }
+.lesson #part-2 .option.theme-high:hover  { border-color:#7c3aed; }
+
+/* Make sure correctness states override theme borders */
+.lesson #part-2 .option.is-correct { border-color: var(--kp-correct) !important; }
+.lesson #part-2 .option.is-wrong   { border-color: var(--kp-wrong)   !important; }
+
 .quiz-feedback { text-align: center; min-height: 20px; color: var(--kp-muted); }
 .quiz-meta     { display: flex; gap: 16px; justify-content: center; color: var(--kp-muted); }
 
@@ -202,196 +232,125 @@ body.site {
 .speak-status .status-line { color: var(--kp-muted); }
 
 /* =========================================================
-   Lesson 1-1 and 1-2: keep prior readability upgrades
+   Universal Level Type Styling
+   (-1, -2, -3 apply across all worlds)
    ========================================================= */
-:where(.lesson[data-lesson-id="1-1"], .lesson[data-lesson-id="1-2"]) .lesson-progress .progressbar { display: none; }
 
-/* Part 1 spacing */
-:where(.lesson[data-lesson-id="1-1"], .lesson[data-lesson-id="1-2"]) #part-1 .kana-grid { margin-bottom: 2.5rem; }
+/* -1 lessons (hiragana rows) */
+.lesson[data-lesson-id$="-1"] .lesson-progress .progressbar { display: none; }
+.lesson[data-lesson-id$="-1"] #part-1 .kana-grid { margin-bottom: 2.5rem; }
 
-/* Part 2 upgrades */
-:where(.lesson[data-lesson-id="1-1"], .lesson[data-lesson-id="1-2"]) #part-2 .quiz-panel {
-  padding: 22px;
-  background: color-mix(in oklab, var(--kp-surface) 90%, black);
+/* -2 lessons (katakana rows) */
+.lesson[data-lesson-id$="-2"] .lesson-progress .progressbar { display: none; }
+.lesson[data-lesson-id$="-2"] #part-1 .kana-grid { margin-bottom: 2.5rem; }
+
+/* -3 lessons (mixed hira+kata) */
+.lesson[data-lesson-id$="-3"] .pair-card {
+  background: var(--kp-surface-2);
   border: 1px solid var(--kp-border);
   border-radius: var(--kp-radius);
-  box-shadow: var(--kp-shadow);
+  padding: 12px;
+  text-align: center;
 }
-:where(.lesson[data-lesson-id="1-1"], .lesson[data-lesson-id="1-2"]) #part-2 .prompt-text {
-  font-size: 1.35rem; font-weight: 600; color: var(--kp-text); letter-spacing: .2px; text-align: center;
+.lesson[data-lesson-id$="-3"] .pair-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
 }
-:where(.lesson[data-lesson-id="1-1"], .lesson[data-lesson-id="1-2"]) #part-2 .prompt-text .prompt-target {
-  font-size: 1.6rem; font-weight: 800;
-}
-:where(.lesson[data-lesson-id="1-1"], .lesson[data-lesson-id="1-2"]) #part-2 .quiz-options {
-  grid-template-columns: repeat(2, minmax(260px, 1fr)); gap: 18px; margin: 18px 0 12px;
-}
-:where(.lesson[data-lesson-id="1-1"], .lesson[data-lesson-id="1-2"]) #part-2 .option {
-  font-size: clamp(52px, 8vw, 96px); padding: 22px 18px; border-radius: 16px; border: 2px solid var(--kp-border);
-  user-select: none; transition: transform .08s ease, border-color .12s ease, box-shadow .12s ease, background-color .12s ease, color .12s ease;
-}
-:where(.lesson[data-lesson-id="1-1"], .lesson[data-lesson-id="1-2"]) #part-2 .option.theme-dark  { background:#0b1224; color:#e5e7eb; border-color:#2b3447; }
-:where(.lesson[data-lesson-id="1-1"], .lesson[data-lesson-id="1-2"]) #part-2 .option.theme-light { background:#f3f4f6; color:#0b1224; border-color:#cbd5e1; }
-:where(.lesson[data-lesson-id="1-1"], .lesson[data-lesson-id="1-2"]) #part-2 .option.theme-sepia { background:#f6eedb; color:#3b2f1a; border-color:#e3d4b4; }
-:where(.lesson[data-lesson-id="1-1"], .lesson[data-lesson-id="1-2"]) #part-2 .option.theme-high  { background:#000; color:#fff; border-color:#ffffffa8; }
-:where(.lesson[data-lesson-id="1-1"], .lesson[data-lesson-id="1-2"]) #part-2 .option.is-disabled { pointer-events: none; opacity: .55; }
-
-:where(.lesson[data-lesson-id="1-1"], .lesson[data-lesson-id="1-2"]) #part-2 .quiz-progress {
-  display: grid; gap: 8px; justify-items: center; margin: 8px 0 6px;
-  color: color-mix(in oklab, var(--kp-text) 80%, var(--kp-muted));
-}
-:where(.lesson[data-lesson-id="1-1"], .lesson[data-lesson-id="1-2"]) #part-2 .meter {
-  width: min(560px, 90%); height: 10px; background: var(--kp-surface-2); border: 1px solid var(--kp-border);
-  border-radius: 999px; overflow: hidden;
-}
-:where(.lesson[data-lesson-id="1-1"], .lesson[data-lesson-id="1-2"]) #part-2 .meter-fill {
-  height: 100%; width: 0%; background: linear-gradient(90deg, var(--kp-accent), var(--kp-accent-2)); transition: width .2s ease;
-}
-
-/* Part 3 upgrades */
-:where(.lesson[data-lesson-id="1-1"], .lesson[data-lesson-id="1-2"]) #part-3 .quiz-progress {
-  display: grid; gap: 8px; justify-items: center; margin: 16px 0 6px;
-  color: color-mix(in oklab, var(--kp-text) 80%, var(--kp-muted));
-}
-:where(.lesson[data-lesson-id="1-1"], .lesson[data-lesson-id="1-2"]) #part-3 .meter {
-  width: min(560px, 90%); height: 10px; background: var(--kp-surface-2); border: 1px solid var(--kp-border);
-  border-radius: 999px; overflow: hidden;
-}
-:where(.lesson[data-lesson-id="1-1"], .lesson[data-lesson-id="1-2"]) #part-3 .meter-fill {
-  height: 100%; width: 0%; background: linear-gradient(90deg, var(--kp-accent), var(--kp-accent-2)); transition: width .2s ease;
-}
-:where(.lesson[data-lesson-id="1-1"], .lesson[data-lesson-id="1-2"]) #part-3 .type-glyph-wrapper {
-  display: grid; place-items: center; padding: 24px; border-radius: var(--kp-radius);
-  border: 1px solid var(--kp-border); margin: 6px 0 12px;
-}
-:where(.lesson[data-lesson-id="1-1"], .lesson[data-lesson-id="1-2"]) #part-3 .type-glyph-wrapper.theme-dark  { background:#0b1224; color:#e5e7eb; border-color:#2b3447; }
-:where(.lesson[data-lesson-id="1-1"], .lesson[data-lesson-id="1-2"]) #part-3 .type-glyph-wrapper.theme-light { background:#f3f4f6; color:#0b1224; border-color:#cbd5e1; }
-:where(.lesson[data-lesson-id="1-1"], .lesson[data-lesson-id="1-2"]) #part-3 .type-glyph-wrapper.theme-sepia { background:#f6eedb; color:#3b2f1a; border-color:#e3d4b4; }
-:where(.lesson[data-lesson-id="1-1"], .lesson[data-lesson-id="1-2"]) #part-3 .type-glyph-wrapper.theme-high  { background:#000; color:#fff; border-color:#ffffffa8; }
-
-:where(.lesson[data-lesson-id="1-1"], .lesson[data-lesson-id="1-2"]) #part-3 .type-input {
-  width: min(380px, 90%); margin: 0 auto; display: block; background: #0e152a; border: 1px solid #1e2a42;
-  color: var(--kp-text); border-radius: 999px; padding: 12px 16px; font-size: 1.05rem; text-align: center; outline: none;
-  transition: box-shadow .15s ease, border-color .15s ease, background-color .15s ease;
-}
-:where(.lesson[data-lesson-id="1-1"], .lesson[data-lesson-id="1-2"]) #part-3 .type-input:focus {
-  border-color: var(--kp-accent); box-shadow: 0 0 0 4px color-mix(in oklab, var(--kp-accent) 25%, transparent); background: #0c1124;
+.lesson[data-lesson-id$="-3"] .pair-romaji {
+  margin-top: 6px;
+  font-weight: 600;
+  color: var(--kp-muted);
 }
 
 /* =========================================================
-   Lesson 1-3 — Mixed Vowels (pairs + cross-script identify + romaji typing)
+   Shared Typing + Progress UI (Parts 2 & 3) — ALL lessons
+   This brings the "1-4 style" (pill input + gradient meter +
+   themed glyph panel) to Part 2 and Part 3 for every suffix.
    ========================================================= */
 
-/* Hide the thin top progress bar for 1-3 as well */
-.lesson[data-lesson-id="1-3"] .lesson-progress .progressbar { display: none; }
-
-/* Part 1: pair cards layout */
-.lesson[data-lesson-id="1-3"] #part-1 .kana-grid {
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 16px;
-  margin-bottom: 2.5rem;
-}
-.lesson[data-lesson-id="1-3"] #part-1 .pair-card {
-  background: var(--kp-surface);
-  border: 1px solid var(--kp-border);
-  border-radius: var(--kp-radius);
-  box-shadow: var(--kp-shadow);
-  padding: 14px 12px;
-  display: grid;
-  gap: 8px;
-}
-.lesson[data-lesson-id="1-3"] #part-1 .pair-row {
-  display: grid;
-  grid-template-columns: 1fr auto 1fr;
+/* Glyph wrapper with themeable surfaces */
+.lesson #part-2 .type-glyph-wrapper,
+.lesson #part-3 .type-glyph-wrapper {
+  display: flex;              /* simpler than grid for inline look */
+  justify-content: center;    /* keep centered */
   align-items: center;
-  gap: 8px;
-}
-.lesson[data-lesson-id="1-3"] #part-1 .glyph {
-  font-size: clamp(54px, 9vw, 100px);
-  line-height: 1;
-  text-align: center;
-}
-.lesson[data-lesson-id="1-3"] #part-1 .link {
-  color: var(--kp-muted);
-  font-size: 1.2rem;
-  text-align: center;
-}
-.lesson[data-lesson-id="1-3"] #part-1 .pair-romaji {
-  text-align: center;
-  color: var(--kp-muted);
-  font-weight: 600;
-  letter-spacing: .2px;
-  font-size: 1.05rem;
-}
-
-/* Part 2: readability + meter (same upgrades) */
-.lesson[data-lesson-id="1-3"] #part-2 .quiz-panel {
-  padding: 22px;
-  background: color-mix(in oklab, var(--kp-surface) 90%, black);
-  border: 1px solid var(--kp-border);
+  gap: 0;                     /* no extra space */
+  padding: 24px;
   border-radius: var(--kp-radius);
-  box-shadow: var(--kp-shadow);
+  border: 1px solid var(--kp-border);
+  margin: 6px 0 12px;
 }
-.lesson[data-lesson-id="1-3"] #part-2 .prompt-text {
-  font-size: 1.35rem; font-weight: 600; color: var(--kp-text); letter-spacing: .2px; text-align: center;
-}
-.lesson[data-lesson-id="1-3"] #part-2 .quiz-options {
-  grid-template-columns: repeat(2, minmax(260px, 1fr));
-  gap: 18px;
-  margin: 18px 0 12px;
-}
-.lesson[data-lesson-id="1-3"] #part-2 .option {
-  font-size: clamp(52px, 8vw, 96px);
-  padding: 22px 18px;
-  border-radius: 16px;
-  border: 2px solid var(--kp-border);
-  user-select: none;
-  transition: transform .08s ease, border-color .12s ease, box-shadow .12s ease, background-color .12s ease, color .12s ease;
-}
-.lesson[data-lesson-id="1-3"] #part-2 .option.theme-dark  { background:#0b1224; color:#e5e7eb; border-color:#2b3447; }
-.lesson[data-lesson-id="1-3"] #part-2 .option.theme-light { background:#f3f4f6; color:#0b1224; border-color:#cbd5e1; }
-.lesson[data-lesson-id="1-3"] #part-2 .option.theme-sepia { background:#f6eedb; color:#3b2f1a; border-color:#e3d4b4; }
-.lesson[data-lesson-id="1-3"] #part-2 .option.theme-high  { background:#000; color:#fff; border-color:#ffffffa8; }
-.lesson[data-lesson-id="1-3"] #part-2 .option.is-disabled { pointer-events: none; opacity: .55; }
 
-.lesson[data-lesson-id="1-3"] #part-2 .quiz-progress {
-  display: grid; gap: 8px; justify-items: center; margin: 8px 0 6px;
-  color: color-mix(in oklab, var(--kp-text) 80%, var(--kp-muted));
+.lesson #part-2 .type-glyph,
+.lesson #part-3 .type-glyph {
+  font-size: clamp(80px, 12vw, 140px);
+  line-height: 1;
+  margin: 0 4px; /* tiny breathing room, optional */
 }
-.lesson[data-lesson-id="1-3"] #part-2 .meter {
-  width: min(560px, 90%); height: 10px; background: var(--kp-surface-2); border: 1px solid var(--kp-border);
-  border-radius: 999px; overflow: hidden;
-}
-.lesson[data-lesson-id="1-3"] #part-2 .meter-fill {
-  height: 100%; width: 0%; background: linear-gradient(90deg, var(--kp-accent), var(--kp-accent-2)); transition: width .2s ease;
-}
-.lesson[data-lesson-id="1-3"] #part-2 .meter-label { font-size: .95rem; }
 
-/* Part 3: meter + themed wrapper, minimalist input */
-.lesson[data-lesson-id="1-3"] #part-3 .quiz-progress {
-  display: grid; gap: 8px; justify-items: center; margin: 16px 0 6px;
-  color: color-mix(in oklab, var(--kp-text) 80%, var(--kp-muted));
-}
-.lesson[data-lesson-id="1-3"] #part-3 .meter {
-  width: min(560px, 90%); height: 10px; background: var(--kp-surface-2); border: 1px solid var(--kp-border);
-  border-radius: 999px; overflow: hidden;
-}
-.lesson[data-lesson-id="1-3"] #part-3 .meter-fill {
-  height: 100%; width: 0%; background: linear-gradient(90deg, var(--kp-accent), var(--kp-accent-2)); transition: width .2s ease;
-}
-.lesson[data-lesson-id="1-3"] #part-3 .type-glyph-wrapper {
-  display: grid; place-items: center; padding: 24px; border-radius: var(--kp-radius);
-  border: 1px solid var(--kp-border); margin: 6px 0 12px;
-}
-.lesson[data-lesson-id="1-3"] #part-3 .type-glyph-wrapper.theme-dark  { background:#0b1224; color:#e5e7eb; border-color:#2b3447; }
-.lesson[data-lesson-id="1-3"] #part-3 .type-glyph-wrapper.theme-light { background:#f3f4f6; color:#0b1224; border-color:#cbd5e1; }
-.lesson[data-lesson-id="1-3"] #part-3 .type-glyph-wrapper.theme-sepia { background:#f6eedb; color:#3b2f1a; border-color:#e3d4b4; }
-.lesson[data-lesson-id="1-3"] #part-3 .type-glyph-wrapper.theme-high  { background:#000; color:#fff; border-color:#ffffffa8; }
-.lesson[data-lesson-id="1-3"] #part-3 .type-input {
-  width: min(380px, 90%); margin: 0 auto; display: block; background: #0e152a; border: 1px solid #1e2a42;
-  color: var(--kp-text); border-radius: 999px; padding: 12px 16px; font-size: 1.05rem; text-align: center; outline: none;
+
+/* Theme variants */
+.lesson #part-2 .type-glyph-wrapper.theme-dark,
+.lesson #part-3 .type-glyph-wrapper.theme-dark  { background:#0b1224; color:#e5e7eb; border-color:#2b3447; }
+.lesson #part-2 .type-glyph-wrapper.theme-light,
+.lesson #part-3 .type-glyph-wrapper.theme-light { background:#f3f4f6; color:#0b1224; border-color:#cbd5e1; }
+.lesson #part-2 .type-glyph-wrapper.theme-sepia,
+.lesson #part-3 .type-glyph-wrapper.theme-sepia { background:#f6eedb; color:#3b2f1a; border-color:#e3d4b4; }
+.lesson #part-2 .type-glyph-wrapper.theme-high,
+.lesson #part-3 .type-glyph-wrapper.theme-high  { background:#000;    color:#fff;   border-color:#ffffffa8; }
+
+/* Input (pill) */
+.lesson #part-2 .type-input,
+.lesson #part-3 .type-input {
+  width: min(380px, 90%);
+  margin: 0 auto;
+  display: block;
+  background: #0e152a;
+  border: 1px solid #1e2a42;
+  color: var(--kp-text);
+  border-radius: 999px;
+  padding: 12px 16px;
+  font-size: 1.05rem;
+  text-align: center;
+  outline: none;
   transition: box-shadow .15s ease, border-color .15s ease, background-color .15s ease;
 }
-.lesson[data-lesson-id="1-3"] #part-3 .type-input:focus {
-  border-color: var(--kp-accent); box-shadow: 0 0 0 4px color-mix(in oklab, var(--kp-accent) 25%, transparent); background: #0c1124;
+.lesson #part-2 .type-input:focus,
+.lesson #part-3 .type-input:focus {
+  border-color: var(--kp-accent);
+  box-shadow: 0 0 0 4px color-mix(in oklab, var(--kp-accent) 25%, transparent);
+  background: #0c1124;
 }
+
+/* In-panel progress (meter) */
+.lesson #part-2 .quiz-progress,
+.lesson #part-3 .quiz-progress {
+  display: grid;
+  gap: 8px;
+  justify-items: center;
+  margin: 16px 0 6px;
+  color: color-mix(in oklab, var(--kp-text) 80%, var(--kp-muted));
+}
+.lesson #part-2 .meter,
+.lesson #part-3 .meter {
+  width: min(560px, 90%);
+  height: 10px;
+  background: var(--kp-surface-2);
+  border: 1px solid var(--kp-border);
+  border-radius: 999px;
+  overflow: hidden;
+}
+.lesson #part-2 .meter-fill,
+.lesson #part-3 .meter-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--kp-accent), var(--kp-accent-2));
+  transition: width .2s ease;
+}
+.lesson #part-2 .meter-label,
+.lesson #part-3 .meter-label { font-size: .95rem; }
+
+/* Keep -4 header behavior consistent if you used it before */
+.lesson[data-lesson-id$="-4"] .lesson-progress .progressbar { display: none; }
