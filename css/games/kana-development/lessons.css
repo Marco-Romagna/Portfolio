@@ -369,3 +369,21 @@ body.site {
 
 /* Keep -4 header behavior consistent if you used it before */
 .lesson[data-lesson-id$="-4"] .lesson-progress .progressbar { display: none; }
+
+
+/* lessons.css */
+
+/* Vocab cards */
+.vocab-card {
+  text-align: center;
+  padding: 1rem;
+}
+
+.vocab-card .kana-glyph {
+  display: block;
+  font-size: 2rem;   /* smaller than kana big cards */
+  line-height: 1.4;
+  writing-mode: horizontal-tb; /* force horizontal */
+}
+
+
