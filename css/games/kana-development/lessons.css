@@ -273,14 +273,23 @@ body.site {
 /* Glyph wrapper with themeable surfaces */
 .lesson #part-2 .type-glyph-wrapper,
 .lesson #part-3 .type-glyph-wrapper {
-  display: grid;
-  place-items: center;
-  grid-auto-flow: column;
+  display: flex;              /* simpler than grid for inline look */
+  justify-content: center;    /* keep centered */
+  align-items: center;
+  gap: 0;                     /* no extra space */
   padding: 24px;
   border-radius: var(--kp-radius);
   border: 1px solid var(--kp-border);
   margin: 6px 0 12px;
 }
+
+.lesson #part-2 .type-glyph,
+.lesson #part-3 .type-glyph {
+  font-size: clamp(80px, 12vw, 140px);
+  line-height: 1;
+  margin: 0 4px; /* tiny breathing room, optional */
+}
+
 
 /* Theme variants */
 .lesson #part-2 .type-glyph-wrapper.theme-dark,
