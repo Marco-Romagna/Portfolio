@@ -135,6 +135,21 @@ body.site {
 .prompt-text  { color: var(--kp-muted); }
 .prompt-text .prompt-target { color: var(--kp-text); }
 
+/* Make the quiz prompt text more prominent */
+.quiz-prompt .prompt-text {
+  font-size: 1.2rem;   /* bump size (default ~1rem) */
+  font-weight: 600;    /* make it a bit bolder */
+  color: var(--kp-text); /* instead of muted gray */
+}
+
+/* Keep the highlighted kana extra strong */
+.quiz-prompt .prompt-text .prompt-target {
+  font-size: 1.35rem;  /* slightly larger for the kana */
+  font-weight: 700;
+  color: var(--kp-accent); /* highlight with accent color */
+}
+
+
 .quiz-options {
   display: grid;
   grid-template-columns: repeat(2, minmax(120px, 1fr));
