@@ -24,6 +24,12 @@
     return src[Math.floor(Math.random()*src.length)];
   }
 
+  // Theme classes
+  const THEMES = ['theme-dark','theme-light','theme-sepia','theme-high'];
+  function randomTheme() {
+    return THEMES[Math.floor(Math.random() * THEMES.length)];
+  }
+
   // ======================================================
   // Part 1 — Preview
   // ======================================================
@@ -167,7 +173,7 @@
 
       ordered.forEach((glyph,i)=>{
         const b=document.createElement('button');
-        b.className=`option`;
+        b.className=`option ${randomTheme()}`;  // 👈 add random theme here
         b.dataset.value=glyph;
         b.textContent=glyph;
         b.addEventListener('click',()=>onPick(glyph,promptGlyph,b));
