@@ -276,7 +276,6 @@ body.site {
   display: grid;
   place-items: center;
   grid-auto-flow: column;
-  gap: 10px;
   padding: 24px;
   border-radius: var(--kp-radius);
   border: 1px solid var(--kp-border);
