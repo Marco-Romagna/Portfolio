@@ -201,7 +201,7 @@ body.site {
 
 /* =========================================================
    Universal Level Type Styling
-   (-1, -2, -3, -4 apply across all worlds)
+   (-1, -2, -3 apply across all worlds)
    ========================================================= */
 
 /* -1 lessons (hiragana rows) */
@@ -233,28 +233,14 @@ body.site {
 }
 
 /* =========================================================
-   Themed backgrounds (Identify options + Typing wrappers, all lessons)
+   Shared Typing + Progress UI (Parts 2 & 3) — ALL lessons
+   This brings the "1-4 style" (pill input + gradient meter +
+   themed glyph panel) to Part 2 and Part 3 for every suffix.
    ========================================================= */
-.lesson .option.theme-dark,
-.lesson .type-glyph-wrapper.theme-dark  { background:#0b1224; color:#e5e7eb; border-color:#2b3447; }
-.lesson .option.theme-light,
-.lesson .type-glyph-wrapper.theme-light { background:#f3f4f6; color:#0b1224; border-color:#cbd5e1; }
-.lesson .option.theme-sepia,
-.lesson .type-glyph-wrapper.theme-sepia { background:#f6eedb; color:#3b2f1a; border-color:#e3d4b4; }
-.lesson .option.theme-high,
-.lesson .type-glyph-wrapper.theme-high  { background:#000;     color:#fff;   border-color:#ffffffa8; }
 
-.lesson .option.theme-dark:hover  { border-color:#5b6a8d; }
-.lesson .option.theme-light:hover { border-color:#94a3b8; }
-.lesson .option.theme-sepia:hover { border-color:#d6bf94; }
-.lesson .option.theme-high:hover  { border-color:#ffffff; }
-
-/* =========================================================
-   Romaji typing lessons (-4, -8, …) keep special pill input/meter
-   ========================================================= */
-.lesson[data-lesson-id$="-4"] .lesson-progress .progressbar { display: none; }
-
-.lesson[data-lesson-id$="-4"] #part-2 .type-glyph-wrapper {
+/* Glyph wrapper with themeable surfaces */
+.lesson #part-2 .type-glyph-wrapper,
+.lesson #part-3 .type-glyph-wrapper {
   display: grid;
   place-items: center;
   padding: 24px;
@@ -263,7 +249,19 @@ body.site {
   margin: 6px 0 12px;
 }
 
-.lesson[data-lesson-id$="-4"] #part-2 .type-input {
+/* Theme variants */
+.lesson #part-2 .type-glyph-wrapper.theme-dark,
+.lesson #part-3 .type-glyph-wrapper.theme-dark  { background:#0b1224; color:#e5e7eb; border-color:#2b3447; }
+.lesson #part-2 .type-glyph-wrapper.theme-light,
+.lesson #part-3 .type-glyph-wrapper.theme-light { background:#f3f4f6; color:#0b1224; border-color:#cbd5e1; }
+.lesson #part-2 .type-glyph-wrapper.theme-sepia,
+.lesson #part-3 .type-glyph-wrapper.theme-sepia { background:#f6eedb; color:#3b2f1a; border-color:#e3d4b4; }
+.lesson #part-2 .type-glyph-wrapper.theme-high,
+.lesson #part-3 .type-glyph-wrapper.theme-high  { background:#000;    color:#fff;   border-color:#ffffffa8; }
+
+/* Input (pill) */
+.lesson #part-2 .type-input,
+.lesson #part-3 .type-input {
   width: min(380px, 90%);
   margin: 0 auto;
   display: block;
@@ -277,19 +275,24 @@ body.site {
   outline: none;
   transition: box-shadow .15s ease, border-color .15s ease, background-color .15s ease;
 }
-.lesson[data-lesson-id$="-4"] #part-2 .type-input:focus {
+.lesson #part-2 .type-input:focus,
+.lesson #part-3 .type-input:focus {
   border-color: var(--kp-accent);
   box-shadow: 0 0 0 4px color-mix(in oklab, var(--kp-accent) 25%, transparent);
   background: #0c1124;
 }
-.lesson[data-lesson-id$="-4"] #part-2 .quiz-progress {
+
+/* In-panel progress (meter) */
+.lesson #part-2 .quiz-progress,
+.lesson #part-3 .quiz-progress {
   display: grid;
   gap: 8px;
   justify-items: center;
   margin: 16px 0 6px;
   color: color-mix(in oklab, var(--kp-text) 80%, var(--kp-muted));
 }
-.lesson[data-lesson-id$="-4"] #part-2 .meter {
+.lesson #part-2 .meter,
+.lesson #part-3 .meter {
   width: min(560px, 90%);
   height: 10px;
   background: var(--kp-surface-2);
@@ -297,11 +300,15 @@ body.site {
   border-radius: 999px;
   overflow: hidden;
 }
-.lesson[data-lesson-id$="-4"] #part-2 .meter-fill {
+.lesson #part-2 .meter-fill,
+.lesson #part-3 .meter-fill {
   height: 100%;
   width: 0%;
   background: linear-gradient(90deg, var(--kp-accent), var(--kp-accent-2));
   transition: width .2s ease;
 }
-.lesson[data-lesson-id$="-4"] #part-2 .meter-label { font-size: .95rem; }
+.lesson #part-2 .meter-label,
+.lesson #part-3 .meter-label { font-size: .95rem; }
 
+/* Keep -4 header behavior consistent if you used it before */
+.lesson[data-lesson-id$="-4"] .lesson-progress .progressbar { display: none; }
