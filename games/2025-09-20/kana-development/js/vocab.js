@@ -1,30 +1,43 @@
 // ==========================================================
-// Vocab API (World Milestones)
-// - Loads the lexicon JSON
-// - Exposes helpers to fetch curated word sets per world
-// - Lets you override/curate selections without touching lessons.js
+// vocab.js
+// Utility for loading and managing vocabulary sets
 // ==========================================================
+
 (() => {
-  const ROOT = (() => {
-    // Compute relative root from this file’s typical location:
-    // games/2025-09-20/kana-development/js/vocab.js
-    // to data/lexicon.json
-    const here = document.currentScript?.src || "";
-    // Fallback to relative path used in project
-    return here.includes("/games/2025-09-20/kana-development/")
-      ? "/games/2025-09-20/kana-development/"
-      : "./";
-  })();
-
-  const LEXICON_URL = `${ROOT}data/lexicon.json`;
-
-  // Local cache
+  const LEXICON_URL = "../data/lexicon.json";
   let _lexicon = null;
-  let _indexById = new Map();
 
-  // -----------------------
-  // Utilities
-  // -----------------------
+  // ---------- Load + Cache ----------
+  async function loadLexicon() {
+    if (_lexicon) return _lexicon;
+    const res = await fetch(LEXICON_URL);
+    _lexicon = await res.json();
+    return _lexicon;
+  }
+
+  // ---------- Get full lexicon ----------
+  async function getLexicon() {
+    const data = await loadLexicon();
+    return data.words || [];
+  }
+
+  // ---------- Lookup ----------
+  async function findById(id) {
+    const words = await getLexicon();
+    return words.find(w => w.id === id) || null;
+  }
+
+  async function findByKana(kana) {
+    const words = await getLexicon();
+    return words.find(w => w.kana === kana) || null;
+  }
+
+  async function findByRomaji(romaji) {
+    const words = await getLexicon();
+    return words.find(w => w.romaji === romaji) || null;
+  }
+
+  // ---------- Helpers ----------
   function shuffle(arr) {
     const a = arr.slice();
     for (let i = a.length - 1; i > 0; i--) {
@@ -35,117 +48,66 @@
   }
 
   function sample(arr, n) {
-    return shuffle(arr).slice(0, Math.max(0, Math.min(n, arr.length)));
+    return shuffle(arr).slice(0, n);
   }
 
-  function ensureIndex() {
-    if (!_lexicon) return;
-    if (_indexById.size) return;
-    _lexicon.words.forEach(w => _indexById.set(w.id, w));
+  // ---------- Get set by IDs ----------
+  async function getSet(ids) {
+    const words = await getLexicon();
+    return words.filter(w => ids.includes(w.id));
   }
 
-  // -----------------------
-  // Load lexicon (once)
-  // -----------------------
-  async function loadLexicon() {
-    if (_lexicon) return _lexicon;
-    const res = await fetch(LEXICON_URL, { cache: "no-cache" });
-    if (!res.ok) throw new Error(`Failed to load lexicon.json: ${res.status}`);
-    _lexicon = await res.json();
-    ensureIndex();
-    return _lexicon;
+  // ---------- Get words by tag ----------
+  async function getByTag(tag) {
+    const words = await getLexicon();
+    return words.filter(w => (w.tags || []).includes(tag));
   }
 
-  // -----------------------
-  // Public API
-  // -----------------------
-  const Vocab = {
-    /**
-     * Load the full lexicon object.
-     */
-    async getLexicon() {
-      return await loadLexicon();
-    },
+  // ---------- Get words by JLPT ----------
+  async function getByJLPT(level) {
+    const words = await getLexicon();
+    return words.filter(w => w.jlpt === level);
+  }
 
-    /**
-     * Return curated IDs for a world (as listed in lexicon.byWorld).
-     * @param {string|number} worldCode - e.g. "1", 1, "2"
-     * @returns {Promise<string[]>}
-     */
-    async getCuratedIdsForWorld(worldCode) {
-      const lex = await loadLexicon();
-      const key = String(worldCode);
-      const ids = lex.byWorld?.[key] || [];
-      return ids.slice();
-    },
+  // ---------- Get random subset ----------
+  async function getRandom(n) {
+    const words = await getLexicon();
+    return sample(words, n);
+  }
 
-    /**
-     * Return full word objects for a given world’s curated set.
-     * Optionally limit by count (in original order, unless shuffled).
-     * @param {string|number} worldCode
-     * @param {number} [limit] - optional
-     * @param {boolean} [random=false] - sample randomly if true
-     * @returns {Promise<object[]>}
-     */
-    async getWorldMilestone(worldCode, limit = undefined, random = false) {
-      const ids = await Vocab.getCuratedIdsForWorld(worldCode);
-      ensureIndex();
-      let words = ids.map(id => _indexById.get(id)).filter(Boolean);
+  // ======================================================
+  // NEW: Get words for a specific world milestone
+  // roleKey examples: "1-base", "2-daku", "2-handaku"
+  // ======================================================
+  async function getWorldMilestone(roleKey) {
+    const data = await loadLexicon();
+    const ids = data.byWorld[roleKey] || [];
+    return data.words.filter(w => ids.includes(w.id));
+  }
 
-      if (typeof limit === "number") {
-        if (random) words = sample(words, limit);
-        else words = words.slice(0, limit);
-      }
-      return words;
-    },
+  // ======================================================
+  // UPDATED: Get all words for a world (all its stages)
+  // e.g. worldCode = "2" → returns words from 2-base, 2-daku, 2-handaku
+  // ======================================================
+  async function getWorld(worldCode) {
+    const data = await loadLexicon();
+    const keys = Object.keys(data.byWorld).filter(k => k.startsWith(worldCode + "-"));
+    const ids = keys.flatMap(k => data.byWorld[k]);
+    return data.words.filter(w => ids.includes(w.id));
+  }
 
-    /**
-     * Find a word by ID / kana / romaji (exact match).
-     * @param {{id?: string, kana?: string, romaji?: string}} q
-     * @returns {Promise<object|null>}
-     */
-    async find(q) {
-      const lex = await loadLexicon();
-      ensureIndex();
-
-      if (q.id && _indexById.has(q.id)) return _indexById.get(q.id) || null;
-
-      let out = null;
-      if (q.kana) {
-        out = lex.words.find(w => w.kana === q.kana) || null;
-      } else if (q.romaji) {
-        out = lex.words.find(w => w.romaji === q.romaji) || null;
-      }
-      return out;
-    },
-
-    /**
-     * Search words by predicate.
-     * @param {(w: object) => boolean} fn
-     * @returns {Promise<object[]>}
-     */
-    async filter(fn) {
-      const lex = await loadLexicon();
-      return lex.words.filter(fn);
-    },
-
-    /**
-     * For a future “review world”: pull words from many worlds.
-     * @param {Array<string|number>} worldCodes
-     * @param {number} count
-     * @returns {Promise<object[]>}
-     */
-    async makeReviewSet(worldCodes, count) {
-      const pools = await Promise.all(worldCodes.map(w => Vocab.getWorldMilestone(w)));
-      const all = pools.flat();
-      return sample(all, count);
-    }
-  };
-
-  // Expose globally
-  window.KANA_LEXICON = {
+  // ---------- Expose ----------
+  window.Vocab = {
     loadLexicon,
-    get data() { return _lexicon; }
+    getLexicon,
+    findById,
+    findByKana,
+    findByRomaji,
+    getSet,
+    getByTag,
+    getByJLPT,
+    getRandom,
+    getWorldMilestone, // NEW
+    getWorld           // UPDATED
   };
-  window.Vocab = Vocab;
 })();

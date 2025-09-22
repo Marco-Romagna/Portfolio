@@ -1,171 +1,50 @@
 {
   "meta": {
-    "version": 1,
+    "version": 2,
     "locale": "ja-JP",
-    "notes": "N5-friendly core lexicon. Worlds 1–2 only for now."
+    "notes": "N5-friendly core lexicon split into base/daku/handaku sets. 8 words per stage."
   },
   "words": [
-     /* =========================
-       WORLD 1 — Vowels only
-       ========================= */
-    {
-      "id": "ai",
-      "kana": "あい",
-      "romaji": "ai",
-      "gloss_en": "love; affection",
-      "jlpt": "N5",
-      "tags": ["core", "vowels"],
-      "worlds": ["1"]
-    },
-    {
-      "id": "iie",
-      "kana": "いいえ",
-      "romaji": "iie",
-      "gloss_en": "no",
-      "jlpt": "N5",
-      "tags": ["core", "vowels", "phrase"],
-      "worlds": ["1"]
-    },
-    {
-      "id": "ue",
-      "kana": "うえ",
-      "romaji": "ue",
-      "gloss_en": "up; above",
-      "jlpt": "N5",
-      "tags": ["core", "vowels", "direction"],
-      "worlds": ["1"]
-    },
-    {
-      "id": "ie",
-      "kana": "いえ",
-      "romaji": "ie",
-      "gloss_en": "house; home",
-      "jlpt": "N5",
-      "tags": ["core", "vowels", "place"],
-      "worlds": ["1"]
-    },
-    {
-      "id": "ao",
-      "kana": "あお",
-      "romaji": "ao",
-      "gloss_en": "blue (noun)",
-      "jlpt": "N5",
-      "tags": ["core", "vowels", "color"],
-      "worlds": ["1"]
-    },
-    {
-      "id": "aoi",
-      "kana": "あおい",
-      "romaji": "aoi",
-      "gloss_en": "blue (adjective)",
-      "jlpt": "N5",
-      "tags": ["core", "vowels", "color"],
-      "worlds": ["1"]
-    },
-    {
-      "id": "au",
-      "kana": "あう",
-      "romaji": "au",
-      "gloss_en": "to meet",
-      "jlpt": "N5",
-      "tags": ["core", "vowels", "verb"],
-      "worlds": ["1"]
-    },
-    {
-      "id": "iu",
-      "kana": "いう",
-      "romaji": "iu",
-      "gloss_en": "to say",
-      "jlpt": "N5",
-      "tags": ["core", "vowels", "verb"],
-      "worlds": ["1"]
-    },
 
-    /* =========================
-       WORLD 2 — K/G row (+ vowels)
-       Only uses vowels + か/き/く/け/こ + が/ぎ/ぐ/げ/ご
-       ========================= */
-    {
-      "id": "iku",
-      "kana": "いく",
-      "romaji": "iku",
-      "gloss_en": "to go",
-      "jlpt": "N5",
-      "tags": ["core", "k-row", "verb"],
-      "worlds": ["2"]
-    },
-    {
-      "id": "kiku",
-      "kana": "きく",
-      "romaji": "kiku",
-      "gloss_en": "to listen; to ask",
-      "jlpt": "N5",
-      "tags": ["core", "k-row", "verb"],
-      "worlds": ["2"]
-    },
-    {
-      "id": "kau",
-      "kana": "かう",
-      "romaji": "kau",
-      "gloss_en": "to buy",
-      "jlpt": "N5",
-      "tags": ["core", "k-row", "verb"],
-      "worlds": ["2"]
-    },
-    {
-      "id": "kao",
-      "kana": "かお",
-      "romaji": "kao",
-      "gloss_en": "face",
-      "jlpt": "N5",
-      "tags": ["core", "k-row", "body"],
-      "worlds": ["2"]
-    },
-    {
-      "id": "ike",
-      "kana": "いけ",
-      "romaji": "ike",
-      "gloss_en": "pond",
-      "jlpt": "N5",
-      "tags": ["core", "k-row", "place"],
-      "worlds": ["2"]
-    },
-    {
-      "id": "koe",
-      "kana": "こえ",
-      "romaji": "koe",
-      "gloss_en": "voice",
-      "jlpt": "N5",
-      "tags": ["core", "k-row"],
-      "worlds": ["2"]
-    },
-    {
-      "id": "eiga",
-      "kana": "えいが",
-      "romaji": "eiga",
-      "gloss_en": "movie; film",
-      "jlpt": "N5",
-      "tags": ["core", "g-row", "topic"],
-      "worlds": ["2"]
-    },
-    {
-      "id": "gaikoku",
-      "kana": "がいこく",
-      "romaji": "gaikoku",
-      "gloss_en": "foreign country",
-      "jlpt": "N5",
-      "tags": ["core", "g-row", "place"],
-      "worlds": ["2"]
-    }
+    
+    { "id": "ai", "kana": "あい", "romaji": "ai", "gloss_en": "love; affection", "jlpt": "N5", "tags": ["core","vowels"], "worlds": ["1-base"] },
+    { "id": "iie", "kana": "いいえ", "romaji": "iie", "gloss_en": "no", "jlpt": "N5", "tags": ["core","vowels","phrase"], "worlds": ["1-base"] },
+    { "id": "ue", "kana": "うえ", "romaji": "ue", "gloss_en": "up; above", "jlpt": "N5", "tags": ["core","vowels","direction"], "worlds": ["1-base"] },
+    { "id": "ie", "kana": "いえ", "romaji": "ie", "gloss_en": "house; home", "jlpt": "N5", "tags": ["core","vowels","place"], "worlds": ["1-base"] },
+    { "id": "ao", "kana": "あお", "romaji": "ao", "gloss_en": "blue (noun)", "jlpt": "N5", "tags": ["core","vowels","color"], "worlds": ["1-base"] },
+    { "id": "aoi", "kana": "あおい", "romaji": "aoi", "gloss_en": "blue (adjective)", "jlpt": "N5", "tags": ["core","vowels","color"], "worlds": ["1-base"] },
+    { "id": "au", "kana": "あう", "romaji": "au", "gloss_en": "to meet", "jlpt": "N5", "tags": ["core","vowels","verb"], "worlds": ["1-base"] },
+    { "id": "iu", "kana": "いう", "romaji": "iu", "gloss_en": "to say", "jlpt": "N5", "tags": ["core","vowels","verb"], "worlds": ["1-base"] },
 
-    /* ===== NOTE =====
-       When you unlock more rows later, you can safely
-       add broader N5 staples here (e.g., がくせい, ぎんこう),
-       but for now we keep words constrained to learned kana.
-    */
+
+    
+    { "id": "iku", "kana": "いく", "romaji": "iku", "gloss_en": "to go", "jlpt": "N5", "tags": ["core","k-row","verb"], "worlds": ["2-base"] },
+    { "id": "kiku", "kana": "きく", "romaji": "kiku", "gloss_en": "to listen; to ask", "jlpt": "N5", "tags": ["core","k-row","verb"], "worlds": ["2-base"] },
+    { "id": "kau", "kana": "かう", "romaji": "kau", "gloss_en": "to buy", "jlpt": "N5", "tags": ["core","k-row","verb"], "worlds": ["2-base"] },
+    { "id": "kao", "kana": "かお", "romaji": "kao", "gloss_en": "face", "jlpt": "N5", "tags": ["core","k-row","body"], "worlds": ["2-base"] },
+    { "id": "ike", "kana": "いけ", "romaji": "ike", "gloss_en": "pond", "jlpt": "N5", "tags": ["core","k-row","place"], "worlds": ["2-base"] },
+    { "id": "koe", "kana": "こえ", "romaji": "koe", "gloss_en": "voice", "jlpt": "N5", "tags": ["core","k-row"], "worlds": ["2-base"] },
+    { "id": "aka", "kana": "あか", "romaji": "aka", "gloss_en": "red", "jlpt": "N5", "tags": ["core","k-row","color"], "worlds": ["2-base"] },
+    { "id": "oku", "kana": "おく", "romaji": "oku", "gloss_en": "inner part; back", "jlpt": "N5", "tags": ["core","k-row","place"], "worlds": ["2-base"] },
+
+
+
+    
+    { "id": "eiga", "kana": "えいが", "romaji": "eiga", "gloss_en": "movie; film", "jlpt": "N5", "tags": ["core","g-row","topic"], "worlds": ["2-daku"] },
+    { "id": "gaikoku", "kana": "がいこく", "romaji": "gaikoku", "gloss_en": "foreign country", "jlpt": "N5", "tags": ["core","g-row","place"], "worlds": ["2-daku"] },
+    { "id": "gakusei", "kana": "がくせい", "romaji": "gakusei", "gloss_en": "student", "jlpt": "N5", "tags": ["core","g-row","person"], "worlds": ["2-daku"] },
+    { "id": "gakkou", "kana": "がっこう", "romaji": "gakkou", "gloss_en": "school", "jlpt": "N5", "tags": ["core","g-row","place"], "worlds": ["2-daku"] },
+    { "id": "ginkou", "kana": "ぎんこう", "romaji": "ginkou", "gloss_en": "bank", "jlpt": "N5", "tags": ["core","g-row","place"], "worlds": ["2-daku"] },
+    { "id": "genki", "kana": "げんき", "romaji": "genki", "gloss_en": "healthy; energetic", "jlpt": "N5", "tags": ["core","g-row","adjective"], "worlds": ["2-daku"] },
+    { "id": "getsuyoubi", "kana": "げつようび", "romaji": "getsuyoubi", "gloss_en": "Monday", "jlpt": "N5", "tags": ["core","g-row","time"], "worlds": ["2-daku"] },
+    { "id": "guramu", "kana": "ぐらむ", "romaji": "guramu", "gloss_en": "gram (unit of weight)", "jlpt": "N5", "tags": ["loanword","g-row"], "worlds": ["2-daku"] }
   ],
   "byWorld": {
-    "1": ["ai", "iie", "ue", "ie", "ao", "aoi", "au", "iu"],
-    "2": ["iku", "kiku", "kau", "kao", "ike", "koe", "eiga", "gaikoku"]
+    "1-base": ["ai","iie","ue","ie","ao","aoi","au","iu"],
+    "1-daku": [],
+    "1-handaku": [],
+    "2-base": ["iku","kiku","kau","kao","ike","koe","aka","oku"],
+    "2-daku": ["eiga","gaikoku","gakusei","gakkou","ginkou","genki","getsuyoubi","guramu"],
+    "2-handaku": []
   }
 }

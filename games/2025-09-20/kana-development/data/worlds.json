@@ -1,26 +1,31 @@
 {
   "sets": {
-    "w1_vowels_showcase": ["ai", "ie", "ue", "oi", "ao", "ui", "io", "ei"],
-    "w2_k_core": ["ika", "ike", "eki", "kiku", "aka", "kako", "koe", "oki"],
-    "w2_g_core": ["kagi", "goma", "kage", "age"],
-    "review_w1_w2_light": ["ai", "ie", "ue", "ika", "kiku", "kagi", "goma"],
-    "review_w2_all": ["ika", "ike", "eki", "kiku", "aka", "kako", "koe", "oki", "kagi", "goma", "kage", "age"]
+    "review_w1_w2_light": ["ai","ie","ue","iku","kiku","gakusei","genki"],
+    "review_w2_all": ["iku","kiku","kau","kao","ike","koe","aka","oku","eiga","gaikoku","gakkou","ginkou","genki","getsuyoubi","guramu"]
   },
   "worlds": {
     "1": {
       "code": "1",
       "title": "World 1 — Vowels",
       "levels": {
-        "1-4": ["w1_vowels_showcase"]
+        "1-1": [],
+        "1-2": [],
+        "1-3": [],
+        "1-4": []  // vocab (base)
       }
     },
     "2": {
       "code": "2",
       "title": "World 2 — K / G Rows",
       "levels": {
-        "2-4": ["w2_k_core"],
-        "2-8": ["w2_g_core"],
-        "2-R": ["review_w1_w2_light"]
+        "2-1": [],
+        "2-2": [],
+        "2-3": [],
+        "2-4": [],  // vocab (base, K-row)
+        "2-5": [],
+        "2-6": [],
+        "2-7": [],
+        "2-8": []   // vocab (dakuten, G-row)
       }
     }
   }

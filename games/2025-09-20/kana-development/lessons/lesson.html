@@ -7,7 +7,7 @@
 
   <!-- Site styles -->
   <link rel="stylesheet" href="../../../../css/main.css">
-  <link rel="stylesheet" href="../../../../css/games/kana-development/styles.css">
+  <link rel="stylesheet" href="../../../../css/games/kana-development/stages.css">
   <link rel="stylesheet" href="../../../../css/games/kana-development/lessons.css">
 </head>
 <body class="site mode-light">
@@ -31,8 +31,6 @@
     <!-- Progress steps (JS will populate labels and count) -->
     <nav class="lesson-progress" aria-label="Lesson progress">
       <ol class="steps"></ol>
-      <div class="progressbar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
-        <div class="progressbar-fill"></div>
       </div>
     </nav>
 
@@ -43,7 +41,11 @@
     <section id="part-4" class="lesson-part" data-part-index="4"></section>
   </main>
 
-  <!-- Universal lesson logic -->
+  <!-- Universal lesson logic-->
+  <script defer src="../js/vocab.js"></script>
+  <script defer src="../js/lessons-core.js"></script>
+  <script defer src="../js/lessons-kana.js"></script>
+  <script defer src="../js/lessons-vocab.js"></script>
   <script defer src="../js/lessons.js"></script>
 </body>
 </html>
