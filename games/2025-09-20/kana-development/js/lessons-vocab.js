@@ -6,8 +6,16 @@
 (() => {
   const {
     $, $$,
-    WORLD, showPart
+    WORLD, SUFFIX, showPart
   } = window.LessonCore;
+
+  // ---------- Map suffix to lexicon key ----------
+  function getRoleKey(world, suffix) {
+    if (suffix === 4) return `${world}-base`;
+    if (suffix === 8) return `${world}-daku`;
+    if (suffix === 12) return `${world}-handaku`;
+    return `${world}-base`; // fallback
+  }
 
   // ======================================================
   // Part 1 — Preview Words
@@ -199,7 +207,9 @@
   // Public API
   // ======================================================
   window.initVocabParts = async function(){
-    const words = await Vocab.getWorldMilestone(WORLD);
+    const roleKey = getRoleKey(WORLD, SUFFIX);
+    const words = await Vocab.getWorldMilestone(roleKey);
+
     await initPart1(words);
     await initPart2(words);
     await initPart3(words);
