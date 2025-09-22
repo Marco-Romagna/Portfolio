@@ -163,6 +163,38 @@ body.site {
   box-shadow: 0 0 0 3px color-mix(in oklab, var(--kp-wrong) 30%, transparent);
 }
 
+/* Themed option cards for Part 2 (Identify) */
+.lesson #part-2 .option.theme-dark  {
+  background:#0b1224;
+  color:#e5e7eb;
+  border-color:#2b3447;
+}
+.lesson #part-2 .option.theme-light {
+  background:#f3f4f6;
+  color:#0b1224;
+  border-color:#cbd5e1;
+}
+.lesson #part-2 .option.theme-sepia {
+  background:#f6eedb;
+  color:#3b2f1a;
+  border-color:#e3d4b4;
+}
+.lesson #part-2 .option.theme-high  {
+  background:#000;
+  color:#fff;
+  border-color:#ffffffa8;
+}
+
+/* Keep hover consistent on themed options */
+.lesson #part-2 .option.theme-dark:hover  { border-color:#7c3aed; }
+.lesson #part-2 .option.theme-light:hover { border-color:#7c3aed; }
+.lesson #part-2 .option.theme-sepia:hover { border-color:#7c3aed; }
+.lesson #part-2 .option.theme-high:hover  { border-color:#7c3aed; }
+
+/* Make sure correctness states override theme borders */
+.lesson #part-2 .option.is-correct { border-color: var(--kp-correct) !important; }
+.lesson #part-2 .option.is-wrong   { border-color: var(--kp-wrong)   !important; }
+
 .quiz-feedback { text-align: center; min-height: 20px; color: var(--kp-muted); }
 .quiz-meta     { display: flex; gap: 16px; justify-content: center; color: var(--kp-muted); }
 
