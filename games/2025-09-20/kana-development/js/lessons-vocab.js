@@ -11,6 +11,8 @@
     getRoleKey
   } = window.LessonCore;
 
+  const THEMES = ['theme-dark','theme-light','theme-sepia','theme-high'];
+
   // ======================================================
   // Part 1 — Preview Words
   // ======================================================
@@ -81,11 +83,12 @@
       promptEl.textContent = correct.gloss_en;
 
       const distractors = words.filter(w => w.id !== correct.id).sort(()=>0.5-Math.random()).slice(0,3);
-      const options = [correct, ...distractors].sort(()=>0.5-Math.random());
+      const options = [correct, ...distractors];
 
-      options.forEach(w=>{
+      // Fixed theme order: dark, light, sepia, high
+      options.forEach((w,i)=>{
         const b=document.createElement('button');
-        b.className='option';
+        b.className=`option ${THEMES[i % THEMES.length]}`;
         b.textContent=w.kana;
         b.addEventListener('click',()=>{
           if(w===correct){
