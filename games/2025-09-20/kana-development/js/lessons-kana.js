@@ -26,8 +26,13 @@
 
   // Theme classes
   const THEMES = ['theme-dark','theme-light','theme-sepia','theme-high'];
-  function randomTheme() {
-    return THEMES[Math.floor(Math.random() * THEMES.length)];
+  function shuffle(arr) {
+    const a = arr.slice();
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
   }
 
   // ======================================================
@@ -122,7 +127,7 @@
     let prevOptionAtIndex = [null, null, null, null];
     let roundLocked = false;
 
-    function sample(arr,n){const a=[...arr];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a.slice(0,n);}
+    function sample(arr,n){return shuffle(arr).slice(0,n);}
     function setFeedback(t){if(feedback)feedback.textContent=t;}
     function updateMeter(){const pct=Math.round((progressPts/GOAL)*100);if(meterFill)meterFill.style.width=`${pct}%`;if(meterLabel)meterLabel.textContent=`Progress: ${progressPts} / ${GOAL}`;}
 
@@ -171,9 +176,12 @@
 
       const ordered=arrangeOptionsNoSlotRepeat(options);
 
+      // Pick unique themes for this round
+      const themes = shuffle(THEMES).slice(0, ordered.length);
+
       ordered.forEach((glyph,i)=>{
         const b=document.createElement('button');
-        b.className=`option ${randomTheme()}`;  // 👈 add random theme here
+        b.className=`option ${themes[i]}`;  // 👈 each option gets a different theme
         b.dataset.value=glyph;
         b.textContent=glyph;
         b.addEventListener('click',()=>onPick(glyph,promptGlyph,b));
