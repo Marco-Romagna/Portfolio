@@ -5,9 +5,8 @@
     "notes": "N5-friendly core lexicon split into base/daku/handaku sets. 8 words per stage."
   },
   "words": [
-    /* =========================
-       WORLD 1 — Vowels (Base)
-       ========================= */
+
+    
     { "id": "ai", "kana": "あい", "romaji": "ai", "gloss_en": "love; affection", "jlpt": "N5", "tags": ["core","vowels"], "worlds": ["1-base"] },
     { "id": "iie", "kana": "いいえ", "romaji": "iie", "gloss_en": "no", "jlpt": "N5", "tags": ["core","vowels","phrase"], "worlds": ["1-base"] },
     { "id": "ue", "kana": "うえ", "romaji": "ue", "gloss_en": "up; above", "jlpt": "N5", "tags": ["core","vowels","direction"], "worlds": ["1-base"] },
@@ -17,9 +16,8 @@
     { "id": "au", "kana": "あう", "romaji": "au", "gloss_en": "to meet", "jlpt": "N5", "tags": ["core","vowels","verb"], "worlds": ["1-base"] },
     { "id": "iu", "kana": "いう", "romaji": "iu", "gloss_en": "to say", "jlpt": "N5", "tags": ["core","vowels","verb"], "worlds": ["1-base"] },
 
-    /* =========================
-       WORLD 2 — K-row (Base)
-       ========================= */
+
+    
     { "id": "iku", "kana": "いく", "romaji": "iku", "gloss_en": "to go", "jlpt": "N5", "tags": ["core","k-row","verb"], "worlds": ["2-base"] },
     { "id": "kiku", "kana": "きく", "romaji": "kiku", "gloss_en": "to listen; to ask", "jlpt": "N5", "tags": ["core","k-row","verb"], "worlds": ["2-base"] },
     { "id": "kau", "kana": "かう", "romaji": "kau", "gloss_en": "to buy", "jlpt": "N5", "tags": ["core","k-row","verb"], "worlds": ["2-base"] },
@@ -29,9 +27,9 @@
     { "id": "aka", "kana": "あか", "romaji": "aka", "gloss_en": "red", "jlpt": "N5", "tags": ["core","k-row","color"], "worlds": ["2-base"] },
     { "id": "oku", "kana": "おく", "romaji": "oku", "gloss_en": "inner part; back", "jlpt": "N5", "tags": ["core","k-row","place"], "worlds": ["2-base"] },
 
-    /* =========================
-       WORLD 2 — G-row (Dakuten)
-       ========================= */
+
+
+    
     { "id": "eiga", "kana": "えいが", "romaji": "eiga", "gloss_en": "movie; film", "jlpt": "N5", "tags": ["core","g-row","topic"], "worlds": ["2-daku"] },
     { "id": "gaikoku", "kana": "がいこく", "romaji": "gaikoku", "gloss_en": "foreign country", "jlpt": "N5", "tags": ["core","g-row","place"], "worlds": ["2-daku"] },
     { "id": "gakusei", "kana": "がくせい", "romaji": "gakusei", "gloss_en": "student", "jlpt": "N5", "tags": ["core","g-row","person"], "worlds": ["2-daku"] },
