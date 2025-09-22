@@ -4,14 +4,12 @@
 // ==========================================================
 
 (() => {
-  // ========= tiny helpers =========
   const $  = (s, r = document) => r.querySelector(s);
   const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
 
   const lesson = $('.lesson');
   if (!lesson) return;
 
-  // ========= set lessonId + totalParts from URL =========
   const params = new URLSearchParams(window.location.search);
   const qId = params.get('id') || '1-1';
   lesson.dataset.lessonId = qId;
@@ -30,7 +28,6 @@
 
   const cta = $('.lesson-cta [data-action="advance"]');
   const hideCTA = () => { cta?.closest('.lesson-cta')?.classList.add('is-hidden'); };
-  const startBtn = $('#part-1 .actions [data-action="advance"]');
 
   function showPart(idx) {
     const current = Math.min(Math.max(idx, 1), totalParts);
@@ -42,10 +39,8 @@
     hideCTA();
   }
 
-  // ========= world datasets (scalable) =========
   const H_VOW = ['あ','い','う','え','お'];
   const K_VOW = ['ア','イ','ウ','エ','オ'];
-
   const H_KA  = ['か','き','く','け','こ'];
   const K_KA  = ['カ','キ','ク','ケ','コ'];
   const H_GA  = ['が','ぎ','ぐ','げ','ご'];
@@ -102,13 +97,10 @@
   const WORLD1_COMBO_RULES = (WORLD === 1);
   const REQUIRE_MIXED_SCRIPTS_IN_COMBO = (WORLD === 1 && SUFFIX === 3);
 
-  // ========= build steps dynamically =========
   (function initSteps() {
     if (!stepsList) return;
     stepsList.innerHTML = '';
-    const labels = IS_TYPING_ONLY
-      ? ['Preview','Typing','Finish']
-      : ['Preview','Identify','Typing','Speak'];
+    const labels = IS_TYPING_ONLY ? ['Preview','Typing','Finish'] : ['Preview','Identify','Typing','Speak'];
     labels.forEach((label, idx) => {
       const li = document.createElement('li');
       li.className = `step ${idx===0 ? 'is-active' : ''}`;
@@ -118,38 +110,61 @@
     });
   })();
 
-  // ========= Part 1 (Preview) =========
   (function initPart1() {
-    if (!(SUFFIX === 3 || SUFFIX === 7)) return;
-    const part1 = $('#part-1'); if (!part1) return;
-    const grid = document.createElement('div');
-    grid.className = 'kana-grid';
-    part1.appendChild(grid);
+    const part1 = $('#part-1');
+    if (!part1) return;
+    part1.innerHTML = '';
 
-    const hiraganaPool = KANA.filter(g => /[\u3040-\u309F]/.test(g));
-    const pairs = hiraganaPool.map(h => ({ h, k: PAIR[h], r: ROMA[h] })).filter(p => !!p.k);
+    const title = document.createElement('h2');
+    title.className = 'part-title';
+    part1.appendChild(title);
 
-    grid.innerHTML = '';
-    pairs.forEach(p => {
-      const card = document.createElement('article');
-      card.className = 'pair-card';
-      card.innerHTML = `
-        <div class="pair-row"><span class="glyph h">${p.h}</span><span class="link">⇄</span><span class="glyph k">${p.k}</span></div>
-        <div class="pair-romaji">${p.r}</div>
-      `;
-      grid.appendChild(card);
-    });
+    if (SUFFIX === 3 || SUFFIX === 7) {
+      title.textContent = 'Preview — Script Pairs';
+      const grid = document.createElement('div');
+      grid.className = 'kana-grid';
+      part1.appendChild(grid);
+      const hiraganaPool = KANA.filter(g => /[\u3040-\u309F]/.test(g));
+      const pairs = hiraganaPool.map(h => ({ h, k: PAIR[h], r: ROMA[h] })).filter(p => !!p.k);
+      pairs.forEach(p => {
+        const card = document.createElement('article');
+        card.className = 'pair-card';
+        card.innerHTML = `
+          <div class="pair-row"><span class="glyph h">${p.h}</span><span class="link">⇄</span><span class="glyph k">${p.k}</span></div>
+          <div class="pair-romaji">${p.r}</div>
+        `;
+        grid.appendChild(card);
+      });
+    } else {
+      title.textContent = 'Preview';
+      const grid = document.createElement('div');
+      grid.className = 'kana-grid';
+      part1.appendChild(grid);
+      const uniq = Array.from(new Set(KANA));
+      uniq.forEach(g => {
+        const card = document.createElement('article');
+        card.className = 'card-big kana-card';
+        card.innerHTML = `
+          <span class="kana-glyph">${g}</span>
+          <span class="kana-sub">${ROMA[g] || ''}</span>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    const actions = document.createElement('div');
+    actions.className = 'actions';
+    actions.innerHTML = `<button class="btn primary" data-action="advance">Start</button>`;
+    part1.appendChild(actions);
+    actions.querySelector('[data-action="advance"]')?.addEventListener('click', () => showPart(2));
   })();
 
-  startBtn?.addEventListener('click', () => showPart(2));
-
-  // ========= Part 2 (Identify / Typing) =========
   (function initPart2() {
-    const part2 = $('#part-2'); if (!part2) return;
+    const part2 = $('#part-2');
+    if (!part2) return;
 
     if (IS_TYPING_ONLY) { initTyping(part2, GOAL_TYPE, true); return; }
 
-    // scaffold
     part2.innerHTML = `
       <h2 class="part-title">Identify</h2>
       <div class="quiz-panel">
@@ -171,7 +186,6 @@
     const GOAL = GOAL_IDENT;
     let progressPts = 0;
     const THEMES = ['theme-dark','theme-light','theme-sepia','theme-high'];
-    const weights = Object.fromEntries(KANA.map(k => [k, 1]));
     const unseen  = new Set(KANA);
     let lastPromptGlyph = null;
     let prevOptionAtIndex = [null, null, null, null];
@@ -207,37 +221,106 @@
     updateMeter();nextQuestion();
   })();
 
-  // ========= Part 3 (Typing) =========
-  (function initPart3(){if(IS_TYPING_ONLY)return;const part3=$('#part-3');if(!part3)return;initTyping(part3,GOAL_TYPE,false);})();
+  (function initPart3(){
+    if(IS_TYPING_ONLY)return;
+    const part3=$('#part-3');if(!part3)return;
+    part3.innerHTML = `
+      <h2 class="part-title">Typing</h2>
+      <div class="type-panel">
+        <div class="type-glyph-wrapper"></div>
+        <input id="type-input" class="type-input" placeholder="Type romaji…" autocomplete="off" />
+        <div class="quiz-progress"><div class="meter"><div class="meter-fill"></div></div><div class="meter-label"></div></div>
+        <div class="actions"><button class="btn primary is-hidden" data-action="next-part">Next</button></div>
+      </div>
+    `;
+    initTyping(part3,GOAL_TYPE,false);
+  })();
 
-  // ========= Part 4 (Speak placeholder) =========
-  (function initPart4(){const part4=$('#part-4');if(!part4)return;const panel=document.createElement('div');panel.className='speak-panel';panel.innerHTML=`<div class="kana-glyph speak-glyph">${KANA[0]||'あ'}</div><p class="muted">Speaking practice is in progress.</p><button class="btn primary" data-action="finish-lesson">Finish</button>`;part4.appendChild(panel);panel.querySelector('[data-action="finish-lesson"]').addEventListener('click',()=>{window.location.href='../index.html';});})();
+  (function initPart4(){
+    const part4=$('#part-4');if(!part4)return;
+    part4.innerHTML = '';
+    const panel=document.createElement('div');
+    panel.className='speak-panel';
+    panel.innerHTML=`<div class="kana-glyph speak-glyph">${KANA[0]||'あ'}</div><p class="muted">Speaking practice is in progress.</p><button class="btn primary" data-action="finish-lesson">Finish</button>`;
+    part4.appendChild(panel);
+    panel.querySelector('[data-action="finish-lesson"]')?.addEventListener('click',()=>{window.location.href='../index.html';});
+  })();
 
-  // ========= Typing engine =========
   function initTyping(scopeEl,GOAL,isPart2){
-    const wrapper=$('.type-glyph-wrapper',scopeEl)||document.createElement('div');if(!wrapper.classList.contains('type-glyph-wrapper')){wrapper.className='type-glyph-wrapper';scopeEl.appendChild(wrapper);}
-    const input=$('#type-input',scopeEl)||document.createElement('input');if(!input.id){input.id='type-input';input.className='type-input';input.setAttribute('autocomplete','off');scopeEl.appendChild(input);}
-    const meterFill=$('.quiz-progress .meter-fill',scopeEl)||document.createElement('div');if(!meterFill.classList.contains('meter-fill')){const m=document.createElement('div');m.className='quiz-progress';m.innerHTML='<div class="meter"><div class="meter-fill"></div></div><div class="meter-label"></div>';scopeEl.appendChild(m);}
-    const meterLabel=$('.quiz-progress .meter-label',scopeEl);
-    let actionBtn=$('[data-action="next-part"]',scopeEl);if(actionBtn)actionBtn.classList.add('is-hidden');
+    const panel = $('.type-panel', scopeEl) || scopeEl;
+    let wrapper=$('.type-glyph-wrapper',panel);
+    if(!wrapper){wrapper=document.createElement('div');wrapper.className='type-glyph-wrapper';panel.appendChild(wrapper);}
+    let input=$('#type-input',panel);
+    if(!input){input=document.createElement('input');input.id='type-input';input.className='type-input';input.setAttribute('autocomplete','off');input.setAttribute('placeholder','Type romaji…');panel.appendChild(input);}
+    let progressWrap=$('.quiz-progress',panel);
+    if(!progressWrap){progressWrap=document.createElement('div');progressWrap.className='quiz-progress';progressWrap.innerHTML='<div class="meter"><div class="meter-fill"></div></div><div class="meter-label"></div>';panel.appendChild(progressWrap);}
+    const meterFill=$('.quiz-progress .meter-fill',panel);
+    const meterLabel=$('.quiz-progress .meter-label',panel);
+    let actionBtn=$('[data-action="next-part"]',panel);
+    if(!actionBtn){const actions=document.createElement('div');actions.className='actions';actionBtn=document.createElement('button');actionBtn.className='btn primary is-hidden';actionBtn.dataset.action='next-part';actionBtn.textContent='Next';actions.appendChild(actionBtn);panel.appendChild(actions);} else {actionBtn.classList.add('is-hidden');}
+
     const THEMES=['theme-dark','theme-light','theme-sepia','theme-high'];
-    const weights=Object.fromEntries(KANA.map(k=>[k,1]));const unseen=new Set(KANA);
+    const unseen=new Set(KANA);
     const COMBO_THRESHOLD=GOAL-COMBO_LAST;
-    let progressPts=0;let lastKana=null;let comboActive=false;let comboSeq=[];let comboIdx=0;let lastComboKey=null;
+    let progressPts=0;
+    let lastKana=null;
+    let comboActive=false;
+    let comboSeq=[];
+    let comboIdx=0;
+    let lastComboKey=null;
 
     function updateMeter(){const pct=Math.round((progressPts/GOAL)*100);if(meterFill)meterFill.style.width=`${pct}%`;if(meterLabel)meterLabel.textContent=`Progress: ${progressPts} / ${GOAL}`;}
     function setThemeRandom(){wrapper.classList.remove(...THEMES);wrapper.classList.add(THEMES[Math.floor(Math.random()*THEMES.length)]);}
     function pickNextKana(){const unseenArr=Array.from(unseen);if(unseenArr.length){let c=unseenArr;if(c.length>1)c=c.filter(k=>k!==lastKana);return c[Math.floor(Math.random()*c.length)];}return KANA[Math.floor(Math.random()*KANA.length)];}
-    function makeCombo(){for(let attempt=0;attempt<80;attempt++){const seq=[pickNextKana(),pickNextKana(),pickNextKana()];if(WORLD1_COMBO_RULES&&new Set(seq).size!==3)continue;if(REQUIRE_MIXED_SCRIPTS_IN_COMBO){const hasH=seq.some(g=>/[\u3040-\u309F]/.test(g));const hasK=seq.some(g=>/[\u30A0-\u30FF]/.test(g));if(!(hasH&&hasK))continue;}const key=seq.join('');if(key!==lastComboKey)return{seq,key};}return{seq:[pickNextKana(),pickNextKana(),pickNextKana()],key:'fallback'};}
+    function makeCombo(){
+      for(let attempt=0;attempt<80;attempt++){
+        const seq=[pickNextKana(),pickNextKana(),pickNextKana()];
+        if(WORLD1_COMBO_RULES&&new Set(seq).size!==3)continue;
+        if(REQUIRE_MIXED_SCRIPTS_IN_COMBO){
+          const hasH=seq.some(g=>/[\u3040-\u309F]/.test(g));
+          const hasK=seq.some(g=>/[\u30A0-\u30FF]/.test(g));
+          if(!(hasH&&hasK))continue;
+        }
+        const key=seq.join('');
+        if(key!==lastComboKey)return{seq,key};
+      }
+      return{seq:[pickNextKana(),pickNextKana(),pickNextKana()],key:'fallback'};
+    }
     function renderGlyph(k){wrapper.innerHTML=`<span class="kana-glyph type-glyph" data-current-kana="${k}">${k}</span>`;}
     function renderComboDisplay(){wrapper.innerHTML=comboSeq.map(k=>`<span class="kana-glyph type-glyph">${k}</span>`).join(' ');}
-    function newRound(){if(progressPts>=COMBO_THRESHOLD){const {seq,key}=makeCombo();comboSeq=seq;comboIdx=0;lastComboKey=key;comboActive=true;setThemeRandom();renderComboDisplay();}else{comboActive=false;const k=pickNextKana();setThemeRandom();renderGlyph(k);lastKana=k;}input.value='';input.focus();}
-    function evaluate(){const val=input.value.trim().toLowerCase();if(!val)return;if(!comboActive){const kana=wrapper.querySelector('.type-glyph')?.dataset.currentKana;const expected=ROMA[kana];if(val===expected){progressPts=Math.min(GOAL,progressPts+1);unseen.delete(kana);updateMeter();if(progressPts>=GOAL)actionBtn.classList.remove('is-hidden');else newRound();}else{progressPts=Math.max(0,progressPts-1);updateMeter();newRound();}}else{const expectedAll=comboSeq.map(k=>ROMA[k]).join('');if(val===expectedAll){progressPts=Math.min(GOAL,progressPts+1);comboSeq.forEach(k=>unseen.delete(k));updateMeter();if(progressPts>=GOAL)actionBtn.classList.remove('is-hidden');else newRound();}else{progressPts=Math.max(0,progressPts-1);updateMeter();newRound();}}}
+    function newRound(){
+      if(progressPts>=COMBO_THRESHOLD){
+        const {seq,key}=makeCombo();comboSeq=seq;comboIdx=0;lastComboKey=key;comboActive=true;setThemeRandom();renderComboDisplay();
+      }else{
+        comboActive=false;const k=pickNextKana();setThemeRandom();renderGlyph(k);lastKana=k;
+      }
+      input.value='';input.focus();
+    }
+    function evaluate(){
+      const val=input.value.trim().toLowerCase();if(!val)return;
+      if(!comboActive){
+        const kana=wrapper.querySelector('.type-glyph')?.getAttribute('data-current-kana') || '';
+        const expected=ROMA[kana];
+        if(val===expected){
+          progressPts=Math.min(GOAL,progressPts+1);unseen.delete(kana);updateMeter();
+          if(progressPts>=GOAL){actionBtn.classList.remove('is-hidden');} else {newRound();}
+        }else{
+          progressPts=Math.max(0,progressPts-1);updateMeter();newRound();
+        }
+      }else{
+        const expectedAll=comboSeq.map(k=>ROMA[k]).join('');
+        if(val===expectedAll){
+          progressPts=Math.min(GOAL,progressPts+1);comboSeq.forEach(k=>unseen.delete(k));updateMeter();
+          if(progressPts>=GOAL){actionBtn.classList.remove('is-hidden');} else {newRound();}
+        }else{
+          progressPts=Math.max(0,progressPts-1);updateMeter();newRound();
+        }
+      }
+    }
     input.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();evaluate();}});
     actionBtn?.addEventListener('click',()=>{if(isPart2)showPart(3);else showPart(4);});
     updateMeter();newRound();
   }
 
-  // ========= boot =========
   showPart(1);
 })();
