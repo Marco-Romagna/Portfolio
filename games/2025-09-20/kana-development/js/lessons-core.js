@@ -58,7 +58,7 @@
     'ガ':'ga','ギ':'gi','グ':'gu','ゲ':'ge','ゴ':'go'
   };
 
-  // Cross-script mapping (hiragana <-> katakana)
+  // Cross-script mapping
   const PAIR = {};
   [...H_VOW].forEach((h,i)=>{ PAIR[h] = K_VOW[i]; PAIR[K_VOW[i]] = h; });
   [...H_KA ].forEach((h,i)=>{ PAIR[h] = K_KA [i]; PAIR[K_KA [i]] = h; });
@@ -132,12 +132,21 @@
     });
   })();
 
+  // ---------- Helper: RoleKey for vocab ----------
+  function getRoleKey(world, suffix) {
+    if (suffix === 4) return `${world}-base`;
+    if (suffix === 8) return `${world}-daku`;
+    if (suffix === 12) return `${world}-handaku`;
+    return `${world}-base`;
+  }
+
   // ---------- Export ----------
   window.LessonCore = {
     $,$$,
     WORLD, SUFFIX, ROLE, IS_VOCAB, IS_TYPING_ONLY, MIXED_TYPE,
     KANA, ROMA, PAIR,
     GOAL_IDENT, GOAL_TYPE, COMBO_LAST,
-    showPart
+    showPart,
+    getRoleKey
   };
 })();
