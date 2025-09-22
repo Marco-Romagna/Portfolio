@@ -232,7 +232,26 @@ body.site {
   color: var(--kp-muted);
 }
 
-/* -4 lessons (romaji typing) */
+/* =========================================================
+   Themed backgrounds (Identify options + Typing wrappers, all lessons)
+   ========================================================= */
+.lesson .option.theme-dark,
+.lesson .type-glyph-wrapper.theme-dark  { background:#0b1224; color:#e5e7eb; border-color:#2b3447; }
+.lesson .option.theme-light,
+.lesson .type-glyph-wrapper.theme-light { background:#f3f4f6; color:#0b1224; border-color:#cbd5e1; }
+.lesson .option.theme-sepia,
+.lesson .type-glyph-wrapper.theme-sepia { background:#f6eedb; color:#3b2f1a; border-color:#e3d4b4; }
+.lesson .option.theme-high,
+.lesson .type-glyph-wrapper.theme-high  { background:#000;     color:#fff;   border-color:#ffffffa8; }
+
+.lesson .option.theme-dark:hover  { border-color:#5b6a8d; }
+.lesson .option.theme-light:hover { border-color:#94a3b8; }
+.lesson .option.theme-sepia:hover { border-color:#d6bf94; }
+.lesson .option.theme-high:hover  { border-color:#ffffff; }
+
+/* =========================================================
+   Romaji typing lessons (-4, -8, …) keep special pill input/meter
+   ========================================================= */
 .lesson[data-lesson-id$="-4"] .lesson-progress .progressbar { display: none; }
 
 .lesson[data-lesson-id$="-4"] #part-2 .type-glyph-wrapper {
@@ -243,10 +262,6 @@ body.site {
   border: 1px solid var(--kp-border);
   margin: 6px 0 12px;
 }
-.lesson[data-lesson-id$="-4"] #part-2 .type-glyph-wrapper.theme-dark  { background:#0b1224; color:#e5e7eb; border-color:#2b3447; }
-.lesson[data-lesson-id$="-4"] #part-2 .type-glyph-wrapper.theme-light { background:#f3f4f6; color:#0b1224; border-color:#cbd5e1; }
-.lesson[data-lesson-id$="-4"] #part-2 .type-glyph-wrapper.theme-sepia { background:#f6eedb; color:#3b2f1a; border-color:#e3d4b4; }
-.lesson[data-lesson-id$="-4"] #part-2 .type-glyph-wrapper.theme-high  { background:#000; color:#fff; border-color:#ffffffa8; }
 
 .lesson[data-lesson-id$="-4"] #part-2 .type-input {
   width: min(380px, 90%);
@@ -267,7 +282,6 @@ body.site {
   box-shadow: 0 0 0 4px color-mix(in oklab, var(--kp-accent) 25%, transparent);
   background: #0c1124;
 }
-
 .lesson[data-lesson-id$="-4"] #part-2 .quiz-progress {
   display: grid;
   gap: 8px;
@@ -290,3 +304,4 @@ body.site {
   transition: width .2s ease;
 }
 .lesson[data-lesson-id$="-4"] #part-2 .meter-label { font-size: .95rem; }
+
