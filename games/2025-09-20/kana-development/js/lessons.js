@@ -257,14 +257,24 @@
     }
 
     function pickPromptGlyph(){
-      if(unseen.size>0){
-        let c=Array.from(unseen);
-        if(c.length>1) c=c.filter(k=>k!==lastPromptGlyph);
-        return c[Math.floor(Math.random()*c.length)];
-      }
-      // pool exhausted → still avoid immediate repeat
-      return pickAvoidRepeat(KANA, lastPromptGlyph);
+    // Prefer unseen; if it's empty, use full pool.
+    const basePool = (unseen.size > 0) ? Array.from(unseen) : [...KANA];
+  
+    // Absolute rule: never repeat the last prompt if we can avoid it.
+    let pool = basePool.filter(k => k !== lastPromptGlyph);
+  
+    // If filtering removed everything (e.g., only 1 item left and it's the last one),
+    // fall back to the full KANA minus lastPromptGlyph when possible.
+    if (pool.length === 0 && KANA.length > 1) {
+      pool = KANA.filter(k => k !== lastPromptGlyph);
     }
+    // If we truly only have a single unique glyph in the whole lesson (rare),
+    // pool will be length 0 here; in that case we have to allow the repeat.
+    if (pool.length === 0) pool = basePool;
+  
+    return pool[Math.floor(Math.random() * pool.length)];
+  }
+
 
     function nextQuestion(){
       roundLocked=false;grid.innerHTML='';
@@ -443,9 +453,24 @@
       wrapper.classList.add(THEMES[Math.floor(Math.random()*THEMES.length)]);
     }
     function pickNextKana(){
-      const pool = Array.from(unseen).length ? Array.from(unseen) : KANA.slice();
-      return pickAvoidRepeat(pool, lastKana);
+    // Prefer unseen; if it's empty, use full pool.
+    const basePool = (unseen.size > 0) ? Array.from(unseen) : [...KANA];
+  
+    // Absolute rule: never repeat the last typed glyph (single-glyph rounds).
+    let pool = basePool.filter(k => k !== lastKana);
+  
+    // If filtering removed everything (e.g., only 1 unseen left and it's the last one),
+    // fall back to full KANA minus lastKana when possible.
+    if (pool.length === 0 && KANA.length > 1) {
+      pool = KANA.filter(k => k !== lastKana);
     }
+    // If we truly only have a single unique glyph in the whole lesson (rare),
+    // pool will be length 0 here; in that case we have to allow the repeat.
+    if (pool.length === 0) pool = basePool;
+  
+    return pool[Math.floor(Math.random() * pool.length)];
+  }
+
 
     // Build a 3-glyph combo respecting all constraints
     function makeCombo(){
