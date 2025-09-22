@@ -4,7 +4,7 @@
 // ==========================================================
 
 (() => {
-  const LEXICON_URL = "../js/lexicon.json";
+  const LEXICON_URL = "../data/lexicon.json";
   let _lexicon = null;
 
   // ---------- Load + Cache ----------
