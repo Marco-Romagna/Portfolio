@@ -176,12 +176,12 @@
 
       const ordered=arrangeOptionsNoSlotRepeat(options);
 
-      // Pick unique themes for this round
-      const themes = shuffle(THEMES).slice(0, ordered.length);
+      // Fixed theme order: dark, light, sepia, high
+      const themes = THEMES.slice(0, ordered.length);
 
       ordered.forEach((glyph,i)=>{
         const b=document.createElement('button');
-        b.className=`option ${themes[i]}`;  // 👈 each option gets a different theme
+        b.className=`option ${themes[i]}`;  // 👈 fixed per slot
         b.dataset.value=glyph;
         b.textContent=glyph;
         b.addEventListener('click',()=>onPick(glyph,promptGlyph,b));
