@@ -470,9 +470,12 @@ body.site {
 }
 
 .hunt-target .kana-glyph {
+  display: flex;
+  justify-content: center;
+  gap: 0.25em;      /* space between characters */
   font-size: clamp(72px, 12vw, 140px);
   font-weight: 700;
-  color: var(--kp-accent-2); /* brighter accent for contrast */
+  color: var(--kp-accent-2);
   margin-bottom: 8px;
 }
 
@@ -514,4 +517,12 @@ body.site {
   font-size: .9rem;
   color: var(--kp-muted);
   text-align: center;
+}
+
+.hunt-token {
+  display: inline-block;
+  cursor: pointer;
+  padding: 0 2px;
+  border-radius: 4px;
+  transition: background .2s ease, color .2s ease;
 }
