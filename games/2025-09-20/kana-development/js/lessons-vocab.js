@@ -51,7 +51,6 @@
     const items = [];
     let currentIdx = 0;
   
-    // Build sidebar items
     words.forEach((w, idx) => {
       const li = document.createElement('li');
       li.textContent = w.kana;
@@ -62,7 +61,7 @@
         currentIdx = idx;
       });
       if (idx === 0) {
-        li.classList.add('is-active'); // first word active
+        li.classList.add('is-active');
         showWord(w);
       }
       items.push(li);
@@ -73,7 +72,6 @@
     container.appendChild(detail);
     part1.appendChild(container);
   
-    // Controls
     const actions = document.createElement('div');
     actions.className = 'actions';
     actions.innerHTML = `
@@ -97,7 +95,7 @@
   }
 
   // ======================================================
-  // Part 2 — Word Hunt (Guided word-by-word)
+  // Part 2 — Word Hunt (character-based)
   // ======================================================
   async function initPart2Hunt(words) {
     const part2 = $('#part-2');
@@ -107,7 +105,7 @@
       <h2 class="part-title">Word Hunt</h2>
       <div class="hunt-panel">
         <p class="hunt-instruction">Find the highlighted word in the paragraph below.</p>
-        <div class="hunt-target"></div>
+        <div class="hunt-target-box"></div>
         <div class="hunt-text"></div>
         <div class="hunt-progress"></div>
         <div class="actions"><button class="btn primary is-hidden" data-action="next-part">Next</button></div>
@@ -115,24 +113,23 @@
     `;
 
     const huntText = $('.hunt-text', part2);
-    const targetEl = $('.hunt-target', part2);
+    const targetBox = $('.hunt-target-box', part2);
     const progress = $('.hunt-progress', part2);
     const nextBtn = $('[data-action="next-part"]', part2);
 
-    // Load hunt paragraphs for this world
+    // Load hunt paragraphs
     let paragraphs = [];
     try {
       const res = await fetch('../data/hunts.json');
-      if (!res.ok) throw new Error(`Failed to load hunts.json (${res.status})`);
       const hunts = await res.json();
       const roleKey = getRoleKey(WORLD, SUFFIX);
       paragraphs = hunts[roleKey] || [];
     } catch (err) {
-      console.error("Error loading hunts.json:", err);
+      console.error("Hunt JSON error:", err);
     }
 
     if (!paragraphs.length) {
-      huntText.innerHTML = `<em>No hunt text found for this lesson.</em>`;
+      huntText.innerHTML = `<em>No hunt text found.</em>`;
       return;
     }
 
@@ -145,16 +142,12 @@
       huntText.innerHTML = '';
       const para = paragraphs[currentPara];
 
-      para.split(/(\s+)/).forEach(tok => {
-        if (!tok.trim()) {
-          huntText.appendChild(document.createTextNode(' '));
-          return;
-        }
+      // Split into characters
+      [...para].forEach(ch => {
         const span = document.createElement('span');
-        span.textContent = tok;
-        span.className = 'hunt-word';
+        span.textContent = ch;
+        span.className = 'hunt-char';
         huntText.appendChild(span);
-        huntText.appendChild(document.createTextNode(' '));
       });
 
       currentWordIdx = 0;
@@ -163,71 +156,73 @@
 
     function loadNextWord() {
       if (currentWordIdx >= words.length) {
-        // finished all words in this paragraph
         currentPara++;
         if (currentPara < paragraphs.length) {
-          progress.textContent = "Paragraph complete! Moving on…";
-          setTimeout(() => {
-            renderParagraph();
-          }, 1000);
+          progress.textContent = "Paragraph complete!";
+          setTimeout(renderParagraph, 800);
         } else {
-          progress.textContent = "Hunt complete!";
+          progress.textContent = "🎉 Hunt complete!";
           nextBtn.classList.remove('is-hidden');
         }
         return;
       }
 
-      // Setup target word
       const targetWord = words[currentWordIdx];
-      targetEl.innerHTML = `
-        <div class="kana-glyph">${targetWord.kana}</div>
-        <div class="kana-gloss">${targetWord.gloss_en}</div>
+      targetBox.innerHTML = `
+        <div class="hunt-kana">${targetWord.kana}</div>
+        <div class="hunt-gloss">${targetWord.gloss_en}</div>
       `;
 
       foundCount = 0;
       totalInstances = 0;
 
-      $$('.hunt-word', huntText).forEach(span => {
-        if (span.textContent === targetWord.kana) {
-          totalInstances++;
-        }
-      });
+      // Count occurrences
+      const joined = [...huntText.querySelectorAll('.hunt-char')].map(x => x.textContent).join('');
+      totalInstances = joined.split(targetWord.kana).length - 1;
 
       progress.textContent = `Found 0 / ${totalInstances}`;
       attachHandlers(targetWord);
     }
 
     function attachHandlers(targetWord) {
-      $$('.hunt-word', huntText).forEach(span => {
+      const chars = $$('.hunt-char', huntText);
+      let buffer = '';
+
+      chars.forEach((span, idx) => {
         span.addEventListener('click', () => {
-          if (span.textContent === targetWord.kana && !span.classList.contains('is-correct')) {
-            span.classList.add('is-correct');
-            foundCount++;
-            progress.textContent = `Found ${foundCount} / ${totalInstances}`;
-            if (foundCount >= totalInstances) {
-              progress.textContent = `✅ All ${totalInstances} found for ${targetWord.kana}`;
-              setTimeout(() => {
-                currentWordIdx++;
-                loadNextWord();
-              }, 800);
+          buffer += span.textContent;
+
+          if (targetWord.kana.startsWith(buffer)) {
+            span.classList.add('is-correct-part');
+            if (buffer === targetWord.kana) {
+              foundCount++;
+              progress.textContent = `Found ${foundCount} / ${totalInstances}`;
+              buffer = '';
+              if (foundCount >= totalInstances) {
+                progress.textContent = `✅ All found for ${targetWord.kana}`;
+                setTimeout(() => {
+                  currentWordIdx++;
+                  loadNextWord();
+                }, 800);
+              }
             }
-          } else if (span.textContent !== targetWord.kana) {
+          } else {
+            // Wrong click → reset buffer
+            buffer = '';
+            chars.forEach(c => c.classList.remove('is-correct-part'));
             span.classList.add('is-wrong');
-            setTimeout(() => span.classList.remove('is-wrong'), 500);
+            setTimeout(() => span.classList.remove('is-wrong'), 400);
           }
         });
       });
     }
 
-    nextBtn.addEventListener('click', () => {
-      showPart(3); // advance to Identify
-    });
-
+    nextBtn.addEventListener('click', () => showPart(3));
     renderParagraph();
   }
 
   // ======================================================
-  // Part 3 — Identify (English → Kana multiple-choice)
+  // Part 3 — Identify
   // ======================================================
   async function initPart3(words) {
     const part3 = $('#part-3');
@@ -244,10 +239,10 @@
       </div>
     `;
 
-    const grid       = $('.quiz-options', part3);
-    const feedback   = $('.quiz-feedback .feedback-text', part3);
-    const promptEl   = $('.prompt-text .prompt-target', part3);
-    const meterFill  = $('.quiz-progress .meter-fill', part3);
+    const grid = $('.quiz-options', part3);
+    const feedback = $('.quiz-feedback .feedback-text', part3);
+    const promptEl = $('.prompt-text .prompt-target', part3);
+    const meterFill = $('.quiz-progress .meter-fill', part3);
     const meterLabel = $('.quiz-progress .meter-label', part3);
 
     const GOAL = words.length * 2;
@@ -316,7 +311,7 @@
   }
 
   // ======================================================
-  // Part 4 — Typing (English → Kana input)
+  // Part 4 — Typing
   // ======================================================
   async function initPart4(words) {
     const part4 = $('#part-4');
@@ -332,52 +327,53 @@
       </div>
     `;
 
-    const wrapper=$('.type-glyph-wrapper',part4);
-    const input=$('#type-input',part4);
-    const meterFill=$('.meter-fill',part4);
-    const meterLabel=$('.meter-label',part4);
-    const actionBtn=$('[data-action="next-part"]',part4);
+    const wrapper = $('.type-glyph-wrapper', part4);
+    const input = $('#type-input', part4);
+    const meterFill = $('.meter-fill', part4);
+    const meterLabel = $('.meter-label', part4);
+    const actionBtn = $('[data-action="next-part"]', part4);
 
-    let progressPts=0, GOAL=words.length*2, current=null;
+    let progressPts = 0, GOAL = words.length * 2, current = null;
 
-    function updateMeter(){
-      const pct=Math.round((progressPts/GOAL)*100);
-      meterFill.style.width=`${pct}%`;
-      meterLabel.textContent=`Progress: ${progressPts}/${GOAL}`;
+    function updateMeter() {
+      const pct = Math.round((progressPts / GOAL) * 100);
+      meterFill.style.width = `${pct}%`;
+      meterLabel.textContent = `Progress: ${progressPts}/${GOAL}`;
     }
 
-    function newRound(){
-      current=words[Math.floor(Math.random()*words.length)];
-      wrapper.innerHTML=`<span class="kana-glyph">${current.gloss_en}</span>`;
-      input.value='';
+    function newRound() {
+      current = words[Math.floor(Math.random() * words.length)];
+      wrapper.innerHTML = `<span class="kana-glyph">${current.gloss_en}</span>`;
+      input.value = '';
     }
 
-    input.addEventListener('keydown',e=>{
-      if(e.key==='Enter'){
-        if(input.value.trim()===current.kana){
+    input.addEventListener('keydown', e => {
+      if (e.key === 'Enter') {
+        if (input.value.trim() === current.kana) {
           progressPts++; updateMeter();
-          if(progressPts>=GOAL){ actionBtn.classList.remove('is-hidden'); }
+          if (progressPts >= GOAL) { actionBtn.classList.remove('is-hidden'); }
           else newRound();
         } else {
-          input.value=''; // retry
+          input.value = '';
         }
       }
     });
-    actionBtn.addEventListener('click',()=>showPart(5));
+
+    actionBtn.addEventListener('click', () => showPart(5));
     updateMeter(); newRound();
   }
 
   // ======================================================
-  // Part 5 — Audio (Play audio → Romaji/English input)
+  // Part 5 — Audio
   // ======================================================
   async function initPart5(words) {
     const part5 = $('#part-5');
     if (!part5) return;
 
     part5.innerHTML = '<h2 class="part-title">Audio Quiz</h2>';
-    const panel=document.createElement('div');
-    panel.className='speak-panel';
-    panel.innerHTML=`
+    const panel = document.createElement('div');
+    panel.className = 'speak-panel';
+    panel.innerHTML = `
       <button class="btn primary" id="play-audio">Play Audio</button>
       <input id="audio-answer" class="type-input" placeholder="Type romaji or English…" />
       <div class="actions"><button class="btn primary" data-action="finish-lesson">Finish</button></div>
@@ -388,23 +384,23 @@
     const input = $('#audio-answer', part5);
     const finishBtn = $('[data-action="finish-lesson"]', part5);
 
-    let current = words[Math.floor(Math.random()*words.length)];
+    let current = words[Math.floor(Math.random() * words.length)];
 
-    btnPlay.addEventListener('click',()=>{
-      if(current.audio){
+    btnPlay.addEventListener('click', () => {
+      if (current.audio) {
         new Audio(current.audio).play();
       } else {
         alert("No audio file found for this word yet.");
       }
     });
 
-    finishBtn.addEventListener('click',()=>{ window.location.href='../index.html'; });
+    finishBtn.addEventListener('click', () => { window.location.href = '../index.html'; });
   }
 
   // ======================================================
   // Public API
   // ======================================================
-  window.initVocabParts = async function(){
+  window.initVocabParts = async function () {
     const roleKey = getRoleKey(WORLD, SUFFIX);
     const words = await Vocab.getWorldMilestone(roleKey);
 
