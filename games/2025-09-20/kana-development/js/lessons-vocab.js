@@ -14,102 +14,94 @@
   const THEMES = ['theme-dark','theme-light','theme-sepia','theme-high'];
 
   // ======================================================
-  // Part 1 — Preview Words
+  // Part 1 — Preview Words (Word Explorer)
   // ======================================================
-    async function initPart1(words) {
+  async function initPart1(words) {
     const part1 = $('#part-1');
     if (!part1) return;
-  
+
     part1.innerHTML = '<h2 class="part-title">Vocabulary — Word Explorer</h2>';
-  
-    let index = 0;
-  
-    const layout = document.createElement('div');
-    layout.className = 'vocab-explorer';
-  
-    // Sidebar (Kana list)
-    const sidebar = document.createElement('ul');
-    sidebar.className = 'vocab-list';
-    words.forEach((w, i) => {
-      const li = document.createElement('li');
-      li.textContent = w.kana;
-      li.dataset.index = i;
-      li.addEventListener('click', () => {
-        index = i;
-        renderDetail();
-      });
-      sidebar.appendChild(li);
-    });
-  
-    // Main detail panel
+
+    const container = document.createElement('div');
+    container.className = 'vocab-explorer';
+
+    // Sidebar
+    const listEl = document.createElement('ul');
+    listEl.className = 'vocab-list';
+
+    // Detail panel
     const detail = document.createElement('div');
     detail.className = 'vocab-detail';
-  
-    // Actions
+
+    function showWord(w) {
+      detail.innerHTML = `
+        <div class="kana-glyph">${w.kana}</div>
+        <div class="kana-romaji">${w.romaji}</div>
+        <div class="kana-gloss">${w.gloss_en}</div>
+        ${w.note ? `<div class="vocab-note">Note: ${w.note}</div>` : ""}
+        ${w.example ? `
+          <div class="vocab-example">
+            <div>${w.example.kana}</div>
+            <div><strong>${w.example.romaji}</strong></div>
+            <div>${w.example.english}</div>
+          </div>` : ""}
+      `;
+    }
+
+    // Build sidebar items
+    words.forEach((w, idx) => {
+      const li = document.createElement('li');
+      li.textContent = w.kana;
+      li.addEventListener('click', () => {
+        // remove active from all
+        $$('.vocab-list li').forEach(el => el.classList.remove('is-active'));
+        li.classList.add('is-active');
+        showWord(w);
+      });
+      if (idx === 0) {
+        li.classList.add('is-active'); // first word active
+        showWord(w);
+      }
+      listEl.appendChild(li);
+    });
+
+    container.appendChild(listEl);
+    container.appendChild(detail);
+    part1.appendChild(container);
+
+    // Controls
     const actions = document.createElement('div');
     actions.className = 'actions';
     actions.innerHTML = `
-      <button class="btn ghost" data-action="prev">&larr; Prev</button>
-      <button class="btn ghost" data-action="next">Next &rarr;</button>
+      <button class="btn ghost" data-action="prev">← Prev</button>
+      <button class="btn ghost" data-action="next">Next →</button>
       <button class="btn primary" data-action="advance">Start Lesson</button>
     `;
-  
-    layout.appendChild(sidebar);
-    layout.appendChild(detail);
-    part1.appendChild(layout);
     part1.appendChild(actions);
-  
-    // Render current word in detail panel
-    function renderDetail() {
-      const w = words[index];
-  
-      // Highlight active sidebar word
-      $$('.vocab-list li', sidebar).forEach((li, i) => {
-        li.classList.toggle('is-active', i === index);
-      });
-  
-      detail.innerHTML = `
-        <div class="vocab-card-large">
-          <div class="kana-glyph">${w.kana}</div>
-          <div class="kana-sub">${w.romaji}</div>
-          <div class="vocab-english">${w.gloss_en}</div>
-          ${w.audio ? `<button class="btn small" data-action="play">🔊 Play Audio</button>` : ""}
-          ${w.note ? `<div class="vocab-note">Note: ${w.note}</div>` : ""}
-          ${w.example ? `
-            <div class="vocab-example">
-              <p>${w.example.kana}</p>
-              <p>${w.example.romaji}</p>
-              <p class="muted">${w.example.english}</p>
-            </div>
-          ` : ""}
-        </div>
-      `;
-  
-      $('[data-action="play"]', detail)?.addEventListener('click', () => {
-        if (w.audio) new Audio(w.audio).play();
-      });
+
+    const items = $$('.vocab-list li', part1);
+    let currentIdx = 0;
+
+    function selectIndex(newIdx) {
+      if (newIdx < 0 || newIdx >= items.length) return;
+      items.forEach(el => el.classList.remove('is-active'));
+      items[newIdx].classList.add('is-active');
+      showWord(words[newIdx]);
+      currentIdx = newIdx;
     }
-  
-    // Navigation
-    $('[data-action="prev"]', actions).addEventListener('click', () => {
-      index = (index - 1 + words.length) % words.length;
-      renderDetail();
-    });
-    $('[data-action="next"]', actions).addEventListener('click', () => {
-      index = (index + 1) % words.length;
-      renderDetail();
-    });
-    $('[data-action="advance"]', actions).addEventListener('click', () => showPart(2));
-  
-    renderDetail();
+
+    $('[data-action="prev"]', part1).addEventListener('click', () => selectIndex(currentIdx - 1));
+    $('[data-action="next"]', part1).addEventListener('click', () => selectIndex(currentIdx + 1));
+    $('[data-action="advance"]', part1).addEventListener('click', () => showPart(2));
   }
+
   // ======================================================
   // Part 2 — Identify (English → Kana multiple-choice)
   // ======================================================
   async function initPart2(words) {
     const part2 = $('#part-2');
     if (!part2) return;
-  
+
     part2.innerHTML = `
       <h2 class="part-title">Identify</h2>
       <div class="quiz-panel">
@@ -120,46 +112,42 @@
         <div class="actions"><button class="btn primary is-hidden" data-action="next-part">Next</button></div>
       </div>
     `;
-  
+
     const grid       = $('.quiz-options', part2);
     const feedback   = $('.quiz-feedback .feedback-text', part2);
     const promptEl   = $('.prompt-text .prompt-target', part2);
     const meterFill  = $('.quiz-progress .meter-fill', part2);
     const meterLabel = $('.quiz-progress .meter-label', part2);
-  
-    // Goal = two rounds of the full set (e.g. 6 words → 12)
+
     const GOAL = words.length * 2;
     let progressPts = 0;
-  
-    // Queue system for recycling wrong answers
+
     let queue = [...words];
     let current = null;
     let firstTry = true;
-  
+
     function updateMeter() {
       const pct = Math.round((progressPts / GOAL) * 100);
       meterFill.style.width = `${pct}%`;
       meterLabel.textContent = `Progress: ${progressPts} / ${GOAL}`;
     }
-  
+
     function nextQuestion() {
       grid.innerHTML = '';
       feedback.textContent = '';
-  
+
       if (queue.length === 0) {
-        // If queue is empty, refill with a shuffled set
         queue = [...words].sort(() => Math.random() - 0.5);
       }
-  
+
       current = queue.shift();
       firstTry = true;
-  
+
       promptEl.textContent = current.gloss_en;
-  
-      // Pick 3 random distractors
+
       const distractors = words.filter(w => w.id !== current.id).sort(() => 0.5 - Math.random()).slice(0, 3);
       const options = [current, ...distractors].sort(() => 0.5 - Math.random());
-  
+
       options.forEach((w, i) => {
         const b = document.createElement('button');
         b.className = `option ${THEMES[i % THEMES.length]}`;
@@ -181,7 +169,6 @@
             b.classList.add('is-wrong');
             feedback.textContent = 'Try again!';
             firstTry = false;
-            // If they missed, push it back into the queue to appear again
             if (!queue.includes(current)) {
               queue.push(current);
             }
@@ -190,16 +177,15 @@
         grid.appendChild(b);
       });
     }
-  
+
     $('[data-action="next-part"]', part2)?.addEventListener('click', () => showPart(3));
-  
+
     updateMeter();
     nextQuestion();
   }
 
-
   // ======================================================
-  // Part 3 — Typing (English → Kana input, themed like Kana Part 3)
+  // Part 3 — Typing (English → Kana input)
   // ======================================================
   async function initPart3(words) {
     const part3 = $('#part-3');
@@ -221,7 +207,7 @@
     const meterLabel=$('.meter-label',part3);
     const actionBtn=$('[data-action="next-part"]',part3);
 
-    let progressPts=0, GOAL=10, current=null;
+    let progressPts=0, GOAL=words.length*2, current=null;
 
     function updateMeter(){
       const pct=Math.round((progressPts/GOAL)*100);
@@ -231,11 +217,7 @@
 
     function newRound(){
       current=words[Math.floor(Math.random()*words.length)];
-      // Apply random theme each round
-      wrapper.classList.remove(...THEMES);
-      wrapper.classList.add(THEMES[Math.floor(Math.random()*THEMES.length)]);
-      // Show ENGLISH prompt in the panel
-      wrapper.innerHTML=`<span class="type-glyph">${current.gloss_en}</span>`;
+      wrapper.innerHTML=`<span class="kana-glyph">${current.gloss_en}</span>`;
       input.value='';
     }
 
