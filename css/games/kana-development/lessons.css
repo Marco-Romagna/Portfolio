@@ -466,23 +466,29 @@ body.site {
   border: 2px solid var(--kp-accent);
   border-radius: var(--kp-radius);
   box-shadow: var(--kp-shadow);
-  max-width: 380px;
+  max-width: 420px;
 }
 
-/* Big glyph inside hunt target */
+/* Override for hunt glyph only */
 .hunt-target .kana-glyph {
-  font-size: clamp(80px, 14vw, 180px); /* much larger */
-  font-weight: 700;
+  display: block;
+  font-size: clamp(96px, 15vw, 200px); /* MUCH bigger */
+  font-weight: 800;
   color: var(--kp-accent-2);
-  line-height: 1;
+  line-height: 1.1;
   margin-bottom: 12px;
+  background: color-mix(in srgb, var(--kp-accent-2) 20%, transparent);
+  border-radius: var(--kp-radius);
+  padding: 8px 16px;
 }
 
-/* Gloss below */
+/* Gloss (English meaning) */
 .hunt-target .kana-gloss {
-  font-size: 1.2rem;
+  font-size: 1.3rem;
+  font-weight: 600;
   color: var(--kp-text);
 }
+
 
 /* Paragraph text area */
 .hunt-text {
