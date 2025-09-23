@@ -25,11 +25,9 @@
     const container = document.createElement('div');
     container.className = 'vocab-explorer';
   
-    // Sidebar
     const listEl = document.createElement('ul');
     listEl.className = 'vocab-list';
   
-    // Detail panel
     const detail = document.createElement('div');
     detail.className = 'vocab-detail';
   
@@ -117,7 +115,6 @@
     const progress = $('.hunt-progress', part2);
     const nextBtn = $('[data-action="next-part"]', part2);
 
-    // Load hunt paragraphs
     let paragraphs = [];
     try {
       const res = await fetch('../data/hunts.json');
@@ -140,12 +137,9 @@
       huntText.innerHTML = '';
       const para = paragraphs[currentPara];
     
-      // Walk through characters, wrap only vocab matches
       let i = 0;
       while (i < para.length) {
         let matched = false;
-    
-        // Try to match any vocab word at this position
         for (const w of words) {
           if (para.startsWith(w.kana, i)) {
             const span = document.createElement('span');
@@ -157,13 +151,12 @@
             break;
           }
         }
-    
         if (!matched) {
-          // Normal character (space, punctuation, kana not in vocab)
           huntText.appendChild(document.createTextNode(para[i]));
           i++;
         }
       }
+      loadNextWord(); // after rendering, start with first target
     }
 
     function loadNextWord() {
@@ -188,10 +181,9 @@
       let totalInstances = 0;
       let foundCount = 0;
 
-      $$('.hunt-word', huntText).forEach(span => {
-        if (span.textContent === targetWord.kana) {
-          totalInstances++;
-        }
+      const spans = $$('.hunt-word', huntText);
+      spans.forEach(span => {
+        if (span.textContent === targetWord.kana) totalInstances++;
         span.addEventListener('click', () => {
           if (span.textContent === targetWord.kana && !span.classList.contains('is-correct')) {
             span.classList.add('is-correct');
