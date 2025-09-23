@@ -546,4 +546,44 @@ body.site {
   font-size: 1.2rem;
   color: var(--kp-text);
 }
+/* Hunt target box */
+.hunt-target-box {
+  margin: 16px auto;
+  padding: 24px;
+  text-align: center;
+  border: 2px solid var(--kp-accent);
+  border-radius: var(--kp-radius);
+  background: var(--kp-surface);
+  max-width: 280px;
+  box-shadow: var(--kp-shadow);
+}
+
+.hunt-target-box .hunt-kana {
+  font-size: clamp(64px, 10vw, 120px);
+  font-weight: bold;
+  color: var(--kp-accent-2);
+  margin-bottom: 8px;
+}
+
+.hunt-target-box .hunt-gloss {
+  font-size: 1.1rem;
+  color: var(--kp-text);
+}
+
+.hunt-char {
+  cursor: pointer;
+  padding: 2px 3px;
+  border-radius: 4px;
+  transition: background .2s ease;
+}
+
+.hunt-char.is-correct-part {
+  background: var(--kp-correct);
+  color: #fff;
+}
+
+.hunt-char.is-wrong {
+  background: var(--kp-wrong);
+  color: #fff;
+}
 
