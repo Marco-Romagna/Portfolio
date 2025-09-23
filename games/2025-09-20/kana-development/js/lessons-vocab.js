@@ -96,123 +96,124 @@
   // Part 2 — Word Hunt (word-by-word guided)
   // ======================================================
   async function initPart2Hunt(words) {
-    const part2 = $('#part-2');
-    if (!part2) return;
+  const part2 = $('#part-2');
+  if (!part2) return;
 
-    part2.innerHTML = `
-      <h2 class="part-title">Word Hunt</h2>
-      <div class="hunt-panel">
-        <p class="hunt-instruction">Find the highlighted word in the paragraph below.</p>
-        <div class="hunt-target"></div>
-        <div class="hunt-text"></div>
-        <div class="hunt-progress"></div>
-        <div class="actions"><button class="btn primary is-hidden" data-action="next-part">Next</button></div>
-      </div>
-    `;
+  part2.innerHTML = `
+    <h2 class="part-title">Word Hunt</h2>
+    <div class="hunt-panel">
+      <p class="hunt-instruction">Find the highlighted word in the paragraph below.</p>
+      <div class="hunt-target"></div>
+      <div class="hunt-text"></div>
+      <div class="hunt-progress"></div>
+    </div>
+  `;
 
-    const huntText = $('.hunt-text', part2);
-    const targetEl = $('.hunt-target', part2);
-    const progress = $('.hunt-progress', part2);
-    const nextBtn = $('[data-action="next-part"]', part2);
+  const huntText = $('.hunt-text', part2);
+  const targetEl = $('.hunt-target', part2);
+  const progress = $('.hunt-progress', part2);
 
-    let paragraphs = [];
-    try {
-      const res = await fetch('../data/hunts.json');
-      const hunts = await res.json();
-      const roleKey = getRoleKey(WORLD, SUFFIX);
-      paragraphs = hunts[roleKey] || [];
-    } catch (err) {
-      console.error("Hunt JSON error:", err);
+  // Load hunt paragraphs
+  let paragraphs = [];
+  try {
+    const res = await fetch('../data/hunts.json');
+    const hunts = await res.json();
+    const roleKey = getRoleKey(WORLD, SUFFIX);
+    paragraphs = hunts[roleKey] || [];
+  } catch (err) {
+    console.error("Hunt JSON error:", err);
+  }
+
+  if (!paragraphs.length) {
+    huntText.innerHTML = `<em>No hunt text found.</em>`;
+    return;
+  }
+
+  let currentPara = 0;
+  let currentWordIdx = 0;
+
+  function renderParagraph() {
+    huntText.innerHTML = '';
+    const para = paragraphs[currentPara];
+
+    let i = 0;
+    while (i < para.length) {
+      let matched = false;
+      for (const w of words) {
+        if (para.startsWith(w.kana, i)) {
+          const span = document.createElement('span');
+          span.textContent = w.kana;
+          span.className = 'hunt-word';
+          huntText.appendChild(span);
+          i += w.kana.length;
+          matched = true;
+          break;
+        }
+      }
+      if (!matched) {
+        const span = document.createElement('span');
+        span.textContent = para[i];
+        span.className = 'hunt-filler'; // not clickable
+        huntText.appendChild(span);
+        i++;
+      }
     }
 
-    if (!paragraphs.length) {
-      huntText.innerHTML = `<em>No hunt text found.</em>`;
+    loadNextWord();
+  }
+
+  function loadNextWord() {
+    if (currentWordIdx >= words.length) {
+      // all words done → move to next paragraph
+      currentPara++;
+      if (currentPara < paragraphs.length) {
+        progress.textContent = "Paragraph complete!";
+        setTimeout(renderParagraph, 800);
+      } else {
+        progress.textContent = "🎉 Hunt complete!";
+        setTimeout(() => showPart(3), 1000);
+      }
       return;
     }
 
-    let currentPara = 0;
-    let currentWordIdx = 0;
+    const targetWord = words[currentWordIdx];
+    targetEl.innerHTML = `
+      <div class="hunt-target-word">${targetWord.kana}</div>
+      <div class="hunt-gloss">${targetWord.gloss_en}</div>
+    `;
 
-    function renderParagraph() {
-      huntText.innerHTML = '';
-      const para = paragraphs[currentPara];
-    
-      let i = 0;
-      while (i < para.length) {
-        let matched = false;
-        for (const w of words) {
-          if (para.startsWith(w.kana, i)) {
-            const span = document.createElement('span');
-            span.textContent = w.kana;
-            span.className = 'hunt-token hunt-word'; // marked as vocab
-            huntText.appendChild(span);
-            i += w.kana.length;
-            matched = true;
-            break;
-          }
-        }
-        if (!matched) {
-          const span = document.createElement('span');
-          span.textContent = para[i];
-          span.className = 'hunt-token'; // normal token, still clickable
-          huntText.appendChild(span);
-          i++;
-        }
-      }
+    let foundCount = 0;
+    const wordSpans = $$('.hunt-word', huntText).filter(
+      span => span.textContent === targetWord.kana
+    );
+
+    // If this word doesn’t exist in this paragraph, skip immediately
+    if (wordSpans.length === 0) {
+      currentWordIdx++;
       loadNextWord();
+      return;
     }
-    
-    function loadNextWord() {
-      if (currentWordIdx >= words.length) {
-        currentPara++;
-        if (currentPara < paragraphs.length) {
-          progress.textContent = "Paragraph complete! Moving on…";
-          setTimeout(renderParagraph, 1000);
-        } else {
-          progress.textContent = "🎉 Hunt complete!";
-          nextBtn.classList.remove('is-hidden');
-        }
-        return;
-      }
-    
-      const targetWord = words[currentWordIdx];
-      targetEl.innerHTML = `
-        <div class="hunt-target-word">${targetWord.kana}</div>
-        <div class="hunt-gloss">${targetWord.gloss_en}</div>
-      `;
 
-    
-      let totalInstances = 0;
-      let foundCount = 0;
-    
-      const tokens = $$('.hunt-token', huntText);
-      tokens.forEach(span => {
-        if (span.textContent === targetWord.kana) totalInstances++;
-        span.addEventListener('click', () => {
-          if (span.textContent === targetWord.kana && !span.classList.contains('is-correct')) {
-            span.classList.add('is-correct');
-            foundCount++;
-            progress.textContent = `Found ${foundCount} / ${totalInstances}`;
-            if (foundCount >= totalInstances) {
-              progress.textContent = `✅ All ${totalInstances} found for ${targetWord.kana}`;
-              setTimeout(() => {
-                currentWordIdx++;
-                loadNextWord();
-              }, 800);
-            }
-          } else {
-            span.classList.add('is-wrong');
-            setTimeout(() => span.classList.remove('is-wrong'), 400);
+    wordSpans.forEach(span => {
+      span.addEventListener('click', () => {
+        if (!span.classList.contains('is-correct')) {
+          span.classList.add('is-correct');
+          foundCount++;
+          if (foundCount >= wordSpans.length) {
+            setTimeout(() => {
+              currentWordIdx++;
+              loadNextWord();
+            }, 600);
           }
-        });
+        }
       });
-    
-      progress.textContent = `Found 0 / ${totalInstances}`;
-    }
+    });
 
-    nextBtn.addEventListener('click', () => showPart(3));
-    renderParagraph();
+    progress.textContent = '';
   }
+
+  renderParagraph();
+}
 
   // ======================================================
   // Part 3 — Identify
