@@ -29,7 +29,7 @@
   <!-- Main lesson container -->
   <main class="container game-wrap">
 
-    <!-- Progress steps -->
+    <!-- Progress steps (populated by lessons-core.js) -->
     <nav class="lesson-progress" aria-label="Lesson progress">
       <ol class="steps"></ol>
     </nav>
@@ -48,30 +48,5 @@
   <script defer src="../js/lessons-kana.js"></script>
   <script defer src="../js/lessons-vocab.js"></script>
   <script defer src="../js/lessons.js"></script>
-
-  <!-- Step renderer -->
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const lessonId = document.body.dataset.lessonId || "";
-      const stepsContainer = document.querySelector('.steps');
-
-      const isVocab = lessonId.includes("vocab") || lessonId.endsWith("-5");
-      const totalSteps = isVocab ? 5 : 4;
-
-      const labels = isVocab
-        ? ["Explorer", "Hunt", "Identify", "Typing", "Audio"]
-        : ["Preview", "Identify", "Typing", "Audio"];
-
-      for (let i = 0; i < totalSteps; i++) {
-        const li = document.createElement('li');
-        li.className = 'step' + (i === 0 ? ' is-active' : '');
-        li.innerHTML = `
-          <span class="step-label">${labels[i]}</span>
-          <span class="step-sub">Part ${i + 1}</span>
-        `;
-        stepsContainer.appendChild(li);
-      }
-    });
-  </script>
 </body>
 </html>
