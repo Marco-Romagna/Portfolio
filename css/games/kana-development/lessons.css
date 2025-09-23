@@ -435,8 +435,10 @@ body.site {
 
 /* Active word in the vocab sidebar */
 .vocab-list li.is-active {
-  background: var(--kp-accent);
-  color: #fff;
+  background: color-mix(in srgb, var(--kp-accent) 20%, transparent);
+  color: var(--kp-accent);
   font-weight: 600;
+  border-left: 4px solid var(--kp-accent);
 }
+
 
