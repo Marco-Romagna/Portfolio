@@ -93,12 +93,9 @@
   }
 
   // ======================================================
-  // Part 2 — Word Hunt (word-by-word guided)
+  // Part 2 — Word Hunt (2 hunts only)
   // ======================================================
- // ======================================================
-// Part 2 — Word Hunt (multi-hunt progression)
-// ======================================================
-async function initPart2Hunt(words) {
+  async function initPart2Hunt(words) {
     const part2 = $('#part-2');
     if (!part2) return;
   
@@ -138,33 +135,41 @@ async function initPart2Hunt(words) {
     let currentWordIdx = 0;
     let huntWords = [];
   
-    // Render paragraph as clickable tokens
+    // Render one paragraph with vocab words clickable
     function renderParagraph() {
       huntText.innerHTML = '';
       const para = paragraphs[currentPara];
   
-      para.split(/(\s+)/).forEach(tok => {
-        if (!tok.trim()) {
-          huntText.appendChild(document.createTextNode(' '));
-          return;
+      let i = 0;
+      while (i < para.length) {
+        let matched = false;
+        for (const w of words) {
+          if (para.startsWith(w.kana, i)) {
+            const span = document.createElement('span');
+            span.textContent = w.kana;
+            span.className = 'hunt-word';
+            huntText.appendChild(span);
+            i += w.kana.length;
+            matched = true;
+            break;
+          }
         }
-        const span = document.createElement('span');
-        span.textContent = tok;
-        span.className = 'hunt-word';
-        huntText.appendChild(span);
-        huntText.appendChild(document.createTextNode(' '));
-      });
+        if (!matched) {
+          huntText.appendChild(document.createTextNode(para[i]));
+          i++;
+        }
+      }
   
-      // For this hunt, pick which vocab words must be found (from the paragraph itself)
+      // Only words that appear in this paragraph
       huntWords = words.filter(w => para.includes(w.kana));
       currentWordIdx = 0;
       loadNextWord();
     }
   
-    // Set up the next target word
+    // Pick target word and wait for all clicks
     function loadNextWord() {
       if (currentWordIdx >= huntWords.length) {
-        progress.textContent = "✅ Hunt complete!";
+        progress.textContent = "✅ Paragraph complete!";
         nextBtn.classList.remove('is-hidden');
         return;
       }
@@ -186,7 +191,7 @@ async function initPart2Hunt(words) {
             span.classList.add('is-correct');
             foundCount++;
             if (foundCount >= totalInstances) {
-              progress.textContent = `✅ ${targetWord.kana} found!`;
+              progress.textContent = `✅ ${targetWord.kana} found`;
               setTimeout(() => {
                 currentWordIdx++;
                 loadNextWord();
@@ -200,7 +205,7 @@ async function initPart2Hunt(words) {
       });
     }
   
-    // Button advances to next hunt or Part 3
+    // After Hunt 1 → Hunt 2 → then Part 3
     nextBtn.addEventListener('click', () => {
       currentPara++;
       currentWordIdx = 0;
@@ -208,12 +213,14 @@ async function initPart2Hunt(words) {
         nextBtn.classList.add('is-hidden');
         renderParagraph();
       } else {
-        showPart(3); // after all hunts, move to Identify
+        showPart(3);
       }
     });
   
     renderParagraph();
   }
+
+
 
   // ======================================================
   // Part 3 — Identify
