@@ -19,20 +19,20 @@
   async function initPart1(words) {
     const part1 = $('#part-1');
     if (!part1) return;
-
+  
     part1.innerHTML = '<h2 class="part-title">Vocabulary — Word Explorer</h2>';
-
+  
     const container = document.createElement('div');
     container.className = 'vocab-explorer';
-
+  
     // Sidebar
     const listEl = document.createElement('ul');
     listEl.className = 'vocab-list';
-
+  
     // Detail panel
     const detail = document.createElement('div');
     detail.className = 'vocab-detail';
-
+  
     function showWord(w) {
       detail.innerHTML = `
         <div class="kana-glyph">${w.kana}</div>
@@ -47,28 +47,31 @@
           </div>` : ""}
       `;
     }
-
+  
+    const items = [];
+  
     // Build sidebar items
     words.forEach((w, idx) => {
       const li = document.createElement('li');
       li.textContent = w.kana;
       li.addEventListener('click', () => {
-        // remove active from all
-        $$('.vocab-list li').forEach(el => el.classList.remove('is-active'));
+        items.forEach(el => el.classList.remove('is-active'));
         li.classList.add('is-active');
         showWord(w);
+        currentIdx = idx;
       });
       if (idx === 0) {
         li.classList.add('is-active'); // first word active
         showWord(w);
       }
+      items.push(li);
       listEl.appendChild(li);
     });
-
+  
     container.appendChild(listEl);
     container.appendChild(detail);
     part1.appendChild(container);
-
+  
     // Controls
     const actions = document.createElement('div');
     actions.className = 'actions';
@@ -78,10 +81,9 @@
       <button class="btn primary" data-action="advance">Start Lesson</button>
     `;
     part1.appendChild(actions);
-
-    const items = $$('.vocab-list li', part1);
+  
     let currentIdx = 0;
-
+  
     function selectIndex(newIdx) {
       if (newIdx < 0 || newIdx >= items.length) return;
       items.forEach(el => el.classList.remove('is-active'));
@@ -89,7 +91,7 @@
       showWord(words[newIdx]);
       currentIdx = newIdx;
     }
-
+  
     $('[data-action="prev"]', part1).addEventListener('click', () => selectIndex(currentIdx - 1));
     $('[data-action="next"]', part1).addEventListener('click', () => selectIndex(currentIdx + 1));
     $('[data-action="advance"]', part1).addEventListener('click', () => showPart(2));
