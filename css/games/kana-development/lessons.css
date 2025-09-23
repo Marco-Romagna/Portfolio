@@ -91,6 +91,17 @@ body.site {
 .kana-glyph { font-size: clamp(64px, 10vw, 120px); line-height: 1; }
 .kana-sub   { color: var(--kp-muted); margin-top: 6px; font-size: 1.1rem; }
 
+/* Vocab-specific cards (horizontal text) */
+.vocab-card {
+  text-align: center;
+  padding: 1rem;
+}
+.vocab-card .kana-glyph {
+  font-size: 2rem;
+  line-height: 1.4;
+  writing-mode: horizontal-tb;
+}
+
 .part-title { margin: 0 0 12px; }
 
 .actions {
@@ -133,7 +144,18 @@ body.site {
 .quiz-panel   { padding: 16px; }
 .quiz-prompt  { text-align: center; margin-bottom: 10px; }
 .prompt-text  { color: var(--kp-muted); }
-.prompt-text .prompt-target { color: var(--kp-text); }
+
+/* Make the quiz prompt text more prominent */
+.quiz-prompt .prompt-text {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--kp-text);
+}
+.quiz-prompt .prompt-text .prompt-target {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--kp-accent);
+}
 
 .quiz-options {
   display: grid;
@@ -155,11 +177,11 @@ body.site {
 }
 .option:hover { transform: translateY(-1px); border-color: var(--kp-accent); }
 .option.is-correct {
-  border-color: var(--kp-correct);
+  border-color: var(--kp-correct) !important;
   box-shadow: 0 0 0 3px color-mix(in oklab, var(--kp-correct) 30%, transparent);
 }
 .option.is-wrong {
-  border-color: var(--kp-wrong);
+  border-color: var(--kp-wrong) !important;
   box-shadow: 0 0 0 3px color-mix(in oklab, var(--kp-wrong) 30%, transparent);
 }
 
@@ -184,22 +206,18 @@ body.site {
   color:#fff;
   border-color:#ffffffa8;
 }
-
-/* Keep hover consistent on themed options */
-.lesson #part-2 .option.theme-dark:hover  { border-color:#7c3aed; }
-.lesson #part-2 .option.theme-light:hover { border-color:#7c3aed; }
-.lesson #part-2 .option.theme-sepia:hover { border-color:#7c3aed; }
-.lesson #part-2 .option.theme-high:hover  { border-color:#7c3aed; }
-
-/* Make sure correctness states override theme borders */
-.lesson #part-2 .option.is-correct { border-color: var(--kp-correct) !important; }
-.lesson #part-2 .option.is-wrong   { border-color: var(--kp-wrong)   !important; }
+.lesson #part-2 .option.theme-dark:hover,
+.lesson #part-2 .option.theme-light:hover,
+.lesson #part-2 .option.theme-sepia:hover,
+.lesson #part-2 .option.theme-high:hover {
+  border-color:#7c3aed;
+}
 
 .quiz-feedback { text-align: center; min-height: 20px; color: var(--kp-muted); }
 .quiz-meta     { display: flex; gap: 16px; justify-content: center; color: var(--kp-muted); }
 
 /* =========================================================
-   Part 3 — Base typing styles
+   Part 3 — Typing
    ========================================================= */
 .type-panel          { padding: 16px; text-align: center; }
 .type-glyph-wrapper  { margin: 4px 0 8px; }
@@ -233,7 +251,6 @@ body.site {
 
 /* =========================================================
    Universal Level Type Styling
-   (-1, -2, -3 apply across all worlds)
    ========================================================= */
 
 /* -1 lessons (hiragana rows) */
@@ -265,18 +282,13 @@ body.site {
 }
 
 /* =========================================================
-   Shared Typing + Progress UI (Parts 2 & 3) — ALL lessons
-   This brings the "1-4 style" (pill input + gradient meter +
-   themed glyph panel) to Part 2 and Part 3 for every suffix.
+   Shared Typing + Progress UI (Parts 2 & 3)
    ========================================================= */
-
-/* Glyph wrapper with themeable surfaces */
 .lesson #part-2 .type-glyph-wrapper,
 .lesson #part-3 .type-glyph-wrapper {
-  display: flex;              /* simpler than grid for inline look */
-  justify-content: center;    /* keep centered */
+  display: flex;
+  justify-content: center;
   align-items: center;
-  gap: 0;                     /* no extra space */
   padding: 24px;
   border-radius: var(--kp-radius);
   border: 1px solid var(--kp-border);
@@ -287,11 +299,9 @@ body.site {
 .lesson #part-3 .type-glyph {
   font-size: clamp(80px, 12vw, 140px);
   line-height: 1;
-  margin: 0 4px; /* tiny breathing room, optional */
+  margin: 0 4px;
 }
 
-
-/* Theme variants */
 .lesson #part-2 .type-glyph-wrapper.theme-dark,
 .lesson #part-3 .type-glyph-wrapper.theme-dark  { background:#0b1224; color:#e5e7eb; border-color:#2b3447; }
 .lesson #part-2 .type-glyph-wrapper.theme-light,
@@ -299,9 +309,8 @@ body.site {
 .lesson #part-2 .type-glyph-wrapper.theme-sepia,
 .lesson #part-3 .type-glyph-wrapper.theme-sepia { background:#f6eedb; color:#3b2f1a; border-color:#e3d4b4; }
 .lesson #part-2 .type-glyph-wrapper.theme-high,
-.lesson #part-3 .type-glyph-wrapper.theme-high  { background:#000;    color:#fff;   border-color:#ffffffa8; }
+.lesson #part-3 .type-glyph-wrapper.theme-high  { background:#000; color:#fff; border-color:#ffffffa8; }
 
-/* Input (pill) */
 .lesson #part-2 .type-input,
 .lesson #part-3 .type-input {
   width: min(380px, 90%);
@@ -324,7 +333,6 @@ body.site {
   background: #0c1124;
 }
 
-/* In-panel progress (meter) */
 .lesson #part-2 .quiz-progress,
 .lesson #part-3 .quiz-progress {
   display: grid;
@@ -352,5 +360,75 @@ body.site {
 .lesson #part-2 .meter-label,
 .lesson #part-3 .meter-label { font-size: .95rem; }
 
-/* Keep -4 header behavior consistent if you used it before */
 .lesson[data-lesson-id$="-4"] .lesson-progress .progressbar { display: none; }
+
+
+/* =========================================================
+   Vocab Explorer (Part 1)
+   ========================================================= */
+.vocab-explorer {
+  display: grid;
+  grid-template-columns: 160px 1fr;
+  gap: var(--kp-gap);
+}
+
+.vocab-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  background: var(--kp-surface);
+  border: 1px solid var(--kp-border);
+  border-radius: var(--kp-radius);
+  overflow: hidden;
+}
+.vocab-list li {
+  padding: 10px 12px;
+  cursor: pointer;
+  border-bottom: 1px solid var(--kp-border);
+  transition: background .2s, color .2s;
+}
+.vocab-list li:last-child { border-bottom: none; }
+.vocab-list li:hover { background: var(--kp-surface-2); }
+.vocab-list li.is-active {
+  background: var(--kp-accent);
+  color: #fff;
+}
+
+.vocab-detail {
+  background: var(--kp-surface);
+  border: 1px solid var(--kp-border);
+  border-radius: var(--kp-radius);
+  padding: 2rem;
+  text-align: center;
+  box-shadow: var(--kp-shadow);
+}
+
+.vocab-card-large .kana-glyph {
+  font-size: clamp(64px, 8vw, 120px);
+  margin-bottom: 1rem;
+}
+.vocab-card-large .kana-sub {
+  font-size: 1.5rem;
+  color: var(--kp-muted);
+  margin-bottom: 0.5rem;
+}
+.vocab-card-large .vocab-english {
+  font-size: 1.25rem;
+  margin-bottom: 1rem;
+}
+.vocab-note {
+  margin-top: 0.5rem;
+  font-size: 0.95rem;
+  color: var(--kp-warn);
+}
+.vocab-example {
+  margin-top: 1rem;
+  font-size: 1rem;
+  text-align: left;
+  border-top: 1px dashed var(--kp-border);
+  padding-top: 0.5rem;
+}
+.vocab-example p { margin: 0.25rem 0; }
+.vocab-example .muted { color: var(--kp-muted); }
+
+
