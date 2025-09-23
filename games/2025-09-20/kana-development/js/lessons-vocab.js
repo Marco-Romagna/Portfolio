@@ -109,7 +109,7 @@
   async function initPart2(words) {
     const part2 = $('#part-2');
     if (!part2) return;
-
+  
     part2.innerHTML = `
       <h2 class="part-title">Identify</h2>
       <div class="quiz-panel">
@@ -120,62 +120,83 @@
         <div class="actions"><button class="btn primary is-hidden" data-action="next-part">Next</button></div>
       </div>
     `;
-
+  
     const grid       = $('.quiz-options', part2);
     const feedback   = $('.quiz-feedback .feedback-text', part2);
     const promptEl   = $('.prompt-text .prompt-target', part2);
     const meterFill  = $('.quiz-progress .meter-fill', part2);
     const meterLabel = $('.quiz-progress .meter-label', part2);
-
-    const GOAL = words.length * 2; 
-    // two cycles through the set (6 words → 12 questions)
+  
+    // Goal = two rounds of the full set (e.g. 6 words → 12)
+    const GOAL = words.length * 2;
     let progressPts = 0;
-    let lastWord = null;
-
-    function updateMeter(){
-      const pct=Math.round((progressPts/GOAL)*100);
-      meterFill.style.width=`${pct}%`;
-      meterLabel.textContent=`Progress: ${progressPts} / ${GOAL}`;
+  
+    // Queue system for recycling wrong answers
+    let queue = [...words];
+    let current = null;
+    let firstTry = true;
+  
+    function updateMeter() {
+      const pct = Math.round((progressPts / GOAL) * 100);
+      meterFill.style.width = `${pct}%`;
+      meterLabel.textContent = `Progress: ${progressPts} / ${GOAL}`;
     }
-
-    function nextQuestion(){
-      grid.innerHTML='';
-      const pool = words.filter(w => w !== lastWord);
-      const correct = pool[Math.floor(Math.random()*pool.length)];
-      lastWord = correct;
-      promptEl.textContent = correct.gloss_en;
-
-      const distractors = words.filter(w => w.id !== correct.id).sort(()=>0.5-Math.random()).slice(0,3);
-      const options = [correct, ...distractors];
-
-      // Fixed theme order: dark, light, sepia, high
-      options.forEach((w,i)=>{
-        const b=document.createElement('button');
-        b.className=`option ${THEMES[i % THEMES.length]}`;
-        b.textContent=w.kana;
-        b.addEventListener('click',()=>{
-          if(w===correct){
+  
+    function nextQuestion() {
+      grid.innerHTML = '';
+      feedback.textContent = '';
+  
+      if (queue.length === 0) {
+        // If queue is empty, refill with a shuffled set
+        queue = [...words].sort(() => Math.random() - 0.5);
+      }
+  
+      current = queue.shift();
+      firstTry = true;
+  
+      promptEl.textContent = current.gloss_en;
+  
+      // Pick 3 random distractors
+      const distractors = words.filter(w => w.id !== current.id).sort(() => 0.5 - Math.random()).slice(0, 3);
+      const options = [current, ...distractors].sort(() => 0.5 - Math.random());
+  
+      options.forEach((w, i) => {
+        const b = document.createElement('button');
+        b.className = `option ${THEMES[i % THEMES.length]}`;
+        b.textContent = w.kana;
+        b.addEventListener('click', () => {
+          if (w === current) {
+            if (firstTry) {
+              progressPts++;
+              updateMeter();
+            }
             b.classList.add('is-correct');
-            progressPts++;
-            updateMeter();
-            if(progressPts>=GOAL){
-              $('[data-action="next-part"]',part2).classList.remove('is-hidden');
-              feedback.textContent='Well done!';
-            } else { setTimeout(nextQuestion,300); }
+            if (progressPts >= GOAL) {
+              $('[data-action="next-part"]', part2).classList.remove('is-hidden');
+              feedback.textContent = 'Well done!';
+            } else {
+              setTimeout(nextQuestion, 400);
+            }
           } else {
             b.classList.add('is-wrong');
-            feedback.textContent='Try again!';
+            feedback.textContent = 'Try again!';
+            firstTry = false;
+            // If they missed, push it back into the queue to appear again
+            if (!queue.includes(current)) {
+              queue.push(current);
+            }
           }
         });
         grid.appendChild(b);
       });
-
-      feedback.textContent='Pick the right one…';
     }
-
-    $('[data-action="next-part"]',part2)?.addEventListener('click',()=>showPart(3));
-    updateMeter(); nextQuestion();
+  
+    $('[data-action="next-part"]', part2)?.addEventListener('click', () => showPart(3));
+  
+    updateMeter();
+    nextQuestion();
   }
+
 
   // ======================================================
   // Part 3 — Typing (English → Kana input, themed like Kana Part 3)
