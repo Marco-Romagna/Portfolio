@@ -1,8 +1,8 @@
 {
   "meta": {
-    "version": 2,
+    "version": 3,
     "locale": "ja-JP",
-    "notes": "N5-friendly core lexicon split into base/daku/handaku sets. 8 words per stage."
+    "notes": "N5-friendly core lexicon split into base/daku/handaku sets. 6 words per stage, extras preserved separately."
   },
   "words": [
     {
@@ -66,18 +66,6 @@
       "example": { "kana": "あおいそら", "romaji": "aoi sora", "english": "blue sky" }
     },
     {
-      "id": "aoi",
-      "kana": "あおい",
-      "romaji": "aoi",
-      "gloss_en": "blue (adjective)",
-      "jlpt": "N5",
-      "tags": ["core", "vowels", "color"],
-      "worlds": ["1-base"],
-      "audio": "",
-      "note": "Adjective form of あお. Can also describe someone’s face as pale.",
-      "example": { "kana": "あおいシャツ", "romaji": "aoi shatsu", "english": "blue shirt" }
-    },
-    {
       "id": "au",
       "kana": "あう",
       "romaji": "au",
@@ -88,18 +76,6 @@
       "audio": "",
       "note": "Used for meeting people. Usually with に particle.",
       "example": { "kana": "ともだちにあう", "romaji": "tomodachi ni au", "english": "to meet a friend" }
-    },
-    {
-      "id": "iu",
-      "kana": "いう",
-      "romaji": "iu",
-      "gloss_en": "to say",
-      "jlpt": "N5",
-      "tags": ["core", "vowels", "verb"],
-      "worlds": ["1-base"],
-      "audio": "",
-      "note": "General verb for 'say/tell'. Often paired with と particle.",
-      "example": { "kana": "かれは「こんにちは」といった", "romaji": "kare wa 'konnichiwa' to itta", "english": "He said 'hello'." }
     },
 
     {
@@ -174,30 +150,6 @@
       "note": "Refers to human/animal voices. Different from おと (sound).",
       "example": { "kana": "きれいなこえ", "romaji": "kirei na koe", "english": "a beautiful voice" }
     },
-    {
-      "id": "aka",
-      "kana": "あか",
-      "romaji": "aka",
-      "gloss_en": "red",
-      "jlpt": "N5",
-      "tags": ["core", "k-row", "color"],
-      "worlds": ["2-base"],
-      "audio": "",
-      "note": "Noun form of 'red'. Adjective form is あかい (akai).",
-      "example": { "kana": "あかがすきです", "romaji": "aka ga suki desu", "english": "I like red" }
-    },
-    {
-      "id": "oku",
-      "kana": "おく",
-      "romaji": "oku",
-      "gloss_en": "inner part; back",
-      "jlpt": "N5",
-      "tags": ["core", "k-row", "place"],
-      "worlds": ["2-base"],
-      "audio": "",
-      "note": "Refers to deep or inner areas (e.g., inside shops/rooms).",
-      "example": { "kana": "へやのおく", "romaji": "heya no oku", "english": "the back of the room" }
-    },
 
     {
       "id": "eiga",
@@ -270,38 +222,17 @@
       "audio": "",
       "note": "Also used in greetings: おげんきですか？ (How are you?).",
       "example": { "kana": "げんきです！", "romaji": "genki desu!", "english": "I’m fine!" }
-    },
-    {
-      "id": "getsuyoubi",
-      "kana": "げつようび",
-      "romaji": "getsuyoubi",
-      "gloss_en": "Monday",
-      "jlpt": "N5",
-      "tags": ["core", "g-row", "time"],
-      "worlds": ["2-daku"],
-      "audio": "",
-      "note": "One of the days of the week. Literally 'moon-day'.",
-      "example": { "kana": "げつようびにあう", "romaji": "getsuyoubi ni au", "english": "to meet on Monday" }
-    },
-    {
-      "id": "guramu",
-      "kana": "ぐらむ",
-      "romaji": "guramu",
-      "gloss_en": "gram (unit of weight)",
-      "jlpt": "N5",
-      "tags": ["loanword", "g-row"],
-      "worlds": ["2-daku"],
-      "audio": "",
-      "note": "Loanword from English 'gram'. Used in cooking/shopping.",
-      "example": { "kana": "ひゃくぐらむのにく", "romaji": "hyaku guramu no niku", "english": "100 grams of meat" }
     }
   ],
   "byWorld": {
-    "1-base": ["ai", "iie", "ue", "ie", "ao", "aoi", "au", "iu"],
+    "1-base": ["ai", "iie", "ue", "ie", "ao", "au"],
+    "1-extra": ["aoi", "iu"],
     "1-daku": [],
     "1-handaku": [],
-    "2-base": ["iku", "kiku", "kau", "kao", "ike", "koe", "aka", "oku"],
-    "2-daku": ["eiga", "gaikoku", "gakusei", "gakkou", "ginkou", "genki", "getsuyoubi", "guramu"],
+    "2-base": ["iku", "kiku", "kau", "kao", "ike", "koe"],
+    "2-extra": ["aka", "oku"],
+    "2-daku": ["eiga", "gaikoku", "gakusei", "gakkou", "ginkou", "genki"],
+    "2-extra-daku": ["getsuyoubi", "guramu"],
     "2-handaku": []
   }
 }
