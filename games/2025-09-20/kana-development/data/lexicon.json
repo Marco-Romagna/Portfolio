@@ -226,13 +226,11 @@
   ],
   "byWorld": {
     "1-base": ["ai", "iie", "ue", "ie", "ao", "au"],
-    "1-extra": ["aoi", "iu"],
     "1-daku": [],
     "1-handaku": [],
     "2-base": ["iku", "kiku", "kau", "kao", "ike", "koe"],
-    "2-extra": ["aka", "oku"],
     "2-daku": ["eiga", "gaikoku", "gakusei", "gakkou", "ginkou", "genki"],
-    "2-extra-daku": ["getsuyoubi", "guramu"],
     "2-handaku": []
   }
+
 }
