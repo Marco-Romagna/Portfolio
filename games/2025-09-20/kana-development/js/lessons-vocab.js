@@ -144,7 +144,7 @@
           if (para.startsWith(w.kana, i)) {
             const span = document.createElement('span');
             span.textContent = w.kana;
-            span.className = 'hunt-word';
+            span.className = 'hunt-token hunt-word'; // marked as vocab
             huntText.appendChild(span);
             i += w.kana.length;
             matched = true;
@@ -152,13 +152,16 @@
           }
         }
         if (!matched) {
-          huntText.appendChild(document.createTextNode(para[i]));
+          const span = document.createElement('span');
+          span.textContent = para[i];
+          span.className = 'hunt-token'; // normal token, still clickable
+          huntText.appendChild(span);
           i++;
         }
       }
-      loadNextWord(); // after rendering, start with first target
+      loadNextWord();
     }
-
+    
     function loadNextWord() {
       if (currentWordIdx >= words.length) {
         currentPara++;
@@ -171,18 +174,18 @@
         }
         return;
       }
-
+    
       const targetWord = words[currentWordIdx];
       targetEl.innerHTML = `
-        <div class="kana-glyph">${targetWord.kana}</div>
-        <div class="kana-gloss">${targetWord.gloss_en}</div>
+        <div class="hunt-kana">${targetWord.kana}</div>
+        <div class="hunt-gloss">${targetWord.gloss_en}</div>
       `;
-
+    
       let totalInstances = 0;
       let foundCount = 0;
-
-      const spans = $$('.hunt-word', huntText);
-      spans.forEach(span => {
+    
+      const tokens = $$('.hunt-token', huntText);
+      tokens.forEach(span => {
         if (span.textContent === targetWord.kana) totalInstances++;
         span.addEventListener('click', () => {
           if (span.textContent === targetWord.kana && !span.classList.contains('is-correct')) {
@@ -196,13 +199,13 @@
                 loadNextWord();
               }, 800);
             }
-          } else if (span.textContent !== targetWord.kana) {
+          } else {
             span.classList.add('is-wrong');
             setTimeout(() => span.classList.remove('is-wrong'), 400);
           }
         });
       });
-
+    
       progress.textContent = `Found 0 / ${totalInstances}`;
     }
 
