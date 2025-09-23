@@ -97,7 +97,7 @@
   }
 
   // ======================================================
-  // Part 2 — Word Hunt (Find vocab inside paragraphs)
+  // Part 2 — Word Hunt (Guided word-by-word)
   // ======================================================
   async function initPart2Hunt(words) {
     const part2 = $('#part-2');
@@ -106,7 +106,8 @@
     part2.innerHTML = `
       <h2 class="part-title">Word Hunt</h2>
       <div class="hunt-panel">
-        <p class="hunt-instruction">Click all the new words you can find in this paragraph.</p>
+        <p class="hunt-instruction">Find the highlighted word in the paragraph below.</p>
+        <div class="hunt-target"></div>
         <div class="hunt-text"></div>
         <div class="hunt-progress"></div>
         <div class="actions"><button class="btn primary is-hidden" data-action="next-part">Next</button></div>
@@ -114,6 +115,7 @@
     `;
 
     const huntText = $('.hunt-text', part2);
+    const targetEl = $('.hunt-target', part2);
     const progress = $('.hunt-progress', part2);
     const nextBtn = $('[data-action="next-part"]', part2);
 
@@ -124,7 +126,6 @@
       if (!res.ok) throw new Error(`Failed to load hunts.json (${res.status})`);
       const hunts = await res.json();
       const roleKey = getRoleKey(WORLD, SUFFIX);
-      console.log("Loading hunts for:", roleKey);
       paragraphs = hunts[roleKey] || [];
     } catch (err) {
       console.error("Error loading hunts.json:", err);
@@ -136,15 +137,14 @@
     }
 
     let currentPara = 0;
-    let foundWords = new Set();
+    let currentWordIdx = 0;
+    let foundCount = 0;
+    let totalInstances = 0;
 
     function renderParagraph() {
       huntText.innerHTML = '';
-      foundWords.clear();
-      progress.textContent = 'Found: —';
-
       const para = paragraphs[currentPara];
-      // Split on spaces (each token clickable)
+
       para.split(/(\s+)/).forEach(tok => {
         if (!tok.trim()) {
           huntText.appendChild(document.createTextNode(' '));
@@ -153,32 +153,74 @@
         const span = document.createElement('span');
         span.textContent = tok;
         span.className = 'hunt-word';
+        huntText.appendChild(span);
+        huntText.appendChild(document.createTextNode(' '));
+      });
+
+      currentWordIdx = 0;
+      loadNextWord();
+    }
+
+    function loadNextWord() {
+      if (currentWordIdx >= words.length) {
+        // finished all words in this paragraph
+        currentPara++;
+        if (currentPara < paragraphs.length) {
+          progress.textContent = "Paragraph complete! Moving on…";
+          setTimeout(() => {
+            renderParagraph();
+          }, 1000);
+        } else {
+          progress.textContent = "Hunt complete!";
+          nextBtn.classList.remove('is-hidden');
+        }
+        return;
+      }
+
+      // Setup target word
+      const targetWord = words[currentWordIdx];
+      targetEl.innerHTML = `
+        <div class="kana-glyph">${targetWord.kana}</div>
+        <div class="kana-gloss">${targetWord.gloss_en}</div>
+      `;
+
+      foundCount = 0;
+      totalInstances = 0;
+
+      $$('.hunt-word', huntText).forEach(span => {
+        if (span.textContent === targetWord.kana) {
+          totalInstances++;
+        }
+      });
+
+      progress.textContent = `Found 0 / ${totalInstances}`;
+      attachHandlers(targetWord);
+    }
+
+    function attachHandlers(targetWord) {
+      $$('.hunt-word', huntText).forEach(span => {
         span.addEventListener('click', () => {
-          if (words.some(w => w.kana === tok)) {
+          if (span.textContent === targetWord.kana && !span.classList.contains('is-correct')) {
             span.classList.add('is-correct');
-            foundWords.add(tok);
-            progress.textContent = `Found: ${[...foundWords].join(', ')}`;
-            if ([...words.map(w => w.kana)].every(k => foundWords.has(k))) {
-              nextBtn.classList.remove('is-hidden');
+            foundCount++;
+            progress.textContent = `Found ${foundCount} / ${totalInstances}`;
+            if (foundCount >= totalInstances) {
+              progress.textContent = `✅ All ${totalInstances} found for ${targetWord.kana}`;
+              setTimeout(() => {
+                currentWordIdx++;
+                loadNextWord();
+              }, 800);
             }
-          } else {
+          } else if (span.textContent !== targetWord.kana) {
             span.classList.add('is-wrong');
             setTimeout(() => span.classList.remove('is-wrong'), 500);
           }
         });
-        huntText.appendChild(span);
-        huntText.appendChild(document.createTextNode(' '));
       });
     }
 
     nextBtn.addEventListener('click', () => {
-      currentPara++;
-      if (currentPara < paragraphs.length) {
-        nextBtn.classList.add('is-hidden');
-        renderParagraph();
-      } else {
-        showPart(3); // move to Identify
-      }
+      showPart(3); // advance to Identify
     });
 
     renderParagraph();
