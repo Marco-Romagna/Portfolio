@@ -177,9 +177,10 @@
     
       const targetWord = words[currentWordIdx];
       targetEl.innerHTML = `
-        <div class="hunt-kana">${targetWord.kana}</div>
+        <div class="hunt-target-word">${targetWord.kana}</div>
         <div class="hunt-gloss">${targetWord.gloss_en}</div>
       `;
+
     
       let totalInstances = 0;
       let foundCount = 0;
