@@ -441,4 +441,49 @@ body.site {
   border-left: 4px solid var(--kp-accent);
 }
 
+/* =========================================================
+   Part 2 — Word Hunt styles
+   ========================================================= */
+.hunt-panel {
+  padding: 16px;
+}
+
+.hunt-instruction {
+  margin-bottom: 12px;
+  color: var(--kp-muted);
+  font-size: 1.05rem;
+  text-align: center;
+}
+
+.hunt-text {
+  margin: 16px 0;
+  line-height: 2;
+  font-size: 1.2rem;
+  text-align: left;
+}
+
+.hunt-word {
+  cursor: pointer;
+  padding: 2px 4px;
+  margin: 0 1px;
+  border-radius: 6px;
+  transition: background .2s ease, color .2s ease;
+}
+
+.hunt-word.is-correct {
+  background: var(--kp-correct);
+  color: #fff;
+}
+
+.hunt-word.is-wrong {
+  background: var(--kp-wrong);
+  color: #fff;
+}
+
+.hunt-progress {
+  margin-top: 12px;
+  font-size: .9rem;
+  color: var(--kp-muted);
+  text-align: center;
+}
 
