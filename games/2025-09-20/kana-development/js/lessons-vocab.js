@@ -127,7 +127,8 @@
     const meterFill  = $('.quiz-progress .meter-fill', part2);
     const meterLabel = $('.quiz-progress .meter-label', part2);
 
-    const GOAL = 10;
+    const GOAL = words.length * 2; 
+    // two cycles through the set (6 words → 12 questions)
     let progressPts = 0;
     let lastWord = null;
 
