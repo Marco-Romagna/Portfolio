@@ -361,3 +361,74 @@ body.site {
 .lesson #part-3 .meter-label { font-size: .95rem; }
 
 .lesson[data-lesson-id$="-4"] .lesson-progress .progressbar { display: none; }
+
+
+/* =========================================================
+   Vocab Explorer (Part 1)
+   ========================================================= */
+.vocab-explorer {
+  display: grid;
+  grid-template-columns: 160px 1fr;
+  gap: var(--kp-gap);
+}
+
+.vocab-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  background: var(--kp-surface);
+  border: 1px solid var(--kp-border);
+  border-radius: var(--kp-radius);
+  overflow: hidden;
+}
+.vocab-list li {
+  padding: 10px 12px;
+  cursor: pointer;
+  border-bottom: 1px solid var(--kp-border);
+  transition: background .2s, color .2s;
+}
+.vocab-list li:last-child { border-bottom: none; }
+.vocab-list li:hover { background: var(--kp-surface-2); }
+.vocab-list li.is-active {
+  background: var(--kp-accent);
+  color: #fff;
+}
+
+.vocab-detail {
+  background: var(--kp-surface);
+  border: 1px solid var(--kp-border);
+  border-radius: var(--kp-radius);
+  padding: 2rem;
+  text-align: center;
+  box-shadow: var(--kp-shadow);
+}
+
+.vocab-card-large .kana-glyph {
+  font-size: clamp(64px, 8vw, 120px);
+  margin-bottom: 1rem;
+}
+.vocab-card-large .kana-sub {
+  font-size: 1.5rem;
+  color: var(--kp-muted);
+  margin-bottom: 0.5rem;
+}
+.vocab-card-large .vocab-english {
+  font-size: 1.25rem;
+  margin-bottom: 1rem;
+}
+.vocab-note {
+  margin-top: 0.5rem;
+  font-size: 0.95rem;
+  color: var(--kp-warn);
+}
+.vocab-example {
+  margin-top: 1rem;
+  font-size: 1rem;
+  text-align: left;
+  border-top: 1px dashed var(--kp-border);
+  padding-top: 0.5rem;
+}
+.vocab-example p { margin: 0.25rem 0; }
+.vocab-example .muted { color: var(--kp-muted); }
+
+
