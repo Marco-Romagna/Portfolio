@@ -586,4 +586,21 @@ body.site {
   background: var(--kp-wrong);
   color: #fff;
 }
+.hunt-word {
+  display: inline;       /* keep natural flow */
+  cursor: pointer;
+  padding: 0 2px;
+  border-radius: 4px;
+  transition: background .2s ease, color .2s ease;
+}
+
+.hunt-word.is-correct {
+  background: var(--kp-correct);
+  color: #fff;
+}
+
+.hunt-word.is-wrong {
+  background: var(--kp-wrong);
+  color: #fff;
+}
 
