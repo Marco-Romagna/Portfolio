@@ -1,0 +1,14 @@
+{
+  "meta": {
+    "version": 1,
+    "notes": "Word Hunt paragraphs for each world. Each world has 2+ coherent paragraphs containing all target vocab naturally."
+  },
+
+  "1-base": [
+    "きのう ともだち の いえ に いきました。 いえ の まえ に あお の くるま が とまっています。 へや の うえ に え が あります。 ともだち に あって、たくさん はなしました。 「コーヒー を のみますか。」と きかれて、わたし は 「いいえ」 と いいました。 あとで テレビ で 「あいはたいせつです」 と いっていました。",
+    
+    "こんばん、いえ で かぞく と あいました。 いえ の うえ の まど から あおい そら が みえます。 はは は 「アイス を たべますか。」と ききました。 そのとき テレビ で 「あいはたいせつです」 と いっていました。 わたし は 「いいえ」と こたえて、また はなし を ききました。"
+  ]
+
+  /* Later worlds like "2-base", "2-daku", etc. will be added here */
+}
