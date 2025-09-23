@@ -1,13 +1,12 @@
 {
   "meta": {
-    "version": 2,
-    "notes": "Word Hunt paragraphs for World 1. Each target word appears exactly twice across the 4 hunts. Each paragraph has 3 simple sentences."
+    "version": 1,
+    "notes": "Word Hunt paragraphs for each world. Each world has 2+ coherent paragraphs containing all target vocab naturally."
   },
 
   "1-base": [
-    "ともだち と あって、たのしく はなしました。 そのとき 「あい は たいせつです」 と おもいました。 でんしゃ の まえ で わかれました。",
-    "あおい そら を みあげました。 うえ に くも が ゆっくり うごいていました。 そのけしき は とても しずかでした。",
-    "いえ の まど から とおり を みました。 いえ の ちかく に ちいさな みせ が あります。 でも いま は ひと が いません。",
-    "ともだち に あいました。 でも いそがしくて 「いいえ」と こたえました。 そのあと に べつ の ひ と に あいました。"
+    "きのう ともだち の いえ に あいました。 いえ の まえ に あおい くるま が とまっています。 へや の うえ に え が あります。 ともだち に 「コーヒー を のみますか」と きかれて、わたし は 「いいえ」と いいました。 すると、ともだち が 「ともだち は たいせつ です」と いいました。 わたし は 「あい も たいせつ です」と こたえました。",
+    
+    "こんばん、いえ で かぞく と あいました。 いえ の うえ の まど から あおい そら が みえます。 はは は 「アイス を たべますか」と ききました。 わたし は 「いいえ」と こたえて、また はなし を ききました。"
   ]
 }
