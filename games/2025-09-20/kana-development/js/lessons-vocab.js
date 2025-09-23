@@ -16,31 +16,93 @@
   // ======================================================
   // Part 1 — Preview Words
   // ======================================================
-  async function initPart1(words) {
+    async function initPart1(words) {
     const part1 = $('#part-1');
     if (!part1) return;
-    part1.innerHTML = '<h2 class="part-title">Preview — Vocabulary</h2>';
-
-    const grid = document.createElement('div');
-    grid.className = 'kana-grid';
-    words.forEach(w => {
-      const card = document.createElement('article');
-      card.className = 'card-big kana-card vocab-card';
-      card.innerHTML = `
-        <span class="kana-glyph">${w.kana}</span>
-        <span class="kana-sub">${w.romaji} — ${w.gloss_en}</span>
-      `;
-      grid.appendChild(card);
+  
+    part1.innerHTML = '<h2 class="part-title">Vocabulary — Word Explorer</h2>';
+  
+    let index = 0;
+  
+    const layout = document.createElement('div');
+    layout.className = 'vocab-explorer';
+  
+    // Sidebar (Kana list)
+    const sidebar = document.createElement('ul');
+    sidebar.className = 'vocab-list';
+    words.forEach((w, i) => {
+      const li = document.createElement('li');
+      li.textContent = w.kana;
+      li.dataset.index = i;
+      li.addEventListener('click', () => {
+        index = i;
+        renderDetail();
+      });
+      sidebar.appendChild(li);
     });
-    part1.appendChild(grid);
-
+  
+    // Main detail panel
+    const detail = document.createElement('div');
+    detail.className = 'vocab-detail';
+  
+    // Actions
     const actions = document.createElement('div');
     actions.className = 'actions';
-    actions.innerHTML = `<button class="btn primary" data-action="advance">Start</button>`;
+    actions.innerHTML = `
+      <button class="btn ghost" data-action="prev">&larr; Prev</button>
+      <button class="btn ghost" data-action="next">Next &rarr;</button>
+      <button class="btn primary" data-action="advance">Start Lesson</button>
+    `;
+  
+    layout.appendChild(sidebar);
+    layout.appendChild(detail);
+    part1.appendChild(layout);
     part1.appendChild(actions);
-    actions.querySelector('[data-action="advance"]').addEventListener('click', () => showPart(2));
+  
+    // Render current word in detail panel
+    function renderDetail() {
+      const w = words[index];
+  
+      // Highlight active sidebar word
+      $$('.vocab-list li', sidebar).forEach((li, i) => {
+        li.classList.toggle('is-active', i === index);
+      });
+  
+      detail.innerHTML = `
+        <div class="vocab-card-large">
+          <div class="kana-glyph">${w.kana}</div>
+          <div class="kana-sub">${w.romaji}</div>
+          <div class="vocab-english">${w.gloss_en}</div>
+          ${w.audio ? `<button class="btn small" data-action="play">🔊 Play Audio</button>` : ""}
+          ${w.note ? `<div class="vocab-note">Note: ${w.note}</div>` : ""}
+          ${w.example ? `
+            <div class="vocab-example">
+              <p>${w.example.kana}</p>
+              <p>${w.example.romaji}</p>
+              <p class="muted">${w.example.english}</p>
+            </div>
+          ` : ""}
+        </div>
+      `;
+  
+      $('[data-action="play"]', detail)?.addEventListener('click', () => {
+        if (w.audio) new Audio(w.audio).play();
+      });
+    }
+  
+    // Navigation
+    $('[data-action="prev"]', actions).addEventListener('click', () => {
+      index = (index - 1 + words.length) % words.length;
+      renderDetail();
+    });
+    $('[data-action="next"]', actions).addEventListener('click', () => {
+      index = (index + 1) % words.length;
+      renderDetail();
+    });
+    $('[data-action="advance"]', actions).addEventListener('click', () => showPart(2));
+  
+    renderDetail();
   }
-
   // ======================================================
   // Part 2 — Identify (English → Kana multiple-choice)
   // ======================================================
