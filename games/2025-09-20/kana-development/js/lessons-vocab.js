@@ -95,7 +95,10 @@
   // ======================================================
   // Part 2 — Word Hunt (word-by-word guided)
   // ======================================================
-  async function initPart2Hunt(words) {
+ // ======================================================
+// Part 2 — Word Hunt (multi-hunt progression)
+// ======================================================
+async function initPart2Hunt(words) {
     const part2 = $('#part-2');
     if (!part2) return;
   
@@ -105,12 +108,14 @@
         <p class="hunt-instruction">Find the highlighted word in the paragraph below.</p>
         <div class="hunt-target"></div>
         <div class="hunt-text"></div>
+        <div class="hunt-progress"></div>
         <div class="actions"><button class="btn primary is-hidden" data-action="next-part">Next</button></div>
       </div>
     `;
   
     const huntText = $('.hunt-text', part2);
     const targetEl = $('.hunt-target', part2);
+    const progress = $('.hunt-progress', part2);
     const nextBtn = $('[data-action="next-part"]', part2);
   
     // Load hunt paragraphs
@@ -131,46 +136,40 @@
   
     let currentPara = 0;
     let currentWordIdx = 0;
+    let huntWords = [];
   
+    // Render paragraph as clickable tokens
     function renderParagraph() {
       huntText.innerHTML = '';
       const para = paragraphs[currentPara];
   
-      // Break into tokens (words separated by spaces or punctuation)
-      const tokens = para.split(/(\s+)/);
-  
-      tokens.forEach(tok => {
+      para.split(/(\s+)/).forEach(tok => {
         if (!tok.trim()) {
-          huntText.appendChild(document.createTextNode(tok));
+          huntText.appendChild(document.createTextNode(' '));
           return;
         }
-  
         const span = document.createElement('span');
         span.textContent = tok;
-        span.className = 'hunt-token';
+        span.className = 'hunt-word';
         huntText.appendChild(span);
+        huntText.appendChild(document.createTextNode(' '));
       });
   
+      // For this hunt, pick which vocab words must be found (from the paragraph itself)
+      huntWords = words.filter(w => para.includes(w.kana));
+      currentWordIdx = 0;
       loadNextWord();
     }
   
+    // Set up the next target word
     function loadNextWord() {
-      if (currentWordIdx >= words.length) {
-        currentPara++;
-        if (currentPara < paragraphs.length) {
-          nextBtn.classList.remove('is-hidden');
-          nextBtn.onclick = () => {
-            nextBtn.classList.add('is-hidden');
-            renderParagraph();
-          };
-        } else {
-          // fully done → advance
-          showPart(3);
-        }
+      if (currentWordIdx >= huntWords.length) {
+        progress.textContent = "✅ Hunt complete!";
+        nextBtn.classList.remove('is-hidden');
         return;
       }
   
-      const targetWord = words[currentWordIdx];
+      const targetWord = huntWords[currentWordIdx];
       targetEl.innerHTML = `
         <div class="hunt-target-word">${targetWord.kana}</div>
         <div class="hunt-gloss">${targetWord.gloss_en}</div>
@@ -179,21 +178,19 @@
       let foundCount = 0;
       let totalInstances = 0;
   
-      const tokens = $$('.hunt-token', huntText);
+      const tokens = $$('.hunt-word', huntText);
       tokens.forEach(span => {
-        if (span.textContent === targetWord.kana) {
-          totalInstances++;
-        }
-  
+        if (span.textContent === targetWord.kana) totalInstances++;
         span.addEventListener('click', () => {
           if (span.textContent === targetWord.kana && !span.classList.contains('is-correct')) {
             span.classList.add('is-correct');
             foundCount++;
             if (foundCount >= totalInstances) {
+              progress.textContent = `✅ ${targetWord.kana} found!`;
               setTimeout(() => {
                 currentWordIdx++;
                 loadNextWord();
-              }, 600);
+              }, 800);
             }
           } else if (span.textContent !== targetWord.kana) {
             span.classList.add('is-wrong');
@@ -203,11 +200,21 @@
       });
     }
   
-    nextBtn.addEventListener('click', () => showPart(3));
+    // Button advances to next hunt or Part 3
+    nextBtn.addEventListener('click', () => {
+      currentPara++;
+      currentWordIdx = 0;
+      if (currentPara < paragraphs.length) {
+        nextBtn.classList.add('is-hidden');
+        renderParagraph();
+      } else {
+        showPart(3); // after all hunts, move to Identify
+      }
+    });
+  
     renderParagraph();
   }
 
-  
   // ======================================================
   // Part 3 — Identify
   // ======================================================
