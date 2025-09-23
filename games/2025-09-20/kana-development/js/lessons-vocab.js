@@ -141,18 +141,46 @@
     function renderParagraph() {
       huntText.innerHTML = '';
       const para = paragraphs[currentPara];
-
-      // Split into characters
-      [...para].forEach(ch => {
-        const span = document.createElement('span');
-        span.textContent = ch;
-        span.className = 'hunt-char';
-        huntText.appendChild(span);
+    
+      // Split by "word boundaries" = spaces or punctuation
+      // If no spaces, we still wrap known words manually
+      const tokens = para.split(/(\s+)/);
+    
+      tokens.forEach(tok => {
+        if (!tok.trim()) {
+          huntText.appendChild(document.createTextNode(tok));
+          return;
+        }
+    
+        // check if token contains a target vocab word
+        let matched = false;
+        words.forEach(w => {
+          if (tok.includes(w.kana)) {
+            // wrap the vocab word itself in a span
+            const idx = tok.indexOf(w.kana);
+            const before = tok.slice(0, idx);
+            const word = tok.slice(idx, idx + w.kana.length);
+            const after = tok.slice(idx + w.kana.length);
+    
+            if (before) huntText.appendChild(document.createTextNode(before));
+    
+            const span = document.createElement('span');
+            span.textContent = word;
+            span.className = 'hunt-word'; // whole vocab word clickable
+            huntText.appendChild(span);
+    
+            if (after) huntText.appendChild(document.createTextNode(after));
+    
+            matched = true;
+          }
+        });
+    
+        if (!matched) {
+          huntText.appendChild(document.createTextNode(tok));
+        }
       });
-
-      currentWordIdx = 0;
-      loadNextWord();
     }
+
 
     function loadNextWord() {
       if (currentWordIdx >= words.length) {
