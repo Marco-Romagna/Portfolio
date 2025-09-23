@@ -536,3 +536,15 @@ body.site {
 .hunt-token:hover {
   background: rgba(255,255,255,0.08); /* subtle highlight */
 }
+
+/* Big highlighted hunt target word */
+.hunt-target-word {
+  font-size: clamp(96px, 15vw, 180px);
+  font-weight: 800;
+  color: var(--kp-accent-2);
+  margin-bottom: 12px;
+  background: color-mix(in srgb, var(--kp-accent-2) 20%, transparent);
+  border-radius: var(--kp-radius);
+  padding: 8px 16px;
+  display: inline-block;
+}
