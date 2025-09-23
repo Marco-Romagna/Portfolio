@@ -457,28 +457,28 @@ body.site {
   text-align: center;
 }
 
-/* Target word display */
+/* Hunt target box */
 .hunt-target {
   text-align: center;
   margin: 20px auto;
-  padding: 24px;
+  padding: 32px 24px;
   background: var(--kp-surface);
   border: 2px solid var(--kp-accent);
   border-radius: var(--kp-radius);
   box-shadow: var(--kp-shadow);
-  max-width: 320px;
+  max-width: 380px;
 }
 
+/* Big glyph inside hunt target */
 .hunt-target .kana-glyph {
-  display: flex;
-  justify-content: center;
-  gap: 0.25em;      /* space between characters */
-  font-size: clamp(72px, 12vw, 140px);
+  font-size: clamp(80px, 14vw, 180px); /* much larger */
   font-weight: 700;
   color: var(--kp-accent-2);
-  margin-bottom: 8px;
+  line-height: 1;
+  margin-bottom: 12px;
 }
 
+/* Gloss below */
 .hunt-target .kana-gloss {
   font-size: 1.2rem;
   color: var(--kp-text);
