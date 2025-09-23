@@ -379,8 +379,11 @@ body.site {
   background: var(--kp-surface);
   border: 1px solid var(--kp-border);
   border-radius: var(--kp-radius);
-  overflow-y: auto;       /* allow scrolling if many items */
-  max-height: 70vh;       /* don’t exceed viewport */
+
+  display: inline-block;   /* shrink to fit items */
+  min-width: 140px;        /* prevent it from collapsing too small */
+  max-height: 70vh;        /* if too many items, allow scrolling */
+  overflow-y: auto;
 }
 
 .vocab-list li {
@@ -389,11 +392,8 @@ body.site {
   border-bottom: 1px solid var(--kp-border);
   transition: background .2s, color .2s;
 }
-.vocab-list li:last-child { border-bottom: none; }
-.vocab-list li:hover { background: var(--kp-surface-2); }
-.vocab-list li.is-active {
-  background: var(--kp-accent);
-  color: #fff;
+.vocab-list li:last-child {
+  border-bottom: none;
 }
 
 .vocab-detail {
