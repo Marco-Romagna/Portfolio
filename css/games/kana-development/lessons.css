@@ -526,3 +526,7 @@ body.site {
   border-radius: 4px;
   transition: background .2s ease, color .2s ease;
 }
+
+.hunt-token:hover {
+  background: rgba(255,255,255,0.08); /* subtle highlight */
+}
