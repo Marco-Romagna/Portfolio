@@ -159,40 +159,47 @@
   
     function loadNextWord() {
       if (shuffledWords.length === 0) {
-        // Paragraph finished → show button
         progress.textContent = "Paragraph complete!";
         nextBtn.classList.remove('is-hidden');
         return;
       }
-  
+    
       const targetWord = shuffledWords.shift();
       targetEl.innerHTML = `
         <div class="hunt-target-word">${targetWord.kana}</div>
         <div class="hunt-gloss">${targetWord.gloss_en}</div>
       `;
-  
+    
       let totalInstances = 0;
       let foundCount = 0;
-  
+    
       const tokens = $$('.hunt-token', huntText);
+    
+      // count how many times target word exists in this paragraph
       tokens.forEach(span => {
         if (span.textContent === targetWord.kana) totalInstances++;
-        span.addEventListener('click', () => {
+      });
+    
+      tokens.forEach(span => {
+        span.onclick = () => {
           if (span.textContent === targetWord.kana && !span.classList.contains('is-correct')) {
+            // ✅ correct
             span.classList.add('is-correct');
             foundCount++;
             if (foundCount >= totalInstances) {
               setTimeout(loadNextWord, 600);
             }
-          } else if (span.textContent !== targetWord.kana) {
+          } else {
+            // ❌ wrong
             span.classList.add('is-wrong');
             setTimeout(() => span.classList.remove('is-wrong'), 400);
           }
-        });
+        };
       });
-  
+    
       progress.textContent = '';
     }
+
   
     nextBtn.addEventListener('click', () => {
       nextBtn.classList.add('is-hidden');
