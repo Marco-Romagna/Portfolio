@@ -139,22 +139,31 @@
     function renderParagraph() {
       huntText.innerHTML = '';
       const para = paragraphs[currentPara];
-
-      // Tokenize by spaces
-      const tokens = para.split(/(\s+)/);
-      tokens.forEach(tok => {
-        if (!tok.trim()) {
-          huntText.appendChild(document.createTextNode(tok));
-          return;
+    
+      // Walk through characters, wrap only vocab matches
+      let i = 0;
+      while (i < para.length) {
+        let matched = false;
+    
+        // Try to match any vocab word at this position
+        for (const w of words) {
+          if (para.startsWith(w.kana, i)) {
+            const span = document.createElement('span');
+            span.textContent = w.kana;
+            span.className = 'hunt-word';
+            huntText.appendChild(span);
+            i += w.kana.length;
+            matched = true;
+            break;
+          }
         }
-        const span = document.createElement('span');
-        span.textContent = tok;
-        span.className = 'hunt-word';
-        huntText.appendChild(span);
-      });
-
-      currentWordIdx = 0;
-      loadNextWord();
+    
+        if (!matched) {
+          // Normal character (space, punctuation, kana not in vocab)
+          huntText.appendChild(document.createTextNode(para[i]));
+          i++;
+        }
+      }
     }
 
     function loadNextWord() {
