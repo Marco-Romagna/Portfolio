@@ -433,4 +433,10 @@ body.site {
 .vocab-example p { margin: 0.25rem 0; }
 .vocab-example .muted { color: var(--kp-muted); }
 
+/* Active word in the vocab sidebar */
+.vocab-list li.is-active {
+  background: var(--kp-accent);
+  color: #fff;
+  font-weight: 600;
+}
 
