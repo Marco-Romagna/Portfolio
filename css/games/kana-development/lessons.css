@@ -501,21 +501,20 @@ body.site {
 /* Clickable vocab words */
 .hunt-word {
   display: inline;
-  cursor: pointer;
-  padding: 0 2px;
+  padding: 0 2px;   
   border-radius: 4px;
+  cursor: pointer;
   transition: background .2s ease, color .2s ease;
 }
-
 .hunt-word.is-correct {
   background: var(--kp-correct);
   color: #fff;
 }
-
 .hunt-word.is-wrong {
   background: var(--kp-wrong);
   color: #fff;
 }
+
 
 /* Progress text */
 .hunt-progress {
