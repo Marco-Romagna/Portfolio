@@ -118,10 +118,22 @@
     const nextBtn = $('[data-action="next-part"]', part2);
 
     // Load hunt paragraphs for this world
-    const res = await fetch('../hunts.json');
-    const hunts = await res.json();
-    const roleKey = getRoleKey(WORLD, SUFFIX);
-    const paragraphs = hunts[roleKey] || [];
+    let paragraphs = [];
+    try {
+      const res = await fetch('../data/hunts.json');
+      if (!res.ok) throw new Error(`Failed to load hunts.json (${res.status})`);
+      const hunts = await res.json();
+      const roleKey = getRoleKey(WORLD, SUFFIX);
+      console.log("Loading hunts for:", roleKey);
+      paragraphs = hunts[roleKey] || [];
+    } catch (err) {
+      console.error("Error loading hunts.json:", err);
+    }
+
+    if (!paragraphs.length) {
+      huntText.innerHTML = `<em>No hunt text found for this lesson.</em>`;
+      return;
+    }
 
     let currentPara = 0;
     let foundWords = new Set();
