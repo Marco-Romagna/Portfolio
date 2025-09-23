@@ -137,10 +137,10 @@
     function renderParagraph() {
       huntText.innerHTML = '';
       const para = paragraphs[currentPara];
-  
-      // Split into words by spaces & punctuation
-      const tokens = para.split(/(\s+|。|、|「|」|！|？)/);
-  
+    
+      // Split by words (using spaces + punctuation as separators)
+      const tokens = para.split(/(\s+|。|、|「|」)/);
+    
       tokens.forEach(tok => {
         if (!tok.trim()) {
           huntText.appendChild(document.createTextNode(tok));
@@ -151,16 +151,24 @@
         span.className = 'hunt-token';
         huntText.appendChild(span);
       });
-  
-      // Shuffle vocab words for this paragraph
-      shuffledWords = [...words].sort(() => Math.random() - 0.5);
+    
+      // filter vocab words that actually exist in this paragraph
+      availableWords = words.filter(w => para.includes(w.kana));
+      shuffledWords = [...availableWords].sort(() => Math.random() - 0.5);
+    
       loadNextWord();
     }
-  
+    
     function loadNextWord() {
       if (shuffledWords.length === 0) {
-        progress.textContent = "Paragraph complete!";
-        nextBtn.classList.remove('is-hidden');
+        currentPara++;
+        if (currentPara < paragraphs.length) {
+          progress.textContent = "Paragraph complete!";
+          setTimeout(renderParagraph, 800);
+        } else {
+          progress.textContent = "🎉 Hunt complete!";
+          nextBtn.classList.remove('is-hidden');
+        }
         return;
       }
     
@@ -173,34 +181,26 @@
       let totalInstances = 0;
       let foundCount = 0;
     
-      const tokens = $$('.hunt-token', huntText);
-    
-      // count how many times target word exists in this paragraph
-      tokens.forEach(span => {
+      const spans = $$('.hunt-token', huntText);
+      spans.forEach(span => {
         if (span.textContent === targetWord.kana) totalInstances++;
-      });
-    
-      tokens.forEach(span => {
         span.onclick = () => {
           if (span.textContent === targetWord.kana && !span.classList.contains('is-correct')) {
-            // ✅ correct
             span.classList.add('is-correct');
             foundCount++;
             if (foundCount >= totalInstances) {
-              setTimeout(loadNextWord, 600);
+              progress.textContent = `✅ ${targetWord.kana} found`;
+              setTimeout(loadNextWord, 700);
             }
-          } else {
-            // ❌ wrong
+          } else if (span.textContent !== targetWord.kana) {
             span.classList.add('is-wrong');
-            setTimeout(() => span.classList.remove('is-wrong'), 400);
+            setTimeout(() => span.classList.remove('is-wrong'), 300);
           }
         };
       });
-    
-      progress.textContent = '';
     }
 
-  
+    
     nextBtn.addEventListener('click', () => {
       nextBtn.classList.add('is-hidden');
       currentPara++;
