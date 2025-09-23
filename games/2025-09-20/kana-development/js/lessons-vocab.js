@@ -138,15 +138,21 @@
       huntText.innerHTML = '';
       const para = paragraphs[currentPara];
   
-      // wrap *every* character in a span
-      for (let i = 0; i < para.length; i++) {
+      // Split into words by spaces & punctuation
+      const tokens = para.split(/(\s+|。|、|「|」|！|？)/);
+  
+      tokens.forEach(tok => {
+        if (!tok.trim()) {
+          huntText.appendChild(document.createTextNode(tok));
+          return;
+        }
         const span = document.createElement('span');
-        span.textContent = para[i];
+        span.textContent = tok;
         span.className = 'hunt-token';
         huntText.appendChild(span);
-      }
+      });
   
-      // shuffle vocab words order for this paragraph
+      // Shuffle vocab words for this paragraph
       shuffledWords = [...words].sort(() => Math.random() - 0.5);
       loadNextWord();
     }
