@@ -521,4 +521,29 @@ body.site {
   border-color: var(--kp-accent);
   transform: translateY(-2px);
 }
+/* =========================================================
+   Part 2 — Word Hunt target word styling
+   ========================================================= */
+.hunt-target {
+  text-align: center;
+  margin: 20px auto;
+  padding: 20px;
+  background: var(--kp-surface);
+  border: 2px solid var(--kp-accent);
+  border-radius: var(--kp-radius);
+  box-shadow: var(--kp-shadow);
+  max-width: 400px;
+}
+
+.hunt-target .kana-glyph {
+  font-size: clamp(72px, 12vw, 140px);
+  font-weight: 700;
+  color: var(--kp-accent-2); /* brighter accent for contrast */
+  margin-bottom: 8px;
+}
+
+.hunt-target .kana-gloss {
+  font-size: 1.2rem;
+  color: var(--kp-text);
+}
 
