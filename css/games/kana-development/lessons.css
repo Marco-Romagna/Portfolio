@@ -486,4 +486,39 @@ body.site {
   color: var(--kp-muted);
   text-align: center;
 }
+/* Lesson steps row */
+.steps {
+  display: flex;
+  justify-content: space-between; /* spread items evenly */
+  gap: var(--kp-gap);
+  list-style: none;
+  padding: 0;
+  margin: 0 0 12px;
+  flex-wrap: nowrap; /* prevent wrapping to a second line */
+}
+
+.step {
+  flex: 1;                     /* equal width for all */
+  text-align: center;
+  background: var(--kp-surface);
+  border: 1px solid var(--kp-border);
+  border-radius: var(--kp-radius);
+  padding: 10px 12px;
+  transition: transform .15s ease, border-color .15s ease;
+  box-shadow: var(--kp-shadow);
+}
+
+.step .step-label {
+  font-weight: 700;
+  display: block;
+}
+.step .step-sub {
+  color: var(--kp-muted);
+  font-size: .9rem;
+}
+
+.step.is-active {
+  border-color: var(--kp-accent);
+  transform: translateY(-2px);
+}
 
