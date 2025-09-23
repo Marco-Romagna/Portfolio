@@ -95,7 +95,7 @@
   }
 
   // ======================================================
-  // Part 2 — Word Hunt (character-based)
+  // Part 2 — Word Hunt (word-by-word guided)
   // ======================================================
   async function initPart2Hunt(words) {
     const part2 = $('#part-2');
@@ -105,7 +105,7 @@
       <h2 class="part-title">Word Hunt</h2>
       <div class="hunt-panel">
         <p class="hunt-instruction">Find the highlighted word in the paragraph below.</p>
-        <div class="hunt-target-box"></div>
+        <div class="hunt-target"></div>
         <div class="hunt-text"></div>
         <div class="hunt-progress"></div>
         <div class="actions"><button class="btn primary is-hidden" data-action="next-part">Next</button></div>
@@ -113,7 +113,7 @@
     `;
 
     const huntText = $('.hunt-text', part2);
-    const targetBox = $('.hunt-target-box', part2);
+    const targetEl = $('.hunt-target', part2);
     const progress = $('.hunt-progress', part2);
     const nextBtn = $('[data-action="next-part"]', part2);
 
@@ -135,59 +135,34 @@
 
     let currentPara = 0;
     let currentWordIdx = 0;
-    let foundCount = 0;
-    let totalInstances = 0;
 
     function renderParagraph() {
       huntText.innerHTML = '';
       const para = paragraphs[currentPara];
-    
-      // Split by "word boundaries" = spaces or punctuation
-      // If no spaces, we still wrap known words manually
+
+      // Tokenize by spaces
       const tokens = para.split(/(\s+)/);
-    
       tokens.forEach(tok => {
         if (!tok.trim()) {
           huntText.appendChild(document.createTextNode(tok));
           return;
         }
-    
-        // check if token contains a target vocab word
-        let matched = false;
-        words.forEach(w => {
-          if (tok.includes(w.kana)) {
-            // wrap the vocab word itself in a span
-            const idx = tok.indexOf(w.kana);
-            const before = tok.slice(0, idx);
-            const word = tok.slice(idx, idx + w.kana.length);
-            const after = tok.slice(idx + w.kana.length);
-    
-            if (before) huntText.appendChild(document.createTextNode(before));
-    
-            const span = document.createElement('span');
-            span.textContent = word;
-            span.className = 'hunt-word'; // whole vocab word clickable
-            huntText.appendChild(span);
-    
-            if (after) huntText.appendChild(document.createTextNode(after));
-    
-            matched = true;
-          }
-        });
-    
-        if (!matched) {
-          huntText.appendChild(document.createTextNode(tok));
-        }
+        const span = document.createElement('span');
+        span.textContent = tok;
+        span.className = 'hunt-word';
+        huntText.appendChild(span);
       });
-    }
 
+      currentWordIdx = 0;
+      loadNextWord();
+    }
 
     function loadNextWord() {
       if (currentWordIdx >= words.length) {
         currentPara++;
         if (currentPara < paragraphs.length) {
-          progress.textContent = "Paragraph complete!";
-          setTimeout(renderParagraph, 800);
+          progress.textContent = "Paragraph complete! Moving on…";
+          setTimeout(renderParagraph, 1000);
         } else {
           progress.textContent = "🎉 Hunt complete!";
           nextBtn.classList.remove('is-hidden');
@@ -196,53 +171,38 @@
       }
 
       const targetWord = words[currentWordIdx];
-      targetBox.innerHTML = `
-        <div class="hunt-kana">${targetWord.kana}</div>
-        <div class="hunt-gloss">${targetWord.gloss_en}</div>
+      targetEl.innerHTML = `
+        <div class="kana-glyph">${targetWord.kana}</div>
+        <div class="kana-gloss">${targetWord.gloss_en}</div>
       `;
 
-      foundCount = 0;
-      totalInstances = 0;
+      let totalInstances = 0;
+      let foundCount = 0;
 
-      // Count occurrences
-      const joined = [...huntText.querySelectorAll('.hunt-char')].map(x => x.textContent).join('');
-      totalInstances = joined.split(targetWord.kana).length - 1;
-
-      progress.textContent = `Found 0 / ${totalInstances}`;
-      attachHandlers(targetWord);
-    }
-
-    function attachHandlers(targetWord) {
-      const chars = $$('.hunt-char', huntText);
-      let buffer = '';
-
-      chars.forEach((span, idx) => {
+      $$('.hunt-word', huntText).forEach(span => {
+        if (span.textContent === targetWord.kana) {
+          totalInstances++;
+        }
         span.addEventListener('click', () => {
-          buffer += span.textContent;
-
-          if (targetWord.kana.startsWith(buffer)) {
-            span.classList.add('is-correct-part');
-            if (buffer === targetWord.kana) {
-              foundCount++;
-              progress.textContent = `Found ${foundCount} / ${totalInstances}`;
-              buffer = '';
-              if (foundCount >= totalInstances) {
-                progress.textContent = `✅ All found for ${targetWord.kana}`;
-                setTimeout(() => {
-                  currentWordIdx++;
-                  loadNextWord();
-                }, 800);
-              }
+          if (span.textContent === targetWord.kana && !span.classList.contains('is-correct')) {
+            span.classList.add('is-correct');
+            foundCount++;
+            progress.textContent = `Found ${foundCount} / ${totalInstances}`;
+            if (foundCount >= totalInstances) {
+              progress.textContent = `✅ All ${totalInstances} found for ${targetWord.kana}`;
+              setTimeout(() => {
+                currentWordIdx++;
+                loadNextWord();
+              }, 800);
             }
-          } else {
-            // Wrong click → reset buffer
-            buffer = '';
-            chars.forEach(c => c.classList.remove('is-correct-part'));
+          } else if (span.textContent !== targetWord.kana) {
             span.classList.add('is-wrong');
             setTimeout(() => span.classList.remove('is-wrong'), 400);
           }
         });
       });
+
+      progress.textContent = `Found 0 / ${totalInstances}`;
     }
 
     nextBtn.addEventListener('click', () => showPart(3));
