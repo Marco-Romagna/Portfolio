@@ -455,84 +455,16 @@ body.site {
   text-align: center;
 }
 
-.hunt-text {
-  margin: 16px 0;
-  line-height: 2;
-  font-size: 1.2rem;
-  text-align: left;
-}
-
-.hunt-word {
-  cursor: pointer;
-  padding: 2px 4px;
-  margin: 0 1px;
-  border-radius: 6px;
-  transition: background .2s ease, color .2s ease;
-}
-
-.hunt-word.is-correct {
-  background: var(--kp-correct);
-  color: #fff;
-}
-
-.hunt-word.is-wrong {
-  background: var(--kp-wrong);
-  color: #fff;
-}
-
-.hunt-progress {
-  margin-top: 12px;
-  font-size: .9rem;
-  color: var(--kp-muted);
-  text-align: center;
-}
-/* Lesson steps row */
-.steps {
-  display: flex;
-  justify-content: space-between; /* spread items evenly */
-  gap: var(--kp-gap);
-  list-style: none;
-  padding: 0;
-  margin: 0 0 12px;
-  flex-wrap: nowrap; /* prevent wrapping to a second line */
-}
-
-.step {
-  flex: 1;                     /* equal width for all */
-  text-align: center;
-  background: var(--kp-surface);
-  border: 1px solid var(--kp-border);
-  border-radius: var(--kp-radius);
-  padding: 10px 12px;
-  transition: transform .15s ease, border-color .15s ease;
-  box-shadow: var(--kp-shadow);
-}
-
-.step .step-label {
-  font-weight: 700;
-  display: block;
-}
-.step .step-sub {
-  color: var(--kp-muted);
-  font-size: .9rem;
-}
-
-.step.is-active {
-  border-color: var(--kp-accent);
-  transform: translateY(-2px);
-}
-/* =========================================================
-   Part 2 — Word Hunt target word styling
-   ========================================================= */
+/* Target word display */
 .hunt-target {
   text-align: center;
   margin: 20px auto;
-  padding: 20px;
+  padding: 24px;
   background: var(--kp-surface);
   border: 2px solid var(--kp-accent);
   border-radius: var(--kp-radius);
   box-shadow: var(--kp-shadow);
-  max-width: 400px;
+  max-width: 320px;
 }
 
 .hunt-target .kana-glyph {
@@ -546,48 +478,18 @@ body.site {
   font-size: 1.2rem;
   color: var(--kp-text);
 }
-/* Hunt target box */
-.hunt-target-box {
-  margin: 16px auto;
-  padding: 24px;
-  text-align: center;
-  border: 2px solid var(--kp-accent);
-  border-radius: var(--kp-radius);
-  background: var(--kp-surface);
-  max-width: 280px;
-  box-shadow: var(--kp-shadow);
+
+/* Paragraph text area */
+.hunt-text {
+  margin: 16px 0;
+  line-height: 2;
+  font-size: 1.2rem;
+  text-align: left;
 }
 
-.hunt-target-box .hunt-kana {
-  font-size: clamp(64px, 10vw, 120px);
-  font-weight: bold;
-  color: var(--kp-accent-2);
-  margin-bottom: 8px;
-}
-
-.hunt-target-box .hunt-gloss {
-  font-size: 1.1rem;
-  color: var(--kp-text);
-}
-
-.hunt-char {
-  cursor: pointer;
-  padding: 2px 3px;
-  border-radius: 4px;
-  transition: background .2s ease;
-}
-
-.hunt-char.is-correct-part {
-  background: var(--kp-correct);
-  color: #fff;
-}
-
-.hunt-char.is-wrong {
-  background: var(--kp-wrong);
-  color: #fff;
-}
+/* Clickable vocab words */
 .hunt-word {
-  display: inline;       /* keep natural flow */
+  display: inline;
   cursor: pointer;
   padding: 0 2px;
   border-radius: 4px;
@@ -604,3 +506,10 @@ body.site {
   color: #fff;
 }
 
+/* Progress text */
+.hunt-progress {
+  margin-top: 12px;
+  font-size: .9rem;
+  color: var(--kp-muted);
+  text-align: center;
+}
