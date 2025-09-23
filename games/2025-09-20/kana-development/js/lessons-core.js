@@ -20,7 +20,9 @@
   const SUFFIX = Number(suffixStr);
   const [WORLD] = qId.split('-').map(Number);
 
-  lesson.dataset.totalParts = (SUFFIX === 4 || SUFFIX === 8 || SUFFIX === 12) ? 4 : 4;
+  // Decide total parts (vocab lessons use 5)
+  const IS_VOCAB = (SUFFIX === 4 || SUFFIX === 8 || SUFFIX === 12);
+  lesson.dataset.totalParts = IS_VOCAB ? 5 : 4;
   const totalParts = Number(lesson.dataset.totalParts);
 
   const parts      = $$('.lesson-part');
@@ -80,7 +82,6 @@
     return map[SUFFIX] || 'hira-base';
   })();
 
-  const IS_VOCAB = ROLE.startsWith('vocab');
   let MIXED_TYPE = false;
   let IS_TYPING_ONLY = false;
 
@@ -116,7 +117,7 @@
     let labels;
 
     if (IS_VOCAB) {
-      labels = ['Preview','Identify','Typing','Audio'];
+      labels = ['Explorer','Hunt','Identify','Typing','Audio'];
     } else if (IS_TYPING_ONLY) {
       labels = ['Preview','Typing','Finish'];
     } else {
