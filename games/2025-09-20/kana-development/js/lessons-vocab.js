@@ -105,14 +105,12 @@
         <p class="hunt-instruction">Find the highlighted word in the paragraph below.</p>
         <div class="hunt-target"></div>
         <div class="hunt-text"></div>
-        <div class="hunt-progress"></div>
-        <div class="actions"><button class="btn primary is-hidden" data-action="next-part">Continue</button></div>
+        <div class="actions"><button class="btn primary is-hidden" data-action="next-part">Next</button></div>
       </div>
     `;
   
     const huntText = $('.hunt-text', part2);
     const targetEl = $('.hunt-target', part2);
-    const progress = $('.hunt-progress', part2);
     const nextBtn = $('[data-action="next-part"]', part2);
   
     // Load hunt paragraphs
@@ -132,85 +130,80 @@
     }
   
     let currentPara = 0;
-    let shuffledWords = [];
+    let currentWordIdx = 0;
   
     function renderParagraph() {
       huntText.innerHTML = '';
       const para = paragraphs[currentPara];
-    
-      // Split by words (using spaces + punctuation as separators)
-      const tokens = para.split(/(\s+|。|、|「|」)/);
-    
+  
+      // Break into tokens (words separated by spaces or punctuation)
+      const tokens = para.split(/(\s+)/);
+  
       tokens.forEach(tok => {
         if (!tok.trim()) {
           huntText.appendChild(document.createTextNode(tok));
           return;
         }
+  
         const span = document.createElement('span');
         span.textContent = tok;
         span.className = 'hunt-token';
         huntText.appendChild(span);
       });
-    
-      // filter vocab words that actually exist in this paragraph
-      availableWords = words.filter(w => para.includes(w.kana));
-      shuffledWords = [...availableWords].sort(() => Math.random() - 0.5);
-    
+  
       loadNextWord();
     }
-    
+  
     function loadNextWord() {
-      if (shuffledWords.length === 0) {
+      if (currentWordIdx >= words.length) {
         currentPara++;
         if (currentPara < paragraphs.length) {
-          progress.textContent = "Paragraph complete!";
-          setTimeout(renderParagraph, 800);
-        } else {
-          progress.textContent = "🎉 Hunt complete!";
           nextBtn.classList.remove('is-hidden');
+          nextBtn.onclick = () => {
+            nextBtn.classList.add('is-hidden');
+            renderParagraph();
+          };
+        } else {
+          // fully done → advance
+          showPart(3);
         }
         return;
       }
-    
-      const targetWord = shuffledWords.shift();
+  
+      const targetWord = words[currentWordIdx];
       targetEl.innerHTML = `
         <div class="hunt-target-word">${targetWord.kana}</div>
         <div class="hunt-gloss">${targetWord.gloss_en}</div>
       `;
-    
-      let totalInstances = 0;
+  
       let foundCount = 0;
-    
-      const spans = $$('.hunt-token', huntText);
-      spans.forEach(span => {
-        if (span.textContent === targetWord.kana) totalInstances++;
-        span.onclick = () => {
+      let totalInstances = 0;
+  
+      const tokens = $$('.hunt-token', huntText);
+      tokens.forEach(span => {
+        if (span.textContent === targetWord.kana) {
+          totalInstances++;
+        }
+  
+        span.addEventListener('click', () => {
           if (span.textContent === targetWord.kana && !span.classList.contains('is-correct')) {
             span.classList.add('is-correct');
             foundCount++;
             if (foundCount >= totalInstances) {
-              progress.textContent = `✅ ${targetWord.kana} found`;
-              setTimeout(loadNextWord, 700);
+              setTimeout(() => {
+                currentWordIdx++;
+                loadNextWord();
+              }, 600);
             }
           } else if (span.textContent !== targetWord.kana) {
             span.classList.add('is-wrong');
-            setTimeout(() => span.classList.remove('is-wrong'), 300);
+            setTimeout(() => span.classList.remove('is-wrong'), 400);
           }
-        };
+        });
       });
     }
-
-    
-    nextBtn.addEventListener('click', () => {
-      nextBtn.classList.add('is-hidden');
-      currentPara++;
-      if (currentPara < paragraphs.length) {
-        renderParagraph();
-      } else {
-        showPart(3); // after final paragraph, go to Part 3
-      }
-    });
   
+    nextBtn.addEventListener('click', () => showPart(3));
     renderParagraph();
   }
 
