@@ -159,11 +159,12 @@
         const span = document.createElement("span");
         span.className = "hunt-token";
         span.textContent = token;
-  
+      
         span.addEventListener("click", () => {
           if (!currentTarget) return;
-  
-          if (span.textContent.includes(currentTarget.kana)) {
+      
+          // ✅ strict equality instead of substring match
+          if (span.textContent === currentTarget.kana) {
             span.classList.add("is-correct");
             setNextTarget(); // move to next target
           } else {
@@ -171,7 +172,7 @@
             setTimeout(() => span.classList.remove("is-wrong"), 400);
           }
         });
-  
+      
         passageEl.appendChild(span);
         passageEl.append(" ");
       });
