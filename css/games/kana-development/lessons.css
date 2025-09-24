@@ -564,3 +564,21 @@ body.site {
   background: #dc3545 !important; /* red */
   color: #fff !important;
 }
+
+.debug-bar {
+  position: fixed;
+  bottom: 10px;
+  left: 10px;
+  z-index: 9999;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.debug-bar button {
+  background: #444;
+  color: white;
+  border: none;
+  padding: 0.25rem 0.5rem;
+  cursor: pointer;
+}
+
