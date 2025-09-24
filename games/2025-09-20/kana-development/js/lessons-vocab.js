@@ -286,7 +286,7 @@
   }
 
   // ======================================================
-  // Part 4 — Typing
+  // Part 4 — Typing (Romaji)
   // ======================================================
   async function initPart4(words) {
     const part4 = $('#part-4');
@@ -299,78 +299,100 @@
           <p class="prompt-text">Type the romaji for <strong class="prompt-target"></strong></p>
         </div>
         <div class="quiz-input-wrapper">
-          <input id="typing-input" class="quiz-input" placeholder="Type romaji…" autocomplete="off" />
+          <input id="type-input" class="quiz-input" placeholder="Type romaji…" autocomplete="off" />
         </div>
-        <!-- 🔹 identical to Part 3 progress markup -->
+        <div class="quiz-feedback"><p class="feedback-text"></p></div>
         <div class="quiz-progress">
           <div class="meter"><div class="meter-fill"></div></div>
           <div class="meter-label"></div>
         </div>
-        <div class="quiz-feedback"><p class="feedback-text"></p></div>
-        <div class="actions"><button class="btn primary is-hidden" data-action="next-part">Next</button></div>
+        <div class="actions">
+          <button class="btn primary is-hidden" data-action="next-part">Next</button>
+        </div>
       </div>
     `;
   
-    const input = $('#typing-input', part4);
+    const input = $('#type-input', part4);
+    const promptEl = $('.prompt-target', part4);
     const feedback = $('.quiz-feedback .feedback-text', part4);
-    const promptEl = $('.prompt-text .prompt-target', part4);
     const meterFill = $('.quiz-progress .meter-fill', part4);
     const meterLabel = $('.quiz-progress .meter-label', part4);
-    const nextBtn = $('[data-action="next-part"]', part4);
+    const actionBtn = $('[data-action="next-part"]', part4);
   
     const GOAL = words.length * 2;
     let progressPts = 0;
-    let queue = [...words];
+    let finished = false;
     let current = null;
-    let lastId = null;
+    let lastWord = null;
   
+    // ---------------------------
+    // Helpers
+    // ---------------------------
     function updateMeter() {
-      const pct = Math.round((progressPts / GOAL) * 100);
+      const safePts = Math.min(progressPts, GOAL);
+      const pct = Math.round((safePts / GOAL) * 100);
       meterFill.style.width = `${pct}%`;
-      meterLabel.textContent = `Progress: ${progressPts} / ${GOAL}`;
+      meterLabel.textContent = `Progress: ${safePts} / ${GOAL}`;
     }
   
-    function nextQuestion() {
+    function pickNewWord() {
+      let next;
+      do {
+        next = words[Math.floor(Math.random() * words.length)];
+      } while (next === lastWord && words.length > 1); // avoid repeat
+      lastWord = next;
+      return next;
+    }
+  
+    function newRound() {
+      input.disabled = true;
+      current = pickNewWord();
+      promptEl.textContent = current.gloss_en;
       feedback.textContent = '';
       input.value = '';
-      do {
-        current = queue[Math.floor(Math.random() * queue.length)];
-      } while (current.id === lastId && queue.length > 1);
-      lastId = current.id;
-      promptEl.textContent = current.gloss_en;
-      input.focus();
+      setTimeout(() => {
+        input.disabled = false;
+        input.focus();
+      }, 200); // prevent double-enter
     }
   
+    // ---------------------------
+    // Input Handler
+    // ---------------------------
     input.addEventListener('keydown', e => {
-      if (e.key === 'Enter') {
-        const val = input.value.trim().toLowerCase();
-        if (val === current.romaji.toLowerCase()) {
+      if (e.key === 'Enter' && !finished) {
+        const answer = input.value.trim().toLowerCase();
+        if (answer === current.romaji.toLowerCase()) {
           progressPts++;
           updateMeter();
-          feedback.textContent = '✅ Correct!';
-          feedback.classList.add('correct');
-          feedback.classList.remove('wrong');
+  
           if (progressPts >= GOAL) {
-            nextBtn.classList.remove('is-hidden');
+            finished = true;
+            input.disabled = true;
+            feedback.textContent = "✅ Correct! All done!";
+            actionBtn.classList.remove('is-hidden');
           } else {
-            setTimeout(nextQuestion, 500);
+            feedback.textContent = "✅ Correct!";
+            newRound();
           }
         } else {
-          progressPts = Math.max(0, progressPts - 1);
-          updateMeter();
-          feedback.textContent = `❌ Wrong. Correct answer: ${current.romaji}`;
-          feedback.classList.add('wrong');
-          feedback.classList.remove('correct');
-          setTimeout(nextQuestion, 800);
+          feedback.textContent = "❌ Wrong, try again!";
+          input.value = '';
         }
       }
     });
-  
-    nextBtn.addEventListener('click', () => showPart(5));
-  
-    updateMeter();
-    nextQuestion();
-  }
+
+  // ---------------------------
+  // Next Part
+  // ---------------------------
+  actionBtn.addEventListener('click', () => showPart(5));
+
+  // ---------------------------
+  // Start
+  // ---------------------------
+  updateMeter();
+  newRound();
+}
 
     
   // ======================================================
