@@ -294,12 +294,10 @@
   
     part4.innerHTML = `
       <h2 class="part-title">Typing</h2>
-      <div class="type-panel">
-        <div class="quiz-prompt">
-          <p>Type the romaji for <strong class="prompt-target"></strong></p>
-        </div>
+      <div class="quiz-panel">
+        <p class="quiz-prompt">Type the romaji for <strong class="prompt-target"></strong></p>
         <div class="quiz-input-wrapper">
-          <input id="type-input" class="quiz-input" placeholder="Type romaji…" autocomplete="off" />
+          <input id="quiz-input" class="quiz-input" placeholder="Type romaji…" autocomplete="off" />
         </div>
         <div class="quiz-feedback"><p class="feedback-text"></p></div>
         <div class="quiz-progress">
@@ -310,19 +308,18 @@
       </div>
     `;
   
+    const input = $('#quiz-input', part4);
+    const feedback = $('.quiz-feedback .feedback-text', part4);
     const promptEl = $('.prompt-target', part4);
-    const input = $('#type-input', part4);
-    const feedback = $('.feedback-text', part4);
     const meterFill = $('.meter-fill', part4);
     const meterLabel = $('.meter-label', part4);
     const actionBtn = $('[data-action="next-part"]', part4);
   
     const GOAL = words.length * 2;
     let progressPts = 0;
-  
-    let queue = [...words].sort(() => Math.random() - 0.5);
-    let usedWords = [];
     let current = null;
+    let lastWord = null;
+    let locked = false;
   
     function updateMeter() {
       const pct = Math.round((progressPts / GOAL) * 100);
@@ -330,49 +327,47 @@
       meterLabel.textContent = `Progress: ${progressPts} / ${GOAL}`;
     }
   
-    function refillQueue() {
-      // put all words back in, shuffle again
-      queue = [...words].sort(() => Math.random() - 0.5);
-      usedWords = [];
+    function pickWord() {
+      let candidate;
+      do {
+        candidate = words[Math.floor(Math.random() * words.length)];
+      } while (candidate === lastWord && words.length > 1);
+      lastWord = candidate;
+      return candidate;
     }
   
     function newRound() {
-      if (queue.length === 0) {
-        refillQueue();
-      }
-      current = queue.shift();
-      usedWords.push(current.id);
-  
+      locked = false;
+      current = pickWord();
       promptEl.textContent = current.gloss_en;
-      input.value = '';
-      feedback.textContent = '';
-      feedback.className = "feedback-text";
+      feedback.textContent = "";
+      input.value = "";
+      input.disabled = false;
+      input.focus();
     }
   
     input.addEventListener('keydown', e => {
-      if (e.key === 'Enter' && !input.disabled) {
+      if (e.key === 'Enter' && !locked) {
         const answer = input.value.trim().toLowerCase();
-    
-        // ✅ skip if nothing was typed
-        if (answer === "") {
-          return; 
-        }
-    
+        if (answer === "") return; // ignore empty enter
+  
+        locked = true; // prevent double triggers
+        input.disabled = true;
+  
         if (answer === current.romaji.toLowerCase()) {
           progressPts++;
           feedback.textContent = "✅ Correct!";
           feedback.className = "feedback-text correct";
         } else {
           progressPts = Math.max(0, progressPts - 1);
-          feedback.innerHTML = `❌ Wrong! Correct answer: <strong>${current.romaji}</strong>`;
+          feedback.innerHTML = `❌ Correct: <strong>${current.romaji}</strong>`;
           feedback.className = "feedback-text wrong";
         }
-    
+  
         updateMeter();
-    
+  
         if (progressPts >= GOAL) {
           actionBtn.classList.remove('is-hidden');
-          input.disabled = true;
         } else {
           setTimeout(newRound, 900);
         }
