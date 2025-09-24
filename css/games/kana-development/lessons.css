@@ -461,12 +461,12 @@ body.site {
 .hunt-target {
   text-align: center;
   margin: 20px auto;
-  padding: 32px 24px;
+  padding: 24px;
   background: var(--kp-surface);
-  border: 2px solid var(--kp-accent);
+  border: none;              /* 🔹 remove purple border */
   border-radius: var(--kp-radius);
   box-shadow: var(--kp-shadow);
-  max-width: 420px;
+  max-width: 320px;
 }
 
 /* Override for hunt glyph only */
