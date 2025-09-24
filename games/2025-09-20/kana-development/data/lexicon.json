@@ -1,8 +1,8 @@
 {
   "meta": {
-    "version": 2,
+    "version": 3,
     "locale": "ja-JP",
-    "notes": "N5-friendly core lexicon split into base/daku/handaku sets. 8 words per stage."
+    "notes": "N5-friendly core lexicon split into base/daku/handaku sets. 6 words per stage. Extra vocab retained in 'words' but not assigned to lessons yet."
   },
   "words": [
     {
@@ -14,8 +14,8 @@
       "tags": ["core", "vowels"],
       "worlds": ["1-base"],
       "audio": "",
-      "note": "Often used in formal or literary contexts. In daily life, 「好き (suki)」 is more common for 'like/love'.",
-      "example": { "kana": "愛を感じる", "romaji": "ai wo kanjiru", "english": "to feel love" }
+      "note": "Often used in formal or literary contexts. In daily life, 「すき (suki)」 is more common for 'like/love'.",
+      "example": { "kana": "あいをかんじる", "romaji": "ai wo kanjiru", "english": "to feel love" }
     },
     {
       "id": "iie",
@@ -27,7 +27,7 @@
       "worlds": ["1-base"],
       "audio": "",
       "note": "Polite way to say 'no'. In casual speech, people often use ううん (uun).",
-      "example": { "kana": "いいえ、違います", "romaji": "iie, chigaimasu", "english": "No, that’s not correct" }
+      "example": { "kana": "いいえ、ちがいます", "romaji": "iie, chigaimasu", "english": "No, that’s not correct" }
     },
     {
       "id": "ue",
@@ -39,7 +39,7 @@
       "worlds": ["1-base"],
       "audio": "",
       "note": "Can mean 'on top of' or 'above'. Opposite is した (shita, below).",
-      "example": { "kana": "机の上", "romaji": "tsukue no ue", "english": "on the desk" }
+      "example": { "kana": "つくえのうえ", "romaji": "tsukue no ue", "english": "on the desk" }
     },
     {
       "id": "ie",
@@ -50,20 +50,8 @@
       "tags": ["core", "vowels", "place"],
       "worlds": ["1-base"],
       "audio": "",
-      "note": "「家 (ie)」 is neutral. 「うち (uchi)」 is more casual/familiar for 'home'.",
-      "example": { "kana": "家に帰る", "romaji": "ie ni kaeru", "english": "to return home" }
-    },
-    {
-      "id": "ao",
-      "kana": "あお",
-      "romaji": "ao",
-      "gloss_en": "blue (noun)",
-      "jlpt": "N5",
-      "tags": ["core", "vowels", "color"],
-      "worlds": ["1-base"],
-      "audio": "",
-      "note": "Historically covers both blue and green. For green, 「緑 (midori)」 is also used.",
-      "example": { "kana": "青い空", "romaji": "aoi sora", "english": "blue sky" }
+      "note": "「いえ (ie)」 is neutral. 「うち (uchi)」 is more casual/familiar for 'home'.",
+      "example": { "kana": "いえにかえる", "romaji": "ie ni kaeru", "english": "to return home" }
     },
     {
       "id": "aoi",
@@ -74,8 +62,8 @@
       "tags": ["core", "vowels", "color"],
       "worlds": ["1-base"],
       "audio": "",
-      "note": "Adjective form of 青. Can also describe someone’s face as pale.",
-      "example": { "kana": "青いシャツ", "romaji": "aoi shatsu", "english": "blue shirt" }
+      "note": "Used as an adjective. For the noun form 'blue', あお (ao) can appear separately. Historically covers both blue and green. For green, 「みどり (midori)」 is also used.",
+      "example": { "kana": "あおいシャツ", "romaji": "aoi shatsu", "english": "blue shirt" }
     },
     {
       "id": "au",
@@ -87,21 +75,8 @@
       "worlds": ["1-base"],
       "audio": "",
       "note": "Used for meeting people. Usually with に particle.",
-      "example": { "kana": "友だちに会う", "romaji": "tomodachi ni au", "english": "to meet a friend" }
+      "example": { "kana": "ともだちにあう", "romaji": "tomodachi ni au", "english": "to meet a friend" }
     },
-    {
-      "id": "iu",
-      "kana": "いう",
-      "romaji": "iu",
-      "gloss_en": "to say",
-      "jlpt": "N5",
-      "tags": ["core", "vowels", "verb"],
-      "worlds": ["1-base"],
-      "audio": "",
-      "note": "General verb for 'say/tell'. Often paired with と particle.",
-      "example": { "kana": "彼は「こんにちは」と言った", "romaji": "kare wa 'konnichiwa' to itta", "english": "He said 'hello'." }
-    },
-
     {
       "id": "iku",
       "kana": "いく",
@@ -112,7 +87,7 @@
       "worlds": ["2-base"],
       "audio": "",
       "note": "Basic motion verb. Irregular past form: いった (itta).",
-      "example": { "kana": "学校に行く", "romaji": "gakkou ni iku", "english": "to go to school" }
+      "example": { "kana": "がっこうにいく", "romaji": "gakkou ni iku", "english": "to go to school" }
     },
     {
       "id": "kiku",
@@ -123,8 +98,8 @@
       "tags": ["core", "k-row", "verb"],
       "worlds": ["2-base"],
       "audio": "",
-      "note": "Context decides: with 音楽 → 'listen', with 質問 → 'ask'.",
-      "example": { "kana": "音楽を聞く", "romaji": "ongaku wo kiku", "english": "to listen to music" }
+      "note": "Context decides: with おんがく → 'listen', with しつもん → 'ask'.",
+      "example": { "kana": "おんがくをきく", "romaji": "ongaku wo kiku", "english": "to listen to music" }
     },
     {
       "id": "kau",
@@ -136,7 +111,7 @@
       "worlds": ["2-base"],
       "audio": "",
       "note": "Everyday verb, often with を particle.",
-      "example": { "kana": "本を買う", "romaji": "hon wo kau", "english": "to buy a book" }
+      "example": { "kana": "ほんをかう", "romaji": "hon wo kau", "english": "to buy a book" }
     },
     {
       "id": "kao",
@@ -147,8 +122,8 @@
       "tags": ["core", "k-row", "body"],
       "worlds": ["2-base"],
       "audio": "",
-      "note": "Used in expressions like 顔色 (kaoiro, complexion).",
-      "example": { "kana": "顔が赤い", "romaji": "kao ga akai", "english": "face is red" }
+      "note": "Used in expressions like かおいろ (complexion).",
+      "example": { "kana": "かおがあかい", "romaji": "kao ga akai", "english": "face is red" }
     },
     {
       "id": "ike",
@@ -160,7 +135,7 @@
       "worlds": ["2-base"],
       "audio": "",
       "note": "Refers to small, often man-made ponds.",
-      "example": { "kana": "池の魚", "romaji": "ike no sakana", "english": "the pond’s fish" }
+      "example": { "kana": "いけのさかな", "romaji": "ike no sakana", "english": "the pond’s fish" }
     },
     {
       "id": "koe",
@@ -171,34 +146,9 @@
       "tags": ["core", "k-row"],
       "worlds": ["2-base"],
       "audio": "",
-      "note": "Refers to human/animal voices. Different from 音 (oto, sound).",
-      "example": { "kana": "きれいな声", "romaji": "kirei na koe", "english": "a beautiful voice" }
+      "note": "Refers to human/animal voices. Different from おと (sound).",
+      "example": { "kana": "きれいなこえ", "romaji": "kirei na koe", "english": "a beautiful voice" }
     },
-    {
-      "id": "aka",
-      "kana": "あか",
-      "romaji": "aka",
-      "gloss_en": "red",
-      "jlpt": "N5",
-      "tags": ["core", "k-row", "color"],
-      "worlds": ["2-base"],
-      "audio": "",
-      "note": "Noun form of 'red'. Adjective form is あかい (akai).",
-      "example": { "kana": "赤が好きです", "romaji": "aka ga suki desu", "english": "I like red" }
-    },
-    {
-      "id": "oku",
-      "kana": "おく",
-      "romaji": "oku",
-      "gloss_en": "inner part; back",
-      "jlpt": "N5",
-      "tags": ["core", "k-row", "place"],
-      "worlds": ["2-base"],
-      "audio": "",
-      "note": "Refers to deep or inner areas (e.g., inside shops/rooms).",
-      "example": { "kana": "部屋の奥", "romaji": "heya no oku", "english": "the back of the room" }
-    },
-
     {
       "id": "eiga",
       "kana": "えいが",
@@ -208,8 +158,8 @@
       "tags": ["core", "g-row", "topic"],
       "worlds": ["2-daku"],
       "audio": "",
-      "note": "Common word, often with 見る (to watch).",
-      "example": { "kana": "映画を見る", "romaji": "eiga wo miru", "english": "to watch a movie" }
+      "note": "Common word, often with みる (to watch).",
+      "example": { "kana": "えいがをみる", "romaji": "eiga wo miru", "english": "to watch a movie" }
     },
     {
       "id": "gaikoku",
@@ -221,7 +171,7 @@
       "worlds": ["2-daku"],
       "audio": "",
       "note": "Literally 'outside country'.",
-      "example": { "kana": "外国に行く", "romaji": "gaikoku ni iku", "english": "to go abroad" }
+      "example": { "kana": "がいこくにいく", "romaji": "gaikoku ni iku", "english": "to go abroad" }
     },
     {
       "id": "gakusei",
@@ -232,8 +182,8 @@
       "tags": ["core", "g-row", "person"],
       "worlds": ["2-daku"],
       "audio": "",
-      "note": "Usually refers to university students. For younger students, 生徒 (seito) is used.",
-      "example": { "kana": "大学生です", "romaji": "daigakusei desu", "english": "I’m a university student" }
+      "note": "Usually refers to university students. For younger students, せいと (seito) is used.",
+      "example": { "kana": "だいがくせいです", "romaji": "daigakusei desu", "english": "I’m a university student" }
     },
     {
       "id": "gakkou",
@@ -244,8 +194,8 @@
       "tags": ["core", "g-row", "place"],
       "worlds": ["2-daku"],
       "audio": "",
-      "note": "General word for school. Modified as 小学校 (elementary school), etc.",
-      "example": { "kana": "学校に行く", "romaji": "gakkou ni iku", "english": "to go to school" }
+      "note": "General word for school. Modified as しょうがっこう (elementary school), etc.",
+      "example": { "kana": "がっこうにいく", "romaji": "gakkou ni iku", "english": "to go to school" }
     },
     {
       "id": "ginkou",
@@ -256,8 +206,8 @@
       "tags": ["core", "g-row", "place"],
       "worlds": ["2-daku"],
       "audio": "",
-      "note": "Used in places like 銀行員 (bank worker).",
-      "example": { "kana": "銀行で働く", "romaji": "ginkou de hataraku", "english": "to work at a bank" }
+      "note": "Used in places like ぎんこういん (bank worker).",
+      "example": { "kana": "ぎんこうではたらく", "romaji": "ginkou de hataraku", "english": "to work at a bank" }
     },
     {
       "id": "genki",
@@ -268,8 +218,44 @@
       "tags": ["core", "g-row", "adjective"],
       "worlds": ["2-daku"],
       "audio": "",
-      "note": "Also used in greetings: お元気ですか？ (How are you?).",
-      "example": { "kana": "元気です！", "romaji": "genki desu!", "english": "I’m fine!" }
+      "note": "Also used in greetings: おげんきですか？ (How are you?).",
+      "example": { "kana": "げんきです！", "romaji": "genki desu!", "english": "I’m fine!" }
+    },
+    {
+      "id": "iu",
+      "kana": "いう",
+      "romaji": "iu",
+      "gloss_en": "to say",
+      "jlpt": "N5",
+      "tags": ["core", "vowels", "verb"],
+      "worlds": [],
+      "audio": "",
+      "note": "General verb for 'say/tell'. Often paired with と particle.",
+      "example": { "kana": "かれは「こんにちは」といった", "romaji": "kare wa 'konnichiwa' to itta", "english": "He said 'hello'." }
+    },
+    {
+      "id": "aka",
+      "kana": "あか",
+      "romaji": "aka",
+      "gloss_en": "red",
+      "jlpt": "N5",
+      "tags": ["core", "k-row", "color"],
+      "worlds": [],
+      "audio": "",
+      "note": "Noun form of 'red'. Adjective form is あかい (akai).",
+      "example": { "kana": "あかがすきです", "romaji": "aka ga suki desu", "english": "I like red" }
+    },
+    {
+      "id": "oku",
+      "kana": "おく",
+      "romaji": "oku",
+      "gloss_en": "inner part; back",
+      "jlpt": "N5",
+      "tags": ["core", "k-row", "place"],
+      "worlds": [],
+      "audio": "",
+      "note": "Refers to deep or inner areas (e.g., inside shops/rooms).",
+      "example": { "kana": "へやのおく", "romaji": "heya no oku", "english": "the back of the room" }
     },
     {
       "id": "getsuyoubi",
@@ -278,10 +264,10 @@
       "gloss_en": "Monday",
       "jlpt": "N5",
       "tags": ["core", "g-row", "time"],
-      "worlds": ["2-daku"],
+      "worlds": [],
       "audio": "",
       "note": "One of the days of the week. Literally 'moon-day'.",
-      "example": { "kana": "月曜日に会う", "romaji": "getsuyoubi ni au", "english": "to meet on Monday" }
+      "example": { "kana": "げつようびにあう", "romaji": "getsuyoubi ni au", "english": "to meet on Monday" }
     },
     {
       "id": "guramu",
@@ -290,18 +276,18 @@
       "gloss_en": "gram (unit of weight)",
       "jlpt": "N5",
       "tags": ["loanword", "g-row"],
-      "worlds": ["2-daku"],
+      "worlds": [],
       "audio": "",
       "note": "Loanword from English 'gram'. Used in cooking/shopping.",
-      "example": { "kana": "100グラムの肉", "romaji": "hyaku guramu no niku", "english": "100 grams of meat" }
+      "example": { "kana": "ひゃくぐらむのにく", "romaji": "hyaku guramu no niku", "english": "100 grams of meat" }
     }
   ],
   "byWorld": {
-    "1-base": ["ai", "iie", "ue", "ie", "ao", "aoi", "au", "iu"],
+    "1-base": ["ai", "iie", "ue", "ie", "aoi", "au"],
     "1-daku": [],
     "1-handaku": [],
-    "2-base": ["iku", "kiku", "kau", "kao", "ike", "koe", "aka", "oku"],
-    "2-daku": ["eiga", "gaikoku", "gakusei", "gakkou", "ginkou", "genki", "getsuyoubi", "guramu"],
+    "2-base": ["iku", "kiku", "kau", "kao", "ike", "koe"],
+    "2-daku": ["eiga", "gaikoku", "gakusei", "gakkou", "ginkou", "genki"],
     "2-handaku": []
   }
 }

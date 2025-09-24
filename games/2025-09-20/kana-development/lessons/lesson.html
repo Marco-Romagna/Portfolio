@@ -10,7 +10,7 @@
   <link rel="stylesheet" href="../../../../css/games/kana-development/stages.css">
   <link rel="stylesheet" href="../../../../css/games/kana-development/lessons.css">
 </head>
-<body class="site mode-light">
+<body class="site mode-light lesson" data-lesson-id="" data-total-parts="">
 
   <!-- Site header -->
   <header class="header">
@@ -27,25 +27,27 @@
   </div>
 
   <!-- Main lesson container -->
-  <main class="container game-wrap lesson" data-lesson-id="" data-total-parts="">
-    <!-- Progress steps (JS will populate labels and count) -->
+  <main class="container game-wrap">
+
+    <!-- Progress steps (populated by lessons-core.js) -->
     <nav class="lesson-progress" aria-label="Lesson progress">
       <ol class="steps"></ol>
-      </div>
     </nav>
 
-    <!-- Placeholder sections for Parts 1–4 -->
+    <!-- Placeholder sections -->
     <section id="part-1" class="lesson-part is-visible" data-part-index="1"></section>
     <section id="part-2" class="lesson-part" data-part-index="2"></section>
     <section id="part-3" class="lesson-part" data-part-index="3"></section>
     <section id="part-4" class="lesson-part" data-part-index="4"></section>
+    <section id="part-5" class="lesson-part" data-part-index="5"></section>
   </main>
 
-  <!-- Universal lesson logic-->
+  <!-- Universal lesson logic -->
   <script defer src="../js/vocab.js"></script>
   <script defer src="../js/lessons-core.js"></script>
   <script defer src="../js/lessons-kana.js"></script>
   <script defer src="../js/lessons-vocab.js"></script>
   <script defer src="../js/lessons.js"></script>
+
 </body>
 </html>

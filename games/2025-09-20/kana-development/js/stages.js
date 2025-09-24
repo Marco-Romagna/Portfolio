@@ -38,9 +38,9 @@ window.KANA_STAGES = {
     },
     {
       code: "1-4",
-      title: "1-4 — Type Vowels (romaji)",
+      title: "1-4 — Vocabulary Challenge",
       href: "lessons/lesson.html?id=1-4",
-      thumb: "a"
+      thumb: "語"
     },
 
     // ===== World 2 =====
@@ -65,9 +65,9 @@ window.KANA_STAGES = {
     },
     {
       code: "2-4",
-      title: "2-4 — Type K (romaji)",
+      title: "2-4 — Vocabulary Challenge",
       href: "lessons/lesson.html?id=2-4",
-      thumb: "k"
+      thumb: "語"
     },
     {
       code: "2-5",
@@ -90,9 +90,9 @@ window.KANA_STAGES = {
     },
     {
       code: "2-8",
-      title: "2-8 — Type G (romaji)",
+      title: "2-8 — Vocabulary Challenge",
       href: "lessons/lesson.html?id=2-8",
-      thumb: "g"
+      thumb: "語"
     }
   ]
 };

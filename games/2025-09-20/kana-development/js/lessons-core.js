@@ -2,6 +2,7 @@
 // lessons-core.js
 // Shared utilities + role detection for all lesson types
 // ==========================================================
+window.DEBUG_SKIP_ENABLED = true; // set false for production
 
 (() => {
   // ---------- DOM Helpers ----------
@@ -20,7 +21,9 @@
   const SUFFIX = Number(suffixStr);
   const [WORLD] = qId.split('-').map(Number);
 
-  lesson.dataset.totalParts = (SUFFIX === 4 || SUFFIX === 8 || SUFFIX === 12) ? 4 : 4;
+  // Decide total parts (vocab lessons use 5)
+  const IS_VOCAB = (SUFFIX === 4 || SUFFIX === 8 || SUFFIX === 12);
+  lesson.dataset.totalParts = IS_VOCAB ? 5 : 4;
   const totalParts = Number(lesson.dataset.totalParts);
 
   const parts      = $$('.lesson-part');
@@ -28,18 +31,73 @@
   const progress   = $('.progressbar');
   const fill       = $('.progressbar-fill');
 
-  const cta = $('.lesson-cta [data-action="advance"]');
-  const hideCTA = () => { cta?.closest('.lesson-cta')?.classList.add('is-hidden'); };
+  const ctaWrap = $('.lesson-cta');
+  const nextBtn = $('.lesson-cta [data-action="advance"]');
+  const hideCTA = () => { ctaWrap?.classList.add('is-hidden'); };
+
+  // Add back button (styled same as next)
+  let backBtn = document.createElement('button');
+  backBtn.textContent = "← Back";
+  backBtn.className = "btn primary is-hidden";
+  backBtn.dataset.action = "back";
+  ctaWrap?.insertBefore(backBtn, nextBtn);
+
+  let currentPart = 1;
 
   function showPart(idx) {
-    const current = Math.min(Math.max(idx, 1), totalParts);
-    parts.forEach(p => p.classList.toggle('is-visible', Number(p.dataset.partIndex) === current));
-    $$('.steps .step').forEach(s => s.classList.toggle('is-active', Number(s.dataset.part) === current));
-    const pct = totalParts > 1 ? Math.round((current - 1) / (totalParts - 1) * 100) : 100;
+    currentPart = Math.min(Math.max(idx, 1), totalParts);
+    parts.forEach(p =>
+      p.classList.toggle('is-visible', Number(p.dataset.partIndex) === currentPart)
+    );
+    $$('.steps .step').forEach(s =>
+      s.classList.toggle('is-active', Number(s.dataset.part) === currentPart)
+    );
+
+    const pct = totalParts > 1 ? Math.round((currentPart - 1) / (totalParts - 1) * 100) : 100;
     if (fill) fill.style.width = `${pct}%`;
     if (progress) progress.setAttribute('aria-valuenow', String(pct));
-    hideCTA();
+
+    if (!window.DEBUG_SKIP_ENABLED) {
+      hideCTA(); // normal flow hides CTA until conditions met
+    } else {
+      ctaWrap?.classList.remove('is-hidden'); // always visible in debug
+    }
+
+    // back button only visible after part 1
+    if (currentPart > 1) {
+      backBtn.classList.remove('is-hidden');
+    } else {
+      backBtn.classList.add('is-hidden');
+    }
+
+    // Lazy-init vocab parts
+    if (window.LessonCore.IS_VOCAB) {
+      if (currentPart === 2 && typeof window.initPart2 === "function") {
+        window.initPart2(); window.initPart2 = null;
+      }
+      if (currentPart === 3 && typeof window.initPart3 === "function") {
+        window.initPart3(); window.initPart3 = null;
+      }
+      if (currentPart === 4 && typeof window.initPart4 === "function") {
+        window.initPart4(); window.initPart4 = null;
+      }
+      if (currentPart === 5 && typeof window.initPart5 === "function") {
+        window.initPart5(); window.initPart5 = null;
+      }
+    }
   }
+
+  // ---------- Hook navigation buttons ----------
+  nextBtn?.addEventListener('click', () => {
+    if (window.DEBUG_SKIP_ENABLED) {
+      showPart(currentPart + 1);
+    }
+  });
+  backBtn?.addEventListener('click', () => {
+    if (window.DEBUG_SKIP_ENABLED) {
+      showPart(currentPart - 1);
+    }
+  });
 
   // ---------- Kana Sets ----------
   const H_VOW = ['あ','い','う','え','お'];
@@ -80,7 +138,6 @@
     return map[SUFFIX] || 'hira-base';
   })();
 
-  const IS_VOCAB = ROLE.startsWith('vocab');
   let MIXED_TYPE = false;
   let IS_TYPING_ONLY = false;
 
@@ -116,7 +173,7 @@
     let labels;
 
     if (IS_VOCAB) {
-      labels = ['Preview','Identify','Typing','Audio'];
+      labels = ['Explorer','Hunt','Identify','Typing','Audio'];
     } else if (IS_TYPING_ONLY) {
       labels = ['Preview','Typing','Finish'];
     } else {
