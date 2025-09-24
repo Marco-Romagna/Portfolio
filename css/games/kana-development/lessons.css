@@ -603,11 +603,20 @@ body.site {
   color: #fff;
 }
 
-/* Typing Part 4 matches Identify style */
-.type-glyph-wrapper {
-  font-size: 2rem;
-  font-weight: 700;
+
+/* Part 4 Typing Styles */
+.type-prompt-box {
+  display: inline-block;
+  padding: 1rem 1.5rem;
+  border-radius: 8px;
+  background: rgba(255,255,255,0.05);
   margin-bottom: 1rem;
+}
+
+.type-prompt {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #fff;
 }
 
 .type-input-wrapper {
@@ -623,17 +632,18 @@ body.site {
   outline: none;
   text-align: center;
   background: transparent;
-  width: 180px;
+  width: 200px;
 }
 
-.type-input.is-correct {
+.feedback-text {
+  margin-top: 0.5rem;
+  font-size: 1rem;
+}
+
+.feedback-text.is-correct {
   color: #4caf50;
-  font-weight: 700;
 }
 
-.type-input.is-wrong {
+.feedback-text.is-wrong {
   color: #f44336;
-  font-weight: 700;
 }
-
-
