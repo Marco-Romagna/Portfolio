@@ -54,19 +54,16 @@
       "example": { "kana": "いえにかえる", "romaji": "ie ni kaeru", "english": "to return home" }
     },
     {
-    "id": "aoi",
-    "kana": "あおい",
-    "romaji": "aoi",
-    "gloss_en": "blue (adjective)",
-    "jlpt": "N5",
-    "tags": ["core", "vowels", "color"],
-    "worlds": ["1-base"],
-    "audio": "",
-    "note": "Used as an adjective. For the noun form 'blue', あお (ao) can appear separately. Historically covers both blue and green. For green, 「みどり (midori)」 is also used.",
-    "example": {
-      "kana": "あおい シャツ",
-      "romaji": "aoi shatsu",
-      "english": "blue shirt"
+      "id": "aoi",
+      "kana": "あおい",
+      "romaji": "aoi",
+      "gloss_en": "blue (adjective)",
+      "jlpt": "N5",
+      "tags": ["core", "vowels", "color"],
+      "worlds": ["1-base"],
+      "audio": "",
+      "note": "Used as an adjective. For the noun form 'blue', あお (ao) can appear separately. Historically covers both blue and green. For green, 「みどり (midori)」 is also used.",
+      "example": { "kana": "あおいシャツ", "romaji": "aoi shatsu", "english": "blue shirt" }
     },
     {
       "id": "au",
@@ -285,14 +282,12 @@
       "example": { "kana": "ひゃくぐらむのにく", "romaji": "hyaku guramu no niku", "english": "100 grams of meat" }
     }
   ],
-    "byWorld": {
-      "1-base": ["ai", "iie", "ue", "ie", "aoi", "au"],
-      "1-daku": [],
-      "1-handaku": [],
-      "2-base": ["iku", "kiku", "kau", "kao", "ike", "koe"],
-      "2-daku": ["eiga", "gaikoku", "gakusei", "gakkou", "ginkou", "genki"],
-      "2-handaku": []
-    }
-
-
+  "byWorld": {
+    "1-base": ["ai", "iie", "ue", "ie", "aoi", "au"],
+    "1-daku": [],
+    "1-handaku": [],
+    "2-base": ["iku", "kiku", "kau", "kao", "ike", "koe"],
+    "2-daku": ["eiga", "gaikoku", "gakusei", "gakkou", "ginkou", "genki"],
+    "2-handaku": []
+  }
 }
