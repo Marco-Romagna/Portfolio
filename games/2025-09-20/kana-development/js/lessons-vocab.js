@@ -139,26 +139,26 @@
       huntText.innerHTML = '';
       const para = paragraphs[currentPara];
     
-      // Split into word tokens by spaces
-      const tokens = para.split(/\s+/);
+      if (!tokenizer) {
+        console.warn("Tokenizer not ready yet!");
+        return;
+      }
     
-      tokens.forEach(tok => {
-        if (!tok.trim()) return;
+      const tokens = tokenizer.tokenize(para);
     
+      tokens.forEach(token => {
         const span = document.createElement('span');
-        span.textContent = tok;
+        span.textContent = token.surface_form;   // the visible word
+        span.className = 'hunt-token';
     
-        if (words.some(w => w.kana === tok)) {
-          span.className = 'hunt-word';
-        } else {
-          span.className = 'hunt-token';
+        // Mark if it's one of the vocab targets
+        if (words.some(w => w.kana === token.basic_form)) {
+          span.classList.add('hunt-word');
         }
     
         huntText.appendChild(span);
-        huntText.appendChild(document.createTextNode(' '));
+        huntText.appendChild(document.createTextNode(' ')); // spacing
       });
-    
-      loadNextWord();
     }
     
     function loadNextWord() {
