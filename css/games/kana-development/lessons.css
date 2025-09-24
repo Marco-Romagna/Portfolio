@@ -663,3 +663,6 @@ body.site {
   font-size: 0.9rem;
   color: #d1d5db;
 }
+.quiz-prompt .prompt-target {
+  color: #7c3aed; /* purple accent */
+}
