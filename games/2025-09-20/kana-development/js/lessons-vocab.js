@@ -337,11 +337,14 @@
   window.initVocabParts = async function () {
     const roleKey = getRoleKey(WORLD, SUFFIX);
     const words = await Vocab.getWorldMilestone(roleKey);
-
+  
+    // Init Part 1 immediately
     await initPart1(words);
-    await initPart2Hunt(roleKey); 
-    await initPart3(words);
-    await initPart4(words);
-    await initPart5(words);
+  
+    // Lazy init for the others: only run when their section becomes visible
+    window.initPart2 = () => initPart2Hunt(roleKey);
+    window.initPart3 = () => initPart3(words);
+    window.initPart4 = () => initPart4(words);
+    window.initPart5 = () => initPart5(words);
   };
 })();
