@@ -107,8 +107,7 @@
         <div class="hunt-text"></div>
         <div class="hunt-progress"></div>
         <div class="actions">
-          <button class="btn primary is-hidden" data-action="next-hunt">Next Hunt</button>
-          <button class="btn primary is-hidden" data-action="next-part">Next</button>
+          <button class="btn primary is-hidden" data-action="next">Next</button>
         </div>
       </div>
     `;
@@ -116,8 +115,7 @@
     const huntText = $('.hunt-text', part2);
     const targetEl = $('.hunt-target', part2);
     const progress = $('.hunt-progress', part2);
-    const nextHuntBtn = $('[data-action="next-hunt"]', part2);
-    const nextPartBtn = $('[data-action="next-part"]', part2);
+    const nextBtn = $('[data-action="next"]', part2);
   
     // Load hunt paragraphs
     let paragraphs = [];
@@ -169,13 +167,19 @@
     // --- load the next word in this paragraph ---
     function loadNextWord() {
       if (currentWordIdx >= words.length) {
-        // paragraph finished
+        // hunt finished → reveal next button
         if (currentPara === 0) {
-          progress.textContent = "Paragraph complete!";
-          nextHuntBtn.classList.remove('is-hidden');
-        } else if (currentPara === 1) {
-          progress.textContent = "Hunt complete!";
-          nextPartBtn.classList.remove('is-hidden');
+          progress.textContent = "✅ Hunt 1 complete!";
+          nextBtn.classList.remove('is-hidden');
+          nextBtn.onclick = () => {
+            nextBtn.classList.add('is-hidden');
+            currentPara = 1;
+            renderParagraph();
+          };
+        } else {
+          progress.textContent = "🎉 Hunt 2 complete!";
+          nextBtn.classList.remove('is-hidden');
+          nextBtn.onclick = () => showPart(3);
         }
         return;
       }
@@ -202,26 +206,17 @@
               setTimeout(() => {
                 currentWordIdx++;
                 loadNextWord();
-              }, 800);
+              }, 500);
             }
           } else if (span.textContent !== targetWord.kana) {
             span.classList.add('is-wrong');
-            setTimeout(() => span.classList.remove('is-wrong'), 400);
+            setTimeout(() => span.classList.remove('is-wrong'), 300);
           }
         });
       });
   
       progress.textContent = `Looking for ${targetWord.kana}`;
     }
-  
-    // --- Button events ---
-    nextHuntBtn.addEventListener('click', () => {
-      nextHuntBtn.classList.add('is-hidden');
-      currentPara = 1; // go to Hunt 2
-      renderParagraph();
-    });
-  
-    nextPartBtn.addEventListener('click', () => showPart(3));
   
     renderParagraph();
   }
