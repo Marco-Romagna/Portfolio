@@ -54,16 +54,19 @@
       "example": { "kana": "いえにかえる", "romaji": "ie ni kaeru", "english": "to return home" }
     },
     {
-      "id": "aoi",
-      "kana": "あおい",
-      "romaji": "aoi",
-      "gloss_en": "blue (adjective)",
-      "jlpt": "N5",
-      "tags": ["core", "vowels", "color"],
-      "worlds": ["1-base"],
-      "audio": "",
-      "note": "Used as an adjective. For the noun form 'blue', あお (ao) can appear separately. Historically covers both blue and green. For green, 「みどり (midori)」 is also used.",
-      "example": { "kana": "あおい そら", "romaji": "aoi sora", "english": "blue sky" }
+    "id": "aoi",
+    "kana": "あおい",
+    "romaji": "aoi",
+    "gloss_en": "blue (adjective)",
+    "jlpt": "N5",
+    "tags": ["core", "vowels", "color"],
+    "worlds": ["1-base"],
+    "audio": "",
+    "note": "Used as an adjective. For the noun form 'blue', あお (ao) can appear separately. Historically covers both blue and green. For green, 「みどり (midori)」 is also used.",
+    "example": {
+      "kana": "あおい シャツ",
+      "romaji": "aoi shatsu",
+      "english": "blue shirt"
     },
     {
       "id": "au",
@@ -77,7 +80,6 @@
       "note": "Used for meeting people. Usually with に particle.",
       "example": { "kana": "ともだちにあう", "romaji": "tomodachi ni au", "english": "to meet a friend" }
     },
-
     {
       "id": "iku",
       "kana": "いく",
@@ -150,7 +152,6 @@
       "note": "Refers to human/animal voices. Different from おと (sound).",
       "example": { "kana": "きれいなこえ", "romaji": "kirei na koe", "english": "a beautiful voice" }
     },
-
     {
       "id": "eiga",
       "kana": "えいが",
