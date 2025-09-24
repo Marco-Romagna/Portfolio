@@ -287,68 +287,80 @@
   }
 
   // ======================================================
-  // Part 4 — Typing
+  // Part 4 — Typing (English → romaji input)
   // ======================================================
   async function initPart4(words) {
     const part4 = $('#part-4');
     if (!part4) return;
-
+  
     part4.innerHTML = `
       <h2 class="part-title">Typing</h2>
       <div class="type-panel">
         <div class="type-glyph-wrapper"></div>
         <div class="type-input-wrapper theme-dark">
-          <input id="type-input" class="type-input" placeholder="Type kana…" autocomplete="off" />
+          <input id="type-input" class="type-input" placeholder="Type romaji…" autocomplete="off" />
         </div>
         <div class="quiz-progress">
           <div class="meter"><div class="meter-fill"></div></div>
           <div class="meter-label"></div>
         </div>
-        <div class="actions"><button class="btn primary" data-action="next-part">Next</button></div>
+        <div class="actions"><button class="btn primary is-hidden" data-action="next-part">Next</button></div>
       </div>
     `;
-
-
+  
     const wrapper = $('.type-glyph-wrapper', part4);
     const input = $('#type-input', part4);
     const meterFill = $('.meter-fill', part4);
     const meterLabel = $('.meter-label', part4);
     const actionBtn = $('[data-action="next-part"]', part4);
-
+  
     let progressPts = 0, GOAL = words.length * 2, current = null;
-
+  
     function updateMeter() {
       const pct = Math.round((progressPts / GOAL) * 100);
       meterFill.style.width = `${pct}%`;
       meterLabel.textContent = `Progress: ${progressPts}/${GOAL}`;
     }
-
+  
     function newRound() {
       current = words[Math.floor(Math.random() * words.length)];
       wrapper.innerHTML = `<span class="kana-glyph">${current.gloss_en}</span>`;
-    
-      // apply theme class to input wrapper
+  
+      // randomize theme colors like Part 3
       const theme = THEMES[Math.floor(Math.random() * THEMES.length)];
       const inputWrapper = $('.type-input-wrapper', part4);
       inputWrapper.className = `type-input-wrapper ${theme}`;
-    
+  
       input.value = '';
+      input.focus();
     }
-
+  
     input.addEventListener('keydown', e => {
       if (e.key === 'Enter') {
-        if (input.value.trim() === current.kana) {
-          progressPts++; updateMeter();
-          if (progressPts >= GOAL) { actionBtn.classList.remove('is-hidden'); }
-          else newRound();
+        const guess = input.value.trim().toLowerCase();
+        if (guess === current.romaji.toLowerCase()) {
+          progressPts++;
+          updateMeter();
+          input.classList.add('is-correct');
+          setTimeout(() => {
+            input.classList.remove('is-correct');
+            if (progressPts >= GOAL) { 
+              actionBtn.classList.remove('is-hidden'); 
+            } else {
+              newRound();
+            }
+          }, 400);
         } else {
+          input.classList.add('is-wrong');
+          setTimeout(() => input.classList.remove('is-wrong'), 400);
           input.value = '';
         }
       }
     });
-
+  
     actionBtn.addEventListener('click', () => showPart(5));
-    updateMeter(); newRound();
+    updateMeter();
+    newRound();
   }
 
   // ======================================================
