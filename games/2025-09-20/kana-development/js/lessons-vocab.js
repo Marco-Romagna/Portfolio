@@ -91,11 +91,11 @@
     $('[data-action="next"]', part1).addEventListener('click', () => selectIndex(currentIdx + 1));
     $('[data-action="advance"]', part1).addEventListener('click', () => showPart(2));
   }
-
+  
   // ==========================================================
-  // Part 2 — Vocab Hunt (Immersion Passage)
+  // Part 2 — Vocab Hunt (Immersion Passage, for -4/-8/-12 levels)
   // ==========================================================
-  async function initVocabHunt(worldKey = "1-base") {
+  async function initVocabHunt(worldKey) {
     const { $, showPart, KANA } = window.LessonCore;
     const part2 = $('#part-2');
     if (!part2) return;
@@ -109,7 +109,7 @@
       return;
     }
   
-    // Pick the first paragraph for now
+    // For now: pick the first paragraph
     const passage = paragraphs[0];
   
     part2.innerHTML = `
@@ -120,7 +120,7 @@
   
     const container = $('#hunt-passage', part2);
   
-    // Init tokenizer
+    // Tokenizer
     kuromoji.builder({ dicPath: "../js/dict" }).build((err, tokenizer) => {
       if (err) {
         container.textContent = "Tokenizer failed to load.";
@@ -128,16 +128,13 @@
         return;
       }
   
-      // Tokenize full paragraph
       const tokens = tokenizer.tokenize(passage);
-  
       tokens.forEach(tok => {
         const span = document.createElement("span");
         span.className = "hunt-token";
         span.textContent = tok.surface_form;
         span.dataset.value = tok.surface_form;
   
-        // Click logic
         span.addEventListener("click", () => {
           const hasTargetKana = KANA.some(k => span.dataset.value.includes(k));
           if (hasTargetKana) {
@@ -149,16 +146,15 @@
         });
   
         container.appendChild(span);
-        container.append(" "); // spacing
+        container.append(" ");
       });
     });
   
-    // Continue lesson flow
     $('[data-action="next-part"]', part2)
       ?.addEventListener("click", () => showPart(3));
   }
 
-  
+   
   // ======================================================
   // Part 3 — Identify
   // ======================================================
