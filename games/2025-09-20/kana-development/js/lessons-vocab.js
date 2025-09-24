@@ -286,7 +286,7 @@
   }
 
   // ======================================================
-  // Part 4 — Typing (English → romaji)
+  // Part 4 — Typing (romaji input, styled like Identify)
   // ======================================================
   async function initPart4(words) {
     const part4 = $('#part-4');
@@ -294,83 +294,86 @@
   
     part4.innerHTML = `
       <h2 class="part-title">Typing</h2>
-      <div class="type-panel">
-        <div class="type-prompt-box">
-          <span id="type-prompt" class="type-prompt"></span>
+      <div class="quiz-panel">
+        <div class="quiz-prompt">
+          <p class="prompt-text">Type the romaji for <strong class="prompt-target"></strong></p>
         </div>
-        <div class="type-input-wrapper theme-dark">
-          <input id="type-input" class="type-input" placeholder="Type romaji…" autocomplete="off" />
+        <div class="quiz-input-wrapper">
+          <input id="typing-input" class="quiz-input" placeholder="Type romaji…" autocomplete="off" />
         </div>
-        <div class="quiz-feedback"><p class="feedback-text"></p></div>
         <div class="quiz-progress">
           <div class="meter"><div class="meter-fill"></div></div>
           <div class="meter-label"></div>
         </div>
+        <div class="quiz-feedback"><p class="feedback-text"></p></div>
         <div class="actions"><button class="btn primary is-hidden" data-action="next-part">Next</button></div>
       </div>
     `;
   
-    const promptEl = $('#type-prompt', part4);
-    const input = $('#type-input', part4);
-    const feedback = $('.feedback-text', part4);
-    const meterFill = $('.meter-fill', part4);
-    const meterLabel = $('.meter-label', part4);
-    const actionBtn = $('[data-action="next-part"]', part4);
+    const input = $('#typing-input', part4);
+    const feedback = $('.quiz-feedback .feedback-text', part4);
+    const promptEl = $('.prompt-text .prompt-target', part4);
+    const meterFill = $('.quiz-progress .meter-fill', part4);
+    const meterLabel = $('.quiz-progress .meter-label', part4);
+    const nextBtn = $('[data-action="next-part"]', part4);
   
-    let progressPts = 0, GOAL = words.length * 2;
-    let current = null, last = null;
+    const GOAL = words.length * 2;
+    let progressPts = 0;
+    let queue = [...words];
+    let current = null;
+    let lastId = null;
   
     function updateMeter() {
       const pct = Math.round((progressPts / GOAL) * 100);
       meterFill.style.width = `${pct}%`;
-      meterLabel.textContent = `Progress: ${progressPts}/${GOAL}`;
+      meterLabel.textContent = `Progress: ${progressPts} / ${GOAL}`;
     }
   
-    function pickWord() {
-      let next;
-      do {
-        next = words[Math.floor(Math.random() * words.length)];
-      } while (last && next.id === last.id && words.length > 1);
-      last = next;
-      return next;
-    }
-  
-    function newRound() {
-      current = pickWord();
-      promptEl.textContent = current.gloss_en;
-      input.value = '';
+    function nextQuestion() {
       feedback.textContent = '';
+      input.value = '';
+      // ensure not the same as last word
+      do {
+        current = queue[Math.floor(Math.random() * queue.length)];
+      } while (current.id === lastId && queue.length > 1);
+  
+      lastId = current.id;
+      promptEl.textContent = current.gloss_en;
       input.focus();
     }
   
     input.addEventListener('keydown', e => {
       if (e.key === 'Enter') {
-        const guess = input.value.trim().toLowerCase();
-        if (guess === current.romaji.toLowerCase()) {
+        const val = input.value.trim().toLowerCase();
+        if (val === current.romaji.toLowerCase()) {
           progressPts++;
+          updateMeter();
           feedback.textContent = '✅ Correct!';
-          feedback.className = 'feedback-text is-correct';
+          feedback.classList.add('correct');
+          feedback.classList.remove('wrong');
+  
+          if (progressPts >= GOAL) {
+            nextBtn.classList.remove('is-hidden');
+          } else {
+            setTimeout(nextQuestion, 500);
+          }
         } else {
-          progressPts = Math.max(0, progressPts - 1);
-          feedback.textContent = `❌ Wrong (${current.romaji})`;
-          feedback.className = 'feedback-text is-wrong';
-        }
-        updateMeter();
-        if (progressPts >= GOAL) {
-          actionBtn.classList.remove('is-hidden');
-        } else {
-          setTimeout(newRound, 700);
+          progressPts = Math.max(0, progressPts - 1); // subtract on wrong
+          updateMeter();
+          feedback.textContent = `❌ Wrong. Correct answer: ${current.romaji}`;
+          feedback.classList.add('wrong');
+          feedback.classList.remove('correct');
+          setTimeout(nextQuestion, 800);
         }
       }
     });
   
-    actionBtn.addEventListener('click', () => showPart(5));
+    nextBtn.addEventListener('click', () => showPart(5));
   
     updateMeter();
-    newRound();
+    nextQuestion();
   }
-
-
+    
   // ======================================================
   // Part 5 — Audio
   // ======================================================
