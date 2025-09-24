@@ -139,23 +139,28 @@
       huntText.innerHTML = '';
       const para = paragraphs[currentPara];
     
-      // split by spaces
-      const tokens = para.split(/(\s+)/);
+      // Split by spaces into words
+      const tokens = para.split(/\s+/);
     
       tokens.forEach(tok => {
-        if (!tok.trim()) {
-          huntText.appendChild(document.createTextNode(tok));
-          return;
-        }
+        if (!tok.trim()) return;
     
         const span = document.createElement('span');
         span.textContent = tok;
-        span.className = words.some(w => tok === w.kana) ? 'hunt-word' : 'hunt-token';
+    
+        if (words.some(w => w.kana === tok)) {
+          span.className = 'hunt-word';
+        } else {
+          span.className = 'hunt-token';
+        }
+    
         huntText.appendChild(span);
+        huntText.appendChild(document.createTextNode(' ')); // preserve spacing
       });
     
       loadNextWord();
     }
+
   
     function loadNextWord() {
       if (currentWordIdx >= wordQueue.length) {
