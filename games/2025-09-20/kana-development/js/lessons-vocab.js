@@ -358,7 +358,7 @@
           feedback.className = "feedback-text correct";
         } else {
           progressPts = Math.max(0, progressPts - 1);
-          feedback.innerHTML = `❌ Wrong! Correct answer: <strong>${current.romaji}</strong>`;
+          feedback.innerHTML = `❌ Answer: <strong>${current.romaji}</strong>`;
           feedback.className = "feedback-text wrong";
         }
   
