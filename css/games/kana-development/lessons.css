@@ -581,15 +581,25 @@ body.site {
   padding: 0.25rem 0.5rem;
   cursor: pointer;
 }
+/* Centered navigation buttons (Back + Next) */
 .lesson-cta {
   position: sticky;
   bottom: 0;
   display: flex;
-  justify-content: space-between; /* ← spread out Back and Next */
+  justify-content: center;   /* center horizontally */
+  gap: var(--kp-gap);        /* spacing between buttons */
   padding: 16px 0 8px;
   background: linear-gradient(to top, rgba(0,0,0,.25), rgba(0,0,0,0));
 }
-.lesson-cta .btn { 
-  min-width: 120px;
+
+.lesson-cta .btn {
+  min-width: 140px;
+  text-align: center;
+}
+
+.lesson-cta .btn.primary {
+  background: var(--kp-accent);
+  border-color: transparent;
+  color: #fff;
 }
 
