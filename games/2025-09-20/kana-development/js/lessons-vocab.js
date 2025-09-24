@@ -109,34 +109,58 @@
     }
   
     let currentPara = 0;
+    let targets = [];
+    let currentTarget = null;
   
     part2.innerHTML = `
       <h2 class="part-title">Immersion Hunt</h2>
       <div id="hunt-target" class="hunt-target"></div>
       <div id="hunt-passage" class="hunt-passage"></div>
-      <div class="actions"><button class="btn primary" data-action="next-part">Next</button></div>
+      <div class="actions"><button class="btn primary is-hidden" data-action="next-part">Next</button></div>
     `;
   
     const passageEl = $('#hunt-passage', part2);
     const targetEl = $('#hunt-target', part2);
     const nextBtn = $('[data-action="next-part"]', part2);
   
+    // Shuffle helper
+    function shuffle(arr) {
+      return arr.sort(() => Math.random() - 0.5);
+    }
+  
+    // Pick next target from pool
+    function setNextTarget() {
+      if (targets.length === 0) {
+        // all words for this paragraph are done
+        nextBtn.classList.remove("is-hidden");
+        targetEl.textContent = "✅ All found!";
+        currentTarget = null;
+        return;
+      }
+      currentTarget = targets.pop();
+      targetEl.textContent = `Find: ${currentTarget.romaji} (${currentTarget.gloss_en})`;
+    }
+  
     function renderParagraph() {
       passageEl.textContent = "";
+      nextBtn.classList.add("is-hidden");
   
-      // Pick a random vocab word from the lesson
-      const randomWord = words[Math.floor(Math.random() * words.length)];
-      const randomTarget = randomWord.kana;
-      targetEl.textContent = `Find: ${randomTarget}`;
+      // reset target pool (shuffle for randomness)
+      targets = shuffle([...words]);
+      currentTarget = null;
   
+      // Render paragraph tokens
       paragraphs[currentPara].forEach(token => {
         const span = document.createElement("span");
         span.className = "hunt-token";
         span.textContent = token;
   
         span.addEventListener("click", () => {
-          if (span.textContent.includes(randomTarget)) {
+          if (!currentTarget) return;
+  
+          if (span.textContent.includes(currentTarget.kana)) {
             span.classList.add("is-correct");
+            setNextTarget(); // move to next target
           } else {
             span.classList.add("is-wrong");
             setTimeout(() => span.classList.remove("is-wrong"), 400);
@@ -146,6 +170,8 @@
         passageEl.appendChild(span);
         passageEl.append(" ");
       });
+  
+      setNextTarget(); // start first target
     }
   
     renderParagraph();
@@ -153,13 +179,13 @@
     nextBtn.addEventListener("click", () => {
       currentPara++;
       if (currentPara < paragraphs.length) {
-        renderParagraph(); // show next paragraph
+        renderParagraph(); // next paragraph
       } else {
-        showPart(3); // after last one, move on
+        showPart(3); // after last one, go to Part 3
       }
     });
   }
-  
+
 
   // ======================================================
   // Part 3 — Identify
