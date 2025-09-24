@@ -521,6 +521,7 @@ body.site {
   text-align: center;
 }
 
+/* Theme variants for Identify buttons */
 .option.theme-dark {
   background: #1a1a2e;
   color: #fff;
@@ -538,20 +539,26 @@ body.site {
   border: 2px solid #ff4081;
   color: #ff4081;
 }
+
+/* Keep Identify button size/layout consistent */
 .option {
+  display: inline-block;
+  min-width: 150px;     /* same button width you had */
+  padding: 16px 24px;   /* keep your larger size */
+  margin: 10px;
+  font-size: 1.4rem;
+  font-family: inherit;
   border-radius: 8px;
-  padding: 12px 20px;
-  font-size: 1.2rem;
-  margin: 6px;
-  transition: all 0.2s ease;
+  cursor: pointer;
+  transition: all 0.25s ease;
 }
+
+/* Feedback colors */
 .option.is-correct {
-  background: #28a745 !important; /* green highlight */
+  background: #28a745 !important; /* green */
   color: #fff !important;
 }
 .option.is-wrong {
-  background: #dc3545 !important; /* red highlight */
+  background: #dc3545 !important; /* red */
   color: #fff !important;
 }
-
-
