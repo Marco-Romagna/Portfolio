@@ -34,21 +34,23 @@ body.site {
 .lesson-progress { margin: 18px 0 12px; }
 
 .steps {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  display: flex;
+  justify-content: space-between;
   gap: var(--kp-gap);
   list-style: none;
   padding: 0;
-  margin: 0 0 8px;
+  margin: 0 0 12px;
+  flex-wrap: nowrap; /* keep on one row */
 }
 .step {
+  flex: 1;
+  text-align: center;
   background: var(--kp-surface);
   border: 1px solid var(--kp-border);
   border-radius: var(--kp-radius);
   padding: 10px 12px;
-  text-align: center;
-  box-shadow: var(--kp-shadow);
   transition: transform .15s ease, border-color .15s ease;
+  box-shadow: var(--kp-shadow);
 }
 .step .step-label { font-weight: 700; display: block; }
 .step .step-sub   { color: var(--kp-muted); font-size: .9rem; }
@@ -379,19 +381,21 @@ body.site {
   background: var(--kp-surface);
   border: 1px solid var(--kp-border);
   border-radius: var(--kp-radius);
-  overflow: hidden;
+
+  display: inline-block;   /* shrink to fit items */
+  min-width: 140px;        /* prevent it from collapsing too small */
+  max-height: 70vh;        /* if too many items, allow scrolling */
+  overflow-y: auto;
 }
+
 .vocab-list li {
-  padding: 10px 12px;
+  padding: 12px 14px;
   cursor: pointer;
   border-bottom: 1px solid var(--kp-border);
   transition: background .2s, color .2s;
 }
-.vocab-list li:last-child { border-bottom: none; }
-.vocab-list li:hover { background: var(--kp-surface-2); }
-.vocab-list li.is-active {
-  background: var(--kp-accent);
-  color: #fff;
+.vocab-list li:last-child {
+  border-bottom: none;
 }
 
 .vocab-detail {
@@ -431,4 +435,234 @@ body.site {
 .vocab-example p { margin: 0.25rem 0; }
 .vocab-example .muted { color: var(--kp-muted); }
 
+/* Active word in the vocab sidebar */
+.vocab-list li.is-active {
+  background: color-mix(in srgb, var(--kp-accent) 20%, transparent);
+  color: var(--kp-accent);
+  font-weight: 600;
+  border-left: 4px solid var(--kp-accent);
+}
 
+/* =========================================================
+   Part 2 — Word Hunt styles
+   ========================================================= */
+.hunt-panel {
+  padding: 16px;
+}
+
+.hunt-instruction {
+  margin-bottom: 12px;
+  color: var(--kp-muted);
+  font-size: 1.05rem;
+  text-align: center;
+}
+
+/* Hunt target box */
+.hunt-target {
+  text-align: center;
+  margin: 20px auto;
+  padding: 24px;
+  background: var(--kp-surface);
+  border-radius: var(--kp-radius);
+  box-shadow: var(--kp-shadow);
+  max-width: 360px;
+}
+
+/* Romaji display (big + bold) */
+.hunt-target .hunt-romaji {
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: var(--kp-accent-2);
+  margin-bottom: 8px;
+  letter-spacing: 1px;
+}
+
+/* English gloss (smaller, muted) */
+.hunt-target .hunt-english {
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: var(--kp-text);
+  font-style: italic;
+}
+
+/* Paragraph text area */
+.hunt-passage {
+  margin: 16px 0;
+  line-height: 2;
+  font-size: 1.3rem;
+  text-align: left;
+}
+
+/* Clickable tokens */
+.hunt-token {
+  display: inline-block;
+  cursor: pointer;
+  padding: 0 4px;
+  border-radius: 4px;
+  transition: background 0.2s, color 0.2s;
+}
+.hunt-token:hover {
+  background: rgba(255,255,255,0.08); /* subtle highlight */
+}
+.hunt-token.is-correct {
+  background: var(--kp-correct);
+  color: #fff;
+}
+.hunt-token.is-wrong {
+  background: var(--kp-wrong);
+  color: #fff;
+}
+
+/* Progress text (optional) */
+.hunt-progress {
+  margin-top: 12px;
+  font-size: .9rem;
+  color: var(--kp-muted);
+  text-align: center;
+}
+
+/* Theme variants for Identify buttons */
+.option.theme-dark {
+  background: #1a1a2e;
+  color: #fff;
+}
+.option.theme-light {
+  background: #f5f5f5;
+  color: #222;
+}
+.option.theme-sepia {
+  background: #fdf6e3;
+  color: #654321;
+}
+.option.theme-high {
+  background: #222;
+  border: 2px solid #ff4081;
+  color: #ff4081;
+}
+
+/* Keep Identify button size/layout consistent */
+.option {
+  display: inline-block;
+  min-width: 150px;
+  padding: 16px 24px;
+  margin: 10px;
+  font-size: 2rem;         /* bigger characters */
+  font-weight: 600;        /* thicker strokes */
+  font-family: "Noto Sans JP", "Hiragino Kaku Gothic Pro", "Meiryo", sans-serif;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  text-align: center;
+}
+
+/* Feedback colors */
+.option.is-correct {
+  background: #28a745 !important; /* green */
+  color: #fff !important;
+}
+.option.is-wrong {
+  background: #dc3545 !important; /* red */
+  color: #fff !important;
+}
+
+.debug-bar {
+  position: fixed;
+  bottom: 10px;
+  left: 10px;
+  z-index: 9999;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.debug-bar button {
+  background: #444;
+  color: white;
+  border: none;
+  padding: 0.25rem 0.5rem;
+  cursor: pointer;
+}
+/* Centered navigation buttons (Back + Next) */
+.lesson-cta {
+  position: sticky;
+  bottom: 0;
+  display: flex;
+  justify-content: center;   /* center horizontally */
+  gap: var(--kp-gap);        /* spacing between buttons */
+  padding: 16px 0 8px;
+  background: linear-gradient(to top, rgba(0,0,0,.25), rgba(0,0,0,0));
+}
+
+.lesson-cta .btn {
+  min-width: 140px;
+  text-align: center;
+}
+
+.lesson-cta .btn.primary {
+  background: var(--kp-accent);
+  border-color: transparent;
+  color: #fff;
+}
+
+/* Part 4 Typing Styles */
+.quiz-input-wrapper {
+  margin: 1rem 0;
+  display: flex;
+  justify-content: center;
+}
+.quiz-input {
+  font-size: 1.5rem;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  border: 2px solid #666;
+  background: #111827;
+  color: #f9fafb;
+  text-align: center;
+  width: 250px;
+}
+.quiz-input:focus {
+  outline: none;
+  border-color: #7c3aed; /* purple highlight */
+}
+.quiz-feedback {
+  margin-top: 0.5rem;
+  text-align: center;
+  min-height: 1.5rem;
+}
+.quiz-feedback .correct {
+  color: #10b981; /* green */
+}
+.quiz-feedback .wrong {
+  color: #ef4444; /* red */
+}
+.quiz-progress {
+  margin-top: 1rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.quiz-progress .meter {
+  height: 6px;
+  border-radius: 4px;
+  background: #1f2937;
+  overflow: hidden;
+  margin-bottom: 0.5rem;
+  width: 300px; /* adjust this to be slightly larger than .quiz-input */
+  max-width: 90%; /* safe on smaller screens */
+}
+
+.quiz-progress .meter-fill {
+  height: 100%;
+  width: 0;
+  background: linear-gradient(to right, #7c3aed, #06b6d4);
+  transition: width 0.3s ease;
+}
+
+.quiz-progress .meter-label {
+  font-size: 0.9rem;
+  color: #d1d5db;
+}
+.quiz-prompt .prompt-target {
+  color: #7c3aed; /* purple accent */
+}
