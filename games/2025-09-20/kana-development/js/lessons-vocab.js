@@ -13,33 +13,6 @@
 
   const THEMES = ['theme-dark','theme-light','theme-sepia','theme-high'];
 
-  // ---------- Tokenizer + Hunt Cache ----------
-  let vocabTokenizer = null;
-  let vocabHuntCache = {}; // worldKey -> [ [tokens], [tokens] ]
-
-  kuromoji.builder({ dicPath: "../js/dict" }).build((err, tokenizer) => {
-    if (err) {
-      console.error("Tokenizer init failed", err);
-      return;
-    }
-    vocabTokenizer = tokenizer;
-    console.log("Tokenizer ready");
-
-    // Preload hunts.json
-    fetch("../data/hunts.json")
-      .then(r => r.json())
-      .then(hunts => {
-        Object.keys(hunts).forEach(key => {
-          if (Array.isArray(hunts[key])) {
-            vocabHuntCache[key] = hunts[key].map(passage =>
-              tokenizer.tokenize(passage)
-            );
-          }
-        });
-        console.log("Hunt cache built:", vocabHuntCache);
-      });
-  });
-
   // ======================================================
   // Part 1 — Preview Words (Word Explorer)
   // ======================================================
@@ -118,18 +91,29 @@
     $('[data-action="next"]', part1).addEventListener('click', () => selectIndex(currentIdx + 1));
     $('[data-action="advance"]', part1).addEventListener('click', () => showPart(2));
   }
+  
   // ==========================================================
-  // Part 2 — Vocab Hunt (cycle through all paragraphs)
+  // Part 2 — Vocab Hunt (Immersion Passage using hunts-tokens.json)
   // ==========================================================
   async function initPart2Hunt(worldKey) {
     const { $, showPart, KANA } = window.LessonCore;
     const part2 = $('#part-2');
     if (!part2) return;
   
+    const res = await fetch("../data/hunts-tokens.json");
+    const hunts = await res.json();
+    const paragraphs = hunts[worldKey];
+    if (!paragraphs || paragraphs.length === 0) {
+      part2.innerHTML = `<p>No hunt data for ${worldKey}</p>`;
+      return;
+    }
+  
+    let currentPara = 0;
+  
     part2.innerHTML = `
       <h2 class="part-title">Immersion Hunt</h2>
       <div id="hunt-target" class="hunt-target"></div>
-      <div id="hunt-passage" class="hunt-passage">Loading...</div>
+      <div id="hunt-passage" class="hunt-passage"></div>
       <div class="actions"><button class="btn primary" data-action="next-part">Next</button></div>
     `;
   
@@ -137,28 +121,17 @@
     const targetEl = $('#hunt-target', part2);
     const nextBtn = $('[data-action="next-part"]', part2);
   
-    // Ensure cache is ready
-    if (!vocabHuntCache[worldKey]) {
-      passageEl.textContent = `No hunt data available for ${worldKey}`;
-      console.warn("Hunt not ready:", worldKey, vocabHuntCache);
-      return;
-    }
-  
-    let currentPara = 0;
-    const allParas = vocabHuntCache[worldKey];
-  
     function renderParagraph() {
       passageEl.textContent = "";
   
-      // Pick a fresh random kana target for this passage
+      // Pick a random kana target for this paragraph
       const randomTarget = KANA[Math.floor(Math.random() * KANA.length)];
       targetEl.textContent = `Find: ${randomTarget}`;
   
-      const tokens = allParas[currentPara];
-      tokens.forEach(tok => {
+      paragraphs[currentPara].forEach(token => {
         const span = document.createElement("span");
         span.className = "hunt-token";
-        span.textContent = tok.surface_form;
+        span.textContent = token;
   
         span.addEventListener("click", () => {
           if (span.textContent.includes(randomTarget)) {
@@ -178,15 +151,14 @@
   
     nextBtn.addEventListener("click", () => {
       currentPara++;
-      if (currentPara < allParas.length) {
-        renderParagraph(); // show the next paragraph
+      if (currentPara < paragraphs.length) {
+        renderParagraph(); // show next paragraph
       } else {
         showPart(3); // after last paragraph, move on
       }
     });
   }
 
-  
   // ======================================================
   // Part 3 — Identify
   // ======================================================
@@ -370,10 +342,7 @@
     const roleKey = getRoleKey(WORLD, SUFFIX);
     const words = await Vocab.getWorldMilestone(roleKey);
 
-    // Only Part 1 immediately
     await initPart1(words);
-
-    // Lazy init
     window.initPart2 = () => initPart2Hunt(roleKey);
     window.initPart3 = () => initPart3(words);
     window.initPart4 = () => initPart4(words);
