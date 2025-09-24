@@ -317,10 +317,11 @@
     const meterLabel = $('.meter-label', part4);
     const actionBtn = $('[data-action="next-part"]', part4);
   
-    const GOAL = words.length * 2; // same pacing as Identify
+    const GOAL = words.length * 2;
     let progressPts = 0;
   
     let queue = [...words].sort(() => Math.random() - 0.5);
+    let usedWords = [];
     let current = null;
   
     function updateMeter() {
@@ -329,12 +330,19 @@
       meterLabel.textContent = `Progress: ${progressPts} / ${GOAL}`;
     }
   
+    function refillQueue() {
+      // put all words back in, shuffle again
+      queue = [...words].sort(() => Math.random() - 0.5);
+      usedWords = [];
+    }
+  
     function newRound() {
       if (queue.length === 0) {
-        // refill with shuffled full set once exhausted
-        queue = [...words].sort(() => Math.random() - 0.5);
+        refillQueue();
       }
       current = queue.shift();
+      usedWords.push(current.id);
+  
       promptEl.textContent = current.gloss_en;
       input.value = '';
       feedback.textContent = '';
@@ -350,7 +358,7 @@
           feedback.className = "feedback-text correct";
         } else {
           progressPts = Math.max(0, progressPts - 1);
-          feedback.textContent = "❌ Wrong!";
+          feedback.innerHTML = `❌ Wrong! Correct answer: <strong>${current.romaji}</strong>`;
           feedback.className = "feedback-text wrong";
         }
   
@@ -358,9 +366,9 @@
   
         if (progressPts >= GOAL) {
           actionBtn.classList.remove('is-hidden');
-          input.disabled = true; // stop further typing
+          input.disabled = true;
         } else {
-          setTimeout(newRound, 600); // move on after short delay
+          setTimeout(newRound, 900); // wait longer so they can see the right spelling
         }
       }
     });
