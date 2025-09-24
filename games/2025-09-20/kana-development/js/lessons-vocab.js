@@ -345,7 +345,7 @@
     const words = await Vocab.getWorldMilestone(roleKey);
 
     await initPart1(words);
-    window.initPart2 = () => initPart2Hunt(roleKey);
+    window.initPart2 = () => initPart2Hunt(roleKey, words);
     window.initPart3 = () => initPart3(words);
     window.initPart4 = () => initPart4(words);
     window.initPart5 = () => initPart5(words);
