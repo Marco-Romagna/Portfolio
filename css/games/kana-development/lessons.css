@@ -603,56 +603,37 @@ body.site {
   color: #fff;
 }
 
-/* Part 4 Typing - Vocab */
-.lesson-part[data-part-index="4"] {
-  text-align: center;
-  padding: 2rem;
-}
-
-.vocab-prompt {
-  font-size: 2.2rem;
+/* Typing Part 4 matches Identify style */
+.type-glyph-wrapper {
+  font-size: 2rem;
   font-weight: 700;
-  margin-bottom: 1.2rem;
+  margin-bottom: 1rem;
 }
 
-.vocab-input {
-  font-size: 1.6rem;
-  padding: 0.6rem 1rem;
-  border: 2px solid #ccc;
-  border-radius: 6px;
-  text-align: center;
-  outline: none;
-  transition: border 0.2s, background 0.2s;
+.type-input-wrapper {
+  display: inline-block;
+  padding: 0.8rem 1rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
 }
 
-.vocab-input.is-correct {
-  border-color: #4caf50;
-  background: #e6f7e6;
-}
-
-.vocab-input.is-wrong {
-  border-color: #f44336;
-  background: #fdecea;
-}
-
-.vocab-feedback {
-  margin-top: 0.8rem;
+.type-input {
   font-size: 1.2rem;
-  color: #ccc;
-}
-
-.vocab-next {
-  margin-top: 1.4rem;
-  padding: 0.6rem 1.2rem;
-  font-size: 1rem;
   border: none;
-  border-radius: 6px;
-  background: #7a4dff;
-  color: white;
-  cursor: pointer;
+  outline: none;
+  text-align: center;
+  background: transparent;
+  width: 180px;
 }
 
-.vocab-next.is-hidden {
-  display: none;
+.type-input.is-correct {
+  color: #4caf50;
+  font-weight: 700;
 }
+
+.type-input.is-wrong {
+  color: #f44336;
+  font-weight: 700;
+}
+
 
