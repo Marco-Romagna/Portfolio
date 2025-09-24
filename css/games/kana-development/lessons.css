@@ -472,7 +472,7 @@ body.site {
 /* Override for hunt glyph only */
 .hunt-target .kana-glyph {
   display: block;
-  font-size: clamp(96px, 15vw, 200px); /* MUCH bigger */
+  font-size: clamp(64px, 9vw, 110px);
   font-weight: 800;
   color: var(--kp-accent-2);
   line-height: 1.1;
