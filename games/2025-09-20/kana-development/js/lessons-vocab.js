@@ -297,11 +297,17 @@
       <h2 class="part-title">Typing</h2>
       <div class="type-panel">
         <div class="type-glyph-wrapper"></div>
-        <input id="type-input" class="type-input" placeholder="Type kana…" autocomplete="off" />
-        <div class="quiz-progress"><div class="meter"><div class="meter-fill"></div></div><div class="meter-label"></div></div>
+        <div class="type-input-wrapper theme-dark">
+          <input id="type-input" class="type-input" placeholder="Type kana…" autocomplete="off" />
+        </div>
+        <div class="quiz-progress">
+          <div class="meter"><div class="meter-fill"></div></div>
+          <div class="meter-label"></div>
+        </div>
         <div class="actions"><button class="btn primary" data-action="next-part">Next</button></div>
       </div>
     `;
+
 
     const wrapper = $('.type-glyph-wrapper', part4);
     const input = $('#type-input', part4);
