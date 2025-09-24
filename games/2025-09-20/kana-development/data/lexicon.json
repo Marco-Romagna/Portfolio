@@ -298,7 +298,7 @@
     }
   ],
     "byWorld": {
-    "1-base": ["ai", "iie", "ue", "ie", "ao", "au"],
+    "1-base": ["ai", "iie", "ue", "ie", "aoi", "au"],
     "1-daku": [],
     "1-handaku": [],
     "2-base": ["iku", "kiku", "kau", "kao", "ike", "koe"],
