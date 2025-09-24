@@ -463,107 +463,60 @@ body.site {
   margin: 20px auto;
   padding: 24px;
   background: var(--kp-surface);
-  border: none;              /* 🔹 remove purple border */
   border-radius: var(--kp-radius);
   box-shadow: var(--kp-shadow);
-  max-width: 320px;
+  max-width: 360px;
 }
 
-/* Override for hunt glyph only */
-.hunt-target .kana-glyph {
-  display: block;
-  font-size: clamp(64px, 9vw, 110px);
-  font-weight: 800;
+/* Romaji display (big + bold) */
+.hunt-target .hunt-romaji {
+  font-size: 2.2rem;
+  font-weight: 700;
   color: var(--kp-accent-2);
-  line-height: 1.1;
-  margin-bottom: 12px;
-  background: color-mix(in srgb, var(--kp-accent-2) 20%, transparent);
-  border-radius: var(--kp-radius);
-  padding: 8px 16px;
+  margin-bottom: 8px;
+  letter-spacing: 1px;
 }
 
-/* Gloss (English meaning) */
-.hunt-target .kana-gloss {
-  font-size: 1.3rem;
-  font-weight: 600;
+/* English gloss (smaller, muted) */
+.hunt-target .hunt-english {
+  font-size: 1.2rem;
+  font-weight: 500;
   color: var(--kp-text);
+  font-style: italic;
 }
-
 
 /* Paragraph text area */
-.hunt-text {
+.hunt-passage {
   margin: 16px 0;
   line-height: 2;
   font-size: 1.3rem;
   text-align: left;
 }
 
-/* Clickable vocab words */
-.hunt-word {
-  display: inline;
-  padding: 0 2px;   
-  border-radius: 4px;
+/* Clickable tokens */
+.hunt-token {
+  display: inline-block;
   cursor: pointer;
-  transition: background .2s ease, color .2s ease;
+  padding: 0 4px;
+  border-radius: 4px;
+  transition: background 0.2s, color 0.2s;
 }
-.hunt-word.is-correct {
+.hunt-token:hover {
+  background: rgba(255,255,255,0.08); /* subtle highlight */
+}
+.hunt-token.is-correct {
   background: var(--kp-correct);
   color: #fff;
 }
-.hunt-word.is-wrong {
+.hunt-token.is-wrong {
   background: var(--kp-wrong);
   color: #fff;
 }
 
-
-/* Progress text */
+/* Progress text (optional) */
 .hunt-progress {
   margin-top: 12px;
   font-size: .9rem;
   color: var(--kp-muted);
   text-align: center;
-}
-
-.hunt-token {
-  display: inline-block;
-  cursor: pointer;
-  padding: 0 2px;
-  border-radius: 4px;
-  transition: background .2s ease, color .2s ease;
-}
-
-.hunt-token:hover {
-  background: rgba(255,255,255,0.08); /* subtle highlight */
-}
-
-/* Big highlighted hunt target word */
-.hunt-target-word {
-  font-size: clamp(48px, 6vw, 96px); 
-  font-weight: 700;
-  color: var(--kp-accent-2);
-  margin-bottom: 6px;
-  display: block;
-  text-align: center;
-  letter-spacing: 2px;
-}
-
-.hunt-passage {
-  font-size: 1.4rem;
-  line-height: 2.2rem;
-  margin: 1em 0;
-}
-
-.hunt-token {
-  cursor: pointer;
-  padding: 0 4px;
-  border-radius: 4px;
-  transition: background 0.2s;
-}
-
-.hunt-token.is-correct {
-  background: lightgreen;
-}
-
-.hunt-token.is-wrong {
-  background: pink;
 }
