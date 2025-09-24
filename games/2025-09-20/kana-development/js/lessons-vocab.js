@@ -93,7 +93,7 @@
   }
 
   // ======================================================
-  // Part 2 — Word Hunt (randomized, multiple hunts)
+  // Part 2 — Word Hunt (clean version, all clickable, no dupes required)
   // ======================================================
   async function initPart2Hunt(words) {
     const part2 = $('#part-2');
@@ -139,28 +139,19 @@
       huntText.innerHTML = '';
       const para = paragraphs[currentPara];
   
-      let i = 0;
-      while (i < para.length) {
-        let matched = false;
-        for (const w of words) {
-          if (para.startsWith(w.kana, i)) {
-            const span = document.createElement('span');
-            span.textContent = w.kana;
-            span.className = 'hunt-word';
-            huntText.appendChild(span);
-            i += w.kana.length;
-            matched = true;
-            break;
-          }
-        }
-        if (!matched) {
+      // Split paragraph into words (space-based for now)
+      const tokens = para.split(/(\s+)/);
+  
+      tokens.forEach(tok => {
+        if (!tok.trim()) {
+          huntText.appendChild(document.createTextNode(tok));
+        } else {
           const span = document.createElement('span');
-          span.textContent = para[i];
-          span.className = 'hunt-char'; // normal character
+          span.textContent = tok;
+          span.className = 'hunt-token';
           huntText.appendChild(span);
-          i++;
         }
-      }
+      });
   
       // Shuffle words for this hunt
       wordQueue = [...words].sort(() => Math.random() - 0.5);
@@ -181,28 +172,22 @@
         <div class="hunt-gloss">${targetWord.gloss_en}</div>
       `;
   
-      let foundCount = 0;
-      const spans = $$('.hunt-word', huntText);
+      const tokens = $$('.hunt-token', huntText);
   
-      spans.forEach(span => {
-        span.addEventListener('click', () => {
-          if (span.textContent === targetWord.kana && !span.classList.contains('is-correct')) {
+      tokens.forEach(span => {
+        span.onclick = () => {
+          if (span.textContent === targetWord.kana) {
             span.classList.add('is-correct');
-            foundCount++;
-  
-            // All instances found → next word
-            const totalInstances = spans.filter(s => s.textContent === targetWord.kana).length;
-            if (foundCount >= totalInstances) {
-              setTimeout(() => {
-                currentWordIdx++;
-                loadNextWord();
-              }, 400);
-            }
-          } else if (span.textContent !== targetWord.kana) {
+            // immediately move on, no need to find duplicates
+            setTimeout(() => {
+              currentWordIdx++;
+              loadNextWord();
+            }, 400);
+          } else {
             span.classList.add('is-wrong');
             setTimeout(() => span.classList.remove('is-wrong'), 400);
           }
-        });
+        };
       });
     }
   
