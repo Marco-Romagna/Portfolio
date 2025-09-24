@@ -326,6 +326,12 @@
     function newRound() {
       current = words[Math.floor(Math.random() * words.length)];
       wrapper.innerHTML = `<span class="kana-glyph">${current.gloss_en}</span>`;
+    
+      // apply theme class to input wrapper
+      const theme = THEMES[Math.floor(Math.random() * THEMES.length)];
+      const inputWrapper = $('.type-input-wrapper', part4);
+      inputWrapper.className = `type-input-wrapper ${theme}`;
+    
       input.value = '';
     }
 
