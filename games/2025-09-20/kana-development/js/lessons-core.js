@@ -3,6 +3,7 @@
 // Shared utilities + role detection for all lesson types
 // ==========================================================
 window.DEBUG_SKIP_ENABLED = true; // set false for production
+
 (() => {
   // ---------- DOM Helpers ----------
   const $  = (s, r = document) => r.querySelector(s);
@@ -30,16 +31,16 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
   const progress   = $('.progressbar');
   const fill       = $('.progressbar-fill');
 
-  const cta = $('.lesson-cta [data-action="advance"]');
-  const ctaWrap = cta?.closest('.lesson-cta');
+  const ctaWrap = $('.lesson-cta');
+  const nextBtn = $('.lesson-cta [data-action="advance"]');
   const hideCTA = () => { ctaWrap?.classList.add('is-hidden'); };
 
-  // Add back button
+  // Add back button (styled same as next)
   let backBtn = document.createElement('button');
   backBtn.textContent = "← Back";
-  backBtn.className = "btn ghost is-hidden";
+  backBtn.className = "btn primary is-hidden";
   backBtn.dataset.action = "back";
-  ctaWrap?.insertBefore(backBtn, ctaWrap.firstChild);
+  ctaWrap?.insertBefore(backBtn, nextBtn);
 
   let currentPart = 1;
 
@@ -86,8 +87,8 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
     }
   }
 
-  // ---------- Debug skip: hook buttons ----------
-  cta?.addEventListener('click', () => {
+  // ---------- Hook navigation buttons ----------
+  nextBtn?.addEventListener('click', () => {
     if (window.DEBUG_SKIP_ENABLED) {
       showPart(currentPart + 1);
     }
