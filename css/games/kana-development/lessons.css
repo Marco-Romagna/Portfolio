@@ -547,3 +547,23 @@ body.site {
   letter-spacing: 2px;
 }
 
+.hunt-passage {
+  font-size: 1.4rem;
+  line-height: 2.2rem;
+  margin: 1em 0;
+}
+
+.hunt-token {
+  cursor: pointer;
+  padding: 0 4px;
+  border-radius: 4px;
+  transition: background 0.2s;
+}
+
+.hunt-token.is-correct {
+  background: lightgreen;
+}
+
+.hunt-token.is-wrong {
+  background: pink;
+}
