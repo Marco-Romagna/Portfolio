@@ -543,14 +543,16 @@ body.site {
 /* Keep Identify button size/layout consistent */
 .option {
   display: inline-block;
-  min-width: 150px;     /* same button width you had */
-  padding: 16px 24px;   /* keep your larger size */
+  min-width: 150px;
+  padding: 16px 24px;
   margin: 10px;
-  font-size: 1.4rem;
-  font-family: inherit;
+  font-size: 2rem;         /* bigger characters */
+  font-weight: 600;        /* thicker strokes */
+  font-family: "Noto Sans JP", "Hiragino Kaku Gothic Pro", "Meiryo", sans-serif;
   border-radius: 8px;
   cursor: pointer;
   transition: all 0.25s ease;
+  text-align: center;
 }
 
 /* Feedback colors */
