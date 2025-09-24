@@ -233,7 +233,11 @@
     function nextQuestion() {
       grid.innerHTML = '';
       feedback.textContent = '';
-
+      // reset old classes before rendering new buttons
+      document.querySelectorAll('.option').forEach(btn => {
+        btn.classList.remove('is-correct', 'is-wrong');
+      });
+      
       if (queue.length === 0) {
         queue = [...words].sort(() => Math.random() - 0.5);
       }
