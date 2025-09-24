@@ -339,7 +339,7 @@
     const words = await Vocab.getWorldMilestone(roleKey);
 
     await initPart1(words);
-    await initPart2Hunt(words);
+    await initPart2Hunt(roleKey); 
     await initPart3(words);
     await initPart4(words);
     await initPart5(words);
