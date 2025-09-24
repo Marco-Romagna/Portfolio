@@ -13,6 +13,33 @@
 
   const THEMES = ['theme-dark','theme-light','theme-sepia','theme-high'];
 
+  // ---------- Tokenizer + Hunt Cache ----------
+  let vocabTokenizer = null;
+  let vocabHuntCache = {}; // worldKey -> [ [tokens], [tokens] ]
+
+  kuromoji.builder({ dicPath: "../js/dict" }).build((err, tokenizer) => {
+    if (err) {
+      console.error("Tokenizer init failed", err);
+      return;
+    }
+    vocabTokenizer = tokenizer;
+    console.log("Tokenizer ready");
+
+    // Preload hunts.json
+    fetch("../data/hunts.json")
+      .then(r => r.json())
+      .then(hunts => {
+        Object.keys(hunts).forEach(key => {
+          if (Array.isArray(hunts[key])) {
+            vocabHuntCache[key] = hunts[key].map(passage =>
+              tokenizer.tokenize(passage)
+            );
+          }
+        });
+        console.log("Hunt cache built:", vocabHuntCache);
+      });
+  });
+
   // ======================================================
   // Part 1 — Preview Words (Word Explorer)
   // ======================================================
@@ -100,61 +127,54 @@
     const part2 = $('#part-2');
     if (!part2) return;
   
-    // Load hunts.json
-    const res = await fetch("../data/hunts.json");
-    const hunts = await res.json();
-    const paragraphs = hunts[worldKey];
-    if (!paragraphs || paragraphs.length === 0) {
-      part2.innerHTML = "<p>No hunt data available.</p>";
-      return;
-    }
-  
-    // For now: pick the first paragraph
-    const passage = paragraphs[0];
-  
     part2.innerHTML = `
       <h2 class="part-title">Immersion Hunt</h2>
-      <div id="hunt-passage" class="hunt-passage"></div>
+      <div id="hunt-target" class="hunt-target"></div>
+      <div id="hunt-passage" class="hunt-passage">Loading...</div>
       <div class="actions"><button class="btn primary" data-action="next-part">Next</button></div>
     `;
   
-    const container = $('#hunt-passage', part2);
+    const passageEl = $('#hunt-passage', part2);
+    const targetEl = $('#hunt-target', part2);
   
-    // Tokenizer
-    kuromoji.builder({ dicPath: "../js/dict" }).build((err, tokenizer) => {
-      if (err) {
-        container.textContent = "Tokenizer failed to load.";
-        console.error(err);
-        return;
-      }
+    // Ensure cache is ready
+    if (!vocabHuntCache[worldKey]) {
+      passageEl.textContent = `No hunt data available for ${worldKey}`;
+      console.warn("Hunt not ready:", worldKey, vocabHuntCache);
+      return;
+    }
   
-      const tokens = tokenizer.tokenize(passage);
-      tokens.forEach(tok => {
-        const span = document.createElement("span");
-        span.className = "hunt-token";
-        span.textContent = tok.surface_form;
-        span.dataset.value = tok.surface_form;
+    // Pick first paragraph (TODO: cycle both)
+    const tokens = vocabHuntCache[worldKey][0];
   
-        span.addEventListener("click", () => {
-          const hasTargetKana = KANA.some(k => span.dataset.value.includes(k));
-          if (hasTargetKana) {
-            span.classList.add("is-correct");
-          } else {
-            span.classList.add("is-wrong");
-            setTimeout(() => span.classList.remove("is-wrong"), 500);
-          }
-        });
+    // Pick a random kana target
+    const randomTarget = KANA[Math.floor(Math.random() * KANA.length)];
+    targetEl.textContent = `Find: ${randomTarget}`;
   
-        container.appendChild(span);
-        container.append(" ");
+    // Render tokens
+    passageEl.textContent = "";
+    tokens.forEach(tok => {
+      const span = document.createElement("span");
+      span.className = "hunt-token";
+      span.textContent = tok.surface_form;
+  
+      span.addEventListener("click", () => {
+        if (span.textContent.includes(randomTarget)) {
+          span.classList.add("is-correct");
+        } else {
+          span.classList.add("is-wrong");
+          setTimeout(() => span.classList.remove("is-wrong"), 400);
+        }
       });
+  
+      passageEl.appendChild(span);
+      passageEl.append(" ");
     });
   
     $('[data-action="next-part"]', part2)
       ?.addEventListener("click", () => showPart(3));
   }
 
-   
   // ======================================================
   // Part 3 — Identify
   // ======================================================
@@ -257,7 +277,7 @@
         <div class="type-glyph-wrapper"></div>
         <input id="type-input" class="type-input" placeholder="Type kana…" autocomplete="off" />
         <div class="quiz-progress"><div class="meter"><div class="meter-fill"></div></div><div class="meter-label"></div></div>
-        <div class="actions"><button class="btn primary is-hidden" data-action="next-part">Next</button></div>
+        <div class="actions"><button class="btn primary" data-action="next-part">Next</button></div>
       </div>
     `;
 
@@ -337,11 +357,11 @@
   window.initVocabParts = async function () {
     const roleKey = getRoleKey(WORLD, SUFFIX);
     const words = await Vocab.getWorldMilestone(roleKey);
-  
-    // Init Part 1 immediately
+
+    // Only Part 1 immediately
     await initPart1(words);
-  
-    // Lazy init for the others: only run when their section becomes visible
+
+    // Lazy init
     window.initPart2 = () => initPart2Hunt(roleKey);
     window.initPart3 = () => initPart3(words);
     window.initPart4 = () => initPart4(words);
