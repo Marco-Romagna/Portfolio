@@ -286,7 +286,7 @@
   }
 
   // ======================================================
-  // Part 4 — Typing (Romaji)
+  // Part 4 — Typing (Romaji Input)
   // ======================================================
   async function initPart4(words) {
     const part4 = $('#part-4');
@@ -294,9 +294,9 @@
   
     part4.innerHTML = `
       <h2 class="part-title">Typing</h2>
-      <div class="quiz-panel">
+      <div class="type-panel">
         <div class="quiz-prompt">
-          <p class="prompt-text">Type the romaji for <strong class="prompt-target"></strong></p>
+          <p>Type the romaji for <strong class="prompt-target"></strong></p>
         </div>
         <div class="quiz-input-wrapper">
           <input id="type-input" class="quiz-input" placeholder="Type romaji…" autocomplete="off" />
@@ -306,95 +306,72 @@
           <div class="meter"><div class="meter-fill"></div></div>
           <div class="meter-label"></div>
         </div>
-        <div class="actions">
-          <button class="btn primary is-hidden" data-action="next-part">Next</button>
-        </div>
+        <div class="actions"><button class="btn primary is-hidden" data-action="next-part">Next</button></div>
       </div>
     `;
   
-    const input = $('#type-input', part4);
     const promptEl = $('.prompt-target', part4);
-    const feedback = $('.quiz-feedback .feedback-text', part4);
-    const meterFill = $('.quiz-progress .meter-fill', part4);
-    const meterLabel = $('.quiz-progress .meter-label', part4);
+    const input = $('#type-input', part4);
+    const feedback = $('.feedback-text', part4);
+    const meterFill = $('.meter-fill', part4);
+    const meterLabel = $('.meter-label', part4);
     const actionBtn = $('[data-action="next-part"]', part4);
   
-    const GOAL = words.length * 2;
+    const GOAL = words.length * 2; // same pacing as Identify
     let progressPts = 0;
-    let finished = false;
+  
+    let queue = [...words].sort(() => Math.random() - 0.5);
     let current = null;
-    let lastWord = null;
   
-    // ---------------------------
-    // Helpers
-    // ---------------------------
     function updateMeter() {
-      const safePts = Math.min(progressPts, GOAL);
-      const pct = Math.round((safePts / GOAL) * 100);
+      const pct = Math.round((progressPts / GOAL) * 100);
       meterFill.style.width = `${pct}%`;
-      meterLabel.textContent = `Progress: ${safePts} / ${GOAL}`;
-    }
-  
-    function pickNewWord() {
-      let next;
-      do {
-        next = words[Math.floor(Math.random() * words.length)];
-      } while (next === lastWord && words.length > 1); // avoid repeat
-      lastWord = next;
-      return next;
+      meterLabel.textContent = `Progress: ${progressPts} / ${GOAL}`;
     }
   
     function newRound() {
-      input.disabled = true;
-      current = pickNewWord();
+      if (queue.length === 0) {
+        // refill with shuffled full set once exhausted
+        queue = [...words].sort(() => Math.random() - 0.5);
+      }
+      current = queue.shift();
       promptEl.textContent = current.gloss_en;
-      feedback.textContent = '';
       input.value = '';
-      setTimeout(() => {
-        input.disabled = false;
-        input.focus();
-      }, 200); // prevent double-enter
+      feedback.textContent = '';
+      feedback.className = "feedback-text";
     }
   
-    // ---------------------------
-    // Input Handler
-    // ---------------------------
     input.addEventListener('keydown', e => {
-      if (e.key === 'Enter' && !finished) {
+      if (e.key === 'Enter' && !input.disabled) {
         const answer = input.value.trim().toLowerCase();
         if (answer === current.romaji.toLowerCase()) {
           progressPts++;
-          updateMeter();
-  
-          if (progressPts >= GOAL) {
-            finished = true;
-            input.disabled = true;
-            feedback.textContent = "✅ Correct! All done!";
-            actionBtn.classList.remove('is-hidden');
-          } else {
-            feedback.textContent = "✅ Correct!";
-            newRound();
-          }
+          feedback.textContent = "✅ Correct!";
+          feedback.className = "feedback-text correct";
         } else {
-          feedback.textContent = "❌ Wrong, try again!";
-          input.value = '';
+          progressPts = Math.max(0, progressPts - 1);
+          feedback.textContent = "❌ Wrong!";
+          feedback.className = "feedback-text wrong";
+        }
+  
+        updateMeter();
+  
+        if (progressPts >= GOAL) {
+          actionBtn.classList.remove('is-hidden');
+          input.disabled = true; // stop further typing
+        } else {
+          setTimeout(newRound, 600); // move on after short delay
         }
       }
     });
+  
+    actionBtn.addEventListener('click', () => showPart(5));
+  
+    updateMeter();
+    newRound();
+  }
 
-  // ---------------------------
-  // Next Part
-  // ---------------------------
-  actionBtn.addEventListener('click', () => showPart(5));
-
-  // ---------------------------
-  // Start
-  // ---------------------------
-  updateMeter();
-  newRound();
-}
-
-    
+  
   // ======================================================
   // Part 5 — Audio
   // ======================================================
