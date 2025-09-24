@@ -118,9 +118,8 @@
     $('[data-action="next"]', part1).addEventListener('click', () => selectIndex(currentIdx + 1));
     $('[data-action="advance"]', part1).addEventListener('click', () => showPart(2));
   }
-  
   // ==========================================================
-  // Part 2 — Vocab Hunt (Immersion Passage, for -4/-8/-12 levels)
+  // Part 2 — Vocab Hunt (cycle through all paragraphs)
   // ==========================================================
   async function initPart2Hunt(worldKey) {
     const { $, showPart, KANA } = window.LessonCore;
@@ -136,6 +135,7 @@
   
     const passageEl = $('#hunt-passage', part2);
     const targetEl = $('#hunt-target', part2);
+    const nextBtn = $('[data-action="next-part"]', part2);
   
     // Ensure cache is ready
     if (!vocabHuntCache[worldKey]) {
@@ -144,37 +144,49 @@
       return;
     }
   
-    // Pick first paragraph (TODO: cycle both)
-    const tokens = vocabHuntCache[worldKey][0];
+    let currentPara = 0;
+    const allParas = vocabHuntCache[worldKey];
   
-    // Pick a random kana target
-    const randomTarget = KANA[Math.floor(Math.random() * KANA.length)];
-    targetEl.textContent = `Find: ${randomTarget}`;
+    function renderParagraph() {
+      passageEl.textContent = "";
   
-    // Render tokens
-    passageEl.textContent = "";
-    tokens.forEach(tok => {
-      const span = document.createElement("span");
-      span.className = "hunt-token";
-      span.textContent = tok.surface_form;
+      // Pick a fresh random kana target for this passage
+      const randomTarget = KANA[Math.floor(Math.random() * KANA.length)];
+      targetEl.textContent = `Find: ${randomTarget}`;
   
-      span.addEventListener("click", () => {
-        if (span.textContent.includes(randomTarget)) {
-          span.classList.add("is-correct");
-        } else {
-          span.classList.add("is-wrong");
-          setTimeout(() => span.classList.remove("is-wrong"), 400);
-        }
+      const tokens = allParas[currentPara];
+      tokens.forEach(tok => {
+        const span = document.createElement("span");
+        span.className = "hunt-token";
+        span.textContent = tok.surface_form;
+  
+        span.addEventListener("click", () => {
+          if (span.textContent.includes(randomTarget)) {
+            span.classList.add("is-correct");
+          } else {
+            span.classList.add("is-wrong");
+            setTimeout(() => span.classList.remove("is-wrong"), 400);
+          }
+        });
+  
+        passageEl.appendChild(span);
+        passageEl.append(" ");
       });
+    }
   
-      passageEl.appendChild(span);
-      passageEl.append(" ");
+    renderParagraph();
+  
+    nextBtn.addEventListener("click", () => {
+      currentPara++;
+      if (currentPara < allParas.length) {
+        renderParagraph(); // show the next paragraph
+      } else {
+        showPart(3); // after last paragraph, move on
+      }
     });
-  
-    $('[data-action="next-part"]', part2)
-      ?.addEventListener("click", () => showPart(3));
   }
 
+  
   // ======================================================
   // Part 3 — Identify
   // ======================================================
