@@ -95,8 +95,8 @@
   // ==========================================================
   // Part 2 — Vocab Hunt (Immersion Passage using hunts-tokens.json)
   // ==========================================================
-  async function initPart2Hunt(worldKey) {
-    const { $, showPart, KANA } = window.LessonCore;
+  async function initPart2Hunt(worldKey, words) {
+    const { $, showPart } = window.LessonCore;
     const part2 = $('#part-2');
     if (!part2) return;
   
@@ -123,17 +123,17 @@
   
     function renderParagraph() {
       passageEl.textContent = "";
-    
-      // Pick a random vocab word instead of kana
+  
+      // Pick a random vocab word from the lesson
       const randomWord = words[Math.floor(Math.random() * words.length)];
       const randomTarget = randomWord.kana;
       targetEl.textContent = `Find: ${randomTarget}`;
-    
+  
       paragraphs[currentPara].forEach(token => {
         const span = document.createElement("span");
         span.className = "hunt-token";
         span.textContent = token;
-    
+  
         span.addEventListener("click", () => {
           if (span.textContent.includes(randomTarget)) {
             span.classList.add("is-correct");
@@ -142,12 +142,11 @@
             setTimeout(() => span.classList.remove("is-wrong"), 400);
           }
         });
-    
+  
         passageEl.appendChild(span);
         passageEl.append(" ");
       });
     }
-
   
     renderParagraph();
   
@@ -156,10 +155,11 @@
       if (currentPara < paragraphs.length) {
         renderParagraph(); // show next paragraph
       } else {
-        showPart(3); // after last paragraph, move on
+        showPart(3); // after last one, move on
       }
     });
   }
+  
 
   // ======================================================
   // Part 3 — Identify
