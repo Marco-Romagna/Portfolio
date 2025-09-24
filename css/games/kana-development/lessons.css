@@ -634,3 +634,27 @@ body.site {
 .quiz-feedback .wrong {
   color: #ef4444; /* red */
 }
+.quiz-progress {
+  margin-top: 1rem;
+  text-align: center;
+}
+
+.quiz-progress .meter {
+  height: 8px;
+  border-radius: 4px;
+  background: #1f2937;
+  overflow: hidden;
+  margin-bottom: 0.5rem;
+}
+
+.quiz-progress .meter-fill {
+  height: 100%;
+  width: 0;
+  background: linear-gradient(to right, #7c3aed, #06b6d4);
+  transition: width 0.3s ease;
+}
+
+.quiz-progress .meter-label {
+  font-size: 0.9rem;
+  color: #d1d5db;
+}
