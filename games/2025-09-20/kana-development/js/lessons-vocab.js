@@ -192,7 +192,6 @@
     });
   }
 
-
   // ======================================================
   // Part 3 — Identify
   // ======================================================
@@ -287,7 +286,7 @@
   }
 
   // ======================================================
-  // Part 4 — Typing (English → romaji input)
+  // Part 4 — Typing (English → romaji)
   // ======================================================
   async function initPart4(words) {
     const part4 = $('#part-4');
@@ -296,10 +295,13 @@
     part4.innerHTML = `
       <h2 class="part-title">Typing</h2>
       <div class="type-panel">
-        <div class="type-glyph-wrapper"></div>
+        <div class="type-prompt-box">
+          <span id="type-prompt" class="type-prompt"></span>
+        </div>
         <div class="type-input-wrapper theme-dark">
           <input id="type-input" class="type-input" placeholder="Type romaji…" autocomplete="off" />
         </div>
+        <div class="quiz-feedback"><p class="feedback-text"></p></div>
         <div class="quiz-progress">
           <div class="meter"><div class="meter-fill"></div></div>
           <div class="meter-label"></div>
@@ -308,13 +310,15 @@
       </div>
     `;
   
-    const wrapper = $('.type-glyph-wrapper', part4);
+    const promptEl = $('#type-prompt', part4);
     const input = $('#type-input', part4);
+    const feedback = $('.feedback-text', part4);
     const meterFill = $('.meter-fill', part4);
     const meterLabel = $('.meter-label', part4);
     const actionBtn = $('[data-action="next-part"]', part4);
   
-    let progressPts = 0, GOAL = words.length * 2, current = null;
+    let progressPts = 0, GOAL = words.length * 2;
+    let current = null, last = null;
   
     function updateMeter() {
       const pct = Math.round((progressPts / GOAL) * 100);
@@ -322,16 +326,20 @@
       meterLabel.textContent = `Progress: ${progressPts}/${GOAL}`;
     }
   
+    function pickWord() {
+      let next;
+      do {
+        next = words[Math.floor(Math.random() * words.length)];
+      } while (last && next.id === last.id && words.length > 1);
+      last = next;
+      return next;
+    }
+  
     function newRound() {
-      current = words[Math.floor(Math.random() * words.length)];
-      wrapper.innerHTML = `<span class="kana-glyph">${current.gloss_en}</span>`;
-  
-      // randomize theme colors like Part 3
-      const theme = THEMES[Math.floor(Math.random() * THEMES.length)];
-      const inputWrapper = $('.type-input-wrapper', part4);
-      inputWrapper.className = `type-input-wrapper ${theme}`;
-  
+      current = pickWord();
+      promptEl.textContent = current.gloss_en;
       input.value = '';
+      feedback.textContent = '';
       input.focus();
     }
   
@@ -340,28 +348,28 @@
         const guess = input.value.trim().toLowerCase();
         if (guess === current.romaji.toLowerCase()) {
           progressPts++;
-          updateMeter();
-          input.classList.add('is-correct');
-          setTimeout(() => {
-            input.classList.remove('is-correct');
-            if (progressPts >= GOAL) { 
-              actionBtn.classList.remove('is-hidden'); 
-            } else {
-              newRound();
-            }
-          }, 400);
+          feedback.textContent = '✅ Correct!';
+          feedback.className = 'feedback-text is-correct';
         } else {
-          input.classList.add('is-wrong');
-          setTimeout(() => input.classList.remove('is-wrong'), 400);
-          input.value = '';
+          progressPts = Math.max(0, progressPts - 1);
+          feedback.textContent = `❌ Wrong (${current.romaji})`;
+          feedback.className = 'feedback-text is-wrong';
+        }
+        updateMeter();
+        if (progressPts >= GOAL) {
+          actionBtn.classList.remove('is-hidden');
+        } else {
+          setTimeout(newRound, 700);
         }
       }
     });
   
     actionBtn.addEventListener('click', () => showPart(5));
+  
     updateMeter();
     newRound();
   }
+
 
   // ======================================================
   // Part 5 — Audio
