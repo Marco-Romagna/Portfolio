@@ -352,23 +352,29 @@
     input.addEventListener('keydown', e => {
       if (e.key === 'Enter' && !input.disabled) {
         const answer = input.value.trim().toLowerCase();
+    
+        // ✅ skip if nothing was typed
+        if (answer === "") {
+          return; 
+        }
+    
         if (answer === current.romaji.toLowerCase()) {
           progressPts++;
           feedback.textContent = "✅ Correct!";
           feedback.className = "feedback-text correct";
         } else {
           progressPts = Math.max(0, progressPts - 1);
-          feedback.innerHTML = `❌ Answer: <strong>${current.romaji}</strong>`;
+          feedback.innerHTML = `❌ Wrong! Correct answer: <strong>${current.romaji}</strong>`;
           feedback.className = "feedback-text wrong";
         }
-  
+    
         updateMeter();
-  
+    
         if (progressPts >= GOAL) {
           actionBtn.classList.remove('is-hidden');
           input.disabled = true;
         } else {
-          setTimeout(newRound, 900); // wait longer so they can see the right spelling
+          setTimeout(newRound, 900);
         }
       }
     });
