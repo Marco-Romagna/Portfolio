@@ -92,133 +92,70 @@
     $('[data-action="advance"]', part1).addEventListener('click', () => showPart(2));
   }
 
-  // ======================================================
-  // Part 2 — Word Hunt (clean version, all clickable, no dupes required)
-  // ======================================================
-  async function initPart2Hunt(words) {
+  // ==========================================================
+  // Part 2 — Vocab Hunt (Immersion Passage)
+  // ==========================================================
+  async function initVocabHunt(worldKey = "1-base") {
+    const { $, showPart, KANA } = window.LessonCore;
     const part2 = $('#part-2');
     if (!part2) return;
   
-    part2.innerHTML = `
-      <h2 class="part-title">Word Hunt</h2>
-      <div class="hunt-panel">
-        <p class="hunt-instruction">Find the highlighted word in the paragraph below.</p>
-        <div class="hunt-target"></div>
-        <div class="hunt-text"></div>
-        <div class="actions">
-          <button class="btn primary is-hidden" data-action="next-part">Next</button>
-        </div>
-      </div>
-    `;
-  
-    const huntText = $('.hunt-text', part2);
-    const targetEl = $('.hunt-target', part2);
-    const nextBtn = $('[data-action="next-part"]', part2);
-  
-    // Load hunt paragraphs
-    let paragraphs = [];
-    try {
-      const res = await fetch('../data/hunts.json');
-      const hunts = await res.json();
-      const roleKey = getRoleKey(WORLD, SUFFIX);
-      paragraphs = hunts[roleKey] || [];
-    } catch (err) {
-      console.error("Hunt JSON error:", err);
-    }
-  
-    if (!paragraphs.length) {
-      huntText.innerHTML = `<em>No hunt text found.</em>`;
+    // Load hunts.json
+    const res = await fetch("../data/hunts.json");
+    const hunts = await res.json();
+    const paragraphs = hunts[worldKey];
+    if (!paragraphs || paragraphs.length === 0) {
+      part2.innerHTML = "<p>No hunt data available.</p>";
       return;
     }
   
-    let currentPara = 0;
-    let wordQueue = [];
-    let currentWordIdx = 0;
+    // Pick the first paragraph for now
+    const passage = paragraphs[0];
   
-    function renderParagraph() {
-      huntText.innerHTML = '';
-      const para = paragraphs[currentPara];
-    
-      if (!tokenizer) {
-        console.warn("Tokenizer not ready yet!");
+    part2.innerHTML = `
+      <h2 class="part-title">Immersion Hunt</h2>
+      <div id="hunt-passage" class="hunt-passage"></div>
+      <div class="actions"><button class="btn primary" data-action="next-part">Next</button></div>
+    `;
+  
+    const container = $('#hunt-passage', part2);
+  
+    // Init tokenizer
+    kuromoji.builder({ dicPath: "../js/dict" }).build((err, tokenizer) => {
+      if (err) {
+        container.textContent = "Tokenizer failed to load.";
+        console.error(err);
         return;
       }
-    
-      const tokens = tokenizer.tokenize(para);
-    
-      tokens.forEach(token => {
-        const span = document.createElement('span');
-        span.textContent = token.surface_form;   // the visible word
-        span.className = 'hunt-token';
-    
-        // Mark if it's one of the vocab targets
-        if (words.some(w => w.kana === token.basic_form)) {
-          span.classList.add('hunt-word');
-        }
-    
-        huntText.appendChild(span);
-        huntText.appendChild(document.createTextNode(' ')); // spacing
-      });
-    }
-    
-    function loadNextWord() {
-      if (currentWordIdx >= words.length) {
-        currentPara++;
-        if (currentPara < paragraphs.length) {
-          progress.textContent = "Hunt complete! Click Next to continue.";
-          nextBtn.classList.remove('is-hidden');
-        } else {
-          progress.textContent = "🎉 All hunts complete!";
-          nextBtn.classList.remove('is-hidden');
-          nextBtn.onclick = () => showPart(3);
-        }
-        return;
-      }
-    
-      const targetWord = words[currentWordIdx];
-      targetEl.innerHTML = `
-        <div class="hunt-target-word">${targetWord.kana}</div>
-        <div class="hunt-gloss">${targetWord.gloss_en}</div>
-      `;
-    
-      let found = false;
-      const spans = $$('.hunt-word, .hunt-token', huntText);
-    
-      spans.forEach(span => {
-        span.addEventListener('click', () => {
-          if (found) return; // already answered this word
-    
-          if (span.textContent === targetWord.kana) {
-            span.classList.add('is-correct');
-            found = true;
-    
-            setTimeout(() => {
-              currentWordIdx++;
-              loadNextWord();
-            }, 600);
+  
+      // Tokenize full paragraph
+      const tokens = tokenizer.tokenize(passage);
+  
+      tokens.forEach(tok => {
+        const span = document.createElement("span");
+        span.className = "hunt-token";
+        span.textContent = tok.surface_form;
+        span.dataset.value = tok.surface_form;
+  
+        // Click logic
+        span.addEventListener("click", () => {
+          const hasTargetKana = KANA.some(k => span.dataset.value.includes(k));
+          if (hasTargetKana) {
+            span.classList.add("is-correct");
           } else {
-            span.classList.add('is-wrong');
-            setTimeout(() => span.classList.remove('is-wrong'), 400);
+            span.classList.add("is-wrong");
+            setTimeout(() => span.classList.remove("is-wrong"), 500);
           }
         });
+  
+        container.appendChild(span);
+        container.append(" "); // spacing
       });
-    }
-
-  
-
-  
-    nextBtn.addEventListener('click', () => {
-      currentPara++;
-      nextBtn.classList.add('is-hidden');
-  
-      if (currentPara < paragraphs.length) {
-        renderParagraph();
-      } else {
-        showPart(3); // move to Part 3 after last hunt
-      }
     });
   
-    renderParagraph();
+    // Continue lesson flow
+    $('[data-action="next-part"]', part2)
+      ?.addEventListener("click", () => showPart(3));
   }
 
   
