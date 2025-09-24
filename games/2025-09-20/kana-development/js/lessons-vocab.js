@@ -286,7 +286,7 @@
   }
 
   // ======================================================
-  // Part 4 — Typing (romaji input, styled like Identify)
+  // Part 4 — Typing
   // ======================================================
   async function initPart4(words) {
     const part4 = $('#part-4');
@@ -301,6 +301,7 @@
         <div class="quiz-input-wrapper">
           <input id="typing-input" class="quiz-input" placeholder="Type romaji…" autocomplete="off" />
         </div>
+        <!-- 🔹 identical to Part 3 progress markup -->
         <div class="quiz-progress">
           <div class="meter"><div class="meter-fill"></div></div>
           <div class="meter-label"></div>
@@ -332,11 +333,9 @@
     function nextQuestion() {
       feedback.textContent = '';
       input.value = '';
-      // ensure not the same as last word
       do {
         current = queue[Math.floor(Math.random() * queue.length)];
       } while (current.id === lastId && queue.length > 1);
-  
       lastId = current.id;
       promptEl.textContent = current.gloss_en;
       input.focus();
@@ -351,14 +350,13 @@
           feedback.textContent = '✅ Correct!';
           feedback.classList.add('correct');
           feedback.classList.remove('wrong');
-  
           if (progressPts >= GOAL) {
             nextBtn.classList.remove('is-hidden');
           } else {
             setTimeout(nextQuestion, 500);
           }
         } else {
-          progressPts = Math.max(0, progressPts - 1); // subtract on wrong
+          progressPts = Math.max(0, progressPts - 1);
           updateMeter();
           feedback.textContent = `❌ Wrong. Correct answer: ${current.romaji}`;
           feedback.classList.add('wrong');
@@ -373,6 +371,7 @@
     updateMeter();
     nextQuestion();
   }
+
     
   // ======================================================
   // Part 5 — Audio
