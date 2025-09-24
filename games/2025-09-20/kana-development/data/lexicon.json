@@ -297,7 +297,7 @@
       "example": { "kana": "ひゃくぐらむのにく", "romaji": "hyaku guramu no niku", "english": "100 grams of meat" }
     }
   ],
-  "byWorld": {
+    "byWorld": {
     "1-base": ["ai", "iie", "ue", "ie", "ao", "au"],
     "1-daku": [],
     "1-handaku": [],
@@ -305,4 +305,5 @@
     "2-daku": ["eiga", "gaikoku", "gakusei", "gakkou", "ginkou", "genki"],
     "2-handaku": []
   }
+
 }
