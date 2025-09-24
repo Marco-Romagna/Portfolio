@@ -2,7 +2,7 @@
 // lessons-core.js
 // Shared utilities + role detection for all lesson types
 // ==========================================================
-
+window.DEBUG_SKIP_ENABLED = true; // set false for production
 (() => {
   // ---------- DOM Helpers ----------
   const $  = (s, r = document) => r.querySelector(s);
@@ -40,27 +40,30 @@
     const pct = totalParts > 1 ? Math.round((current - 1) / (totalParts - 1) * 100) : 100;
     if (fill) fill.style.width = `${pct}%`;
     if (progress) progress.setAttribute('aria-valuenow', String(pct));
-    hideCTA();
+  
+    if (!window.DEBUG_SKIP_ENABLED) {
+      hideCTA(); // normal flow hides CTA until conditions met
+    } else {
+      cta?.closest('.lesson-cta')?.classList.remove('is-hidden'); // show it always
+    }
+  
     // Lazy-init vocab parts
     if (window.LessonCore.IS_VOCAB) {
       if (idx === 2 && typeof window.initPart2 === "function") {
-        window.initPart2();
-        window.initPart2 = null; // prevent re-init
+        window.initPart2(); window.initPart2 = null;
       }
       if (idx === 3 && typeof window.initPart3 === "function") {
-        window.initPart3();
-        window.initPart3 = null;
+        window.initPart3(); window.initPart3 = null;
       }
       if (idx === 4 && typeof window.initPart4 === "function") {
-        window.initPart4();
-        window.initPart4 = null;
+        window.initPart4(); window.initPart4 = null;
       }
       if (idx === 5 && typeof window.initPart5 === "function") {
-        window.initPart5();
-        window.initPart5 = null;
+        window.initPart5(); window.initPart5 = null;
       }
     }
   }
+
 
   // ---------- Kana Sets ----------
   const H_VOW = ['あ','い','う','え','お'];
