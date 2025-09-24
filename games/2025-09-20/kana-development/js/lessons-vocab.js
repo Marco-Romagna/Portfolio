@@ -95,7 +95,7 @@
   // ==========================================================
   // Part 2 — Vocab Hunt (Immersion Passage, for -4/-8/-12 levels)
   // ==========================================================
-  async function initVocabHunt(worldKey) {
+  async function initPart2Hunt(worldKey) {
     const { $, showPart, KANA } = window.LessonCore;
     const part2 = $('#part-2');
     if (!part2) return;
