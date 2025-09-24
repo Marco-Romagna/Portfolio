@@ -224,19 +224,6 @@
       "note": "Also used in greetings: おげんきですか？ (How are you?).",
       "example": { "kana": "げんきです！", "romaji": "genki desu!", "english": "I’m fine!" }
     },
-
-    {
-      "id": "aoi",
-      "kana": "あおい",
-      "romaji": "aoi",
-      "gloss_en": "blue (adjective)",
-      "jlpt": "N5",
-      "tags": ["core", "vowels", "color"],
-      "worlds": [],
-      "audio": "",
-      "note": "Adjective form of あお. Can also describe someone’s face as pale.",
-      "example": { "kana": "あおいシャツ", "romaji": "aoi shatsu", "english": "blue shirt" }
-    },
     {
       "id": "iu",
       "kana": "いう",
