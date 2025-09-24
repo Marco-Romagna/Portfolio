@@ -133,13 +133,18 @@
       if (targets.length === 0) {
         // all words for this paragraph are done
         nextBtn.classList.remove("is-hidden");
-        targetEl.textContent = "✅ All found!";
+        targetEl.innerHTML = `<div class="hunt-english">✅ All words found!</div>`;
         currentTarget = null;
         return;
       }
+    
       currentTarget = targets.pop();
-      targetEl.textContent = `Find: ${currentTarget.romaji} (${currentTarget.gloss_en})`;
+      targetEl.innerHTML = `
+        <div class="hunt-romaji">${currentTarget.romaji}</div>
+        <div class="hunt-english">${currentTarget.gloss_en}</div>
+      `;
     }
+
   
     function renderParagraph() {
       passageEl.textContent = "";
