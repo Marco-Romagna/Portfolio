@@ -139,7 +139,7 @@
       huntText.innerHTML = '';
       const para = paragraphs[currentPara];
     
-      // Split by spaces into words
+      // Split into word tokens by spaces
       const tokens = para.split(/\s+/);
     
       tokens.forEach(tok => {
@@ -155,44 +155,57 @@
         }
     
         huntText.appendChild(span);
-        huntText.appendChild(document.createTextNode(' ')); // preserve spacing
+        huntText.appendChild(document.createTextNode(' '));
       });
     
       loadNextWord();
     }
-
-  
+    
     function loadNextWord() {
-      if (currentWordIdx >= wordQueue.length) {
-        // Finished this hunt
-        nextBtn.classList.remove('is-hidden');
+      if (currentWordIdx >= words.length) {
+        currentPara++;
+        if (currentPara < paragraphs.length) {
+          progress.textContent = "Hunt complete! Click Next to continue.";
+          nextBtn.classList.remove('is-hidden');
+        } else {
+          progress.textContent = "🎉 All hunts complete!";
+          nextBtn.classList.remove('is-hidden');
+          nextBtn.onclick = () => showPart(3);
+        }
         return;
       }
-  
-      const targetWord = wordQueue[currentWordIdx];
+    
+      const targetWord = words[currentWordIdx];
       targetEl.innerHTML = `
         <div class="hunt-target-word">${targetWord.kana}</div>
         <div class="hunt-gloss">${targetWord.gloss_en}</div>
       `;
-  
-      const tokens = $$('.hunt-token', huntText);
-  
-      tokens.forEach(span => {
-        span.onclick = () => {
+    
+      let found = false;
+      const spans = $$('.hunt-word, .hunt-token', huntText);
+    
+      spans.forEach(span => {
+        span.addEventListener('click', () => {
+          if (found) return; // already answered this word
+    
           if (span.textContent === targetWord.kana) {
             span.classList.add('is-correct');
-            // immediately move on, no need to find duplicates
+            found = true;
+    
             setTimeout(() => {
               currentWordIdx++;
               loadNextWord();
-            }, 400);
+            }, 600);
           } else {
             span.classList.add('is-wrong');
             setTimeout(() => span.classList.remove('is-wrong'), 400);
           }
-        };
+        });
       });
     }
+
+  
+
   
     nextBtn.addEventListener('click', () => {
       currentPara++;
