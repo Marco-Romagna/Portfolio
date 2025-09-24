@@ -31,39 +31,72 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
   const fill       = $('.progressbar-fill');
 
   const cta = $('.lesson-cta [data-action="advance"]');
-  const hideCTA = () => { cta?.closest('.lesson-cta')?.classList.add('is-hidden'); };
+  const ctaWrap = cta?.closest('.lesson-cta');
+  const hideCTA = () => { ctaWrap?.classList.add('is-hidden'); };
+
+  // Add back button
+  let backBtn = document.createElement('button');
+  backBtn.textContent = "← Back";
+  backBtn.className = "btn ghost is-hidden";
+  backBtn.dataset.action = "back";
+  ctaWrap?.insertBefore(backBtn, ctaWrap.firstChild);
+
+  let currentPart = 1;
 
   function showPart(idx) {
-    const current = Math.min(Math.max(idx, 1), totalParts);
-    parts.forEach(p => p.classList.toggle('is-visible', Number(p.dataset.partIndex) === current));
-    $$('.steps .step').forEach(s => s.classList.toggle('is-active', Number(s.dataset.part) === current));
-    const pct = totalParts > 1 ? Math.round((current - 1) / (totalParts - 1) * 100) : 100;
+    currentPart = Math.min(Math.max(idx, 1), totalParts);
+    parts.forEach(p =>
+      p.classList.toggle('is-visible', Number(p.dataset.partIndex) === currentPart)
+    );
+    $$('.steps .step').forEach(s =>
+      s.classList.toggle('is-active', Number(s.dataset.part) === currentPart)
+    );
+
+    const pct = totalParts > 1 ? Math.round((currentPart - 1) / (totalParts - 1) * 100) : 100;
     if (fill) fill.style.width = `${pct}%`;
     if (progress) progress.setAttribute('aria-valuenow', String(pct));
-  
+
     if (!window.DEBUG_SKIP_ENABLED) {
       hideCTA(); // normal flow hides CTA until conditions met
     } else {
-      cta?.closest('.lesson-cta')?.classList.remove('is-hidden'); // show it always
+      ctaWrap?.classList.remove('is-hidden'); // always visible in debug
     }
-  
+
+    // back button only visible after part 1
+    if (currentPart > 1) {
+      backBtn.classList.remove('is-hidden');
+    } else {
+      backBtn.classList.add('is-hidden');
+    }
+
     // Lazy-init vocab parts
     if (window.LessonCore.IS_VOCAB) {
-      if (idx === 2 && typeof window.initPart2 === "function") {
+      if (currentPart === 2 && typeof window.initPart2 === "function") {
         window.initPart2(); window.initPart2 = null;
       }
-      if (idx === 3 && typeof window.initPart3 === "function") {
+      if (currentPart === 3 && typeof window.initPart3 === "function") {
         window.initPart3(); window.initPart3 = null;
       }
-      if (idx === 4 && typeof window.initPart4 === "function") {
+      if (currentPart === 4 && typeof window.initPart4 === "function") {
         window.initPart4(); window.initPart4 = null;
       }
-      if (idx === 5 && typeof window.initPart5 === "function") {
+      if (currentPart === 5 && typeof window.initPart5 === "function") {
         window.initPart5(); window.initPart5 = null;
       }
     }
   }
 
+  // ---------- Debug skip: hook buttons ----------
+  cta?.addEventListener('click', () => {
+    if (window.DEBUG_SKIP_ENABLED) {
+      showPart(currentPart + 1);
+    }
+  });
+  backBtn?.addEventListener('click', () => {
+    if (window.DEBUG_SKIP_ENABLED) {
+      showPart(currentPart - 1);
+    }
+  });
 
   // ---------- Kana Sets ----------
   const H_VOW = ['あ','い','う','え','お'];
