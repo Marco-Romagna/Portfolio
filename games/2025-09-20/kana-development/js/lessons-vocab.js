@@ -1,5 +1,5 @@
 // ==========================================================
-// lessons-vocab.js
+// lessons-vocab.js 
 // Vocab lesson flow (Parts 1–5: Explorer, Hunt, Identify, Typing, Audio)
 // ==========================================================
 
