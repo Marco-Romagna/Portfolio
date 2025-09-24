@@ -286,71 +286,108 @@
     nextQuestion();
   }
 
-  // ======================================================
-  // Part 4 — Typing
-  // ======================================================
-  async function initPart4(words) {
-    const part4 = $('#part-4');
-    if (!part4) return;
-
-    part4.innerHTML = `
-      <h2 class="part-title">Typing</h2>
-      <div class="type-panel">
-        <div class="type-glyph-wrapper"></div>
-        <div class="type-input-wrapper theme-dark">
-          <input id="type-input" class="type-input" placeholder="Type kana…" autocomplete="off" />
-        </div>
-        <div class="quiz-progress">
-          <div class="meter"><div class="meter-fill"></div></div>
-          <div class="meter-label"></div>
-        </div>
-        <div class="actions"><button class="btn primary" data-action="next-part">Next</button></div>
-      </div>
-    `;
-
-
-    const wrapper = $('.type-glyph-wrapper', part4);
-    const input = $('#type-input', part4);
-    const meterFill = $('.meter-fill', part4);
-    const meterLabel = $('.meter-label', part4);
-    const actionBtn = $('[data-action="next-part"]', part4);
-
-    let progressPts = 0, GOAL = words.length * 2, current = null;
-
-    function updateMeter() {
-      const pct = Math.round((progressPts / GOAL) * 100);
-      meterFill.style.width = `${pct}%`;
-      meterLabel.textContent = `Progress: ${progressPts}/${GOAL}`;
+  // ==========================================================
+  // lessons-vocab-part4.js
+  // Part 4 (Typing) for vocab lessons
+  // English gloss → user types romaji
+  // ==========================================================
+  
+  (() => {
+    let words = [];
+    let current = 0;
+    let correct = 0;
+    let total = 12; // adjust per session size
+  
+    const container = document.querySelector('.lesson-part[data-part-index="4"]');
+    if (!container) return;
+  
+    const promptEl = container.querySelector('.vocab-prompt');
+    const inputEl = container.querySelector('.vocab-input');
+    const feedbackEl = container.querySelector('.vocab-feedback');
+    const progressEl = container.querySelector('.progressbar-fill');
+    const nextBtn = container.querySelector('.vocab-next');
+  
+    // init
+    async function init() {
+      const roleKey = window.LessonCore.getRoleKey(window.LessonCore.WORLD, window.LessonCore.SUFFIX);
+      const res = await fetch('../data/lexicon.json');
+      const json = await res.json();
+      const allWords = json.words.filter(w => (w.worlds || []).includes(roleKey));
+  
+      words = shuffle(allWords).slice(0, total);
+      current = 0;
+      correct = 0;
+      render();
     }
-
-    function newRound() {
-      current = words[Math.floor(Math.random() * words.length)];
-      wrapper.innerHTML = `<span class="kana-glyph">${current.gloss_en}</span>`;
-    
-      // apply theme class to input wrapper
-      const theme = THEMES[Math.floor(Math.random() * THEMES.length)];
-      const inputWrapper = $('.type-input-wrapper', part4);
-      inputWrapper.className = `type-input-wrapper ${theme}`;
-    
-      input.value = '';
+  
+    function shuffle(arr) {
+      return arr.sort(() => Math.random() - 0.5);
     }
-
-    input.addEventListener('keydown', e => {
+  
+    function render() {
+      const word = words[current];
+      promptEl.textContent = word.gloss_en;
+      inputEl.value = '';
+      inputEl.className = 'vocab-input';
+      feedbackEl.textContent = '';
+      inputEl.focus();
+      updateProgress();
+    }
+  
+    function updateProgress() {
+      const pct = Math.round((current / total) * 100);
+      progressEl.style.width = `${pct}%`;
+    }
+  
+    function check() {
+      const word = words[current];
+      const guess = inputEl.value.trim().toLowerCase();
+      const answer = word.romaji.trim().toLowerCase();
+  
+      if (guess === answer) {
+        inputEl.classList.add('is-correct');
+        feedbackEl.textContent = `✓ ${word.kana} (${word.romaji})`;
+        correct++;
+      } else {
+        inputEl.classList.add('is-wrong');
+        feedbackEl.textContent = `✗ Correct: ${word.romaji}`;
+      }
+      nextBtn.classList.remove('is-hidden');
+    }
+  
+    function next() {
+      current++;
+      if (current >= total) {
+        finish();
+      } else {
+        render();
+        nextBtn.classList.add('is-hidden');
+      }
+    }
+  
+    function finish() {
+      promptEl.textContent = `Done! You got ${correct} / ${total} correct.`;
+      inputEl.style.display = 'none';
+      feedbackEl.textContent = '';
+      nextBtn.classList.add('is-hidden');
+    }
+  
+    // --- listeners
+    inputEl.addEventListener('keydown', e => {
       if (e.key === 'Enter') {
-        if (input.value.trim() === current.kana) {
-          progressPts++; updateMeter();
-          if (progressPts >= GOAL) { actionBtn.classList.remove('is-hidden'); }
-          else newRound();
+        if (!nextBtn.classList.contains('is-hidden')) {
+          next();
         } else {
-          input.value = '';
+          check();
         }
       }
     });
-
-    actionBtn.addEventListener('click', () => showPart(5));
-    updateMeter(); newRound();
-  }
-
+    nextBtn.addEventListener('click', next);
+  
+    // expose to LessonCore init
+    window.initPart4 = init;
+  })();
+  
   // ======================================================
   // Part 5 — Audio
   // ======================================================
