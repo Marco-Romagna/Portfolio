@@ -123,16 +123,17 @@
   
     function renderParagraph() {
       passageEl.textContent = "";
-  
-      // Pick a random kana target for this paragraph
-      const randomTarget = KANA[Math.floor(Math.random() * KANA.length)];
+    
+      // Pick a random vocab word instead of kana
+      const randomWord = words[Math.floor(Math.random() * words.length)];
+      const randomTarget = randomWord.kana;
       targetEl.textContent = `Find: ${randomTarget}`;
-  
+    
       paragraphs[currentPara].forEach(token => {
         const span = document.createElement("span");
         span.className = "hunt-token";
         span.textContent = token;
-  
+    
         span.addEventListener("click", () => {
           if (span.textContent.includes(randomTarget)) {
             span.classList.add("is-correct");
@@ -141,11 +142,12 @@
             setTimeout(() => span.classList.remove("is-wrong"), 400);
           }
         });
-  
+    
         passageEl.appendChild(span);
         passageEl.append(" ");
       });
     }
+
   
     renderParagraph();
   
