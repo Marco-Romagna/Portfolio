@@ -136,30 +136,37 @@
     let currentPara = 0;
     let currentWordIdx = 0;
   
-    // --- render paragraph (split by tokens) ---
     function renderParagraph() {
       huntText.innerHTML = '';
       const para = paragraphs[currentPara];
-  
-      // split by spaces + punctuation
-      const tokens = para.split(/(\s+|。|、|「|」)/);
-  
-      tokens.forEach(tok => {
-        if (!tok.trim()) {
-          huntText.appendChild(document.createTextNode(tok));
-        } else if (words.some(w => w.kana === tok)) {
+    
+      let i = 0;
+      while (i < para.length) {
+        let matched = false;
+    
+        // Check if any vocab word matches starting here
+        for (const w of words) {
+          if (para.startsWith(w.kana, i)) {
+            const span = document.createElement('span');
+            span.textContent = w.kana;
+            span.className = 'hunt-word'; // whole vocab word
+            huntText.appendChild(span);
+            i += w.kana.length;
+            matched = true;
+            break;
+          }
+        }
+    
+        // If no vocab word matched, just append this character normally
+        if (!matched) {
           const span = document.createElement('span');
-          span.textContent = tok;
-          span.className = 'hunt-word';
-          huntText.appendChild(span);
-        } else {
-          const span = document.createElement('span');
-          span.textContent = tok;
+          span.textContent = para[i];
           span.className = 'hunt-token';
           huntText.appendChild(span);
+          i++;
         }
-      });
-  
+      }
+    
       currentWordIdx = 0;
       loadNextWord();
     }
