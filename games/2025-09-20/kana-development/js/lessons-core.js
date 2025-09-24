@@ -41,6 +41,25 @@
     if (fill) fill.style.width = `${pct}%`;
     if (progress) progress.setAttribute('aria-valuenow', String(pct));
     hideCTA();
+    // Lazy-init vocab parts
+    if (window.LessonCore.IS_VOCAB) {
+      if (idx === 2 && typeof window.initPart2 === "function") {
+        window.initPart2();
+        window.initPart2 = null; // prevent re-init
+      }
+      if (idx === 3 && typeof window.initPart3 === "function") {
+        window.initPart3();
+        window.initPart3 = null;
+      }
+      if (idx === 4 && typeof window.initPart4 === "function") {
+        window.initPart4();
+        window.initPart4 = null;
+      }
+      if (idx === 5 && typeof window.initPart5 === "function") {
+        window.initPart5();
+        window.initPart5 = null;
+      }
+    }
   }
 
   // ---------- Kana Sets ----------
