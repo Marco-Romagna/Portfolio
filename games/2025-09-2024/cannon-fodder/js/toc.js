@@ -1,60 +1,56 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const books = {
+  const tocData = {
     book1: [
-      { title: "Part 1 – Introduction", file: "CannonFodder-Part1.pdf" },
-      { title: "Part 2 – Basic Training", file: "CannonFodder-Part2.pdf" },
-      { title: "Part 3 – Soldier", file: "CannonFodder-Part3.pdf" },
-      { title: "Part 4 – Firearm Basics", file: "CannonFodder-Part4.pdf" },
-      { title: "Part 5 – Defense & Survival", file: "CannonFodder-Part5.pdf" },
-      { title: "Part 6 – Firearm Management", file: "CannonFodder-Part6.pdf" },
-      { title: "Part 7 – Advanced Combat", file: "CannonFodder-Part7.pdf" },
-      { title: "Part 8 – Out of Combat", file: "CannonFodder-Part8.pdf" },
-      { title: "Part 9 – Classes & Roles", file: "CannonFodder-Part9.pdf" },
-      { title: "Part 10 – General Traits", file: "CannonFodder-Part10.pdf" }
+      { title: "Part 1: Introduction", file: "book1-part1-intro.pdf" },
+      { title: "Part 2: Basic Training", file: "book1-part2-basic-training.pdf" },
+      { title: "Part 3: Soldier", file: "book1-part3-soldier.pdf" },
+      { title: "Part 4: Firearm Basics", file: "book1-part4-firearm-basics.pdf" },
+      { title: "Part 5: Defense & Survival", file: "book1-part5-defense.pdf" },
+      { title: "Part 6: Firearm Management", file: "book1-part6-firearm-management.pdf" },
+      { title: "Part 7: Advanced Combat", file: "book1-part7-advanced-combat.pdf" },
+      { title: "Part 8: Out of Combat", file: "book1-part8-out-of-combat.pdf" },
+      { title: "Part 9: Classes & Roles", file: "book1-part9-classes-roles.pdf" },
+      { title: "Part 10: General Traits", file: "book1-part10-traits.pdf" },
     ],
     book2: [
-      { title: "Modern Era Guns", file: "CannonFodder2-Modern.pdf" },
-      { title: "Global Era Guns", file: "CannonFodder2-Global.pdf" },
-      { title: "Cold War Era Guns", file: "CannonFodder2-ColdWar.pdf" },
-      { title: "Second World War Guns", file: "CannonFodder2-WW2.pdf" },
-      { title: "Great War Guns", file: "CannonFodder2-GreatWar.pdf" },
-      { title: "Industrial Era Guns", file: "CannonFodder2-Industrial.pdf" },
-      { title: "Equipment", file: "CannonFodder2-Equipment.pdf" },
-      { title: "Gun Mods & Attachments", file: "CannonFodder2-Mods.pdf" },
-      { title: "Appendix – Personal Record", file: "CannonFodder2-Appendix.pdf" }
+      { title: "Intro to Guns & Gear", file: "book2-part11a-intro.pdf" },
+      { title: "Modern & Global Era Guns", file: "book2-part11b-modern-global.pdf" },
+      { title: "Cold War Era Guns", file: "book2-part11c-cold-war.pdf" },
+      { title: "Second World War Guns", file: "book2-part11d-ww2.pdf" },
+      { title: "Great War Guns", file: "book2-part11e-great-war.pdf" },
+      { title: "Industrial Era Guns", file: "book2-part11f-industrial.pdf" },
+      { title: "Equipment", file: "book2-part11g-equipment.pdf" },
+      { title: "Gun Mods & Attachments", file: "book2-part11h-mods.pdf" },
+      { title: "Appendix: Personal Record (1)", file: "book2-appendix1.pdf" },
+      { title: "Appendix: Personal Record (2)", file: "book2-appendix2.pdf" },
     ]
   };
 
-  const tocContainer = document.getElementById("toc-list");
-  const pdfViewer = document.querySelector(".pdf-viewer");
+  const tocContainer = document.getElementById("toc");
+  const viewer = document.getElementById("pdf-viewer");
 
   function renderTOC(bookKey) {
-    const toc = books[bookKey];
-    tocContainer.innerHTML = toc.map(
-      (item, i) => `<li><a href="${item.file}" data-index="${i}">${item.title}</a></li>`
-    ).join("");
-
-    const links = tocContainer.querySelectorAll("a");
-    if (links.length > 0) {
-      links[0].classList.add("active");
-      pdfViewer.src = links[0].getAttribute("href");
-    }
-
-    tocContainer.querySelectorAll("a").forEach(link => {
-      link.addEventListener("click", (e) => {
+    tocContainer.innerHTML = "";
+    tocData[bookKey].forEach(item => {
+      const li = document.createElement("li");
+      const a = document.createElement("a");
+      a.href = "#";
+      a.textContent = item.title;
+      a.addEventListener("click", e => {
         e.preventDefault();
-        pdfViewer.src = e.target.getAttribute("href");
-
-        tocContainer.querySelectorAll("a").forEach(l => l.classList.remove("active"));
-        e.target.classList.add("active");
+        viewer.src = `pdfs/${item.file}`;
       });
+      li.appendChild(a);
+      tocContainer.appendChild(li);
     });
+    // Load first item by default
+    viewer.src = `pdfs/${tocData[bookKey][0].file}`;
   }
 
-  // Buttons to toggle book
+  // Buttons to switch between Book 1 and Book 2
   document.getElementById("book1-btn").addEventListener("click", () => renderTOC("book1"));
   document.getElementById("book2-btn").addEventListener("click", () => renderTOC("book2"));
 
-  // Default: Book 1
+  // Initialize with Book 1
   renderTOC("book1");
 });
