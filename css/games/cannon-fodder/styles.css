@@ -1,3 +1,9 @@
+.pdf-wrapper {
+  margin: 0 auto;
+  padding: 0 12px;   /* adds space on left/right */
+  max-width: 1200px; /* keeps it from stretching too wide on huge monitors */
+}
+
 .pdf-viewer {
   width: 100%;
   height: calc(100vh - 120px);
