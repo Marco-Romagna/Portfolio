@@ -64,7 +64,15 @@
     {"id":"piano_kata","kana":"ピアノ","romaji":"piano","gloss_en":"piano","tags":["loanword","p-row","instrument"],"worlds":["6-handaku-kata"],"audio":"","note":"Loanword from Italian/English. Katakana ピアノ is the **standard spelling**.","example":{"kana":"ピアノをひく","romaji":"piano wo hiku","english":"to play the piano"}},
     {"id":"posuto_kata","kana":"ポスト","romaji":"posuto","gloss_en":"postbox","tags":["loanword","p-row","object"],"worlds":["6-handaku-kata"],"audio":"","note":"Loanword from English 'post'. Katakana ポスト is the **standard spelling**.","example":{"kana":"ポストにてがみをいれる","romaji":"posuto ni tegami wo ireru","english":"to put a letter in the postbox"}},
     {"id":"pen_kata","kana":"ペン","romaji":"pen","gloss_en":"pen","tags":["loanword","p-row","object"],"worlds":["6-handaku-kata"],"audio":"","note":"Loanword from English. Katakana ペン is the **standard spelling**.","example":{"kana":"ペンでかく","romaji":"pen de kaku","english":"to write with a pen"}},
-    {"id":"puro_kata","kana":"プロ","romaji":"puro","gloss_en":"professional","tags":["loanword","p-row","person"],"worlds":["6-handaku-kata"],"audio":"","note":"Loanword from 'pro(fessional)'. Katakana プロ is the **standard spelling**.","example":{"kana":"プロのせんしゅ","romaji":"puro no senshu","english":"a professional player"}}
+    {"id":"puro_kata","kana":"プロ","romaji":"puro","gloss_en":"professional","tags":["loanword","p-row","person"],"worlds":["6-handaku-kata"],"audio":"","note":"Loanword from 'pro(fessional)'. Katakana プロ is the **standard spelling**.","example":{"kana":"プロのせんしゅ","romaji":"puro no senshu","english":"a professional player"}},
+
+    {"id":"mizu_kata","kana":"ミズ","romaji":"mizu","gloss_en":"water","tags":["core","m-row","nature"],"worlds":["7-base-kata"],"audio":"","note":"Normally みず. Katakana ミズ sometimes used in ads, manga, or stylization.","example":{"kana":"ミズをのむ","romaji":"mizu wo nomu","english":"to drink water"}},
+    {"id":"machi_kata","kana":"マチ","romaji":"machi","gloss_en":"town; city","tags":["core","m-row","place"],"worlds":["7-base-kata"],"audio":"","note":"Normally まち. Katakana マチ used in names (e.g., アキハバラマチ) or design.","example":{"kana":"おおきいマチ","romaji":"ookii machi","english":"a big town"}},
+    {"id":"miru_kata","kana":"ミル","romaji":"miru","gloss_en":"to see; to watch","tags":["core","m-row","verb"],"worlds":["7-base-kata"],"audio":"","note":"Normally みる. Katakana ミル often used in games, ads, or casual stylization.","example":{"kana":"えいがをミル","romaji":"eiga wo miru","english":"to watch a movie"}},
+    {"id":"mori_kata","kana":"モリ","romaji":"mori","gloss_en":"forest","tags":["core","m-row","nature"],"worlds":["7-base-kata"],"audio":"","note":"Normally もり. Katakana モリ appears in names, branding, or stylization.","example":{"kana":"モリをあるく","romaji":"mori wo aruku","english":"to walk through the forest"}},
+    {"id":"megane_kata","kana":"メガネ","romaji":"megane","gloss_en":"glasses (spectacles)","tags":["core","m-row","object"],"worlds":["7-base-kata"],"audio":"","note":"Katakana メガネ is **common spelling** for 'glasses', though 眼鏡 also exists.","example":{"kana":"メガネをかける","romaji":"megane wo kakeru","english":"to wear glasses"}},
+    {"id":"mado_kata","kana":"マド","romaji":"mado","gloss_en":"window","tags":["core","m-row","object"],"worlds":["7-base-kata"],"audio":"","note":"Normally まど. Katakana マド sometimes appears in names or design.","example":{"kana":"マドをあける","romaji":"mado wo akeru","english":"to open the window"}}
+    
     
   ],
   "byWorld": {
@@ -78,6 +86,7 @@
     "5-base-kata": ["namae_kata","niku_kata","neko_kata","nani_kata","natsu_kata","naka_kata"],
     "6-base-kata": ["hana_kata","hito_kata","fuyu_kata","heya_kata","hon_kata","hikari_kata"],
     "6-daku-kata": ["basho_kata","biiru_kata","bukuro_kata","benkyou_kata","boushi_kata","byouin_kata"],
-    "6-handaku-kata": ["pan_kata","pinku_kata","piano_kata","posuto_kata","pen_kata","puro_kata"]
+    "6-handaku-kata": ["pan_kata","pinku_kata","piano_kata","posuto_kata","pen_kata","puro_kata"],
+    "7-base-kata": ["mizu_kata","machi_kata","miru_kata","mori_kata","megane_kata","mado_kata"]
   }
 }
