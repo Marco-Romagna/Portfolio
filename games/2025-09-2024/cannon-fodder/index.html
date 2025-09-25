@@ -9,6 +9,16 @@
   <!-- Styles -->
   <link rel="stylesheet" href="../../../css/main.css">
   <script src="../../../no-mobile.js" defer></script>
+
+  <style>
+    .pdf-book iframe {
+      display: block;
+      width: 100%;
+      height: 900px; /* taller for less paging */
+      border: none;
+      margin-bottom: -4px; /* removes tiny gap between iframes */
+    }
+  </style>
 </head>
 <body class="site">
   <!-- Header -->
@@ -28,36 +38,17 @@
   <main class="container">
     <section class="panel">
       <h2>Cannon Fodder Rulebook</h2>
-      <p>The full rulebook is split into sections for easier loading.</p>
+      <p>Scroll down to read the full rulebook seamlessly.</p>
 
-      <!-- Part 1 -->
-      <h3>Part 1 (Pages 1–50)</h3>
-      <iframe src="CannonFodder-Part1.pdf" width="100%" height="800px"></iframe>
-
-      <!-- Part 2 -->
-      <h3>Part 2 (Pages 51–100)</h3>
-      <iframe src="CannonFodder-Part2.pdf" width="100%" height="800px"></iframe>
-
-      <!-- Part 3 -->
-      <h3>Part 3 (Pages 101–150)</h3>
-      <iframe src="CannonFodder-Part3.pdf" width="100%" height="800px"></iframe>
-
-      <!-- Part 4 -->
-      <h3>Part 4 (Pages 151–200)</h3>
-      <iframe src="CannonFodder-Part4.pdf" width="100%" height="800px"></iframe>
-
-      <!-- Part 5 -->
-      <h3>Part 5 (Pages 201–250)</h3>
-      <iframe src="CannonFodder-Part5.pdf" width="100%" height="800px"></iframe>
-
-      <!-- Part 6 -->
-      <h3>Part 6 (Pages 251–300)</h3>
-      <iframe src="CannonFodder-Part6.pdf" width="100%" height="800px"></iframe>
-
-      <!-- Part 7 -->
-      <h3>Part 7 (Pages 301–346)</h3>
-      <iframe src="CannonFodder-Part7.pdf" width="100%" height="800px"></iframe>
-
+      <div class="pdf-book">
+        <iframe src="CannonFodder-Part1.pdf"></iframe>
+        <iframe src="CannonFodder-Part2.pdf"></iframe>
+        <iframe src="CannonFodder-Part3.pdf"></iframe>
+        <iframe src="CannonFodder-Part4.pdf"></iframe>
+        <iframe src="CannonFodder-Part5.pdf"></iframe>
+        <iframe src="CannonFodder-Part6.pdf"></iframe>
+        <iframe src="CannonFodder-Part7.pdf"></iframe>
+      </div>
     </section>
   </main>
 
