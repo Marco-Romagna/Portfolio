@@ -85,8 +85,14 @@
     {"id":"yoru_hira","kana":"よる","romaji":"yoru","gloss_en":"night","tags":["core","y-row","time"],"worlds":["8-base-hira"],"audio":"","note":"Common word for night. Written 夜 in kanji.","example":{"kana":"よるにねる","romaji":"yoru ni neru","english":"to sleep at night"}},
     {"id":"yasai_hira","kana":"やさい","romaji":"yasai","gloss_en":"vegetable","tags":["core","y-row","food"],"worlds":["8-base-hira"],"audio":"","note":"Everyday word for vegetables. Written 野菜 in kanji.","example":{"kana":"やさいをたべる","romaji":"yasai wo taberu","english":"to eat vegetables"}},
     {"id":"yubi_hira","kana":"ゆび","romaji":"yubi","gloss_en":"finger","tags":["core","y-row","body"],"worlds":["8-base-hira"],"audio":"","note":"Means 'finger'; also 'toe' in compounds. Written 指 in kanji.","example":{"kana":"ゆびをさす","romaji":"yubi wo sasu","english":"to point with a finger"}},
-    {"id":"yume_hira","kana":"ゆめ","romaji":"yume","gloss_en":"dream","tags":["core","y-row","abstract"],"worlds":["8-base-hira"],"audio":"","note":"Means 'dream' (both sleeping and goals). Written 夢 in kanji.","example":{"kana":"ゆめをみる","romaji":"yume wo miru","english":"to dream"}}
-    
+    {"id":"yume_hira","kana":"ゆめ","romaji":"yume","gloss_en":"dream","tags":["core","y-row","abstract"],"worlds":["8-base-hira"],"audio":"","note":"Means 'dream' (both sleeping and goals). Written 夢 in kanji.","example":{"kana":"ゆめをみる","romaji":"yume wo miru","english":"to dream"}},
+
+    {"id":"ringo_hira","kana":"りんご","romaji":"ringo","gloss_en":"apple","tags":["core","r-row","food"],"worlds":["9-base-hira"],"audio":"","note":"Common fruit word. Often written 林檎 in kanji, but usually seen in kana.","example":{"kana":"りんごをたべる","romaji":"ringo wo taberu","english":"to eat an apple"}},
+    {"id":"rekishi_hira","kana":"れきし","romaji":"rekishi","gloss_en":"history","tags":["core","r-row","abstract"],"worlds":["9-base-hira"],"audio":"","note":"Word for 'history'. Written 歴史 in kanji.","example":{"kana":"れきしをべんきょうする","romaji":"rekishi wo benkyou suru","english":"to study history"}},
+    {"id":"rusu_hira","kana":"るす","romaji":"rusu","gloss_en":"absence; being away","tags":["core","r-row","state"],"worlds":["9-base-hira"],"audio":"","note":"Used when someone is not at home. Written 留守 in kanji.","example":{"kana":"いえはるすです","romaji":"ie wa rusu desu","english":"The house is empty (no one is home)"}},
+    {"id":"raku_hira","kana":"らく","romaji":"raku","gloss_en":"easy; comfortable","tags":["core","r-row","adjective"],"worlds":["9-base-hira"],"audio":"","note":"Means 'easy' or 'comfortable'. Written 楽 in kanji.","example":{"kana":"らくなしごと","romaji":"raku na shigoto","english":"an easy job"}},
+    {"id":"risu_hira","kana":"りす","romaji":"risu","gloss_en":"squirrel","tags":["core","r-row","animal"],"worlds":["9-base-hira"],"audio":"","note":"Animal word for 'squirrel'. Written 栗鼠 (rare).","example":{"kana":"りすがきをたべる","romaji":"risu ga ki wo taberu","english":"the squirrel eats a tree (nuts)"}},
+    {"id":"rajio_hira","kana":"らじお","romaji":"rajio","gloss_en":"radio","tags":["loanword","r-row","object"],"worlds":["9-base-hira"],"audio":"","note":"Loanword from English 'radio'. Usually written in katakana, but here in hiragana for practice.","example":{"kana":"らじおをきく","romaji":"rajio wo kiku","english":"to listen to the radio"}}
   ],
   "byWorld": {
     "1-base-hira":["ai_hira","iie_hira","ue_hira","ie_hira","aoi_hira","au_hira"],
@@ -101,6 +107,7 @@
     "6-daku-hira": ["basho_hira","biiru_hira","bukuro_hira","benkyou_hira","boushi_hira","byouin_hira"],
     "6-handaku-hira": ["pan_hira","pinku_hira","piano_hira","posuto_hira","pen_hira","puro_hira"],
     "7-base-hira": ["mizu_hira","machi_hira","miru_hira","mori_hira","megane_hira","mado_hira"],
-    "8-base-hira": ["yama_hira","yuki_hira","yoru_hira","yasai_hira","yubi_hira","yume_hira"]
+    "8-base-hira": ["yama_hira","yuki_hira","yoru_hira","yasai_hira","yubi_hira","yume_hira"],
+    "9-base-hira": ["ringo_hira","rekishi_hira","rusu_hira","raku_hira","risu_hira","rajio_hira"]
   }
 }
