@@ -19,7 +19,7 @@
     {"id":"gakusei_hira","kana":"がくせい","romaji":"gakusei","gloss_en":"student","tags":["core","g-row","person"],"worlds":["2-daku-hira"],"audio":"","note":"Usually refers to university students. For younger students, せいと (seito) is common.","example":{"kana":"がくせいです","romaji":"gakusei desu","english":"I am a student"}},
     {"id":"gakkou_hira","kana":"がっこう","romaji":"gakkou","gloss_en":"school","tags":["core","g-row","place"],"worlds":["2-daku-hira"],"audio":"","note":"General word for school. Often combined, e.g., しょうがっこう (elementary school).","example":{"kana":"がっこうにいく","romaji":"gakkou ni iku","english":"to go to school"}},
     {"id":"ginkou_hira","kana":"ぎんこう","romaji":"ginkou","gloss_en":"bank","tags":["core","g-row","place"],"worlds":["2-daku-hira"],"audio":"","note":"Used for financial institutions. Worker is ぎんこういん.","example":{"kana":"ぎんこうでしごとをする","romaji":"ginkou de shigoto wo suru","english":"to work at a bank"}},
-    {"id":"genki_hira","kana":"げんき","romaji":"genki","gloss_en":"healthy; energetic","tags":["core","g-row","adjective"],"worlds":["2-daku-hira"],"audio":"","note":"Common in greetings: おげんきですか？ (How are you?).","example":{"kana":"げんきです！","romaji":"genki desu!","english":"I’m fine!"}}
+    {"id":"genki_hira","kana":"げんき","romaji":"genki","gloss_en":"healthy; energetic","tags":["core","g-row","adjective"],"worlds":["2-daku-hira"],"audio":"","note":"Common in greetings: おげんきですか？ (How are you?).","example":{"kana":"げんきです！","romaji":"genki desu!","english":"I’m fine!"}},
 
     {"id":"sakura_hira","kana":"さくら","romaji":"sakura","gloss_en":"cherry blossom","tags":["core","s-row","nature"],"worlds":["3-base-hira"],"audio":"","note":"Iconic Japanese flower. Often associated with spring, festivals, and the fleeting nature of life.","example":{"kana":"さくらのはな","romaji":"sakura no hana","english":"cherry blossom flowers"}},
     {"id":"shio_hira","kana":"しお","romaji":"shio","gloss_en":"salt","tags":["core","s-row","food"],"worlds":["3-base-hira"],"audio":"","note":"Common seasoning. Often appears in cooking and food packaging.","example":{"kana":"しおをいれる","romaji":"shio wo ireru","english":"add salt"}},
@@ -32,7 +32,21 @@
     {"id":"zoo_hira","kana":"どうぶつえん","romaji":"doubutsuen","gloss_en":"zoo","tags":["core","z-row","place"],"worlds":["3-daku-hira"],"audio":"","note":"Full word is どうぶつえん (literally 'animal garden').","example":{"kana":"どうぶつえんにいく","romaji":"doubutsuen ni iku","english":"to go to the zoo"}},
     {"id":"zen_hira","kana":"ぜん","romaji":"zen","gloss_en":"Zen (Buddhism)","tags":["core","z-row","concept"],"worlds":["3-daku-hira"],"audio":"","note":"A school of Buddhism. Also used metaphorically worldwide.","example":{"kana":"ぜんのしゅうぎょう","romaji":"zen no shuugyou","english":"Zen practice"}},
     {"id":"zou_hira","kana":"ぞう","romaji":"zou","gloss_en":"elephant","tags":["core","z-row","animal"],"worlds":["3-daku-hira"],"audio":"","note":"Basic word for elephant, common in children’s books and zoo vocabulary.","example":{"kana":"ぞうはおおきい","romaji":"zou wa ookii","english":"the elephant is big"}},
-    {"id":"zero_hira","kana":"ゼロ","romaji":"zero","gloss_en":"zero","tags":["loanword","z-row","number"],"worlds":["3-daku-hira"],"audio":"","note":"Loanword from English. Modern Japanese always writes it in katakana, but hiragana practice may show it.","example":{"kana":"ゼロからはじめる","romaji":"zero kara hajimeru","english":"to start from zero"}}
+    {"id":"zero_hira","kana":"ゼロ","romaji":"zero","gloss_en":"zero","tags":["loanword","z-row","number"],"worlds":["3-daku-hira"],"audio":"","note":"Loanword from English. Modern Japanese always writes it in katakana, but hiragana practice may show it.","example":{"kana":"ゼロからはじめる","romaji":"zero kara hajimeru","english":"to start from zero"}},
+
+    {"id":"taberu_hira","kana":"たべる","romaji":"taberu","gloss_en":"to eat","tags":["core","t-row","verb"],"worlds":["4-base-hira"],"audio":"","note":"Very common verb. Used with を to mark the object.","example":{"kana":"りんごをたべる","romaji":"ringo wo taberu","english":"to eat an apple"}},
+    {"id":"chizu_hira","kana":"ちず","romaji":"chizu","gloss_en":"map","tags":["core","t-row","object"],"worlds":["4-base-hira"],"audio":"","note":"Common in travel contexts. Written with kanji 地図.","example":{"kana":"ちずをみる","romaji":"chizu wo miru","english":"to look at a map"}},
+    {"id":"tsuki_hira","kana":"つき","romaji":"tsuki","gloss_en":"moon; month","tags":["core","t-row","nature"],"worlds":["4-base-hira"],"audio":"","note":"Means both 'moon' and 'month'. Written with different kanji (月).","example":{"kana":"つきがきれいです","romaji":"tsuki ga kirei desu","english":"The moon is beautiful"}},
+    {"id":"tegami_hira","kana":"てがみ","romaji":"tegami","gloss_en":"letter","tags":["core","t-row","object"],"worlds":["4-base-hira"],"audio":"","note":"Means a handwritten letter. Common word in beginner vocab.","example":{"kana":"てがみをかく","romaji":"tegami wo kaku","english":"to write a letter"}},
+    {"id":"tomodachi_hira","kana":"ともだち","romaji":"tomodachi","gloss_en":"friend","tags":["core","t-row","person"],"worlds":["4-base-hira"],"audio":"","note":"General word for 'friend'. Often shortened to とも.","example":{"kana":"ともだちにあう","romaji":"tomodachi ni au","english":"to meet a friend"}},
+    {"id":"tokei_hira","kana":"とけい","romaji":"tokei","gloss_en":"clock; watch","tags":["core","t-row","object"],"worlds":["4-base-hira"],"audio":"","note":"Means both clocks and wristwatches. Written 時計 in kanji.","example":{"kana":"とけいをみる","romaji":"tokei wo miru","english":"to look at a clock"}},
+    {"id":"densha_hira","kana":"でんしゃ","romaji":"densha","gloss_en":"train","tags":["core","d-row","transport"],"worlds":["4-daku-hira"],"audio":"","note":"Common everyday transport word. Written 電車 in kanji.","example":{"kana":"でんしゃにのる","romaji":"densha ni noru","english":"to ride a train"}},
+    {"id":"daigaku_hira","kana":"だいがく","romaji":"daigaku","gloss_en":"university","tags":["core","d-row","place"],"worlds":["4-daku-hira"],"audio":"","note":"Refers to university/college. Often combined, e.g. 東京大学 (University of Tokyo).","example":{"kana":"だいがくにいく","romaji":"daigaku ni iku","english":"to go to university"}},
+    {"id":"dekiru_hira","kana":"できる","romaji":"dekiru","gloss_en":"to be able to; can","tags":["core","d-row","verb"],"worlds":["4-daku-hira"],"audio":"","note":"Expresses ability. Often used with 〜が: 日本語ができる (can speak Japanese).","example":{"kana":"すしができる","romaji":"sushi ga dekiru","english":"can make sushi"}},
+    {"id":"doa_hira","kana":"どあ","romaji":"doa","gloss_en":"door","tags":["loanword","d-row","object"],"worlds":["4-daku-hira"],"audio":"","note":"Loanword from English 'door'. Commonly written in katakana ドア.","example":{"kana":"どあをあける","romaji":"doa wo akeru","english":"to open the door"}},
+    {"id":"dare_hira","kana":"だれ","romaji":"dare","gloss_en":"who","tags":["core","d-row","question"],"worlds":["4-daku-hira"],"audio":"","note":"Common question word.","example":{"kana":"だれですか","romaji":"dare desu ka","english":"Who is it?"}},
+    {"id":"depaato_hira","kana":"でぱーと","romaji":"depaato","gloss_en":"department store","tags":["loanword","d-row","place"],"worlds":["4-daku-hira"],"audio":"","note":"Loanword from 'department'. Usually written デパート in katakana.","example":{"kana":"でぱーとでかいものをする","romaji":"depaato de kaimono wo suru","english":"to shop at a department store"}}
+
     
   ],
   "byWorld": {
@@ -40,6 +54,8 @@
     "2-base-hira":["iku_hira","kiku_hira","kau_hira","kao_hira","ike_hira","koe_hira"],
     "2-daku-hira":["eiga_hira","gaikoku_hira","gakusei_hira","gakkou_hira","ginkou_hira","genki_hira"],
     "3-base-hira": ["sakura_hira","shio_hira","sumu_hira","seki_hira","sora_hira","sono_hira"],
-    "3-daku-hira": ["zasshi_hira","jisho_hira","zoo_hira","zen_hira","zou_hira","zero_hira"]
+    "3-daku-hira": ["zasshi_hira","jisho_hira","zoo_hira","zen_hira","zou_hira","zero_hira"],
+    "4-base-hira": ["taberu_hira","chizu_hira","tsuki_hira","tegami_hira","tomodachi_hira","tokei_hira"],
+    "4-daku-hira": ["densha_hira","daigaku_hira","dekiru_hira","doa_hira","dare_hira","depaato_hira"]
   }
 }
