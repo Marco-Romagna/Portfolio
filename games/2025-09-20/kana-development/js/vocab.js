@@ -96,29 +96,36 @@
 
   // ======================================================
   // Get words for a specific world milestone
-  // e.g. getWorldMilestone("2-base", "hiragana")
+  // e.g. getWorldMilestone("2-base-hira", "hiragana")
   // ======================================================
   async function getWorldMilestone(worldKey, type = "hiragana") {
     const data = await loadWorlds();
-    const ids = data[worldKey] || [];
-    const lexicon = await loadLexicon(type);
+    const entry = data.worlds.find(w => w.id === worldKey);
+    if (!entry) return [];
+
+    // override type if defined in worlds.json
+    const lexType = entry.lexicon || type;
+    const lexicon = await loadLexicon(lexType);
+
+    const ids = lexicon.byWorld[worldKey] || [];
     return lexicon.words.filter(w => ids.includes(w.id));
   }
 
   // ======================================================
   // Get all words for a world (all its milestones)
-  // e.g. getWorld("2", "katakana")
+  // e.g. getWorld("2") → base/daku/handaku for hira+kata
   // ======================================================
   async function getWorld(worldCode, type = "hiragana") {
     const data = await loadWorlds();
-    const keys = Object.keys(data).filter(k => k.startsWith(worldCode + "-"));
-    const lexicon = await loadLexicon(type);
+    const entries = data.worlds.filter(w => w.id.startsWith(worldCode + "-"));
 
     let results = [];
-    keys.forEach(k => {
-      const ids = data[k] || [];
+    for (let entry of entries) {
+      const lexType = entry.lexicon || type;
+      const lexicon = await loadLexicon(lexType);
+      const ids = lexicon.byWorld[entry.id] || [];
       results = results.concat(lexicon.words.filter(w => ids.includes(w.id)));
-    });
+    }
     return results;
   }
 
