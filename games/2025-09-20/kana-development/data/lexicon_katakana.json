@@ -1,5 +1,22 @@
 {
   "meta": {"version":1,"locale":"ja-JP","script":"katakana"},
-  "words": [],
-  "byWorld": {"1-base-kata":[]}
+  "words": [
+    {"id":"iku_kata","kana":"イク","romaji":"iku","gloss_en":"to go","tags":["core","k-row","verb"],"worlds":["2-base-kata"],"audio":"","note":"Same word as いく (hiragana). Katakana form is unusual, mostly in manga or stylistic emphasis.","example":{"kana":"イク！","romaji":"iku!","english":"Go!"}},
+    {"id":"kiku_kata","kana":"キク","romaji":"kiku","gloss_en":"to listen; to ask","tags":["core","k-row","verb"],"worlds":["2-base-kata"],"audio":"","note":"Normally きく. Katakana used in manga, ads, or design for visual effect.","example":{"kana":"せんせいにキク","romaji":"sensei ni kiku","english":"ask the teacher (stylized)"}},
+    {"id":"kau_kata","kana":"カウ","romaji":"kau","gloss_en":"to buy","tags":["core","k-row","verb"],"worlds":["2-base-kata"],"audio":"","note":"Standard is かう. Katakana adds emphasis in handwritten notes, ads, or comics.","example":{"kana":"パンをカウ","romaji":"pan wo kau","english":"to buy bread (stylized)"}},
+    {"id":"kao_kata","kana":"カオ","romaji":"kao","gloss_en":"face","tags":["core","k-row","body"],"worlds":["2-base-kata"],"audio":"","note":"Face. Written in katakana for stylistic or playful use.","example":{"kana":"カオがあかい","romaji":"kao ga akai","english":"His face is red"}},
+    {"id":"ike_kata","kana":"イケ","romaji":"ike","gloss_en":"pond","tags":["core","k-row","place"],"worlds":["2-base-kata"],"audio":"","note":"Normally いけ. Katakana might appear in brand names, design, or manga.","example":{"kana":"イケのさかな","romaji":"ike no sakana","english":"fish in the pond"}},
+    {"id":"koe_kata","kana":"コエ","romaji":"koe","gloss_en":"voice","tags":["core","k-row"],"worlds":["2-base-kata"],"audio":"","note":"Usually こえ. Katakana コエ often used in lyrics, games, or manga for emphasis.","example":{"kana":"きれいなコエ","romaji":"kirei na koe","english":"a beautiful voice"}},
+    {"id":"eiga_kata","kana":"エイガ","romaji":"eiga","gloss_en":"movie; film","tags":["core","g-row","topic"],"worlds":["2-daku-kata"],"audio":"","note":"Usually written えいが. Katakana エイガ gives a stylized/foreign feel.","example":{"kana":"エイガをみる","romaji":"eiga wo miru","english":"to watch a movie"}},
+    {"id":"gaikoku_kata","kana":"ガイコク","romaji":"gaikoku","gloss_en":"foreign country","tags":["core","g-row","place"],"worlds":["2-daku-kata"],"audio":"","note":"Katakana ガイコク is unusual, adds dramatic or design flair.","example":{"kana":"ガイコクにいく","romaji":"gaikoku ni iku","english":"to go abroad"}},
+    {"id":"gakusei_kata","kana":"ガクセイ","romaji":"gakusei","gloss_en":"student","tags":["core","g-row","person"],"worlds":["2-daku-kata"],"audio":"","note":"Usually がくせい. Katakana ガクセイ sometimes used in posters or comics.","example":{"kana":"ガクセイです","romaji":"gakusei desu","english":"I am a student"}},
+    {"id":"gakkou_kata","kana":"ガッコウ","romaji":"gakkou","gloss_en":"school","tags":["core","g-row","place"],"worlds":["2-daku-kata"],"audio":"","note":"Standard form is がっこう. Katakana may appear in signs or manga for emphasis.","example":{"kana":"ガッコウにいく","romaji":"gakkou ni iku","english":"to go to school"}},
+    {"id":"ginkou_kata","kana":"ギンコウ","romaji":"ginkou","gloss_en":"bank","tags":["core","g-row","place"],"worlds":["2-daku-kata"],"audio":"","note":"ぎんこう is normal. Katakana ギンコウ may appear in ads, signs, or branding.","example":{"kana":"ギンコウではたらく","romaji":"ginkou de hataraku","english":"to work at a bank"}},
+    {"id":"genki_kata","kana":"ゲンキ","romaji":"genki","gloss_en":"healthy; energetic","tags":["core","g-row","adjective"],"worlds":["2-daku-kata"],"audio":"","note":"げんき is standard. Katakana ゲンキ adds visual punch in manga or casual writing.","example":{"kana":"ゲンキです！","romaji":"genki desu!","english":"I’m fine!"}}
+  ],
+  "byWorld": {
+    "1-base-kata": [],
+    "2-base-kata": ["iku_kata","kiku_kata","kau_kata","kao_kata","ike_kata","koe_kata"],
+    "2-daku-kata": ["eiga_kata","gaikoku_kata","gakusei_kata","gakkou_kata","ginkou_kata","genki_kata"]
+  }
 }
