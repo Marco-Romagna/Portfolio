@@ -100,17 +100,16 @@
   // ======================================================
   async function getWorldMilestone(worldKey, type = "hiragana") {
     const data = await loadWorlds();
-    const entry = data.worlds.find(w => w.id === worldKey);
-    if (!entry) return [];
-
-    // override type if defined in worlds.json
-    const lexType = entry.lexicon || type;
-    const lexicon = await loadLexicon(lexType);
-
-    const ids = lexicon.byWorld[worldKey] || [];
+    const ids = data[worldKey] || [];
+  
+    const lexicon = await loadLexicon(type);
+    if (!lexicon || !lexicon.words) {
+      console.error("Lexicon missing or malformed for type:", type, lexicon);
+      return [];
+    }
+  
     return lexicon.words.filter(w => ids.includes(w.id));
   }
-
   // ======================================================
   // Get all words for a world (all its milestones)
   // e.g. getWorld("2") → base/daku/handaku for hira+kata
