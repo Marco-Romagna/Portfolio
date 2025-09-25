@@ -35,7 +35,7 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
   const nextBtn = $('.lesson-cta [data-action="advance"]');
   const hideCTA = () => { ctaWrap?.classList.add('is-hidden'); };
 
-  // Add back button (styled same as next)
+  // Add back button
   let backBtn = document.createElement('button');
   backBtn.textContent = "← Back";
   backBtn.className = "btn primary is-hidden";
@@ -58,12 +58,11 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
     if (progress) progress.setAttribute('aria-valuenow', String(pct));
 
     if (!window.DEBUG_SKIP_ENABLED) {
-      hideCTA(); // normal flow hides CTA until conditions met
+      hideCTA();
     } else {
-      ctaWrap?.classList.remove('is-hidden'); // always visible in debug
+      ctaWrap?.classList.remove('is-hidden');
     }
 
-    // back button only visible after part 1
     if (currentPart > 1) {
       backBtn.classList.remove('is-hidden');
     } else {
@@ -87,40 +86,109 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
     }
   }
 
-  // ---------- Hook navigation buttons ----------
-  nextBtn?.addEventListener('click', () => {
-    if (window.DEBUG_SKIP_ENABLED) {
-      showPart(currentPart + 1);
-    }
-  });
-  backBtn?.addEventListener('click', () => {
-    if (window.DEBUG_SKIP_ENABLED) {
-      showPart(currentPart - 1);
-    }
-  });
+  nextBtn?.addEventListener('click', () => { if (window.DEBUG_SKIP_ENABLED) showPart(currentPart + 1); });
+  backBtn?.addEventListener('click', () => { if (window.DEBUG_SKIP_ENABLED) showPart(currentPart - 1); });
 
   // ---------- Kana Sets ----------
   const H_VOW = ['あ','い','う','え','お'];
   const K_VOW = ['ア','イ','ウ','エ','オ'];
+
   const H_KA  = ['か','き','く','け','こ'];
   const K_KA  = ['カ','キ','ク','ケ','コ'];
   const H_GA  = ['が','ぎ','ぐ','げ','ご'];
   const K_GA  = ['ガ','ギ','グ','ゲ','ゴ'];
 
+  const H_SA  = ['さ','し','す','せ','そ'];
+  const K_SA  = ['サ','シ','ス','セ','ソ'];
+  const H_ZA  = ['ざ','じ','ず','ぜ','ぞ'];
+  const K_ZA  = ['ザ','ジ','ズ','ゼ','ゾ'];
+
+  const H_TA  = ['た','ち','つ','て','と'];
+  const K_TA  = ['タ','チ','ツ','テ','ト'];
+  const H_DA  = ['だ','ぢ','づ','で','ど'];
+  const K_DA  = ['ダ','ヂ','ヅ','デ','ド'];
+
+  const H_NA  = ['な','に','ぬ','ね','の'];
+  const K_NA  = ['ナ','ニ','ヌ','ネ','ノ'];
+
+  const H_HA  = ['は','ひ','ふ','へ','ほ'];
+  const K_HA  = ['ハ','ヒ','フ','ヘ','ホ'];
+  const H_BA  = ['ば','び','ぶ','べ','ぼ'];
+  const K_BA  = ['バ','ビ','ブ','ベ','ボ'];
+  const H_PA  = ['ぱ','ぴ','ぷ','ぺ','ぽ'];
+  const K_PA  = ['パ','ピ','プ','ペ','ポ'];
+
+  const H_MA  = ['ま','み','む','め','も'];
+  const K_MA  = ['マ','ミ','ム','メ','モ'];
+
+  const H_YA  = ['や','ゆ','よ'];
+  const K_YA  = ['ヤ','ユ','ヨ'];
+
+  const H_RA  = ['ら','り','る','れ','ろ'];
+  const K_RA  = ['ラ','リ','ル','レ','ロ'];
+
+  const H_WA  = ['わ','を','ん'];
+  const K_WA  = ['ワ','ヲ','ン'];
+
+  // ---------- Romaji Map ----------
   const ROMA = {
+    // Vowels
     'あ':'a','い':'i','う':'u','え':'e','お':'o',
     'ア':'a','イ':'i','ウ':'u','エ':'e','オ':'o',
+    // K / G
     'か':'ka','き':'ki','く':'ku','け':'ke','こ':'ko',
     'カ':'ka','キ':'ki','ク':'ku','ケ':'ke','コ':'ko',
     'が':'ga','ぎ':'gi','ぐ':'gu','げ':'ge','ご':'go',
-    'ガ':'ga','ギ':'gi','グ':'gu','ゲ':'ge','ゴ':'go'
+    'ガ':'ga','ギ':'gi','グ':'gu','ゲ':'ge','ゴ':'go',
+    // S / Z
+    'さ':'sa','し':'shi','す':'su','せ':'se','そ':'so',
+    'サ':'sa','シ':'shi','ス':'su','セ':'se','ソ':'so',
+    'ざ':'za','じ':'ji','ず':'zu','ぜ':'ze','ぞ':'zo',
+    'ザ':'za','ジ':'ji','ズ':'zu','ゼ':'ze','ゾ':'zo',
+    // T / D
+    'た':'ta','ち':'chi','つ':'tsu','て':'te','と':'to',
+    'タ':'ta','チ':'chi','ツ':'tsu','テ':'te','ト':'to',
+    'だ':'da','ぢ':'ji','づ':'zu','で':'de','ど':'do',
+    'ダ':'da','ヂ':'ji','ヅ':'zu','デ':'de','ド':'do',
+    // N
+    'な':'na','に':'ni','ぬ':'nu','ね':'ne','の':'no',
+    'ナ':'na','ニ':'ni','ヌ':'nu','ネ':'ne','ノ':'no',
+    // H / B / P
+    'は':'ha','ひ':'hi','ふ':'fu','へ':'he','ほ':'ho',
+    'ハ':'ha','ヒ':'hi','フ':'fu','ヘ':'he','ホ':'ho',
+    'ば':'ba','び':'bi','ぶ':'bu','べ':'be','ぼ':'bo',
+    'バ':'ba','ビ':'bi','ブ':'bu','ベ':'be','ボ':'bo',
+    'ぱ':'pa','ぴ':'pi','ぷ':'pu','ぺ':'pe','ぽ':'po',
+    'パ':'pa','ピ':'pi','プ':'pu','ペ':'pe','ポ':'po',
+    // M
+    'ま':'ma','み':'mi','む':'mu','め':'me','も':'mo',
+    'マ':'ma','ミ':'mi','ム':'mu','メ':'me','モ':'mo',
+    // Y
+    'や':'ya','ゆ':'yu','よ':'yo',
+    'ヤ':'ya','ユ':'yu','ヨ':'yo',
+    // R
+    'ら':'ra','り':'ri','る':'ru','れ':'re','ろ':'ro',
+    'ラ':'ra','リ':'ri','ル':'ru','レ':'re','ロ':'ro',
+    // W + N
+    'わ':'wa','を':'wo','ん':'n',
+    'ワ':'wa','ヲ':'wo','ン':'n'
   };
 
-  // Cross-script mapping
+  // ---------- Cross-script mapping ----------
   const PAIR = {};
-  [...H_VOW].forEach((h,i)=>{ PAIR[h] = K_VOW[i]; PAIR[K_VOW[i]] = h; });
-  [...H_KA ].forEach((h,i)=>{ PAIR[h] = K_KA [i]; PAIR[K_KA [i]] = h; });
-  [...H_GA ].forEach((h,i)=>{ PAIR[h] = K_GA [i]; PAIR[K_GA [i]] = h; });
+  function addPairs(hRow, kRow) {
+    hRow.forEach((h,i)=>{ PAIR[h] = kRow[i]; PAIR[kRow[i]] = h; });
+  }
+  addPairs(H_VOW, K_VOW);
+  addPairs(H_KA, K_KA); addPairs(H_GA, K_GA);
+  addPairs(H_SA, K_SA); addPairs(H_ZA, K_ZA);
+  addPairs(H_TA, K_TA); addPairs(H_DA, K_DA);
+  addPairs(H_NA, K_NA);
+  addPairs(H_HA, K_HA); addPairs(H_BA, K_BA); addPairs(H_PA, K_PA);
+  addPairs(H_MA, K_MA);
+  addPairs(H_YA, K_YA);
+  addPairs(H_RA, K_RA);
+  addPairs(H_WA, K_WA);
 
   // ---------- Role Detection ----------
   const ROLE = (() => {
@@ -144,6 +212,14 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
   function getWorldSets(world) {
     if (world === 1) return { H_BASE: H_VOW, K_BASE: K_VOW, H_DAKU: [], K_DAKU: [] };
     if (world === 2) return { H_BASE: H_KA, K_BASE: K_KA, H_DAKU: H_GA, K_DAKU: K_GA };
+    if (world === 3) return { H_BASE: H_SA, K_BASE: K_SA, H_DAKU: H_ZA, K_DAKU: K_ZA };
+    if (world === 4) return { H_BASE: H_TA, K_BASE: K_TA, H_DAKU: H_DA, K_DAKU: K_DA };
+    if (world === 5) return { H_BASE: H_NA, K_BASE: K_NA, H_DAKU: [], K_DAKU: [] };
+    if (world === 6) return { H_BASE: H_HA, K_BASE: K_HA, H_DAKU: [...H_BA, ...H_PA], K_DAKU: [...K_BA, ...K_PA] };
+    if (world === 7) return { H_BASE: H_MA, K_BASE: K_MA, H_DAKU: [], K_DAKU: [] };
+    if (world === 8) return { H_BASE: H_YA, K_BASE: K_YA, H_DAKU: [], K_DAKU: [] };
+    if (world === 9) return { H_BASE: H_RA, K_BASE: K_RA, H_DAKU: [], K_DAKU: [] };
+    if (world === 10) return { H_BASE: H_WA, K_BASE: K_WA, H_DAKU: [], K_DAKU: [] };
     return { H_BASE: [], K_BASE: [], H_DAKU: [], K_DAKU: [] };
   }
 
@@ -189,7 +265,6 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
     });
   })();
 
-  // ---------- Helper: RoleKey for vocab ----------
   function getRoleKey(world, suffix) {
     if (suffix === 4) return `${world}-base`;
     if (suffix === 8) return `${world}-daku`;
