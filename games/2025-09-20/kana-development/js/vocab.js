@@ -102,14 +102,13 @@
     const data = await loadWorlds();
     const ids = data[worldKey] || [];
   
-    const lexicon = await loadLexicon(type);
-    if (!lexicon || !lexicon.words) {
-      console.error("Lexicon missing or malformed for type:", type, lexicon);
-      return [];
-    }
+    const suffix = type === "hiragana" ? "_hira" : "_kata";
+    const idsWithSuffix = ids.map(id => id + suffix);
   
-    return lexicon.words.filter(w => ids.includes(w.id));
+    const lexicon = await loadLexicon(type);
+    return (lexicon.words || []).filter(w => idsWithSuffix.includes(w.id));
   }
+
   // ======================================================
   // Get all words for a world (all its milestones)
   // e.g. getWorld("2") → base/daku/handaku for hira+kata
