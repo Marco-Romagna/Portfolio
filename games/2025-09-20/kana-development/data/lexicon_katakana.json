@@ -86,7 +86,13 @@
     {"id":"raku_kata","kana":"ラク","romaji":"raku","gloss_en":"easy; comfortable","tags":["core","r-row","adjective"],"worlds":["9-base-kata"],"audio":"","note":"ラク often appears in katakana in ads (ラクに〜 = 'easily…').","example":{"kana":"ラクなしごと","romaji":"raku na shigoto","english":"an easy job"}},
     {"id":"risu_kata","kana":"リス","romaji":"risu","gloss_en":"squirrel","tags":["core","r-row","animal"],"worlds":["9-base-kata"],"audio":"","note":"リス is the usual modern spelling for 'squirrel'.","example":{"kana":"リスがきをたべる","romaji":"risu ga ki wo taberu","english":"the squirrel eats a tree (nuts)"}},
     {"id":"rajio_kata","kana":"ラジオ","romaji":"rajio","gloss_en":"radio","tags":["loanword","r-row","object"],"worlds":["9-base-kata"],"audio":"","note":"ラジオ is the standard way to write 'radio'.","example":{"kana":"ラジオをきく","romaji":"rajio wo kiku","english":"to listen to the radio"}},
-    
+
+    {"id":"wan_kata","kana":"ワン","romaji":"wan","gloss_en":"woof; bowl (counter)","tags":["core","w-row","sound"],"worlds":["10-base-kata"],"audio":"","note":"ワン is the common way to write the dog bark 'woof'. Also used in counters (ワンカップ = one cup).","example":{"kana":"イヌが「ワン」となく","romaji":"inu ga 'wan' to naku","english":"the dog barks 'woof'"}},
+    {"id":"wakarimasu_kata","kana":"ワカリマス","romaji":"wakarimasu","gloss_en":"to understand","tags":["core","w-row","verb"],"worlds":["10-base-kata"],"audio":"","note":"Normally written わかります. Katakana form ワカリマス is stylized (e.g., in ads).","example":{"kana":"ニホンゴがワカリマス","romaji":"nihongo ga wakarimasu","english":"I understand Japanese"}},
+    {"id":"wa_kata","kana":"ワ","romaji":"wa","gloss_en":"wa (particle)","tags":["grammar","w-row"],"worlds":["10-base-kata"],"audio":"","note":"Katakana ワ can represent the 'wa' sound, but the topic particle is は in hiragana.","example":{"kana":"ワタシワガクセイデス","romaji":"watashi wa gakusei desu","english":"I am a student"}},
+    {"id":"wo_kata","kana":"ヲ","romaji":"wo","gloss_en":"wo (particle)","tags":["grammar","w-row"],"worlds":["10-base-kata"],"audio":"","note":"ヲ represents the 'wo/o' sound. Rarely seen outside the を particle.","example":{"kana":"ミズヲノム","romaji":"mizu wo nomu","english":"to drink water"}},
+    {"id":"nani_kata","kana":"ナニ","romaji":"nani","gloss_en":"what","tags":["core","question"],"worlds":["10-base-kata"],"audio":"","note":"Normally なに. ナニ sometimes used in bolded katakana for emphasis (like in manga).","example":{"kana":"ナニヲシマスカ","romaji":"nani wo shimasu ka","english":"What will you do?"}},
+    {"id":"ne_kata","kana":"ネ","romaji":"ne","gloss_en":"ne (sentence ending)","tags":["grammar","particle"],"worlds":["10-base-kata"],"audio":"","note":"Katakana ネ exists but particles are almost never written in katakana.","example":{"kana":"イイテンキデスネ","romaji":"ii tenki desu ne","english":"Nice weather, isn’t it?"}}
   ],
   "byWorld": {
     "1-base-kata": [],
@@ -102,6 +108,7 @@
     "6-handaku-kata": ["pan_kata","pinku_kata","piano_kata","posuto_kata","pen_kata","puro_kata"],
     "7-base-kata": ["mizu_kata","machi_kata","miru_kata","mori_kata","megane_kata","mado_kata"],
     "8-base-kata": ["yama_kata","yuki_kata","yoru_kata","yasai_kata","yubi_kata","yume_kata"],
-    "9-base-kata": ["ringo_kata","rekishi_kata","rusu_kata","raku_kata","risu_kata","rajio_kata"]
+    "9-base-kata": ["ringo_kata","rekishi_kata","rusu_kata","raku_kata","risu_kata","rajio_kata"],
+    "10-base-kata": ["wan_kata","wakarimasu_kata","wa_kata","wo_kata","nani_kata","ne_kata"]
   }
 }
