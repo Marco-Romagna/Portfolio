@@ -6,29 +6,12 @@
   <title>Cannon Fodder • Marco Portfolio</title>
   <meta name="color-scheme" content="dark light" />
 
-  <!-- Styles -->
+  <!-- Global Styles -->
   <link rel="stylesheet" href="../../../css/main.css">
   <script src="../../../no-mobile.js" defer></script>
 
-  <style>
-    html, body {
-      height: 100%;
-      margin: 0;
-    }
-
-    main.container {
-      padding: 0; /* remove extra padding around iframe */
-    }
-
-    .pdf-viewer {
-      width: 100%;
-      height: calc(100vh - 120px); 
-      /* 100vh = full viewport height
-         subtract ~120px for header + footer */
-      border: none;
-      display: block;
-    }
-  </style>
+  <!-- Page-specific Styles -->
+  <link rel="stylesheet" href="../../../css/games/cannon-fodder/styles.css">
 </head>
 <body class="site">
   <!-- Header -->
@@ -48,6 +31,32 @@
   <main class="container">
     <section class="panel">
       <h2>Cannon Fodder Rulebook</h2>
+
+      <!-- Credits -->
+      <div class="credits">
+        <h3>Credits</h3>
+        <div class="credit-list">
+          <div class="credit-label">Authors</div>
+          <div>Andrew Moffatt, Stephen Rock, Tyler Lyman, Gabriel Eskew, Chase Edwards, <strong>Marco Romagna</strong></div>
+
+          <div class="credit-label">Artists</div>
+          <div>Jacob McConnell, Carolina Inkote, Derrek Fan</div>
+
+          <div class="credit-label">Rule System</div>
+          <div>Other Systems</div>
+
+          <div class="credit-label">Page Count</div>
+          <div>346</div>
+
+          <div class="credit-label">Format</div>
+          <div>PDF</div>
+
+          <div class="credit-label">Published</div>
+          <div>May 5, 2025 (DriveThruRPG)</div>
+        </div>
+      </div>
+
+      <!-- Embedded PDF -->
       <iframe class="pdf-viewer" src="CannonFodder.pdf"></iframe>
     </section>
   </main>
