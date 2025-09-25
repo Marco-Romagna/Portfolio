@@ -52,7 +52,26 @@
     {"id":"neko_hira","kana":"ねこ","romaji":"neko","gloss_en":"cat","tags":["core","n-row","animal"],"worlds":["5-base-hira"],"audio":"","note":"Basic word for cat, common in beginner vocabulary.","example":{"kana":"ねこがすきです","romaji":"neko ga suki desu","english":"I like cats"}},
     {"id":"nani_hira","kana":"なに","romaji":"nani","gloss_en":"what","tags":["core","n-row","question"],"worlds":["5-base-hira"],"audio":"","note":"Common question word. Can also appear as なん before certain sounds (e.g., なんですか).","example":{"kana":"これはなに？","romaji":"kore wa nani?","english":"What is this?"}},
     {"id":"natsu_hira","kana":"なつ","romaji":"natsu","gloss_en":"summer","tags":["core","n-row","season"],"worlds":["5-base-hira"],"audio":"","note":"Season word for summer. Often used in seasonal greetings.","example":{"kana":"なつがあつい","romaji":"natsu ga atsui","english":"summer is hot"}},
-    {"id":"naka_hira","kana":"なか","romaji":"naka","gloss_en":"inside; middle","tags":["core","n-row","direction"],"worlds":["5-base-hira"],"audio":"","note":"Means inside/middle. Often used with の: はこのなか (inside the box).","example":{"kana":"はこのなか","romaji":"hako no naka","english":"inside the box"}}
+    {"id":"naka_hira","kana":"なか","romaji":"naka","gloss_en":"inside; middle","tags":["core","n-row","direction"],"worlds":["5-base-hira"],"audio":"","note":"Means inside/middle. Often used with の: はこのなか (inside the box).","example":{"kana":"はこのなか","romaji":"hako no naka","english":"inside the box"}},
+
+    {"id":"hana_hira","kana":"はな","romaji":"hana","gloss_en":"flower; nose","tags":["core","h-row","nature"],"worlds":["6-base-hira"],"audio":"","note":"Can mean 'flower' (花) or 'nose' (鼻) depending on kanji. Context decides.","example":{"kana":"はながきれい","romaji":"hana ga kirei","english":"the flowers are beautiful"}},
+    {"id":"hito_hira","kana":"ひと","romaji":"hito","gloss_en":"person","tags":["core","h-row","person"],"worlds":["6-base-hira"],"audio":"","note":"General word for a person. Written 人 in kanji.","example":{"kana":"しんせつなひと","romaji":"shinsetsu na hito","english":"a kind person"}},
+    {"id":"fuyu_hira","kana":"ふゆ","romaji":"fuyu","gloss_en":"winter","tags":["core","h-row","season"],"worlds":["6-base-hira"],"audio":"","note":"One of the four seasons. Often used in seasonal greetings.","example":{"kana":"ふゆはさむい","romaji":"fuyu wa samui","english":"winter is cold"}},
+    {"id":"heya_hira","kana":"へや","romaji":"heya","gloss_en":"room","tags":["core","h-row","place"],"worlds":["6-base-hira"],"audio":"","note":"Means a room inside a building. Written 部屋 in kanji.","example":{"kana":"へやにはいる","romaji":"heya ni hairu","english":"to enter the room"}},
+    {"id":"hon_hira","kana":"ほん","romaji":"hon","gloss_en":"book","tags":["core","h-row","object"],"worlds":["6-base-hira"],"audio":"","note":"Word for book. Written 本 in kanji.","example":{"kana":"ほんをよむ","romaji":"hon wo yomu","english":"to read a book"}},
+    {"id":"hikari_hira","kana":"ひかり","romaji":"hikari","gloss_en":"light","tags":["core","h-row","nature"],"worlds":["6-base-hira"],"audio":"","note":"Means light/ray. Often appears in names (e.g., ひかる).","example":{"kana":"ひかりがつよい","romaji":"hikari ga tsuyoi","english":"the light is strong"}},
+    {"id":"basho_hira","kana":"ばしょ","romaji":"basho","gloss_en":"place; location","tags":["core","b-row","place"],"worlds":["6-daku-hira"],"audio":"","note":"General word for location. Written 場所 in kanji.","example":{"kana":"やくそくのばしょ","romaji":"yakusoku no basho","english":"the promised place"}},
+    {"id":"biiru_hira","kana":"びーる","romaji":"biiru","gloss_en":"beer","tags":["loanword","b-row","drink"],"worlds":["6-daku-hira"],"audio":"","note":"Loanword from English 'beer'. Usually written in katakana ビール.","example":{"kana":"びーるをのむ","romaji":"biiru wo nomu","english":"to drink beer"}},
+    {"id":"bukuro_hira","kana":"ふくろ","romaji":"fukuro","gloss_en":"bag","tags":["core","b-row","object"],"worlds":["6-daku-hira"],"audio":"","note":"Word for bag/sack. Written 袋 in kanji. Common in daily life.","example":{"kana":"ふくろにいれる","romaji":"fukuro ni ireru","english":"to put (it) in a bag"}},
+    {"id":"benkyou_hira","kana":"べんきょう","romaji":"benkyou","gloss_en":"study","tags":["core","b-row","activity"],"worlds":["6-daku-hira"],"audio":"","note":"Word for studying. Written 勉強 in kanji.","example":{"kana":"にほんごをべんきょうする","romaji":"nihongo wo benkyou suru","english":"to study Japanese"}},
+    {"id":"boushi_hira","kana":"ぼうし","romaji":"boushi","gloss_en":"hat","tags":["core","b-row","object"],"worlds":["6-daku-hira"],"audio":"","note":"Word for hat. Written 帽子 in kanji.","example":{"kana":"ぼうしをかぶる","romaji":"boushi wo kaburu","english":"to wear a hat"}},
+    {"id":"byouin_hira","kana":"びょういん","romaji":"byouin","gloss_en":"hospital","tags":["core","b-row","place"],"worlds":["6-daku-hira"],"audio":"","note":"Word for hospital. Written 病院 in kanji.","example":{"kana":"びょういんにいく","romaji":"byouin ni iku","english":"to go to the hospital"}},
+    {"id":"pan_hira","kana":"ぱん","romaji":"pan","gloss_en":"bread","tags":["loanword","p-row","food"],"worlds":["6-handaku-hira"],"audio":"","note":"Loanword from Portuguese 'pão'. Standard spelling is katakana パン.","example":{"kana":"ぱんをたべる","romaji":"pan wo taberu","english":"to eat bread"}},
+    {"id":"pinku_hira","kana":"ぴんく","romaji":"pinku","gloss_en":"pink","tags":["loanword","p-row","color"],"worlds":["6-handaku-hira"],"audio":"","note":"Loanword from English 'pink'. Usually written ピンク in katakana.","example":{"kana":"ぴんくのくるま","romaji":"pinku no kuruma","english":"a pink car"}},
+    {"id":"piano_hira","kana":"ぴあの","romaji":"piano","gloss_en":"piano","tags":["loanword","p-row","instrument"],"worlds":["6-handaku-hira"],"audio":"","note":"Loanword from Italian/English. Normal spelling is katakana ピアノ.","example":{"kana":"ぴあのをひく","romaji":"piano wo hiku","english":"to play the piano"}},
+    {"id":"posuto_hira","kana":"ぽすと","romaji":"posuto","gloss_en":"postbox","tags":["loanword","p-row","object"],"worlds":["6-handaku-hira"],"audio":"","note":"Loanword from 'post'. Katakana ポスト is standard.","example":{"kana":"ぽすとにてがみをいれる","romaji":"posuto ni tegami wo ireru","english":"to put a letter in the postbox"}},
+    {"id":"pen_hira","kana":"ぺん","romaji":"pen","gloss_en":"pen","tags":["loanword","p-row","object"],"worlds":["6-handaku-hira"],"audio":"","note":"Loanword from English. Standard form is katakana ペン.","example":{"kana":"ぺんでかく","romaji":"pen de kaku","english":"to write with a pen"}},
+    {"id":"puro_hira","kana":"ぷろ","romaji":"puro","gloss_en":"professional","tags":["loanword","p-row","person"],"worlds":["6-handaku-hira"],"audio":"","note":"Loanword from 'pro(fessional)'. Usually katakana プロ.","example":{"kana":"ぷろのせんしゅ","romaji":"puro no senshu","english":"a professional player"}}
 
     
   ],
@@ -64,6 +83,9 @@
     "3-daku-hira": ["zasshi_hira","jisho_hira","zoo_hira","zen_hira","zou_hira","zero_hira"],
     "4-base-hira": ["taberu_hira","chizu_hira","tsuki_hira","tegami_hira","tomodachi_hira","tokei_hira"],
     "4-daku-hira": ["densha_hira","daigaku_hira","dekiru_hira","doa_hira","dare_hira","depaato_hira"],
-    "5-base-hira": ["namae_hira","niku_hira","neko_hira","nani_hira","natsu_hira","naka_hira"]
+    "5-base-hira": ["namae_hira","niku_hira","neko_hira","nani_hira","natsu_hira","naka_hira"],
+    "6-base-hira": ["hana_hira","hito_hira","fuyu_hira","heya_hira","hon_hira","hikari_hira"],
+    "6-daku-hira": ["basho_hira","biiru_hira","bukuro_hira","benkyou_hira","boushi_hira","byouin_hira"],
+    "6-handaku-hira": ["pan_hira","pinku_hira","piano_hira","posuto_hira","pen_hira","puro_hira"]
   }
 }
