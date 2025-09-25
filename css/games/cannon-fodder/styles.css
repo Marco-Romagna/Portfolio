@@ -87,4 +87,23 @@
   height: calc(100vh - 150px); 
   border: none;
 }
+/* DriveThruRPG Button */
+.dtrpg-btn {
+  display: inline-block;
+  padding: 0.5rem 0.75rem;
+  margin-bottom: 1rem;
+  border-radius: 6px;
+  background: color-mix(in oklab, var(--accent) 20%, transparent);
+  border: 1px solid color-mix(in oklab, var(--accent) 40%, transparent);
+  color: var(--accent);
+  font-weight: 600;
+  text-decoration: none;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.dtrpg-btn:hover {
+  background: color-mix(in oklab, var(--accent) 30%, transparent);
+  transform: translateY(-1px);
+  text-decoration: none;
+}
 
