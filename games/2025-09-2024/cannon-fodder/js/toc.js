@@ -24,19 +24,18 @@ const book2Toc = [
   { title: "Appendix: Personal Record (2)", file: "pdfs/book2-appendix2.pdf" }
 ];
 
-let currentBook = "book1";
-
 function renderToc(book) {
   const toc = document.getElementById("toc");
   toc.innerHTML = "";
 
   const entries = book === "book1" ? book1Toc : book2Toc;
+
   entries.forEach(entry => {
     const li = document.createElement("li");
     const a = document.createElement("a");
     a.href = "#";
     a.textContent = entry.title;
-    a.addEventListener("click", (e) => {
+    a.addEventListener("click", e => {
       e.preventDefault();
       loadPdf(entry.file);
     });
@@ -44,26 +43,29 @@ function renderToc(book) {
     toc.appendChild(li);
   });
 
-  // load first PDF by default
+  // Load the first chapter of that book by default
   if (entries.length > 0) loadPdf(entries[0].file);
 
-  // update active button
+  // Highlight active book button
   document.getElementById("book1-btn").classList.toggle("active", book === "book1");
   document.getElementById("book2-btn").classList.toggle("active", book === "book2");
-
-  currentBook = book;
 }
 
 function loadPdf(file) {
   const viewer = document.getElementById("pdf-viewer");
   viewer.src = file;
 
-  // reset scroll to top
-  viewer.scrollIntoView({ behavior: "instant", block: "start" });
+  // Ensure we reset scroll position every time
+  viewer.onload = () => {
+    viewer.contentWindow?.scrollTo(0, 0);
+    // Also make sure the iframe itself jumps into view if scrolled down
+    viewer.scrollIntoView({ behavior: "instant", block: "start" });
+  };
 }
 
+// Book switching
 document.getElementById("book1-btn").addEventListener("click", () => renderToc("book1"));
 document.getElementById("book2-btn").addEventListener("click", () => renderToc("book2"));
 
-// start with Book 1
+// Initialize with Book 1
 renderToc("book1");
