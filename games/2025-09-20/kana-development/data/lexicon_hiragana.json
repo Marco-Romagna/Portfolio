@@ -78,7 +78,14 @@
     {"id":"miru_hira","kana":"みる","romaji":"miru","gloss_en":"to see; to watch","tags":["core","m-row","verb"],"worlds":["7-base-hira"],"audio":"","note":"Basic verb. With テレビ means 'watch TV'.","example":{"kana":"えいがをみる","romaji":"eiga wo miru","english":"to watch a movie"}},
     {"id":"mori_hira","kana":"もり","romaji":"mori","gloss_en":"forest","tags":["core","m-row","nature"],"worlds":["7-base-hira"],"audio":"","note":"Word for forest. Written 森 in kanji.","example":{"kana":"もりをあるく","romaji":"mori wo aruku","english":"to walk through the forest"}},
     {"id":"megane_hira","kana":"めがね","romaji":"megane","gloss_en":"glasses (spectacles)","tags":["core","m-row","object"],"worlds":["7-base-hira"],"audio":"","note":"Word for eyeglasses. Written 眼鏡 in kanji.","example":{"kana":"めがねをかける","romaji":"megane wo kakeru","english":"to wear glasses"}},
-    {"id":"mado_hira","kana":"まど","romaji":"mado","gloss_en":"window","tags":["core","m-row","object"],"worlds":["7-base-hira"],"audio":"","note":"Word for window. Written 窓 in kanji.","example":{"kana":"まどをあける","romaji":"mado wo akeru","english":"to open the window"}}
+    {"id":"mado_hira","kana":"まど","romaji":"mado","gloss_en":"window","tags":["core","m-row","object"],"worlds":["7-base-hira"],"audio":"","note":"Word for window. Written 窓 in kanji.","example":{"kana":"まどをあける","romaji":"mado wo akeru","english":"to open the window"}},
+
+    {"id":"yama_hira","kana":"やま","romaji":"yama","gloss_en":"mountain","tags":["core","y-row","nature"],"worlds":["8-base-hira"],"audio":"","note":"Basic word for mountain. Written 山 in kanji.","example":{"kana":"やまにのぼる","romaji":"yama ni noboru","english":"to climb a mountain"}},
+    {"id":"yuki_hira","kana":"ゆき","romaji":"yuki","gloss_en":"snow","tags":["core","y-row","nature"],"worlds":["8-base-hira"],"audio":"","note":"Word for snow. Written 雪 in kanji.","example":{"kana":"ゆきがふる","romaji":"yuki ga furu","english":"snow falls"}},
+    {"id":"yoru_hira","kana":"よる","romaji":"yoru","gloss_en":"night","tags":["core","y-row","time"],"worlds":["8-base-hira"],"audio":"","note":"Common word for night. Written 夜 in kanji.","example":{"kana":"よるにねる","romaji":"yoru ni neru","english":"to sleep at night"}},
+    {"id":"yasai_hira","kana":"やさい","romaji":"yasai","gloss_en":"vegetable","tags":["core","y-row","food"],"worlds":["8-base-hira"],"audio":"","note":"Everyday word for vegetables. Written 野菜 in kanji.","example":{"kana":"やさいをたべる","romaji":"yasai wo taberu","english":"to eat vegetables"}},
+    {"id":"yubi_hira","kana":"ゆび","romaji":"yubi","gloss_en":"finger","tags":["core","y-row","body"],"worlds":["8-base-hira"],"audio":"","note":"Means 'finger'; also 'toe' in compounds. Written 指 in kanji.","example":{"kana":"ゆびをさす","romaji":"yubi wo sasu","english":"to point with a finger"}},
+    {"id":"yume_hira","kana":"ゆめ","romaji":"yume","gloss_en":"dream","tags":["core","y-row","abstract"],"worlds":["8-base-hira"],"audio":"","note":"Means 'dream' (both sleeping and goals). Written 夢 in kanji.","example":{"kana":"ゆめをみる","romaji":"yume wo miru","english":"to dream"}}
     
   ],
   "byWorld": {
@@ -93,6 +100,7 @@
     "6-base-hira": ["hana_hira","hito_hira","fuyu_hira","heya_hira","hon_hira","hikari_hira"],
     "6-daku-hira": ["basho_hira","biiru_hira","bukuro_hira","benkyou_hira","boushi_hira","byouin_hira"],
     "6-handaku-hira": ["pan_hira","pinku_hira","piano_hira","posuto_hira","pen_hira","puro_hira"],
-    "7-base-hira": ["mizu_hira","machi_hira","miru_hira","mori_hira","megane_hira","mado_hira"]
+    "7-base-hira": ["mizu_hira","machi_hira","miru_hira","mori_hira","megane_hira","mado_hira"],
+    "8-base-hira": ["yama_hira","yuki_hira","yoru_hira","yasai_hira","yubi_hira","yume_hira"]
   }
 }
