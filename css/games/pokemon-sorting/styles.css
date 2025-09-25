@@ -6,6 +6,7 @@
   flex-direction: column;   /* stack rows */
   gap: .75rem;
   margin-bottom: 1rem;
+  align-items: center;      /* center the two rows */
 }
 
 .controls-row {
@@ -13,6 +14,7 @@
   align-items: center;
   flex-wrap: wrap;
   gap: 1rem 1.5rem;         /* row spacing */
+  justify-content: center;  /* center row contents */
 }
 
 .control {
@@ -27,7 +29,7 @@
 }
 
 .actions-wrap {
-  margin-left: auto;        /* push New Round to the right on row 1 */
+  margin-left: auto;        /* optional — not really needed when centered */
 }
 
 /* =========================
@@ -99,6 +101,7 @@
   display: flex;
   gap: .5rem;
   flex-wrap: wrap;
+  justify-content: center;
 }
 .gen-chip {
   display: inline-flex;
@@ -162,6 +165,16 @@
   padding: .25rem .55rem;
   border: 1px dashed var(--border-color, #3a3f47);
   border-radius: .5rem;
+}
+
+/* =========================
+   Game wrapper
+   ========================= */
+#game {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
 }
 
 /* =========================
@@ -243,6 +256,9 @@
 
 .result-banner { font-weight: 700; }
 
+/* =========================
+   Mobile blocker
+   ========================= */
 .mobile-blocker{
   max-width: 680px;
   margin: 2.5rem auto;
@@ -262,7 +278,9 @@
   opacity: .9;
 }
 
-/* Pokéball spinner */
+/* =========================
+   Pokéball spinner
+   ========================= */
 .pokeball-spinner {
   position: relative;
   width: 48px;
@@ -288,4 +306,3 @@
 @keyframes poke-spin {
   to { transform: rotate(360deg); }
 }
-
