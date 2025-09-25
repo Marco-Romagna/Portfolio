@@ -26,6 +26,15 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
   lesson.dataset.totalParts = IS_VOCAB ? 5 : 4;
   const totalParts = Number(lesson.dataset.totalParts);
 
+  // 🔥 NEW: Which lexicon does this lesson use?
+  let LEXICON = "hiragana";
+  if (IS_VOCAB && window.KANA_STAGES) {
+    const level = window.KANA_STAGES.levels.find(l => l.code === qId);
+    if (level && level.lexicon) {
+      LEXICON = level.lexicon; // "hiragana" or "katakana"
+    }
+  }
+
   const parts      = $$('.lesson-part');
   const stepsList  = $('.steps');
   const progress   = $('.progressbar');
@@ -279,6 +288,7 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
     KANA, ROMA, PAIR,
     GOAL_IDENT, GOAL_TYPE, COMBO_LAST,
     showPart,
-    getRoleKey
+    getRoleKey,
+    LEXICON // 👈 now exposed globally
   };
 })();
