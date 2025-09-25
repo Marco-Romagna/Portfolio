@@ -8,7 +8,8 @@
     $, $$,
     WORLD, SUFFIX,
     showPart,
-    getRoleKey
+    getRoleKey,
+    LEXICON
   } = window.LessonCore;
 
   const THEMES = ['theme-dark','theme-light','theme-sepia','theme-high'];
@@ -131,7 +132,6 @@
     // Pick next target from pool
     function setNextTarget() {
       if (targets.length === 0) {
-        // all words for this paragraph are done
         nextBtn.classList.remove("is-hidden");
         targetEl.innerHTML = `<div class="hunt-english">✅ All words found!</div>`;
         currentTarget = null;
@@ -144,17 +144,14 @@
         <div class="hunt-english">${currentTarget.gloss_en}</div>
       `;
     }
-
   
     function renderParagraph() {
       passageEl.textContent = "";
       nextBtn.classList.add("is-hidden");
   
-      // reset target pool (shuffle for randomness)
       targets = shuffle([...words]);
       currentTarget = null;
   
-      // Render paragraph tokens
       paragraphs[currentPara].forEach(token => {
         const span = document.createElement("span");
         span.className = "hunt-token";
@@ -163,10 +160,9 @@
         span.addEventListener("click", () => {
           if (!currentTarget) return;
       
-          // ✅ strict equality instead of substring match
           if (span.textContent === currentTarget.kana) {
             span.classList.add("is-correct");
-            setNextTarget(); // move to next target
+            setNextTarget();
           } else {
             span.classList.add("is-wrong");
             setTimeout(() => span.classList.remove("is-wrong"), 400);
@@ -177,7 +173,7 @@
         passageEl.append(" ");
       });
   
-      setNextTarget(); // start first target
+      setNextTarget();
     }
   
     renderParagraph();
@@ -185,9 +181,9 @@
     nextBtn.addEventListener("click", () => {
       currentPara++;
       if (currentPara < paragraphs.length) {
-        renderParagraph(); // next paragraph
+        renderParagraph();
       } else {
-        showPart(3); // after last one, go to Part 3
+        showPart(3);
       }
     });
   }
@@ -232,7 +228,6 @@
     function nextQuestion() {
       grid.innerHTML = '';
       feedback.textContent = '';
-      // reset old classes before rendering new buttons
       document.querySelectorAll('.option').forEach(btn => {
         btn.classList.remove('is-correct', 'is-wrong');
       });
@@ -349,9 +344,9 @@
     input.addEventListener('keydown', e => {
       if (e.key === 'Enter' && !locked) {
         const answer = input.value.trim().toLowerCase();
-        if (answer === "") return; // ignore empty enter
+        if (answer === "") return;
   
-        locked = true; // prevent double triggers
+        locked = true;
         input.disabled = true;
   
         if (answer === current.romaji.toLowerCase()) {
@@ -380,7 +375,6 @@
     newRound();
   }
 
-  
   // ======================================================
   // Part 5 — Audio
   // ======================================================
@@ -420,7 +414,7 @@
   // ======================================================
   window.initVocabParts = async function () {
     const roleKey = getRoleKey(WORLD, SUFFIX);
-    const words = await Vocab.getWorldMilestone(roleKey);
+    const words = await Vocab.getWorldMilestone(roleKey, LEXICON);
 
     await initPart1(words);
     window.initPart2 = () => initPart2Hunt(roleKey, words);
