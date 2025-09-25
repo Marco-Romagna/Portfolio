@@ -1,16 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Cannon Fodder • Rulebook</title>
-  <meta name="color-scheme" content="dark light" />
-
-  <!-- Global Styles -->
-  <link rel="stylesheet" href="../../../css/main.css">
-
-  <!-- Page-specific Styles -->
-  <link rel="stylesheet" href="../../../css/games/cannon-fodder/styles.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cannon Fodder Rulebook</title>
+  <link rel="stylesheet" href="../../../css/main.css" />
+  <link rel="stylesheet" href="../../../css/games/cannon-fodder/styles.css" />
 </head>
 <body class="site">
   <!-- Header -->
@@ -20,53 +15,31 @@
         <span class="dot"></span><span>Marco • Portfolio</span>
       </a>
       <nav class="links">
-        <a class="cta" href="https://www.linkedin.com/in/marco-romagna"
-           target="_blank" rel="noopener noreferrer">LinkedIn</a>
+        <a class="cta" href="https://www.drivethrurpg.com/en/product/521032/cannon-fodder"
+           target="_blank" rel="noopener noreferrer">View on DriveThruRPG</a>
       </nav>
     </div>
   </header>
 
   <!-- Main -->
-  <main class="container">
-    <section class="panel">
+  <main class="container split-layout">
+    <!-- Sidebar TOC -->
+    <aside class="toc-wrapper">
       <h2>Cannon Fodder Rulebook</h2>
-
-      <!-- Credits -->
-      <div class="credits">
-        <h3>Credits</h3>
-        <div class="credit-list">
-          <div class="credit-label">Authors</div>
-          <div>Andrew Moffatt, Marco Romagna, Stephen Rock, Tyler Lyman, Gabriel Eskew, Chase Edwards
-          <div class="credit-label">Artists</div>
-          <div>Jacob McConnell, Carolina Inkote, Derrek Fan</div>
-
-          <div class="credit-label">Page Count</div>
-          <div>346</div>
-
-          <div class="credit-label">Published</div>
-          <div>May 5, 2025</div>
-        </div>
-        <p style="margin-top:1rem;">
-          <a class="cta" href="https://www.drivethrurpg.com/en/product/521032/cannon-fodder"
-             target="_blank" rel="noopener noreferrer">
-            View on DriveThruRPG
-          </a>
-        </p>
+      <p class="credits">
+        Authors: Andrew Moffatt, Stephen Rock, Tyler Lyman, Gabriel Eskew, Chase Edwards, Marco Romagna<br/>
+        Artists: Jacob McConnell, Carolina Inkote, Derrek Fan
+      </p>
+      <div class="toc-header">
+        <button id="book1-btn" class="active">Book 1: Core Rules</button>
+        <button id="book2-btn">Book 2: Guns & Appendix</button>
       </div>
+      <ul id="toc"></ul>
+    </aside>
 
-      <!-- Layout: Sidebar + PDF -->
-      <div class="layout">
-        <!-- Sidebar TOC -->
-        <aside class="toc">
-          <h3>Table of Contents</h3>
-          <ul id="toc-list"><!-- Populated dynamically by toc.js --></ul>
-        </aside>
-
-        <!-- PDF Viewer -->
-        <div class="pdf-wrapper">
-          <iframe class="pdf-viewer" src="CannonFodder-Part1.pdf"></iframe>
-        </div>
-      </div>
+    <!-- PDF Viewer -->
+    <section class="pdf-wrapper">
+      <iframe id="pdf-viewer" class="pdf-frame" src="" frameborder="0"></iframe>
     </section>
   </main>
 
@@ -75,7 +48,7 @@
     <p>&copy; 2025 Marco Romagna</p>
   </footer>
 
-  <!-- TOC Script -->
-  <script src="js/toc.js" defer></script>
+  <!-- Scripts -->
+  <script src="js/toc.js"></script>
 </body>
 </html>
