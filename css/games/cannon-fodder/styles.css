@@ -1,0 +1,139 @@
+/* Layout */
+.split-layout {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 1rem;
+  align-items: start;
+  min-height: 80vh;
+}
+
+/* Sidebar */
+.toc-wrapper {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1rem;
+}
+
+.toc-wrapper h2 {
+  margin: 0 0 .5rem;
+  font-size: 1.25rem;
+}
+
+.credits {
+  font-size: 0.85rem;
+  color: var(--muted);
+  margin-bottom: 1rem;
+  line-height: 1.4;
+}
+
+/* TOC Buttons */
+.toc-header {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.toc-header button {
+  flex: 1;
+  padding: 0.4rem 0.6rem;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.toc-header button.active,
+.toc-header button:hover {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+
+/* TOC List */
+#toc {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+#toc li {
+  margin-bottom: 0.4rem;
+}
+
+#toc a {
+  color: var(--accent);
+  text-decoration: none;
+  font-size: 0.9rem;
+}
+
+#toc a:hover {
+  text-decoration: underline;
+}
+
+/* PDF Viewer */
+.pdf-wrapper {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.pdf-frame {
+  width: 100%;
+  height: calc(100vh - 150px); 
+  border: none;
+}
+/* DriveThruRPG Button */
+.dtrpg-btn {
+  display: inline-block;
+  padding: 0.5rem 0.75rem;
+  margin-bottom: 1rem;
+  border-radius: 6px;
+  background: color-mix(in oklab, var(--accent) 20%, transparent);
+  border: 1px solid color-mix(in oklab, var(--accent) 40%, transparent);
+  color: var(--accent);
+  font-weight: 600;
+  text-decoration: none;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.dtrpg-btn:hover {
+  background: color-mix(in oklab, var(--accent) 30%, transparent);
+  transform: translateY(-1px);
+  text-decoration: none;
+}
+
+/* Highlight active TOC link */
+#toc a.active {
+  font-weight: 600;
+  color: white;
+  background: color-mix(in oklab, var(--accent) 25%, transparent);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+.credits {
+  margin: 1rem 0;
+  padding: 0.75rem 1rem;
+  border-left: 3px solid var(--accent);
+  background: rgba(255,255,255,0.03);
+  border-radius: 6px;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: var(--muted);
+}
+
+.credits h3 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.credits strong {
+  color: var(--text);
+  font-weight: 600;
+}
