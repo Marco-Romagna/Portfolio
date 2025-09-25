@@ -6,9 +6,11 @@
 (() => {
   const HIRA_URL = "../data/lexicon_hiragana.json";
   const KATA_URL = "../data/lexicon_katakana.json";
+  const WORLDS_URL = "../data/worlds.json";
 
   let _hiragana = null;
   let _katakana = null;
+  let _worlds = null;
 
   // ---------- Load + Cache ----------
   async function loadLexicon(type = "hiragana") {
@@ -23,6 +25,13 @@
       _katakana = await res.json();
       return _katakana;
     }
+  }
+
+  async function loadWorlds() {
+    if (_worlds) return _worlds;
+    const res = await fetch(WORLDS_URL);
+    _worlds = await res.json();
+    return _worlds;
   }
 
   // ---------- Get full lexicon ----------
@@ -87,35 +96,29 @@
 
   // ======================================================
   // Get words for a specific world milestone
-  // Worlds.json now tells us which lexicon to use
+  // e.g. getWorldMilestone("2-base", "hiragana")
   // ======================================================
-  async function getWorldMilestone(worldKey) {
-    const res = await fetch("../data/worlds.json");
-    const data = await res.json();
-    const world = data.worlds.find(w => w.id === worldKey);
-    if (!world) return [];
-    const lexType = world.lexicon;
-    const lexicon = await loadLexicon(lexType);
-    const ids = lexicon.byWorld[worldKey] || [];
+  async function getWorldMilestone(worldKey, type = "hiragana") {
+    const data = await loadWorlds();
+    const ids = data[worldKey] || [];
+    const lexicon = await loadLexicon(type);
     return lexicon.words.filter(w => ids.includes(w.id));
   }
 
   // ======================================================
-  // Get all words for a world (all its stages)
-  // e.g. worldCode = "2" → returns words from 2-base, 2-daku, 2-handaku (+ katakana if present)
+  // Get all words for a world (all its milestones)
+  // e.g. getWorld("2", "katakana")
   // ======================================================
-  async function getWorld(worldCode) {
-    const res = await fetch("../data/worlds.json");
-    const data = await res.json();
-    const worlds = data.worlds.filter(w => w.id.startsWith(worldCode + "-"));
+  async function getWorld(worldCode, type = "hiragana") {
+    const data = await loadWorlds();
+    const keys = Object.keys(data).filter(k => k.startsWith(worldCode + "-"));
+    const lexicon = await loadLexicon(type);
 
     let results = [];
-    for (let w of worlds) {
-      const lexType = w.lexicon;
-      const lexicon = await loadLexicon(lexType);
-      const ids = lexicon.byWorld[w.id] || [];
-      results = results.concat(lexicon.words.filter(word => ids.includes(word.id)));
-    }
+    keys.forEach(k => {
+      const ids = data[k] || [];
+      results = results.concat(lexicon.words.filter(w => ids.includes(w.id)));
+    });
     return results;
   }
 
