@@ -84,6 +84,7 @@
 
 .pdf-frame {
   width: 100%;
-  height: 80vh;
+  height: calc(100vh - 150px); 
   border: none;
 }
+
