@@ -92,7 +92,14 @@
     {"id":"rusu_hira","kana":"るす","romaji":"rusu","gloss_en":"absence; being away","tags":["core","r-row","state"],"worlds":["9-base-hira"],"audio":"","note":"Used when someone is not at home. Written 留守 in kanji.","example":{"kana":"いえはるすです","romaji":"ie wa rusu desu","english":"The house is empty (no one is home)"}},
     {"id":"raku_hira","kana":"らく","romaji":"raku","gloss_en":"easy; comfortable","tags":["core","r-row","adjective"],"worlds":["9-base-hira"],"audio":"","note":"Means 'easy' or 'comfortable'. Written 楽 in kanji.","example":{"kana":"らくなしごと","romaji":"raku na shigoto","english":"an easy job"}},
     {"id":"risu_hira","kana":"りす","romaji":"risu","gloss_en":"squirrel","tags":["core","r-row","animal"],"worlds":["9-base-hira"],"audio":"","note":"Animal word for 'squirrel'. Written 栗鼠 (rare).","example":{"kana":"りすがきをたべる","romaji":"risu ga ki wo taberu","english":"the squirrel eats a tree (nuts)"}},
-    {"id":"rajio_hira","kana":"らじお","romaji":"rajio","gloss_en":"radio","tags":["loanword","r-row","object"],"worlds":["9-base-hira"],"audio":"","note":"Loanword from English 'radio'. Usually written in katakana, but here in hiragana for practice.","example":{"kana":"らじおをきく","romaji":"rajio wo kiku","english":"to listen to the radio"}}
+    {"id":"rajio_hira","kana":"らじお","romaji":"rajio","gloss_en":"radio","tags":["loanword","r-row","object"],"worlds":["9-base-hira"],"audio":"","note":"Loanword from English 'radio'. Usually written in katakana, but here in hiragana for practice.","example":{"kana":"らじおをきく","romaji":"rajio wo kiku","english":"to listen to the radio"}},
+
+    {"id":"wan_hira","kana":"わん","romaji":"wan","gloss_en":"woof; bowl (counter)","tags":["core","w-row","sound"],"worlds":["10-base-hira"],"audio":"","note":"わん is the onomatopoeia for a dog's bark, and also used as a counter for bowls.","example":{"kana":"いぬが「わん」となく","romaji":"inu ga 'wan' to naku","english":"the dog barks 'woof'"}},
+    {"id":"wakarimasu_hira","kana":"わかります","romaji":"wakarimasu","gloss_en":"to understand","tags":["core","w-row","verb"],"worlds":["10-base-hira"],"audio":"","note":"Polite form of 'to understand'. Plain form is わかる.","example":{"kana":"にほんごがわかります","romaji":"nihongo ga wakarimasu","english":"I understand Japanese"}},
+    {"id":"wa_hira","kana":"わ","romaji":"wa","gloss_en":"wa (particle)","tags":["grammar","w-row"],"worlds":["10-base-hira"],"audio":"","note":"Topic particle in Japanese sentences. Written with は but pronounced 'wa'.","example":{"kana":"わたしはがくせいです","romaji":"watashi wa gakusei desu","english":"I am a student"}},
+    {"id":"wo_hira","kana":"を","romaji":"wo","gloss_en":"wo (particle)","tags":["grammar","w-row"],"worlds":["10-base-hira"],"audio":"","note":"Object particle. Pronounced 'o'.","example":{"kana":"みずをのむ","romaji":"mizu wo nomu","english":"to drink water"}},
+    {"id":"nani_hira","kana":"なに","romaji":"nani","gloss_en":"what","tags":["core","question"],"worlds":["10-base-hira"],"audio":"","note":"Basic question word meaning 'what'.","example":{"kana":"なにをしますか","romaji":"nani wo shimasu ka","english":"What will you do?"}},
+    {"id":"ne_hira","kana":"ね","romaji":"ne","gloss_en":"ne (sentence ending)","tags":["grammar","particle"],"worlds":["10-base-hira"],"audio":"","note":"Sentence ending particle to seek agreement, like 'isn’t it?'.","example":{"kana":"いいてんきですね","romaji":"ii tenki desu ne","english":"Nice weather, isn’t it?"}}
   ],
   "byWorld": {
     "1-base-hira":["ai_hira","iie_hira","ue_hira","ie_hira","aoi_hira","au_hira"],
@@ -108,6 +115,7 @@
     "6-handaku-hira": ["pan_hira","pinku_hira","piano_hira","posuto_hira","pen_hira","puro_hira"],
     "7-base-hira": ["mizu_hira","machi_hira","miru_hira","mori_hira","megane_hira","mado_hira"],
     "8-base-hira": ["yama_hira","yuki_hira","yoru_hira","yasai_hira","yubi_hira","yume_hira"],
-    "9-base-hira": ["ringo_hira","rekishi_hira","rusu_hira","raku_hira","risu_hira","rajio_hira"]
+    "9-base-hira": ["ringo_hira","rekishi_hira","rusu_hira","raku_hira","risu_hira","rajio_hira"],
+    "10-base-hira": ["wan_hira","wakarimasu_hira","wa_hira","wo_hira","nani_hira","ne_hira"]
   }
 }
