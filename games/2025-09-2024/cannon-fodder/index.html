@@ -42,23 +42,31 @@
           <div class="credit-label">Artists</div>
           <div>Jacob McConnell, Carolina Inkote, Derrek Fan</div>
 
-          <div class="credit-label">Rule System</div>
-          <div>Other Systems</div>
-
           <div class="credit-label">Page Count</div>
           <div>346</div>
-
-          <div class="credit-label">Format</div>
-          <div>PDF</div>
 
           <div class="credit-label">Published</div>
           <div>May 5, 2025 (DriveThruRPG)</div>
         </div>
       </div>
 
+      <!-- Table of Contents -->
+      <nav class="toc">
+        <h3>Table of Contents</h3>
+        <ul>
+          <li><a href="#" data-pdf="CannonFodder-Intro.pdf">Introduction & Basic Rules</a></li>
+          <li><a href="#" data-pdf="CannonFodder-Characters.pdf">Character Creation</a></li>
+          <li><a href="#" data-pdf="CannonFodder-Classes.pdf">Classes</a></li>
+          <li><a href="#" data-pdf="CannonFodder-Combat.pdf">Combat & Action Economy</a></li>
+          <li><a href="#" data-pdf="CannonFodder-Equipment.pdf">Equipment</a></li>
+          <li><a href="#" data-pdf="CannonFodder-GM.pdf">Game Master’s Guide</a></li>
+          <li><a href="#" data-pdf="CannonFodder-Appendices.pdf">Appendices & Reference</a></li>
+        </ul>
+      </nav>
+
       <!-- Embedded PDF -->
       <div class="pdf-wrapper">
-        <iframe class="pdf-viewer" src="CannonFodder.pdf"></iframe>
+        <iframe id="pdfFrame" class="pdf-viewer" src="CannonFodder-Intro.pdf"></iframe>
       </div>
     </section>
   </main>
@@ -67,5 +75,16 @@
   <footer class="footer container">
     <p>&copy; 2025 Marco Romagna</p>
   </footer>
+
+  <!-- TOC Script -->
+  <script>
+    document.querySelectorAll(".toc a").forEach(link => {
+      link.addEventListener("click", e => {
+        e.preventDefault();
+        const pdf = link.getAttribute("data-pdf");
+        document.getElementById("pdfFrame").src = pdf;
+      });
+    });
+  </script>
 </body>
 </html>
