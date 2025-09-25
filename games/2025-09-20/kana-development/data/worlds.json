@@ -16,7 +16,8 @@
         "ie_hira",
         "aoi_hira",
         "au_hira"
-      ]
+      ],
+      "lexicon": "hiragana"
     },
     {
       "id": "2-base",
@@ -29,7 +30,8 @@
         "kao_hira",
         "kiku_hira",
         "kuni_hira"
-      ]
+      ],
+      "lexicon": "hiragana"
     },
     {
       "id": "2-daku",
@@ -42,7 +44,8 @@
         "getsuyoubi_hira",
         "gohan_hira",
         "eiga_hira"
-      ]
+      ],
+      "lexicon": "hiragana"
     },
     {
       "id": "2-katakana",
@@ -55,7 +58,8 @@
         "aisu_kata",
         "ekoo_kata",
         "keeki_kata"
-      ]
+      ],
+      "lexicon": "katakana"
     },
     {
       "id": "2-daku-katakana",
@@ -68,7 +72,8 @@
         "geemu_kata",
         "guramu_kata",
         "sakkaa_kata"
-      ]
+      ],
+      "lexicon": "katakana"
     },
     {
       "id": "3-base",
@@ -81,7 +86,8 @@
         "sou_hira",
         "asa_hira",
         "hanasu_hira"
-      ]
+      ],
+      "lexicon": "hiragana"
     },
     {
       "id": "3-daku",
@@ -94,7 +100,8 @@
         "zou_hira",
         "mizu_hira",
         "hiza_hira"
-      ]
+      ],
+      "lexicon": "hiragana"
     },
     {
       "id": "3-katakana",
@@ -107,7 +114,8 @@
         "sando_kata",
         "seetaa_kata",
         "soosu_kata"
-      ]
+      ],
+      "lexicon": "katakana"
     },
     {
       "id": "3-daku-katakana",
@@ -120,7 +128,8 @@
         "jazu_kata",
         "zuumu_kata",
         "jimu_kata"
-      ]
+      ],
+      "lexicon": "katakana"
     },
     {
       "id": "4-base",
@@ -133,7 +142,8 @@
         "tamago_hira",
         "tenki_hira",
         "kitte_hira"
-      ]
+      ],
+      "lexicon": "hiragana"
     },
     {
       "id": "4-daku",
@@ -146,7 +156,8 @@
         "denwa_hira",
         "michi_hira",
         "sotsugyou_hira"
-      ]
+      ],
+      "lexicon": "hiragana"
     },
     {
       "id": "4-katakana",
@@ -159,7 +170,8 @@
         "chiketto_kata",
         "tsuaa_kata",
         "teeburu_kata"
-      ]
+      ],
+      "lexicon": "katakana"
     },
     {
       "id": "4-daku-katakana",
@@ -172,7 +184,8 @@
         "demo_kata",
         "dansu_kata",
         "doonatsu_kata"
-      ]
+      ],
+      "lexicon": "katakana"
     },
     {
       "id": "5-base",
@@ -185,7 +198,8 @@
         "nomimono_hira",
         "nuno_hira",
         "ano_hira"
-      ]
+      ],
+      "lexicon": "hiragana"
     },
     {
       "id": "5-katakana",
@@ -198,7 +212,8 @@
         "nanbaa_kata",
         "nyuusu_kata",
         "nuudoru_kata"
-      ]
+      ],
+      "lexicon": "katakana"
     },
     {
       "id": "6-base",
@@ -211,7 +226,8 @@
         "heya_hira",
         "hon_hira",
         "hashi_hira"
-      ]
+      ],
+      "lexicon": "hiragana"
     },
     {
       "id": "6-daku",
@@ -224,7 +240,8 @@
         "benkyou_hira",
         "boushi_hira",
         "baka_hira"
-      ]
+      ],
+      "lexicon": "hiragana"
     },
     {
       "id": "6-handaku",
@@ -237,7 +254,8 @@
         "pen_hira",
         "poketto_hira",
         "pikapika_hira"
-      ]
+      ],
+      "lexicon": "hiragana"
     },
     {
       "id": "6-katakana",
@@ -250,7 +268,8 @@
         "fooku_kata",
         "firumu_kata",
         "heddohon_kata"
-      ]
+      ],
+      "lexicon": "katakana"
     },
     {
       "id": "6-daku-katakana",
@@ -263,7 +282,8 @@
         "buutsu_kata",
         "beddo_kata",
         "booru_kata"
-      ]
+      ],
+      "lexicon": "katakana"
     },
     {
       "id": "6-handaku-katakana",
@@ -276,7 +296,8 @@
         "puuru_kata",
         "poketto_kata",
         "posuto_kata"
-      ]
+      ],
+      "lexicon": "katakana"
     },
     {
       "id": "7-base",
@@ -289,7 +310,8 @@
         "megane_hira",
         "mori_hira",
         "manga_hira"
-      ]
+      ],
+      "lexicon": "hiragana"
     },
     {
       "id": "7-katakana",
@@ -302,7 +324,8 @@
         "menyuu_kata",
         "moderu_kata",
         "maiku_kata"
-      ]
+      ],
+      "lexicon": "katakana"
     },
     {
       "id": "8-base",
@@ -315,7 +338,8 @@
         "yasai_hira",
         "youfuku_hira",
         "yume_hira"
-      ]
+      ],
+      "lexicon": "hiragana"
     },
     {
       "id": "8-katakana",
@@ -328,7 +352,8 @@
         "yangu_kata",
         "yuumoa_kata",
         "yooroppa_kata"
-      ]
+      ],
+      "lexicon": "katakana"
     },
     {
       "id": "9-base",
@@ -341,7 +366,8 @@
         "reizouko_hira",
         "roku_hira",
         "karada_hira"
-      ]
+      ],
+      "lexicon": "hiragana"
     },
     {
       "id": "9-katakana",
@@ -354,7 +380,8 @@
         "robotto_kata",
         "rizumu_kata",
         "repooto_kata"
-      ]
+      ],
+      "lexicon": "katakana"
     },
     {
       "id": "10-base",
@@ -367,7 +394,8 @@
         "anzen_hira",
         "konban_hira",
         "sensei_hira"
-      ]
+      ],
+      "lexicon": "hiragana"
     },
     {
       "id": "10-katakana",
@@ -380,7 +408,8 @@
         "waarudo_kata",
         "wookuman_kata",
         "uindou_kata"
-      ]
+      ],
+      "lexicon": "katakana"
     }
   ]
 }
