@@ -38,7 +38,15 @@
     {"id":"dekiru_kata","kana":"デキル","romaji":"dekiru","gloss_en":"to be able to; can","tags":["core","d-row","verb"],"worlds":["4-daku-kata"],"audio":"","note":"Standard できる. Katakana デキル often used for emphasis (e.g., in games).","example":{"kana":"スシがデキル","romaji":"sushi ga dekiru","english":"can make sushi"}},
     {"id":"doa_kata","kana":"ドア","romaji":"doa","gloss_en":"door","tags":["loanword","d-row","object"],"worlds":["4-daku-kata"],"audio":"","note":"Loanword from English 'door'. Katakana ドア is the normal spelling today.","example":{"kana":"ドアをあける","romaji":"doa wo akeru","english":"to open the door"}},
     {"id":"dare_kata","kana":"ダレ","romaji":"dare","gloss_en":"who","tags":["core","d-row","question"],"worlds":["4-daku-kata"],"audio":"","note":"Usually だれ. Katakana ダレ is stylized (often in comics).","example":{"kana":"ダレですか","romaji":"dare desu ka","english":"Who is it?"}},
-    {"id":"depaato_kata","kana":"デパート","romaji":"depaato","gloss_en":"department store","tags":["loanword","d-row","place"],"worlds":["4-daku-kata"],"audio":"","note":"Loanword from English 'department'. Standard spelling is デパート (katakana).","example":{"kana":"デパートでかいものをする","romaji":"depaato de kaimono wo suru","english":"to shop at a department store"}}
+    {"id":"depaato_kata","kana":"デパート","romaji":"depaato","gloss_en":"department store","tags":["loanword","d-row","place"],"worlds":["4-daku-kata"],"audio":"","note":"Loanword from English 'department'. Standard spelling is デパート (katakana).","example":{"kana":"デパートでかいものをする","romaji":"depaato de kaimono wo suru","english":"to shop at a department store"}},
+
+    {"id":"namae_kata","kana":"ナマエ","romaji":"namae","gloss_en":"name","tags":["core","n-row","person"],"worlds":["5-base-kata"],"audio":"","note":"Normally written なまえ. Katakana ナマエ might be used in forms, games, or manga.","example":{"kana":"ナマエをかく","romaji":"namae wo kaku","english":"to write one’s name"}},
+    {"id":"niku_kata","kana":"ニク","romaji":"niku","gloss_en":"meat","tags":["core","n-row","food"],"worlds":["5-base-kata"],"audio":"","note":"Usually にく. Katakana ニク often used on menus or food packaging.","example":{"kana":"ニクをたべる","romaji":"niku wo taberu","english":"to eat meat"}},
+    {"id":"neko_kata","kana":"ネコ","romaji":"neko","gloss_en":"cat","tags":["core","n-row","animal"],"worlds":["5-base-kata"],"audio":"","note":"Normally ねこ. Katakana ネコ often appears in manga or stylized pet-related branding.","example":{"kana":"ネコがすきです","romaji":"neko ga suki desu","english":"I like cats"}},
+    {"id":"nani_kata","kana":"ナニ","romaji":"nani","gloss_en":"what","tags":["core","n-row","question"],"worlds":["5-base-kata"],"audio":"","note":"Standard is なに. Katakana ナニ adds emphasis in manga/dialogue.","example":{"kana":"コレはナニ？","romaji":"kore wa nani?","english":"What is this?"}},
+    {"id":"natsu_kata","kana":"ナツ","romaji":"natsu","gloss_en":"summer","tags":["core","n-row","season"],"worlds":["5-base-kata"],"audio":"","note":"Standard is なつ. Katakana ナツ is common in names, songs, or stylization.","example":{"kana":"ナツがあつい","romaji":"natsu ga atsui","english":"summer is hot"}},
+    {"id":"naka_kata","kana":"ナカ","romaji":"naka","gloss_en":"inside; middle","tags":["core","n-row","direction"],"worlds":["5-base-kata"],"audio":"","note":"Normally なか. Katakana ナカ sometimes used in names or design.","example":{"kana":"ハコのナカ","romaji":"hako no naka","english":"inside the box"}}
+    
   ],
   "byWorld": {
     "1-base-kata": [],
@@ -47,6 +55,7 @@
     "3-base-kata": ["sakura_kata","shio_kata","sumu_kata","seki_kata","sora_kata","sono_kata"],
     "3-daku-kata": ["zasshi_kata","jisho_kata","zoo_kata","zen_kata","zou_kata","zero_kata"],
     "4-base-kata": ["taberu_kata","chizu_kata","tsuki_kata","tegami_kata","tomodachi_kata","tokei_kata"],
-    "4-daku-kata": ["densha_kata","daigaku_kata","dekiru_kata","doa_kata","dare_kata","depaato_kata"]
+    "4-daku-kata": ["densha_kata","daigaku_kata","dekiru_kata","doa_kata","dare_kata","depaato_kata"],
+    "5-base-kata": ["namae_kata","niku_kata","neko_kata","nani_kata","natsu_kata","naka_kata"]
   }
 }
