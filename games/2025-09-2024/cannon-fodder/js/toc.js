@@ -24,7 +24,7 @@ const book2Toc = [
   { title: "Appendix: Personal Record (2)", file: "pdfs/book2-appendix2.pdf" }
 ];
 
-function renderToc(book) {
+function renderToc(book, autoLoad = false) {
   const toc = document.getElementById("toc");
   toc.innerHTML = "";
 
@@ -46,8 +46,8 @@ function renderToc(book) {
     li.appendChild(a);
     toc.appendChild(li);
 
-    // auto-highlight + load first entry
-    if (idx === 0) {
+    // only auto-load first chapter if flag is true
+    if (idx === 0 && autoLoad) {
       setActiveLink(a);
       loadPdf(entry.file);
     }
@@ -59,9 +59,7 @@ function renderToc(book) {
 }
 
 function setActiveLink(link) {
-  // remove old highlights
   document.querySelectorAll("#toc a").forEach(a => a.classList.remove("active"));
-  // add new highlight
   link.classList.add("active");
 }
 
@@ -69,7 +67,6 @@ function loadPdf(file) {
   const viewer = document.getElementById("pdf-viewer");
   viewer.src = file;
 
-  // Reset scroll
   viewer.onload = () => {
     viewer.contentWindow?.scrollTo(0, 0);
     viewer.scrollIntoView({ behavior: "instant", block: "start" });
@@ -77,8 +74,8 @@ function loadPdf(file) {
 }
 
 // Book switching
-document.getElementById("book1-btn").addEventListener("click", () => renderToc("book1"));
-document.getElementById("book2-btn").addEventListener("click", () => renderToc("book2"));
+document.getElementById("book1-btn").addEventListener("click", () => renderToc("book1", true));
+document.getElementById("book2-btn").addEventListener("click", () => renderToc("book2", false));
 
-// Init with Book 1
-renderToc("book1");
+// Initialize with Book 1, auto-load first chapter
+renderToc("book1", true);
