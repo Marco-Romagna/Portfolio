@@ -71,8 +71,14 @@
     {"id":"piano_hira","kana":"ぴあの","romaji":"piano","gloss_en":"piano","tags":["loanword","p-row","instrument"],"worlds":["6-handaku-hira"],"audio":"","note":"Loanword from Italian/English. Normal spelling is katakana ピアノ.","example":{"kana":"ぴあのをひく","romaji":"piano wo hiku","english":"to play the piano"}},
     {"id":"posuto_hira","kana":"ぽすと","romaji":"posuto","gloss_en":"postbox","tags":["loanword","p-row","object"],"worlds":["6-handaku-hira"],"audio":"","note":"Loanword from 'post'. Katakana ポスト is standard.","example":{"kana":"ぽすとにてがみをいれる","romaji":"posuto ni tegami wo ireru","english":"to put a letter in the postbox"}},
     {"id":"pen_hira","kana":"ぺん","romaji":"pen","gloss_en":"pen","tags":["loanword","p-row","object"],"worlds":["6-handaku-hira"],"audio":"","note":"Loanword from English. Standard form is katakana ペン.","example":{"kana":"ぺんでかく","romaji":"pen de kaku","english":"to write with a pen"}},
-    {"id":"puro_hira","kana":"ぷろ","romaji":"puro","gloss_en":"professional","tags":["loanword","p-row","person"],"worlds":["6-handaku-hira"],"audio":"","note":"Loanword from 'pro(fessional)'. Usually katakana プロ.","example":{"kana":"ぷろのせんしゅ","romaji":"puro no senshu","english":"a professional player"}}
+    {"id":"puro_hira","kana":"ぷろ","romaji":"puro","gloss_en":"professional","tags":["loanword","p-row","person"],"worlds":["6-handaku-hira"],"audio":"","note":"Loanword from 'pro(fessional)'. Usually katakana プロ.","example":{"kana":"ぷろのせんしゅ","romaji":"puro no senshu","english":"a professional player"}},
 
+    {"id":"mizu_hira","kana":"みず","romaji":"mizu","gloss_en":"water","tags":["core","m-row","nature"],"worlds":["7-base-hira"],"audio":"","note":"Basic word for water. Written 水 in kanji.","example":{"kana":"みずをのむ","romaji":"mizu wo nomu","english":"to drink water"}},
+    {"id":"machi_hira","kana":"まち","romaji":"machi","gloss_en":"town; city","tags":["core","m-row","place"],"worlds":["7-base-hira"],"audio":"","note":"Can mean 'town' or 'neighborhood'. Written 町 or 街.","example":{"kana":"おおきいまち","romaji":"ookii machi","english":"a big town"}},
+    {"id":"miru_hira","kana":"みる","romaji":"miru","gloss_en":"to see; to watch","tags":["core","m-row","verb"],"worlds":["7-base-hira"],"audio":"","note":"Basic verb. With テレビ means 'watch TV'.","example":{"kana":"えいがをみる","romaji":"eiga wo miru","english":"to watch a movie"}},
+    {"id":"mori_hira","kana":"もり","romaji":"mori","gloss_en":"forest","tags":["core","m-row","nature"],"worlds":["7-base-hira"],"audio":"","note":"Word for forest. Written 森 in kanji.","example":{"kana":"もりをあるく","romaji":"mori wo aruku","english":"to walk through the forest"}},
+    {"id":"megane_hira","kana":"めがね","romaji":"megane","gloss_en":"glasses (spectacles)","tags":["core","m-row","object"],"worlds":["7-base-hira"],"audio":"","note":"Word for eyeglasses. Written 眼鏡 in kanji.","example":{"kana":"めがねをかける","romaji":"megane wo kakeru","english":"to wear glasses"}},
+    {"id":"mado_hira","kana":"まど","romaji":"mado","gloss_en":"window","tags":["core","m-row","object"],"worlds":["7-base-hira"],"audio":"","note":"Word for window. Written 窓 in kanji.","example":{"kana":"まどをあける","romaji":"mado wo akeru","english":"to open the window"}}
     
   ],
   "byWorld": {
@@ -86,6 +92,7 @@
     "5-base-hira": ["namae_hira","niku_hira","neko_hira","nani_hira","natsu_hira","naka_hira"],
     "6-base-hira": ["hana_hira","hito_hira","fuyu_hira","heya_hira","hon_hira","hikari_hira"],
     "6-daku-hira": ["basho_hira","biiru_hira","bukuro_hira","benkyou_hira","boushi_hira","byouin_hira"],
-    "6-handaku-hira": ["pan_hira","pinku_hira","piano_hira","posuto_hira","pen_hira","puro_hira"]
+    "6-handaku-hira": ["pan_hira","pinku_hira","piano_hira","posuto_hira","pen_hira","puro_hira"],
+    "7-base-hira": ["mizu_hira","machi_hira","miru_hira","mori_hira","megane_hira","mado_hira"]
   }
 }
