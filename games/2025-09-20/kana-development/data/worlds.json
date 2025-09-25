@@ -1,415 +1,71 @@
 {
-  "meta": {
-    "version": 3,
-    "locale": "ja-JP",
-    "notes": "World progression mapping for hiragana and katakana vocab challenges (N5-friendly). IDs match lexicon_full_detailed.json."
-  },
-  "worlds": [
-    {
-      "id": "1-base",
-      "title": "World 1: Hiragana",
-      "type": "hiragana",
-      "vocab": [
-        "ai_hira",
-        "iie_hira",
-        "ue_hira",
-        "ie_hira",
-        "aoi_hira",
-        "au_hira"
-      ],
-      "lexicon": "hiragana"
-    },
-    {
-      "id": "2-base",
-      "title": "World 2: Hiragana",
-      "type": "hiragana",
-      "vocab": [
-        "kasa_hira",
-        "ike_hira",
-        "aka_hira",
-        "kao_hira",
-        "kiku_hira",
-        "kuni_hira"
-      ],
-      "lexicon": "hiragana"
-    },
-    {
-      "id": "2-daku",
-      "title": "World 2: Hiragana Dakuten",
-      "type": "hiragana",
-      "vocab": [
-        "gakkou_hira",
-        "ginkou_hira",
-        "gakusei_hira",
-        "getsuyoubi_hira",
-        "gohan_hira",
-        "eiga_hira"
-      ],
-      "lexicon": "hiragana"
-    },
-    {
-      "id": "2-katakana",
-      "title": "World 2: Katakana",
-      "type": "katakana",
-      "vocab": [
-        "kamera_kata",
-        "koohii_kata",
-        "kaado_kata",
-        "aisu_kata",
-        "ekoo_kata",
-        "keeki_kata"
-      ],
-      "lexicon": "katakana"
-    },
-    {
-      "id": "2-daku-katakana",
-      "title": "World 2: Katakana Dakuten",
-      "type": "katakana",
-      "vocab": [
-        "gorufu_kata",
-        "gitaa_kata",
-        "gasu_kata",
-        "geemu_kata",
-        "guramu_kata",
-        "sakkaa_kata"
-      ],
-      "lexicon": "katakana"
-    },
-    {
-      "id": "3-base",
-      "title": "World 3: Hiragana",
-      "type": "hiragana",
-      "vocab": [
-        "sakana_hira",
-        "sushi_hira",
-        "sensei_hira",
-        "sou_hira",
-        "asa_hira",
-        "hanasu_hira"
-      ],
-      "lexicon": "hiragana"
-    },
-    {
-      "id": "3-daku",
-      "title": "World 3: Hiragana Dakuten",
-      "type": "hiragana",
-      "vocab": [
-        "zasshi_hira",
-        "jisho_hira",
-        "zenbu_hira",
-        "zou_hira",
-        "mizu_hira",
-        "hiza_hira"
-      ],
-      "lexicon": "hiragana"
-    },
-    {
-      "id": "3-katakana",
-      "title": "World 3: Katakana",
-      "type": "katakana",
-      "vocab": [
-        "sarada_kata",
-        "shiitsu_kata",
-        "sukii_kata",
-        "sando_kata",
-        "seetaa_kata",
-        "soosu_kata"
-      ],
-      "lexicon": "katakana"
-    },
-    {
-      "id": "3-daku-katakana",
-      "title": "World 3: Katakana Dakuten",
-      "type": "katakana",
-      "vocab": [
-        "zubon_kata",
-        "zoon_kata",
-        "juusu_kata",
-        "jazu_kata",
-        "zuumu_kata",
-        "jimu_kata"
-      ],
-      "lexicon": "katakana"
-    },
-    {
-      "id": "4-base",
-      "title": "World 4: Hiragana",
-      "type": "hiragana",
-      "vocab": [
-        "tokei_hira",
-        "tsuki_hira",
-        "chizu_hira",
-        "tamago_hira",
-        "tenki_hira",
-        "kitte_hira"
-      ],
-      "lexicon": "hiragana"
-    },
-    {
-      "id": "4-daku",
-      "title": "World 4: Hiragana Dakuten",
-      "type": "hiragana",
-      "vocab": [
-        "densha_hira",
-        "daigaku_hira",
-        "doyoubi_hira",
-        "denwa_hira",
-        "michi_hira",
-        "sotsugyou_hira"
-      ],
-      "lexicon": "hiragana"
-    },
-    {
-      "id": "4-katakana",
-      "title": "World 4: Katakana",
-      "type": "katakana",
-      "vocab": [
-        "tesuto_kata",
-        "tenisu_kata",
-        "takushii_kata",
-        "chiketto_kata",
-        "tsuaa_kata",
-        "teeburu_kata"
-      ],
-      "lexicon": "katakana"
-    },
-    {
-      "id": "4-daku-katakana",
-      "title": "World 4: Katakana Dakuten",
-      "type": "katakana",
-      "vocab": [
-        "doa_kata",
-        "deeto_kata",
-        "dorama_kata",
-        "demo_kata",
-        "dansu_kata",
-        "doonatsu_kata"
-      ],
-      "lexicon": "katakana"
-    },
-    {
-      "id": "5-base",
-      "title": "World 5: Hiragana",
-      "type": "hiragana",
-      "vocab": [
-        "namae_hira",
-        "nihon_hira",
-        "neko_hira",
-        "nomimono_hira",
-        "nuno_hira",
-        "ano_hira"
-      ],
-      "lexicon": "hiragana"
-    },
-    {
-      "id": "5-katakana",
-      "title": "World 5: Katakana",
-      "type": "katakana",
-      "vocab": [
-        "nooto_kata",
-        "nekutai_kata",
-        "naifu_kata",
-        "nanbaa_kata",
-        "nyuusu_kata",
-        "nuudoru_kata"
-      ],
-      "lexicon": "katakana"
-    },
-    {
-      "id": "6-base",
-      "title": "World 6: Hiragana",
-      "type": "hiragana",
-      "vocab": [
-        "hana_hira",
-        "hito_hira",
-        "fune_hira",
-        "heya_hira",
-        "hon_hira",
-        "hashi_hira"
-      ],
-      "lexicon": "hiragana"
-    },
-    {
-      "id": "6-daku",
-      "title": "World 6: Hiragana Dakuten",
-      "type": "hiragana",
-      "vocab": [
-        "basu_hira",
-        "byouin_hira",
-        "bungaku_hira",
-        "benkyou_hira",
-        "boushi_hira",
-        "baka_hira"
-      ],
-      "lexicon": "hiragana"
-    },
-    {
-      "id": "6-handaku",
-      "title": "World 6: Hiragana Handakuten",
-      "type": "hiragana",
-      "vocab": [
-        "pan_hira",
-        "piano_hira",
-        "puuru_hira",
-        "pen_hira",
-        "poketto_hira",
-        "pikapika_hira"
-      ],
-      "lexicon": "hiragana"
-    },
-    {
-      "id": "6-katakana",
-      "title": "World 6: Katakana",
-      "type": "katakana",
-      "vocab": [
-        "hoteru_kata",
-        "hanbaagaa_kata",
-        "hiitaa_kata",
-        "fooku_kata",
-        "firumu_kata",
-        "heddohon_kata"
-      ],
-      "lexicon": "katakana"
-    },
-    {
-      "id": "6-daku-katakana",
-      "title": "World 6: Katakana Dakuten",
-      "type": "katakana",
-      "vocab": [
-        "basu_kata",
-        "banana_kata",
-        "biru_kata",
-        "buutsu_kata",
-        "beddo_kata",
-        "booru_kata"
-      ],
-      "lexicon": "katakana"
-    },
-    {
-      "id": "6-handaku-katakana",
-      "title": "World 6: Katakana Handakuten",
-      "type": "katakana",
-      "vocab": [
-        "pan_kata",
-        "pen_kata",
-        "piano_kata",
-        "puuru_kata",
-        "poketto_kata",
-        "posuto_kata"
-      ],
-      "lexicon": "katakana"
-    },
-    {
-      "id": "7-base",
-      "title": "World 7: Hiragana",
-      "type": "hiragana",
-      "vocab": [
-        "mado_hira",
-        "mimi_hira",
-        "mushi_hira",
-        "megane_hira",
-        "mori_hira",
-        "manga_hira"
-      ],
-      "lexicon": "hiragana"
-    },
-    {
-      "id": "7-katakana",
-      "title": "World 7: Katakana",
-      "type": "katakana",
-      "vocab": [
-        "manga_kata",
-        "memo_kata",
-        "miruku_kata",
-        "menyuu_kata",
-        "moderu_kata",
-        "maiku_kata"
-      ],
-      "lexicon": "katakana"
-    },
-    {
-      "id": "8-base",
-      "title": "World 8: Hiragana",
-      "type": "hiragana",
-      "vocab": [
-        "yama_hira",
-        "yuki_hira",
-        "yoru_hira",
-        "yasai_hira",
-        "youfuku_hira",
-        "yume_hira"
-      ],
-      "lexicon": "hiragana"
-    },
-    {
-      "id": "8-katakana",
-      "title": "World 8: Katakana",
-      "type": "katakana",
-      "vocab": [
-        "yooguruto_kata",
-        "yunifo-mu_kata",
-        "yotto_kata",
-        "yangu_kata",
-        "yuumoa_kata",
-        "yooroppa_kata"
-      ],
-      "lexicon": "katakana"
-    },
-    {
-      "id": "9-base",
-      "title": "World 9: Hiragana",
-      "type": "hiragana",
-      "vocab": [
-        "ringo_hira",
-        "rainen_hira",
-        "rusu_hira",
-        "reizouko_hira",
-        "roku_hira",
-        "karada_hira"
-      ],
-      "lexicon": "hiragana"
-    },
-    {
-      "id": "9-katakana",
-      "title": "World 9: Katakana",
-      "type": "katakana",
-      "vocab": [
-        "rajio_kata",
-        "resutoran_kata",
-        "ruuru_kata",
-        "robotto_kata",
-        "rizumu_kata",
-        "repooto_kata"
-      ],
-      "lexicon": "katakana"
-    },
-    {
-      "id": "10-base",
-      "title": "World 10: Hiragana",
-      "type": "hiragana",
-      "vocab": [
-        "watashi_hira",
-        "wakaru_hira",
-        "wo_hira",
-        "anzen_hira",
-        "konban_hira",
-        "sensei_hira"
-      ],
-      "lexicon": "hiragana"
-    },
-    {
-      "id": "10-katakana",
-      "title": "World 10: Katakana",
-      "type": "katakana",
-      "vocab": [
-        "wain_kata",
-        "wiiku_kata",
-        "webu_kata",
-        "waarudo_kata",
-        "wookuman_kata",
-        "uindou_kata"
-      ],
-      "lexicon": "katakana"
-    }
-  ]
+  "1-base-hira": ["ai_hira", "iie_hira", "ue_hira", "ie_hira", "aoi_hira", "au_hira"],
+  "1-base-kata": [],
+  "1-daku-hira": [],
+  "1-daku-kata": [],
+  "1-handaku-hira": [],
+  "1-handaku-kata": [],
+
+  "2-base-hira": ["iku_hira", "kiku_hira", "kau_hira", "kao_hira", "ike_hira", "koe_hira"],
+  "2-base-kata": ["iku_kata", "kiku_kata", "kau_kata", "kao_kata", "ike_kata", "koe_kata"],
+  "2-daku-hira": ["eiga_hira", "gaikoku_hira", "gakusei_hira", "gakkou_hira", "ginkou_hira", "genki_hira"],
+  "2-daku-kata": ["eiga_kata", "gaikoku_kata", "gakusei_kata", "gakkou_kata", "ginkou_kata", "genki_kata"],
+  "2-handaku-hira": [],
+  "2-handaku-kata": [],
+
+  "3-base-hira": ["sakura_hira", "shio_hira", "sumu_hira", "seki_hira", "sora_hira", "sono_hira"],
+  "3-base-kata": ["sakura_kata", "shio_kata", "sumu_kata", "seki_kata", "sora_kata", "sono_kata"],
+  "3-daku-hira": ["zasshi_hira", "jisho_hira", "zoo_hira", "zen_hira", "zou_hira", "zero_hira"],
+  "3-daku-kata": ["zasshi_kata", "jisho_kata", "zoo_kata", "zen_kata", "zou_kata", "zero_kata"],
+  "3-handaku-hira": [],
+  "3-handaku-kata": [],
+
+  "4-base-hira": ["taberu_hira", "chizu_hira", "tsuki_hira", "tegami_hira", "tomodachi_hira", "tokei_hira"],
+  "4-base-kata": ["taberu_kata", "chizu_kata", "tsuki_kata", "tegami_kata", "tomodachi_kata", "tokei_kata"],
+  "4-daku-hira": ["densha_hira", "daigaku_hira", "dekiru_hira", "doa_hira", "dare_hira", "depaato_hira"],
+  "4-daku-kata": ["densha_kata", "daigaku_kata", "dekiru_kata", "doa_kata", "dare_kata", "depaato_kata"],
+  "4-handaku-hira": [],
+  "4-handaku-kata": [],
+
+  "5-base-hira": ["namae_hira", "niku_hira", "neko_hira", "nani_hira", "natsu_hira", "naka_hira"],
+  "5-base-kata": ["namae_kata", "niku_kata", "neko_kata", "nani_kata", "natsu_kata", "naka_kata"],
+  "5-daku-hira": [],
+  "5-daku-kata": [],
+  "5-handaku-hira": [],
+  "5-handaku-kata": [],
+
+  "6-base-hira": ["hana_hira", "hito_hira", "fuyu_hira", "heya_hira", "hon_hira", "hikari_hira"],
+  "6-base-kata": ["hana_kata", "hito_kata", "fuyu_kata", "heya_kata", "hon_kata", "hikari_kata"],
+  "6-daku-hira": ["basho_hira", "biiru_hira", "bukuro_hira", "benkyou_hira", "boushi_hira", "byouin_hira"],
+  "6-daku-kata": ["basho_kata", "biiru_kata", "bukuro_kata", "benkyou_kata", "boushi_kata", "byouin_kata"],
+  "6-handaku-hira": ["pan_hira", "pinku_hira", "piano_hira", "posuto_hira", "pen_hira", "puro_hira"],
+  "6-handaku-kata": ["pan_kata", "pinku_kata", "piano_kata", "posuto_kata", "pen_kata", "puro_kata"],
+
+  "7-base-hira": ["mizu_hira", "machi_hira", "miru_hira", "mori_hira", "megane_hira", "mado_hira"],
+  "7-base-kata": ["mizu_kata", "machi_kata", "miru_kata", "mori_kata", "megane_kata", "mado_kata"],
+  "7-daku-hira": [],
+  "7-daku-kata": [],
+  "7-handaku-hira": [],
+  "7-handaku-kata": [],
+
+  "8-base-hira": ["yama_hira", "yuki_hira", "yoru_hira", "yasai_hira", "yubi_hira", "yume_hira"],
+  "8-base-kata": ["yama_kata", "yuki_kata", "yoru_kata", "yasai_kata", "yubi_kata", "yume_kata"],
+  "8-daku-hira": [],
+  "8-daku-kata": [],
+  "8-handaku-hira": [],
+  "8-handaku-kata": [],
+
+  "9-base-hira": ["ringo_hira", "rekishi_hira", "rusu_hira", "raku_hira", "risu_hira", "rajio_hira"],
+  "9-base-kata": ["ringo_kata", "rekishi_kata", "rusu_kata", "raku_kata", "risu_kata", "rajio_kata"],
+  "9-daku-hira": [],
+  "9-daku-kata": [],
+  "9-handaku-hira": [],
+  "9-handaku-kata": [],
+
+  "10-base-hira": ["wan_hira", "wakarimasu_hira", "wa_hira", "wo_hira", "nani_hira", "ne_hira"],
+  "10-base-kata": ["wan_kata", "wakarimasu_kata", "wa_kata", "wo_kata", "nani_kata", "ne_kata"],
+  "10-daku-hira": [],
+  "10-daku-kata": [],
+  "10-handaku-hira": [],
+  "10-handaku-kata": []
 }
