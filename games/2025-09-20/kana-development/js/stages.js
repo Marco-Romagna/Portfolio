@@ -6,7 +6,7 @@ window.KANA_STAGES = {
     { code: "3", title: "World 3 — S / Z Rows", desc: "Learn the S-row and its dakuten variations.", levels: ["3-1","3-2","3-3","3-4","3-5","3-6","3-7","3-8"] },
     { code: "4", title: "World 4 — T / D Rows", desc: "Learn the T-row and its dakuten variations.", levels: ["4-1","4-2","4-3","4-4","4-5","4-6","4-7","4-8"] },
     { code: "5", title: "World 5 — N Row", desc: "Practice the N-row.", levels: ["5-1","5-2","5-3","5-4"] },
-    { code: "6", title: "World 6 — H / B / P Rows", desc: "Learn the H-row and its dakuten/handaku variations.", levels: ["6-1","6-2","6-3","6-4","6-5","6-6","6-7","6-8"] },
+    { code: "6", title: "World 6 — H / B / P Rows", desc: "Learn the H-row and its dakuten/handaku variations.", levels: ["6-1","6-2","6-3","6-4","6-5","6-6","6-7","6-8","6-9","6-10","6-11","6-12"] },
     { code: "7", title: "World 7 — M Row", desc: "Practice the M-row.", levels: ["7-1","7-2","7-3","7-4"] },
     { code: "8", title: "World 8 — Y Row", desc: "Practice the Y-row (やゆよ).", levels: ["8-1","8-2","8-3","8-4"] },
     { code: "9", title: "World 9 — R Row", desc: "Practice the R-row.", levels: ["9-1","9-2","9-3","9-4"] },
