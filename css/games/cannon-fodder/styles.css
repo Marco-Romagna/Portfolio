@@ -71,3 +71,9 @@
 .toc a:hover {
   text-decoration: underline;
 }
+.toc a.active {
+  color: #fff;
+  background: var(--accent);
+  padding: 2px 6px;
+  border-radius: 6px;
+}
