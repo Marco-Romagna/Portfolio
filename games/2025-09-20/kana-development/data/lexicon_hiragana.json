@@ -21,11 +21,25 @@
     {"id":"ginkou_hira","kana":"ぎんこう","romaji":"ginkou","gloss_en":"bank","tags":["core","g-row","place"],"worlds":["2-daku-hira"],"audio":"","note":"Used for financial institutions. Worker is ぎんこういん.","example":{"kana":"ぎんこうでしごとをする","romaji":"ginkou de shigoto wo suru","english":"to work at a bank"}},
     {"id":"genki_hira","kana":"げんき","romaji":"genki","gloss_en":"healthy; energetic","tags":["core","g-row","adjective"],"worlds":["2-daku-hira"],"audio":"","note":"Common in greetings: おげんきですか？ (How are you?).","example":{"kana":"げんきです！","romaji":"genki desu!","english":"I’m fine!"}}
 
+    {"id":"sakura_kata","kana":"サクラ","romaji":"sakura","gloss_en":"cherry blossom","tags":["core","s-row","nature"],"worlds":["3-base-kata"],"audio":"","note":"Normally written さくら or 桜 (kanji). Katakana サクラ often used in product names or stylized text.","example":{"kana":"サクラのはな","romaji":"sakura no hana","english":"cherry blossom flowers"}},
+    {"id":"shio_kata","kana":"シオ","romaji":"shio","gloss_en":"salt","tags":["core","s-row","food"],"worlds":["3-base-kata"],"audio":"","note":"Standard form is しお. Katakana シオ sometimes used on food packaging.","example":{"kana":"シオをいれる","romaji":"shio wo ireru","english":"add salt"}},
+    {"id":"sumu_kata","kana":"スム","romaji":"sumu","gloss_en":"to live; to reside","tags":["core","s-row","verb"],"worlds":["3-base-kata"],"audio":"","note":"Normally すむ. Katakana spelling is uncommon, sometimes in manga narration.","example":{"kana":"トウキョウにスム","romaji":"Toukyou ni sumu","english":"to live in Tokyo"}},
+    {"id":"seki_kata","kana":"セキ","romaji":"seki","gloss_en":"seat","tags":["core","s-row","place"],"worlds":["3-base-kata"],"audio":"","note":"Usually written せき or 席. Katakana セキ can appear on seating charts or tickets.","example":{"kana":"セキにすわる","romaji":"seki ni suwaru","english":"to sit in a seat"}},
+    {"id":"sora_kata","kana":"ソラ","romaji":"sora","gloss_en":"sky","tags":["core","s-row","nature"],"worlds":["3-base-kata"],"audio":"","note":"Standard is そら. Katakana ソラ often used in anime/game character names.","example":{"kana":"ソラがあおい","romaji":"sora ga aoi","english":"the sky is blue"}},
+    {"id":"sono_kata","kana":"ソノ","romaji":"sono","gloss_en":"that; garden","tags":["core","s-row","misc"],"worlds":["3-base-kata"],"audio":"","note":"Normally その (that) or その (園, garden). Katakana ソノ used in branding or stylized text.","example":{"kana":"ソノほんをよむ","romaji":"sono hon wo yomu","english":"read that book"}},
+    {"id":"zasshi_kata","kana":"ザッシ","romaji":"zasshi","gloss_en":"magazine","tags":["core","z-row","object"],"worlds":["3-daku-kata"],"audio":"","note":"Usually written ざっし. Katakana ザッシ sometimes used on covers or ads.","example":{"kana":"ザッシをよむ","romaji":"zasshi wo yomu","english":"to read a magazine"}},
+    {"id":"jisho_kata","kana":"ジショ","romaji":"jisho","gloss_en":"dictionary","tags":["core","z-row","object"],"worlds":["3-daku-kata"],"audio":"","note":"Standard is じしょ. Katakana ジショ might appear in study apps or design.","example":{"kana":"ジショをつかう","romaji":"jisho wo tsukau","english":"to use a dictionary"}},
+    {"id":"zoo_kata","kana":"ズウ","romaji":"zū","gloss_en":"zoo (short form)","tags":["core","z-row","place"],"worlds":["3-daku-kata"],"audio":"","note":"Comes from どうぶつえん (doubutsuen). Katakana ズウ is a clipped loan-style form.","example":{"kana":"ズウにいく","romaji":"zū ni iku","english":"to go to the zoo"}},
+    {"id":"zen_kata","kana":"ゼン","romaji":"zen","gloss_en":"Zen (Buddhism)","tags":["core","z-row","concept"],"worlds":["3-daku-kata"],"audio":"","note":"Usually 禅 in kanji. Katakana ゼン used in product names or global contexts.","example":{"kana":"ゼンのしゅうぎょう","romaji":"zen no shuugyou","english":"Zen practice"}},
+    {"id":"zou_kata","kana":"ゾウ","romaji":"zou","gloss_en":"elephant","tags":["core","z-row","animal"],"worlds":["3-daku-kata"],"audio":"","note":"Normally ぞう. Katakana ゾウ appears in picture books, zoo signs, or stylized text.","example":{"kana":"ゾウはおおきい","romaji":"zou wa ookii","english":"the elephant is big"}},
+    {"id":"zero_kata","kana":"ゼロ","romaji":"zero","gloss_en":"zero","tags":["loanword","z-row","number"],"worlds":["3-daku-kata"],"audio":"","note":"Loanword from English 'zero'. Always written in katakana in modern Japanese.","example":{"kana":"ゼロからはじめる","romaji":"zero kara hajimeru","english":"to start from zero"}}
     
   ],
   "byWorld": {
     "1-base-hira":["ai_hira","iie_hira","ue_hira","ie_hira","aoi_hira","au_hira"],
     "2-base-hira":["iku_hira","kiku_hira","kau_hira","kao_hira","ike_hira","koe_hira"],
-    "2-daku-hira":["eiga_hira","gaikoku_hira","gakusei_hira","gakkou_hira","ginkou_hira","genki_hira"]
+    "2-daku-hira":["eiga_hira","gaikoku_hira","gakusei_hira","gakkou_hira","ginkou_hira","genki_hira"],
+    "3-base-kata": ["sakura_kata","shio_kata","sumu_kata","seki_kata","sora_kata","sono_kata"],
+    "3-daku-kata": ["zasshi_kata","jisho_kata","zoo_kata","zen_kata","zou_kata","zero_kata"]
   }
 }
