@@ -7,6 +7,24 @@
     {"id":"ie_hira","kana":"いえ","romaji":"ie","gloss_en":"house; home","tags":["core","vowels","place"],"worlds":["1-base-hira"],"audio":"","note":"いえ (ie) is neutral. うち (uchi) is more casual/familiar.","example":{"kana":"いえにかえる","romaji":"ie ni kaeru","english":"to return home"}},
     {"id":"aoi_hira","kana":"あおい","romaji":"aoi","gloss_en":"blue (adjective)","tags":["core","vowels","color"],"worlds":["1-base-hira"],"audio":"","note":"Used as adjective. Noun form is あお (ao). Historically covered blue/green.","example":{"kana":"あおいシャツ","romaji":"aoi shatsu","english":"blue shirt"}},
     {"id":"au_hira","kana":"あう","romaji":"au","gloss_en":"to meet","tags":["core","vowels","verb"],"worlds":["1-base-hira"],"audio":"","note":"Used for meeting people, usually with に particle.","example":{"kana":"ともだちにあう","romaji":"tomodachi ni au","english":"to meet a friend"}}
+    ,
+    {"id":"iku_hira","kana":"いく","romaji":"iku","gloss_en":"to go","tags":["core","k-row","verb"],"worlds":["2-base-hira"],"audio":"","note":"Basic motion verb. Past tense is irregular: いった (itta). Often used with に to mark destination.","example":{"kana":"がっこうにいく","romaji":"gakkou ni iku","english":"to go to school"}},
+    {"id":"kiku_hira","kana":"きく","romaji":"kiku","gloss_en":"to listen; to ask","tags":["core","k-row","verb"],"worlds":["2-base-hira"],"audio":"","note":"Context decides meaning: with おんがく it means 'listen', with しつもん it means 'ask a question'.","example":{"kana":"せんせいにきく","romaji":"sensei ni kiku","english":"to ask the teacher"}},
+    {"id":"kau_hira","kana":"かう","romaji":"kau","gloss_en":"to buy","tags":["core","k-row","verb"],"worlds":["2-base-hira"],"audio":"","note":"Common everyday verb. Usually paired with を for the object.","example":{"kana":"パンをかう","romaji":"pan wo kau","english":"to buy bread"}},
+    {"id":"kao_hira","kana":"かお","romaji":"kao","gloss_en":"face","tags":["core","k-row","body"],"worlds":["2-base-hira"],"audio":"","note":"Literal 'face'. Also appears in expressions like かおいろ (complexion) or かおをあらう (wash one’s face).","example":{"kana":"かおをあらう","romaji":"kao wo arau","english":"to wash one’s face"}},
+    {"id":"ike_hira","kana":"いけ","romaji":"ike","gloss_en":"pond","tags":["core","k-row","place"],"worlds":["2-base-hira"],"audio":"","note":"Refers to a pond, often man-made in gardens or parks.","example":{"kana":"いけにさかながいる","romaji":"ike ni sakana ga iru","english":"There are fish in the pond"}},
+    {"id":"koe_hira","kana":"こえ","romaji":"koe","gloss_en":"voice","tags":["core","k-row"],"worlds":["2-base-hira"],"audio":"","note":"Used for human/animal voices. Different from おと (sound).","example":{"kana":"きれいなこえ","romaji":"kirei na koe","english":"a beautiful voice"}},
+    {"id":"eiga_hira","kana":"えいが","romaji":"eiga","gloss_en":"movie; film","tags":["core","g-row","topic"],"worlds":["2-daku-hira"],"audio":"","note":"Common word. Paired with みる (to watch).","example":{"kana":"えいがをみる","romaji":"eiga wo miru","english":"to watch a movie"}},
+    {"id":"gaikoku_hira","kana":"がいこく","romaji":"gaikoku","gloss_en":"foreign country","tags":["core","g-row","place"],"worlds":["2-daku-hira"],"audio":"","note":"Literally 'outside country'. Often used when traveling abroad.","example":{"kana":"がいこくにいく","romaji":"gaikoku ni iku","english":"to go abroad"}},
+    {"id":"gakusei_hira","kana":"がくせい","romaji":"gakusei","gloss_en":"student","tags":["core","g-row","person"],"worlds":["2-daku-hira"],"audio":"","note":"Usually refers to university students. For younger students, せいと (seito) is common.","example":{"kana":"がくせいです","romaji":"gakusei desu","english":"I am a student"}},
+    {"id":"gakkou_hira","kana":"がっこう","romaji":"gakkou","gloss_en":"school","tags":["core","g-row","place"],"worlds":["2-daku-hira"],"audio":"","note":"General word for school. Often combined, e.g., しょうがっこう (elementary school).","example":{"kana":"がっこうにいく","romaji":"gakkou ni iku","english":"to go to school"}},
+    {"id":"ginkou_hira","kana":"ぎんこう","romaji":"ginkou","gloss_en":"bank","tags":["core","g-row","place"],"worlds":["2-daku-hira"],"audio":"","note":"Used for financial institutions. Worker is ぎんこういん.","example":{"kana":"ぎんこうでしごとをする","romaji":"ginkou de shigoto wo suru","english":"to work at a bank"}},
+    {"id":"genki_hira","kana":"げんき","romaji":"genki","gloss_en":"healthy; energetic","tags":["core","g-row","adjective"],"worlds":["2-daku-hira"],"audio":"","note":"Common in greetings: おげんきですか？ (How are you?).","example":{"kana":"げんきです！","romaji":"genki desu!","english":"I’m fine!"}}
+    ,
+    
   ],
-  "byWorld":{"1-base-hira":["ai_hira","iie_hira","ue_hira","ie_hira","aoi_hira","au_hira"]}
+  "byWorld":
+  {"1-base-hira":["ai_hira","iie_hira","ue_hira","ie_hira","aoi_hira","au_hira"]},
+  {"2-base-hira":["iku_hira","kiku_hira","kau_hira","kao_hira","ike_hira","koe_hira"],"2-daku-hira":["eiga_hira","gaikoku_hira","gakusei_hira","gakkou_hira","ginkou_hira","genki_hira"]}
+  
 }
