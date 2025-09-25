@@ -65,7 +65,7 @@ function setActiveLink(link) {
 
 function loadPdf(file) {
   const viewer = document.getElementById("pdf-viewer");
-  viewer.src = file;
+  viewer.src = file + "#zoom=page-fit"; // force fit-to-page
 
   viewer.onload = () => {
     viewer.contentWindow?.scrollTo(0, 0);
