@@ -1,20 +1,49 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Portfolio</title>
-  <link rel="stylesheet" href="styles.css">
-  <script src="no-mobile.js" defer></script>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Cannon Fodder • Marco Portfolio</title>
+  <meta name="color-scheme" content="dark light" />
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="../../../css/main.css">
+  <script src="../../../no-mobile.js" defer></script>
 </head>
 <body class="site">
-  <div class="container">
-    <div class="panel">
-      <h2>Work in progress</h2>
+  <!-- Header -->
+  <header class="header">
+    <div class="container nav">
+      <a class="brand" href="../../../index.html">
+        <span class="dot"></span><span>Marco • Portfolio</span>
+      </a>
+      <nav class="links">
+        <a class="cta" href="https://www.linkedin.com/in/marco-romagna"
+           target="_blank" rel="noopener noreferrer">LinkedIn</a>
+      </nav>
     </div>
-  </div>
-  <footer class="footer">
-    <p>&copy; 2025</p>
+  </header>
+
+  <!-- Main -->
+  <main class="container">
+    <section class="panel">
+      <h2>Cannon Fodder</h2>
+      <p><em>Work in progress page for the Cannon Fodder TTRPG.</em></p>
+
+      <!-- PDF viewer -->
+      <div style="margin-top:1rem;">
+        <iframe src="CannonFodder.pdf" width="100%" height="800px" style="border:1px solid var(--border); border-radius:8px;">
+          This browser does not support PDFs. Please download the file:
+          <a href="CannonFodder.pdf">Download PDF</a>
+        </iframe>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer container">
+    <p>&copy; 2025 Marco Romagna</p>
   </footer>
 </body>
 </html>
+
