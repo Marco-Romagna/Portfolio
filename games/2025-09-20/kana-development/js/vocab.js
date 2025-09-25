@@ -96,34 +96,36 @@
 
   // ======================================================
   // Get words for a specific world milestone
-  // e.g. getWorldMilestone("2-base-hira", "hiragana")
+  // e.g. getWorldMilestone("2-base", "hiragana")
   // ======================================================
   async function getWorldMilestone(worldKey, type = "hiragana") {
     const data = await loadWorlds();
     const ids = data[worldKey] || [];
-  
+
     const suffix = type === "hiragana" ? "_hira" : "_kata";
     const idsWithSuffix = ids.map(id => id + suffix);
-  
+
     const lexicon = await loadLexicon(type);
     return (lexicon.words || []).filter(w => idsWithSuffix.includes(w.id));
   }
 
   // ======================================================
   // Get all words for a world (all its milestones)
-  // e.g. getWorld("2") → base/daku/handaku for hira+kata
+  // e.g. getWorld("2", "katakana")
   // ======================================================
   async function getWorld(worldCode, type = "hiragana") {
     const data = await loadWorlds();
-    const entries = data.worlds.filter(w => w.id.startsWith(worldCode + "-"));
+    const keys = Object.keys(data).filter(k => k.startsWith(worldCode + "-"));
+
+    const suffix = type === "hiragana" ? "_hira" : "_kata";
+    const lexicon = await loadLexicon(type);
 
     let results = [];
-    for (let entry of entries) {
-      const lexType = entry.lexicon || type;
-      const lexicon = await loadLexicon(lexType);
-      const ids = lexicon.byWorld[entry.id] || [];
-      results = results.concat(lexicon.words.filter(w => ids.includes(w.id)));
-    }
+    keys.forEach(k => {
+      const ids = data[k] || [];
+      const idsWithSuffix = ids.map(id => id + suffix);
+      results = results.concat(lexicon.words.filter(w => idsWithSuffix.includes(w.id)));
+    });
     return results;
   }
 
