@@ -12,5 +12,12 @@
     "path": "games/2025-09-20/kana-development/",
     "image": "games/2025-09-20/kana-development/assets/thumb.png",
     "tags": ["Japanese", "Kana", "Learning"]
+  },
+  {
+    "title": "Cannon Fodder",
+    "date": "2025-09-24",
+    "path": "games/2025-09-24/cannon-fodder/",
+    "image": "games/2025-09-24/cannon-fodder/assets/thumb.png",
+    "tags":  ["Ebook", "TTRPG", "Game Design", "WW2"]
   }
 ]
