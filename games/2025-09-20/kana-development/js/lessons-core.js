@@ -22,16 +22,20 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
   const [WORLD] = qId.split('-').map(Number);
 
   // Decide total parts (vocab lessons use 5)
-  const IS_VOCAB = (SUFFIX === 4 || SUFFIX === 8 || SUFFIX === 12);
+  const HIRA_VOCAB_SUFFIXES = [4, 9, 14];
+  const KATA_VOCAB_SUFFIXES = [5, 10, 15];
+
+  const IS_VOCAB = [...HIRA_VOCAB_SUFFIXES, ...KATA_VOCAB_SUFFIXES].includes(SUFFIX);
   lesson.dataset.totalParts = IS_VOCAB ? 5 : 4;
   const totalParts = Number(lesson.dataset.totalParts);
 
   // 🔥 NEW: Which lexicon does this lesson use?
   let LEXICON = "hiragana";
-  if (IS_VOCAB && window.KANA_STAGES) {
-    const level = window.KANA_STAGES.levels.find(l => l.code === qId);
-    if (level && level.lexicon) {
-      LEXICON = level.lexicon; // "hiragana" or "katakana"
+  if (IS_VOCAB && WORLD > 1) {
+    if (HIRA_VOCAB_SUFFIXES.includes(SUFFIX)) {
+      LEXICON = "hiragana";
+    } else if (KATA_VOCAB_SUFFIXES.includes(SUFFIX)) {
+      LEXICON = "katakana";
     }
   }
 
@@ -151,7 +155,7 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
     'ガ':'ga','ギ':'gi','グ':'gu','ゲ':'ge','ゴ':'go',
     // S / Z
     'さ':'sa','し':'shi','す':'su','せ':'se','そ':'so',
-    'サ':'sa','シ':'shi','ス':'su','セ':'se','ソ':'so',
+    'サ':'sa','シ':'shi','ス':'su','セ':'so','ソ':'so',
     'ざ':'za','じ':'ji','ず':'zu','ぜ':'ze','ぞ':'zo',
     'ザ':'za','ジ':'ji','ズ':'zu','ゼ':'ze','ゾ':'zo',
     // T / D
@@ -206,11 +210,14 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
       2:'kata-base',
       3:'mixed-base',
       4:'vocab-base',
-      5:'hira-daku',
-      6:'kata-daku',
-      7:'mixed-daku',
-      8:'vocab-daku',
-      12:'vocab-handaku'
+      5:'vocab-kata',
+      6:'hira-daku',
+      7:'kata-daku',
+      8:'mixed-daku',
+      9:'vocab-daku',
+      10:'vocab-kata-daku',
+      14:'vocab-handaku',
+      15:'vocab-kata-handaku'
     };
     return map[SUFFIX] || 'hira-base';
   })();
@@ -275,9 +282,12 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
   })();
 
   function getRoleKey(world, suffix) {
-    if (suffix === 4) return `${world}-base`;
-    if (suffix === 8) return `${world}-daku`;
-    if (suffix === 12) return `${world}-handaku`;
+    if (HIRA_VOCAB_SUFFIXES.includes(suffix)) return `${world}-base`;
+    if (KATA_VOCAB_SUFFIXES.includes(suffix)) return `${world}-base`; // still use same IDs, lexicon differs
+    if (suffix === 9)  return `${world}-daku`;
+    if (suffix === 10) return `${world}-daku`;
+    if (suffix === 14) return `${world}-handaku`;
+    if (suffix === 15) return `${world}-handaku`;
     return `${world}-base`;
   }
 
@@ -289,6 +299,6 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
     GOAL_IDENT, GOAL_TYPE, COMBO_LAST,
     showPart,
     getRoleKey,
-    LEXICON // 👈 now exposed globally
+    LEXICON
   };
 })();
