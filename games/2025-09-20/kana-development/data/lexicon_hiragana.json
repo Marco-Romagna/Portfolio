@@ -21,11 +21,25 @@
     {"id":"ginkou_hira","kana":"ぎんこう","romaji":"ginkou","gloss_en":"bank","tags":["core","g-row","place"],"worlds":["2-daku-hira"],"audio":"","note":"Used for financial institutions. Worker is ぎんこういん.","example":{"kana":"ぎんこうでしごとをする","romaji":"ginkou de shigoto wo suru","english":"to work at a bank"}},
     {"id":"genki_hira","kana":"げんき","romaji":"genki","gloss_en":"healthy; energetic","tags":["core","g-row","adjective"],"worlds":["2-daku-hira"],"audio":"","note":"Common in greetings: おげんきですか？ (How are you?).","example":{"kana":"げんきです！","romaji":"genki desu!","english":"I’m fine!"}}
 
+    {"id":"sakura_hira","kana":"さくら","romaji":"sakura","gloss_en":"cherry blossom","tags":["core","s-row","nature"],"worlds":["3-base-hira"],"audio":"","note":"Iconic Japanese flower. Often associated with spring, festivals, and the fleeting nature of life.","example":{"kana":"さくらのはな","romaji":"sakura no hana","english":"cherry blossom flowers"}},
+    {"id":"shio_hira","kana":"しお","romaji":"shio","gloss_en":"salt","tags":["core","s-row","food"],"worlds":["3-base-hira"],"audio":"","note":"Common seasoning. Often appears in cooking and food packaging.","example":{"kana":"しおをいれる","romaji":"shio wo ireru","english":"add salt"}},
+    {"id":"sumu_hira","kana":"すむ","romaji":"sumu","gloss_en":"to live; to reside","tags":["core","s-row","verb"],"worlds":["3-base-hira"],"audio":"","note":"Used to describe where someone lives. Typically with に particle.","example":{"kana":"とうきょうにすむ","romaji":"toukyou ni sumu","english":"to live in Tokyo"}},
+    {"id":"seki_hira","kana":"せき","romaji":"seki","gloss_en":"seat","tags":["core","s-row","place"],"worlds":["3-base-hira"],"audio":"","note":"Refers to a physical seat, also used for 'cough' with different kanji.","example":{"kana":"せきにすわる","romaji":"seki ni suwaru","english":"to sit in a seat"}},
+    {"id":"sora_hira","kana":"そら","romaji":"sora","gloss_en":"sky","tags":["core","s-row","nature"],"worlds":["3-base-hira"],"audio":"","note":"Word for 'sky'. Common in poetry and names.","example":{"kana":"そらがあおい","romaji":"sora ga aoi","english":"the sky is blue"}},
+    {"id":"sono_hira","kana":"その","romaji":"sono","gloss_en":"that","tags":["core","s-row","misc"],"worlds":["3-base-hira"],"audio":"","note":"Demonstrative adjective meaning 'that'. Used before nouns.","example":{"kana":"そのほんをよむ","romaji":"sono hon wo yomu","english":"read that book"}},
+    {"id":"zasshi_hira","kana":"ざっし","romaji":"zasshi","gloss_en":"magazine","tags":["core","z-row","object"],"worlds":["3-daku-hira"],"audio":"","note":"General word for magazines. Can appear in study contexts or everyday reading.","example":{"kana":"ざっしをよむ","romaji":"zasshi wo yomu","english":"to read a magazine"}},
+    {"id":"jisho_hira","kana":"じしょ","romaji":"jisho","gloss_en":"dictionary","tags":["core","z-row","object"],"worlds":["3-daku-hira"],"audio":"","note":"Common word for dictionary. Useful in study-related phrases.","example":{"kana":"じしょをつかう","romaji":"jisho wo tsukau","english":"to use a dictionary"}},
+    {"id":"zoo_hira","kana":"どうぶつえん","romaji":"doubutsuen","gloss_en":"zoo","tags":["core","z-row","place"],"worlds":["3-daku-hira"],"audio":"","note":"Full word is どうぶつえん (literally 'animal garden').","example":{"kana":"どうぶつえんにいく","romaji":"doubutsuen ni iku","english":"to go to the zoo"}},
+    {"id":"zen_hira","kana":"ぜん","romaji":"zen","gloss_en":"Zen (Buddhism)","tags":["core","z-row","concept"],"worlds":["3-daku-hira"],"audio":"","note":"A school of Buddhism. Also used metaphorically worldwide.","example":{"kana":"ぜんのしゅうぎょう","romaji":"zen no shuugyou","english":"Zen practice"}},
+    {"id":"zou_hira","kana":"ぞう","romaji":"zou","gloss_en":"elephant","tags":["core","z-row","animal"],"worlds":["3-daku-hira"],"audio":"","note":"Basic word for elephant, common in children’s books and zoo vocabulary.","example":{"kana":"ぞうはおおきい","romaji":"zou wa ookii","english":"the elephant is big"}},
+    {"id":"zero_hira","kana":"ゼロ","romaji":"zero","gloss_en":"zero","tags":["loanword","z-row","number"],"worlds":["3-daku-hira"],"audio":"","note":"Loanword from English. Modern Japanese always writes it in katakana, but hiragana practice may show it.","example":{"kana":"ゼロからはじめる","romaji":"zero kara hajimeru","english":"to start from zero"}}
     
   ],
   "byWorld": {
     "1-base-hira":["ai_hira","iie_hira","ue_hira","ie_hira","aoi_hira","au_hira"],
     "2-base-hira":["iku_hira","kiku_hira","kau_hira","kao_hira","ike_hira","koe_hira"],
     "2-daku-hira":["eiga_hira","gaikoku_hira","gakusei_hira","gakkou_hira","ginkou_hira","genki_hira"],
+    "3-base-hira": ["sakura_hira","shio_hira","sumu_hira","seki_hira","sora_hira","sono_hira"],
+    "3-daku-hira": ["zasshi_hira","jisho_hira","zoo_hira","zen_hira","zou_hira","zero_hira"]
   }
 }
