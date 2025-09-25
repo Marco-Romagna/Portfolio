@@ -1,97 +1,89 @@
 /* Layout */
-.layout {
+.split-layout {
   display: grid;
-  grid-template-columns: 240px 1fr; /* sidebar + main area */
-  gap: 16px;
-  margin-top: 1rem;
+  grid-template-columns: 280px 1fr;
+  gap: 1rem;
+  align-items: start;
+  min-height: 80vh;
 }
 
-/* Sidebar TOC */
-.toc {
+/* Sidebar */
+.toc-wrapper {
   background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: 8px;
   padding: 1rem;
-  max-height: calc(100vh - 200px);
-  overflow-y: auto;
-  position: sticky;
-  top: 80px;
 }
 
-.toc h3 {
-  margin-top: 0;
-  font-size: 1.05rem;
-  font-weight: 700;
-  color: var(--accent);
+.toc-wrapper h2 {
+  margin: 0 0 .5rem;
+  font-size: 1.25rem;
 }
 
-.toc ul {
+.credits {
+  font-size: 0.85rem;
+  color: var(--muted);
+  margin-bottom: 1rem;
+  line-height: 1.4;
+}
+
+/* TOC Buttons */
+.toc-header {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.toc-header button {
+  flex: 1;
+  padding: 0.4rem 0.6rem;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.toc-header button.active,
+.toc-header button:hover {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+
+/* TOC List */
+#toc {
   list-style: none;
   padding: 0;
   margin: 0;
 }
 
-.toc li {
-  margin: .35rem 0;
+#toc li {
+  margin-bottom: 0.4rem;
 }
 
-.toc a {
-  display: block;
-  padding: 4px 6px;
-  border-radius: 6px;
+#toc a {
   color: var(--accent);
   text-decoration: none;
-  font-weight: 500;
   font-size: 0.9rem;
 }
 
-.toc a:hover {
-  background: rgba(122,162,247,.12);
-}
-
-.toc a.active {
-  background: var(--accent);
-  color: #fff;
+#toc a:hover {
+  text-decoration: underline;
 }
 
 /* PDF Viewer */
 .pdf-wrapper {
-  flex: 1;
-  min-height: 80vh;
-}
-
-.pdf-viewer {
-  width: 100%;
-  height: calc(100vh - 160px);
-  border: none;
-  display: block;
-  background: #111;
-}
-
-/* Credits */
-.credits {
   background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 1rem 1.25rem;
-  margin-bottom: 1.5rem;
+  border-radius: 8px;
+  overflow: hidden;
 }
 
-.credits h3 {
-  margin-top: 0;
-  font-size: 1.1rem;
-  font-weight: 700;
-  color: var(--accent);
-}
-
-.credit-list {
-  display: grid;
-  grid-template-columns: 120px 1fr;
-  gap: 6px 12px;
-  font-size: .95rem;
-}
-
-.credit-label {
-  font-weight: 600;
-  color: var(--muted);
+.pdf-frame {
+  width: 100%;
+  height: 80vh;
+  border: none;
 }
