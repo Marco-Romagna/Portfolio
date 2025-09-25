@@ -71,8 +71,14 @@
     {"id":"miru_kata","kana":"ミル","romaji":"miru","gloss_en":"to see; to watch","tags":["core","m-row","verb"],"worlds":["7-base-kata"],"audio":"","note":"Normally みる. Katakana ミル often used in games, ads, or casual stylization.","example":{"kana":"えいがをミル","romaji":"eiga wo miru","english":"to watch a movie"}},
     {"id":"mori_kata","kana":"モリ","romaji":"mori","gloss_en":"forest","tags":["core","m-row","nature"],"worlds":["7-base-kata"],"audio":"","note":"Normally もり. Katakana モリ appears in names, branding, or stylization.","example":{"kana":"モリをあるく","romaji":"mori wo aruku","english":"to walk through the forest"}},
     {"id":"megane_kata","kana":"メガネ","romaji":"megane","gloss_en":"glasses (spectacles)","tags":["core","m-row","object"],"worlds":["7-base-kata"],"audio":"","note":"Katakana メガネ is **common spelling** for 'glasses', though 眼鏡 also exists.","example":{"kana":"メガネをかける","romaji":"megane wo kakeru","english":"to wear glasses"}},
-    {"id":"mado_kata","kana":"マド","romaji":"mado","gloss_en":"window","tags":["core","m-row","object"],"worlds":["7-base-kata"],"audio":"","note":"Normally まど. Katakana マド sometimes appears in names or design.","example":{"kana":"マドをあける","romaji":"mado wo akeru","english":"to open the window"}}
+    {"id":"mado_kata","kana":"マド","romaji":"mado","gloss_en":"window","tags":["core","m-row","object"],"worlds":["7-base-kata"],"audio":"","note":"Normally まど. Katakana マド sometimes appears in names or design.","example":{"kana":"マドをあける","romaji":"mado wo akeru","english":"to open the window"}},
     
+    {"id":"yama_kata","kana":"ヤマ","romaji":"yama","gloss_en":"mountain","tags":["core","y-row","nature"],"worlds":["8-base-kata"],"audio":"","note":"Normally やま. Katakana ヤマ is common in brand names (e.g., ヤマハ Yamaha).","example":{"kana":"ヤマにのぼる","romaji":"yama ni noboru","english":"to climb a mountain"}},
+    {"id":"yuki_kata","kana":"ユキ","romaji":"yuki","gloss_en":"snow","tags":["core","y-row","nature"],"worlds":["8-base-kata"],"audio":"","note":"Normally ゆき. Katakana ユキ often used for names (ユキ is a common girl’s name).","example":{"kana":"ユキがふる","romaji":"yuki ga furu","english":"snow falls"}},
+    {"id":"yoru_kata","kana":"ヨル","romaji":"yoru","gloss_en":"night","tags":["core","y-row","time"],"worlds":["8-base-kata"],"audio":"","note":"Normally よる. Katakana ヨル sometimes used in manga/stylized writing.","example":{"kana":"ヨルにねる","romaji":"yoru ni neru","english":"to sleep at night"}},
+    {"id":"yasai_kata","kana":"ヤサイ","romaji":"yasai","gloss_en":"vegetable","tags":["core","y-row","food"],"worlds":["8-base-kata"],"audio":"","note":"Normally やさい. Katakana ヤサイ sometimes used in menus, design, or stylization.","example":{"kana":"ヤサイをたべる","romaji":"yasai wo taberu","english":"to eat vegetables"}},
+    {"id":"yubi_kata","kana":"ユビ","romaji":"yubi","gloss_en":"finger","tags":["core","y-row","body"],"worlds":["8-base-kata"],"audio":"","note":"Normally ゆび. Katakana ユビ appears in stylization or product names.","example":{"kana":"ユビをさす","romaji":"yubi wo sasu","english":"to point with a finger"}},
+    {"id":"yume_kata","kana":"ユメ","romaji":"yume","gloss_en":"dream","tags":["core","y-row","abstract"],"worlds":["8-base-kata"],"audio":"","note":"Normally ゆめ. Katakana ユメ sometimes appears in manga titles or stylization.","example":{"kana":"ユメをみる","romaji":"yume wo miru","english":"to dream"}}
     
   ],
   "byWorld": {
@@ -87,6 +93,7 @@
     "6-base-kata": ["hana_kata","hito_kata","fuyu_kata","heya_kata","hon_kata","hikari_kata"],
     "6-daku-kata": ["basho_kata","biiru_kata","bukuro_kata","benkyou_kata","boushi_kata","byouin_kata"],
     "6-handaku-kata": ["pan_kata","pinku_kata","piano_kata","posuto_kata","pen_kata","puro_kata"],
-    "7-base-kata": ["mizu_kata","machi_kata","miru_kata","mori_kata","megane_kata","mado_kata"]
+    "7-base-kata": ["mizu_kata","machi_kata","miru_kata","mori_kata","megane_kata","mado_kata"],
+    "8-base-kata": ["yama_kata","yuki_kata","yoru_kata","yasai_kata","yubi_kata","yume_kata"]
   }
 }
