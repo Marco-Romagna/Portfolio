@@ -1,0 +1,1887 @@
+{
+  "meta": {
+    "version": 3,
+    "locale": "ja-JP",
+    "notes": "Katakana-only core lexicon (N5-friendly). Extracted from full lexicon."
+  },
+  "words": [
+    {
+      "id": "kamera_kata",
+      "kana": "カメラ",
+      "romaji": "kamera",
+      "gloss_en": "camera",
+      "jlpt": "N5",
+      "tags": [
+        "loanword",
+        "object"
+      ],
+      "worlds": [
+        "2-katakana"
+      ],
+      "audio": "",
+      "note": "Common katakana loanword.",
+      "example": {
+        "kana": "カメラです",
+        "romaji": "kamera desu",
+        "english": "It is camera"
+      }
+    },
+    {
+      "id": "koohii_kata",
+      "kana": "コーヒー",
+      "romaji": "koohii",
+      "gloss_en": "coffee",
+      "jlpt": "N5",
+      "tags": [
+        "loanword",
+        "food"
+      ],
+      "worlds": [
+        "2-katakana"
+      ],
+      "audio": "",
+      "note": "Common katakana loanword.",
+      "example": {
+        "kana": "コーヒーをたべる",
+        "romaji": "koohii wo taberu",
+        "english": "to eat coffee"
+      }
+    },
+    {
+      "id": "kaado_kata",
+      "kana": "カード",
+      "romaji": "kaado",
+      "gloss_en": "card",
+      "jlpt": "N5",
+      "tags": [
+        "loanword",
+        "object"
+      ],
+      "worlds": [
+        "2-katakana"
+      ],
+      "audio": "",
+      "note": "Common katakana loanword.",
+      "example": {
+        "kana": "カードです",
+        "romaji": "kaado desu",
+        "english": "It is card"
+      }
+    },
+    {
+      "id": "aisu_kata",
+      "kana": "アイス",
+      "romaji": "aisu",
+      "gloss_en": "ice cream",
+      "jlpt": "N5",
+      "tags": [
+        "loanword",
+        "food"
+      ],
+      "worlds": [
+        "2-katakana"
+      ],
+      "audio": "",
+      "note": "Common katakana loanword.",
+      "example": {
+        "kana": "アイスをたべる",
+        "romaji": "aisu wo taberu",
+        "english": "to eat ice cream"
+      }
+    },
+    {
+      "id": "ekoo_kata",
+      "kana": "エコー",
+      "romaji": "ekoo",
+      "gloss_en": "echo",
+      "jlpt": "N5",
+      "tags": [
+        "loanword",
+        "other"
+      ],
+      "worlds": [
+        "2-katakana"
+      ],
+      "audio": "",
+      "note": "Common katakana loanword.",
+      "example": {
+        "kana": "エコーです",
+        "romaji": "ekoo desu",
+        "english": "It is echo"
+      }
+    },
+    {
+      "id": "keeki_kata",
+      "kana": "ケーキ",
+      "romaji": "keeki",
+      "gloss_en": "cake",
+      "jlpt": "N5",
+      "tags": [
+        "loanword",
+        "food"
+      ],
+      "worlds": [
+        "2-katakana"
+      ],
+      "audio": "",
+      "note": "Common katakana loanword.",
+      "example": {
+        "kana": "ケーキをたべる",
+        "romaji": "keeki wo taberu",
+        "english": "to eat cake"
+      }
+    },
+    {
+      "id": "gorufu_kata",
+      "kana": "ゴルフ",
+      "romaji": "gorufu",
+      "gloss_en": "golf",
+      "jlpt": "N5",
+      "tags": [
+        "loanword",
+        "topic"
+      ],
+      "worlds": [
+        "2-daku-katakana"
+      ],
+      "audio": "",
+      "note": "Common katakana loanword.",
+      "example": {
+        "kana": "ゴルフです",
+        "romaji": "gorufu desu",
+        "english": "It is golf"
+      }
+    },
+    {
+      "id": "gitaa_kata",
+      "kana": "ギター",
+      "romaji": "gitaa",
+      "gloss_en": "guitar",
+      "jlpt": "N5",
+      "tags": [
+        "loanword",
+        "object"
+      ],
+      "worlds": [
+        "2-daku-katakana"
+      ],
+      "audio": "",
+      "note": "Common katakana loanword.",
+      "example": {
+        "kana": "ギターです",
+        "romaji": "gitaa desu",
+        "english": "It is guitar"
+      }
+    },
+    {
+      "id": "gasu_kata",
+      "kana": "ガス",
+      "romaji": "gasu",
+      "gloss_en": "other",
+      "jlpt": "N5",
+      "tags": [
+        "loanword",
+        "other"
+      ],
+      "worlds": [
+        "2-daku-katakana"
+      ],
+      "audio": "",
+      "note": "Common katakana loanword.",
+      "example": {
+        "kana": "ガスです",
+        "romaji": "gasu desu",
+        "english": "It is other"
+      }
+    },
+    {
+      "id": "geemu_kata",
+      "kana": "ゲーム",
+      "romaji": "geemu",
+      "gloss_en": "game",
+      "jlpt": "N5",
+      "tags": [
+        "loanword",
+        "topic"
+      ],
+      "worlds": [
+        "2-daku-katakana"
+      ],
+      "audio": "",
+      "note": "Common katakana loanword.",
+      "example": {
+        "kana": "ゲームです",
+        "romaji": "geemu desu",
+        "english": "It is game"
+      }
+    },
+    {
+      "id": "guramu_kata",
+      "kana": "グラム",
+      "romaji": "guramu",
+      "gloss_en": "gram",
+      "jlpt": "N5",
+      "tags": [
+        "loanword",
+        "other"
+      ],
+      "worlds": [
+        "2-daku-katakana"
+      ],
+      "audio": "",
+      "note": "Common katakana loanword.",
+      "example": {
+        "kana": "グラムです",
+        "romaji": "guramu desu",
+        "english": "It is gram"
+      }
+    },
+    {
+      "id": "sakkaa_kata",
+      "kana": "サッカー",
+      "romaji": "sakkaa",
+      "gloss_en": "soccer",
+      "jlpt": "N5",
+      "tags": [
+        "loanword",
+        "topic"
+      ],
+      "worlds": [
+        "2-daku-katakana"
+      ],
+      "audio": "",
+      "note": "Common katakana loanword.",
+      "example": {
+        "kana": "サッカーです",
+        "romaji": "sakkaa desu",
+        "english": "It is soccer"
+      }
+    },
+    {
+      "id": "sarada_kata",
+      "kana": "サラダ",
+      "romaji": "sarada",
+      "gloss_en": "salad",
+      "jlpt": "N5",
+      "tags": [
+        "loanword",
+        "food"
+      ],
+      "worlds": [
+        "3-katakana"
+      ],
+      "audio": "",
+      "note": "Common katakana loanword.",
+      "example": {
+        "kana": "サラダをたべる",
+        "romaji": "sarada wo taberu",
+        "english": "to eat salad"
+      }
+    },
+    {
+      "id": "shiitsu_kata",
+      "kana": "シーツ",
+      "romaji": "shiitsu",
+      "gloss_en": "sheets",
+      "jlpt": "N5",
+      "tags": [
+        "loanword",
+        "object"
+      ],
+      "worlds": [
+        "3-katakana"
+      ],
+      "audio": "",
+      "note": "Common katakana loanword.",
+      "example": {
+        "kana": "シーツです",
+        "romaji": "shiitsu desu",
+        "english": "It is sheets"
+      }
+    },
+    {
+      "id": "sukii_kata",
+      "kana": "スキー",
+      "romaji": "sukii",
+      "gloss_en": "skiing",
+      "jlpt": "N5",
+      "tags": [
+        "loanword",
+        "topic"
+      ],
+      "worlds": [
+        "3-katakana"
+      ],
+      "audio": "",
+      "note": "Common katakana loanword.",
+      "example": {
+        "kana": "スキーです",
+        "romaji": "sukii desu",
+        "english": "It is skiing"
+      }
+    },
+    {
+      "id": "sando_kata",
+      "kana": "サンド",
+      "romaji": "sando",
+      "gloss_en": "sandwich",
+      "jlpt": "N5",
+      "tags": [
+        "loanword",
+        "food"
+      ],
+      "worlds": [
+        "3-katakana"
+      ],
+      "audio": "",
+      "note": "Common katakana loanword.",
+      "example": {
+        "kana": "サンドをたべる",
+        "romaji": "sando wo taberu",
+        "english": "to eat sandwich"
+      }
+    },
+    {
+      "id": "seetaa_kata",
+      "kana": "セーター",
+      "romaji": "seetaa",
+      "gloss_en": "sweater",
+      "jlpt": "N5",
+      "tags": [
+        "loanword",
+        "object"
+      ],
+      "worlds": [
+        "3-katakana"
+      ],
+      "audio": "",
+      "note": "Common katakana loanword.",
+      "example": {
+        "kana": "セーターです",
+        "romaji": "seetaa desu",
+        "english": "It is sweater"
+      }
+    },
+    {
+      "id": "soosu_kata",
+      "kana": "ソース",
+      "romaji": "soosu",
+      "gloss_en": "sauce",
+      "jlpt": "N5",
+      "tags": [
+        "loanword",
+        "food"
+      ],
+      "worlds": [
+        "3-katakana"
+      ],
+      "audio": "",
+      "note": "Common katakana loanword.",
+      "example": {
+        "kana": "ソースをたべる",
+        "romaji": "soosu wo taberu",
+        "english": "to eat sauce"
+      }
+    },
+    {
+      "id": "zubon_kata",
+      "kana": "ズボン",
+      "romaji": "zubon",
+      "gloss_en": "pants",
+      "jlpt": "N5",
+      "tags": [
+        "loanword",
+        "object"
+      ],
+      "worlds": [
+        "3-daku-katakana"
+      ],
+      "audio": "",
+      "note": "Common katakana loanword.",
+      "example": {
+        "kana": "ズボンです",
+        "romaji": "zubon desu",
+        "english": "It is pants"
+      }
+    },
+    {
+      "id": "zoon_kata",
+      "kana": "ゾーン",
+      "romaji": "zoon",
+      "gloss_en": "zone",
+      "jlpt": "N5",
+      "tags": [
+        "loanword",
+        "place"
+      ],
+      "worlds": [
+        "3-daku-katakana"
+      ],
+      "audio": "",
+      "note": "Common katakana loanword.",
+      "example": {
+        "kana": "ゾーンにいく",
+        "romaji": "zoon ni iku",
+        "english": "to go to zone"
+      }
+    },
+    {
+      "id": "juusu_kata",
+      "kana": "ジュース",
+      "romaji": "juusu",
+      "gloss_en": "juice",
+      "jlpt": "N5",
+      "tags": [
+        "loanword",
+        "food"
+      ],
+      "worlds": [
+        "3-daku-katakana"
+      ],
+      "audio": "",
+      "note": "Common katakana loanword.",
+      "example": {
+        "kana": "ジュースをたべる",
+        "romaji": "juusu wo taberu",
+        "english": "to eat juice"
+      }
+    },
+    {
+      "id": "jazu_kata",
+      "kana": "ジャズ",
+      "romaji": "jazu",
+      "gloss_en": "jazz",
+      "jlpt": "N5",
+      "tags": [
+        "loanword",
+        "topic"
+      ],
+      "worlds": [
+        "3-daku-katakana"
+      ],
+      "audio": "",
+      "note": "Common katakana loanword.",
+      "example": {
+        "kana": "ジャズです",
+        "romaji": "jazu desu",
+        "english": "It is jazz"
+      }
+    },
+    {
+      "id": "zuumu_kata",
+      "kana": "ズーム",
+      "romaji": "zuumu",
+      "gloss_en": "zoom",
+      "jlpt": "N5",
+      "tags": [
+        "loanword",
+        "topic"
+      ],
+      "worlds": [
+        "3-daku-katakana"
+      ],
+      "audio": "",
+      "note": "Common katakana loanword.",
+      "example": {
+        "kana": "ズームです",
+        "romaji": "zuumu desu",
+        "english": "It is zoom"
+      }
+    },
+    {
+      "id": "jimu_kata",
+      "kana": "ジム",
+      "romaji": "jimu",
+      "gloss_en": "gym",
+      "jlpt": "N5",
+      "tags": [
+        "loanword",
+        "place"
+      ],
+      "worlds": [
+        "3-daku-katakana"
+      ],
+      "audio": "",
+      "note": "Common katakana loanword.",
+      "example": {
+        "kana": "ジムにいく",
+        "romaji": "jimu ni iku",
+        "english": "to go to gym"
+      }
+    },
+    {
+      "id": "tesuto_kata",
+      "kana": "テスト",
+      "romaji": "tesuto",
+      "gloss_en": "test",
+      "jlpt": "N5",
+      "tags": [
+        "loanword",
+        "topic"
+      ],
+      "worlds": [
+        "4-katakana"
+      ],
+      "audio": "",
+      "note": "Common katakana loanword.",
+      "example": {
+        "kana": "テストです",
+        "romaji": "tesuto desu",
+        "english": "It is test"
+      }
+    },
+    {
+      "id": "tenisu_kata",
+      "kana": "テニス",
+      "romaji": "tenisu",
+      "gloss_en": "tennis",
+      "jlpt": "N5",
+      "tags": [
+        "loanword",
+        "topic"
+      ],
+      "worlds": [
+        "4-katakana"
+      ],
+      "audio": "",
+      "note": "Common katakana loanword.",
+      "example": {
+        "kana": "テニスです",
+        "romaji": "tenisu desu",
+        "english": "It is tennis"
+      }
+    },
+    {
+      "id": "takushii_kata",
+      "kana": "タクシー",
+      "romaji": "takushii",
+      "gloss_en": "taxi",
+      "jlpt": "N5",
+      "tags": [
+        "loanword",
+        "transport"
+      ],
+      "worlds": [
+        "4-katakana"
+      ],
+      "audio": "",
+      "note": "Common katakana loanword.",
+      "example": {
+        "kana": "タクシーです",
+        "romaji": "takushii desu",
+        "english": "It is taxi"
+      }
+    },
+    {
+      "id": "chiketto_kata",
+      "kana": "チケット",
+      "romaji": "chiketto",
+      "gloss_en": "ticket",
+      "jlpt": "N5",
+      "tags": [
+        "loanword",
+        "object"
+      ],
+      "worlds": [
+        "4-katakana"
+      ],
+      "audio": "",
+      "note": "Common katakana loanword.",
+      "example": {
+        "kana": "チケットです",
+        "romaji": "chiketto desu",
+        "english": "It is ticket"
+      }
+    },
+    {
+      "id": "tsuaa_kata",
+      "kana": "ツアー",
+      "romaji": "tsuaa",
+      "gloss_en": "tour",
+      "jlpt": "N5",
+      "tags": [
+        "loanword",
+        "event"
+      ],
+      "worlds": [
+        "4-katakana"
+      ],
+      "audio": "",
+      "note": "Common katakana loanword.",
+      "example": {
+        "kana": "ツアーです",
+        "romaji": "tsuaa desu",
+        "english": "It is tour"
+      }
+    },
+    {
+      "id": "teeburu_kata",
+      "kana": "テーブル",
+      "romaji": "teeburu",
+      "gloss_en": "table",
+      "jlpt": "N5",
+      "tags": [
+        "loanword",
+        "object"
+      ],
+      "worlds": [
+        "4-katakana"
+      ],
+      "audio": "",
+      "note": "Common katakana loanword.",
+      "example": {
+        "kana": "テーブルです",
+        "romaji": "teeburu desu",
+        "english": "It is table"
+      }
+    },
+    {
+      "id": "doa_kata",
+      "kana": "ドア",
+      "romaji": "doa",
+      "gloss_en": "door",
+      "jlpt": "N5",
+      "tags": [
+        "loanword",
+        "object"
+      ],
+      "worlds": [
+        "4-daku-katakana"
+      ],
+      "audio": "",
+      "note": "Common katakana loanword.",
+      "example": {
+        "kana": "ドアです",
+        "romaji": "doa desu",
+        "english": "It is door"
+      }
+    },
+    {
+      "id": "deeto_kata",
+      "kana": "デート",
+      "romaji": "deeto",
+      "gloss_en": "date",
+      "jlpt": "N5",
+      "tags": [
+        "loanword",
+        "event"
+      ],
+      "worlds": [
+        "4-daku-katakana"
+      ],
+      "audio": "",
+      "note": "Common katakana loanword.",
+      "example": {
+        "kana": "デートです",
+        "romaji": "deeto desu",
+        "english": "It is date"
+      }
+    },
+    {
+      "id": "dorama_kata",
+      "kana": "ドラマ",
+      "romaji": "dorama",
+      "gloss_en": "drama",
+      "jlpt": "N5",
+      "tags": [
+        "loanword",
+        "topic"
+      ],
+      "worlds": [
+        "4-daku-katakana"
+      ],
+      "audio": "",
+      "note": "Common katakana loanword.",
+      "example": {
+        "kana": "ドラマです",
+        "romaji": "dorama desu",
+        "english": "It is drama"
+      }
+    },
+    {
+      "id": "demo_kata",
+      "kana": "デモ",
+      "romaji": "demo",
+      "gloss_en": "demo",
+      "jlpt": "N5",
+      "tags": [
+        "loanword",
+        "event"
+      ],
+      "worlds": [
+        "4-daku-katakana"
+      ],
+      "audio": "",
+      "note": "Common katakana loanword.",
+      "example": {
+        "kana": "デモです",
+        "romaji": "demo desu",
+        "english": "It is demo"
+      }
+    },
+    {
+      "id": "dansu_kata",
+      "kana": "ダンス",
+      "romaji": "dansu",
+      "gloss_en": "dance",
+      "jlpt": "N5",
+      "tags": [
+        "loanword",
+        "event"
+      ],
+      "worlds": [
+        "4-daku-katakana"
+      ],
+      "audio": "",
+      "note": "Common katakana loanword.",
+      "example": {
+        "kana": "ダンスです",
+        "romaji": "dansu desu",
+        "english": "It is dance"
+      }
+    },
+    {
+      "id": "doonatsu_kata",
+      "kana": "ドーナツ",
+      "romaji": "doonatsu",
+      "gloss_en": "donut",
+      "jlpt": "N5",
+      "tags": [
+        "loanword",
+        "food"
+      ],
+      "worlds": [
+        "4-daku-katakana"
+      ],
+      "audio": "",
+      "note": "Common katakana loanword.",
+      "example": {
+        "kana": "ドーナツをたべる",
+        "romaji": "doonatsu wo taberu",
+        "english": "to eat donut"
+      }
+    },
+    {
+      "id": "nooto_kata",
+      "kana": "ノート",
+      "romaji": "nooto",
+      "gloss_en": "notebook",
+      "jlpt": "N5",
+      "tags": [
+        "loanword",
+        "object"
+      ],
+      "worlds": [
+        "5-katakana"
+      ],
+      "audio": "",
+      "note": "Common katakana loanword.",
+      "example": {
+        "kana": "ノートです",
+        "romaji": "nooto desu",
+        "english": "It is notebook"
+      }
+    },
+    {
+      "id": "nekutai_kata",
+      "kana": "ネクタイ",
+      "romaji": "nekutai",
+      "gloss_en": "necktie",
+      "jlpt": "N5",
+      "tags": [
+        "loanword",
+        "object"
+      ],
+      "worlds": [
+        "5-katakana"
+      ],
+      "audio": "",
+      "note": "Common katakana loanword.",
+      "example": {
+        "kana": "ネクタイです",
+        "romaji": "nekutai desu",
+        "english": "It is necktie"
+      }
+    },
+    {
+      "id": "naifu_kata",
+      "kana": "ナイフ",
+      "romaji": "naifu",
+      "gloss_en": "knife",
+      "jlpt": "N5",
+      "tags": [
+        "loanword",
+        "object"
+      ],
+      "worlds": [
+        "5-katakana"
+      ],
+      "audio": "",
+      "note": "Common katakana loanword.",
+      "example": {
+        "kana": "ナイフです",
+        "romaji": "naifu desu",
+        "english": "It is knife"
+      }
+    },
+    {
+      "id": "nanbaa_kata",
+      "kana": "ナンバー",
+      "romaji": "nanbaa",
+      "gloss_en": "number",
+      "jlpt": "N5",
+      "tags": [
+        "loanword",
+        "other"
+      ],
+      "worlds": [
+        "5-katakana"
+      ],
+      "audio": "",
+      "note": "Common katakana loanword.",
+      "example": {
+        "kana": "ナンバーです",
+        "romaji": "nanbaa desu",
+        "english": "It is number"
+      }
+    },
+    {
+      "id": "nyuusu_kata",
+      "kana": "ニュース",
+      "romaji": "nyuusu",
+      "gloss_en": "news",
+      "jlpt": "N5",
+      "tags": [
+        "loanword",
+        "topic"
+      ],
+      "worlds": [
+        "5-katakana"
+      ],
+      "audio": "",
+      "note": "Common katakana loanword.",
+      "example": {
+        "kana": "ニュースです",
+        "romaji": "nyuusu desu",
+        "english": "It is news"
+      }
+    },
+    {
+      "id": "nuudoru_kata",
+      "kana": "ヌードル",
+      "romaji": "nuudoru",
+      "gloss_en": "noodles",
+      "jlpt": "N5",
+      "tags": [
+        "loanword",
+        "food"
+      ],
+      "worlds": [
+        "5-katakana"
+      ],
+      "audio": "",
+      "note": "Common katakana loanword.",
+      "example": {
+        "kana": "ヌードルをたべる",
+        "romaji": "nuudoru wo taberu",
+        "english": "to eat noodles"
+      }
+    },
+    {
+      "id": "hoteru_kata",
+      "kana": "ホテル",
+      "romaji": "hoteru",
+      "gloss_en": "hotel",
+      "jlpt": "N5",
+      "tags": [
+        "loanword",
+        "place"
+      ],
+      "worlds": [
+        "6-katakana"
+      ],
+      "audio": "",
+      "note": "Common katakana loanword.",
+      "example": {
+        "kana": "ホテルにいく",
+        "romaji": "hoteru ni iku",
+        "english": "to go to hotel"
+      }
+    },
+    {
+      "id": "hanbaagaa_kata",
+      "kana": "ハンバーガー",
+      "romaji": "hanbaagaa",
+      "gloss_en": "hamburger",
+      "jlpt": "N5",
+      "tags": [
+        "loanword",
+        "food"
+      ],
+      "worlds": [
+        "6-katakana"
+      ],
+      "audio": "",
+      "note": "Common katakana loanword.",
+      "example": {
+        "kana": "ハンバーガーをたべる",
+        "romaji": "hanbaagaa wo taberu",
+        "english": "to eat hamburger"
+      }
+    },
+    {
+      "id": "hiitaa_kata",
+      "kana": "ヒーター",
+      "romaji": "hiitaa",
+      "gloss_en": "heater",
+      "jlpt": "N5",
+      "tags": [
+        "loanword",
+        "object"
+      ],
+      "worlds": [
+        "6-katakana"
+      ],
+      "audio": "",
+      "note": "Common katakana loanword.",
+      "example": {
+        "kana": "ヒーターです",
+        "romaji": "hiitaa desu",
+        "english": "It is heater"
+      }
+    },
+    {
+      "id": "fooku_kata",
+      "kana": "フォーク",
+      "romaji": "fooku",
+      "gloss_en": "fork",
+      "jlpt": "N5",
+      "tags": [
+        "loanword",
+        "object"
+      ],
+      "worlds": [
+        "6-katakana"
+      ],
+      "audio": "",
+      "note": "Common katakana loanword.",
+      "example": {
+        "kana": "フォークです",
+        "romaji": "fooku desu",
+        "english": "It is fork"
+      }
+    },
+    {
+      "id": "firumu_kata",
+      "kana": "フィルム",
+      "romaji": "firumu",
+      "gloss_en": "film",
+      "jlpt": "N5",
+      "tags": [
+        "loanword",
+        "object"
+      ],
+      "worlds": [
+        "6-katakana"
+      ],
+      "audio": "",
+      "note": "Common katakana loanword.",
+      "example": {
+        "kana": "フィルムです",
+        "romaji": "firumu desu",
+        "english": "It is film"
+      }
+    },
+    {
+      "id": "heddohon_kata",
+      "kana": "ヘッドホン",
+      "romaji": "heddohon",
+      "gloss_en": "headphones",
+      "jlpt": "N5",
+      "tags": [
+        "loanword",
+        "object"
+      ],
+      "worlds": [
+        "6-katakana"
+      ],
+      "audio": "",
+      "note": "Common katakana loanword.",
+      "example": {
+        "kana": "ヘッドホンです",
+        "romaji": "heddohon desu",
+        "english": "It is headphones"
+      }
+    },
+    {
+      "id": "basu_kata",
+      "kana": "バス",
+      "romaji": "basu",
+      "gloss_en": "bus",
+      "jlpt": "N5",
+      "tags": [
+        "loanword",
+        "transport"
+      ],
+      "worlds": [
+        "6-daku-katakana"
+      ],
+      "audio": "",
+      "note": "Common katakana loanword.",
+      "example": {
+        "kana": "バスです",
+        "romaji": "basu desu",
+        "english": "It is bus"
+      }
+    },
+    {
+      "id": "banana_kata",
+      "kana": "バナナ",
+      "romaji": "banana",
+      "gloss_en": "banana",
+      "jlpt": "N5",
+      "tags": [
+        "loanword",
+        "food"
+      ],
+      "worlds": [
+        "6-daku-katakana"
+      ],
+      "audio": "",
+      "note": "Common katakana loanword.",
+      "example": {
+        "kana": "バナナをたべる",
+        "romaji": "banana wo taberu",
+        "english": "to eat banana"
+      }
+    },
+    {
+      "id": "biru_kata",
+      "kana": "ビル",
+      "romaji": "biru",
+      "gloss_en": "building",
+      "jlpt": "N5",
+      "tags": [
+        "loanword",
+        "place"
+      ],
+      "worlds": [
+        "6-daku-katakana"
+      ],
+      "audio": "",
+      "note": "Common katakana loanword.",
+      "example": {
+        "kana": "ビルにいく",
+        "romaji": "biru ni iku",
+        "english": "to go to building"
+      }
+    },
+    {
+      "id": "buutsu_kata",
+      "kana": "ブーツ",
+      "romaji": "buutsu",
+      "gloss_en": "boots",
+      "jlpt": "N5",
+      "tags": [
+        "loanword",
+        "object"
+      ],
+      "worlds": [
+        "6-daku-katakana"
+      ],
+      "audio": "",
+      "note": "Common katakana loanword.",
+      "example": {
+        "kana": "ブーツです",
+        "romaji": "buutsu desu",
+        "english": "It is boots"
+      }
+    },
+    {
+      "id": "beddo_kata",
+      "kana": "ベッド",
+      "romaji": "beddo",
+      "gloss_en": "bed",
+      "jlpt": "N5",
+      "tags": [
+        "loanword",
+        "object"
+      ],
+      "worlds": [
+        "6-daku-katakana"
+      ],
+      "audio": "",
+      "note": "Common katakana loanword.",
+      "example": {
+        "kana": "ベッドです",
+        "romaji": "beddo desu",
+        "english": "It is bed"
+      }
+    },
+    {
+      "id": "booru_kata",
+      "kana": "ボール",
+      "romaji": "booru",
+      "gloss_en": "ball",
+      "jlpt": "N5",
+      "tags": [
+        "loanword",
+        "object"
+      ],
+      "worlds": [
+        "6-daku-katakana"
+      ],
+      "audio": "",
+      "note": "Common katakana loanword.",
+      "example": {
+        "kana": "ボールです",
+        "romaji": "booru desu",
+        "english": "It is ball"
+      }
+    },
+    {
+      "id": "pan_kata",
+      "kana": "パン",
+      "romaji": "pan",
+      "gloss_en": "bread",
+      "jlpt": "N5",
+      "tags": [
+        "loanword",
+        "food"
+      ],
+      "worlds": [
+        "6-handaku-katakana"
+      ],
+      "audio": "",
+      "note": "Common katakana loanword.",
+      "example": {
+        "kana": "パンをたべる",
+        "romaji": "pan wo taberu",
+        "english": "to eat bread"
+      }
+    },
+    {
+      "id": "pen_kata",
+      "kana": "ペン",
+      "romaji": "pen",
+      "gloss_en": "pen",
+      "jlpt": "N5",
+      "tags": [
+        "loanword",
+        "object"
+      ],
+      "worlds": [
+        "6-handaku-katakana"
+      ],
+      "audio": "",
+      "note": "Common katakana loanword.",
+      "example": {
+        "kana": "ペンです",
+        "romaji": "pen desu",
+        "english": "It is pen"
+      }
+    },
+    {
+      "id": "piano_kata",
+      "kana": "ピアノ",
+      "romaji": "piano",
+      "gloss_en": "piano",
+      "jlpt": "N5",
+      "tags": [
+        "loanword",
+        "object"
+      ],
+      "worlds": [
+        "6-handaku-katakana"
+      ],
+      "audio": "",
+      "note": "Common katakana loanword.",
+      "example": {
+        "kana": "ピアノです",
+        "romaji": "piano desu",
+        "english": "It is piano"
+      }
+    },
+    {
+      "id": "puuru_kata",
+      "kana": "プール",
+      "romaji": "puuru",
+      "gloss_en": "pool",
+      "jlpt": "N5",
+      "tags": [
+        "loanword",
+        "place"
+      ],
+      "worlds": [
+        "6-handaku-katakana"
+      ],
+      "audio": "",
+      "note": "Common katakana loanword.",
+      "example": {
+        "kana": "プールにいく",
+        "romaji": "puuru ni iku",
+        "english": "to go to pool"
+      }
+    },
+    {
+      "id": "poketto_kata",
+      "kana": "ポケット",
+      "romaji": "poketto",
+      "gloss_en": "pocket",
+      "jlpt": "N5",
+      "tags": [
+        "loanword",
+        "object"
+      ],
+      "worlds": [
+        "6-handaku-katakana"
+      ],
+      "audio": "",
+      "note": "Common katakana loanword.",
+      "example": {
+        "kana": "ポケットです",
+        "romaji": "poketto desu",
+        "english": "It is pocket"
+      }
+    },
+    {
+      "id": "posuto_kata",
+      "kana": "ポスト",
+      "romaji": "posuto",
+      "gloss_en": "post/mailbox",
+      "jlpt": "N5",
+      "tags": [
+        "loanword",
+        "place"
+      ],
+      "worlds": [
+        "6-handaku-katakana"
+      ],
+      "audio": "",
+      "note": "Common katakana loanword.",
+      "example": {
+        "kana": "ポストにいく",
+        "romaji": "posuto ni iku",
+        "english": "to go to post/mailbox"
+      }
+    },
+    {
+      "id": "manga_kata",
+      "kana": "マンガ",
+      "romaji": "manga",
+      "gloss_en": "manga",
+      "jlpt": "N5",
+      "tags": [
+        "loanword",
+        "topic"
+      ],
+      "worlds": [
+        "7-katakana"
+      ],
+      "audio": "",
+      "note": "Common katakana loanword.",
+      "example": {
+        "kana": "マンガです",
+        "romaji": "manga desu",
+        "english": "It is manga"
+      }
+    },
+    {
+      "id": "memo_kata",
+      "kana": "メモ",
+      "romaji": "memo",
+      "gloss_en": "memo/note",
+      "jlpt": "N5",
+      "tags": [
+        "loanword",
+        "object"
+      ],
+      "worlds": [
+        "7-katakana"
+      ],
+      "audio": "",
+      "note": "Common katakana loanword.",
+      "example": {
+        "kana": "メモです",
+        "romaji": "memo desu",
+        "english": "It is memo/note"
+      }
+    },
+    {
+      "id": "miruku_kata",
+      "kana": "ミルク",
+      "romaji": "miruku",
+      "gloss_en": "milk",
+      "jlpt": "N5",
+      "tags": [
+        "loanword",
+        "food"
+      ],
+      "worlds": [
+        "7-katakana"
+      ],
+      "audio": "",
+      "note": "Common katakana loanword.",
+      "example": {
+        "kana": "ミルクをたべる",
+        "romaji": "miruku wo taberu",
+        "english": "to eat milk"
+      }
+    },
+    {
+      "id": "menyuu_kata",
+      "kana": "メニュー",
+      "romaji": "menyuu",
+      "gloss_en": "menu",
+      "jlpt": "N5",
+      "tags": [
+        "loanword",
+        "object"
+      ],
+      "worlds": [
+        "7-katakana"
+      ],
+      "audio": "",
+      "note": "Common katakana loanword.",
+      "example": {
+        "kana": "メニューです",
+        "romaji": "menyuu desu",
+        "english": "It is menu"
+      }
+    },
+    {
+      "id": "moderu_kata",
+      "kana": "モデル",
+      "romaji": "moderu",
+      "gloss_en": "model",
+      "jlpt": "N5",
+      "tags": [
+        "loanword",
+        "person"
+      ],
+      "worlds": [
+        "7-katakana"
+      ],
+      "audio": "",
+      "note": "Common katakana loanword.",
+      "example": {
+        "kana": "モデルです",
+        "romaji": "moderu desu",
+        "english": "It is model"
+      }
+    },
+    {
+      "id": "maiku_kata",
+      "kana": "マイク",
+      "romaji": "maiku",
+      "gloss_en": "microphone",
+      "jlpt": "N5",
+      "tags": [
+        "loanword",
+        "object"
+      ],
+      "worlds": [
+        "7-katakana"
+      ],
+      "audio": "",
+      "note": "Common katakana loanword.",
+      "example": {
+        "kana": "マイクです",
+        "romaji": "maiku desu",
+        "english": "It is microphone"
+      }
+    },
+    {
+      "id": "yooguruto_kata",
+      "kana": "ヨーグルト",
+      "romaji": "yooguruto",
+      "gloss_en": "yogurt",
+      "jlpt": "N5",
+      "tags": [
+        "loanword",
+        "food"
+      ],
+      "worlds": [
+        "8-katakana"
+      ],
+      "audio": "",
+      "note": "Common katakana loanword.",
+      "example": {
+        "kana": "ヨーグルトをたべる",
+        "romaji": "yooguruto wo taberu",
+        "english": "to eat yogurt"
+      }
+    },
+    {
+      "id": "yunifo-mu_kata",
+      "kana": "ユニフォーム",
+      "romaji": "yunifo-mu",
+      "gloss_en": "uniform",
+      "jlpt": "N5",
+      "tags": [
+        "loanword",
+        "object"
+      ],
+      "worlds": [
+        "8-katakana"
+      ],
+      "audio": "",
+      "note": "Common katakana loanword.",
+      "example": {
+        "kana": "ユニフォームです",
+        "romaji": "yunifo-mu desu",
+        "english": "It is uniform"
+      }
+    },
+    {
+      "id": "yotto_kata",
+      "kana": "ヨット",
+      "romaji": "yotto",
+      "gloss_en": "yacht",
+      "jlpt": "N5",
+      "tags": [
+        "loanword",
+        "transport"
+      ],
+      "worlds": [
+        "8-katakana"
+      ],
+      "audio": "",
+      "note": "Common katakana loanword.",
+      "example": {
+        "kana": "ヨットです",
+        "romaji": "yotto desu",
+        "english": "It is yacht"
+      }
+    },
+    {
+      "id": "yangu_kata",
+      "kana": "ヤング",
+      "romaji": "yangu",
+      "gloss_en": "young",
+      "jlpt": "N5",
+      "tags": [
+        "loanword",
+        "other"
+      ],
+      "worlds": [
+        "8-katakana"
+      ],
+      "audio": "",
+      "note": "Common katakana loanword.",
+      "example": {
+        "kana": "ヤングです",
+        "romaji": "yangu desu",
+        "english": "It is young"
+      }
+    },
+    {
+      "id": "yuumoa_kata",
+      "kana": "ユーモア",
+      "romaji": "yuumoa",
+      "gloss_en": "humor",
+      "jlpt": "N5",
+      "tags": [
+        "loanword",
+        "topic"
+      ],
+      "worlds": [
+        "8-katakana"
+      ],
+      "audio": "",
+      "note": "Common katakana loanword.",
+      "example": {
+        "kana": "ユーモアです",
+        "romaji": "yuumoa desu",
+        "english": "It is humor"
+      }
+    },
+    {
+      "id": "yooroppa_kata",
+      "kana": "ヨーロッパ",
+      "romaji": "yooroppa",
+      "gloss_en": "Europe",
+      "jlpt": "N5",
+      "tags": [
+        "loanword",
+        "place"
+      ],
+      "worlds": [
+        "8-katakana"
+      ],
+      "audio": "",
+      "note": "Common katakana loanword.",
+      "example": {
+        "kana": "ヨーロッパにいく",
+        "romaji": "yooroppa ni iku",
+        "english": "to go to Europe"
+      }
+    },
+    {
+      "id": "rajio_kata",
+      "kana": "ラジオ",
+      "romaji": "rajio",
+      "gloss_en": "radio",
+      "jlpt": "N5",
+      "tags": [
+        "loanword",
+        "object"
+      ],
+      "worlds": [
+        "9-katakana"
+      ],
+      "audio": "",
+      "note": "Common katakana loanword.",
+      "example": {
+        "kana": "ラジオです",
+        "romaji": "rajio desu",
+        "english": "It is radio"
+      }
+    },
+    {
+      "id": "resutoran_kata",
+      "kana": "レストラン",
+      "romaji": "resutoran",
+      "gloss_en": "restaurant",
+      "jlpt": "N5",
+      "tags": [
+        "loanword",
+        "place"
+      ],
+      "worlds": [
+        "9-katakana"
+      ],
+      "audio": "",
+      "note": "Common katakana loanword.",
+      "example": {
+        "kana": "レストランにいく",
+        "romaji": "resutoran ni iku",
+        "english": "to go to restaurant"
+      }
+    },
+    {
+      "id": "ruuru_kata",
+      "kana": "ルール",
+      "romaji": "ruuru",
+      "gloss_en": "rule",
+      "jlpt": "N5",
+      "tags": [
+        "loanword",
+        "other"
+      ],
+      "worlds": [
+        "9-katakana"
+      ],
+      "audio": "",
+      "note": "Common katakana loanword.",
+      "example": {
+        "kana": "ルールです",
+        "romaji": "ruuru desu",
+        "english": "It is rule"
+      }
+    },
+    {
+      "id": "robotto_kata",
+      "kana": "ロボット",
+      "romaji": "robotto",
+      "gloss_en": "robot",
+      "jlpt": "N5",
+      "tags": [
+        "loanword",
+        "object"
+      ],
+      "worlds": [
+        "9-katakana"
+      ],
+      "audio": "",
+      "note": "Common katakana loanword.",
+      "example": {
+        "kana": "ロボットです",
+        "romaji": "robotto desu",
+        "english": "It is robot"
+      }
+    },
+    {
+      "id": "rizumu_kata",
+      "kana": "リズム",
+      "romaji": "rizumu",
+      "gloss_en": "rhythm",
+      "jlpt": "N5",
+      "tags": [
+        "loanword",
+        "topic"
+      ],
+      "worlds": [
+        "9-katakana"
+      ],
+      "audio": "",
+      "note": "Common katakana loanword.",
+      "example": {
+        "kana": "リズムです",
+        "romaji": "rizumu desu",
+        "english": "It is rhythm"
+      }
+    },
+    {
+      "id": "repooto_kata",
+      "kana": "レポート",
+      "romaji": "repooto",
+      "gloss_en": "report",
+      "jlpt": "N5",
+      "tags": [
+        "loanword",
+        "object"
+      ],
+      "worlds": [
+        "9-katakana"
+      ],
+      "audio": "",
+      "note": "Common katakana loanword.",
+      "example": {
+        "kana": "レポートです",
+        "romaji": "repooto desu",
+        "english": "It is report"
+      }
+    },
+    {
+      "id": "wain_kata",
+      "kana": "ワイン",
+      "romaji": "wain",
+      "gloss_en": "wine",
+      "jlpt": "N5",
+      "tags": [
+        "loanword",
+        "food"
+      ],
+      "worlds": [
+        "10-katakana"
+      ],
+      "audio": "",
+      "note": "Common katakana loanword.",
+      "example": {
+        "kana": "ワインをたべる",
+        "romaji": "wain wo taberu",
+        "english": "to eat wine"
+      }
+    },
+    {
+      "id": "wiiku_kata",
+      "kana": "ウィーク",
+      "romaji": "wiiku",
+      "gloss_en": "week",
+      "jlpt": "N5",
+      "tags": [
+        "loanword",
+        "time"
+      ],
+      "worlds": [
+        "10-katakana"
+      ],
+      "audio": "",
+      "note": "Common katakana loanword.",
+      "example": {
+        "kana": "ウィークです",
+        "romaji": "wiiku desu",
+        "english": "It is week"
+      }
+    },
+    {
+      "id": "webu_kata",
+      "kana": "ウェブ",
+      "romaji": "webu",
+      "gloss_en": "website",
+      "jlpt": "N5",
+      "tags": [
+        "loanword",
+        "place"
+      ],
+      "worlds": [
+        "10-katakana"
+      ],
+      "audio": "",
+      "note": "Common katakana loanword.",
+      "example": {
+        "kana": "ウェブにいく",
+        "romaji": "webu ni iku",
+        "english": "to go to website"
+      }
+    },
+    {
+      "id": "waarudo_kata",
+      "kana": "ワールド",
+      "romaji": "waarudo",
+      "gloss_en": "world",
+      "jlpt": "N5",
+      "tags": [
+        "loanword",
+        "topic"
+      ],
+      "worlds": [
+        "10-katakana"
+      ],
+      "audio": "",
+      "note": "Common katakana loanword.",
+      "example": {
+        "kana": "ワールドです",
+        "romaji": "waarudo desu",
+        "english": "It is world"
+      }
+    },
+    {
+      "id": "wookuman_kata",
+      "kana": "ウォークマン",
+      "romaji": "wookuman",
+      "gloss_en": "Walkman",
+      "jlpt": "N5",
+      "tags": [
+        "loanword",
+        "object"
+      ],
+      "worlds": [
+        "10-katakana"
+      ],
+      "audio": "",
+      "note": "Common katakana loanword.",
+      "example": {
+        "kana": "ウォークマンです",
+        "romaji": "wookuman desu",
+        "english": "It is Walkman"
+      }
+    },
+    {
+      "id": "uindou_kata",
+      "kana": "ウインドウ",
+      "romaji": "uindou",
+      "gloss_en": "window",
+      "jlpt": "N5",
+      "tags": [
+        "loanword",
+        "object"
+      ],
+      "worlds": [
+        "10-katakana"
+      ],
+      "audio": "",
+      "note": "Common katakana loanword.",
+      "example": {
+        "kana": "ウインドウです",
+        "romaji": "uindou desu",
+        "english": "It is window"
+      }
+    }
+  ],
+  "byWorld": {
+    "2-katakana": [
+      "kamera_kata",
+      "koohii_kata",
+      "kaado_kata",
+      "aisu_kata",
+      "ekoo_kata",
+      "keeki_kata"
+    ],
+    "2-daku-katakana": [
+      "gorufu_kata",
+      "gitaa_kata",
+      "gasu_kata",
+      "geemu_kata",
+      "guramu_kata",
+      "sakkaa_kata"
+    ],
+    "3-katakana": [
+      "sarada_kata",
+      "shiitsu_kata",
+      "sukii_kata",
+      "sando_kata",
+      "seetaa_kata",
+      "soosu_kata"
+    ],
+    "3-daku-katakana": [
+      "zubon_kata",
+      "zoon_kata",
+      "juusu_kata",
+      "jazu_kata",
+      "zuumu_kata",
+      "jimu_kata"
+    ],
+    "4-katakana": [
+      "tesuto_kata",
+      "tenisu_kata",
+      "takushii_kata",
+      "chiketto_kata",
+      "tsuaa_kata",
+      "teeburu_kata"
+    ],
+    "4-daku-katakana": [
+      "doa_kata",
+      "deeto_kata",
+      "dorama_kata",
+      "demo_kata",
+      "dansu_kata",
+      "doonatsu_kata"
+    ],
+    "5-katakana": [
+      "nooto_kata",
+      "nekutai_kata",
+      "naifu_kata",
+      "nanbaa_kata",
+      "nyuusu_kata",
+      "nuudoru_kata"
+    ],
+    "6-katakana": [
+      "hoteru_kata",
+      "hanbaagaa_kata",
+      "hiitaa_kata",
+      "fooku_kata",
+      "firumu_kata",
+      "heddohon_kata"
+    ],
+    "6-daku-katakana": [
+      "basu_kata",
+      "banana_kata",
+      "biru_kata",
+      "buutsu_kata",
+      "beddo_kata",
+      "booru_kata"
+    ],
+    "6-handaku-katakana": [
+      "pan_kata",
+      "pen_kata",
+      "piano_kata",
+      "puuru_kata",
+      "poketto_kata",
+      "posuto_kata"
+    ],
+    "7-katakana": [
+      "manga_kata",
+      "memo_kata",
+      "miruku_kata",
+      "menyuu_kata",
+      "moderu_kata",
+      "maiku_kata"
+    ],
+    "8-katakana": [
+      "yooguruto_kata",
+      "yunifo-mu_kata",
+      "yotto_kata",
+      "yangu_kata",
+      "yuumoa_kata",
+      "yooroppa_kata"
+    ],
+    "9-katakana": [
+      "rajio_kata",
+      "resutoran_kata",
+      "ruuru_kata",
+      "robotto_kata",
+      "rizumu_kata",
+      "repooto_kata"
+    ],
+    "10-katakana": [
+      "wain_kata",
+      "wiiku_kata",
+      "webu_kata",
+      "waarudo_kata",
+      "wookuman_kata",
+      "uindou_kata"
+    ]
+  }
+}
