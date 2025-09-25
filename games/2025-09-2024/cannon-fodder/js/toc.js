@@ -15,18 +15,33 @@ document.addEventListener("DOMContentLoaded", () => {
   ];
 
   const list = document.getElementById("toc-list");
+  const pdfViewer = document.querySelector(".pdf-viewer");
 
-  // Generate clickable TOC
+  // Build TOC links
   list.innerHTML = toc.map(
-    (item) => `<li><a href="${item.file}" target="pdf-viewer">${item.title}</a></li>`
+    (item, i) =>
+      `<li><a href="${item.file}" data-index="${i}">${item.title}</a></li>`
   ).join("");
 
-  // Handle clicks: swap PDF in iframe
+  const links = list.querySelectorAll("a");
+
+  // Activate the first item by default
+  links[0].classList.add("active");
+
+  // Handle click events
   list.addEventListener("click", (e) => {
     if (e.target.tagName === "A") {
       e.preventDefault();
-      const pdfViewer = document.querySelector(".pdf-viewer");
-      pdfViewer.src = e.target.getAttribute("href");
+
+      // Update iframe
+      const newFile = e.target.getAttribute("href");
+      pdfViewer.src = newFile;
+
+      // Remove active from all
+      links.forEach(link => link.classList.remove("active"));
+
+      // Highlight clicked one
+      e.target.classList.add("active");
     }
   });
 });
