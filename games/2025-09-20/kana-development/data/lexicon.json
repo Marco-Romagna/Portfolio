@@ -282,12 +282,46 @@
       "example": { "kana": "ひゃくぐらむのにく", "romaji": "hyaku guramu no niku", "english": "100 grams of meat" }
     }
   ],
-  "byWorld": {
+    "byWorld": {
     "1-base": ["ai", "iie", "ue", "ie", "aoi", "au"],
     "1-daku": [],
     "1-handaku": [],
+  
     "2-base": ["iku", "kiku", "kau", "kao", "ike", "koe"],
     "2-daku": ["eiga", "gaikoku", "gakusei", "gakkou", "ginkou", "genki"],
-    "2-handaku": []
+    "2-handaku": [],
+  
+    "3-base": [],
+    "3-daku": [],
+    "3-handaku": [],
+  
+    "4-base": [],
+    "4-daku": [],
+    "4-handaku": [],
+  
+    "5-base": [],
+    "5-daku": [],
+    "5-handaku": [],
+  
+    "6-base": [],
+    "6-daku": [],
+    "6-handaku": [],
+  
+    "7-base": [],
+    "7-daku": [],
+    "7-handaku": [],
+  
+    "8-base": [],
+    "8-daku": [],
+    "8-handaku": [],
+  
+    "9-base": [],
+    "9-daku": [],
+    "9-handaku": [],
+  
+    "10-base": [],
+    "10-daku": [],
+    "10-handaku": []
   }
+
 }
