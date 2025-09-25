@@ -65,7 +65,11 @@ window.KANA_STAGES = {
     { code: "6-6", title: "6-6 — Katakana B (バビブベボ)", href: "lessons/lesson.html?id=6-6", thumb: "バ" },
     { code: "6-7", title: "6-7 — Mixed B (Hira + Kata)", href: "lessons/lesson.html?id=6-7", thumb: "ば+バ", class: "icon-sm" },
     { code: "6-8", title: "6-8 — Vocabulary Challenge", href: "lessons/lesson.html?id=6-8", thumb: "語" },
-    // Handaku (P-row) could be handled as part of same vocab challenge or a separate world, depending on how you want to pace.
+    { code: "6-9",  title: "6-9 — Hiragana P (ぱぴぷぺぽ)", href: "lessons/lesson.html?id=6-9",  thumb: "ぱ" },
+    { code: "6-10", title: "6-10 — Katakana P (パピプペポ)", href: "lessons/lesson.html?id=6-10", thumb: "パ" },
+    { code: "6-11", title: "6-11 — Mixed P (Hira + Kata)",   href: "lessons/lesson.html?id=6-11", thumb: "ぱ+パ", class: "icon-sm" },
+    { code: "6-12", title: "6-12 — Vocabulary Challenge",   href: "lessons/lesson.html?id=6-12", thumb: "語" },
+
 
     // ===== World 7 =====
     { code: "7-1", title: "7-1 — Hiragana M (まみむめも)", href: "lessons/lesson.html?id=7-1", thumb: "ま" },
