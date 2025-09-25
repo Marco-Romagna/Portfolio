@@ -78,7 +78,14 @@
     {"id":"yoru_kata","kana":"ヨル","romaji":"yoru","gloss_en":"night","tags":["core","y-row","time"],"worlds":["8-base-kata"],"audio":"","note":"Normally よる. Katakana ヨル sometimes used in manga/stylized writing.","example":{"kana":"ヨルにねる","romaji":"yoru ni neru","english":"to sleep at night"}},
     {"id":"yasai_kata","kana":"ヤサイ","romaji":"yasai","gloss_en":"vegetable","tags":["core","y-row","food"],"worlds":["8-base-kata"],"audio":"","note":"Normally やさい. Katakana ヤサイ sometimes used in menus, design, or stylization.","example":{"kana":"ヤサイをたべる","romaji":"yasai wo taberu","english":"to eat vegetables"}},
     {"id":"yubi_kata","kana":"ユビ","romaji":"yubi","gloss_en":"finger","tags":["core","y-row","body"],"worlds":["8-base-kata"],"audio":"","note":"Normally ゆび. Katakana ユビ appears in stylization or product names.","example":{"kana":"ユビをさす","romaji":"yubi wo sasu","english":"to point with a finger"}},
-    {"id":"yume_kata","kana":"ユメ","romaji":"yume","gloss_en":"dream","tags":["core","y-row","abstract"],"worlds":["8-base-kata"],"audio":"","note":"Normally ゆめ. Katakana ユメ sometimes appears in manga titles or stylization.","example":{"kana":"ユメをみる","romaji":"yume wo miru","english":"to dream"}}
+    {"id":"yume_kata","kana":"ユメ","romaji":"yume","gloss_en":"dream","tags":["core","y-row","abstract"],"worlds":["8-base-kata"],"audio":"","note":"Normally ゆめ. Katakana ユメ sometimes appears in manga titles or stylization.","example":{"kana":"ユメをみる","romaji":"yume wo miru","english":"to dream"}},
+
+    {"id":"ringo_kata","kana":"リンゴ","romaji":"ringo","gloss_en":"apple","tags":["core","r-row","food"],"worlds":["9-base-kata"],"audio":"","note":"リンゴ is the common katakana form in modern writing (alongside hiragana).","example":{"kana":"リンゴをたべる","romaji":"ringo wo taberu","english":"to eat an apple"}},
+    {"id":"rekishi_kata","kana":"レキシ","romaji":"rekishi","gloss_en":"history","tags":["core","r-row","abstract"],"worlds":["9-base-kata"],"audio":"","note":"Normally れきし. Katakana レキシ may appear in branding (e.g., musician name).","example":{"kana":"レキシをべんきょうする","romaji":"rekishi wo benkyou suru","english":"to study history"}},
+    {"id":"rusu_kata","kana":"ルス","romaji":"rusu","gloss_en":"absence; being away","tags":["core","r-row","state"],"worlds":["9-base-kata"],"audio":"","note":"Normally るす. Katakana ルス may be used in stylized writing.","example":{"kana":"いえはルスです","romaji":"ie wa rusu desu","english":"The house is empty (no one is home)"}},
+    {"id":"raku_kata","kana":"ラク","romaji":"raku","gloss_en":"easy; comfortable","tags":["core","r-row","adjective"],"worlds":["9-base-kata"],"audio":"","note":"ラク often appears in katakana in ads (ラクに〜 = 'easily…').","example":{"kana":"ラクなしごと","romaji":"raku na shigoto","english":"an easy job"}},
+    {"id":"risu_kata","kana":"リス","romaji":"risu","gloss_en":"squirrel","tags":["core","r-row","animal"],"worlds":["9-base-kata"],"audio":"","note":"リス is the usual modern spelling for 'squirrel'.","example":{"kana":"リスがきをたべる","romaji":"risu ga ki wo taberu","english":"the squirrel eats a tree (nuts)"}},
+    {"id":"rajio_kata","kana":"ラジオ","romaji":"rajio","gloss_en":"radio","tags":["loanword","r-row","object"],"worlds":["9-base-kata"],"audio":"","note":"ラジオ is the standard way to write 'radio'.","example":{"kana":"ラジオをきく","romaji":"rajio wo kiku","english":"to listen to the radio"}},
     
   ],
   "byWorld": {
@@ -94,6 +101,7 @@
     "6-daku-kata": ["basho_kata","biiru_kata","bukuro_kata","benkyou_kata","boushi_kata","byouin_kata"],
     "6-handaku-kata": ["pan_kata","pinku_kata","piano_kata","posuto_kata","pen_kata","puro_kata"],
     "7-base-kata": ["mizu_kata","machi_kata","miru_kata","mori_kata","megane_kata","mado_kata"],
-    "8-base-kata": ["yama_kata","yuki_kata","yoru_kata","yasai_kata","yubi_kata","yume_kata"]
+    "8-base-kata": ["yama_kata","yuki_kata","yoru_kata","yasai_kata","yubi_kata","yume_kata"],
+    "9-base-kata": ["ringo_kata","rekishi_kata","rusu_kata","raku_kata","risu_kata","rajio_kata"]
   }
 }
