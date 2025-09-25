@@ -11,10 +11,11 @@
   border: 1px solid var(--border);
   border-radius: 12px;
   padding: 1rem;
-  max-height: calc(100vh - 180px); /* fits screen */
+  max-height: calc(100vh - 180px);
   overflow-y: auto;
   position: sticky;
-  top: 80px; /* stays visible under header */
+  top: 80px;
+  transition: width 0.3s ease, transform 0.3s ease;
 }
 
 .toc h3 {
@@ -52,14 +53,30 @@
   color: #fff;
 }
 
-/* PDF Viewer */
-.pdf-wrapper {
-  padding: 0;
+/* Toggle Button */
+.toc-toggle {
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 6px 10px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: bold;
+  width: 100%;
 }
 
-.pdf-viewer {
-  width: 100%;
-  height: calc(100vh - 120px);
-  border: none;
-  display: block;
+/* Collapsed Sidebar */
+.toc.collapsed {
+  transform: translateX(-100%);
+  position: absolute;
+  left: 0;
+  top: 80px;
+  z-index: 1000;
+  width: 240px;
+}
+
+.layout.collapsed {
+  grid-template-columns: 1fr; /* hide sidebar */
 }
