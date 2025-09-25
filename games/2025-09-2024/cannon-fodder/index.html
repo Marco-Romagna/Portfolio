@@ -11,10 +11,22 @@
   <script src="../../../no-mobile.js" defer></script>
 
   <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+    }
+
+    main.container {
+      padding: 0; /* remove extra padding around iframe */
+    }
+
     .pdf-viewer {
       width: 100%;
-      height: 100vh; /* use full screen height */
+      height: calc(100vh - 120px); 
+      /* 100vh = full viewport height
+         subtract ~120px for header + footer */
       border: none;
+      display: block;
     }
   </style>
 </head>
@@ -36,9 +48,6 @@
   <main class="container">
     <section class="panel">
       <h2>Cannon Fodder Rulebook</h2>
-      <p>Read the complete rulebook below.</p>
-
-      <!-- Embedded compressed PDF -->
       <iframe class="pdf-viewer" src="CannonFodder.pdf"></iframe>
     </section>
   </main>
