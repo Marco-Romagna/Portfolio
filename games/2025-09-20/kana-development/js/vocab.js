@@ -1,32 +1,41 @@
 // ==========================================================
 // vocab.js
-// Unified loader for hiragana / katakana vocab JSON
+// Utility for loading and managing vocabulary sets
 // ==========================================================
-window.Vocab = (() => {
-  // cache per lexicon so we don’t keep fetching
-  const cache = { hiragana: null, katakana: null };
+(() => {
+  const HIRA_URL = "../data/lexicon_hiragana.json";
+  const KATA_URL = "../data/lexicon_katakana.json";
 
-  // Load full JSON once
-  async function loadLexicon(script) {
-    if (cache[script]) return cache[script];
-    const res = await fetch(`../data/vocab-${script}.json`);
+  let cache = { hiragana: null, katakana: null };
+
+  // ---------- Load + Cache ----------
+  async function loadLexicon(type = "hiragana") {
+    if (cache[type]) return cache[type];
+    const url = type === "hiragana" ? HIRA_URL : KATA_URL;
+    const res = await fetch(url);
     const data = await res.json();
-    cache[script] = data;
+    cache[type] = data;
     return data;
   }
 
-  // Get all words for a world milestone key
-  async function getWorldMilestone(key, script = "hiragana") {
-    const data = await loadLexicon(script);
-    const ids = data.byWorld[key] || [];
+  // ---------- Get words for a world milestone ----------
+  // Example: getWorldMilestone("2-base", "hiragana")
+  async function getWorldMilestone(worldKey, type = "hiragana") {
+    const data = await loadLexicon(type);
+    const ids = (data.byWorld?.[worldKey]) || [];
     return data.words.filter(w => ids.includes(w.id));
   }
 
-  // Lookup one word by ID
-  async function getWord(id, script = "hiragana") {
-    const data = await loadLexicon(script);
+  // ---------- Lookup single word ----------
+  async function getWord(id, type = "hiragana") {
+    const data = await loadLexicon(type);
     return data.words.find(w => w.id === id) || null;
   }
 
-  return { loadLexicon, getWorldMilestone, getWord };
+  // ---------- Export ----------
+  window.Vocab = {
+    loadLexicon,
+    getWorldMilestone,
+    getWord
+  };
 })();
