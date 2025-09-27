@@ -1,18 +1,31 @@
 {
   "meta": {
     "version": 1,
-    "notes": "Word Hunt paragraphs for World 1. Each paragraph uses all 6 vocab words exactly: あい, いいえ, うえ, いえ, あおい, あう."
+    "notes": "Word Hunt paragraphs. Each key corresponds to a specific lexicon group (hira/kata, base/daku/handaku)."
   },
 
-  "1-base": [
+  "1-base-hira": [
     "テレビ で あい の ものがたり を みました。 テレビ の なか で、ふたり が あう。 ふたり は あおい いえ の まえ に たちました。 まど の うえ に え が ありました。 ひとり が 「けっこん しますか」と ききました。 もうひとり は 「いいえ」と こたえました。",
-
     "みせ の うえ に あおい ふく が ならんで います。 まち で ともだち に あう。 みせ の なか で、いえ の もの を みつけました。 わたし は かいもの が すき です。 「かいますか」と きかれて、「いいえ」と こたえました。 さいご に、あい の ほん を みつけました。"
   ],
 
-  "2-base": [
+  "2-base-hira": [
     "にちようび に、ともだち と いけ に いく。 みち を あるきながら、とおく から こえ を きく。 いけ の みず は きれい で、わたし の かお が うつった。 かえり に、ちいさな みせ に よって ノート を かう。",
-    
     "あさ はやく、がっこう に いく。 きょうしつ で せんせい の こえ を きく と、しずか な きもち に なる。 ひるやすみ に、いけ の ちかく で おべんとう を たべる。 かえり に みせ に よって、ほん を かう。 みせ の まど に わたし の かお が うつった。"
+  ],
+
+  "2-base-kata": [
+    "Paragraph 1 …",
+    "Paragraph 2 …"
+  ],
+
+  "2-daku-hira": [
+    "Paragraph 1 …",
+    "Paragraph 2 …"
+  ],
+
+  "2-daku-kata": [
+    "Paragraph 1 …",
+    "Paragraph 2 …"
   ]
 }
