@@ -413,11 +413,14 @@
   // Public API
   // ======================================================
   window.initVocabParts = async function () {
-    const roleKey = getRoleKey(WORLD, SUFFIX);
-    const words = await Vocab.getWorldMilestone(roleKey, LEXICON);
-
+    const roleKeyVocab = getRoleKey(WORLD, SUFFIX);
+    const words = await Vocab.getWorldMilestone(roleKeyVocab, LEXICON);
+  
+    // hunts.json doesn’t use -hira/-kata
+    const roleKeyHunt = roleKeyVocab.replace(/-(hira|kata)$/, "");
+  
     await initPart1(words);
-    window.initPart2 = () => initPart2Hunt(roleKey, words);
+    window.initPart2 = () => initPart2Hunt(roleKeyHunt, words);
     window.initPart3 = () => initPart3(words);
     window.initPart4 = () => initPart4(words);
     window.initPart5 = () => initPart5(words);
