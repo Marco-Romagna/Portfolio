@@ -282,14 +282,24 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
   })();
 
   function getRoleKey(world, suffix) {
-    if (HIRA_VOCAB_SUFFIXES.includes(suffix)) return `${world}-base`;
-    if (KATA_VOCAB_SUFFIXES.includes(suffix)) return `${world}-base`; // still use same IDs, lexicon differs
-    if (suffix === 9)  return `${world}-daku`;
-    if (suffix === 10) return `${world}-daku`;
-    if (suffix === 14) return `${world}-handaku`;
-    if (suffix === 15) return `${world}-handaku`;
-    return `${world}-base`;
+    let base = `${world}-base`;
+    
+    if (suffix === 9 || suffix === 10) {
+      base = `${world}-daku`;
+    } else if (suffix === 14 || suffix === 15) {
+      base = `${world}-handaku`;
+    }
+  
+    // Adjust based on current lexicon
+    if (window.LessonCore.LEXICON === "hiragana") {
+      return base + "-hira";
+    }
+    if (window.LessonCore.LEXICON === "katakana") {
+      return base + "-kata";
+    }
+    return base;
   }
+
 
   // ---------- Export ----------
   window.LessonCore = {
