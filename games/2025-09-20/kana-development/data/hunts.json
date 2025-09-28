@@ -1,7 +1,7 @@
 {
   "meta": {
     "version": 1,
-    "notes": "Word Hunt paragraphs. Each key corresponds to a specific lexicon group (hira/kata, base/daku/handaku)."
+    "notes": "Word Hunt paragraphs for Vocab. Each key corresponds to a specific lexicon group (hira/kata, base/daku/handaku)."
   },
 
   "1-base-hira": [
