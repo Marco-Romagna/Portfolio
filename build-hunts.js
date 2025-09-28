@@ -27,6 +27,19 @@ kuromoji.builder({ dicPath: DIC_PATH }).build((err, tokenizer) => {
     );
   }
 
-  fs.writeFileSync(OUTPUT_PATH, JSON.stringify(output, null, 2), "utf8");
+  // Custom replacer: keep string arrays inline, objects pretty
+  function replacer(key, value) {
+    if (Array.isArray(value) && value.every(v => typeof v === "string")) {
+      return value; // compact string arrays
+    }
+    return value;
+  }
+
+  fs.writeFileSync(
+    OUTPUT_PATH,
+    JSON.stringify(output, replacer, 2),
+    "utf8"
+  );
+
   console.log("✅ Built hunts-tokens.json at", OUTPUT_PATH);
 });
