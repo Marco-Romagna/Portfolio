@@ -27,10 +27,10 @@ kuromoji.builder({ dicPath: DIC_PATH }).build((err, tokenizer) => {
     );
   }
 
-  // Custom replacer: keep string arrays inline, objects pretty
+  // Custom replacer: compact arrays of strings
   function replacer(key, value) {
     if (Array.isArray(value) && value.every(v => typeof v === "string")) {
-      return value; // compact string arrays
+      return value; // keep inline
     }
     return value;
   }
@@ -43,3 +43,4 @@ kuromoji.builder({ dicPath: DIC_PATH }).build((err, tokenizer) => {
 
   console.log("✅ Built hunts-tokens.json at", OUTPUT_PATH);
 });
+
