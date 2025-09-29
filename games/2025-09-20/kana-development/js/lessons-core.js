@@ -316,4 +316,17 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
     showPart,
     LEXICON
   };
+  // ---------- Bootstrapping ----------
+  document.addEventListener("DOMContentLoaded", () => {
+    if (IS_VOCAB) {
+      if (typeof window.initVocabParts === "function") {
+        window.initVocabParts();
+      }
+    } else {
+      if (typeof window.initKanaParts === "function") {
+        window.initKanaParts();
+      }
+    }
+  });
+
 })();
