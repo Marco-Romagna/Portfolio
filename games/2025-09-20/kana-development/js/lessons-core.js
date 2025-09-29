@@ -29,10 +29,16 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
 
   //  Which lexicon does this lesson use?
   let LEXICON = "hiragana";
+
   if (IS_VOCAB && WORLD > 1) {
     if (HIRA_VOCAB_SUFFIXES.includes(SUFFIX)) {
       LEXICON = "hiragana";
     } else if (KATA_VOCAB_SUFFIXES.includes(SUFFIX)) {
+      LEXICON = "katakana";
+    }
+  } else {
+    // Handle non-vocab base lessons too
+    if (SUFFIX === 2 || SUFFIX === 7) {
       LEXICON = "katakana";
     }
   }
