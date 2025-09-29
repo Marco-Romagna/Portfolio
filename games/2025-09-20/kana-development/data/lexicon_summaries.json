@@ -97,7 +97,49 @@
       "kana": "※ は・を・ん",
       "gloss_en": "Particles and ん",
       "note": "は and を are particles with special readings: は is pronounced 'wa' when used as a particle, を is pronounced 'o'. ん is the nasal sound that can appear at the end of words, like ほん (book)."
-    }
-
+    },
+    {
+    "id": "summary_katakana_intro",
+    "worlds": ["1-2"],
+    "kana": "※ カタカナ",
+    "gloss_en": "About Katakana",
+    "note": "Katakana is one of the two Japanese syllabaries. It represents the same sounds as hiragana, but is mainly used for foreign loanwords, names, onomatopoeia, and emphasis. Its shapes are sharper and more angular compared to hiragana."
+  },
+  {
+    "id": "summary_katakana_words",
+    "worlds": ["2-5"],
+    "kana": "※ カタカナのことば",
+    "gloss_en": "Katakana Words",
+    "note": "Until now, katakana was used only for practice with words you already knew from hiragana. From this point forward, you will see real katakana vocabulary. Most are loanwords from English and other languages that Japanese adopted into daily life."
+  },
+  {
+    "id": "summary_long_vowels_kata",
+    "worlds": ["4-1"],
+    "kana": "※ 長音",
+    "gloss_en": "Long Vowels in Katakana",
+    "note": "In katakana, long vowels are written with a long dash (ー). For example, コーヒー (koohii = coffee). This is different from hiragana, where long vowels are usually written with an extra vowel kana (おう, えい, etc.)."
+  },
+  {
+    "id": "summary_sokuon_kata",
+    "worlds": ["4-daku-kata"],
+    "kana": "※ 促音",
+    "gloss_en": "Small ッ in Katakana",
+    "note": "Katakana also uses the small ッ (sokuon) to indicate a doubled consonant. For example, ドット (dotto = dot). It works the same way as in hiragana, but appears often in loanwords."
+  },
+  {
+    "id": "summary_handakuten_kata",
+    "worlds": ["6-handaku-kata"],
+    "kana": "※ 半濁点",
+    "gloss_en": "Handakuten in Katakana",
+    "note": "Just like in hiragana, the handakuten (°) changes the H-row into P-sounds. In katakana, this creates パピプペポ. Many common loanwords use these sounds, like パンダ (panda)."
+  },
+  {
+    "id": "summary_final_n_kata",
+    "worlds": ["10-vocab-kata"],
+    "kana": "※ ン",
+    "gloss_en": "The Final N",
+    "note": "ン is the last katakana character. It represents the 'n' sound, just like in hiragana ん. It often appears at the end of loanwords, such as ワイン (wine) or ワゴン (wagon)."
+  }
+    
   ]
 }
