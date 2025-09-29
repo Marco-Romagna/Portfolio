@@ -27,20 +27,29 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
 
   const IS_VOCAB = [...HIRA_VOCAB_SUFFIXES, ...KATA_VOCAB_SUFFIXES].includes(SUFFIX);
 
-  //  Which lexicon does this lesson use?
-  let LEXICON = "hiragana";
+  // ---------- Role Detection ----------
+  const ROLE = (() => {
+    const map = {
+      1:'hira-base',
+      2:'kata-base',
+      3:'mixed-base',
+      4:'vocab-base',
+      5:'vocab-kata',
+      6:'hira-daku',
+      7:'kata-daku',
+      8:'mixed-daku',
+      9:'vocab-daku',
+      10:'vocab-kata-daku',
+      14:'vocab-handaku',
+      15:'vocab-kata-handaku'
+    };
+    return map[SUFFIX] || 'hira-base';
+  })();
 
-  if (IS_VOCAB && WORLD > 1) {
-    if (HIRA_VOCAB_SUFFIXES.includes(SUFFIX)) {
-      LEXICON = "hiragana";
-    } else if (KATA_VOCAB_SUFFIXES.includes(SUFFIX)) {
-      LEXICON = "katakana";
-    }
-  } else {
-    // Handle non-vocab base lessons too
-    if (SUFFIX === 2 || SUFFIX === 7) {
-      LEXICON = "katakana";
-    }
+  // ---------- Lexicon Detection ----------
+  let LEXICON = "hiragana";
+  if (ROLE.includes("kata")) {
+    LEXICON = "katakana";
   }
 
   // ---------- Summary Detection ----------
@@ -49,7 +58,7 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
   (async () => {
     try {
       const summaries = await window.Vocab.loadSummaries();
-      const roleKey = getRoleKey(WORLD, SUFFIX); // ✅ FIXED: use local function
+      const roleKey = getRoleKey(WORLD, SUFFIX); // use local fn
       SUMMARY_DATA = summaries.find(s => s.worlds.includes(roleKey));
       if (SUMMARY_DATA) {
         initSummary();
@@ -214,25 +223,6 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
   addPairs(H_YA, K_YA);
   addPairs(H_RA, K_RA);
   addPairs(H_WA, K_WA);
-
-  // ---------- Role Detection ----------
-  const ROLE = (() => {
-    const map = {
-      1:'hira-base',
-      2:'kata-base',
-      3:'mixed-base',
-      4:'vocab-base',
-      5:'vocab-kata',
-      6:'hira-daku',
-      7:'kata-daku',
-      8:'mixed-daku',
-      9:'vocab-daku',
-      10:'vocab-kata-daku',
-      14:'vocab-handaku',
-      15:'vocab-kata-handaku'
-    };
-    return map[SUFFIX] || 'hira-base';
-  })();
 
   let MIXED_TYPE = false;
   let IS_TYPING_ONLY = false;
