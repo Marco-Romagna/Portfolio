@@ -35,28 +35,5 @@
       "gloss_en": "Stylized Katakana",
       "note": "In this lesson, you’ll see familiar words written in katakana instead of hiragana. This isn’t common in everyday writing, but katakana can be used stylistically for emphasis, design, or to give a modern feel. Treat it as practice in reading the same sounds with different shapes."
     },
-
-    // --- Placeholders for future ---
-    {
-      "id": "summary_dakuon_intro",
-      "worlds": ["2-daku-hira"],
-      "kana": "※ 濁音",
-      "gloss_en": "About Dakuon",
-      "note": "Dakuon are kana with a dakuten mark (゛), changing their sound (e.g., か → が). This lesson introduces voiced sounds in hiragana."
-    },
-    {
-      "id": "summary_handakuon_intro",
-      "worlds": ["6-handaku-hira"],
-      "kana": "※ 半濁音",
-      "gloss_en": "About Handakuon",
-      "note": "Handakuon use a small circle mark (゜) to indicate a 'p' sound (e.g., は → ぱ). This lesson introduces those special kana."
-    },
-    {
-      "id": "summary_mixed_handaku",
-      "worlds": ["13-mixed-handaku"],
-      "kana": "※ Mix",
-      "gloss_en": "Mixed Handakuten",
-      "note": "This stage mixes hiragana and katakana handakuten sounds. Practice switching scripts as you read."
-    }
   ]
 }
