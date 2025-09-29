@@ -38,7 +38,6 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
   }
 
   // ---------- Summary Detection ----------
-  let HAS_SUMMARY = false;
   let SUMMARY_DATA = null;
 
   (async () => {
@@ -47,17 +46,18 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
       const roleKey = LessonCore.getRoleKey(WORLD, SUFFIX);
       SUMMARY_DATA = summaries.find(s => s.worlds.includes(roleKey));
       if (SUMMARY_DATA) {
-        HAS_SUMMARY = true;
-        lesson.dataset.hasSummary = "true";
+        initSummary();
+      } else {
+        showPart(1); // no summary, jump to lesson directly
       }
     } catch (e) {
       console.warn("No summaries loaded", e);
+      showPart(1);
     }
   })();
 
-  // Decide total parts (adjust if summary exists)
-  let baseParts = IS_VOCAB ? 5 : 4;
-  if (HAS_SUMMARY) baseParts += 1;
+  // Decide total parts (unchanged — summary not counted)
+  const baseParts = IS_VOCAB ? 5 : 4;
   lesson.dataset.totalParts = baseParts;
   const totalParts = baseParts;
 
@@ -119,79 +119,67 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
         window.initPart5(); window.initPart5 = null;
       }
     }
-
-    // Init summary if needed
-    if (HAS_SUMMARY && currentPart === 1) {
-      initPart0();
-    }
   }
 
   nextBtn?.addEventListener('click', () => { if (window.DEBUG_SKIP_ENABLED) showPart(currentPart + 1); });
   backBtn?.addEventListener('click', () => { if (window.DEBUG_SKIP_ENABLED) showPart(currentPart - 1); });
 
-  // ---------- Part 0 Renderer ----------
-  function initPart0() {
-    const part0 = document.querySelector('[data-part-index="0"]');
-    if (!part0 || !SUMMARY_DATA) return;
+  // ---------- Summary Renderer ----------
+  function initSummary() {
+    const container = document.querySelector('#lesson-summary');
+    if (!container || !SUMMARY_DATA) return;
 
-    part0.innerHTML = `
+    container.classList.remove('is-hidden');
+    container.innerHTML = `
       <div class="summary-panel">
-        <h2 class="part-title">${SUMMARY_DATA.gloss_en}</h2>
+        <h2>${SUMMARY_DATA.gloss_en}</h2>
         <p>${SUMMARY_DATA.note}</p>
-      </div>
-      <div class="actions">
-        <button class="btn primary" data-action="advance">Start</button>
+        <button class="btn primary" id="start-lesson">Start Lesson</button>
       </div>
     `;
 
-    part0.querySelector('[data-action="advance"]')
-      ?.addEventListener('click', () => showPart(2));
+    document.querySelector('#start-lesson')
+      .addEventListener('click', () => {
+        container.classList.add('is-hidden');
+        showPart(1);
+      });
   }
 
   // ---------- Kana Sets ----------
   const H_VOW = ['あ','い','う','え','お'];
   const K_VOW = ['ア','イ','ウ','エ','オ'];
-
   const H_KA  = ['か','き','く','け','こ'];
   const K_KA  = ['カ','キ','ク','ケ','コ'];
   const H_GA  = ['が','ぎ','ぐ','げ','ご'];
   const K_GA  = ['ガ','ギ','グ','ゲ','ゴ'];
-
   const H_SA  = ['さ','し','す','せ','そ'];
   const K_SA  = ['サ','シ','ス','セ','ソ'];
   const H_ZA  = ['ざ','じ','ず','ぜ','ぞ'];
   const K_ZA  = ['ザ','ジ','ズ','ゼ','ゾ'];
-
   const H_TA  = ['た','ち','つ','て','と'];
   const K_TA  = ['タ','チ','ツ','テ','ト'];
   const H_DA  = ['だ','ぢ','づ','で','ど'];
   const K_DA  = ['ダ','ヂ','ヅ','デ','ド'];
-
   const H_NA  = ['な','に','ぬ','ね','の'];
   const K_NA  = ['ナ','ニ','ヌ','ネ','ノ'];
-
   const H_HA  = ['は','ひ','ふ','へ','ほ'];
   const K_HA  = ['ハ','ヒ','フ','ヘ','ホ'];
   const H_BA  = ['ば','び','ぶ','べ','ぼ'];
   const K_BA  = ['バ','ビ','ブ','ベ','ボ'];
   const H_PA  = ['ぱ','ぴ','ぷ','ぺ','ぽ'];
   const K_PA  = ['パ','ピ','プ','ペ','ポ'];
-
   const H_MA  = ['ま','み','む','め','も'];
   const K_MA  = ['マ','ミ','ム','メ','モ'];
-
   const H_YA  = ['や','ゆ','よ'];
   const K_YA  = ['ヤ','ユ','ヨ'];
-
   const H_RA  = ['ら','り','る','れ','ろ'];
   const K_RA  = ['ラ','リ','ル','レ','ロ'];
-
   const H_WA  = ['わ','を','ん'];
   const K_WA  = ['ワ','ヲ','ン'];
 
   // ---------- Romaji Map ----------
   const ROMA = {
-    // (all mappings as before — unchanged)
+    // (unchanged mappings)
   };
 
   // ---------- Cross-script mapping ----------
@@ -241,7 +229,7 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
     if (world === 6) return { H_BASE: H_HA, K_BASE: K_HA, H_DAKU: [...H_BA, ...H_PA], K_DAKU: [...K_BA, ...K_PA] };
     if (world === 7) return { H_BASE: H_MA, K_BASE: K_MA, H_DAKU: [], K_DAKU: [] };
     if (world === 8) return { H_BASE: H_YA, K_BASE: K_YA, H_DAKU: [], K_DAKU: [] };
-    if (world === 9) return { H_BASE: H_RA, K_BASE: K_RA, H_DAKU: [], K_DAKU: [] };
+    if (world === 9) return { H_BASE: H_RA, K_BASE: H_RA, H_DAKU: [], K_DAKU: [] };
     if (world === 10) return { H_BASE: H_WA, K_BASE: K_WA, H_DAKU: [], K_DAKU: [] };
     return { H_BASE: [], K_BASE: [], H_DAKU: [], K_DAKU: [] };
   }
@@ -277,11 +265,6 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
       labels = ['Preview','Typing','Finish'];
     } else {
       labels = ['Preview','Identify','Typing','Speak'];
-    }
-
-    // Insert Summary as Part 0 if present
-    if (lesson.dataset.hasSummary === "true") {
-      labels.unshift('Summary');
     }
 
     labels.forEach((label, idx) => {
