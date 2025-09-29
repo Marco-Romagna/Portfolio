@@ -43,7 +43,7 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
   (async () => {
     try {
       const summaries = await window.Vocab.loadSummaries();
-      const roleKey = LessonCore.getRoleKey(WORLD, SUFFIX);
+      const roleKey = getRoleKey(WORLD, SUFFIX); // ✅ FIXED: use local function
       SUMMARY_DATA = summaries.find(s => s.worlds.includes(roleKey));
       if (SUMMARY_DATA) {
         initSummary();
@@ -155,7 +155,6 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
         showPart(1);
       });
   }
-
 
   // ---------- Kana Sets ----------
   const H_VOW = ['あ','い','う','え','お'];
@@ -298,10 +297,10 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
     }
   
     // Adjust based on current lexicon
-    if (window.LessonCore.LEXICON === "hiragana") {
+    if (LEXICON === "hiragana") {
       return base + "-hira";
     }
-    if (window.LessonCore.LEXICON === "katakana") {
+    if (LEXICON === "katakana") {
       return base + "-kata";
     }
     return base;
