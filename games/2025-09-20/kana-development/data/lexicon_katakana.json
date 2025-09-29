@@ -104,8 +104,7 @@
   ],
   "byWorld": {
     "1-base-kata": [],
-    "2-base-kata": ["ikura_kata","kyanpu_kata","kamera_kata","koohii_kata","kaado_kata","kurasu_kata"],
-    "2-daku-kata": ["gasorin_kata","gitaa_kata","gurasu_kata","geemu_kata","gorufu_kata","gamu_kata"],
+    "2-base-kata": ["iku_kata", "kiku_kata", "kau_kata", "kao_kata", "ike_kata", "koe_kata"],
     "3-base-kata": ["sandoicchi_kata","sofa_kata","sakkaa_kata","shatsu_kata","suupaa_kata","sukii_kata"],
     "3-daku-kata": ["zubon_kata","juusu_kata","jetto_kata","zerii_kata","zonbi_kata","janpu_kata"],
     "4-base-kata": ["taoru_kata","chokoreeto_kata","tsuna_kata","teeburu_kata","toiretto_kata","tokkyo_kata"],
@@ -119,5 +118,6 @@
     "9-base-kata": ["raamen_kata","rajio_kata","risutora_kata","risaikuru_kata","rekoodo_kata","ringo_kata"],
     "10-base-kata": ["wanpiisu_kata","wan_kata","wafuru_kata","waakushoppu_kata","waarudo_kata","waakii_kata"]
   }
+
 
 }
