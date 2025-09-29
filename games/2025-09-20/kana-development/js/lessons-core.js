@@ -140,14 +140,17 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
     `;
 
     // Restore UI on start
-    document.querySelector('#start-lesson')
-      .addEventListener('click', () => {
-        container.classList.add('is-hidden');
-        document.querySelector('.lesson-progress')?.classList.remove('is-hidden');
-        $$('.lesson-part').forEach(p => p.classList.remove('is-hidden'));
-        document.querySelector('.lesson-cta')?.classList.remove('is-hidden');
-        showPart(1);
-      });
+   document.querySelector('#start-lesson')
+    .addEventListener('click', () => {
+      container.classList.add('is-hidden');
+      document.querySelector('.lesson-progress')?.classList.remove('is-hidden');
+      document.querySelector('.lesson-cta')?.classList.remove('is-hidden');
+  
+      // Hide all parts, then show Part 1 only
+      $$('.lesson-part').forEach(p => p.classList.remove('is-visible'));
+      showPart(1);
+    });
+
   }
 
   // ---------- Kana Sets ----------
