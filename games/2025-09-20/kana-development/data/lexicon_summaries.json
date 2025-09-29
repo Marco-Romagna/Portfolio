@@ -1,0 +1,18 @@
+{
+  "summaries": [
+    {
+      "id": "summary_stylized",
+      "worlds": ["2-base-kata"],
+      "kana": "※ スタイライズ",
+      "gloss_en": "Stylized Katakana",
+      "note": "These are words you already know in hiragana, written in katakana. This isn’t common, but Japanese sometimes uses katakana stylistically (for emphasis or design)."
+    },
+    {
+      "id": "summary_small_tsu",
+      "worlds": ["3-base-hira", "3-base-kata"],
+      "kana": "※ 小さいつ",
+      "gloss_en": "Small つ",
+      "note": "This lesson introduces the small つ (っ / ッ), which is used to double consonants and create sounds like 'kko'."
+    }
+  ]
+}
