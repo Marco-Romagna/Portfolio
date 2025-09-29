@@ -27,6 +27,20 @@
       "kana": "※ Words",
       "gloss_en": "Building Words",
       "note": "You’ve learned individual vowels. Now let’s see how they combine into real Japanese words. Vocabulary lessons will use only the characters you’ve studied so far."
+    },
+    {
+      "id": "summary_consonants",
+      "worlds": ["2-1"],
+      "kana": "※ 子音",
+      "gloss_en": "About Consonants",
+      "note": "After the vowels, Japanese kana add consonant sounds to create full syllables. The K-row combines the consonant [k] with each vowel: か (ka), き (ki), く (ku), け (ke), こ (ko). This is your first consonant row — other rows follow the same pattern."
+    },
+    {
+      "id": "summary_stylized_kana",
+      "worlds": ["2-5"],
+      "kana": "※ スタイル",
+      "gloss_en": "Stylized Kana Practice",
+      "note": "This lesson reuses the same words and hunts from 2-4, but shown in stylized katakana. This is not how these words are normally written in Japanese — it is just a practice exercise to help you recognize kana even when they appear in decorative or unusual forms. Later, you will encounter normal katakana vocabulary such as loanwords."
     }
   ]
 }
