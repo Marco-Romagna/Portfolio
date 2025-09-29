@@ -8,11 +8,19 @@
     $, $$,
     WORLD, SUFFIX,
     showPart,
-    getRoleKey,
     LEXICON
   } = window.LessonCore;
 
   const THEMES = ['theme-dark','theme-light','theme-sepia','theme-high'];
+
+  // ---------- Role Key Helper ----------
+  // Some vocab keys in lexicon_hiragana.json / hunts-tokens.json use
+  // formats like "1-vocab-hira". We'll generate that here.
+  function getRoleKey(world, suffix) {
+    if (LEXICON === "hiragana") return `${world}-vocab-hira`;
+    if (LEXICON === "katakana") return `${world}-vocab-kata`;
+    return `${world}-vocab-hira`;
+  }
 
   // ======================================================
   // Part 1 — Preview Words (Word Explorer)
@@ -37,13 +45,14 @@
     function showWord(w) {
       detail.innerHTML = `
         <div class="kana-glyph">${w.kana}</div>
-        <div class="kana-romaji">${w.romaji}</div>
-        <div class="kana-gloss">${w.gloss_en}</div>
+        <div class="kana-sub">${w.romaji}</div>
+        <div class="vocab-english">${w.gloss_en}</div>
+        ${w.note ? `<div class="vocab-note">${w.note}</div>` : ""}
         ${w.example ? `
           <div class="vocab-example">
-            <div>${w.example.kana}</div>
-            <div><strong>${w.example.romaji}</strong></div>
-            <div>${w.example.english}</div>
+            <p><strong>${w.example.kana}</strong></p>
+            <p class="muted">${w.example.romaji}</p>
+            <p>${w.example.english}</p>
           </div>` : ""}
       `;
     }
@@ -54,7 +63,7 @@
   
     words.forEach((w, idx) => {
       const li = document.createElement('li');
-      li.textContent = w.kana;
+      li.textContent = w.kana || w.gloss_en;
       li.addEventListener('click', () => {
         items.forEach(el => el.classList.remove('is-active'));
         li.classList.add('is-active');
@@ -98,10 +107,9 @@
   }
   
   // ==========================================================
-  // Part 2 — Vocab Hunt (Immersion Passage using hunts-tokens.json)
+  // Part 2 — Vocab Hunt (Immersion Passage)
   // ==========================================================
   async function initPart2Hunt(worldKey, words) {
-    const { $, showPart } = window.LessonCore;
     const part2 = $('#part-2');
     if (!part2) return;
   
@@ -128,12 +136,10 @@
     const targetEl = $('#hunt-target', part2);
     const nextBtn = $('[data-action="next-part"]', part2);
   
-    // Shuffle helper
     function shuffle(arr) {
       return arr.sort(() => Math.random() - 0.5);
     }
   
-    // Pick next target from pool
     function setNextTarget() {
       if (targets.length === 0) {
         nextBtn.classList.remove("is-hidden");
@@ -141,7 +147,6 @@
         currentTarget = null;
         return;
       }
-    
       currentTarget = targets.pop();
       targetEl.innerHTML = `
         <div class="hunt-romaji">${currentTarget.romaji}</div>
@@ -152,7 +157,6 @@
     function renderParagraph() {
       passageEl.textContent = "";
       nextBtn.classList.add("is-hidden");
-  
       targets = shuffle([...words]);
       currentTarget = null;
   
@@ -163,7 +167,6 @@
       
         span.addEventListener("click", () => {
           if (!currentTarget) return;
-      
           if (span.textContent === currentTarget.kana) {
             span.classList.add("is-correct");
             setNextTarget();
@@ -218,7 +221,6 @@
 
     const GOAL = words.length * 2;
     let progressPts = 0;
-
     let queue = [...words];
     let current = null;
     let firstTry = true;
@@ -232,17 +234,11 @@
     function nextQuestion() {
       grid.innerHTML = '';
       feedback.textContent = '';
-      document.querySelectorAll('.option').forEach(btn => {
-        btn.classList.remove('is-correct', 'is-wrong');
-      });
-      
       if (queue.length === 0) {
         queue = [...words].sort(() => Math.random() - 0.5);
       }
-
       current = queue.shift();
       firstTry = true;
-
       promptEl.textContent = current.gloss_en;
 
       const distractors = words.filter(w => w.id !== current.id).sort(() => 0.5 - Math.random()).slice(0, 3);
@@ -254,10 +250,7 @@
         b.textContent = w.kana;
         b.addEventListener('click', () => {
           if (w === current) {
-            if (firstTry) {
-              progressPts++;
-              updateMeter();
-            }
+            if (firstTry) { progressPts++; updateMeter(); }
             b.classList.add('is-correct');
             if (progressPts >= GOAL) {
               $('[data-action="next-part"]', part3).classList.remove('is-hidden');
@@ -269,9 +262,7 @@
             b.classList.add('is-wrong');
             feedback.textContent = 'Try again!';
             firstTry = false;
-            if (!queue.includes(current)) {
-              queue.push(current);
-            }
+            if (!queue.includes(current)) queue.push(current);
           }
         });
         grid.appendChild(b);
@@ -279,13 +270,12 @@
     }
 
     $('[data-action="next-part"]', part3)?.addEventListener('click', () => showPart(4));
-
     updateMeter();
     nextQuestion();
   }
 
   // ======================================================
-  // Part 4 — Typing (Romaji Input)
+  // Part 4 — Typing
   // ======================================================
   async function initPart4(words) {
     const part4 = $('#part-4');
@@ -295,14 +285,9 @@
       <h2 class="part-title">Typing</h2>
       <div class="quiz-panel">
         <p class="quiz-prompt">Type the romaji for <strong class="prompt-target"></strong></p>
-        <div class="quiz-input-wrapper">
-          <input id="quiz-input" class="quiz-input" placeholder="Type romaji…" autocomplete="off" />
-        </div>
+        <div class="quiz-input-wrapper"><input id="quiz-input" class="quiz-input" placeholder="Type romaji…" autocomplete="off" /></div>
         <div class="quiz-feedback"><p class="feedback-text"></p></div>
-        <div class="quiz-progress">
-          <div class="meter"><div class="meter-fill"></div></div>
-          <div class="meter-label"></div>
-        </div>
+        <div class="quiz-progress"><div class="meter"><div class="meter-fill"></div></div><div class="meter-label"></div></div>
         <div class="actions"><button class="btn primary is-hidden" data-action="next-part">Next</button></div>
       </div>
     `;
@@ -348,23 +333,17 @@
     input.addEventListener('keydown', e => {
       if (e.key === 'Enter' && !locked) {
         const answer = input.value.trim().toLowerCase();
-        if (answer === "") return;
-  
+        if (!answer) return;
         locked = true;
         input.disabled = true;
-  
         if (answer === current.romaji.toLowerCase()) {
           progressPts++;
           feedback.textContent = "✅ Correct!";
-          feedback.className = "feedback-text correct";
         } else {
           progressPts = Math.max(0, progressPts - 1);
           feedback.innerHTML = `❌ Correct: <strong>${current.romaji}</strong>`;
-          feedback.className = "feedback-text wrong";
         }
-  
         updateMeter();
-  
         if (progressPts >= GOAL) {
           actionBtn.classList.remove('is-hidden');
         } else {
@@ -374,7 +353,6 @@
     });
   
     actionBtn.addEventListener('click', () => showPart(5));
-  
     updateMeter();
     newRound();
   }
@@ -385,7 +363,6 @@
   async function initPart5(words) {
     const part5 = $('#part-5');
     if (!part5) return;
-
     part5.innerHTML = '<h2 class="part-title">Audio Quiz</h2>';
     const panel = document.createElement('div');
     panel.className = 'speak-panel';
@@ -401,15 +378,10 @@
     const finishBtn = $('[data-action="finish-lesson"]', part5);
 
     let current = words[Math.floor(Math.random() * words.length)];
-
     btnPlay.addEventListener('click', () => {
-      if (current.audio) {
-        new Audio(current.audio).play();
-      } else {
-        alert("No audio file found for this word yet.");
-      }
+      if (current.audio) new Audio(current.audio).play();
+      else alert("No audio file found for this word yet.");
     });
-
     finishBtn.addEventListener('click', () => { window.location.href = '../index.html'; });
   }
 
@@ -418,14 +390,13 @@
   // ======================================================
   window.initVocabParts = async function () {
     const qId = document.querySelector('.lesson').dataset.lessonId;
-    const [WORLD, SUFFIX] = qId.split('-').map(Number);
-    const roleKey = getRoleKey(WORLD, SUFFIX);
-
+    const [world, suffix] = qId.split('-').map(Number);
+    const roleKey = getRoleKey(world, suffix);
     const words = await Vocab.getWorldMilestone(roleKey, LEXICON);
-  
+
     window.initPart1 = () => initPart1(words);
-    await initPart1(words);
-  
+    await initPart1(words); // run immediately for Part 1
+
     window.initPart2 = () => initPart2Hunt(roleKey, words);
     window.initPart3 = () => initPart3(words);
     window.initPart4 = () => initPart4(words);
