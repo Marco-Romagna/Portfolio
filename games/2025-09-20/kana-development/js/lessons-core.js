@@ -146,13 +146,19 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
       document.querySelector('.lesson-progress')?.classList.remove('is-hidden');
       document.querySelector('.lesson-cta')?.classList.remove('is-hidden');
   
-      // Restore lesson parts visibility
-      $$('.lesson-part').forEach(p => {
-        p.classList.remove('is-hidden', 'is-visible'); // clear both
-      });
+      // Restore lesson parts
+      $$('.lesson-part').forEach(p => p.classList.remove('is-hidden', 'is-visible'));
   
-      showPart(1); // then show Part 1
+      // Show Part 1
+      showPart(1);
+  
+      // 🔑 Trigger init for Part 1 if it exists
+      if (typeof window.initPart1 === "function") {
+        window.initPart1();
+        window.initPart1 = null; // prevent double runs
+      }
     });
+
 
   }
 
