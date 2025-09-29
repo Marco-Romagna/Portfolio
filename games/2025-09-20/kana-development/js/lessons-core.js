@@ -284,28 +284,34 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
   })();
 
   function getRoleKey(world, suffix) {
+    // Default to base
     let base = `${world}-base`;
     
+    // Adjust if daku or handaku
     if (suffix === 9 || suffix === 10) {
       base = `${world}-daku`;
     } else if (suffix === 14 || suffix === 15) {
       base = `${world}-handaku`;
     }
-
-    // Mixed lessons: don't force hira/kata
+  
+    // Mixed lessons: return directly using ROLE
     if (ROLE.includes("mixed")) {
-      return `${world}-${ROLE}`; // e.g. "1-mixed-base"
+      return `${world}-${ROLE}`; 
+      // e.g. "1-mixed-base" or "8-mixed-daku"
     }
   
-    // Adjust based on current lexicon
+    // Otherwise, attach lexicon suffix
     if (LEXICON === "hiragana") {
       return base + "-hira";
     }
     if (LEXICON === "katakana") {
       return base + "-kata";
     }
+  
+    // Fallback (shouldn't normally hit here)
     return base;
   }
+
 
   // ---------- Export ----------
   window.LessonCore = {
