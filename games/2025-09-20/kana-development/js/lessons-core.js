@@ -24,24 +24,24 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
   // Decide total parts (vocab lessons use 5)
   const HIRA_VOCAB_SUFFIXES = [4, 9, 14];
   const KATA_VOCAB_SUFFIXES = [5, 10, 15];
-
   const IS_VOCAB = [...HIRA_VOCAB_SUFFIXES, ...KATA_VOCAB_SUFFIXES].includes(SUFFIX);
 
   // ---------- Role Detection ----------
   const ROLE = (() => {
     const map = {
-      1:'hira-base',
-      2:'kata-base',
-      3:'mixed-base',
-      4:'vocab-base',
-      5:'vocab-kata',
-      6:'hira-daku',
-      7:'kata-daku',
-      8:'mixed-daku',
-      9:'vocab-daku',
-      10:'vocab-kata-daku',
-      14:'vocab-handaku',
-      15:'vocab-kata-handaku'
+      1:  'hira-base',
+      2:  'kata-base',
+      3:  'mixed-base',
+      4:  'vocab-hira',
+      5:  'vocab-kata',
+      6:  'hira-daku',
+      7:  'kata-daku',
+      8:  'mixed-daku',
+      9:  'vocab-hira-daku',
+      10: 'vocab-kata-daku',
+      13: 'mixed-handaku',
+      14: 'vocab-hira-handaku',
+      15: 'vocab-kata-handaku'
     };
     return map[SUFFIX] || 'hira-base';
   })();
@@ -58,12 +58,12 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
   (async () => {
     try {
       const summaries = await window.Vocab.loadSummaries();
-      const roleKey = getRoleKey(WORLD, SUFFIX); // use local fn
+      const roleKey = getRoleKey(WORLD, SUFFIX);
       SUMMARY_DATA = summaries.find(s => s.worlds.includes(roleKey));
       if (SUMMARY_DATA) {
         initSummary();
       } else {
-        showPart(1); // no summary, jump to lesson directly
+        showPart(1); // no summary, jump straight in
       }
     } catch (e) {
       console.warn("No summaries loaded", e);
@@ -71,7 +71,7 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
     }
   })();
 
-  // Decide total parts (unchanged — summary not counted)
+  // Parts (summary not counted toward total)
   const baseParts = IS_VOCAB ? 5 : 4;
   lesson.dataset.totalParts = baseParts;
   const totalParts = baseParts;
@@ -85,7 +85,7 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
   const nextBtn = $('.lesson-cta [data-action="advance"]');
   const hideCTA = () => { ctaWrap?.classList.add('is-hidden'); };
 
-  // Add back button
+  // Back button
   let backBtn = document.createElement('button');
   backBtn.textContent = "← Back";
   backBtn.className = "btn primary is-hidden";
@@ -144,12 +144,12 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
     const container = document.querySelector('#lesson-summary');
     if (!container || !SUMMARY_DATA) return;
   
-    // Hide normal lesson UI while summary is active
+    // Hide normal lesson UI
     document.querySelector('.lesson-progress')?.classList.add('is-hidden');
     $$('.lesson-part').forEach(p => p.classList.add('is-hidden'));
     document.querySelector('.lesson-cta')?.classList.add('is-hidden');
   
-    // Render summary panel
+    // Render summary
     container.classList.remove('is-hidden');
     container.innerHTML = `
       <div class="summary-panel">
@@ -160,7 +160,7 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
       </div>
     `;
   
-    // Restore UI on start
+    // Start button
     document.querySelector('#start-lesson')
       .addEventListener('click', () => {
         container.classList.add('is-hidden');
@@ -283,35 +283,30 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
     });
   })();
 
+  // ---------- Role Key Resolver ----------
   function getRoleKey(world, suffix) {
-    // Default to base
-    let base = `${world}-base`;
-    
-    // Adjust if daku or handaku
-    if (suffix === 9 || suffix === 10) {
-      base = `${world}-daku`;
-    } else if (suffix === 14 || suffix === 15) {
-      base = `${world}-handaku`;
-    }
-  
-    // Mixed lessons: return directly using ROLE
-    if (ROLE.includes("mixed")) {
-      return `${world}-${ROLE}`; 
-      // e.g. "1-mixed-base" or "8-mixed-daku"
-    }
-  
-    // Otherwise, attach lexicon suffix
-    if (LEXICON === "hiragana") {
-      return base + "-hira";
-    }
-    if (LEXICON === "katakana") {
-      return base + "-kata";
-    }
-  
-    // Fallback (shouldn't normally hit here)
-    return base;
-  }
+    // Vocab lessons
+    if (suffix === 4)  return `${world}-vocab-hira`;
+    if (suffix === 5)  return `${world}-vocab-kata`;
+    if (suffix === 9)  return `${world}-vocab-hira-daku`;
+    if (suffix === 10) return `${world}-vocab-kata-daku`;
+    if (suffix === 14) return `${world}-vocab-hira-handaku`;
+    if (suffix === 15) return `${world}-vocab-kata-handaku`;
 
+    // Mixed lessons
+    if (ROLE.includes("mixed")) {
+      return `${world}-${ROLE}`; // e.g. "1-mixed-base", "8-mixed-daku", "13-mixed-handaku"
+    }
+
+    // Normal daku/handaku (non-vocab)
+    if (suffix === 6)  return `${world}-daku-hira`;
+    if (suffix === 7)  return `${world}-daku-kata`;
+    if (suffix === 14) return `${world}-handaku-hira`;
+    if (suffix === 15) return `${world}-handaku-kata`;
+
+    // Default: base lessons
+    return `${world}-base-${LEXICON}`;
+  }
 
   // ---------- Export ----------
   window.LessonCore = {
