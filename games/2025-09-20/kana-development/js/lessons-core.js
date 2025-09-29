@@ -132,11 +132,13 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
     container.classList.remove('is-hidden');
     container.innerHTML = `
       <div class="summary-panel">
+        ${SUMMARY_DATA.kana ? `<div class="summary-kana">${SUMMARY_DATA.kana}</div>` : ""}
         <h2>${SUMMARY_DATA.gloss_en}</h2>
         <p>${SUMMARY_DATA.note}</p>
         <button class="btn primary" id="start-lesson">Start Lesson</button>
       </div>
     `;
+
 
     document.querySelector('#start-lesson')
       .addEventListener('click', () => {
