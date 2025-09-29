@@ -412,9 +412,12 @@
   // ======================================================
   // Public API
   // ======================================================
-    window.initVocabParts = async function () {
+   window.initVocabParts = async function () {
     const roleKeyVocab = getRoleKey(WORLD, SUFFIX);
     const words = await Vocab.getWorldMilestone(roleKeyVocab, LEXICON);
+  
+    // 🔑 Make Part 1 directly accessible (for summary resume)
+    window.initPart1 = () => initPart1(words);
   
     await initPart1(words);
     window.initPart2 = () => initPart2Hunt(roleKeyVocab, words);
