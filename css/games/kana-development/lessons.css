@@ -667,7 +667,14 @@ body.site {
   color: #7c3aed; /* purple accent */
 }
 
-/* ---------- Lesson Summaries (Part 0) ---------- */
+/* ---------- Lesson Summaries (Pre-Lesson Screen) ---------- */
+.lesson-summary {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 300px;
+}
+
 .summary-panel {
   padding: 1.5rem;
   background: var(--surface, #fff);
@@ -679,7 +686,7 @@ body.site {
   text-align: left;
 }
 
-.summary-panel h2.part-title {
+.summary-panel h2 {
   font-size: 1.4rem;
   font-weight: bold;
   margin-bottom: 0.75rem;
@@ -691,13 +698,6 @@ body.site {
   line-height: 1.6;
   color: var(--text, #444);
   margin: 0;
-}
-
-.lesson-part[data-part-index="0"] {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 300px;
 }
 
 
