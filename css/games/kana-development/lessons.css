@@ -700,5 +700,11 @@ body.site {
   margin: 0;
 }
 
+.summary-kana {
+  font-size: 1.2rem;
+  margin-bottom: 0.5rem;
+  color: var(--accent, #6b46c1);
+  font-weight: bold;
+}
 
 
