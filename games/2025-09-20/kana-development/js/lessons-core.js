@@ -128,7 +128,13 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
   function initSummary() {
     const container = document.querySelector('#lesson-summary');
     if (!container || !SUMMARY_DATA) return;
-
+  
+    // Hide normal lesson UI while summary is active
+    document.querySelector('.lesson-progress')?.classList.add('is-hidden');
+    $$('.lesson-part').forEach(p => p.classList.add('is-hidden'));
+    document.querySelector('.lesson-cta')?.classList.add('is-hidden');
+  
+    // Render summary panel
     container.classList.remove('is-hidden');
     container.innerHTML = `
       <div class="summary-panel">
@@ -138,14 +144,18 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
         <button class="btn primary" id="start-lesson">Start Lesson</button>
       </div>
     `;
-
-
+  
+    // Restore UI on start
     document.querySelector('#start-lesson')
       .addEventListener('click', () => {
         container.classList.add('is-hidden');
+        document.querySelector('.lesson-progress')?.classList.remove('is-hidden');
+        $$('.lesson-part').forEach(p => p.classList.remove('is-hidden'));
+        document.querySelector('.lesson-cta')?.classList.remove('is-hidden');
         showPart(1);
       });
   }
+
 
   // ---------- Kana Sets ----------
   const H_VOW = ['あ','い','う','え','お'];
