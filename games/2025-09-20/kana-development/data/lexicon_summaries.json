@@ -27,6 +27,13 @@
       "kana": "※ Words",
       "gloss_en": "Building Words",
       "note": "You’ve learned individual vowels. Now let’s see how they combine into real Japanese words. Vocabulary lessons will use only the characters you’ve studied so far."
+    },
+    {
+      "id": "summary_stylized_katakana",
+      "worlds": ["2-vocab-kata"],
+      "kana": "※ スタイライズ",
+      "gloss_en": "Stylized Katakana",
+      "note": "In this lesson, you’ll see familiar words written in katakana instead of hiragana. This isn’t common in everyday writing, but katakana can be used stylistically for emphasis, design, or to give a modern feel. Treat it as practice in reading the same sounds with different shapes."
     }
   ]
 }
