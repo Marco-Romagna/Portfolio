@@ -1,18 +1,32 @@
 {
   "summaries": [
     {
-      "id": "summary_stylized",
-      "worlds": ["2-base-kata"],
-      "kana": "※ スタイライズ",
-      "gloss_en": "Stylized Katakana",
-      "note": "These are words you already know in hiragana, written in katakana. This isn’t common, but Japanese sometimes uses katakana stylistically (for emphasis or design)."
+      "id": "summary_hiragana_intro",
+      "worlds": ["1-1"],
+      "kana": "※ ひらがな",
+      "gloss_en": "About Hiragana",
+      "note": "Hiragana is the most common Japanese script, used for native words and grammar. Each symbol represents a sound. This course begins with the five vowels: あいうえお."
     },
     {
-      "id": "summary_small_tsu",
-      "worlds": ["3-base-hira", "3-base-kata"],
-      "kana": "※ 小さいつ",
-      "gloss_en": "Small つ",
-      "note": "This lesson introduces the small つ (っ / ッ), which is used to double consonants and create sounds like 'kko'."
+      "id": "summary_katakana_intro",
+      "worlds": ["1-2"],
+      "kana": "※ カタカナ",
+      "gloss_en": "About Katakana",
+      "note": "Katakana is another Japanese script. It is often used for foreign loanwords (like コーヒー), names, sound effects, or emphasis. Its shapes are sharper and more angular compared to hiragana."
+    },
+    {
+      "id": "summary_two_scripts",
+      "worlds": ["1-3"],
+      "kana": "※ Scripts",
+      "gloss_en": "Why Two Scripts?",
+      "note": "Japanese uses two kana scripts, hiragana and katakana. They represent the same sounds but are used in different contexts. Being able to read both is essential."
+    },
+    {
+      "id": "summary_building_words",
+      "worlds": ["1-4"],
+      "kana": "※ Words",
+      "gloss_en": "Building Words",
+      "note": "You’ve learned individual vowels. Now let’s see how they combine into real Japanese words. Vocabulary lessons will use only the characters you’ve studied so far."
     }
   ]
 }
