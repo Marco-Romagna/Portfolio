@@ -23,6 +23,7 @@
   
     part1.innerHTML = '<h2 class="part-title">Vocabulary — Word Explorer</h2>';
   
+    // Layout
     const container = document.createElement('div');
     container.className = 'vocab-explorer';
   
@@ -32,12 +33,12 @@
     const detail = document.createElement('div');
     detail.className = 'vocab-detail';
   
+    // --- Show a vocab word in the detail pane ---
     function showWord(w) {
       detail.innerHTML = `
         <div class="kana-glyph">${w.kana}</div>
         <div class="kana-romaji">${w.romaji}</div>
         <div class="kana-gloss">${w.gloss_en}</div>
-        ${w.note ? `<div class="vocab-note">Note: ${w.note}</div>` : ""}
         ${w.example ? `
           <div class="vocab-example">
             <div>${w.example.kana}</div>
@@ -47,6 +48,7 @@
       `;
     }
   
+    // --- Build word list sidebar ---
     const items = [];
     let currentIdx = 0;
   
@@ -67,10 +69,12 @@
       listEl.appendChild(li);
     });
   
+    // Append to layout
     container.appendChild(listEl);
     container.appendChild(detail);
     part1.appendChild(container);
   
+    // --- Navigation buttons ---
     const actions = document.createElement('div');
     actions.className = 'actions';
     actions.innerHTML = `
