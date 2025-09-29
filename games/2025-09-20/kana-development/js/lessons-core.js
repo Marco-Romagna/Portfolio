@@ -291,6 +291,11 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
     } else if (suffix === 14 || suffix === 15) {
       base = `${world}-handaku`;
     }
+
+    // Mixed lessons: don't force hira/kata
+    if (ROLE.includes("mixed")) {
+      return `${world}-${ROLE}`; // e.g. "1-mixed-base"
+    }
   
     // Adjust based on current lexicon
     if (LEXICON === "hiragana") {
