@@ -29,7 +29,7 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
   lesson.dataset.totalParts = IS_VOCAB ? 5 : 4;
   const totalParts = Number(lesson.dataset.totalParts);
 
-  // 🔥 NEW: Which lexicon does this lesson use?
+  //  Which lexicon does this lesson use?
   let LEXICON = "hiragana";
   if (IS_VOCAB && WORLD > 1) {
     if (HIRA_VOCAB_SUFFIXES.includes(SUFFIX)) {
@@ -39,6 +39,24 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
     }
   }
 
+  // Summary Detection
+  let HAS_SUMMARY = false;
+  let SUMMARY_DATA = null;
+  
+  (async () => {
+    try {
+      const summaries = await window.Vocab.loadSummaries();
+      const roleKey = LessonCore.getRoleKey(WORLD, SUFFIX);
+      SUMMARY_DATA = summaries.find(s => s.worlds.includes(roleKey));
+      if (SUMMARY_DATA) {
+        HAS_SUMMARY = true;
+        lesson.dataset.hasSummary = "true";
+      }
+    } catch (e) {
+      console.warn("No summaries loaded", e);
+    }
+  })();
+  
   const parts      = $$('.lesson-part');
   const stepsList  = $('.steps');
   const progress   = $('.progressbar');
