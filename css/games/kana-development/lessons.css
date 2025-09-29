@@ -666,3 +666,54 @@ body.site {
 .quiz-prompt .prompt-target {
   color: #7c3aed; /* purple accent */
 }
+
+/* ---------- Lesson Summaries (Pre-Lesson Screen) ---------- */
+.lesson-summary {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 70vh; /* taller, centers content nicely */
+}
+
+.summary-panel {
+  padding: 2rem 2.5rem;
+  background: var(--surface, #1a1a2e);
+  border: 1px solid var(--border, #333);
+  border-radius: 16px;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.25);
+  max-width: 720px;
+  width: 100%;
+  text-align: center; /* center content instead of left */
+}
+
+.summary-kana {
+  font-size: 1.2rem;
+  margin-bottom: 0.5rem;
+  color: var(--accent, #8b5cf6);
+  font-weight: bold;
+}
+
+.summary-panel h2 {
+  font-size: 1.6rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  color: var(--text-strong, #fff);
+}
+
+.summary-panel p {
+  font-size: 1.1rem;
+  line-height: 1.8;
+  color: var(--text, #ddd);
+  margin: 0 auto 1.5rem;
+  max-width: 600px; /* keep text lines comfortable */
+}
+
+.summary-panel #start-lesson {
+  font-size: 1.1rem;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  margin-top: 0.5rem;
+  display: inline-block;
+}
+
+

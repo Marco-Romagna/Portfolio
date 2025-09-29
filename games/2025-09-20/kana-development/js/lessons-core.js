@@ -14,7 +14,7 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
   if (!lesson) return;
 
   const params = new URLSearchParams(window.location.search);
-  const qId = params.get('id') || '1-1';
+  const qId = params.get('id') || '1-1'; // direct lesson ID from URL
   lesson.dataset.lessonId = qId;
 
   const [, suffixStr] = qId.split('-');
@@ -24,20 +24,36 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
   // Decide total parts (vocab lessons use 5)
   const HIRA_VOCAB_SUFFIXES = [4, 9, 14];
   const KATA_VOCAB_SUFFIXES = [5, 10, 15];
-
   const IS_VOCAB = [...HIRA_VOCAB_SUFFIXES, ...KATA_VOCAB_SUFFIXES].includes(SUFFIX);
-  lesson.dataset.totalParts = IS_VOCAB ? 5 : 4;
-  const totalParts = Number(lesson.dataset.totalParts);
 
-  // 🔥 NEW: Which lexicon does this lesson use?
+  // ---------- Lexicon Detection ----------
   let LEXICON = "hiragana";
-  if (IS_VOCAB && WORLD > 1) {
-    if (HIRA_VOCAB_SUFFIXES.includes(SUFFIX)) {
-      LEXICON = "hiragana";
-    } else if (KATA_VOCAB_SUFFIXES.includes(SUFFIX)) {
-      LEXICON = "katakana";
-    }
+  if (KATA_VOCAB_SUFFIXES.includes(SUFFIX)) {
+    LEXICON = "katakana";
   }
+
+  // ---------- Summary Detection ----------
+  let SUMMARY_DATA = null;
+
+  (async () => {
+    try {
+      const summaries = await window.Vocab.loadSummaries();
+      SUMMARY_DATA = summaries.find(s => s.worlds.includes(qId));
+      if (SUMMARY_DATA) {
+        initSummary();
+      } else {
+        showPart(1); // no summary, jump straight in
+      }
+    } catch (e) {
+      console.warn("No summaries loaded", e);
+      showPart(1);
+    }
+  })();
+
+  // Decide total parts (summary is not counted)
+  const baseParts = IS_VOCAB ? 5 : 4;
+  lesson.dataset.totalParts = baseParts;
+  const totalParts = baseParts;
 
   const parts      = $$('.lesson-part');
   const stepsList  = $('.steps');
@@ -102,44 +118,79 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
   nextBtn?.addEventListener('click', () => { if (window.DEBUG_SKIP_ENABLED) showPart(currentPart + 1); });
   backBtn?.addEventListener('click', () => { if (window.DEBUG_SKIP_ENABLED) showPart(currentPart - 1); });
 
+  // ---------- Summary Renderer ----------
+  function initSummary() {
+    const container = document.querySelector('#lesson-summary');
+    if (!container || !SUMMARY_DATA) return;
+
+    // Hide normal lesson UI while summary is active
+    document.querySelector('.lesson-progress')?.classList.add('is-hidden');
+    $$('.lesson-part').forEach(p => p.classList.add('is-hidden'));
+    document.querySelector('.lesson-cta')?.classList.add('is-hidden');
+
+    // Render summary panel
+    container.classList.remove('is-hidden');
+    container.innerHTML = `
+      <div class="summary-panel">
+        ${SUMMARY_DATA.kana ? `<div class="summary-kana">${SUMMARY_DATA.kana}</div>` : ""}
+        <h2>${SUMMARY_DATA.gloss_en}</h2>
+        <p>${SUMMARY_DATA.note}</p>
+        <button class="btn primary" id="start-lesson">Start Lesson</button>
+      </div>
+    `;
+
+    // Restore UI on start
+   document.querySelector('#start-lesson')
+    .addEventListener('click', () => {
+      container.classList.add('is-hidden');
+      document.querySelector('.lesson-progress')?.classList.remove('is-hidden');
+      document.querySelector('.lesson-cta')?.classList.remove('is-hidden');
+  
+      // Restore lesson parts
+      $$('.lesson-part').forEach(p => p.classList.remove('is-hidden', 'is-visible'));
+  
+      // Show Part 1
+      showPart(1);
+  
+      // 🔑 Trigger init for Part 1 if it exists
+      if (typeof window.initPart1 === "function") {
+        window.initPart1();
+        window.initPart1 = null; // prevent double runs
+      }
+    });
+
+
+  }
+
   // ---------- Kana Sets ----------
   const H_VOW = ['あ','い','う','え','お'];
   const K_VOW = ['ア','イ','ウ','エ','オ'];
-
   const H_KA  = ['か','き','く','け','こ'];
   const K_KA  = ['カ','キ','ク','ケ','コ'];
   const H_GA  = ['が','ぎ','ぐ','げ','ご'];
   const K_GA  = ['ガ','ギ','グ','ゲ','ゴ'];
-
   const H_SA  = ['さ','し','す','せ','そ'];
   const K_SA  = ['サ','シ','ス','セ','ソ'];
   const H_ZA  = ['ざ','じ','ず','ぜ','ぞ'];
   const K_ZA  = ['ザ','ジ','ズ','ゼ','ゾ'];
-
   const H_TA  = ['た','ち','つ','て','と'];
   const K_TA  = ['タ','チ','ツ','テ','ト'];
   const H_DA  = ['だ','ぢ','づ','で','ど'];
   const K_DA  = ['ダ','ヂ','ヅ','デ','ド'];
-
   const H_NA  = ['な','に','ぬ','ね','の'];
   const K_NA  = ['ナ','ニ','ヌ','ネ','ノ'];
-
   const H_HA  = ['は','ひ','ふ','へ','ほ'];
   const K_HA  = ['ハ','ヒ','フ','ヘ','ホ'];
   const H_BA  = ['ば','び','ぶ','べ','ぼ'];
   const K_BA  = ['バ','ビ','ブ','ベ','ボ'];
   const H_PA  = ['ぱ','ぴ','ぷ','ぺ','ぽ'];
   const K_PA  = ['パ','ピ','プ','ペ','ポ'];
-
   const H_MA  = ['ま','み','む','め','も'];
   const K_MA  = ['マ','ミ','ム','メ','モ'];
-
   const H_YA  = ['や','ゆ','よ'];
   const K_YA  = ['ヤ','ユ','ヨ'];
-
   const H_RA  = ['ら','り','る','れ','ろ'];
   const K_RA  = ['ラ','リ','ル','レ','ロ'];
-
   const H_WA  = ['わ','を','ん'];
   const K_WA  = ['ワ','ヲ','ン'];
 
@@ -155,7 +206,7 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
     'ガ':'ga','ギ':'gi','グ':'gu','ゲ':'ge','ゴ':'go',
     // S / Z
     'さ':'sa','し':'shi','す':'su','せ':'se','そ':'so',
-    'サ':'sa','シ':'shi','ス':'su','セ':'so','ソ':'so',
+    'サ':'sa','シ':'shi','ス':'su','セ':'se','ソ':'so',
     'ざ':'za','じ':'ji','ず':'zu','ぜ':'ze','ぞ':'zo',
     'ザ':'za','ジ':'ji','ズ':'zu','ゼ':'ze','ゾ':'zo',
     // T / D
@@ -203,25 +254,6 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
   addPairs(H_RA, K_RA);
   addPairs(H_WA, K_WA);
 
-  // ---------- Role Detection ----------
-  const ROLE = (() => {
-    const map = {
-      1:'hira-base',
-      2:'kata-base',
-      3:'mixed-base',
-      4:'vocab-base',
-      5:'vocab-kata',
-      6:'hira-daku',
-      7:'kata-daku',
-      8:'mixed-daku',
-      9:'vocab-daku',
-      10:'vocab-kata-daku',
-      14:'vocab-handaku',
-      15:'vocab-kata-handaku'
-    };
-    return map[SUFFIX] || 'hira-base';
-  })();
-
   let MIXED_TYPE = false;
   let IS_TYPING_ONLY = false;
 
@@ -234,7 +266,7 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
     if (world === 6) return { H_BASE: H_HA, K_BASE: K_HA, H_DAKU: [...H_BA, ...H_PA], K_DAKU: [...K_BA, ...K_PA] };
     if (world === 7) return { H_BASE: H_MA, K_BASE: K_MA, H_DAKU: [], K_DAKU: [] };
     if (world === 8) return { H_BASE: H_YA, K_BASE: K_YA, H_DAKU: [], K_DAKU: [] };
-    if (world === 9) return { H_BASE: H_RA, K_BASE: K_RA, H_DAKU: [], K_DAKU: [] };
+    if (world === 9) return { H_BASE: H_RA, K_BASE: H_RA, H_DAKU: [], K_DAKU: [] };
     if (world === 10) return { H_BASE: H_WA, K_BASE: K_WA, H_DAKU: [], K_DAKU: [] };
     return { H_BASE: [], K_BASE: [], H_DAKU: [], K_DAKU: [] };
   }
@@ -243,14 +275,8 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
   let KANA = [];
 
   if (!IS_VOCAB) {
-    if (ROLE === 'hira-base')         KANA = [...H_BASE];
-    else if (ROLE === 'kata-base')    KANA = [...K_BASE];
-    else if (ROLE === 'mixed-base') { KANA = [...H_BASE, ...K_BASE]; MIXED_TYPE = true; }
-    else if (ROLE === 'type-base')  { KANA = [...H_BASE, ...K_BASE]; IS_TYPING_ONLY = true; }
-    else if (ROLE === 'hira-daku')    KANA = [...H_DAKU];
-    else if (ROLE === 'kata-daku')    KANA = [...K_DAKU];
-    else if (ROLE === 'mixed-daku') { KANA = [...H_DAKU, ...K_DAKU]; MIXED_TYPE = true; }
-    else if (ROLE === 'type-daku')  { KANA = [...H_DAKU, ...K_DAKU]; IS_TYPING_ONLY = true; }
+    if (LEXICON === 'hiragana') KANA = [...H_BASE];
+    if (LEXICON === 'katakana') KANA = [...K_BASE];
   }
 
   // ---------- Pacing ----------
@@ -281,34 +307,26 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
     });
   })();
 
-  function getRoleKey(world, suffix) {
-    let base = `${world}-base`;
-    
-    if (suffix === 9 || suffix === 10) {
-      base = `${world}-daku`;
-    } else if (suffix === 14 || suffix === 15) {
-      base = `${world}-handaku`;
-    }
-  
-    // Adjust based on current lexicon
-    if (window.LessonCore.LEXICON === "hiragana") {
-      return base + "-hira";
-    }
-    if (window.LessonCore.LEXICON === "katakana") {
-      return base + "-kata";
-    }
-    return base;
-  }
-
-
   // ---------- Export ----------
   window.LessonCore = {
     $,$$,
-    WORLD, SUFFIX, ROLE, IS_VOCAB, IS_TYPING_ONLY, MIXED_TYPE,
+    WORLD, SUFFIX, IS_VOCAB, IS_TYPING_ONLY, MIXED_TYPE,
     KANA, ROMA, PAIR,
     GOAL_IDENT, GOAL_TYPE, COMBO_LAST,
     showPart,
-    getRoleKey,
     LEXICON
   };
+  // ---------- Bootstrapping ----------
+  document.addEventListener("DOMContentLoaded", () => {
+    if (IS_VOCAB) {
+      if (typeof window.initVocabParts === "function") {
+        window.initVocabParts();
+      }
+    } else {
+      if (typeof window.initKanaParts === "function") {
+        window.initKanaParts();
+      }
+    }
+  });
+
 })();

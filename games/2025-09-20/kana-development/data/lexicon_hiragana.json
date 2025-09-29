@@ -103,20 +103,21 @@
     {"id":"ne_hira","kana":"ね","romaji":"ne","gloss_en":"ne (sentence ending)","tags":["grammar","particle"],"worlds":["10-base-hira"],"audio":"","note":"Sentence ending particle to seek agreement, like 'isn’t it?'.","example":{"kana":"いいてんきですね","romaji":"ii tenki desu ne","english":"Nice weather, isn’t it?"}}
   ],
   "byWorld": {
-    "1-base-hira":["ai_hira","iie_hira","ue_hira","ie_hira","aoi_hira","au_hira"],
-    "2-base-hira":["iku_hira","kiku_hira","kau_hira","kao_hira","ike_hira","koe_hira"],
-    "2-daku-hira":["eiga_hira","gaikoku_hira","gakusei_hira","gakkou_hira","ginkou_hira","genki_hira"],
-    "3-base-hira":["sakura_hira","shio_hira","sumu_hira","seki_hira","sora_hira","sono_hira"],
-    "3-daku-hira":["zasshi_hira","jisho_hira","doubutsuen_hira","zen_hira","zou_hira"],
-    "4-base-hira":["taberu_hira","chizu_hira","tsuki_hira","tegami_hira","tomodachi_hira","tokei_hira"],
-    "4-daku-hira":["densha_hira","daigaku_hira","dekiru_hira","tsuzuku_hira","chijimu_hira","dare_hira"],
-    "5-base-hira": ["namae_hira","niku_hira","neko_hira","nani_hira","natsu_hira","naka_hira"],
-    "6-base-hira": ["hana_hira","hito_hira","fuyu_hira","heya_hira","hon_hira","hikari_hira"],
-    "6-daku-hira": ["basho_hira","biiru_hira","bukuro_hira","benkyou_hira","boushi_hira","byouin_hira"],
-    "6-handaku-hira": ["pan_hira","pinku_hira","piano_hira","posuto_hira","pen_hira","puro_hira"],
-    "7-base-hira": ["mizu_hira","machi_hira","miru_hira","mori_hira","megane_hira","mado_hira"],
-    "8-base-hira": ["yama_hira","yuki_hira","yoru_hira","yasai_hira","yubi_hira","yume_hira"],
-    "9-base-hira": ["ringo_hira","rekishi_hira","rusu_hira","raku_hira","risu_hira","rajio_hira"],
-    "10-base-hira": ["wan_hira","wakarimasu_hira","wa_hira","wo_hira","nani_hira","ne_hira"]
+    "1-vocab-hira": ["ai_hira","iie_hira","ue_hira","ie_hira","aoi_hira","au_hira"],
+    "2-vocab-hira": ["iku_hira","kiku_hira","kau_hira","kao_hira","ike_hira","koe_hira"],
+    "2-vocab-daku-hira": ["eiga_hira","gaikoku_hira","gakusei_hira","gakkou_hira","ginkou_hira","genki_hira"],
+    "3-vocab-hira": ["sakura_hira","shio_hira","sumu_hira","seki_hira","sora_hira","sono_hira"],
+    "3-vocab-daku-hira": ["zasshi_hira","jisho_hira","doubutsuen_hira","zen_hira","zou_hira"],
+    "4-vocab-hira": ["taberu_hira","chizu_hira","tsuki_hira","tegami_hira","tomodachi_hira","tokei_hira"],
+    "4-vocab-daku-hira": ["densha_hira","daigaku_hira","dekiru_hira","tsuzuku_hira","chijimu_hira","dare_hira"],
+    "5-vocab-hira": ["namae_hira","niku_hira","neko_hira","nani_hira","natsu_hira","naka_hira"],
+    "6-vocab-hira": ["hana_hira","hito_hira","fuyu_hira","heya_hira","hon_hira","hikari_hira"],
+    "6-vocab-daku-hira": ["basho_hira","biiru_hira","bukuro_hira","benkyou_hira","boushi_hira","byouin_hira"],
+    "6-vocab-handaku-hira": ["pan_hira","pinku_hira","piano_hira","posuto_hira","pen_hira","puro_hira"],
+    "7-vocab-hira": ["mizu_hira","machi_hira","miru_hira","mori_hira","megane_hira","mado_hira"],
+    "8-vocab-hira": ["yama_hira","yuki_hira","yoru_hira","yasai_hira","yubi_hira","yume_hira"],
+    "9-vocab-hira": ["ringo_hira","rekishi_hira","rusu_hira","raku_hira","risu_hira","rajio_hira"],
+    "10-vocab-hira": ["wan_hira","wakarimasu_hira","wa_hira","wo_hira","nani_hira","ne_hira"]
   }
+
 }

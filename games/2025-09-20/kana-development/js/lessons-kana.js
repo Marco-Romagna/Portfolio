@@ -397,4 +397,6 @@
     initPart3();
     initPart4();
   };
+  
+  window.initPart1 = initPart1;
 })();
