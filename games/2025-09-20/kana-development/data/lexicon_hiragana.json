@@ -77,50 +77,60 @@
     {"id":"patapata_hira","kana":"ぱたぱた","romaji":"patapata","gloss_en":"flapping; pattering","tags":["core","p-row","mimetic"],"worlds":["6-handaku-hira"],"audio":"","note":"Mimetic word describing a flapping or pattering sound.","example":{"kana":"とりがぱたぱたととぶ","romaji":"tori ga patapata to tobu","english":"a bird flaps its wings"}},
 
     {"id":"mizu_hira","kana":"みず","romaji":"mizu","gloss_en":"water","tags":["core","m-row","nature"],"worlds":["7-vocab-hira"],"audio":"","note":"Essential everyday word. Written 水 in kanji.","example":{"kana":"みずをのむ","romaji":"mizu wo nomu","english":"to drink water"}},
-  {"id":"machi_hira","kana":"まち","romaji":"machi","gloss_en":"town; city","tags":["core","m-row","place"],"worlds":["7-vocab-hira"],"audio":"","note":"Common word for town or city. Written 町 in kanji.","example":{"kana":"おおきいまち","romaji":"ookii machi","english":"a big city"}},
-  {"id":"mimi_hira","kana":"みみ","romaji":"mimi","gloss_en":"ear","tags":["core","m-row","body"],"worlds":["7-vocab-hira"],"audio":"","note":"Basic body part word. Written 耳 in kanji.","example":{"kana":"みみでおとをきく","romaji":"mimi de oto wo kiku","english":"to hear a sound with your ear"}},
-  {"id":"mushi_hira","kana":"むし","romaji":"mushi","gloss_en":"insect; bug","tags":["core","m-row","animal"],"worlds":["7-vocab-hira"],"audio":"","note":"Common everyday word. Written 虫 in kanji.","example":{"kana":"むしがとぶ","romaji":"mushi ga tobu","english":"an insect flies"}},
-  {"id":"megane_hira","kana":"めがね","romaji":"megane","gloss_en":"glasses","tags":["core","m-row","object"],"worlds":["7-vocab-hira"],"audio":"","note":"Common word for eyeglasses. Written 眼鏡 in kanji.","example":{"kana":"めがねをかける","romaji":"megane wo kakeru","english":"to wear glasses"}},
-  {"id":"momo_hira","kana":"もも","romaji":"momo","gloss_en":"peach","tags":["core","m-row","food"],"worlds":["7-vocab-hira"],"audio":"","note":"Common fruit. Written 桃 in kanji.","example":{"kana":"ももをたべる","romaji":"momo wo taberu","english":"to eat a peach"}},
+    {"id":"machi_hira","kana":"まち","romaji":"machi","gloss_en":"town; city","tags":["core","m-row","place"],"worlds":["7-vocab-hira"],"audio":"","note":"Common word for town or city. Written 町 in kanji.","example":{"kana":"おおきいまち","romaji":"ookii machi","english":"a big city"}},
+    {"id":"mimi_hira","kana":"みみ","romaji":"mimi","gloss_en":"ear","tags":["core","m-row","body"],"worlds":["7-vocab-hira"],"audio":"","note":"Basic body part word. Written 耳 in kanji.","example":{"kana":"みみでおとをきく","romaji":"mimi de oto wo kiku","english":"to hear a sound with your ear"}},
+    {"id":"mushi_hira","kana":"むし","romaji":"mushi","gloss_en":"insect; bug","tags":["core","m-row","animal"],"worlds":["7-vocab-hira"],"audio":"","note":"Common everyday word. Written 虫 in kanji.","example":{"kana":"むしがとぶ","romaji":"mushi ga tobu","english":"an insect flies"}},
+    {"id":"megane_hira","kana":"めがね","romaji":"megane","gloss_en":"glasses","tags":["core","m-row","object"],"worlds":["7-vocab-hira"],"audio":"","note":"Common word for eyeglasses. Written 眼鏡 in kanji.","example":{"kana":"めがねをかける","romaji":"megane wo kakeru","english":"to wear glasses"}},
+    {"id":"momo_hira","kana":"もも","romaji":"momo","gloss_en":"peach","tags":["core","m-row","food"],"worlds":["7-vocab-hira"],"audio":"","note":"Common fruit. Written 桃 in kanji.","example":{"kana":"ももをたべる","romaji":"momo wo taberu","english":"to eat a peach"}},
 
-    
-    {"id":"yama_hira","kana":"やま","romaji":"yama","gloss_en":"mountain","tags":["core","y-row","nature"],"worlds":["8-base-hira"],"audio":"","note":"Basic word for mountain. Written 山 in kanji.","example":{"kana":"やまにのぼる","romaji":"yama ni noboru","english":"to climb a mountain"}},
-    {"id":"yuki_hira","kana":"ゆき","romaji":"yuki","gloss_en":"snow","tags":["core","y-row","nature"],"worlds":["8-base-hira"],"audio":"","note":"Word for snow. Written 雪 in kanji.","example":{"kana":"ゆきがふる","romaji":"yuki ga furu","english":"snow falls"}},
-    {"id":"yoru_hira","kana":"よる","romaji":"yoru","gloss_en":"night","tags":["core","y-row","time"],"worlds":["8-base-hira"],"audio":"","note":"Common word for night. Written 夜 in kanji.","example":{"kana":"よるにねる","romaji":"yoru ni neru","english":"to sleep at night"}},
-    {"id":"yasai_hira","kana":"やさい","romaji":"yasai","gloss_en":"vegetable","tags":["core","y-row","food"],"worlds":["8-base-hira"],"audio":"","note":"Everyday word for vegetables. Written 野菜 in kanji.","example":{"kana":"やさいをたべる","romaji":"yasai wo taberu","english":"to eat vegetables"}},
-    {"id":"yubi_hira","kana":"ゆび","romaji":"yubi","gloss_en":"finger","tags":["core","y-row","body"],"worlds":["8-base-hira"],"audio":"","note":"Means 'finger'; also 'toe' in compounds. Written 指 in kanji.","example":{"kana":"ゆびをさす","romaji":"yubi wo sasu","english":"to point with a finger"}},
-    {"id":"yume_hira","kana":"ゆめ","romaji":"yume","gloss_en":"dream","tags":["core","y-row","abstract"],"worlds":["8-base-hira"],"audio":"","note":"Means 'dream' (both sleeping and goals). Written 夢 in kanji.","example":{"kana":"ゆめをみる","romaji":"yume wo miru","english":"to dream"}},
+    {"id":"yama_hira","kana":"やま","romaji":"yama","gloss_en":"mountain","tags":["core","y-row","nature"],"worlds":["8-vocab-hira"],"audio":"","note":"Common everyday word. Written 山 in kanji.","example":{"kana":"やまにのぼる","romaji":"yama ni noboru","english":"to climb a mountain"}},
+    {"id":"yasai_hira","kana":"やさい","romaji":"yasai","gloss_en":"vegetable","tags":["core","y-row","food"],"worlds":["8-vocab-hira"],"audio":"","note":"Common food category word. Written 野菜 in kanji.","example":{"kana":"やさいをたべる","romaji":"yasai wo taberu","english":"to eat vegetables"}},
+    {"id":"yuki_hira","kana":"ゆき","romaji":"yuki","gloss_en":"snow","tags":["core","y-row","nature"],"worlds":["8-vocab-hira"],"audio":"","note":"Very common seasonal word. Written 雪 in kanji.","example":{"kana":"ゆきがふる","romaji":"yuki ga furu","english":"snow falls"}},
+    {"id":"yubi_hira","kana":"ゆび","romaji":"yubi","gloss_en":"finger","tags":["core","y-row","body"],"worlds":["8-vocab-hira"],"audio":"","note":"Basic body part word. Written 指 in kanji.","example":{"kana":"ゆびをさす","romaji":"yubi wo sasu","english":"to point a finger"}},
+    {"id":"yume_hira","kana":"ゆめ","romaji":"yume","gloss_en":"dream","tags":["core","y-row","abstract"],"worlds":["8-vocab-hira"],"audio":"","note":"Common abstract noun. Written 夢 in kanji.","example":{"kana":"ゆめをみる","romaji":"yume wo miru","english":"to dream"}},
+    {"id":"yoko_hira","kana":"よこ","romaji":"yoko","gloss_en":"side","tags":["core","y-row","position"],"worlds":["8-vocab-hira"],"audio":"","note":"Common word for 'side' or 'beside'. Written 横 in kanji.","example":{"kana":"よこのへや","romaji":"yoko no heya","english":"the room next door"}},
 
-    {"id":"ringo_hira","kana":"りんご","romaji":"ringo","gloss_en":"apple","tags":["core","r-row","food"],"worlds":["9-base-hira"],"audio":"","note":"Common fruit word. Often written 林檎 in kanji, but usually seen in kana.","example":{"kana":"りんごをたべる","romaji":"ringo wo taberu","english":"to eat an apple"}},
-    {"id":"rekishi_hira","kana":"れきし","romaji":"rekishi","gloss_en":"history","tags":["core","r-row","abstract"],"worlds":["9-base-hira"],"audio":"","note":"Word for 'history'. Written 歴史 in kanji.","example":{"kana":"れきしをべんきょうする","romaji":"rekishi wo benkyou suru","english":"to study history"}},
-    {"id":"rusu_hira","kana":"るす","romaji":"rusu","gloss_en":"absence; being away","tags":["core","r-row","state"],"worlds":["9-base-hira"],"audio":"","note":"Used when someone is not at home. Written 留守 in kanji.","example":{"kana":"いえはるすです","romaji":"ie wa rusu desu","english":"The house is empty (no one is home)"}},
-    {"id":"raku_hira","kana":"らく","romaji":"raku","gloss_en":"easy; comfortable","tags":["core","r-row","adjective"],"worlds":["9-base-hira"],"audio":"","note":"Means 'easy' or 'comfortable'. Written 楽 in kanji.","example":{"kana":"らくなしごと","romaji":"raku na shigoto","english":"an easy job"}},
-    {"id":"risu_hira","kana":"りす","romaji":"risu","gloss_en":"squirrel","tags":["core","r-row","animal"],"worlds":["9-base-hira"],"audio":"","note":"Animal word for 'squirrel'. Written 栗鼠 (rare).","example":{"kana":"りすがきをたべる","romaji":"risu ga ki wo taberu","english":"the squirrel eats a tree (nuts)"}},
-    {"id":"rajio_hira","kana":"らじお","romaji":"rajio","gloss_en":"radio","tags":["loanword","r-row","object"],"worlds":["9-base-hira"],"audio":"","note":"Loanword from English 'radio'. Usually written in katakana, but here in hiragana for practice.","example":{"kana":"らじおをきく","romaji":"rajio wo kiku","english":"to listen to the radio"}},
+    {"id":"rekishi_hira","kana":"れきし","romaji":"rekishi","gloss_en":"history","tags":["core","r-row","abstract"],"worlds":["9-vocab-hira"],"audio":"","note":"Common school subject word. Written 歴史 in kanji.","example":{"kana":"にほんのれきし","romaji":"nihon no rekishi","english":"Japanese history"}},
+    {"id":"rusu_hira","kana":"るす","romaji":"rusu","gloss_en":"absence; not at home","tags":["core","r-row","expression"],"worlds":["9-vocab-hira"],"audio":"","note":"Used when someone is away from home. Written 留守 in kanji.","example":{"kana":"るすです","romaji":"rusu desu","english":"(They are) not at home"}},
+    {"id":"raku_hira","kana":"らく","romaji":"raku","gloss_en":"comfort; easy","tags":["core","r-row","adjective"],"worlds":["9-vocab-hira"],"audio":"","note":"Used in phrases like らくな (easy/comfortable). Written 楽 in kanji.","example":{"kana":"らくなしごと","romaji":"raku na shigoto","english":"an easy job"}},
+    {"id":"risu_hira","kana":"りす","romaji":"risu","gloss_en":"squirrel","tags":["core","r-row","animal"],"worlds":["9-vocab-hira"],"audio":"","note":"Animal word. Written 栗鼠 in kanji (rare).","example":{"kana":"りすがとぶ","romaji":"risu ga tobu","english":"a squirrel jumps"}},
+    {"id":"rouka_hira","kana":"ろうか","romaji":"rouka","gloss_en":"corridor; hallway","tags":["core","r-row","place"],"worlds":["9-vocab-hira"],"audio":"","note":"Common school and building word. Written 廊下 in kanji.","example":{"kana":"ろうかをあるく","romaji":"rouka wo aruku","english":"to walk in the hallway"}},
+    {"id":"rappa_hira","kana":"らっぱ","romaji":"rappa","gloss_en":"trumpet","tags":["core","r-row","object"],"worlds":["9-vocab-hira"],"audio":"","note":"Everyday object word. Written 喇叭 in kanji (rare, often kana). Uses small っ.","example":{"kana":"らっぱをふく","romaji":"rappa wo fuku","english":"to play the trumpet"}},
 
-    {"id":"wan_hira","kana":"わん","romaji":"wan","gloss_en":"woof; bowl (counter)","tags":["core","w-row","sound"],"worlds":["10-base-hira"],"audio":"","note":"わん is the onomatopoeia for a dog's bark, and also used as a counter for bowls.","example":{"kana":"いぬが「わん」となく","romaji":"inu ga 'wan' to naku","english":"the dog barks 'woof'"}},
-    {"id":"wakarimasu_hira","kana":"わかります","romaji":"wakarimasu","gloss_en":"to understand","tags":["core","w-row","verb"],"worlds":["10-base-hira"],"audio":"","note":"Polite form of 'to understand'. Plain form is わかる.","example":{"kana":"にほんごがわかります","romaji":"nihongo ga wakarimasu","english":"I understand Japanese"}},
-    {"id":"wa_hira","kana":"わ","romaji":"wa","gloss_en":"wa (particle)","tags":["grammar","w-row"],"worlds":["10-base-hira"],"audio":"","note":"Topic particle in Japanese sentences. Written with は but pronounced 'wa'.","example":{"kana":"わたしはがくせいです","romaji":"watashi wa gakusei desu","english":"I am a student"}},
-    {"id":"wo_hira","kana":"を","romaji":"wo","gloss_en":"wo (particle)","tags":["grammar","w-row"],"worlds":["10-base-hira"],"audio":"","note":"Object particle. Pronounced 'o'.","example":{"kana":"みずをのむ","romaji":"mizu wo nomu","english":"to drink water"}},
-    {"id":"nani_hira","kana":"なに","romaji":"nani","gloss_en":"what","tags":["core","question"],"worlds":["10-base-hira"],"audio":"","note":"Basic question word meaning 'what'.","example":{"kana":"なにをしますか","romaji":"nani wo shimasu ka","english":"What will you do?"}},
-    {"id":"ne_hira","kana":"ね","romaji":"ne","gloss_en":"ne (sentence ending)","tags":["grammar","particle"],"worlds":["10-base-hira"],"audio":"","note":"Sentence ending particle to seek agreement, like 'isn’t it?'.","example":{"kana":"いいてんきですね","romaji":"ii tenki desu ne","english":"Nice weather, isn’t it?"}}
-  ],
+    {"id":"wani_hira","kana":"わに","romaji":"wani","gloss_en":"crocodile; alligator","tags":["core","w-row","animal"],"worlds":["10-vocab-hira"],"audio":"","note":"Common animal word. Written 鰐 in kanji.","example":{"kana":"わにがかわにいる","romaji":"wani ga kawa ni iru","english":"the crocodile is in the river"}},
+    {"id":"watashi_hira","kana":"わたし","romaji":"watashi","gloss_en":"I; me","tags":["core","w-row","people"],"worlds":["10-vocab-hira"],"audio":"","note":"Common first-person pronoun. Written 私 in kanji.","example":{"kana":"わたしはがくせいです","romaji":"watashi wa gakusei desu","english":"I am a student"}},
+    {"id":"hon_hira","kana":"ほん","romaji":"hon","gloss_en":"book","tags":["core","n-ending","object"],"worlds":["10-vocab-hira"],"audio":"","note":"Basic everyday noun. Written 本 in kanji.","example":{"kana":"ほんをよむ","romaji":"hon wo yomu","english":"to read a book"}},
+    {"id":"ongaku_hira","kana":"おんがく","romaji":"ongaku","gloss_en":"music","tags":["core","n-ending","abstract"],"worlds":["10-vocab-hira"],"audio":"","note":"Common abstract noun. Written 音楽 in kanji.","example":{"kana":"おんがくをきく","romaji":"ongaku wo kiku","english":"to listen to music"}},
+    {"id":"sensei_hira","kana":"せんせい","romaji":"sensei","gloss_en":"teacher","tags":["core","n-ending","people"],"worlds":["10-vocab-hira"],"audio":"","note":"Common noun for teacher/doctor/master. Written 先生 in kanji.","example":{"kana":"せんせいはやさしいです","romaji":"sensei wa yasashii desu","english":"the teacher is kind"}},
+    {"id":"denwa_hira","kana":"でんわ","romaji":"denwa","gloss_en":"telephone","tags":["core","n-ending","object"],"worlds":["10-vocab-hira"],"audio":"","note":"Everyday word for telephone. Written 電話 in kanji.","example":{"kana":"でんわをかける","romaji":"denwa wo kakeru","english":"to make a phone call"}}
+
+      ],
   "byWorld": {
     "1-vocab-hira": ["ai_hira","iie_hira","ue_hira","ie_hira","aoi_hira","au_hira"],
+  
     "2-vocab-hira": ["iku_hira","kiku_hira","kau_hira","kao_hira","ike_hira","koe_hira"],
-    "2-vocab-daku-hira": ["eiga_hira","gaikoku_hira","gakusei_hira","gakkou_hira","ginkou_hira","genki_hira"],
+    "2-vocab-daku-hira": ["eiga_hira","gaikoku_hira","gogo_hira","kagi_hira","kagu_hira","kage_hira"],
+  
     "3-vocab-hira": ["sakura_hira","shio_hira","sumu_hira","seki_hira","sora_hira","sono_hira"],
-    "3-vocab-daku-hira": ["zasshi_hira","jisho_hira","doubutsuen_hira","zen_hira","zou_hira"],
-    "4-vocab-hira": ["taberu_hira","chizu_hira","tsuki_hira","tegami_hira","tomodachi_hira","tokei_hira"],
-    "4-vocab-daku-hira": ["densha_hira","daigaku_hira","dekiru_hira","tsuzuku_hira","chijimu_hira","dare_hira"],
-    "5-vocab-hira": ["namae_hira","niku_hira","neko_hira","nani_hira","natsu_hira","naka_hira"],
-    "6-vocab-hira": ["hana_hira","hito_hira","fuyu_hira","heya_hira","hon_hira","hikari_hira"],
-    "6-vocab-daku-hira": ["basho_hira","biiru_hira","bukuro_hira","benkyou_hira","boushi_hira","byouin_hira"],
-    "6-vocab-handaku-hira": ["pan_hira","pinku_hira","piano_hira","posuto_hira","pen_hira","puro_hira"],
-    "7-vocab-hira": ["mizu_hira","machi_hira","miru_hira","mori_hira","megane_hira","mado_hira"],
-    "8-vocab-hira": ["yama_hira","yuki_hira","yoru_hira","yasai_hira","yubi_hira","yume_hira"],
-    "9-vocab-hira": ["ringo_hira","rekishi_hira","rusu_hira","raku_hira","risu_hira","rajio_hira"],
-    "10-vocab-hira": ["wan_hira","wakarimasu_hira","wa_hira","wo_hira","nani_hira","ne_hira"]
+    "3-vocab-daku-hira": ["zaru_hira","jisho_hira","zu_hira","zei_hira","zou_hira"],
+  
+    "4-vocab-hira": ["tako_hira","chizu_hira","tsuki_hira","te_hira","tokei_hira","kitte_hira"],
+    "4-vocab-daku-hira": ["daigaku_hira","dekiru_hira","tsuzuku_hira","chijimu_hira","doko_hira","dou_hira"],
+  
+    "5-vocab-hira": ["niku_hira","neko_hira","nani_hira","natsu_hira","inu_hira","nori_hira"],
+  
+    "6-vocab-hira": ["hana_hira","hito_hira","fune_hira","heta_hira","hoshi_hira","haha_hira"],
+    "6-vocab-daku-hira": ["baka_hira","bijin_hira","buta_hira","betsu_hira","boushi_hira","bai_hira"],
+    "6-vocab-handaku-hira": ["ippai_hira","happa_hira","pikapika_hira","perapera_hira","pokapoka_hira","patapata_hira"],
+  
+    "7-vocab-hira": ["mizu_hira","machi_hira","mimi_hira","mushi_hira","megane_hira","momo_hira"],
+  
+    "8-vocab-hira": ["yama_hira","yasai_hira","yuki_hira","yubi_hira","yume_hira","yoko_hira"],
+  
+    "9-vocab-hira": ["rekishi_hira","rusu_hira","raku_hira","risu_hira","rouka_hira","rappa_hira"],
+  
+    "10-vocab-hira": ["wani_hira","watashi_hira","hon_hira","ongaku_hira","sensei_hira","denwa_hira"]
   }
+
 
 }
