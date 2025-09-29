@@ -146,9 +146,12 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
       document.querySelector('.lesson-progress')?.classList.remove('is-hidden');
       document.querySelector('.lesson-cta')?.classList.remove('is-hidden');
   
-      // Hide all parts, then show Part 1 only
-      $$('.lesson-part').forEach(p => p.classList.remove('is-visible'));
-      showPart(1);
+      // Restore lesson parts visibility
+      $$('.lesson-part').forEach(p => {
+        p.classList.remove('is-hidden', 'is-visible'); // clear both
+      });
+  
+      showPart(1); // then show Part 1
     });
 
   }
