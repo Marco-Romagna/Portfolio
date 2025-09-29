@@ -416,14 +416,17 @@
   // ======================================================
   // Public API
   // ======================================================
-   window.initVocabParts = async function () {
+  window.initVocabParts = async function () {
     const qId = document.querySelector('.lesson').dataset.lessonId;
-    const words = await Vocab.getWorldMilestone(qId, LEXICON);
+    const [WORLD, SUFFIX] = qId.split('-').map(Number);
+    const roleKey = getRoleKey(WORLD, SUFFIX);
+
+    const words = await Vocab.getWorldMilestone(roleKey, LEXICON);
   
     window.initPart1 = () => initPart1(words);
     await initPart1(words);
   
-    window.initPart2 = () => initPart2Hunt(qId, words);
+    window.initPart2 = () => initPart2Hunt(roleKey, words);
     window.initPart3 = () => initPart3(words);
     window.initPart4 = () => initPart4(words);
     window.initPart5 = () => initPart5(words);
