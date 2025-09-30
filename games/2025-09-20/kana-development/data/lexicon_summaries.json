@@ -12,7 +12,7 @@
       "worlds": ["1-2"],
       "kana": "※ カタカナ",
       "gloss_en": "About Katakana",
-      "note": "Katakana is another Japanese script. It is often used for foreign loanwords (like コーヒー), names, sound effects, or emphasis. Its shapes are sharper and more angular compared to hiragana."
+      "note": "Katakana is one of the two Japanese syllabaries. It represents the same sounds as hiragana, but is mainly used for foreign loanwords, names, onomatopoeia, and emphasis. Its shapes are sharper and more angular compared to hiragana."
     },
     {
       "id": "summary_two_scripts",
@@ -27,6 +27,111 @@
       "kana": "※ Words",
       "gloss_en": "Building Words",
       "note": "You’ve learned individual vowels. Now let’s see how they combine into real Japanese words. Vocabulary lessons will use only the characters you’ve studied so far."
+    },
+    {
+      "id": "summary_consonants",
+      "worlds": ["2-1"],
+      "kana": "※ 子音",
+      "gloss_en": "About Consonants",
+      "note": "After the vowels, Japanese kana add consonant sounds to create full syllables. The K-row combines the consonant [k] with each vowel: か (ka), き (ki), く (ku), け (ke), こ (ko). This is your first consonant row — other rows follow the same pattern."
+    },
+    {
+      "id": "summary_stylized_kana",
+      "worlds": ["2-5"],
+      "kana": "※ スタイル",
+      "gloss_en": "Stylized Kana Practice",
+      "note": "This lesson reuses the same words and hunts from 2-4, but shown in stylized katakana. This is not how these words are normally written in Japanese — it is just a practice exercise to help you recognize kana even when they appear in decorative or unusual forms. Later, you will encounter normal katakana vocabulary such as loanwords."
+    },
+    {
+      "id": "summary_g-row",
+      "worlds": ["2-daku-hira"],
+      "kana": "※ がぎぐげご",
+      "gloss_en": "About the G-row",
+      "note": "Dakuten (゛) makes K-row kana voiced. か→が, き→ぎ, く→ぐ, け→げ, こ→ご. These sounds are very common in Japanese."
+    },
+    {
+      "id": "summary_z-row",
+      "worlds": ["3-daku-hira"],
+      "kana": "※ ざじずぜぞ",
+      "gloss_en": "About the Z-row",
+      "note": "Dakuten (゛) makes S-row kana voiced. さ→ざ, し→じ, す→ず, せ→ぜ, そ→ぞ. Note: じ is pronounced 'ji', not 'zi'."
+    },
+    {
+      "id": "summary_small-tsu",
+      "worlds": ["4-vocab-hira"],
+      "kana": "※ っ (sokuon)",
+      "gloss_en": "Small っ",
+      "note": "The small っ doubles the next consonant sound, creating a pause. For example: きって = kitte. This is very common in Japanese."
+    },
+    {
+      "id": "summary_long-vowels",
+      "worlds": ["4-daku-hira"],
+      "kana": "※ Long vowels",
+      "gloss_en": "About long vowels",
+      "note": "When vowels appear in sequence, the sound is held longer. For example: どう is pronounced 'doo'. Common patterns include おう and えい."
+    },
+    {
+      "id": "summary_no-particle",
+      "worlds": ["5-vocab-hira"],
+      "kana": "※ の (particle)",
+      "gloss_en": "The particle の",
+      "note": "The particle の links words. It shows possession or description: わたしのほん = my book; にほんのくるま = a Japanese car."
+    },
+    {
+      "id": "summary_handakuten",
+      "worlds": ["6-handaku-hira"],
+      "kana": "※ はひふへほ → ぱぴぷぺぽ",
+      "gloss_en": "About handakuten",
+      "note": "The small circle mark (゜) is called handakuten. It changes H-row kana into P-row: は→ぱ, ひ→ぴ, ふ→ぷ, へ→ぺ, ほ→ぽ."
+    },
+    {
+      "id": "summary_mimetic",
+      "worlds": ["6-handaku-hira"],
+      "kana": "※ Mimetic words",
+      "gloss_en": "About mimetic words",
+      "note": "Japanese has many mimetic words (giongo/gitaigo) that describe sounds, states, or feelings. Examples: ぴかぴか (shiny), ぽかぽか (warm). They are very common in everyday language."
+    },
+    {
+      "id": "summary_particles-final",
+      "worlds": ["10-vocab-hira"],
+      "kana": "※ は・を・ん",
+      "gloss_en": "Particles and ん",
+      "note": "は and を are particles with special readings: は is pronounced 'wa' when used as a particle, を is pronounced 'o'. ん is the nasal sound that can appear at the end of words, like ほん (book)."
+    },
+    {
+      "id": "summary_katakana_words",
+      "worlds": ["2-5"],
+      "kana": "※ カタカナのことば",
+      "gloss_en": "Katakana Words",
+      "note": "Until now, katakana was used only for practice with words you already knew from hiragana. From this point forward, you will see real katakana vocabulary. Most are loanwords from English and other languages that Japanese adopted into daily life."
+    },
+    {
+      "id": "summary_katakana_long_vowels",
+      "worlds": ["4-1"],
+      "kana": "※ 長音",
+      "gloss_en": "Long Vowels in Katakana",
+      "note": "In katakana, long vowels are written with a long dash (ー). For example, コーヒー (koohii = coffee). This is different from hiragana, where long vowels are usually written with an extra vowel kana (おう, えい, etc.)."
+    },
+    {
+      "id": "summary_katakana_sokuon",
+      "worlds": ["4-daku-kata"],
+      "kana": "※ 促音",
+      "gloss_en": "Small ッ in Katakana",
+      "note": "Katakana also uses the small ッ (sokuon) to indicate a doubled consonant. For example, ドット (dotto = dot). It works the same way as in hiragana, but appears often in loanwords."
+    },
+    {
+      "id": "summary_katakana_handakuten",
+      "worlds": ["6-handaku-kata"],
+      "kana": "※ 半濁点",
+      "gloss_en": "Handakuten in Katakana",
+      "note": "Just like in hiragana, the handakuten (°) changes the H-row into P-sounds. In katakana, this creates パピプペポ. Many common loanwords use these sounds, like パンダ (panda)."
+    },
+    {
+      "id": "summary_katakana_final_n",
+      "worlds": ["10-vocab-kata"],
+      "kana": "※ ン",
+      "gloss_en": "The Final N",
+      "note": "ン is the last katakana character. It represents the 'n' sound, just like in hiragana ん. It often appears at the end of loanwords, such as ワイン (wine) or ワゴン (wagon)."
     }
   ]
 }
