@@ -33,6 +33,7 @@
     {"id":"zu_hira","kana":"ず","romaji":"zu","gloss_en":"figure; diagram","tags":["core","z-row","abstract"],"worlds":["3-daku-hira"],"audio":"","note":"Used for maps, charts, or figures.","example":{"kana":"ちずにずをかく","romaji":"chizu ni zu wo kaku","english":"to draw a figure on a map"}},
     {"id":"zei_hira","kana":"ぜい","romaji":"zei","gloss_en":"tax","tags":["core","z-row","abstract"],"worlds":["3-daku-hira"],"audio":"","note":"Common everyday word, usually seen in compounds like ぜいきん (tax).","example":{"kana":"ぜいをはらう","romaji":"zei wo harau","english":"to pay tax"}},
     {"id":"zou_hira","kana":"ぞう","romaji":"zou","gloss_en":"elephant","tags":["core","z-row","animal"],"worlds":["3-daku-hira"],"audio":"","note":"Common animal word.","example":{"kana":"ぞうはおおきい","romaji":"zou wa ookii","english":"the elephant is big"}},
+    {"id":"jiko_hira","kana":"じこ","romaji":"jiko","gloss_en":"accident","tags":["core","z-row","event"],"worlds":["3-daku-hira"],"audio":"","note":"Common everyday word, often used for traffic accidents (こうつうじこ).","example":{"kana":"くるまのじこ","romaji":"kuruma no jiko","english":"a car accident"}},
 
 
     {"id":"taberu_hira","kana":"たべる","romaji":"taberu","gloss_en":"to eat","tags":["core","t-row","verb"],"worlds":["4-base-hira"],"audio":"","note":"Very common verb. Used with を to mark the object.","example":{"kana":"りんごをたべる","romaji":"ringo wo taberu","english":"to eat an apple"}},
@@ -112,7 +113,7 @@
     "2-vocab-daku-hira": ["eiga_hira","gaikoku_hira","gogo_hira","kagi_hira","kagu_hira","kage_hira"],
   
     "3-vocab-hira": ["sakura_hira","shio_hira","sumu_hira","seki_hira","sora_hira","sono_hira"],
-    "3-vocab-daku-hira": ["zaru_hira","jisho_hira","zu_hira","zei_hira","zou_hira"],
+    "3-vocab-daku-hira": ["zaru_hira","jisho_hira","zu_hira","zei_hira","zou_hira","jiko_hira"],
   
     "4-vocab-hira": ["tako_hira","chizu_hira","tsuki_hira","te_hira","tokei_hira","kitte_hira"],
     "4-vocab-daku-hira": ["daigaku_hira","dekiru_hira","tsuzuku_hira","chijimu_hira","doko_hira","dou_hira"],
