@@ -13,4 +13,6 @@ This folder contains pre-generated audio files for the Japanese kana syllabary.
 
 ## Usage
 - The webapp references these files by romaji:
-****
+ Example:
+- あ or ア → `a.mp3`
+- か or カ → `ka.mp3`
