@@ -61,17 +61,18 @@
   
       pairs.forEach(p => {
         const card = document.createElement('article');
-        card.className = 'pair-card';
+        card.className = 'card-big kana-card';   // same as single-script cards
+      
         card.innerHTML = `
           <div class="pair-row">
             <span class="glyph h">${p.h}</span>
             <span class="link">⇄</span>
             <span class="glyph k">${p.k}</span>
           </div>
-          <div class="pair-romaji">${p.r}</div>
+          <span class="kana-sub">${p.r}</span>   <!-- consistent with others -->
         `;
-  
-        // --- Audio: make the whole card clickable ---
+      
+        // Audio
         card.addEventListener('click', () => {
           const romaji = p.r;
           if (romaji) {
@@ -80,9 +81,10 @@
             audio.play().catch(err => console.warn('Audio failed:', err));
           }
         });
-  
+      
         grid.appendChild(card);
       });
+
   
     } else {
       // Single-script lessons
