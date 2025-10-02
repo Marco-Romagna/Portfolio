@@ -47,9 +47,11 @@
     title.className = 'part-title';
     part1.appendChild(title);
   
-    // -3/-7 → pair cards; others → single-script
-    if (SUFFIX === 3 || SUFFIX === 7) {
+    // Mixed-script lessons (3, 7, 13) → add marker class
+    if (SUFFIX === 3 || SUFFIX === 7 || SUFFIX === 13) {
+      part1.classList.add("mixed-script");
       title.textContent = 'Preview — Script Pairs';
+  
       const grid = document.createElement('div');
       grid.className = 'kana-grid';
       part1.appendChild(grid);
@@ -69,22 +71,24 @@
           <div class="pair-romaji">${p.r}</div>
         `;
   
-        // --- Audio: make both glyphs clickable ---
-        card.querySelectorAll('.glyph').forEach(el => {
-          el.addEventListener('click', () => {
-            const romaji = p.r;
-            if (romaji) {
-              const audioPath = `../assets/audio/kana/${romaji}.mp3`;
-              const audio = new Audio(audioPath);
-              audio.play().catch(err => console.warn('Audio failed:', err));
-            }
-          });
+        // --- Audio: make the whole card clickable ---
+        card.addEventListener('click', () => {
+          const romaji = p.r;
+          if (romaji) {
+            const audioPath = `../assets/audio/kana/${romaji}.mp3`;
+            const audio = new Audio(audioPath);
+            audio.play().catch(err => console.warn('Audio failed:', err));
+          }
         });
   
         grid.appendChild(card);
       });
+  
     } else {
+      // Single-script lessons
+      part1.classList.remove("mixed-script");
       title.textContent = 'Preview';
+  
       const grid = document.createElement('div');
       grid.className = 'kana-grid';
       part1.appendChild(grid);
@@ -118,6 +122,7 @@
     part1.appendChild(actions);
     actions.querySelector('[data-action="advance"]')?.addEventListener('click', () => showPart(2));
   }
+
 
   // ======================================================
   // Part 2 — Identify
