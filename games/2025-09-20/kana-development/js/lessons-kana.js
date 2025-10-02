@@ -74,7 +74,7 @@
           el.addEventListener('click', () => {
             const romaji = p.r;
             if (romaji) {
-              const audioPath = `kana-development/assets/audio/kana/${romaji}.mp3`;
+              const audioPath = `../assets/audio/kana/${romaji}.mp3`;
               const audio = new Audio(audioPath);
               audio.play().catch(err => console.warn('Audio failed:', err));
             }
@@ -102,7 +102,7 @@
         card.addEventListener('click', () => {
           const romaji = ROMA[g];
           if (romaji) {
-            const audioPath = `kana-development/assets/audio/kana/${romaji}.mp3`;
+            const audioPath = `../assets/audio/kana/${romaji}.mp3`;
             const audio = new Audio(audioPath);
             audio.play().catch(err => console.warn('Audio failed:', err));
           }
