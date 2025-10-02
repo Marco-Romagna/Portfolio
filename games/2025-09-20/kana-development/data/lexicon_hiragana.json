@@ -104,34 +104,22 @@
     {"id":"ongaku_hira","kana":"おんがく","romaji":"ongaku","gloss_en":"music","tags":["core","n-ending","abstract"],"worlds":["10-vocab-hira"],"audio":"","note":"Common abstract noun. Written 音楽 in kanji.","example":{"kana":"おんがくをきく","romaji":"ongaku wo kiku","english":"to listen to music"}},
     {"id":"sensei_hira","kana":"せんせい","romaji":"sensei","gloss_en":"teacher","tags":["core","n-ending","people"],"worlds":["10-vocab-hira"],"audio":"","note":"Common noun for teacher/doctor/master. Written 先生 in kanji.","example":{"kana":"せんせいはやさしいです","romaji":"sensei wa yasashii desu","english":"the teacher is kind"}},
     {"id":"denwa_hira","kana":"でんわ","romaji":"denwa","gloss_en":"telephone","tags":["core","n-ending","object"],"worlds":["10-vocab-hira"],"audio":"","note":"Everyday word for telephone. Written 電話 in kanji.","example":{"kana":"でんわをかける","romaji":"denwa wo kakeru","english":"to make a phone call"}}
-
-      ],
+  ],
   "byWorld": {
     "1-vocab-hira": ["ai_hira","iie_hira","ue_hira","ie_hira","aoi_hira","au_hira"],
-  
     "2-vocab-hira": ["iku_hira","kiku_hira","kau_hira","kao_hira","ike_hira","koe_hira"],
     "2-vocab-daku-hira": ["eiga_hira","gaikoku_hira","gogo_hira","kagi_hira","kagu_hira","kage_hira"],
-  
     "3-vocab-hira": ["sakura_hira","shio_hira","sumu_hira","seki_hira","sora_hira","sono_hira"],
     "3-vocab-daku-hira": ["zaru_hira","jisho_hira","zu_hira","zei_hira","zou_hira","jiko_hira"],
-  
-    "4-vocab-hira": ["tako_hira","chizu_hira","tsuki_hira","te_hira","tokei_hira","kitte_hira"],
-    "4-vocab-daku-hira": ["daigaku_hira","dekiru_hira","tsuzuku_hira","chijimu_hira","doko_hira","dou_hira"],
-  
-    "5-vocab-hira": ["niku_hira","neko_hira","nani_hira","natsu_hira","inu_hira","nori_hira"],
-  
+    "4-vocab-hira": ["taberu_hira","chizu_hira","tsuki_hira","tegami_hira","tomodachi_hira","tokei_hira"],
+    "4-vocab-daku-hira": ["densha_hira","daigaku_hira","dekiru_hira","doa_hira","dare_hira","depaato_hira"],
+    "5-vocab-hira": ["namae_hira","niku_hira","neko_hira","nani_hira","natsu_hira","naka_hira"],
     "6-vocab-hira": ["hana_hira","hito_hira","fune_hira","heta_hira","hoshi_hira","haha_hira"],
     "6-vocab-daku-hira": ["baka_hira","bijin_hira","buta_hira","betsu_hira","boushi_hira","bai_hira"],
     "6-vocab-handaku-hira": ["ippai_hira","happa_hira","pikapika_hira","perapera_hira","pokapoka_hira","patapata_hira"],
-  
     "7-vocab-hira": ["mizu_hira","machi_hira","mimi_hira","mushi_hira","megane_hira","momo_hira"],
-  
     "8-vocab-hira": ["yama_hira","yasai_hira","yuki_hira","yubi_hira","yume_hira","yoko_hira"],
-  
     "9-vocab-hira": ["rekishi_hira","rusu_hira","raku_hira","risu_hira","rouka_hira","rappa_hira"],
-  
     "10-vocab-hira": ["wani_hira","watashi_hira","hon_hira","ongaku_hira","sensei_hira","denwa_hira"]
   }
-
-
 }
