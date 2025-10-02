@@ -717,3 +717,35 @@ body.site {
 }
 
 
+/* Make pair cards more readable and interactive */
+.pair-card {
+  cursor: pointer;               /* shows it's clickable */
+  padding: 1rem;
+  border-radius: 0.75rem;
+  transition: background 0.2s ease, transform 0.1s ease;
+}
+
+.pair-card:hover {
+  background: rgba(255, 255, 255, 0.08); /* subtle highlight */
+  transform: scale(1.03);                /* slight grow effect */
+}
+
+.pair-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0.5rem;
+}
+
+.pair-row .glyph {
+  font-size: 2.2rem;   /* bigger kana */
+  margin: 0 0.5rem;    /* space out glyphs */
+}
+
+.pair-romaji {
+  font-size: 1.1rem;
+  color: #ccc;         /* softer color than glyphs */
+}
+
+
+
