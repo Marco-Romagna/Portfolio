@@ -106,18 +106,18 @@
       "note": "Until now, katakana was used only for practice with words you already knew from hiragana. From this point forward, you will see real katakana vocabulary. Most are loanwords from English and other languages that Japanese adopted into daily life."
     },
     {
-      "id": "summary_katakana_long_vowels",
-      "worlds": ["4-2"],
-      "kana": "※ 長音",
-      "gloss_en": "Long Vowels in Katakana",
-      "note": "In katakana, long vowels are written with a long dash (ー). For example, コーヒー (koohii = coffee). This is different from hiragana, where long vowels are usually written with an extra vowel kana (おう, えい, etc.)."
-    },
-    {
       "id": "summary_katakana_sokuon",
       "worlds": ["4-7"],
       "kana": "※ 促音",
       "gloss_en": "Small ッ in Katakana",
       "note": "Katakana also uses the small ッ (sokuon) to indicate a doubled consonant. For example, ドット (dotto = dot). It works the same way as in hiragana, but appears often in loanwords."
+    },
+    {
+      "id": "summary_katakana_long_vowels",
+      "worlds": ["6-2"],
+      "kana": "※ 長音",
+      "gloss_en": "Long Vowels in Katakana",
+      "note": "In katakana, long vowels are written with a long dash (ー). For example, コーヒー (koohii = coffee). This is different from hiragana, where long vowels are usually written with an extra vowel kana (おう, えい, etc.)."
     },
     {
       "id": "summary_katakana_handakuten",
