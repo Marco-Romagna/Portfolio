@@ -66,7 +66,7 @@
         card.innerHTML = `
           <div class="pair-row">
             <span class="glyph h">${p.h}</span>
-            <span class="link">⇄</span>
+            <span class="link">↔</span>
             <span class="glyph k">${p.k}</span>
           </div>
           <span class="kana-sub">${p.r}</span>   <!-- consistent with others -->
