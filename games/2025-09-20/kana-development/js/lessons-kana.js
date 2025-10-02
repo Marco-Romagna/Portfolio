@@ -47,8 +47,8 @@
     title.className = 'part-title';
     part1.appendChild(title);
   
-    // Mixed-script lessons (3, 7, 13) → add marker class
-    if (SUFFIX === 3 || SUFFIX === 7 || SUFFIX === 13) {
+    // Mixed-script lessons (3, 8, 13) → add marker class
+    if (SUFFIX === 3 || SUFFIX === 8 || SUFFIX === 13) {
       part1.classList.add("mixed-script");
       title.textContent = 'Preview — Script Pairs';
   
