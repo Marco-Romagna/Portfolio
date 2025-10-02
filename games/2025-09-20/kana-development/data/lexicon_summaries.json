@@ -107,7 +107,7 @@
     },
     {
       "id": "summary_katakana_long_vowels",
-      "worlds": ["4-1"],
+      "worlds": ["4-2"],
       "kana": "※ 長音",
       "gloss_en": "Long Vowels in Katakana",
       "note": "In katakana, long vowels are written with a long dash (ー). For example, コーヒー (koohii = coffee). This is different from hiragana, where long vowels are usually written with an extra vowel kana (おう, えい, etc.)."
