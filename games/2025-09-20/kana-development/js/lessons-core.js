@@ -140,26 +140,18 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
     `;
 
     // Restore UI on start
-   document.querySelector('#start-lesson')
-    .addEventListener('click', () => {
-      container.classList.add('is-hidden');
-      document.querySelector('.lesson-progress')?.classList.remove('is-hidden');
-      document.querySelector('.lesson-cta')?.classList.remove('is-hidden');
-  
-      // Restore lesson parts
-      $$('.lesson-part').forEach(p => p.classList.remove('is-hidden', 'is-visible'));
-  
-      // Show Part 1
-      showPart(1);
-  
-      // 🔑 Trigger init for Part 1 if it exists
-      if (typeof window.initPart1 === "function") {
-        window.initPart1();
-        window.initPart1 = null; // prevent double runs
-      }
-    });
-
-
+    document.querySelector('#start-lesson')
+      .addEventListener('click', () => {
+        container.classList.add('is-hidden');
+        document.querySelector('.lesson-progress')?.classList.remove('is-hidden');
+        document.querySelector('.lesson-cta')?.classList.remove('is-hidden');
+        $$('.lesson-part').forEach(p => p.classList.remove('is-hidden', 'is-visible'));
+        showPart(1);
+        if (typeof window.initPart1 === "function") {
+          window.initPart1();
+          window.initPart1 = null;
+        }
+      });
   }
 
   // ---------- Kana Sets ----------
@@ -196,44 +188,34 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
 
   // ---------- Romaji Map ----------
   const ROMA = {
-    // Vowels
     'あ':'a','い':'i','う':'u','え':'e','お':'o',
     'ア':'a','イ':'i','ウ':'u','エ':'e','オ':'o',
-    // K / G
     'か':'ka','き':'ki','く':'ku','け':'ke','こ':'ko',
     'カ':'ka','キ':'ki','ク':'ku','ケ':'ke','コ':'ko',
     'が':'ga','ぎ':'gi','ぐ':'gu','げ':'ge','ご':'go',
     'ガ':'ga','ギ':'gi','グ':'gu','ゲ':'ge','ゴ':'go',
-    // S / Z
     'さ':'sa','し':'shi','す':'su','せ':'se','そ':'so',
     'サ':'sa','シ':'shi','ス':'su','セ':'se','ソ':'so',
     'ざ':'za','じ':'ji','ず':'zu','ぜ':'ze','ぞ':'zo',
     'ザ':'za','ジ':'ji','ズ':'zu','ゼ':'ze','ゾ':'zo',
-    // T / D
     'た':'ta','ち':'chi','つ':'tsu','て':'te','と':'to',
     'タ':'ta','チ':'chi','ツ':'tsu','テ':'te','ト':'to',
     'だ':'da','ぢ':'ji','づ':'zu','で':'de','ど':'do',
     'ダ':'da','ヂ':'ji','ヅ':'zu','デ':'de','ド':'do',
-    // N
     'な':'na','に':'ni','ぬ':'nu','ね':'ne','の':'no',
     'ナ':'na','ニ':'ni','ヌ':'nu','ネ':'ne','ノ':'no',
-    // H / B / P
     'は':'ha','ひ':'hi','ふ':'fu','へ':'he','ほ':'ho',
     'ハ':'ha','ヒ':'hi','フ':'fu','ヘ':'he','ホ':'ho',
     'ば':'ba','び':'bi','ぶ':'bu','べ':'be','ぼ':'bo',
     'バ':'ba','ビ':'bi','ブ':'bu','ベ':'be','ボ':'bo',
     'ぱ':'pa','ぴ':'pi','ぷ':'pu','ぺ':'pe','ぽ':'po',
     'パ':'pa','ピ':'pi','プ':'pu','ペ':'pe','ポ':'po',
-    // M
     'ま':'ma','み':'mi','む':'mu','め':'me','も':'mo',
-    'マ':'ma','ミ':'mi','ム':'mu','メ':'me','モ':'mo',
-    // Y
+    'マ':'ma','ミ':'mi','ム':'mu','メ':'モ','モ':'mo',
     'や':'ya','ゆ':'yu','よ':'yo',
     'ヤ':'ya','ユ':'yu','ヨ':'yo',
-    // R
     'ら':'ra','り':'ri','る':'ru','れ':'re','ろ':'ro',
     'ラ':'ra','リ':'ri','ル':'ru','レ':'re','ロ':'ro',
-    // W + N
     'わ':'wa','を':'wo','ん':'n',
     'ワ':'wa','ヲ':'wo','ン':'n'
   };
@@ -254,35 +236,50 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
   addPairs(H_RA, K_RA);
   addPairs(H_WA, K_WA);
 
-  let MIXED_TYPE = false;
-  let IS_TYPING_ONLY = false;
-
+  // ---------- World Sets ----------
   function getWorldSets(world) {
     if (world === 1) return { H_BASE: H_VOW, K_BASE: K_VOW, H_DAKU: [], K_DAKU: [] };
     if (world === 2) return { H_BASE: H_KA, K_BASE: K_KA, H_DAKU: H_GA, K_DAKU: K_GA };
     if (world === 3) return { H_BASE: H_SA, K_BASE: K_SA, H_DAKU: H_ZA, K_DAKU: K_ZA };
     if (world === 4) return { H_BASE: H_TA, K_BASE: K_TA, H_DAKU: H_DA, K_DAKU: K_DA };
     if (world === 5) return { H_BASE: H_NA, K_BASE: K_NA, H_DAKU: [], K_DAKU: [] };
-    if (world === 6) return { H_BASE: H_HA, K_BASE: K_HA, H_DAKU: [...H_BA, ...H_PA], K_DAKU: [...K_BA, ...K_PA] };
+    if (world === 6) return { H_BASE: H_HA, K_BASE: K_HA, H_DAKU: H_BA, K_DAKU: K_BA, H_HANDA: H_PA, K_HANDA: K_PA };
     if (world === 7) return { H_BASE: H_MA, K_BASE: K_MA, H_DAKU: [], K_DAKU: [] };
     if (world === 8) return { H_BASE: H_YA, K_BASE: K_YA, H_DAKU: [], K_DAKU: [] };
-    if (world === 9) return { H_BASE: H_RA, K_BASE: H_RA, H_DAKU: [], K_DAKU: [] };
+    if (world === 9) return { H_BASE: H_RA, K_BASE: K_RA, H_DAKU: [], K_DAKU: [] };
     if (world === 10) return { H_BASE: H_WA, K_BASE: K_WA, H_DAKU: [], K_DAKU: [] };
     return { H_BASE: [], K_BASE: [], H_DAKU: [], K_DAKU: [] };
   }
 
-  const { H_BASE, K_BASE, H_DAKU, K_DAKU } = getWorldSets(WORLD);
-  let KANA = [];
+  // ---------- KANA selection (base/daku/handaku) ----------
+  function getKanaSet(world, suffix, lexicon) {
+    const sets = getWorldSets(world);
+    const isHira = (lexicon === "hiragana");
 
+    // Base row (suffix < 6)
+    if (suffix < 6) {
+      return isHira ? [...sets.H_BASE] : [...sets.K_BASE];
+    }
+    // Dakuten row (suffix 6–10)
+    else if (suffix >= 6 && suffix < 11) {
+      return isHira ? [...sets.H_DAKU] : [...sets.K_DAKU];
+    }
+    // Handakuten row (suffix >= 11, world 6 only)
+    else if (suffix >= 11 && world === 6) {
+      return isHira ? [...sets.H_HANDA] : [...sets.K_HANDA];
+    }
+    return [];
+  }
+
+  let KANA = [];
   if (!IS_VOCAB) {
-    if (LEXICON === 'hiragana') KANA = [...H_BASE];
-    if (LEXICON === 'katakana') KANA = [...K_BASE];
+    KANA = getKanaSet(WORLD, SUFFIX, LEXICON);
   }
 
   // ---------- Pacing ----------
-  const GOAL_IDENT = (MIXED_TYPE || IS_TYPING_ONLY) ? 20 : 15;
-  const GOAL_TYPE  = (MIXED_TYPE || IS_TYPING_ONLY) ? 20 : 15;
-  const COMBO_LAST = (MIXED_TYPE || IS_TYPING_ONLY) ? 10 : 5;
+  const GOAL_IDENT = (false) ? 20 : 15;
+  const GOAL_TYPE  = (false) ? 20 : 15;
+  const COMBO_LAST = (false) ? 10 : 5;
 
   // ---------- Step Labels ----------
   (function initSteps() {
@@ -292,7 +289,7 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
 
     if (IS_VOCAB) {
       labels = ['Explorer','Hunt','Identify','Typing','Audio'];
-    } else if (IS_TYPING_ONLY) {
+    } else if (false) {
       labels = ['Preview','Typing','Finish'];
     } else {
       labels = ['Preview','Identify','Typing','Speak'];
@@ -310,12 +307,13 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
   // ---------- Export ----------
   window.LessonCore = {
     $,$$,
-    WORLD, SUFFIX, IS_VOCAB, IS_TYPING_ONLY, MIXED_TYPE,
+    WORLD, SUFFIX, IS_VOCAB,
     KANA, ROMA, PAIR,
     GOAL_IDENT, GOAL_TYPE, COMBO_LAST,
     showPart,
     LEXICON
   };
+
   // ---------- Bootstrapping ----------
   document.addEventListener("DOMContentLoaded", () => {
     if (IS_VOCAB) {

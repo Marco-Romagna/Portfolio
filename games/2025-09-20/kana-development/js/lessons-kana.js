@@ -42,40 +42,59 @@
     const part1 = $('#part-1');
     if (!part1) return;
     part1.innerHTML = '';
-
+  
     const title = document.createElement('h2');
     title.className = 'part-title';
     part1.appendChild(title);
-
-    // -3/-7 → pair cards; others → single-script
-    if (SUFFIX === 3 || SUFFIX === 7) {
+  
+    // Mixed-script lessons (3, 8, 13) → add marker class
+    if (SUFFIX === 3 || SUFFIX === 8 || SUFFIX === 13) {
+      part1.classList.add("mixed-script");
       title.textContent = 'Preview — Script Pairs';
+  
       const grid = document.createElement('div');
       grid.className = 'kana-grid';
       part1.appendChild(grid);
-
+  
       const hiraganaPool = KANA.filter(g => isHira(g));
       const pairs = hiraganaPool.map(h => ({ h, k: PAIR[h], r: ROMA[h] })).filter(p => !!p.k);
-
+  
       pairs.forEach(p => {
         const card = document.createElement('article');
-        card.className = 'pair-card';
+        card.className = 'card-big kana-card';   // same as single-script cards
+      
         card.innerHTML = `
           <div class="pair-row">
             <span class="glyph h">${p.h}</span>
-            <span class="link">⇄</span>
+            <span class="link">↔</span>
             <span class="glyph k">${p.k}</span>
           </div>
-          <div class="pair-romaji">${p.r}</div>
+          <span class="kana-sub">${p.r}</span>   <!-- consistent with others -->
         `;
+      
+        // Audio
+        card.addEventListener('click', () => {
+          const romaji = p.r;
+          if (romaji) {
+            const audioPath = `../assets/audio/kana/${romaji}.mp3`;
+            const audio = new Audio(audioPath);
+            audio.play().catch(err => console.warn('Audio failed:', err));
+          }
+        });
+      
         grid.appendChild(card);
       });
+
+  
     } else {
+      // Single-script lessons
+      part1.classList.remove("mixed-script");
       title.textContent = 'Preview';
+  
       const grid = document.createElement('div');
       grid.className = 'kana-grid';
       part1.appendChild(grid);
-
+  
       const uniq = Array.from(new Set(KANA));
       uniq.forEach(g => {
         const card = document.createElement('article');
@@ -84,16 +103,28 @@
           <span class="kana-glyph">${g}</span>
           <span class="kana-sub">${ROMA[g] || ''}</span>
         `;
+  
+        // --- Audio: make the whole card clickable ---
+        card.addEventListener('click', () => {
+          const romaji = ROMA[g];
+          if (romaji) {
+            const audioPath = `../assets/audio/kana/${romaji}.mp3`;
+            const audio = new Audio(audioPath);
+            audio.play().catch(err => console.warn('Audio failed:', err));
+          }
+        });
+  
         grid.appendChild(card);
       });
     }
-
+  
     const actions = document.createElement('div');
     actions.className = 'actions';
     actions.innerHTML = `<button class="btn primary" data-action="advance">${(SUFFIX === 4 || SUFFIX === 8) ? 'Start Typing' : 'Start'}</button>`;
     part1.appendChild(actions);
     actions.querySelector('[data-action="advance"]')?.addEventListener('click', () => showPart(2));
   }
+
 
   // ======================================================
   // Part 2 — Identify
