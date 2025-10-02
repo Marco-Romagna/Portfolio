@@ -98,25 +98,23 @@
   {"id":"wagon_kata","kana":"ワゴン","romaji":"wagon","gloss_en":"wagon; car wagon","tags":["loanword","transport","w-row"],"worlds":["10-vocab-kata"],"audio":"","note":"Loanword from English 'wagon'. Refers to wagons or certain car types.","example":{"kana":"ワゴンにのる","romaji":"wagon ni noru","english":"to ride in a wagon"}},
   {"id":"waado_kata","kana":"ワード","romaji":"waado","gloss_en":"word","tags":["loanword","abstract","w-row"],"worlds":["10-vocab-kata"],"audio":"","note":"Loanword from English 'word'. Also used for Microsoft Word.","example":{"kana":"ワードをつかう","romaji":"waado wo tsukau","english":"to use Word"}},
   {"id":"wakkusu_kata","kana":"ワックス","romaji":"wakkusu","gloss_en":"wax","tags":["loanword","object","w-row"],"worlds":["10-vocab-kata"],"audio":"","note":"Loanword from English 'wax'. Common for car wax or hair styling products.","example":{"kana":"ワックスをつける","romaji":"wakkusu wo tsukeru","english":"to apply wax"}},
-  {"id":"waffuru_kata","kana":"ワッフル","romaji":"waffuru","gloss_en":"waffle","tags":["loanword","food","w-row"],"worlds":["10-vocab-kata"],"audio":"","note":"Loanword from English 'waffle'. Common food word.","example":{"kana":"ワッフルをたべる","romaji":"waffuru wo taberu","english":"to eat a waffle"}},
-    
+  {"id":"waffuru_kata","kana":"ワッフル","romaji":"waffuru","gloss_en":"waffle","tags":["loanword","food","w-row"],"worlds":["10-vocab-kata"],"audio":"","note":"Loanword from English 'waffle'. Common food word.","example":{"kana":"ワッフルをたべる","romaji":"waffuru wo taberu","english":"to eat a waffle"}}
   ],
-    "byWorld": {
-      "1-vocab-kata": [],
-      "2-vocab-kata": ["iku_kata","kiku_kata","kau_kata","kao_kata","ike_kata","koe_kata"],
-      "2-vocab-daku-kata": ["gasorin_kata","gifuto_kata","gurasu_kata","gesuto_kata","gorufu_kata","gamu_kata"],
-      "3-vocab-kata": ["sarada_kata","saru_kata","semi_kata","suika_kata","sofa_kata","sekai_kata"],
-      "3-vocab-daku-kata": ["zubon_kata","zonbi_kata","zemi_kata","zaru_kata","zame_kata","zerachin_kata"],
-      "4-vocab-kata": ["taoru_kata","tanku_kata","tsuna_kata","terebi_kata","tenpo_kata","tomato_kata"],
-      "4-vocab-daku-kata": ["denshi_kata","dejitaru_kata","doresu_kata","dotto_kata","deeto_kata","dansu_kata"],
-      "5-vocab-kata": ["naisu_kata","nekutai_kata","natsu_kata","naifu_kata","nooto_kata","netto_kata"],
-      "6-vocab-kata": ["hanbaagaa_kata","hiirou_kata","herumetto_kata","hoteru_kata","hamu_kata","hotto_kata"],
-      "6-vocab-daku-kata": ["banana_kata","bideo_kata","buutsu_kata","beddo_kata","booru_kata","basu_kata"],
-      "6-vocab-handaku-kata": ["pasokon_kata","piza_kata","purin_kata","pengin_kata","poketto_kata","panda_kata"],
-      "7-vocab-kata": ["manga_kata","miruku_kata","monsutaa_kata","messeiji_kata","masuku_kata","memo_kata"],
-      "8-vocab-kata": ["yotto_kata","yooguruto_kata","yaado_kata","yuumoa_kata","yuuro_kata","yunitto_kata"],
-      "9-vocab-kata": ["raamen_kata","rajio_kata","risutora_kata","risaikuru_kata","rekoodo_kata","resutoran_kata"],
-      "10-vocab-kata": ["wan_kata","wain_kata","wagon_kata","waado_kata","wakkusu_kata","waffuru_kata"]
-    }
-
+  "byWorld": {
+    "1-vocab-kata": [],
+    "2-vocab-kata": ["iku_kata","kiku_kata","kau_kata","kao_kata","ike_kata","koe_kata"],
+    "2-vocab-daku-kata": ["gasorin_kata","gifuto_kata","gurasu_kata","gesuto_kata","gorufu_kata","gamu_kata"],
+    "3-vocab-kata": ["sarada_kata","saru_kata","semi_kata","suika_kata","sofa_kata","sekai_kata"],
+    "3-vocab-daku-kata": ["zubon_kata","zonbi_kata","zemi_kata","zaru_kata","zame_kata","zerachin_kata"],
+    "4-vocab-kata": ["taoru_kata","tanku_kata","tsuna_kata","terebi_kata","tenpo_kata","tomato_kata"],
+    "4-vocab-daku-kata": ["denshi_kata","dejitaru_kata","doresu_kata","dotto_kata","deeto_kata","dansu_kata"],
+    "5-vocab-kata": ["naisu_kata","nekutai_kata","natsu_kata","naifu_kata","nooto_kata","netto_kata"],
+    "6-vocab-kata": ["hanbaagaa_kata","hiirou_kata","herumetto_kata","hoteru_kata","hamu_kata","hotto_kata"],
+    "6-vocab-daku-kata": ["banana_kata","bideo_kata","buutsu_kata","beddo_kata","booru_kata","basu_kata"],
+    "6-vocab-handaku-kata": ["pasokon_kata","piza_kata","purin_kata","pengin_kata","poketto_kata","panda_kata"],
+    "7-vocab-kata": ["manga_kata","miruku_kata","monsutaa_kata","messeiji_kata","masuku_kata","memo_kata"],
+    "8-vocab-kata": ["yotto_kata","yooguruto_kata","yaado_kata","yuumoa_kata","yuuro_kata","yunitto_kata"],
+    "9-vocab-kata": ["raamen_kata","rajio_kata","risutora_kata","risaikuru_kata","rekoodo_kata","resutoran_kata"],
+    "10-vocab-kata": ["wan_kata","wain_kata","wagon_kata","waado_kata","wakkusu_kata","waffuru_kata"]
+  }
 }
