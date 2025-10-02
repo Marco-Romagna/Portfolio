@@ -42,21 +42,21 @@
     const part1 = $('#part-1');
     if (!part1) return;
     part1.innerHTML = '';
-
+  
     const title = document.createElement('h2');
     title.className = 'part-title';
     part1.appendChild(title);
-
+  
     // -3/-7 → pair cards; others → single-script
     if (SUFFIX === 3 || SUFFIX === 7) {
       title.textContent = 'Preview — Script Pairs';
       const grid = document.createElement('div');
       grid.className = 'kana-grid';
       part1.appendChild(grid);
-
+  
       const hiraganaPool = KANA.filter(g => isHira(g));
       const pairs = hiraganaPool.map(h => ({ h, k: PAIR[h], r: ROMA[h] })).filter(p => !!p.k);
-
+  
       pairs.forEach(p => {
         const card = document.createElement('article');
         card.className = 'pair-card';
@@ -68,6 +68,19 @@
           </div>
           <div class="pair-romaji">${p.r}</div>
         `;
+  
+        // --- Audio: make both glyphs clickable ---
+        card.querySelectorAll('.glyph').forEach(el => {
+          el.addEventListener('click', () => {
+            const romaji = p.r;
+            if (romaji) {
+              const audioPath = `games/2025-09-20/kana-development/assets/audio/kana/${romaji}.mp3`;
+              const audio = new Audio(audioPath);
+              audio.play().catch(err => console.warn('Audio failed:', err));
+            }
+          });
+        });
+  
         grid.appendChild(card);
       });
     } else {
@@ -75,7 +88,7 @@
       const grid = document.createElement('div');
       grid.className = 'kana-grid';
       part1.appendChild(grid);
-
+  
       const uniq = Array.from(new Set(KANA));
       uniq.forEach(g => {
         const card = document.createElement('article');
@@ -84,10 +97,21 @@
           <span class="kana-glyph">${g}</span>
           <span class="kana-sub">${ROMA[g] || ''}</span>
         `;
+  
+        // --- Audio: make the whole card clickable ---
+        card.addEventListener('click', () => {
+          const romaji = ROMA[g];
+          if (romaji) {
+            const audioPath = `games/2025-09-20/kana-development/assets/audio/kana/${romaji}.mp3`;
+            const audio = new Audio(audioPath);
+            audio.play().catch(err => console.warn('Audio failed:', err));
+          }
+        });
+  
         grid.appendChild(card);
       });
     }
-
+  
     const actions = document.createElement('div');
     actions.className = 'actions';
     actions.innerHTML = `<button class="btn primary" data-action="advance">${(SUFFIX === 4 || SUFFIX === 8) ? 'Start Typing' : 'Start'}</button>`;
