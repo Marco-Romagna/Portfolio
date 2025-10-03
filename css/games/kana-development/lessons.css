@@ -757,3 +757,16 @@ body.site {
   font-size: 1.1rem;
   color: #ccc;
 }
+
+
+/* Make vocab kana word look interactive */
+.vocab-detail .kana-glyph {
+  cursor: pointer;              
+  transition: transform 0.15s ease, color 0.15s ease;
+  display: inline-block;
+}
+
+.vocab-detail .kana-glyph:hover {
+  color: #ffd27f;               
+  transform: scale(1.05);       
+}
