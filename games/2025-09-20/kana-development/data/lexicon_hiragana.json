@@ -101,8 +101,8 @@
       {"id":"hon_hira","kana":"ほん","romaji":"hon","gloss_en":"book","tags":["core","n-ending","object"],"worlds":["10-vocab-hira"],"note":"Basic everyday noun. Written 本 in kanji.","example":{"kana":"ほんをよむ","romaji":"hon wo yomu","english":"to read a book"}},
       {"id":"ongaku_hira","kana":"おんがく","romaji":"ongaku","gloss_en":"music","tags":["core","n-ending","abstract"],"worlds":["10-vocab-hira"],"note":"Common abstract noun. Written 音楽 in kanji.","example":{"kana":"おんがくをきく","romaji":"ongaku wo kiku","english":"to listen to music"}},
       {"id":"sensei_hira","kana":"せんせい","romaji":"sensei","gloss_en":"teacher","tags":["core","n-ending","people"],"worlds":["10-vocab-hira"],"note":"Common noun for teacher/doctor/master. Written 先生 in kanji.","example":{"kana":"せんせいはやさしいです","romaji":"sensei wa yasashii desu","english":"the teacher is kind"}},
-      {"id":"denwa_hira","kana":"でんわ","romaji":"denwa","gloss_en":"telephone","tags":["core","n-ending","object"],"worlds":["10-vocab-hira"],"note":"Everyday word for telephone. Written 電話 in kanji.","example":{"kana":"でんわをかける","romaji":"denwa wo kakeru","english":"to make a phone call"}},
-      ],
+      {"id":"denwa_hira","kana":"でんわ","romaji":"denwa","gloss_en":"telephone","tags":["core","n-ending","object"],"worlds":["10-vocab-hira"],"note":"Everyday word for telephone. Written 電話 in kanji.","example":{"kana":"でんわをかける","romaji":"denwa wo kakeru","english":"to make a phone call"}}
+  ],
   "byWorld": {
     "1-vocab-hira": ["ai_hira","iie_hira","ue_hira","ie_hira","aoi_hira","au_hira"],
     "2-vocab-hira": ["iku_hira","kiku_hira","kau_hira","kao_hira","ike_hira","koe_hira"],
