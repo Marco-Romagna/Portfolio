@@ -55,6 +55,13 @@
             <p>${w.example.english}</p>
           </div>` : ""}
       `;
+  
+      // click-to-play for the detail block
+      detail.onclick = () => {
+        const audioPath = `../assets/audio/vocab/${w.romaji}.mp3`;
+        const audio = new Audio(audioPath);
+        audio.play().catch(err => console.warn('Audio failed:', err));
+      };
     }
   
     // --- Build word list sidebar ---
