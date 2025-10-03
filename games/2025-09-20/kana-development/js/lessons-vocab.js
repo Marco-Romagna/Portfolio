@@ -55,7 +55,19 @@
             <p>${w.example.english}</p>
           </div>` : ""}
       `;
+    
+      // --- Audio: make the big kana word clickable ---
+      const kanaEl = detail.querySelector('.kana-glyph');
+      if (kanaEl && w.audio) {
+        kanaEl.style.cursor = "pointer"; // show clickable cursor
+        kanaEl.addEventListener('click', () => {
+          const audioPath = `../assets/audio/vocab/${w.audio}`;
+          const audio = new Audio(audioPath);
+          audio.play().catch(err => console.warn("Audio failed:", err));
+        });
+      }
     }
+
   
     // --- Build word list sidebar ---
     const items = [];
