@@ -117,10 +117,6 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
     backBtn.classList.toggle('is-hidden', currentPart <= 1);
   }
 
-
-  nextBtn?.addEventListener('click', () => { if (window.DEBUG_SKIP_ENABLED) showPart(currentPart + 1); });
-  backBtn?.addEventListener('click', () => { if (window.DEBUG_SKIP_ENABLED) showPart(currentPart - 1); });
-
   // ---------- Summary Renderer ----------
   function initSummary() {
     const container = document.querySelector('#lesson-summary');
@@ -214,7 +210,7 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
     'ぱ':'pa','ぴ':'pi','ぷ':'pu','ぺ':'pe','ぽ':'po',
     'パ':'pa','ピ':'pi','プ':'pu','ペ':'pe','ポ':'po',
     'ま':'ma','み':'mi','む':'mu','め':'me','も':'mo',
-    'マ':'ma','ミ':'mi','ム':'mu','メ':'モ','モ':'mo',
+    'マ':'ma','ミ':'mi','ム':'mu','メ':'mo','モ':'mo',
     'や':'ya','ゆ':'yu','よ':'yo',
     'ヤ':'ya','ユ':'yu','ヨ':'yo',
     'ら':'ra','り':'ri','る':'ru','れ':'re','ろ':'ro',
@@ -328,6 +324,34 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
         window.initKanaParts();
       }
     }
+  });
+
+  // ---------- Wait for lesson scripts before enabling debug navigation ----------
+  window.addEventListener("load", () => {
+    if (!window.DEBUG_SKIP_ENABLED) return;
+
+    function debugAdvance(delta) {
+      const nextIdx = Math.min(Math.max(currentPart + delta, 1), totalParts);
+
+      // Ensure init before showing
+      if (!window.LessonCore.IS_VOCAB) {
+        if (nextIdx === 1 && typeof window.initPart1 === "function") window.initPart1();
+        if (nextIdx === 2 && typeof window.initPart2 === "function") window.initPart2();
+        if (nextIdx === 3 && typeof window.initPart3 === "function") window.initPart3();
+        if (nextIdx === 4 && typeof window.initPart4 === "function") window.initPart4();
+      } else {
+        if (nextIdx === 1 && typeof window.initPart1 === "function") window.initPart1();
+        if (nextIdx === 2 && typeof window.initPart2 === "function") window.initPart2();
+        if (nextIdx === 3 && typeof window.initPart3 === "function") window.initPart3();
+        if (nextIdx === 4 && typeof window.initPart4 === "function") window.initPart4();
+        if (nextIdx === 5 && typeof window.initPart5 === "function") window.initPart5();
+      }
+
+      showPart(nextIdx);
+    }
+
+    nextBtn?.addEventListener('click', () => debugAdvance(+1));
+    backBtn?.addEventListener('click', () => debugAdvance(-1));
   });
 
 })();
