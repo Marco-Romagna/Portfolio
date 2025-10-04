@@ -254,7 +254,7 @@
     }
 
     $('[data-action="next-part"]', part2)?.addEventListener('click', () => showPart(3));
-    updateMeter(); nextQuestion();
+    updateMeter(); nextQuestion(); afterInitPart2();
   }
 
   // ======================================================
@@ -277,6 +277,7 @@
       </div>
     `;
     initTyping(part3, GOAL_TYPE, false);
+    afterInitPart3();
   }
 
   // ======================================================
