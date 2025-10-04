@@ -122,7 +122,11 @@
     actions.className = 'actions';
     actions.innerHTML = `<button class="btn primary" data-action="advance">${(SUFFIX === 4 || SUFFIX === 8) ? 'Start Typing' : 'Start'}</button>`;
     part1.appendChild(actions);
-    actions.querySelector('[data-action="advance"]')?.addEventListener('click', () => showPart(2));
+    actions.querySelector('[data-action="advance"]')
+      ?.addEventListener('click', () => {
+        initPart2();   // create Part 2 dynamically
+        showPart(2);   // then switch to it
+      });
   }
 
 
