@@ -551,4 +551,12 @@
     initPart1();   // only start with Preview
   };
   window.initPart1 = initPart1;
+  window.forceInitAllKanaParts = function() {
+  if (typeof window.initPart1 === "function") window.initPart1();
+  if (typeof window.initPart2 === "function") window.initPart2();
+  if (typeof window.initPart3 === "function") window.initPart3();
+  if (typeof window.initPart4 === "function") window.initPart4();
+  console.log("[DEBUG] Force initialized all Kana parts for testing.");
+};
+  
 })();
