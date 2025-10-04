@@ -471,7 +471,7 @@
       nextBtn.addEventListener('click', () => {
         const [worldStr, suffixStr] = lessonId.split('-');
         const nextId = `${worldStr}-${Number(suffixStr) + 1}`;
-        window.location.href = `../lesson.html?id=${nextId}`;
+        window.location.href = `lesson.html?id=${nextId}`;
       });
   
       homeBtn.addEventListener('click', () => {
