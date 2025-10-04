@@ -322,7 +322,8 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
       const lessonContainer = document.querySelector('.lesson');
       if (lessonContainer) {
         lessonContainer.querySelectorAll('.lesson-part').forEach(p => {
-          p.innerHTML = '';
+          // Clear content but keep the part elements themselves
+          p.replaceChildren();
           p.classList.remove('is-visible');
         });
       }
