@@ -319,18 +319,29 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
       Object.assign(window.LessonCore, { WORLD, SUFFIX, IS_VOCAB, LEXICON, KANA });
   
       // --- Relaunch appropriate lesson ---
+      const lessonContainer = document.querySelector('.lesson');
+      if (lessonContainer) {
+        lessonContainer.querySelectorAll('.lesson-part').forEach(p => {
+          p.innerHTML = '';
+          p.classList.remove('is-visible');
+        });
+      }
+      
+      // --- Relaunch appropriate lesson type ---
       if (IS_VOCAB && typeof initVocabParts === 'function') {
+        console.log(`[DEBUG] Reloading VOCAB lesson ${nextId}`);
         initVocabParts();
       } else if (!IS_VOCAB && typeof initKanaParts === 'function') {
+        console.log(`[DEBUG] Reloading KANA lesson ${nextId}`);
         initKanaParts();
       } else {
         console.warn('No suitable init function found for soft reload.');
         window.location.href = `lesson.html?id=${nextId}`;
       }
-    } catch (err) {
-      console.error('Soft reload failed:', err);
-      window.location.href = `lesson.html?id=${currentId}`;
-    }
+      } catch (err) {
+        console.error('Soft reload failed:', err);
+        window.location.href = `lesson.html?id=${currentId}`;
+      }
   }
 
 
