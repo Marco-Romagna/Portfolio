@@ -247,13 +247,46 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
     KANA = getKanaSet(WORLD, SUFFIX, LEXICON);
   }
 
+  // ---------- Smooth lesson navigation ----------
+  function loadNextLesson(nextId) {
+    try {
+      const lesson = document.querySelector('.lesson');
+      if (!lesson) throw new Error('Lesson container missing.');
+  
+      // Update URL param without full reload
+      const params = new URLSearchParams(window.location.search);
+      params.set('id', nextId);
+      history.replaceState({}, '', `${window.location.pathname}?${params}`);
+  
+      // Update dataset so dependent scripts see the new ID
+      lesson.dataset.lessonId = nextId;
+  
+      // Decide which init to call
+      const { IS_VOCAB } = window.LessonCore;
+      if (IS_VOCAB && typeof initVocabParts === 'function') {
+        initVocabParts();
+      } else if (!IS_VOCAB && typeof initKanaParts === 'function') {
+        initKanaParts();
+      } else {
+        console.warn('No suitable init function found for soft reload.');
+        // fallback to hard reload
+        window.location.href = `lesson.html?id=${nextId}`;
+      }
+    } catch (err) {
+      console.error('Soft reload failed:', err);
+      // safety fallback
+      window.location.href = `lesson.html?id=${nextId}`;
+    }
+  }
+
   // ---------- Export ----------
   window.LessonCore = {
     $,$$,
     WORLD, SUFFIX, IS_VOCAB,
     KANA, ROMA, PAIR,
     showPart, LEXICON,
-    GOAL_IDENT, GOAL_TYPE, COMBO_LAST
+    GOAL_IDENT, GOAL_TYPE, COMBO_LAST,
+    loadNextLesson
   };
 
 
