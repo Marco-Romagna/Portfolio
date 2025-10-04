@@ -305,9 +305,11 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
       const IS_VOCAB = [...HIRA_VOCAB_SUFFIXES, ...KATA_VOCAB_SUFFIXES].includes(SUFFIX);
   
       let LEXICON = 'hiragana';
-      if (KATA_VOCAB_SUFFIXES.includes(SUFFIX) || SUFFIX % 2 === 0) {
+      // Katakana lessons always come right after Hiragana (e.g., 1-2, 2-2, etc.)
+      if (SUFFIX % 5 === 2 || SUFFIX % 5 === 0 || KATA_VOCAB_SUFFIXES.includes(SUFFIX)) {
         LEXICON = 'katakana';
       }
+
   
       // --- Rebuild KANA if needed ---
       let KANA = [];
