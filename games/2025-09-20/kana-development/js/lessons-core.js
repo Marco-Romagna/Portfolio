@@ -38,7 +38,12 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
   (async () => {
     try {
       const summaries = await window.Vocab.loadSummaries();
-      SUMMARY_DATA = summaries.find(s => s.worlds.includes(qId));
+      // find level definition
+      const levelDef = window.KANA_STAGES.levels.find(l => l.code === qId);
+      // prefer vocabKey if it exists
+      const lookupId = levelDef?.vocabKey || qId;
+      
+      SUMMARY_DATA = summaries.find(s => s.worlds.includes(lookupId));
       if (SUMMARY_DATA) {
         initSummary();
       } else {

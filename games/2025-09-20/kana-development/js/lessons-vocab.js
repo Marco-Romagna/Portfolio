@@ -397,17 +397,23 @@
   // ======================================================
   window.initVocabParts = async function () {
     const qId = document.querySelector('.lesson').dataset.lessonId;
-    const [world, suffix] = qId.split('-').map(Number);
-    const roleKey = getRoleKey(world, suffix);
+  
+    // look up this level in KANA_STAGES
+    const levelDef = window.KANA_STAGES.levels.find(l => l.code === qId);
+  
+    // prefer vocabKey if available
+    const roleKey = levelDef?.vocabKey || qId;
+  
     const words = await Vocab.getWorldMilestone(roleKey, LEXICON);
-
+  
     window.initPart1 = () => initPart1(words);
     await initPart1(words); // run immediately for Part 1
-
+  
     window.initPart2 = () => initPart2Hunt(roleKey, words);
     window.initPart3 = () => initPart3(words);
     window.initPart4 = () => initPart4(words);
     window.initPart5 = () => initPart5(words);
   };
+
 
 })();
