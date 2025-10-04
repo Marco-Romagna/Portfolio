@@ -69,7 +69,7 @@
             <span class="link">↔</span>
             <span class="glyph k">${p.k}</span>
           </div>
-          <span class="kana-sub">${p.r}</span>   <!-- consistent with others -->
+          <span class="kana-sub">${p.r}</span>
         `;
       
         // Audio
@@ -84,8 +84,6 @@
       
         grid.appendChild(card);
       });
-
-  
     } else {
       // Single-script lessons
       part1.classList.remove("mixed-script");
@@ -128,7 +126,6 @@
         showPart(2);   // then switch to it
       });
   }
-
 
   // ======================================================
   // Part 2 — Identify
@@ -210,13 +207,11 @@
       }
 
       const ordered=arrangeOptionsNoSlotRepeat(options);
-
-      // Fixed theme order: dark, light, sepia, high
       const themes = THEMES.slice(0, ordered.length);
 
       ordered.forEach((glyph,i)=>{
         const b=document.createElement('button');
-        b.className=`option ${themes[i]}`;  // 👈 fixed per slot
+        b.className=`option ${themes[i]}`;
         b.dataset.value=glyph;
         b.textContent=glyph;
         b.addEventListener('click',()=>onPick(glyph,promptGlyph,b));
@@ -262,7 +257,7 @@
   }
 
   // ======================================================
-  // Part 3 — Typing
+  // Part 3 — Typing (with combos)
   // ======================================================
   function initPart3(){
     if(IS_TYPING_ONLY) return;
@@ -343,7 +338,6 @@
       if (unseen.length === 0) unseen = [...KANA];
       currentKana = unseen.splice(Math.floor(Math.random() * unseen.length), 1)[0];
   
-      // Autoplay with delay — AFTER rendering
       setTimeout(() => playAudio(currentKana), 600);
   
       const distractors = KANA.filter(k => k !== currentKana)
@@ -394,15 +388,11 @@
       ?.addEventListener('click', () => window.location.href = '../index.html');
   
     updateMeter();
-  
-    // 👉 Don’t autoplay immediately — wait until part is visible
-    // Instead, trigger the first question slightly delayed
     setTimeout(() => nextQuestion(), 400);
   }
 
-
   // ======================================================
-  // Typing Engine (shared)
+  // Typing Engine (shared with combos)
   // ======================================================
   function initTyping(scopeEl,GOAL,isPart2){
     const wrapper=$('.type-glyph-wrapper',scopeEl);
@@ -523,6 +513,7 @@
 
     updateMeter(); newRound();
   }
+
   // ======================================================
   // Helpers to wire progression
   // ======================================================
@@ -551,12 +542,5 @@
     initPart1();   // only start with Preview
   };
   window.initPart1 = initPart1;
-  window.forceInitAllKanaParts = function() {
-  if (typeof window.initPart1 === "function") window.initPart1();
-  if (typeof window.initPart2 === "function") window.initPart2();
-  if (typeof window.initPart3 === "function") window.initPart3();
-  if (typeof window.initPart4 === "function") window.initPart4();
-  console.log("[DEBUG] Force initialized all Kana parts for testing.");
-};
-  
+
 })();
