@@ -519,6 +519,26 @@
 
     updateMeter(); newRound();
   }
+  // ======================================================
+  // Helpers to wire progression
+  // ======================================================
+  function afterInitPart2() {
+    const part2 = $('#part-2');
+    $('[data-action="next-part"]', part2)
+      ?.addEventListener('click', () => {
+        initPart3();
+        showPart(3);
+      });
+  }
+
+  function afterInitPart3() {
+    const part3 = $('#part-3');
+    $('[data-action="next-part"]', part3)
+      ?.addEventListener('click', () => {
+        initPart4();
+        showPart(4);
+      });
+  }
 
   // ======================================================
   // Public API
