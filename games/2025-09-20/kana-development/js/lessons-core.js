@@ -332,17 +332,16 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
       if (IS_VOCAB && typeof initVocabParts === 'function') {
         console.log(`[DEBUG] Reloading VOCAB lesson ${nextId}`);
         initVocabParts();
+        if (typeof window.LessonCore.showPart === 'function') window.LessonCore.showPart(1);
       } else if (!IS_VOCAB && typeof initKanaParts === 'function') {
         console.log(`[DEBUG] Reloading KANA lesson ${nextId}`);
         initKanaParts();
+        if (typeof window.LessonCore.showPart === 'function') window.LessonCore.showPart(1);
       } else {
         console.warn('No suitable init function found for soft reload.');
         window.location.href = `lesson.html?id=${nextId}`;
       }
-      } catch (err) {
-        console.error('Soft reload failed:', err);
-        window.location.href = `lesson.html?id=${currentId}`;
-      }
+
   }
 
 
