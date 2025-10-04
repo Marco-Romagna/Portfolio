@@ -38,24 +38,19 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
   (async () => {
     try {
       const summaries = await window.Vocab.loadSummaries();
-      // find level definition
       const levelDef = window.KANA_STAGES.levels.find(l => l.code === qId);
-      // prefer vocabKey if it exists
       const lookupId = levelDef?.vocabKey || qId;
-      
       SUMMARY_DATA = summaries.find(s => s.worlds.includes(lookupId));
-      if (SUMMARY_DATA) {
-        initSummary();
-      } else {
-        showPart(1); // no summary, jump straight in
-      }
+
+      if (SUMMARY_DATA) initSummary();
+      else showPart(1);
     } catch (e) {
       console.warn("No summaries loaded", e);
       showPart(1);
     }
   })();
 
-  // Decide total parts (summary is not counted)
+  // ---------- Base setup ----------
   const baseParts = IS_VOCAB ? 5 : 4;
   lesson.dataset.totalParts = baseParts;
   const totalParts = baseParts;
@@ -70,7 +65,7 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
   const hideCTA = () => { ctaWrap?.classList.add('is-hidden'); };
 
   // Add back button
-  let backBtn = document.createElement('button');
+  const backBtn = document.createElement('button');
   backBtn.textContent = "← Back";
   backBtn.className = "btn primary is-hidden";
   backBtn.dataset.action = "back";
@@ -80,8 +75,7 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
 
   function showPart(idx) {
     currentPart = Math.min(Math.max(idx, 1), totalParts);
-  
-    // --- Always ensure the part exists before showing it ---
+
     if (!window.LessonCore.IS_VOCAB) {
       if (currentPart === 1 && typeof window.initPart1 === "function") window.initPart1();
       if (currentPart === 2 && typeof window.initPart2 === "function") window.initPart2();
@@ -94,26 +88,22 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
       if (currentPart === 4 && typeof window.initPart4 === "function") window.initPart4();
       if (currentPart === 5 && typeof window.initPart5 === "function") window.initPart5();
     }
-  
-    // --- Now safely display it ---
+
+    // Visibility and step state
     parts.forEach(p =>
       p.classList.toggle('is-visible', Number(p.dataset.partIndex) === currentPart)
     );
     $$('.steps .step').forEach(s =>
       s.classList.toggle('is-active', Number(s.dataset.part) === currentPart)
     );
-  
+
     const pct = totalParts > 1 ? Math.round((currentPart - 1) / (totalParts - 1) * 100) : 100;
     if (fill) fill.style.width = `${pct}%`;
     if (progress) progress.setAttribute('aria-valuenow', String(pct));
-  
-    // --- Debug buttons always visible when testing ---
-    if (window.DEBUG_SKIP_ENABLED) {
-      ctaWrap?.classList.remove('is-hidden');
-    } else {
-      hideCTA();
-    }
-  
+
+    if (window.DEBUG_SKIP_ENABLED) ctaWrap?.classList.remove('is-hidden');
+    else hideCTA();
+
     backBtn.classList.toggle('is-hidden', currentPart <= 1);
   }
 
@@ -122,12 +112,10 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
     const container = document.querySelector('#lesson-summary');
     if (!container || !SUMMARY_DATA) return;
 
-    // Hide normal lesson UI while summary is active
     document.querySelector('.lesson-progress')?.classList.add('is-hidden');
     $$('.lesson-part').forEach(p => p.classList.add('is-hidden'));
     document.querySelector('.lesson-cta')?.classList.add('is-hidden');
 
-    // Render summary panel
     container.classList.remove('is-hidden');
     container.innerHTML = `
       <div class="summary-panel">
@@ -138,7 +126,6 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
       </div>
     `;
 
-    // Restore UI on start
     document.querySelector('#start-lesson')
       .addEventListener('click', () => {
         container.classList.add('is-hidden');
@@ -146,10 +133,7 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
         document.querySelector('.lesson-cta')?.classList.remove('is-hidden');
         $$('.lesson-part').forEach(p => p.classList.remove('is-hidden', 'is-visible'));
         showPart(1);
-        if (typeof window.initPart1 === "function") {
-          window.initPart1();
-          window.initPart1 = null;
-        }
+        if (typeof window.initPart1 === "function") window.initPart1();
       });
   }
 
@@ -185,7 +169,6 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
   const H_WA  = ['わ','を','ん'];
   const K_WA  = ['ワ','ヲ','ン'];
 
-  // ---------- Romaji Map ----------
   const ROMA = {
     'あ':'a','い':'i','う':'u','え':'e','お':'o',
     'ア':'a','イ':'i','ウ':'u','エ':'e','オ':'o',
@@ -219,160 +202,43 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
     'ワ':'wa','ヲ':'wo','ン':'n'
   };
 
-  // ---------- Cross-script mapping ----------
-  const PAIR = {};
-  function addPairs(hRow, kRow) {
-    hRow.forEach((h,i)=>{ PAIR[h] = kRow[i]; PAIR[kRow[i]] = h; });
-  }
-  addPairs(H_VOW, K_VOW);
-  addPairs(H_KA, K_KA); addPairs(H_GA, K_GA);
-  addPairs(H_SA, K_SA); addPairs(H_ZA, K_ZA);
-  addPairs(H_TA, K_TA); addPairs(H_DA, K_DA);
-  addPairs(H_NA, K_NA);
-  addPairs(H_HA, K_HA); addPairs(H_BA, K_BA); addPairs(H_PA, K_PA);
-  addPairs(H_MA, K_MA);
-  addPairs(H_YA, K_YA);
-  addPairs(H_RA, K_RA);
-  addPairs(H_WA, K_WA);
-
-  // ---------- World Sets ----------
-  function getWorldSets(world) {
-    if (world === 1) return { H_BASE: H_VOW, K_BASE: K_VOW, H_DAKU: [], K_DAKU: [] };
-    if (world === 2) return { H_BASE: H_KA, K_BASE: K_KA, H_DAKU: H_GA, K_DAKU: K_GA };
-    if (world === 3) return { H_BASE: H_SA, K_BASE: K_SA, H_DAKU: H_ZA, K_DAKU: K_ZA };
-    if (world === 4) return { H_BASE: H_TA, K_BASE: K_TA, H_DAKU: H_DA, K_DAKU: K_DA };
-    if (world === 5) return { H_BASE: H_NA, K_BASE: K_NA, H_DAKU: [], K_DAKU: [] };
-    if (world === 6) return { H_BASE: H_HA, K_BASE: K_HA, H_DAKU: H_BA, K_DAKU: K_BA, H_HANDA: H_PA, K_HANDA: K_PA };
-    if (world === 7) return { H_BASE: H_MA, K_BASE: K_MA, H_DAKU: [], K_DAKU: [] };
-    if (world === 8) return { H_BASE: H_YA, K_BASE: K_YA, H_DAKU: [], K_DAKU: [] };
-    if (world === 9) return { H_BASE: H_RA, K_BASE: K_RA, H_DAKU: [], K_DAKU: [] };
-    if (world === 10) return { H_BASE: H_WA, K_BASE: K_WA, H_DAKU: [], K_DAKU: [] };
-    return { H_BASE: [], K_BASE: [], H_DAKU: [], K_DAKU: [] };
-  }
-
-  // ---------- KANA selection (base/daku/handaku) ----------
-  function getKanaSet(world, suffix, lexicon) {
-    const sets = getWorldSets(world);
-    const isHira = (lexicon === "hiragana");
-
-    // Base row (suffix < 6)
-    if (suffix < 6) {
-      return isHira ? [...sets.H_BASE] : [...sets.K_BASE];
-    }
-    // Dakuten row (suffix 6–10)
-    else if (suffix >= 6 && suffix < 11) {
-      return isHira ? [...sets.H_DAKU] : [...sets.K_DAKU];
-    }
-    // Handakuten row (suffix >= 11, world 6 only)
-    else if (suffix >= 11 && world === 6) {
-      return isHira ? [...sets.H_HANDA] : [...sets.K_HANDA];
-    }
-    return [];
-  }
-
-  let KANA = [];
-  if (!IS_VOCAB) {
-    KANA = getKanaSet(WORLD, SUFFIX, LEXICON);
-  }
-
-  // ---------- Pacing ----------
-  const GOAL_IDENT = (false) ? 20 : 15;
-  const GOAL_TYPE  = (false) ? 20 : 15;
-  const COMBO_LAST = (false) ? 10 : 5;
-
-  // ---------- Step Labels ----------
-  (function initSteps() {
-    if (!stepsList) return;
-    stepsList.innerHTML = '';
-    let labels;
-
-    if (IS_VOCAB) {
-      labels = ['Explorer','Hunt','Identify','Typing','Audio'];
-    } else if (false) {
-      labels = ['Preview','Typing','Finish'];
-    } else {
-      labels = ['Preview','Identify','Typing','Speak'];
-    }
-
-    labels.forEach((label, idx) => {
-      const li = document.createElement('li');
-      li.className = `step ${idx===0 ? 'is-active' : ''}`;
-      li.dataset.part = (idx+1);
-      li.innerHTML = `<span class="step-label">Part ${idx+1}</span><span class="step-sub">${label}</span>`;
-      stepsList.appendChild(li);
-    });
-  })();
-
   // ---------- Export ----------
   window.LessonCore = {
     $,$$,
     WORLD, SUFFIX, IS_VOCAB,
-    KANA, ROMA, PAIR,
-    GOAL_IDENT, GOAL_TYPE, COMBO_LAST,
+    KANA, ROMA,
     showPart,
     LEXICON
   };
 
   // ---------- Bootstrapping ----------
-  function tryStartLesson() {
+  document.addEventListener("DOMContentLoaded", () => {
     if (IS_VOCAB && typeof window.initVocabParts === "function") {
       console.log("[DEBUG] Starting vocab lesson");
       window.initVocabParts();
-      return true;
-    }
-    if (!IS_VOCAB && typeof window.initKanaParts === "function") {
+    } else if (!IS_VOCAB && typeof window.initKanaParts === "function") {
       console.log("[DEBUG] Starting kana lesson");
       window.initKanaParts();
-      return true;
-    }
-    return false;
-  }
-  
-  // Keep retrying until lessons-kana.js defines init functions
-  document.addEventListener("DOMContentLoaded", () => {
-    if (!tryStartLesson()) {
-      console.log("[DEBUG] Waiting for lesson scripts...");
-      const timer = setInterval(() => {
-        if (tryStartLesson()) {
-          clearInterval(timer);
-        }
-      }, 100);
     }
   });
 
+  // ---------- Debug Helper ----------
+  if (window.DEBUG_SKIP_ENABLED) {
+    window.forceInitAllKanaParts = function () {
+      console.log("[DEBUG] Manually initializing all Kana parts...");
+      try {
+        if (typeof window.initPart1 === "function") window.initPart1();
+        if (typeof window.initPart2 === "function") window.initPart2();
+        if (typeof window.initPart3 === "function") window.initPart3();
+        if (typeof window.initPart4 === "function") window.initPart4();
+        console.log("[DEBUG] ✅ All Kana parts manually initialized.");
+      } catch (err) {
+        console.error("[DEBUG] ❌ Failed to init all parts:", err);
+      }
+    };
 
-    // ---------- Wait for lesson scripts before enabling debug navigation ----------
-    window.addEventListener("load", () => {
-      if (!window.DEBUG_SKIP_ENABLED) return;
-    
-      // delay by one tick so lessons-kana.js has time to define parts
-      setTimeout(() => {
-        function debugAdvance(delta) {
-          const nextIdx = Math.min(Math.max(currentPart + delta, 1), totalParts);
-    
-          console.log(`[DEBUG] Trying to move to Part ${nextIdx} (current: ${currentPart}, total: ${totalParts})`);
-    
-          // Ensure init before showing
-          if (!window.LessonCore.IS_VOCAB) {
-            if (nextIdx === 1 && typeof window.initPart1 === "function") { console.log("[DEBUG] initPart1()"); window.initPart1(); }
-            if (nextIdx === 2 && typeof window.initPart2 === "function") { console.log("[DEBUG] initPart2()"); window.initPart2(); }
-            if (nextIdx === 3 && typeof window.initPart3 === "function") { console.log("[DEBUG] initPart3()"); window.initPart3(); }
-            if (nextIdx === 4 && typeof window.initPart4 === "function") { console.log("[DEBUG] initPart4()"); window.initPart4(); }
-          } else {
-            if (nextIdx === 1 && typeof window.initPart1 === "function") { console.log("[DEBUG] initPart1()"); window.initPart1(); }
-            if (nextIdx === 2 && typeof window.initPart2 === "function") { console.log("[DEBUG] initPart2()"); window.initPart2(); }
-            if (nextIdx === 3 && typeof window.initPart3 === "function") { console.log("[DEBUG] initPart3()"); window.initPart3(); }
-            if (nextIdx === 4 && typeof window.initPart4 === "function") { console.log("[DEBUG] initPart4()"); window.initPart4(); }
-            if (nextIdx === 5 && typeof window.initPart5 === "function") { console.log("[DEBUG] initPart5()"); window.initPart5(); }
-          }
-    
-          showPart(nextIdx);
-          console.log(`[DEBUG] Now showing Part ${nextIdx}`);
-        }
-    
-        nextBtn?.addEventListener('click', () => debugAdvance(+1));
-        backBtn?.addEventListener('click', () => debugAdvance(-1));
-      }, 200); // small delay ensures lesson scripts are ready
-    });
-
+    // Debug next/back bindings
+    nextBtn?.addEventListener('click', () => showPart(currentPart + 1));
+    backBtn?.addEventListener('click', () => showPart(currentPart - 1));
+  }
 })();
