@@ -80,6 +80,23 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
 
   function showPart(idx) {
     currentPart = Math.min(Math.max(idx, 1), totalParts);
+
+    if (!window.LessonCore.IS_VOCAB) {
+    if (currentPart === 1 && typeof window.initPart1 === "function") {
+      window.initPart1(); window.initPart1 = null;
+    }
+    if (currentPart === 2 && typeof window.initPart2 === "function") {
+      window.initPart2(); window.initPart2 = null;
+    }
+    if (currentPart === 3 && typeof window.initPart3 === "function") {
+      window.initPart3(); window.initPart3 = null;
+    }
+    if (currentPart === 4 && typeof window.initPart4 === "function") {
+      window.initPart4(); window.initPart4 = null;
+    }
+  }
+
+    
     parts.forEach(p =>
       p.classList.toggle('is-visible', Number(p.dataset.partIndex) === currentPart)
     );
