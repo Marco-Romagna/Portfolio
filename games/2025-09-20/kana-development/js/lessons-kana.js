@@ -308,7 +308,7 @@
     const meterLabel = $('.quiz-progress .meter-label', part4);
     const replayBtn = $('#replay-audio', part4);
   
-    const GOAL = KANA.length * 2; // 2x each kana
+    const GOAL = KANA.length * 2;
     let progressPts = 0;
     let unseen = [...KANA];
     let currentKana = null;
@@ -334,20 +334,18 @@
       roundLocked = false;
       grid.innerHTML = '';
       feedback.textContent = '';
-    
-      // Pick kana
+  
       if (unseen.length === 0) unseen = [...KANA];
       currentKana = unseen.splice(Math.floor(Math.random() * unseen.length), 1)[0];
-    
-      // Autoplay with small delay
-      setTimeout(() => playAudio(currentKana), 500);
-    
-      // Options
+  
+      // Autoplay with delay — AFTER rendering
+      setTimeout(() => playAudio(currentKana), 600);
+  
       const distractors = KANA.filter(k => k !== currentKana)
                               .sort(() => 0.5 - Math.random())
                               .slice(0, 3);
       const options = [currentKana, ...distractors].sort(() => 0.5 - Math.random());
-    
+  
       options.forEach((g, i) => {
         const b = document.createElement('button');
         b.className = `option ${THEMES[i % THEMES.length]}`;
@@ -355,10 +353,9 @@
         b.addEventListener('click', () => onPick(g, b));
         grid.appendChild(b);
       });
-    
+  
       replayBtn.onclick = () => playAudio(currentKana);
     }
-
   
     function onPick(choice, btn) {
       if (roundLocked) return;
@@ -392,8 +389,12 @@
       ?.addEventListener('click', () => window.location.href = '../index.html');
   
     updateMeter();
-    nextQuestion();
+  
+    // 👉 Don’t autoplay immediately — wait until part is visible
+    // Instead, trigger the first question slightly delayed
+    setTimeout(() => nextQuestion(), 400);
   }
+
 
   // ======================================================
   // Typing Engine (shared)
