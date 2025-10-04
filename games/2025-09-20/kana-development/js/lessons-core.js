@@ -260,20 +260,39 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
     }
   });
 
-  // ---------- Debug navigation ----------
+    // ---------- Debug navigation ----------
   window.addEventListener("load", () => {
     if (!window.DEBUG_SKIP_ENABLED) return;
     console.log("[DEBUG] Debug navigation ready");
 
-    function debugAdvance(delta) {
-      const nextIdx = Math.min(Math.max(currentPart + delta, 1), totalParts);
-      console.log(`[DEBUG] Trying to move to Part ${nextIdx}`);
-      showPart(nextIdx);
-      console.log(`[DEBUG] Now showing Part ${nextIdx}`);
+    function clickRealAdvance() {
+      // Look for the real "advance" button inside the current visible part
+      const realAdvance = document.querySelector(
+        `.lesson-part.is-visible [data-action="advance"]`
+      );
+      if (realAdvance) {
+        console.log("[DEBUG] Triggering real advance button");
+        realAdvance.click(); // simulate real lesson logic
+      } else {
+        console.log("[DEBUG] No visible advance button — fallback → showPart()");
+        showPart(currentPart + 1);
+      }
     }
 
-    nextBtn?.addEventListener('click', () => debugAdvance(+1));
-    backBtn?.addEventListener('click', () => debugAdvance(-1));
-  });
+    function clickRealBack() {
+      const realBack = document.querySelector(
+        `.lesson-part.is-visible [data-action="back"]`
+      );
+      if (realBack) {
+        console.log("[DEBUG] Triggering real back button");
+        realBack.click();
+      } else {
+        console.log("[DEBUG] No visible back button — fallback → showPart()");
+        showPart(currentPart - 1);
+      }
+    }
 
+    nextBtn?.addEventListener("click", clickRealAdvance);
+    backBtn?.addEventListener("click", clickRealBack);
+  });
 })();
