@@ -314,6 +314,15 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
       if (!IS_VOCAB && typeof getKanaSet === 'function') {
         KANA = getKanaSet(WORLD, SUFFIX, LEXICON);
       }
+      // --- Update global KANA in LessonCore so next lesson uses the right script ---
+      if (window.LessonCore) {
+        window.LessonCore.KANA = KANA;
+        window.LessonCore.LEXICON = LEXICON;
+        window.LessonCore.SUFFIX = SUFFIX;
+        window.LessonCore.WORLD = WORLD;
+        window.LessonCore.IS_VOCAB = IS_VOCAB;
+      }
+
   
       // --- Update LessonCore globals ---
       Object.assign(window.LessonCore, { WORLD, SUFFIX, IS_VOCAB, LEXICON, KANA });
