@@ -314,17 +314,32 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
   };
 
   // ---------- Bootstrapping ----------
+  function tryStartLesson() {
+    if (IS_VOCAB && typeof window.initVocabParts === "function") {
+      console.log("[DEBUG] Starting vocab lesson");
+      window.initVocabParts();
+      return true;
+    }
+    if (!IS_VOCAB && typeof window.initKanaParts === "function") {
+      console.log("[DEBUG] Starting kana lesson");
+      window.initKanaParts();
+      return true;
+    }
+    return false;
+  }
+  
+  // Keep retrying until lessons-kana.js defines init functions
   document.addEventListener("DOMContentLoaded", () => {
-    if (IS_VOCAB) {
-      if (typeof window.initVocabParts === "function") {
-        window.initVocabParts();
-      }
-    } else {
-      if (typeof window.initKanaParts === "function") {
-        window.initKanaParts();
-      }
+    if (!tryStartLesson()) {
+      console.log("[DEBUG] Waiting for lesson scripts...");
+      const timer = setInterval(() => {
+        if (tryStartLesson()) {
+          clearInterval(timer);
+        }
+      }, 100);
     }
   });
+
 
     // ---------- Wait for lesson scripts before enabling debug navigation ----------
     window.addEventListener("load", () => {
