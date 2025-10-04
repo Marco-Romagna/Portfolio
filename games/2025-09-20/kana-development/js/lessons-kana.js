@@ -524,11 +524,7 @@
   // Public API
   // ======================================================
   window.initKanaParts = function(){
-    initPart1();
-    initPart2();
-    initPart3();
-    initPart4();
+    initPart1();   // only start with Preview
   };
-  
   window.initPart1 = initPart1;
 })();
