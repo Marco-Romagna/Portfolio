@@ -365,32 +365,124 @@
   }
 
   // ======================================================
-  // Part 5 — Audio
+  // Part 5 — Audio Quiz (Listen & Type)
   // ======================================================
   async function initPart5(words) {
     const part5 = $('#part-5');
     if (!part5) return;
-    part5.innerHTML = '<h2 class="part-title">Audio Quiz</h2>';
+  
+    part5.innerHTML = `
+      <h2 class="part-title">Audio Quiz</h2>
+    `;
+  
     const panel = document.createElement('div');
     panel.className = 'speak-panel';
     panel.innerHTML = `
-      <button class="btn primary" id="play-audio">Play Audio</button>
-      <input id="audio-answer" class="type-input" placeholder="Type romaji or English…" />
-      <div class="actions"><button class="btn primary" data-action="finish-lesson">Finish</button></div>
+      <button class="btn primary" id="play-audio">🔊 Play Audio</button>
+      <input id="audio-answer" class="type-input" placeholder="Type romaji or English…" autocomplete="off" />
+      <div class="quiz-feedback"><p class="feedback-text"></p></div>
+      <div class="actions">
+        <button class="btn primary is-hidden" data-action="next-part">Finish Lesson</button>
+      </div>
     `;
     part5.appendChild(panel);
-
-    const btnPlay = $('#play-audio', part5);
-    const input = $('#audio-answer', part5);
-    const finishBtn = $('[data-action="finish-lesson"]', part5);
-
-    let current = words[Math.floor(Math.random() * words.length)];
+  
+    const btnPlay   = $('#play-audio', part5);
+    const input     = $('#audio-answer', part5);
+    const feedback  = $('.feedback-text', part5);
+    const nextBtn   = $('[data-action="next-part"]', part5);
+  
+    const THEMES = ['theme-dark','theme-light','theme-sepia','theme-high'];
+    const GOAL = Math.max(3, Math.floor(words.length / 2)); // small random quiz length
+  
+    let progressPts = 0;
+    let current = null;
+    let unseen = [...words];
+  
+    function pickWord() {
+      if (unseen.length === 0) unseen = [...words];
+      return unseen.splice(Math.floor(Math.random() * unseen.length), 1)[0];
+    }
+  
+    function playAudio(word) {
+      if (word.audio) {
+        new Audio(word.audio).play();
+      } else {
+        const romaji = word.romaji;
+        if (!romaji) {
+          alert("No audio available for this word.");
+          return;
+        }
+        const audioPath = `../assets/audio/vocab/${romaji}.mp3`;
+        const audio = new Audio(audioPath);
+        audio.play().catch(err => console.warn('Audio failed:', err));
+      }
+    }
+  
+    function nextQuestion() {
+      current = pickWord();
+      feedback.textContent = '';
+      input.value = '';
+      btnPlay.disabled = false;
+    }
+  
     btnPlay.addEventListener('click', () => {
-      if (current.audio) new Audio(current.audio).play();
-      else alert("No audio file found for this word yet.");
+      playAudio(current);
     });
-    finishBtn.addEventListener('click', () => { window.location.href = '../index.html'; });
+  
+    input.addEventListener('keydown', e => {
+      if (e.key === 'Enter') {
+        const guess = input.value.trim().toLowerCase();
+        const correctRomaji = current.romaji?.toLowerCase() || '';
+        const correctEnglish = current.gloss_en?.toLowerCase() || '';
+  
+        if (guess === correctRomaji || guess === correctEnglish) {
+          feedback.textContent = '✅ Correct!';
+          progressPts++;
+          if (progressPts >= GOAL) {
+            feedback.textContent = '🎉 Part complete!';
+            showFinishButtons();
+          } else {
+            setTimeout(nextQuestion, 600);
+          }
+        } else {
+          feedback.textContent = '❌ Try again…';
+        }
+      }
+    });
+  
+    // ---------------------------------------------
+    // Show Next Level + Return Home on completion
+    // ---------------------------------------------
+    function showFinishButtons() {
+      nextBtn.textContent = 'Next Level →';
+      nextBtn.classList.remove('is-hidden');
+      nextBtn.dataset.action = 'next-level';
+  
+      // Create Return Home button
+      const homeBtn = document.createElement('button');
+      homeBtn.className = 'btn ghost';
+      homeBtn.dataset.action = 'return-home';
+      homeBtn.textContent = '🏠 Return to Home';
+      nextBtn.parentElement?.appendChild(homeBtn);
+  
+      const lessonId = document.body.dataset.lessonId || '';
+  
+      nextBtn.addEventListener('click', () => {
+        const [worldStr, suffixStr] = lessonId.split('-');
+        const nextId = `${worldStr}-${Number(suffixStr) + 1}`;
+        window.location.href = `../lesson.html?id=${nextId}`;
+      });
+  
+      homeBtn.addEventListener('click', () => {
+        window.location.href = '../index.html';
+      });
+    }
+  
+    // Start first question
+    nextQuestion();
   }
+
 
   // ======================================================
   // Public API
