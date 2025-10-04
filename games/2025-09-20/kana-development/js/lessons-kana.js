@@ -69,7 +69,7 @@
             <span class="link">↔</span>
             <span class="glyph k">${p.k}</span>
           </div>
-          <span class="kana-sub">${p.r}</span>   <!-- consistent with others -->
+          <span class="kana-sub">${p.r}</span>
         `;
       
         // Audio
@@ -84,8 +84,6 @@
       
         grid.appendChild(card);
       });
-
-  
     } else {
       // Single-script lessons
       part1.classList.remove("mixed-script");
@@ -122,9 +120,12 @@
     actions.className = 'actions';
     actions.innerHTML = `<button class="btn primary" data-action="advance">${(SUFFIX === 4 || SUFFIX === 8) ? 'Start Typing' : 'Start'}</button>`;
     part1.appendChild(actions);
-    actions.querySelector('[data-action="advance"]')?.addEventListener('click', () => showPart(2));
+    actions.querySelector('[data-action="advance"]')
+      ?.addEventListener('click', () => {
+        initPart2();   // create Part 2 dynamically
+        showPart(2);   // then switch to it
+      });
   }
-
 
   // ======================================================
   // Part 2 — Identify
@@ -206,13 +207,11 @@
       }
 
       const ordered=arrangeOptionsNoSlotRepeat(options);
-
-      // Fixed theme order: dark, light, sepia, high
       const themes = THEMES.slice(0, ordered.length);
 
       ordered.forEach((glyph,i)=>{
         const b=document.createElement('button');
-        b.className=`option ${themes[i]}`;  // 👈 fixed per slot
+        b.className=`option ${themes[i]}`;
         b.dataset.value=glyph;
         b.textContent=glyph;
         b.addEventListener('click',()=>onPick(glyph,promptGlyph,b));
@@ -254,11 +253,11 @@
     }
 
     $('[data-action="next-part"]', part2)?.addEventListener('click', () => showPart(3));
-    updateMeter(); nextQuestion();
+    updateMeter(); nextQuestion(); afterInitPart2();
   }
 
   // ======================================================
-  // Part 3 — Typing
+  // Part 3 — Typing (with combos)
   // ======================================================
   function initPart3(){
     if(IS_TYPING_ONLY) return;
@@ -277,27 +276,123 @@
       </div>
     `;
     initTyping(part3, GOAL_TYPE, false);
+    afterInitPart3();
   }
 
   // ======================================================
-  // Part 4 — Speak (placeholder)
+  // Part 4 — Audio Identify (sound → kana)
   // ======================================================
-  function initPart4(){
-    const part4=$('#part-4'); if(!part4) return;
-    part4.innerHTML = '';
-    const panel=document.createElement('div');
-    panel.className='speak-panel';
-    panel.innerHTML=`
-      <div class="kana-glyph speak-glyph">${KANA[0]||'あ'}</div>
-      <p class="muted">Speaking practice is in progress.</p>
-      <button class="btn primary" data-action="finish-lesson">Finish</button>
+  function initPart4() {
+    const part4 = $('#part-4');
+    if (!part4) return;
+  
+    part4.innerHTML = `
+      <h2 class="part-title">Audio — Listen & Identify</h2>
+      <div class="quiz-panel">
+        <div class="quiz-prompt">
+          <button class="btn ghost" id="replay-audio">🔊 Replay sound</button>
+        </div>
+        <div class="quiz-options"></div>
+        <div class="quiz-progress">
+          <div class="meter"><div class="meter-fill"></div></div>
+          <div class="meter-label"></div>
+        </div>
+        <div class="quiz-feedback"><p class="feedback-text"></p></div>
+        <div class="actions"><button class="btn primary is-hidden" data-action="next-part">Finish Lesson</button></div>
+      </div>
     `;
-    part4.appendChild(panel);
-    panel.querySelector('[data-action="finish-lesson"]')?.addEventListener('click',()=>{ window.location.href='../index.html'; });
+  
+    const grid = $('.quiz-options', part4);
+    const feedback = $('.quiz-feedback .feedback-text', part4);
+    const meterFill = $('.quiz-progress .meter-fill', part4);
+    const meterLabel = $('.quiz-progress .meter-label', part4);
+    const replayBtn = $('#replay-audio', part4);
+  
+    const GOAL = KANA.length * 2;
+    let progressPts = 0;
+    let unseen = [...KANA];
+    let currentKana = null;
+    let roundLocked = false;
+  
+    const THEMES = ['theme-dark','theme-light','theme-sepia','theme-high'];
+  
+    function playAudio(k) {
+      const romaji = ROMA[k];
+      if (!romaji) return;
+      const audioPath = `../assets/audio/kana/${romaji}.mp3`;
+      const audio = new Audio(audioPath);
+      audio.play().catch(err => console.warn("Audio failed:", err));
+    }
+  
+    function updateMeter() {
+      const pct = Math.round((progressPts / GOAL) * 100);
+      meterFill.style.width = `${pct}%`;
+      meterLabel.textContent = `Progress: ${progressPts} / ${GOAL}`;
+    }
+  
+    function nextQuestion() {
+      roundLocked = false;
+      grid.innerHTML = '';
+      feedback.textContent = '';
+  
+      if (unseen.length === 0) unseen = [...KANA];
+      currentKana = unseen.splice(Math.floor(Math.random() * unseen.length), 1)[0];
+  
+      setTimeout(() => playAudio(currentKana), 600);
+  
+      const distractors = KANA.filter(k => k !== currentKana)
+                              .sort(() => 0.5 - Math.random())
+                              .slice(0, 3);
+      const options = [currentKana, ...distractors].sort(() => 0.5 - Math.random());
+  
+      options.forEach((g, i) => {
+        const b = document.createElement('button');
+        b.className = `option ${THEMES[i % THEMES.length]}`;
+        b.textContent = g;
+        b.addEventListener('click', () => onPick(g, b));
+        grid.appendChild(b);
+      });
+  
+      replayBtn.onclick = () => playAudio(currentKana);
+    }
+  
+    function onPick(choice, btn) {
+      if (roundLocked) return;
+      roundLocked = true;
+      const all = $$('.option', part4);
+      all.forEach(b => b.disabled = true);
+  
+      if (choice === currentKana) {
+        btn.classList.add('is-correct');
+        feedback.textContent = 'Correct!';
+        progressPts++;
+        updateMeter();
+        setTimeout(() => {
+          if (progressPts >= GOAL) {
+            $('[data-action="next-part"]', part4)?.classList.remove('is-hidden');
+            feedback.textContent = 'Part complete!';
+          } else {
+            nextQuestion();
+          }
+        }, 350);
+      } else {
+        btn.classList.add('is-wrong');
+        feedback.textContent = 'Try again…';
+        progressPts = Math.max(0, progressPts - 1);
+        updateMeter();
+        setTimeout(() => nextQuestion(), 450);
+      }
+    }
+  
+    $('[data-action="next-part"]', part4)
+      ?.addEventListener('click', () => window.location.href = '../index.html');
+  
+    updateMeter();
+    setTimeout(() => nextQuestion(), 400);
   }
 
   // ======================================================
-  // Typing Engine (shared)
+  // Typing Engine (shared with combos)
   // ======================================================
   function initTyping(scopeEl,GOAL,isPart2){
     const wrapper=$('.type-glyph-wrapper',scopeEl);
@@ -420,14 +515,32 @@
   }
 
   // ======================================================
+  // Helpers to wire progression
+  // ======================================================
+  function afterInitPart2() {
+    const part2 = $('#part-2');
+    $('[data-action="next-part"]', part2)
+      ?.addEventListener('click', () => {
+        initPart3();
+        showPart(3);
+      });
+  }
+
+  function afterInitPart3() {
+    const part3 = $('#part-3');
+    $('[data-action="next-part"]', part3)
+      ?.addEventListener('click', () => {
+        initPart4();
+        showPart(4);
+      });
+  }
+
+  // ======================================================
   // Public API
   // ======================================================
   window.initKanaParts = function(){
-    initPart1();
-    initPart2();
-    initPart3();
-    initPart4();
+    initPart1();   // only start with Preview
   };
-  
   window.initPart1 = initPart1;
+
 })();

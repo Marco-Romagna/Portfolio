@@ -35,39 +35,22 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
   // ---------- Summary Detection ----------
   let SUMMARY_DATA = null;
 
-  (async () => {
-    try {
-      const summaries = await window.Vocab.loadSummaries();
-      // find level definition
-      const levelDef = window.KANA_STAGES.levels.find(l => l.code === qId);
-      // prefer vocabKey if it exists
-      const lookupId = levelDef?.vocabKey || qId;
-      
-      SUMMARY_DATA = summaries.find(s => s.worlds.includes(lookupId));
-      if (SUMMARY_DATA) {
-        initSummary();
-      } else {
-        showPart(1); // no summary, jump straight in
-      }
-    } catch (e) {
-      console.warn("No summaries loaded", e);
-      showPart(1);
-    }
-  })();
-
-  // Decide total parts (summary is not counted)
-  const baseParts = IS_VOCAB ? 5 : 4;
-  lesson.dataset.totalParts = baseParts;
-  const totalParts = baseParts;
-
+  // ---------- DOM / UI ----------
   const parts      = $$('.lesson-part');
   const stepsList  = $('.steps');
   const progress   = $('.progressbar');
   const fill       = $('.progressbar-fill');
+  const ctaWrap    = $('.lesson-cta');
+  const nextBtn    = $('.lesson-cta [data-action="advance"]');
+  const hideCTA    = () => { ctaWrap?.classList.add('is-hidden'); };
 
-  const ctaWrap = $('.lesson-cta');
-  const nextBtn = $('.lesson-cta [data-action="advance"]');
-  const hideCTA = () => { ctaWrap?.classList.add('is-hidden'); };
+  // ---------- Progress + Parts ----------
+  const baseParts = IS_VOCAB ? 5 : 4;
+  lesson.dataset.totalParts = baseParts;
+  const totalParts = baseParts;
+
+  let currentPart = 1;
+  let KANA = []; // ✅ declared early so it's always defined
 
   // Add back button
   let backBtn = document.createElement('button');
@@ -76,10 +59,25 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
   backBtn.dataset.action = "back";
   ctaWrap?.insertBefore(backBtn, nextBtn);
 
-  let currentPart = 1;
-
+  // ---------- Core Show Function ----------
   function showPart(idx) {
     currentPart = Math.min(Math.max(idx, 1), totalParts);
+
+    // --- Always ensure the part exists before showing it ---
+    if (!window.LessonCore.IS_VOCAB) {
+      if (currentPart === 1 && typeof window.initPart1 === "function") window.initPart1();
+      if (currentPart === 2 && typeof window.initPart2 === "function") window.initPart2();
+      if (currentPart === 3 && typeof window.initPart3 === "function") window.initPart3();
+      if (currentPart === 4 && typeof window.initPart4 === "function") window.initPart4();
+    } else {
+      if (currentPart === 1 && typeof window.initPart1 === "function") window.initPart1();
+      if (currentPart === 2 && typeof window.initPart2 === "function") window.initPart2();
+      if (currentPart === 3 && typeof window.initPart3 === "function") window.initPart3();
+      if (currentPart === 4 && typeof window.initPart4 === "function") window.initPart4();
+      if (currentPart === 5 && typeof window.initPart5 === "function") window.initPart5();
+    }
+
+    // --- Display it ---
     parts.forEach(p =>
       p.classList.toggle('is-visible', Number(p.dataset.partIndex) === currentPart)
     );
@@ -91,49 +89,25 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
     if (fill) fill.style.width = `${pct}%`;
     if (progress) progress.setAttribute('aria-valuenow', String(pct));
 
-    if (!window.DEBUG_SKIP_ENABLED) {
-      hideCTA();
-    } else {
+    // --- Debug visibility ---
+    if (window.DEBUG_SKIP_ENABLED) {
       ctaWrap?.classList.remove('is-hidden');
-    }
-
-    if (currentPart > 1) {
-      backBtn.classList.remove('is-hidden');
     } else {
-      backBtn.classList.add('is-hidden');
+      hideCTA();
     }
 
-    // Lazy-init vocab parts
-    if (window.LessonCore.IS_VOCAB) {
-      if (currentPart === 2 && typeof window.initPart2 === "function") {
-        window.initPart2(); window.initPart2 = null;
-      }
-      if (currentPart === 3 && typeof window.initPart3 === "function") {
-        window.initPart3(); window.initPart3 = null;
-      }
-      if (currentPart === 4 && typeof window.initPart4 === "function") {
-        window.initPart4(); window.initPart4 = null;
-      }
-      if (currentPart === 5 && typeof window.initPart5 === "function") {
-        window.initPart5(); window.initPart5 = null;
-      }
-    }
+    backBtn.classList.toggle('is-hidden', currentPart <= 1);
   }
-
-  nextBtn?.addEventListener('click', () => { if (window.DEBUG_SKIP_ENABLED) showPart(currentPart + 1); });
-  backBtn?.addEventListener('click', () => { if (window.DEBUG_SKIP_ENABLED) showPart(currentPart - 1); });
 
   // ---------- Summary Renderer ----------
   function initSummary() {
     const container = document.querySelector('#lesson-summary');
     if (!container || !SUMMARY_DATA) return;
 
-    // Hide normal lesson UI while summary is active
     document.querySelector('.lesson-progress')?.classList.add('is-hidden');
     $$('.lesson-part').forEach(p => p.classList.add('is-hidden'));
     document.querySelector('.lesson-cta')?.classList.add('is-hidden');
 
-    // Render summary panel
     container.classList.remove('is-hidden');
     container.innerHTML = `
       <div class="summary-panel">
@@ -144,7 +118,6 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
       </div>
     `;
 
-    // Restore UI on start
     document.querySelector('#start-lesson')
       .addEventListener('click', () => {
         container.classList.add('is-hidden');
@@ -216,7 +189,7 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
     'ぱ':'pa','ぴ':'pi','ぷ':'pu','ぺ':'pe','ぽ':'po',
     'パ':'pa','ピ':'pi','プ':'pu','ペ':'pe','ポ':'po',
     'ま':'ma','み':'mi','む':'mu','め':'me','も':'mo',
-    'マ':'ma','ミ':'mi','ム':'mu','メ':'モ','モ':'mo',
+    'マ':'ma','ミ':'mi','ム':'mu','メ':'mo','モ':'mo',
     'や':'ya','ゆ':'yu','よ':'yo',
     'ヤ':'ya','ユ':'yu','ヨ':'yo',
     'ら':'ra','り':'ri','る':'ru','れ':'re','ろ':'ro',
@@ -256,80 +229,71 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
     return { H_BASE: [], K_BASE: [], H_DAKU: [], K_DAKU: [] };
   }
 
-  // ---------- KANA selection (base/daku/handaku) ----------
   function getKanaSet(world, suffix, lexicon) {
     const sets = getWorldSets(world);
     const isHira = (lexicon === "hiragana");
-
-    // Base row (suffix < 6)
-    if (suffix < 6) {
-      return isHira ? [...sets.H_BASE] : [...sets.K_BASE];
-    }
-    // Dakuten row (suffix 6–10)
-    else if (suffix >= 6 && suffix < 11) {
-      return isHira ? [...sets.H_DAKU] : [...sets.K_DAKU];
-    }
-    // Handakuten row (suffix >= 11, world 6 only)
-    else if (suffix >= 11 && world === 6) {
-      return isHira ? [...sets.H_HANDA] : [...sets.K_HANDA];
-    }
+    if (suffix < 6) return isHira ? [...sets.H_BASE] : [...sets.K_BASE];
+    else if (suffix >= 6 && suffix < 11) return isHira ? [...sets.H_DAKU] : [...sets.K_DAKU];
+    else if (suffix >= 11 && world === 6) return isHira ? [...sets.H_HANDA] : [...sets.K_HANDA];
     return [];
   }
 
-  let KANA = [];
   if (!IS_VOCAB) {
     KANA = getKanaSet(WORLD, SUFFIX, LEXICON);
   }
-
-  // ---------- Pacing ----------
-  const GOAL_IDENT = (false) ? 20 : 15;
-  const GOAL_TYPE  = (false) ? 20 : 15;
-  const COMBO_LAST = (false) ? 10 : 5;
-
-  // ---------- Step Labels ----------
-  (function initSteps() {
-    if (!stepsList) return;
-    stepsList.innerHTML = '';
-    let labels;
-
-    if (IS_VOCAB) {
-      labels = ['Explorer','Hunt','Identify','Typing','Audio'];
-    } else if (false) {
-      labels = ['Preview','Typing','Finish'];
-    } else {
-      labels = ['Preview','Identify','Typing','Speak'];
-    }
-
-    labels.forEach((label, idx) => {
-      const li = document.createElement('li');
-      li.className = `step ${idx===0 ? 'is-active' : ''}`;
-      li.dataset.part = (idx+1);
-      li.innerHTML = `<span class="step-label">Part ${idx+1}</span><span class="step-sub">${label}</span>`;
-      stepsList.appendChild(li);
-    });
-  })();
 
   // ---------- Export ----------
   window.LessonCore = {
     $,$$,
     WORLD, SUFFIX, IS_VOCAB,
     KANA, ROMA, PAIR,
-    GOAL_IDENT, GOAL_TYPE, COMBO_LAST,
-    showPart,
-    LEXICON
+    showPart, LEXICON
   };
 
   // ---------- Bootstrapping ----------
   document.addEventListener("DOMContentLoaded", () => {
+    console.log("[DEBUG] DOM Ready — Bootstrapping lessons");
     if (IS_VOCAB) {
-      if (typeof window.initVocabParts === "function") {
-        window.initVocabParts();
-      }
+      if (typeof window.initVocabParts === "function") window.initVocabParts();
     } else {
-      if (typeof window.initKanaParts === "function") {
-        window.initKanaParts();
-      }
+      if (typeof window.initKanaParts === "function") window.initKanaParts();
     }
   });
 
+     // ---------- Debug navigation ----------
+      window.addEventListener("load", () => {
+        if (!window.DEBUG_SKIP_ENABLED) return;
+        console.log("[DEBUG] Debug navigation ready");
+    
+        function clickRealAdvance() {
+          // Support both `advance` and `next-part`
+          const realAdvance = document.querySelector(
+            `.lesson-part.is-visible [data-action="advance"], 
+             .lesson-part.is-visible [data-action="next-part"]`
+          );
+          if (realAdvance) {
+            console.log("[DEBUG] Triggering real advance/next-part button");
+            realAdvance.click();
+          } else {
+            console.log("[DEBUG] No advance/next-part button — fallback → showPart()");
+            showPart(currentPart + 1);
+          }
+        }
+    
+        function clickRealBack() {
+          const realBack = document.querySelector(
+            `.lesson-part.is-visible [data-action="back"]`
+          );
+          if (realBack) {
+            console.log("[DEBUG] Triggering real back button");
+            realBack.click();
+          } else {
+            console.log("[DEBUG] No back button — fallback → showPart()");
+            showPart(currentPart - 1);
+          }
+        }
+    
+        nextBtn?.addEventListener("click", clickRealAdvance);
+        backBtn?.addEventListener("click", clickRealBack);
+      });
 })();

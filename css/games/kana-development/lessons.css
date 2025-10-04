@@ -770,3 +770,28 @@ body.site {
   color: #ffd27f;               
   transform: scale(1.05);       
 }
+
+/* =========================================================
+   Kana Part 4 — Audio Identify
+   ========================================================= */
+.lesson #part-4 .quiz-prompt {
+  text-align: center;
+  margin-bottom: 14px;
+}
+
+.lesson #part-4 #replay-audio {
+  font-size: 1rem;
+  padding: 10px 16px;
+  border-radius: var(--kp-radius);
+  background: var(--kp-surface-2);
+  color: var(--kp-text);
+  border: 1px solid var(--kp-border);
+  cursor: pointer;
+  transition: background .15s, transform .1s;
+}
+
+.lesson #part-4 #replay-audio:hover {
+  background: color-mix(in oklab, var(--kp-accent) 15%, var(--kp-surface-2));
+  transform: translateY(-1px);
+}
+
