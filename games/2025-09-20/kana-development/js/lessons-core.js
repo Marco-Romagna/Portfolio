@@ -342,8 +342,11 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
         window.location.href = `lesson.html?id=${nextId}`;
       }
 
+    } catch (err) {
+      console.error('Soft reload failed:', err);
+      window.location.href = `lesson.html?id=${currentId}`;
+    }
   }
-
 
   // ---------- Export ----------
   window.LessonCore = {
