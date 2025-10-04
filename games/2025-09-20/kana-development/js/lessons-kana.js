@@ -334,20 +334,20 @@
       roundLocked = false;
       grid.innerHTML = '';
       feedback.textContent = '';
-  
+    
       // Pick kana
       if (unseen.length === 0) unseen = [...KANA];
       currentKana = unseen.splice(Math.floor(Math.random() * unseen.length), 1)[0];
-  
-      // Autoplay
-      playAudio(currentKana);
-  
+    
+      // Autoplay with small delay
+      setTimeout(() => playAudio(currentKana), 500);
+    
       // Options
       const distractors = KANA.filter(k => k !== currentKana)
                               .sort(() => 0.5 - Math.random())
                               .slice(0, 3);
       const options = [currentKana, ...distractors].sort(() => 0.5 - Math.random());
-  
+    
       options.forEach((g, i) => {
         const b = document.createElement('button');
         b.className = `option ${THEMES[i % THEMES.length]}`;
@@ -355,9 +355,10 @@
         b.addEventListener('click', () => onPick(g, b));
         grid.appendChild(b);
       });
-  
+    
       replayBtn.onclick = () => playAudio(currentKana);
     }
+
   
     function onPick(choice, btn) {
       if (roundLocked) return;
