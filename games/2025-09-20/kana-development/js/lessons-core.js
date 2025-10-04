@@ -326,32 +326,36 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
     }
   });
 
-  // ---------- Wait for lesson scripts before enabling debug navigation ----------
-  window.addEventListener("load", () => {
-    if (!window.DEBUG_SKIP_ENABLED) return;
-
-    function debugAdvance(delta) {
-      const nextIdx = Math.min(Math.max(currentPart + delta, 1), totalParts);
-
-      // Ensure init before showing
-      if (!window.LessonCore.IS_VOCAB) {
-        if (nextIdx === 1 && typeof window.initPart1 === "function") window.initPart1();
-        if (nextIdx === 2 && typeof window.initPart2 === "function") window.initPart2();
-        if (nextIdx === 3 && typeof window.initPart3 === "function") window.initPart3();
-        if (nextIdx === 4 && typeof window.initPart4 === "function") window.initPart4();
-      } else {
-        if (nextIdx === 1 && typeof window.initPart1 === "function") window.initPart1();
-        if (nextIdx === 2 && typeof window.initPart2 === "function") window.initPart2();
-        if (nextIdx === 3 && typeof window.initPart3 === "function") window.initPart3();
-        if (nextIdx === 4 && typeof window.initPart4 === "function") window.initPart4();
-        if (nextIdx === 5 && typeof window.initPart5 === "function") window.initPart5();
+    // ---------- Wait for lesson scripts before enabling debug navigation ----------
+    window.addEventListener("load", () => {
+      if (!window.DEBUG_SKIP_ENABLED) return;
+  
+      function debugAdvance(delta) {
+        const nextIdx = Math.min(Math.max(currentPart + delta, 1), totalParts);
+  
+        console.log(`[DEBUG] Trying to move to Part ${nextIdx} (current: ${currentPart}, total: ${totalParts})`);
+  
+        // Ensure init before showing
+        if (!window.LessonCore.IS_VOCAB) {
+          if (nextIdx === 1 && typeof window.initPart1 === "function") { console.log("[DEBUG] initPart1()"); window.initPart1(); }
+          if (nextIdx === 2 && typeof window.initPart2 === "function") { console.log("[DEBUG] initPart2()"); window.initPart2(); }
+          if (nextIdx === 3 && typeof window.initPart3 === "function") { console.log("[DEBUG] initPart3()"); window.initPart3(); }
+          if (nextIdx === 4 && typeof window.initPart4 === "function") { console.log("[DEBUG] initPart4()"); window.initPart4(); }
+        } else {
+          if (nextIdx === 1 && typeof window.initPart1 === "function") { console.log("[DEBUG] initPart1()"); window.initPart1(); }
+          if (nextIdx === 2 && typeof window.initPart2 === "function") { console.log("[DEBUG] initPart2()"); window.initPart2(); }
+          if (nextIdx === 3 && typeof window.initPart3 === "function") { console.log("[DEBUG] initPart3()"); window.initPart3(); }
+          if (nextIdx === 4 && typeof window.initPart4 === "function") { console.log("[DEBUG] initPart4()"); window.initPart4(); }
+          if (nextIdx === 5 && typeof window.initPart5 === "function") { console.log("[DEBUG] initPart5()"); window.initPart5(); }
+        }
+  
+        showPart(nextIdx);
+        console.log(`[DEBUG] Now showing Part ${nextIdx}`);
       }
+  
+      nextBtn?.addEventListener('click', () => debugAdvance(+1));
+      backBtn?.addEventListener('click', () => debugAdvance(-1));
+    });
 
-      showPart(nextIdx);
-    }
-
-    nextBtn?.addEventListener('click', () => debugAdvance(+1));
-    backBtn?.addEventListener('click', () => debugAdvance(-1));
-  });
 
 })();
