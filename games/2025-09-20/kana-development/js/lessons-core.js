@@ -247,66 +247,92 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
     KANA = getKanaSet(WORLD, SUFFIX, LEXICON);
   }
 
-  // ---------- Smooth lesson navigation ----------
-  function loadNextLesson(nextId) {
+  // ---------- Smooth lesson navigation (stages-driven) ----------
+  function loadNextLesson(currentId) {
     try {
+      const stages = window.KANA_STAGES?.levels || [];
+      if (!stages.length) {
+        console.warn("[WARN] No KANA_STAGES.levels found.");
+        window.location.href = '../index.html';
+        return;
+      }
+  
+      const index = stages.findIndex(l => l.code === currentId);
+      if (index === -1) {
+        console.warn(`[WARN] Unknown lesson id ${currentId}`);
+        window.location.href = '../index.html';
+        return;
+      }
+  
+      // End of lessons check
+      if (index >= stages.length - 1) {
+        console.log("[INFO] End of all lessons reached.");
+        const endScreen = document.createElement('div');
+        endScreen.className = 'lesson-end';
+        endScreen.innerHTML = `
+          <div class="summary-panel">
+            <h2>🎉 Congratulations!</h2>
+            <p>You've completed all available lessons!</p>
+            <button class="btn primary" onclick="window.location.href='../index.html'">Return Home</button>
+          </div>
+        `;
+        document.body.innerHTML = '';
+        document.body.appendChild(endScreen);
+        return;
+      }
+  
+      // Compute next lesson id from stages.js
+      const nextId = stages[index + 1].code;
+      console.log(`[DEBUG] Advancing from ${currentId} → ${nextId}`);
+  
+      // Update URL + dataset
       const lesson = document.querySelector('.lesson');
       if (!lesson) throw new Error('Lesson container missing.');
   
-      // Update URL param without full reload
       const params = new URLSearchParams(window.location.search);
       params.set('id', nextId);
       history.replaceState({}, '', `${window.location.pathname}?${params}`);
-  
-      // Update dataset so dependent scripts see the new ID
       lesson.dataset.lessonId = nextId;
   
-      // --- Recalculate world + suffix ---
-      const [, suffixStr] = nextId.split('-');
+      // --- Extract world + suffix ---
+      const [worldStr, suffixStr] = nextId.split('-');
+      const WORLD = Number(worldStr);
       const SUFFIX = Number(suffixStr);
-      const [WORLD] = nextId.split('-').map(Number);
   
-      // ---------- Lesson Type + Lexicon Detection ----------
+      // --- Recompute core state ---
       const HIRA_VOCAB_SUFFIXES = [4, 9, 14];
       const KATA_VOCAB_SUFFIXES = [5, 10, 15];
       const IS_VOCAB = [...HIRA_VOCAB_SUFFIXES, ...KATA_VOCAB_SUFFIXES].includes(SUFFIX);
   
-      // Alternate lexicon by suffix parity for kana, or explicit sets for vocab
-      let LEXICON = "hiragana";
+      let LEXICON = 'hiragana';
       if (KATA_VOCAB_SUFFIXES.includes(SUFFIX) || SUFFIX % 2 === 0) {
-        LEXICON = "katakana";
+        LEXICON = 'katakana';
       }
   
-      // ---------- Rebuild Kana Set (if applicable) ----------
+      // --- Rebuild KANA if needed ---
       let KANA = [];
-      if (!IS_VOCAB) {
+      if (!IS_VOCAB && typeof getKanaSet === 'function') {
         KANA = getKanaSet(WORLD, SUFFIX, LEXICON);
       }
   
-      // Update the LessonCore globals
-      Object.assign(window.LessonCore, {
-        WORLD, SUFFIX, IS_VOCAB, LEXICON, KANA
-      });
+      // --- Update LessonCore globals ---
+      Object.assign(window.LessonCore, { WORLD, SUFFIX, IS_VOCAB, LEXICON, KANA });
   
-      // ---------- Relaunch appropriate lesson type ----------
-      if (IS_VOCAB && typeof window.initVocabParts === 'function') {
-        console.log(`[DEBUG] Soft reload → VOCAB world=${WORLD}, suffix=${SUFFIX}, lexicon=${LEXICON}`);
+      // --- Relaunch appropriate lesson ---
+      if (IS_VOCAB && typeof initVocabParts === 'function') {
         initVocabParts();
-      } else if (!IS_VOCAB && typeof window.initKanaParts === 'function') {
-        console.log(`[DEBUG] Soft reload → KANA world=${WORLD}, suffix=${SUFFIX}, lexicon=${LEXICON}`);
+      } else if (!IS_VOCAB && typeof initKanaParts === 'function') {
         initKanaParts();
       } else {
         console.warn('No suitable init function found for soft reload.');
-        // fallback to full reload
         window.location.href = `lesson.html?id=${nextId}`;
       }
     } catch (err) {
       console.error('Soft reload failed:', err);
-      window.location.href = `lesson.html?id=${nextId}`;
+      window.location.href = `lesson.html?id=${currentId}`;
     }
   }
 
-  
 
   // ---------- Export ----------
   window.LessonCore = {
