@@ -261,23 +261,52 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
       // Update dataset so dependent scripts see the new ID
       lesson.dataset.lessonId = nextId;
   
-      // Decide which init to call
-      const { IS_VOCAB } = window.LessonCore;
-      if (IS_VOCAB && typeof initVocabParts === 'function') {
+      // --- Recalculate world + suffix ---
+      const [, suffixStr] = nextId.split('-');
+      const SUFFIX = Number(suffixStr);
+      const [WORLD] = nextId.split('-').map(Number);
+  
+      // ---------- Lesson Type + Lexicon Detection ----------
+      const HIRA_VOCAB_SUFFIXES = [4, 9, 14];
+      const KATA_VOCAB_SUFFIXES = [5, 10, 15];
+      const IS_VOCAB = [...HIRA_VOCAB_SUFFIXES, ...KATA_VOCAB_SUFFIXES].includes(SUFFIX);
+  
+      // Alternate lexicon by suffix parity for kana, or explicit sets for vocab
+      let LEXICON = "hiragana";
+      if (KATA_VOCAB_SUFFIXES.includes(SUFFIX) || SUFFIX % 2 === 0) {
+        LEXICON = "katakana";
+      }
+  
+      // ---------- Rebuild Kana Set (if applicable) ----------
+      let KANA = [];
+      if (!IS_VOCAB) {
+        KANA = getKanaSet(WORLD, SUFFIX, LEXICON);
+      }
+  
+      // Update the LessonCore globals
+      Object.assign(window.LessonCore, {
+        WORLD, SUFFIX, IS_VOCAB, LEXICON, KANA
+      });
+  
+      // ---------- Relaunch appropriate lesson type ----------
+      if (IS_VOCAB && typeof window.initVocabParts === 'function') {
+        console.log(`[DEBUG] Soft reload → VOCAB world=${WORLD}, suffix=${SUFFIX}, lexicon=${LEXICON}`);
         initVocabParts();
-      } else if (!IS_VOCAB && typeof initKanaParts === 'function') {
+      } else if (!IS_VOCAB && typeof window.initKanaParts === 'function') {
+        console.log(`[DEBUG] Soft reload → KANA world=${WORLD}, suffix=${SUFFIX}, lexicon=${LEXICON}`);
         initKanaParts();
       } else {
         console.warn('No suitable init function found for soft reload.');
-        // fallback to hard reload
+        // fallback to full reload
         window.location.href = `lesson.html?id=${nextId}`;
       }
     } catch (err) {
       console.error('Soft reload failed:', err);
-      // safety fallback
       window.location.href = `lesson.html?id=${nextId}`;
     }
   }
+
+  
 
   // ---------- Export ----------
   window.LessonCore = {
