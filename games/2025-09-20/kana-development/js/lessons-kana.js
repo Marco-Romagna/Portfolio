@@ -391,11 +391,10 @@
               const lessonId = document.body.dataset.lessonId || '';
   
               nextBtn.addEventListener('click', () => {
-                const [worldStr, suffixStr] = lessonId.split('-');
-                const nextId = `${worldStr}-${Number(suffixStr) + 1}`;
-                window.LessonCore.loadNextLesson(nextId);
+                const lessonId = document.body.dataset.lessonId || '';
+                window.LessonCore.loadNextLesson(lessonId);
               });
-  
+
               homeBtn.addEventListener('click', () => {
                 window.location.href = '../index.html';
               });
