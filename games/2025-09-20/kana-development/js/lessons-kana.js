@@ -298,15 +298,17 @@
           <div class="meter-label"></div>
         </div>
         <div class="quiz-feedback"><p class="feedback-text"></p></div>
-        <div class="actions"><button class="btn primary is-hidden" data-action="next-part">Finish Lesson</button></div>
+        <div class="actions">
+          <button class="btn primary is-hidden" data-action="next-part">Finish Lesson</button>
+        </div>
       </div>
     `;
   
-    const grid = $('.quiz-options', part4);
-    const feedback = $('.quiz-feedback .feedback-text', part4);
-    const meterFill = $('.quiz-progress .meter-fill', part4);
+    const grid       = $('.quiz-options', part4);
+    const feedback   = $('.quiz-feedback .feedback-text', part4);
+    const meterFill  = $('.quiz-progress .meter-fill', part4);
     const meterLabel = $('.quiz-progress .meter-label', part4);
-    const replayBtn = $('#replay-audio', part4);
+    const replayBtn  = $('#replay-audio', part4);
   
     const GOAL = KANA.length * 2;
     let progressPts = 0;
@@ -314,14 +316,14 @@
     let currentKana = null;
     let roundLocked = false;
   
-    const THEMES = ['theme-dark','theme-light','theme-sepia','theme-high'];
+    const THEMES = ['theme-dark', 'theme-light', 'theme-sepia', 'theme-high'];
   
     function playAudio(k) {
       const romaji = ROMA[k];
       if (!romaji) return;
       const audioPath = `../assets/audio/kana/${romaji}.mp3`;
       const audio = new Audio(audioPath);
-      audio.play().catch(err => console.warn("Audio failed:", err));
+      audio.play().catch(err => console.warn('Audio failed:', err));
     }
   
     function updateMeter() {
@@ -360,17 +362,45 @@
       if (roundLocked) return;
       roundLocked = true;
       const all = $$('.option', part4);
-      all.forEach(b => b.disabled = true);
+      all.forEach(b => (b.disabled = true));
   
       if (choice === currentKana) {
         btn.classList.add('is-correct');
         feedback.textContent = 'Correct!';
         progressPts++;
         updateMeter();
+  
         setTimeout(() => {
           if (progressPts >= GOAL) {
-            $('[data-action="next-part"]', part4)?.classList.remove('is-hidden');
             feedback.textContent = 'Part complete!';
+  
+            // ---------- Show Next Level + Return Home ----------
+            const nextBtn = $('[data-action="next-part"]', part4);
+            if (nextBtn) {
+              nextBtn.textContent = 'Next Level →';
+              nextBtn.classList.remove('is-hidden');
+              nextBtn.dataset.action = 'next-level';
+  
+              // Create Return Home button
+              const homeBtn = document.createElement('button');
+              homeBtn.className = 'btn ghost';
+              homeBtn.dataset.action = 'return-home';
+              homeBtn.textContent = '🏠 Return to Home';
+              nextBtn.parentElement?.appendChild(homeBtn);
+  
+              const lessonId = document.body.dataset.lessonId || '';
+  
+              nextBtn.addEventListener('click', () => {
+                const [worldStr, suffixStr] = lessonId.split('-');
+                const nextId = `${worldStr}-${Number(suffixStr) + 1}`;
+                window.location.href = `../lesson.html?id=${nextId}`;
+              });
+  
+              homeBtn.addEventListener('click', () => {
+                window.location.href = '../index.html';
+              });
+            }
+            // ----------------------------------------------------
           } else {
             nextQuestion();
           }
@@ -384,12 +414,10 @@
       }
     }
   
-    $('[data-action="next-part"]', part4)
-      ?.addEventListener('click', () => window.location.href = '../index.html');
-  
     updateMeter();
     setTimeout(() => nextQuestion(), 400);
   }
+
 
   // ======================================================
   // Typing Engine (shared with combos)
