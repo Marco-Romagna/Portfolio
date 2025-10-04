@@ -80,62 +80,43 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
 
   function showPart(idx) {
     currentPart = Math.min(Math.max(idx, 1), totalParts);
-
+  
+    // --- Always ensure the part exists before showing it ---
     if (!window.LessonCore.IS_VOCAB) {
-    if (currentPart === 1 && typeof window.initPart1 === "function") {
-      window.initPart1(); window.initPart1 = null;
+      if (currentPart === 1 && typeof window.initPart1 === "function") window.initPart1();
+      if (currentPart === 2 && typeof window.initPart2 === "function") window.initPart2();
+      if (currentPart === 3 && typeof window.initPart3 === "function") window.initPart3();
+      if (currentPart === 4 && typeof window.initPart4 === "function") window.initPart4();
+    } else {
+      if (currentPart === 1 && typeof window.initPart1 === "function") window.initPart1();
+      if (currentPart === 2 && typeof window.initPart2 === "function") window.initPart2();
+      if (currentPart === 3 && typeof window.initPart3 === "function") window.initPart3();
+      if (currentPart === 4 && typeof window.initPart4 === "function") window.initPart4();
+      if (currentPart === 5 && typeof window.initPart5 === "function") window.initPart5();
     }
-    if (currentPart === 2 && typeof window.initPart2 === "function") {
-      window.initPart2(); window.initPart2 = null;
-    }
-    if (currentPart === 3 && typeof window.initPart3 === "function") {
-      window.initPart3(); window.initPart3 = null;
-    }
-    if (currentPart === 4 && typeof window.initPart4 === "function") {
-      window.initPart4(); window.initPart4 = null;
-    }
-  }
-
-    
+  
+    // --- Now safely display it ---
     parts.forEach(p =>
       p.classList.toggle('is-visible', Number(p.dataset.partIndex) === currentPart)
     );
     $$('.steps .step').forEach(s =>
       s.classList.toggle('is-active', Number(s.dataset.part) === currentPart)
     );
-
+  
     const pct = totalParts > 1 ? Math.round((currentPart - 1) / (totalParts - 1) * 100) : 100;
     if (fill) fill.style.width = `${pct}%`;
     if (progress) progress.setAttribute('aria-valuenow', String(pct));
-
-    if (!window.DEBUG_SKIP_ENABLED) {
-      hideCTA();
-    } else {
+  
+    // --- Debug buttons always visible when testing ---
+    if (window.DEBUG_SKIP_ENABLED) {
       ctaWrap?.classList.remove('is-hidden');
-    }
-
-    if (currentPart > 1) {
-      backBtn.classList.remove('is-hidden');
     } else {
-      backBtn.classList.add('is-hidden');
+      hideCTA();
     }
-
-    // Lazy-init vocab parts
-    if (window.LessonCore.IS_VOCAB) {
-      if (currentPart === 2 && typeof window.initPart2 === "function") {
-        window.initPart2(); window.initPart2 = null;
-      }
-      if (currentPart === 3 && typeof window.initPart3 === "function") {
-        window.initPart3(); window.initPart3 = null;
-      }
-      if (currentPart === 4 && typeof window.initPart4 === "function") {
-        window.initPart4(); window.initPart4 = null;
-      }
-      if (currentPart === 5 && typeof window.initPart5 === "function") {
-        window.initPart5(); window.initPart5 = null;
-      }
-    }
+  
+    backBtn.classList.toggle('is-hidden', currentPart <= 1);
   }
+
 
   nextBtn?.addEventListener('click', () => { if (window.DEBUG_SKIP_ENABLED) showPart(currentPart + 1); });
   backBtn?.addEventListener('click', () => { if (window.DEBUG_SKIP_ENABLED) showPart(currentPart - 1); });
