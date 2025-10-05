@@ -2,15 +2,38 @@
 // lessons-kana.js
 // Kana lesson flow (Parts 1–4 + typing engine)
 // ==========================================================
+
 (() => {
   const {
     $, $$,
-    SUFFIX, KANA, ROMA, PAIR,
+    SUFFIX, ROLE, KANA, ROMA, PAIR,
     GOAL_IDENT, GOAL_TYPE, COMBO_LAST,
+    IS_TYPING_ONLY, MIXED_TYPE,
     showPart
   } = window.LessonCore;
 
+  // Helpers
+  const isHira = ch => /[\u3040-\u309F]/.test(ch);
+  const isKata = ch => /[\u30A0-\u30FF]/.test(ch);
+  const sameSound = (a,b) => ROMA[a] && ROMA[a] === ROMA[b];
+  const differentScript = (a,b) => (isHira(a) && isKata(b)) || (isKata(a) && isHira(b));
+
+  function pickAvoidRepeat(pool, last) {
+    const avail = pool.length > 1 ? pool.filter(g => g !== last) : pool.slice();
+    const src = avail.length ? avail : pool;
+    return src[Math.floor(Math.random()*src.length)];
+  }
+
+  // Theme classes
   const THEMES = ['theme-dark','theme-light','theme-sepia','theme-high'];
+  function shuffle(arr) {
+    const a = arr.slice();
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
 
   // ======================================================
   // Part 1 — Preview
@@ -19,40 +42,89 @@
     const part1 = $('#part-1');
     if (!part1) return;
     part1.innerHTML = '';
-
+  
     const title = document.createElement('h2');
     title.className = 'part-title';
-    title.textContent = 'Preview';
     part1.appendChild(title);
-
-    const grid = document.createElement('div');
-    grid.className = 'kana-grid';
-    part1.appendChild(grid);
-
-    const uniq = Array.from(new Set(KANA));
-    uniq.forEach(g => {
-      const card = document.createElement('article');
-      card.className = 'card-big kana-card';
-      card.innerHTML = `
-        <span class="kana-glyph">${g}</span>
-        <span class="kana-sub">${ROMA[g] || ''}</span>
-      `;
-      card.addEventListener('click', () => {
-        const romaji = ROMA[g];
-        if (romaji) {
-          const audioPath = `../assets/audio/kana/${romaji}.mp3`;
-          const audio = new Audio(audioPath);
-          audio.play().catch(err => console.warn('Audio failed:', err));
-        }
+  
+    // Mixed-script lessons (3, 8, 13) → add marker class
+    if (SUFFIX === 3 || SUFFIX === 8 || SUFFIX === 13) {
+      part1.classList.add("mixed-script");
+      title.textContent = 'Preview — Script Pairs';
+  
+      const grid = document.createElement('div');
+      grid.className = 'kana-grid';
+      part1.appendChild(grid);
+  
+      const hiraganaPool = KANA.filter(g => isHira(g));
+      const pairs = hiraganaPool.map(h => ({ h, k: PAIR[h], r: ROMA[h] })).filter(p => !!p.k);
+  
+      pairs.forEach(p => {
+        const card = document.createElement('article');
+        card.className = 'card-big kana-card';   // same as single-script cards
+      
+        card.innerHTML = `
+          <div class="pair-row">
+            <span class="glyph h">${p.h}</span>
+            <span class="link">↔</span>
+            <span class="glyph k">${p.k}</span>
+          </div>
+          <span class="kana-sub">${p.r}</span>
+        `;
+      
+        // Audio
+        card.addEventListener('click', () => {
+          const romaji = p.r;
+          if (romaji) {
+            const audioPath = `../assets/audio/kana/${romaji}.mp3`;
+            const audio = new Audio(audioPath);
+            audio.play().catch(err => console.warn('Audio failed:', err));
+          }
+        });
+      
+        grid.appendChild(card);
       });
-      grid.appendChild(card);
-    });
-
+    } else {
+      // Single-script lessons
+      part1.classList.remove("mixed-script");
+      title.textContent = 'Preview';
+  
+      const grid = document.createElement('div');
+      grid.className = 'kana-grid';
+      part1.appendChild(grid);
+  
+      const uniq = Array.from(new Set(KANA));
+      uniq.forEach(g => {
+        const card = document.createElement('article');
+        card.className = 'card-big kana-card';
+        card.innerHTML = `
+          <span class="kana-glyph">${g}</span>
+          <span class="kana-sub">${ROMA[g] || ''}</span>
+        `;
+  
+        // --- Audio: make the whole card clickable ---
+        card.addEventListener('click', () => {
+          const romaji = ROMA[g];
+          if (romaji) {
+            const audioPath = `../assets/audio/kana/${romaji}.mp3`;
+            const audio = new Audio(audioPath);
+            audio.play().catch(err => console.warn('Audio failed:', err));
+          }
+        });
+  
+        grid.appendChild(card);
+      });
+    }
+  
     const actions = document.createElement('div');
     actions.className = 'actions';
-    actions.innerHTML = `<button class="btn primary" data-action="advance">Start</button>`;
-    actions.querySelector('[data-action="advance"]').addEventListener('click', () => showPart(2));
+    actions.innerHTML = `<button class="btn primary" data-action="advance">${(SUFFIX === 4 || SUFFIX === 8) ? 'Start Typing' : 'Start'}</button>`;
     part1.appendChild(actions);
+    actions.querySelector('[data-action="advance"]')
+      ?.addEventListener('click', () => {
+        initPart2();   // create Part 2 dynamically
+        showPart(2);   // then switch to it
+      });
   }
 
   // ======================================================
@@ -60,7 +132,7 @@
   // ======================================================
   function initPart2() {
     const part2 = $('#part-2');
-    if (!part2) return;
+    if (!part2 || IS_TYPING_ONLY) return;
 
     part2.innerHTML = `
       <h2 class="part-title">Identify</h2>
@@ -73,135 +145,138 @@
       </div>
     `;
 
-    const grid = $('.quiz-options', part2);
-    const feedback = $('.quiz-feedback .feedback-text', part2);
-    const promptEl = $('.prompt-text .prompt-target', part2);
-    const meterFill = $('.quiz-progress .meter-fill', part2);
+    const grid       = $('.quiz-options', part2);
+    const feedback   = $('.quiz-feedback .feedback-text', part2);
+    const promptEl   = $('.prompt-text .prompt-target', part2);
+    const promptText = $('.prompt-text', part2);
+    const meterFill  = $('.quiz-progress .meter-fill', part2);
     const meterLabel = $('.quiz-progress .meter-label', part2);
 
     const GOAL = GOAL_IDENT;
     let progressPts = 0;
-    let unseen = [...KANA];
-    let currentKana = null;
+    const unseen  = new Set(KANA);
+    let lastPromptGlyph = null;
+    let prevOptionAtIndex = [null, null, null, null];
+    let roundLocked = false;
 
-    function updateMeter() {
-      const pct = Math.round((progressPts / GOAL) * 100);
-      meterFill.style.width = `${pct}%`;
-      meterLabel.textContent = `Progress: ${progressPts} / ${GOAL}`;
+    function sample(arr,n){return shuffle(arr).slice(0,n);}
+    function setFeedback(t){if(feedback)feedback.textContent=t;}
+    function updateMeter(){const pct=Math.round((progressPts/GOAL)*100);if(meterFill)meterFill.style.width=`${pct}%`;if(meterLabel)meterLabel.textContent=`Progress: ${progressPts} / ${GOAL}`;}
+
+    function arrangeOptionsNoSlotRepeat(opts){
+      for(let t=0;t<60;t++){
+        const perm=sample(opts,opts.length);
+        let ok=true;
+        for(let i=0;i<perm.length;i++){ if(prevOptionAtIndex[i]===perm[i]){ ok=false; break; } }
+        if(ok) return perm;
+      }
+      return opts;
     }
 
-    function nextQuestion() {
-      if (unseen.length === 0) unseen = [...KANA];
-      currentKana = unseen.splice(Math.floor(Math.random() * unseen.length), 1)[0];
-      promptEl.textContent = ROMA[currentKana];
-      feedback.textContent = '';
+    function pickPromptGlyph(){
+      const basePool = (unseen.size > 0) ? Array.from(unseen) : [...KANA];
+      let pool = basePool.filter(k => k !== lastPromptGlyph);
+      if (pool.length === 0 && KANA.length > 1) pool = KANA.filter(k => k !== lastPromptGlyph);
+      if (pool.length === 0) pool = basePool;
+      return pool[Math.floor(Math.random() * pool.length)];
+    }
 
-      grid.innerHTML = '';
-      const distractors = KANA.filter(k => k !== currentKana).sort(() => 0.5 - Math.random()).slice(0, 3);
-      const options = [currentKana, ...distractors].sort(() => 0.5 - Math.random());
+    function nextQuestion(){
+      roundLocked=false;grid.innerHTML='';
+      const promptGlyph=pickPromptGlyph();lastPromptGlyph=promptGlyph;
 
-      options.forEach((k, i) => {
-        const b = document.createElement('button');
-        b.className = `option ${THEMES[i % THEMES.length]}`;
-        b.textContent = k;
-        b.addEventListener('click', () => onPick(k, b));
+      if(MIXED_TYPE){
+        const isH=isHira(promptGlyph);
+        const otherLabel=isH?'katakana':'hiragana';
+        promptText.innerHTML=`Which <strong>${otherLabel}</strong> matches <strong class="prompt-target">“${promptGlyph}”</strong>?`;
+      } else {
+        promptEl.dataset.type='romaji';
+        promptEl.textContent=`“${ROMA[promptGlyph]}”`;
+      }
+
+      let options=[];
+      if(MIXED_TYPE){
+        const correct=PAIR[promptGlyph];
+        const pool=isHira(promptGlyph)
+          ? KANA.filter(g=>isKata(g))
+          : KANA.filter(g=>isHira(g));
+        options=[correct,...sample(pool.filter(g=>g!==correct),3)];
+      } else {
+        const correct=promptGlyph;
+        options=[correct,...sample(KANA.filter(k=>k!==correct),3)];
+      }
+
+      const ordered=arrangeOptionsNoSlotRepeat(options);
+      const themes = THEMES.slice(0, ordered.length);
+
+      ordered.forEach((glyph,i)=>{
+        const b=document.createElement('button');
+        b.className=`option ${themes[i]}`;
+        b.dataset.value=glyph;
+        b.textContent=glyph;
+        b.addEventListener('click',()=>onPick(glyph,promptGlyph,b));
         grid.appendChild(b);
       });
+
+      prevOptionAtIndex=ordered.slice();
+      setFeedback('Pick the right one to continue…');
     }
 
-    function onPick(choice, btn) {
-      if (choice === currentKana) {
+    function onPick(choice,promptGlyph,btn){
+      if(roundLocked) return;
+      roundLocked=true;
+      const all=$$('.option',part2);
+      all.forEach(b=>{ b.disabled=true; });
+
+      const correct=MIXED_TYPE?(choice===PAIR[promptGlyph]):(choice===promptGlyph);
+      if(correct){
         btn.classList.add('is-correct');
-        progressPts++;
-        feedback.textContent = 'Correct!';
+        progressPts=Math.min(GOAL,progressPts+1);
+        unseen.delete(promptGlyph);
+        setFeedback('Nice! That’s correct.');
         updateMeter();
-        setTimeout(() => {
-          if (progressPts >= GOAL) {
-            $('[data-action="next-part"]', part2)?.classList.remove('is-hidden');
-            feedback.textContent = 'Part complete!';
+        setTimeout(()=>{
+          if(progressPts>=GOAL){
+            $('[data-action="next-part"]',part2)?.classList.remove('is-hidden');
+            setFeedback('Part complete!');
           } else {
             nextQuestion();
           }
-        }, 400);
+        },320);
       } else {
         btn.classList.add('is-wrong');
-        feedback.textContent = 'Try again!';
-        setTimeout(() => nextQuestion(), 500);
+        progressPts=Math.max(0,progressPts-1);
+        setFeedback('Wrong, try again.');
+        updateMeter();
+        setTimeout(()=>nextQuestion(),420);
       }
     }
 
     $('[data-action="next-part"]', part2)?.addEventListener('click', () => showPart(3));
-
-    updateMeter();
-    nextQuestion();
+    updateMeter(); nextQuestion(); afterInitPart2();
   }
 
   // ======================================================
-  // Part 3 — Typing
+  // Part 3 — Typing (with combos)
   // ======================================================
-  function initPart3() {
-    const part3 = $('#part-3');
-    if (!part3) return;
+  function initPart3(){
+    if(IS_TYPING_ONLY) return;
+    const part3=$('#part-3'); if(!part3) return;
 
     part3.innerHTML = `
       <h2 class="part-title">Typing</h2>
-      <div class="quiz-panel">
-        <p class="quiz-prompt">Type the romaji for <strong class="prompt-target"></strong></p>
-        <input id="quiz-input" class="quiz-input" placeholder="Type romaji…" autocomplete="off" />
-        <div class="quiz-feedback"><p class="feedback-text"></p></div>
-        <div class="quiz-progress"><div class="meter"><div class="meter-fill"></div></div><div class="meter-label"></div></div>
+      <div class="type-panel">
+        <div class="type-glyph-wrapper"></div>
+        <input id="type-input" class="type-input" placeholder="Type romaji…" autocomplete="off" />
+        <div class="quiz-progress">
+          <div class="meter"><div class="meter-fill"></div></div>
+          <div class="meter-label"></div>
+        </div>
         <div class="actions"><button class="btn primary is-hidden" data-action="next-part">Next</button></div>
       </div>
     `;
-
-    const input = $('#quiz-input', part3);
-    const feedback = $('.quiz-feedback .feedback-text', part3);
-    const promptEl = $('.prompt-target', part3);
-    const meterFill = $('.meter-fill', part3);
-    const meterLabel = $('.meter-label', part3);
-    const nextBtn = $('[data-action="next-part"]', part3);
-
-    const GOAL = GOAL_TYPE;
-    let progressPts = 0;
-    let currentKana = null;
-
-    function updateMeter() {
-      const pct = Math.round((progressPts / GOAL) * 100);
-      meterFill.style.width = `${pct}%`;
-      meterLabel.textContent = `Progress: ${progressPts} / ${GOAL}`;
-    }
-
-    function nextQuestion() {
-      currentKana = KANA[Math.floor(Math.random() * KANA.length)];
-      promptEl.textContent = currentKana;
-      feedback.textContent = '';
-      input.value = '';
-      input.focus();
-    }
-
-    input.addEventListener('keydown', e => {
-      if (e.key === 'Enter') {
-        const guess = input.value.trim().toLowerCase();
-        if (guess === ROMA[currentKana]) {
-          progressPts++;
-          feedback.textContent = '✅ Correct!';
-        } else {
-          feedback.textContent = `❌ Correct: ${ROMA[currentKana]}`;
-          progressPts = Math.max(0, progressPts - 1);
-        }
-        updateMeter();
-        if (progressPts >= GOAL) {
-          nextBtn.classList.remove('is-hidden');
-        } else {
-          setTimeout(nextQuestion, 700);
-        }
-      }
-    });
-
-    nextBtn.addEventListener('click', () => showPart(4));
-
-    updateMeter();
-    nextQuestion();
+    initTyping(part3, GOAL_TYPE, false);
+    afterInitPart3();
   }
 
   // ======================================================
@@ -210,7 +285,7 @@
   function initPart4() {
     const part4 = $('#part-4');
     if (!part4) return;
-
+  
     part4.innerHTML = `
       <h2 class="part-title">Audio — Listen & Identify</h2>
       <div class="quiz-panel">
@@ -226,19 +301,21 @@
         <div class="actions"><button class="btn primary is-hidden" data-action="next-part">Finish Lesson</button></div>
       </div>
     `;
-
+  
     const grid = $('.quiz-options', part4);
     const feedback = $('.quiz-feedback .feedback-text', part4);
     const meterFill = $('.quiz-progress .meter-fill', part4);
     const meterLabel = $('.quiz-progress .meter-label', part4);
     const replayBtn = $('#replay-audio', part4);
-
+  
     const GOAL = KANA.length * 2;
     let progressPts = 0;
     let unseen = [...KANA];
     let currentKana = null;
     let roundLocked = false;
-
+  
+    const THEMES = ['theme-dark','theme-light','theme-sepia','theme-high'];
+  
     function playAudio(k) {
       const romaji = ROMA[k];
       if (!romaji) return;
@@ -246,28 +323,28 @@
       const audio = new Audio(audioPath);
       audio.play().catch(err => console.warn("Audio failed:", err));
     }
-
+  
     function updateMeter() {
       const pct = Math.round((progressPts / GOAL) * 100);
       meterFill.style.width = `${pct}%`;
       meterLabel.textContent = `Progress: ${progressPts} / ${GOAL}`;
     }
-
+  
     function nextQuestion() {
       roundLocked = false;
       grid.innerHTML = '';
       feedback.textContent = '';
-
+  
       if (unseen.length === 0) unseen = [...KANA];
       currentKana = unseen.splice(Math.floor(Math.random() * unseen.length), 1)[0];
-
+  
       setTimeout(() => playAudio(currentKana), 600);
-
+  
       const distractors = KANA.filter(k => k !== currentKana)
                               .sort(() => 0.5 - Math.random())
                               .slice(0, 3);
       const options = [currentKana, ...distractors].sort(() => 0.5 - Math.random());
-
+  
       options.forEach((g, i) => {
         const b = document.createElement('button');
         b.className = `option ${THEMES[i % THEMES.length]}`;
@@ -275,16 +352,16 @@
         b.addEventListener('click', () => onPick(g, b));
         grid.appendChild(b);
       });
-
+  
       replayBtn.onclick = () => playAudio(currentKana);
     }
-
+  
     function onPick(choice, btn) {
       if (roundLocked) return;
       roundLocked = true;
       const all = $$('.option', part4);
       all.forEach(b => b.disabled = true);
-
+  
       if (choice === currentKana) {
         btn.classList.add('is-correct');
         feedback.textContent = 'Correct!';
@@ -306,18 +383,164 @@
         setTimeout(() => nextQuestion(), 450);
       }
     }
-
+  
     $('[data-action="next-part"]', part4)
       ?.addEventListener('click', () => window.location.href = '../index.html');
-
+  
     updateMeter();
     setTimeout(() => nextQuestion(), 400);
   }
 
   // ======================================================
+  // Typing Engine (shared with combos)
+  // ======================================================
+  function initTyping(scopeEl,GOAL,isPart2){
+    const wrapper=$('.type-glyph-wrapper',scopeEl);
+    const input=$('#type-input',scopeEl);
+    const meterFill=$('.quiz-progress .meter-fill',scopeEl);
+    const meterLabel=$('.quiz-progress .meter-label',scopeEl);
+    const actionBtn=$('[data-action="next-part"]',scopeEl);
+
+    const THEMES=['theme-dark','theme-light','theme-sepia','theme-high'];
+    const unseen=new Set(KANA);
+    const COMBO_THRESHOLD=GOAL-COMBO_LAST;
+
+    let progressPts=0;
+    let lastKana=null;
+    let comboActive=false;
+    let comboSeq=[];
+    let lastComboSeq=null;
+    let lastComboKey=null;
+
+    function updateMeter(){
+      const pct=Math.round((progressPts/GOAL)*100);
+      if(meterFill)  meterFill.style.width=`${pct}%`;
+      if(meterLabel) meterLabel.textContent=`Progress: ${progressPts} / ${GOAL}`;
+    }
+    function setThemeRandom(){
+      wrapper.classList.remove(...THEMES);
+      wrapper.classList.add(THEMES[Math.floor(Math.random()*THEMES.length)]);
+    }
+    function pickNextKana(){
+      const basePool = (unseen.size > 0) ? Array.from(unseen) : [...KANA];
+      let pool = basePool.filter(k => k !== lastKana);
+      if (pool.length === 0 && KANA.length > 1) pool = KANA.filter(k => k !== lastKana);
+      if (pool.length === 0) pool = basePool;
+      return pool[Math.floor(Math.random() * pool.length)];
+    }
+
+    function makeCombo(){
+      for(let attempt=0;attempt<120;attempt++){
+        const a = pickAvoidRepeat(KANA, lastKana);
+        const b = pickAvoidRepeat(KANA.filter(x=>x!==a), null);
+        const c = pickAvoidRepeat(KANA.filter(x=>x!==a && x!==b), null);
+        const seq=[a,b,c];
+
+        if(new Set(seq).size !== 3) continue;
+        if(lastComboSeq){
+          let violatesPos=false;
+          for(let i=0;i<3;i++){
+            if(sameSound(seq[i], lastComboSeq[i]) && !(MIXED_TYPE && differentScript(seq[i], lastComboSeq[i]))){
+              violatesPos=true; break;
+            }
+          }
+          if(violatesPos) continue;
+        }
+        const key=seq.join('');
+        if(key===lastComboKey) continue;
+        return {seq,key};
+      }
+      const pool = KANA.slice();
+      const a = pickAvoidRepeat(pool, lastKana);
+      const b = pickAvoidRepeat(pool.filter(x=>x!==a), null);
+      const c = pickAvoidRepeat(pool.filter(x=>x!==a && x!==b), null);
+      return {seq:[a,b,c], key:'fallback'};
+    }
+
+    function renderGlyph(k){ wrapper.innerHTML=`<span class="kana-glyph type-glyph" data-current-kana="${k}">${k}</span>`; }
+    function renderComboDisplay(){ wrapper.innerHTML=comboSeq.map(k=>`<span class="kana-glyph type-glyph">${k}</span>`).join(''); }
+
+    function newRound(){
+      if(progressPts>=COMBO_THRESHOLD){
+        const {seq,key}=makeCombo();
+        comboSeq=seq; lastComboSeq=seq.slice(); lastComboKey=key;
+        comboActive=true; setThemeRandom(); renderComboDisplay();
+      }else{
+        comboActive=false;
+        const k=pickNextKana();
+        setThemeRandom(); renderGlyph(k); lastKana=k;
+      }
+      input.value=''; input.focus();
+    }
+
+    function evaluate(){
+      const val=input.value.trim().toLowerCase();
+      if(!val) return;
+
+      if(!comboActive){
+        const kana=wrapper.querySelector('.type-glyph')?.getAttribute('data-current-kana') || '';
+        const expected=ROMA[kana];
+        if(val===expected){
+          progressPts=Math.min(GOAL,progressPts+1);
+          unseen.delete(kana);
+          updateMeter();
+          if(progressPts>=GOAL){ actionBtn.classList.remove('is-hidden'); }
+          else { newRound(); }
+        }else{
+          progressPts=Math.max(0,progressPts-1);
+          updateMeter();
+          newRound();
+        }
+        lastKana=kana;
+      }else{
+        const expectedAll=comboSeq.map(k=>ROMA[k]).join('');
+        if(val===expectedAll){
+          progressPts=Math.min(GOAL,progressPts+1);
+          comboSeq.forEach(k=>unseen.delete(k));
+          updateMeter();
+          if(progressPts>=GOAL){ actionBtn.classList.remove('is-hidden'); }
+          else { newRound(); }
+        }else{
+          progressPts=Math.max(0,progressPts-1);
+          updateMeter();
+          newRound();
+        }
+      }
+    }
+
+    input.addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); evaluate(); } });
+    actionBtn?.addEventListener('click',()=>{ if(isPart2) showPart(3); else showPart(4); });
+
+    updateMeter(); newRound();
+  }
+
+  // ======================================================
+  // Helpers to wire progression
+  // ======================================================
+  function afterInitPart2() {
+    const part2 = $('#part-2');
+    $('[data-action="next-part"]', part2)
+      ?.addEventListener('click', () => {
+        initPart3();
+        showPart(3);
+      });
+  }
+
+  function afterInitPart3() {
+    const part3 = $('#part-3');
+    $('[data-action="next-part"]', part3)
+      ?.addEventListener('click', () => {
+        initPart4();
+        showPart(4);
+      });
+  }
+
+  // ======================================================
   // Public API
   // ======================================================
-  window.initKanaParts = function () {
-    initPart1();
+  window.initKanaParts = function(){
+    initPart1();   // only start with Preview
   };
+  window.initPart1 = initPart1;
+
 })();
