@@ -262,7 +262,4 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
       nextBtn?.addEventListener("click", clickRealAdvance);
       backBtn?.addEventListener("click", clickRealBack);
     });
-  })();
-
-
-})();
+  })(); 
