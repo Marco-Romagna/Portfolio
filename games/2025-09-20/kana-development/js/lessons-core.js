@@ -258,6 +258,28 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
   if (!IS_VOCAB) {
     KANA = getKanaSet(WORLD, SUFFIX, LEXICON);
   }
+  // ---------- Step Labels ----------
+  (function initSteps() {
+    if (!stepsList) return;
+    stepsList.innerHTML = '';
+    let labels;
+  
+    if (IS_VOCAB) {
+      labels = ['Explorer','Hunt','Identify','Typing','Audio'];
+    } else {
+      labels = ['Preview','Identify','Typing','Speak'];
+    }
+  
+    labels.forEach((label, idx) => {
+      const li = document.createElement('li');
+      li.className = `step ${idx===0 ? 'is-active' : ''}`;
+      li.dataset.part = (idx+1);
+      li.innerHTML =
+        `<span class="step-label">Part ${idx+1}</span>` +
+        `<span class="step-sub">${label}</span>`;
+      stepsList.appendChild(li);
+    });
+  })();
 
   // ---------- Export ----------
   window.LessonCore = {
