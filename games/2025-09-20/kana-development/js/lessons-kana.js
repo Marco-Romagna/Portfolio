@@ -282,114 +282,137 @@
   // ======================================================
   // Part 4 — Audio Identify (sound → kana)
   // ======================================================
-  function initPart4() {
-    const part4 = $('#part-4');
-    if (!part4) return;
-  
-    part4.innerHTML = `
-      <h2 class="part-title">Audio — Listen & Identify</h2>
-      <div class="quiz-panel">
-        <div class="quiz-prompt">
-          <button class="btn ghost" id="replay-audio">🔊 Replay sound</button>
+    function initPart4() {
+      const part4 = $('#part-4');
+      if (!part4) return;
+    
+      part4.innerHTML = `
+        <h2 class="part-title">Audio — Listen & Identify</h2>
+        <div class="quiz-panel">
+          <div class="quiz-prompt">
+            <button class="btn ghost" id="replay-audio">🔊 Replay sound</button>
+          </div>
+          <div class="quiz-options"></div>
+          <div class="quiz-progress">
+            <div class="meter"><div class="meter-fill"></div></div>
+            <div class="meter-label"></div>
+          </div>
+          <div class="quiz-feedback"><p class="feedback-text"></p></div>
+          <div class="actions"><button class="btn primary is-hidden" data-action="next-part">Finish Lesson</button></div>
         </div>
-        <div class="quiz-options"></div>
-        <div class="quiz-progress">
-          <div class="meter"><div class="meter-fill"></div></div>
-          <div class="meter-label"></div>
-        </div>
-        <div class="quiz-feedback"><p class="feedback-text"></p></div>
-        <div class="actions"><button class="btn primary is-hidden" data-action="next-part">Finish Lesson</button></div>
-      </div>
-    `;
-  
-    const grid = $('.quiz-options', part4);
-    const feedback = $('.quiz-feedback .feedback-text', part4);
-    const meterFill = $('.quiz-progress .meter-fill', part4);
-    const meterLabel = $('.quiz-progress .meter-label', part4);
-    const replayBtn = $('#replay-audio', part4);
-  
-    const GOAL = KANA.length * 2;
-    let progressPts = 0;
-    let unseen = [...KANA];
-    let currentKana = null;
-    let roundLocked = false;
-  
-    const THEMES = ['theme-dark','theme-light','theme-sepia','theme-high'];
-  
-    function playAudio(k) {
-      const romaji = ROMA[k];
-      if (!romaji) return;
-      const audioPath = `../assets/audio/kana/${romaji}.mp3`;
-      const audio = new Audio(audioPath);
-      audio.play().catch(err => console.warn("Audio failed:", err));
-    }
-  
-    function updateMeter() {
-      const pct = Math.round((progressPts / GOAL) * 100);
-      meterFill.style.width = `${pct}%`;
-      meterLabel.textContent = `Progress: ${progressPts} / ${GOAL}`;
-    }
-  
-    function nextQuestion() {
-      roundLocked = false;
-      grid.innerHTML = '';
-      feedback.textContent = '';
-  
-      if (unseen.length === 0) unseen = [...KANA];
-      currentKana = unseen.splice(Math.floor(Math.random() * unseen.length), 1)[0];
-  
-      setTimeout(() => playAudio(currentKana), 600);
-  
-      const distractors = KANA.filter(k => k !== currentKana)
-                              .sort(() => 0.5 - Math.random())
-                              .slice(0, 3);
-      const options = [currentKana, ...distractors].sort(() => 0.5 - Math.random());
-  
-      options.forEach((g, i) => {
-        const b = document.createElement('button');
-        b.className = `option ${THEMES[i % THEMES.length]}`;
-        b.textContent = g;
-        b.addEventListener('click', () => onPick(g, b));
-        grid.appendChild(b);
-      });
-  
-      replayBtn.onclick = () => playAudio(currentKana);
-    }
-  
-    function onPick(choice, btn) {
-      if (roundLocked) return;
-      roundLocked = true;
-      const all = $$('.option', part4);
-      all.forEach(b => b.disabled = true);
-  
-      if (choice === currentKana) {
-        btn.classList.add('is-correct');
-        feedback.textContent = 'Correct!';
-        progressPts++;
-        updateMeter();
-        setTimeout(() => {
-          if (progressPts >= GOAL) {
-            $('[data-action="next-part"]', part4)?.classList.remove('is-hidden');
-            feedback.textContent = 'Part complete!';
-          } else {
-            nextQuestion();
-          }
-        }, 350);
-      } else {
-        btn.classList.add('is-wrong');
-        feedback.textContent = 'Try again…';
-        progressPts = Math.max(0, progressPts - 1);
-        updateMeter();
-        setTimeout(() => nextQuestion(), 450);
+      `;
+    
+      const grid = $('.quiz-options', part4);
+      const feedback = $('.quiz-feedback .feedback-text', part4);
+      const meterFill = $('.quiz-progress .meter-fill', part4);
+      const meterLabel = $('.quiz-progress .meter-label', part4);
+      const replayBtn = $('#replay-audio', part4);
+    
+      const GOAL = KANA.length * 2;
+      let progressPts = 0;
+      let unseen = [...KANA];
+      let currentKana = null;
+      let lastRomaji = null;
+      let roundLocked = false;
+    
+      const THEMES = ['theme-dark','theme-light','theme-sepia','theme-high'];
+    
+      function playAudio(k) {
+        const romaji = ROMA[k];
+        if (!romaji) return;
+        const audioPath = `../assets/audio/kana/${romaji}.mp3`;
+        const audio = new Audio(audioPath);
+        audio.play().catch(err => console.warn("Audio failed:", err));
       }
+    
+      function updateMeter() {
+        const pct = Math.round((progressPts / GOAL) * 100);
+        meterFill.style.width = `${pct}%`;
+        meterLabel.textContent = `Progress: ${progressPts} / ${GOAL}`;
+      }
+    
+      function pickPromptKana() {
+        const pool = unseen.length ? unseen : [...KANA];
+        const filtered = pool.filter(k => ROMA[k] !== lastRomaji);
+        const pickFrom = filtered.length ? filtered : pool;
+        const pick = pickFrom[Math.floor(Math.random() * pickFrom.length)];
+        lastRomaji = ROMA[pick];
+        return pick;
+      }
+    
+      function nextQuestion() {
+        roundLocked = false;
+        grid.innerHTML = '';
+        feedback.textContent = '';
+    
+        if (unseen.length === 0) unseen = [...KANA];
+        currentKana = pickPromptKana();
+        unseen = unseen.filter(k => k !== currentKana);
+    
+        setTimeout(() => playAudio(currentKana), 600);
+    
+        // --- build distractors ensuring no duplicate romaji within options ---
+        const correctRomaji = ROMA[currentKana];
+        const usedRomaji = new Set([correctRomaji]);
+        const distractors = [];
+    
+        for (const k of shuffle(KANA)) {
+          if (k === currentKana) continue;
+          const r = ROMA[k];
+          if (!r || usedRomaji.has(r)) continue; // skip duplicate sound
+          distractors.push(k);
+          usedRomaji.add(r);
+          if (distractors.length >= 3) break;
+        }
+    
+        const options = shuffle([currentKana, ...distractors]);
+    
+        options.forEach((g, i) => {
+          const b = document.createElement('button');
+          b.className = `option ${THEMES[i % THEMES.length]}`;
+          b.textContent = g;
+          b.addEventListener('click', () => onPick(g, b));
+          grid.appendChild(b);
+        });
+    
+        replayBtn.onclick = () => playAudio(currentKana);
+      }
+    
+      function onPick(choice, btn) {
+        if (roundLocked) return;
+        roundLocked = true;
+        const all = $$('.option', part4);
+        all.forEach(b => b.disabled = true);
+    
+        if (choice === currentKana) {
+          btn.classList.add('is-correct');
+          feedback.textContent = 'Correct!';
+          progressPts++;
+          updateMeter();
+          setTimeout(() => {
+            if (progressPts >= GOAL) {
+              $('[data-action="next-part"]', part4)?.classList.remove('is-hidden');
+              feedback.textContent = 'Part complete!';
+            } else {
+              nextQuestion();
+            }
+          }, 350);
+        } else {
+          btn.classList.add('is-wrong');
+          feedback.textContent = 'Try again…';
+          progressPts = Math.max(0, progressPts - 1);
+          updateMeter();
+          setTimeout(() => nextQuestion(), 450);
+        }
+      }
+    
+      $('[data-action="next-part"]', part4)
+        ?.addEventListener('click', () => window.location.href = '../index.html');
+    
+      updateMeter();
+      setTimeout(() => nextQuestion(), 400);
     }
-  
-    $('[data-action="next-part"]', part4)
-      ?.addEventListener('click', () => window.location.href = '../index.html');
-  
-    updateMeter();
-    setTimeout(() => nextQuestion(), 400);
-  }
+
 
   // ======================================================
   // Typing Engine (shared with combos)
