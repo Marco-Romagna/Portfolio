@@ -1,15 +1,10 @@
-// ==========================================================
+/ ==========================================================
 // lessons-core.js
 // Shared utilities + role detection for all lesson types
 // ==========================================================
 window.DEBUG_SKIP_ENABLED = true; // set false for production
 
 (() => {
-  // ---------- Shared Goals ----------
-  const GOAL_IDENT = 10;   // how many correct answers needed in Identify
-  const GOAL_TYPE  = 10;   // how many correct answers in Typing
-  const COMBO_LAST = 3;    // how many final combo rounds in Typing
-
   // ---------- DOM Helpers ----------
   const $  = (s, r = document) => r.querySelector(s);
   const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
@@ -104,6 +99,39 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
     backBtn.classList.toggle('is-hidden', currentPart <= 1);
   }
 
+  // ---------- Summary Renderer ----------
+  function initSummary() {
+    const container = document.querySelector('#lesson-summary');
+    if (!container || !SUMMARY_DATA) return;
+
+    document.querySelector('.lesson-progress')?.classList.add('is-hidden');
+    $$('.lesson-part').forEach(p => p.classList.add('is-hidden'));
+    document.querySelector('.lesson-cta')?.classList.add('is-hidden');
+
+    container.classList.remove('is-hidden');
+    container.innerHTML = `
+      <div class="summary-panel">
+        ${SUMMARY_DATA.kana ? `<div class="summary-kana">${SUMMARY_DATA.kana}</div>` : ""}
+        <h2>${SUMMARY_DATA.gloss_en}</h2>
+        <p>${SUMMARY_DATA.note}</p>
+        <button class="btn primary" id="start-lesson">Start Lesson</button>
+      </div>
+    `;
+
+    document.querySelector('#start-lesson')
+      .addEventListener('click', () => {
+        container.classList.add('is-hidden');
+        document.querySelector('.lesson-progress')?.classList.remove('is-hidden');
+        document.querySelector('.lesson-cta')?.classList.remove('is-hidden');
+        $$('.lesson-part').forEach(p => p.classList.remove('is-hidden', 'is-visible'));
+        showPart(1);
+        if (typeof window.initPart1 === "function") {
+          window.initPart1();
+          window.initPart1 = null;
+        }
+      });
+  }
+
   // ---------- Kana Sets ----------
   const H_VOW = ['あ','い','う','え','お'];
   const K_VOW = ['ア','イ','ウ','エ','オ'];
@@ -161,7 +189,7 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
     'ぱ':'pa','ぴ':'pi','ぷ':'pu','ぺ':'pe','ぽ':'po',
     'パ':'pa','ピ':'pi','プ':'pu','ペ':'pe','ポ':'po',
     'ま':'ma','み':'mi','む':'mu','め':'me','も':'mo',
-    'マ':'ma','ミ':'mi','ム':'mu','メ':'me','モ':'mo',
+    'マ':'ma','ミ':'mi','ム':'mu','メ':'mo','モ':'mo',
     'や':'ya','ゆ':'yu','よ':'yo',
     'ヤ':'ya','ユ':'yu','ヨ':'yo',
     'ら':'ra','り':'ri','る':'ru','れ':'re','ろ':'ro',
@@ -219,8 +247,7 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
     $,$$,
     WORLD, SUFFIX, IS_VOCAB,
     KANA, ROMA, PAIR,
-    showPart, LEXICON,
-    GOAL_IDENT, GOAL_TYPE, COMBO_LAST
+    showPart, LEXICON
   };
 
   // ---------- Bootstrapping ----------
@@ -232,4 +259,41 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
       if (typeof window.initKanaParts === "function") window.initKanaParts();
     }
   });
+
+     // ---------- Debug navigation ----------
+      window.addEventListener("load", () => {
+        if (!window.DEBUG_SKIP_ENABLED) return;
+        console.log("[DEBUG] Debug navigation ready");
+    
+        function clickRealAdvance() {
+          // Support both `advance` and `next-part`
+          const realAdvance = document.querySelector(
+            `.lesson-part.is-visible [data-action="advance"], 
+             .lesson-part.is-visible [data-action="next-part"]`
+          );
+          if (realAdvance) {
+            console.log("[DEBUG] Triggering real advance/next-part button");
+            realAdvance.click();
+          } else {
+            console.log("[DEBUG] No advance/next-part button — fallback → showPart()");
+            showPart(currentPart + 1);
+          }
+        }
+    
+        function clickRealBack() {
+          const realBack = document.querySelector(
+            `.lesson-part.is-visible [data-action="back"]`
+          );
+          if (realBack) {
+            console.log("[DEBUG] Triggering real back button");
+            realBack.click();
+          } else {
+            console.log("[DEBUG] No back button — fallback → showPart()");
+            showPart(currentPart - 1);
+          }
+        }
+    
+        nextBtn?.addEventListener("click", clickRealAdvance);
+        backBtn?.addEventListener("click", clickRealBack);
+      });
 })();
