@@ -5,6 +5,11 @@
 window.DEBUG_SKIP_ENABLED = true; // set false for production
 
 (() => {
+  // ---------- Shared Goals ----------
+  const GOAL_IDENT = 10;   // how many correct answers needed in Identify
+  const GOAL_TYPE  = 10;   // how many correct answers in Typing
+  const COMBO_LAST = 3;    // how many final combo rounds in Typing
+
   // ---------- DOM Helpers ----------
   const $  = (s, r = document) => r.querySelector(s);
   const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
@@ -247,8 +252,10 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
     $,$$,
     WORLD, SUFFIX, IS_VOCAB,
     KANA, ROMA, PAIR,
-    showPart, LEXICON
+    showPart, LEXICON,
+    GOAL_IDENT, GOAL_TYPE, COMBO_LAST
   };
+
 
   // ---------- Bootstrapping ----------
   document.addEventListener("DOMContentLoaded", () => {
@@ -260,20 +267,40 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
     }
   });
 
-  // ---------- Debug navigation ----------
-  window.addEventListener("load", () => {
-    if (!window.DEBUG_SKIP_ENABLED) return;
-    console.log("[DEBUG] Debug navigation ready");
-
-    function debugAdvance(delta) {
-      const nextIdx = Math.min(Math.max(currentPart + delta, 1), totalParts);
-      console.log(`[DEBUG] Trying to move to Part ${nextIdx}`);
-      showPart(nextIdx);
-      console.log(`[DEBUG] Now showing Part ${nextIdx}`);
-    }
-
-    nextBtn?.addEventListener('click', () => debugAdvance(+1));
-    backBtn?.addEventListener('click', () => debugAdvance(-1));
-  });
-
+     // ---------- Debug navigation ----------
+      window.addEventListener("load", () => {
+        if (!window.DEBUG_SKIP_ENABLED) return;
+        console.log("[DEBUG] Debug navigation ready");
+    
+        function clickRealAdvance() {
+          // Support both `advance` and `next-part`
+          const realAdvance = document.querySelector(
+            `.lesson-part.is-visible [data-action="advance"], 
+             .lesson-part.is-visible [data-action="next-part"]`
+          );
+          if (realAdvance) {
+            console.log("[DEBUG] Triggering real advance/next-part button");
+            realAdvance.click();
+          } else {
+            console.log("[DEBUG] No advance/next-part button — fallback → showPart()");
+            showPart(currentPart + 1);
+          }
+        }
+    
+        function clickRealBack() {
+          const realBack = document.querySelector(
+            `.lesson-part.is-visible [data-action="back"]`
+          );
+          if (realBack) {
+            console.log("[DEBUG] Triggering real back button");
+            realBack.click();
+          } else {
+            console.log("[DEBUG] No back button — fallback → showPart()");
+            showPart(currentPart - 1);
+          }
+        }
+    
+        nextBtn?.addEventListener("click", clickRealAdvance);
+        backBtn?.addEventListener("click", clickRealBack);
+      });
 })();
