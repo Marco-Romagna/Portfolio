@@ -223,4 +223,46 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
     }
   });
 
+
+    // ---------- Debug navigation ----------
+  window.addEventListener("load", () => {
+    if (!window.DEBUG_SKIP_ENABLED) return;
+    console.log("[DEBUG] Debug navigation ready");
+
+    function clickRealAdvance() {
+      // Support both `advance` and `next-part`
+      const realAdvance = document.querySelector(
+        `.lesson-part.is-visible [data-action="advance"],
+         .lesson-part.is-visible [data-action="next-part"]`
+      );
+      if (realAdvance) {
+        console.log("[DEBUG] Triggering real advance/next-part button");
+        realAdvance.click();
+      } else {
+        console.log("[DEBUG] No advance/next-part button — fallback → showPart()");
+        showPart(currentPart + 1);
+      }
+    }
+
+    function clickRealBack() {
+      const realBack = document.querySelector(
+        `.lesson-part.is-visible [data-action="back"]`
+      );
+      if (realBack) {
+        console.log("[DEBUG] Triggering real back button");
+        realBack.click();
+      } else {
+        console.log("[DEBUG] No back button — fallback → showPart()");
+        showPart(currentPart - 1);
+      }
+    }
+
+    const nextBtn = document.querySelector('.lesson-cta [data-action="advance"]');
+    const backBtn = document.querySelector('.lesson-cta [data-action="back"]');
+    nextBtn?.addEventListener("click", clickRealAdvance);
+    backBtn?.addEventListener("click", clickRealBack);
+  });
+})();
+
+
 })();
