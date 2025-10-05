@@ -37,12 +37,8 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
     LEXICON = "katakana";
   }
 
-  // ---------- Summary Detection ----------
-  let SUMMARY_DATA = null;
-
   // ---------- DOM / UI ----------
   const parts      = $$('.lesson-part');
-  const stepsList  = $('.steps');
   const progress   = $('.progressbar');
   const fill       = $('.progressbar-fill');
   const ctaWrap    = $('.lesson-cta');
@@ -55,7 +51,7 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
   const totalParts = baseParts;
 
   let currentPart = 1;
-  let KANA = []; // ✅ declared early so it's always defined
+  let KANA = [];
 
   // Add back button
   let backBtn = document.createElement('button');
@@ -68,7 +64,6 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
   function showPart(idx) {
     currentPart = Math.min(Math.max(idx, 1), totalParts);
 
-    // --- Always ensure the part exists before showing it ---
     if (!window.LessonCore.IS_VOCAB) {
       if (currentPart === 1 && typeof window.initPart1 === "function") window.initPart1();
       if (currentPart === 2 && typeof window.initPart2 === "function") window.initPart2();
@@ -82,19 +77,14 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
       if (currentPart === 5 && typeof window.initPart5 === "function") window.initPart5();
     }
 
-    // --- Display it ---
     parts.forEach(p =>
       p.classList.toggle('is-visible', Number(p.dataset.partIndex) === currentPart)
-    );
-    $$('.steps .step').forEach(s =>
-      s.classList.toggle('is-active', Number(s.dataset.part) === currentPart)
     );
 
     const pct = totalParts > 1 ? Math.round((currentPart - 1) / (totalParts - 1) * 100) : 100;
     if (fill) fill.style.width = `${pct}%`;
     if (progress) progress.setAttribute('aria-valuenow', String(pct));
 
-    // --- Debug visibility ---
     if (window.DEBUG_SKIP_ENABLED) {
       ctaWrap?.classList.remove('is-hidden');
     } else {
@@ -232,4 +222,5 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
       if (typeof window.initKanaParts === "function") window.initKanaParts();
     }
   });
+
 })();
