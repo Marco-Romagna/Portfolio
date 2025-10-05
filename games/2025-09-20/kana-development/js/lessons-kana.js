@@ -195,16 +195,42 @@
       }
 
       let options=[];
-      if(MIXED_TYPE){
-        const correct=PAIR[promptGlyph];
-        const pool=isHira(promptGlyph)
-          ? KANA.filter(g=>isKata(g))
-          : KANA.filter(g=>isHira(g));
-        options=[correct,...sample(pool.filter(g=>g!==correct),3)];
+      if (MIXED_TYPE) {
+        const correct = PAIR[promptGlyph];
+        const correctRomaji = ROMA[correct];
+        const pool = isHira(promptGlyph)
+          ? KANA.filter(g => isKata(g))
+          : KANA.filter(g => isHira(g));
+      
+        const usedRomaji = new Set([correctRomaji]);
+        const distractors = [];
+      
+        for (const k of shuffle(pool)) {
+          const r = ROMA[k];
+          if (!r || usedRomaji.has(r)) continue;
+          distractors.push(k);
+          usedRomaji.add(r);
+          if (distractors.length >= 3) break;
+        }
+      
+        options = shuffle([correct, ...distractors]);
       } else {
-        const correct=promptGlyph;
-        options=[correct,...sample(KANA.filter(k=>k!==correct),3)];
+        const correct = promptGlyph;
+        const correctRomaji = ROMA[correct];
+        const usedRomaji = new Set([correctRomaji]);
+        const distractors = [];
+      
+        for (const k of shuffle(KANA)) {
+          const r = ROMA[k];
+          if (k === correct || !r || usedRomaji.has(r)) continue;
+          distractors.push(k);
+          usedRomaji.add(r);
+          if (distractors.length >= 3) break;
+        }
+      
+        options = shuffle([correct, ...distractors]);
       }
+
 
       const ordered=arrangeOptionsNoSlotRepeat(options);
       const themes = THEMES.slice(0, ordered.length);
