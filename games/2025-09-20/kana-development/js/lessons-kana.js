@@ -282,7 +282,7 @@
   // ======================================================
   // Part 4 — Audio Identify (sound → kana)
   // ======================================================
-  function initPart4() {
+    function initPart4() {
     const part4 = $('#part-4');
     if (!part4) return;
   
@@ -308,9 +308,19 @@
     const meterLabel = $('.quiz-progress .meter-label', part4);
     const replayBtn = $('#replay-audio', part4);
   
-    const GOAL = KANA.length * 2;
+    const uniqueByRomaji = Object.values(
+      KANA.reduce((acc, k) => {
+        const r = ROMA[k];
+        if (!r) return acc;
+        if (!acc[r]) acc[r] = k; // keep first one (randomly hiragana or katakana)
+        return acc;
+      }, {})
+    );
+    const EFFECTIVE_KANA = uniqueByRomaji;
+  
+    const GOAL = EFFECTIVE_KANA.length * 2;
     let progressPts = 0;
-    let unseen = [...KANA];
+    let unseen = [...EFFECTIVE_KANA];
     let currentKana = null;
     let roundLocked = false;
   
@@ -335,14 +345,14 @@
       grid.innerHTML = '';
       feedback.textContent = '';
   
-      if (unseen.length === 0) unseen = [...KANA];
+      if (unseen.length === 0) unseen = [...EFFECTIVE_KANA];
       currentKana = unseen.splice(Math.floor(Math.random() * unseen.length), 1)[0];
   
       setTimeout(() => playAudio(currentKana), 600);
   
-      const distractors = KANA.filter(k => k !== currentKana)
-                              .sort(() => 0.5 - Math.random())
-                              .slice(0, 3);
+      const distractors = EFFECTIVE_KANA.filter(k => k !== currentKana)
+        .sort(() => 0.5 - Math.random())
+        .slice(0, 3);
       const options = [currentKana, ...distractors].sort(() => 0.5 - Math.random());
   
       options.forEach((g, i) => {
@@ -355,7 +365,7 @@
   
       replayBtn.onclick = () => playAudio(currentKana);
     }
-  
+
     function onPick(choice, btn) {
       if (roundLocked) return;
       roundLocked = true;
