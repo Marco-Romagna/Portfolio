@@ -104,39 +104,6 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
     backBtn.classList.toggle('is-hidden', currentPart <= 1);
   }
 
-  // ---------- Summary Renderer ----------
-  function initSummary() {
-    const container = document.querySelector('#lesson-summary');
-    if (!container || !SUMMARY_DATA) return;
-
-    document.querySelector('.lesson-progress')?.classList.add('is-hidden');
-    $$('.lesson-part').forEach(p => p.classList.add('is-hidden'));
-    document.querySelector('.lesson-cta')?.classList.add('is-hidden');
-
-    container.classList.remove('is-hidden');
-    container.innerHTML = `
-      <div class="summary-panel">
-        ${SUMMARY_DATA.kana ? `<div class="summary-kana">${SUMMARY_DATA.kana}</div>` : ""}
-        <h2>${SUMMARY_DATA.gloss_en}</h2>
-        <p>${SUMMARY_DATA.note}</p>
-        <button class="btn primary" id="start-lesson">Start Lesson</button>
-      </div>
-    `;
-
-    document.querySelector('#start-lesson')
-      .addEventListener('click', () => {
-        container.classList.add('is-hidden');
-        document.querySelector('.lesson-progress')?.classList.remove('is-hidden');
-        document.querySelector('.lesson-cta')?.classList.remove('is-hidden');
-        $$('.lesson-part').forEach(p => p.classList.remove('is-hidden', 'is-visible'));
-        showPart(1);
-        if (typeof window.initPart1 === "function") {
-          window.initPart1();
-          window.initPart1 = null;
-        }
-      });
-  }
-
   // ---------- Kana Sets ----------
   const H_VOW = ['あ','い','う','え','お'];
   const K_VOW = ['ア','イ','ウ','エ','オ'];
@@ -194,7 +161,7 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
     'ぱ':'pa','ぴ':'pi','ぷ':'pu','ぺ':'pe','ぽ':'po',
     'パ':'pa','ピ':'pi','プ':'pu','ペ':'pe','ポ':'po',
     'ま':'ma','み':'mi','む':'mu','め':'me','も':'mo',
-    'マ':'ma','ミ':'mi','ム':'mu','メ':'mo','モ':'mo',
+    'マ':'ma','ミ':'mi','ム':'mu','メ':'me','モ':'mo',
     'や':'ya','ゆ':'yu','よ':'yo',
     'ヤ':'ya','ユ':'yu','ヨ':'yo',
     'ら':'ra','り':'ri','る':'ru','れ':'re','ろ':'ro',
@@ -247,128 +214,14 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
     KANA = getKanaSet(WORLD, SUFFIX, LEXICON);
   }
 
-  // ---------- Smooth lesson navigation (stages-driven) ----------
-  function loadNextLesson(currentId) {
-    try {
-      const stages = window.KANA_STAGES?.levels || [];
-      if (!stages.length) {
-        console.warn("[WARN] No KANA_STAGES.levels found.");
-        window.location.href = '../index.html';
-        return;
-      }
-  
-      const index = stages.findIndex(l => l.code === currentId);
-      if (index === -1) {
-        console.warn(`[WARN] Unknown lesson id ${currentId}`);
-        window.location.href = '../index.html';
-        return;
-      }
-  
-      // End of lessons check
-      if (index >= stages.length - 1) {
-        console.log("[INFO] End of all lessons reached.");
-        const endScreen = document.createElement('div');
-        endScreen.className = 'lesson-end';
-        endScreen.innerHTML = `
-          <div class="summary-panel">
-            <h2>🎉 Congratulations!</h2>
-            <p>You've completed all available lessons!</p>
-            <button class="btn primary" onclick="window.location.href='../index.html'">Return Home</button>
-          </div>
-        `;
-        document.body.innerHTML = '';
-        document.body.appendChild(endScreen);
-        return;
-      }
-  
-      // Compute next lesson id from stages.js
-      const nextId = stages[index + 1].code;
-      console.log(`[DEBUG] Advancing from ${currentId} → ${nextId}`);
-  
-      // Update URL + dataset
-      const lesson = document.querySelector('.lesson');
-      if (!lesson) throw new Error('Lesson container missing.');
-  
-      const params = new URLSearchParams(window.location.search);
-      params.set('id', nextId);
-      history.replaceState({}, '', `${window.location.pathname}?${params}`);
-      lesson.dataset.lessonId = nextId;
-  
-      // --- Extract world + suffix ---
-      const [worldStr, suffixStr] = nextId.split('-');
-      const WORLD = Number(worldStr);
-      const SUFFIX = Number(suffixStr);
-  
-      // --- Recompute core state ---
-      const HIRA_VOCAB_SUFFIXES = [4, 9, 14];
-      const KATA_VOCAB_SUFFIXES = [5, 10, 15];
-      const IS_VOCAB = [...HIRA_VOCAB_SUFFIXES, ...KATA_VOCAB_SUFFIXES].includes(SUFFIX);
-  
-      let LEXICON = 'hiragana';
-      // Katakana lessons always come right after Hiragana (e.g., 1-2, 2-2, etc.)
-      if (SUFFIX % 5 === 2 || SUFFIX % 5 === 0 || KATA_VOCAB_SUFFIXES.includes(SUFFIX)) {
-        LEXICON = 'katakana';
-      }
-
-  
-      // --- Rebuild KANA if needed ---
-      let KANA = [];
-      if (!IS_VOCAB && typeof getKanaSet === 'function') {
-        KANA = getKanaSet(WORLD, SUFFIX, LEXICON);
-      }
-      // --- Update global KANA in LessonCore so next lesson uses the right script ---
-      if (window.LessonCore) {
-        window.LessonCore.KANA = KANA;
-        window.LessonCore.LEXICON = LEXICON;
-        window.LessonCore.SUFFIX = SUFFIX;
-        window.LessonCore.WORLD = WORLD;
-        window.LessonCore.IS_VOCAB = IS_VOCAB;
-      }
-
-  
-      // --- Update LessonCore globals ---
-      Object.assign(window.LessonCore, { WORLD, SUFFIX, IS_VOCAB, LEXICON, KANA });
-  
-      // --- Relaunch appropriate lesson ---
-      const lessonContainer = document.querySelector('.lesson');
-      if (lessonContainer) {
-        lessonContainer.querySelectorAll('.lesson-part').forEach(p => {
-          // Clear content but keep the part elements themselves
-          p.replaceChildren();
-          p.classList.remove('is-visible');
-        });
-      }
-      
-      // --- Relaunch appropriate lesson type ---
-      if (IS_VOCAB && typeof initVocabParts === 'function') {
-        console.log(`[DEBUG] Reloading VOCAB lesson ${nextId}`);
-        initVocabParts();
-        if (typeof window.LessonCore.showPart === 'function') window.LessonCore.showPart(1);
-      } else if (!IS_VOCAB && typeof initKanaParts === 'function') {
-        console.log(`[DEBUG] Reloading KANA lesson ${nextId}`);
-        initKanaParts();
-        if (typeof window.LessonCore.showPart === 'function') window.LessonCore.showPart(1);
-      } else {
-        console.warn('No suitable init function found for soft reload.');
-        window.location.href = `lesson.html?id=${nextId}`;
-      }
-
-    } catch (err) {
-      console.error('Soft reload failed:', err);
-      window.location.href = `lesson.html?id=${currentId}`;
-    }
-  }
-
   // ---------- Export ----------
   window.LessonCore = {
     $,$$,
     WORLD, SUFFIX, IS_VOCAB,
     KANA, ROMA, PAIR,
     showPart, LEXICON,
-    GOAL_IDENT, GOAL_TYPE, COMBO_LAST,
-    loadNextLesson
+    GOAL_IDENT, GOAL_TYPE, COMBO_LAST
   };
-
 
   // ---------- Bootstrapping ----------
   document.addEventListener("DOMContentLoaded", () => {
@@ -379,41 +232,4 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
       if (typeof window.initKanaParts === "function") window.initKanaParts();
     }
   });
-
-     // ---------- Debug navigation ----------
-      window.addEventListener("load", () => {
-        if (!window.DEBUG_SKIP_ENABLED) return;
-        console.log("[DEBUG] Debug navigation ready");
-    
-        function clickRealAdvance() {
-          // Support both `advance` and `next-part`
-          const realAdvance = document.querySelector(
-            `.lesson-part.is-visible [data-action="advance"], 
-             .lesson-part.is-visible [data-action="next-part"]`
-          );
-          if (realAdvance) {
-            console.log("[DEBUG] Triggering real advance/next-part button");
-            realAdvance.click();
-          } else {
-            console.log("[DEBUG] No advance/next-part button — fallback → showPart()");
-            showPart(currentPart + 1);
-          }
-        }
-    
-        function clickRealBack() {
-          const realBack = document.querySelector(
-            `.lesson-part.is-visible [data-action="back"]`
-          );
-          if (realBack) {
-            console.log("[DEBUG] Triggering real back button");
-            realBack.click();
-          } else {
-            console.log("[DEBUG] No back button — fallback → showPart()");
-            showPart(currentPart - 1);
-          }
-        }
-    
-        nextBtn?.addEventListener("click", clickRealAdvance);
-        backBtn?.addEventListener("click", clickRealBack);
-      });
 })();
