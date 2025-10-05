@@ -1,4 +1,4 @@
-// ==========================================================
+/// ==========================================================
 // lessons-core.js
 // Shared utilities + role detection for all lesson types
 // ==========================================================
@@ -31,11 +31,16 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
   const KATA_VOCAB_SUFFIXES = [5, 10, 15];
   const IS_VOCAB = [...HIRA_VOCAB_SUFFIXES, ...KATA_VOCAB_SUFFIXES].includes(SUFFIX);
 
-  // ---------- Lexicon Detection ----------
+  // ---------- Lexicon Detection (for Kana Lessons) ----------
   let LEXICON = "hiragana";
-  if (KATA_VOCAB_SUFFIXES.includes(SUFFIX)) {
+  if ([2, 7, 12].includes(SUFFIX)) {
+    LEXICON = "katakana";
+  } else if ([3, 8, 13].includes(SUFFIX)) {
+    LEXICON = "mixed";
+  } else if (KATA_VOCAB_SUFFIXES.includes(SUFFIX)) {
     LEXICON = "katakana";
   }
+  lesson.dataset.lexicon = LEXICON;
 
   // ---------- Summary Detection ----------
   let SUMMARY_DATA = null;
@@ -55,7 +60,7 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
   const totalParts = baseParts;
 
   let currentPart = 1;
-  let KANA = []; // ✅ declared early so it's always defined
+  let KANA = []; // defined early
 
   // Add back button
   let backBtn = document.createElement('button');
@@ -94,7 +99,6 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
     if (fill) fill.style.width = `${pct}%`;
     if (progress) progress.setAttribute('aria-valuenow', String(pct));
 
-    // --- Debug visibility ---
     if (window.DEBUG_SKIP_ENABLED) {
       ctaWrap?.classList.remove('is-hidden');
     } else {
@@ -194,7 +198,7 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
     'ぱ':'pa','ぴ':'pi','ぷ':'pu','ぺ':'pe','ぽ':'po',
     'パ':'pa','ピ':'pi','プ':'pu','ペ':'pe','ポ':'po',
     'ま':'ma','み':'mi','む':'mu','め':'me','も':'mo',
-    'マ':'ma','ミ':'mi','ム':'mu','メ':'mo','モ':'mo',
+    'マ':'ma','ミ':'mi','ム':'mu','メ':'me','モ':'mo',
     'や':'ya','ゆ':'yu','よ':'yo',
     'ヤ':'ya','ユ':'yu','ヨ':'yo',
     'ら':'ra','り':'ri','る':'ru','れ':'re','ろ':'ro',
@@ -243,6 +247,7 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
     return [];
   }
 
+  // ---------- Finalize Kana Set ----------
   if (!IS_VOCAB) {
     KANA = getKanaSet(WORLD, SUFFIX, LEXICON);
   }
@@ -256,7 +261,6 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
     GOAL_IDENT, GOAL_TYPE, COMBO_LAST
   };
 
-
   // ---------- Bootstrapping ----------
   document.addEventListener("DOMContentLoaded", () => {
     console.log("[DEBUG] DOM Ready — Bootstrapping lessons");
@@ -267,40 +271,27 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
     }
   });
 
-     // ---------- Debug navigation ----------
-      window.addEventListener("load", () => {
-        if (!window.DEBUG_SKIP_ENABLED) return;
-        console.log("[DEBUG] Debug navigation ready");
-    
-        function clickRealAdvance() {
-          // Support both `advance` and `next-part`
-          const realAdvance = document.querySelector(
-            `.lesson-part.is-visible [data-action="advance"], 
-             .lesson-part.is-visible [data-action="next-part"]`
-          );
-          if (realAdvance) {
-            console.log("[DEBUG] Triggering real advance/next-part button");
-            realAdvance.click();
-          } else {
-            console.log("[DEBUG] No advance/next-part button — fallback → showPart()");
-            showPart(currentPart + 1);
-          }
-        }
-    
-        function clickRealBack() {
-          const realBack = document.querySelector(
-            `.lesson-part.is-visible [data-action="back"]`
-          );
-          if (realBack) {
-            console.log("[DEBUG] Triggering real back button");
-            realBack.click();
-          } else {
-            console.log("[DEBUG] No back button — fallback → showPart()");
-            showPart(currentPart - 1);
-          }
-        }
-    
-        nextBtn?.addEventListener("click", clickRealAdvance);
-        backBtn?.addEventListener("click", clickRealBack);
-      });
+  // ---------- Debug navigation ----------
+  window.addEventListener("load", () => {
+    if (!window.DEBUG_SKIP_ENABLED) return;
+    console.log("[DEBUG] Debug navigation ready");
+
+    function clickRealAdvance() {
+      const realAdvance = document.querySelector(
+        `.lesson-part.is-visible [data-action="advance"], 
+         .lesson-part.is-visible [data-action="next-part"]`
+      );
+      if (realAdvance) realAdvance.click();
+      else showPart(currentPart + 1);
+    }
+
+    function clickRealBack() {
+      const realBack = document.querySelector(`.lesson-part.is-visible [data-action="back"]`);
+      if (realBack) realBack.click();
+      else showPart(currentPart - 1);
+    }
+
+    nextBtn?.addEventListener("click", clickRealAdvance);
+    backBtn?.addEventListener("click", clickRealBack);
+  });
 })();
