@@ -37,8 +37,12 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
     LEXICON = "katakana";
   }
 
+  // ---------- Summary Detection ----------
+  let SUMMARY_DATA = null;
+
   // ---------- DOM / UI ----------
   const parts      = $$('.lesson-part');
+  const stepsList  = $('.steps');
   const progress   = $('.progressbar');
   const fill       = $('.progressbar-fill');
   const ctaWrap    = $('.lesson-cta');
@@ -51,14 +55,21 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
   const totalParts = baseParts;
 
   let currentPart = 1;
-  let KANA = []; // declared early so it's always defined
+  let KANA = []; // ✅ declared early so it's always defined
+
+  // Add back button
+  let backBtn = document.createElement('button');
+  backBtn.textContent = "← Back";
+  backBtn.className = "btn primary is-hidden";
+  backBtn.dataset.action = "back";
+  ctaWrap?.insertBefore(backBtn, nextBtn);
 
   // ---------- Core Show Function ----------
   function showPart(idx) {
     currentPart = Math.min(Math.max(idx, 1), totalParts);
 
     // --- Always ensure the part exists before showing it ---
-    if (!IS_VOCAB) {
+    if (!window.LessonCore.IS_VOCAB) {
       if (currentPart === 1 && typeof window.initPart1 === "function") window.initPart1();
       if (currentPart === 2 && typeof window.initPart2 === "function") window.initPart2();
       if (currentPart === 3 && typeof window.initPart3 === "function") window.initPart3();
@@ -75,6 +86,9 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
     parts.forEach(p =>
       p.classList.toggle('is-visible', Number(p.dataset.partIndex) === currentPart)
     );
+    $$('.steps .step').forEach(s =>
+      s.classList.toggle('is-active', Number(s.dataset.part) === currentPart)
+    );
 
     const pct = totalParts > 1 ? Math.round((currentPart - 1) / (totalParts - 1) * 100) : 100;
     if (fill) fill.style.width = `${pct}%`;
@@ -86,6 +100,8 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
     } else {
       hideCTA();
     }
+
+    backBtn.classList.toggle('is-hidden', currentPart <= 1);
   }
 
   // ---------- Kana Sets ----------
@@ -172,23 +188,26 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
 
   // ---------- World Sets ----------
   function getWorldSets(world) {
-    if (world === 1) return { H_BASE: H_VOW, K_BASE: K_VOW };
-    if (world === 2) return { H_BASE: H_KA, K_BASE: K_KA };
-    if (world === 3) return { H_BASE: H_SA, K_BASE: K_SA };
-    if (world === 4) return { H_BASE: H_TA, K_BASE: K_TA };
-    if (world === 5) return { H_BASE: H_NA, K_BASE: K_NA };
-    if (world === 6) return { H_BASE: H_HA, K_BASE: K_HA };
-    if (world === 7) return { H_BASE: H_MA, K_BASE: K_MA };
-    if (world === 8) return { H_BASE: H_YA, K_BASE: K_YA };
-    if (world === 9) return { H_BASE: H_RA, K_BASE: K_RA };
-    if (world === 10) return { H_BASE: H_WA, K_BASE: K_WA };
-    return { H_BASE: [], K_BASE: [] };
+    if (world === 1) return { H_BASE: H_VOW, K_BASE: K_VOW, H_DAKU: [], K_DAKU: [] };
+    if (world === 2) return { H_BASE: H_KA, K_BASE: K_KA, H_DAKU: H_GA, K_DAKU: K_GA };
+    if (world === 3) return { H_BASE: H_SA, K_BASE: K_SA, H_DAKU: H_ZA, K_DAKU: K_ZA };
+    if (world === 4) return { H_BASE: H_TA, K_BASE: K_TA, H_DAKU: H_DA, K_DAKU: K_DA };
+    if (world === 5) return { H_BASE: H_NA, K_BASE: K_NA, H_DAKU: [], K_DAKU: [] };
+    if (world === 6) return { H_BASE: H_HA, K_BASE: K_HA, H_DAKU: H_BA, K_DAKU: K_BA, H_HANDA: H_PA, K_HANDA: K_PA };
+    if (world === 7) return { H_BASE: H_MA, K_BASE: K_MA, H_DAKU: [], K_DAKU: [] };
+    if (world === 8) return { H_BASE: H_YA, K_BASE: K_YA, H_DAKU: [], K_DAKU: [] };
+    if (world === 9) return { H_BASE: H_RA, K_BASE: K_RA, H_DAKU: [], K_DAKU: [] };
+    if (world === 10) return { H_BASE: H_WA, K_BASE: K_WA, H_DAKU: [], K_DAKU: [] };
+    return { H_BASE: [], K_BASE: [], H_DAKU: [], K_DAKU: [] };
   }
 
   function getKanaSet(world, suffix, lexicon) {
     const sets = getWorldSets(world);
     const isHira = (lexicon === "hiragana");
-    return isHira ? [...sets.H_BASE] : [...sets.K_BASE];
+    if (suffix < 6) return isHira ? [...sets.H_BASE] : [...sets.K_BASE];
+    else if (suffix >= 6 && suffix < 11) return isHira ? [...sets.H_DAKU] : [...sets.K_DAKU];
+    else if (suffix >= 11 && world === 6) return isHira ? [...sets.H_HANDA] : [...sets.K_HANDA];
+    return [];
   }
 
   if (!IS_VOCAB) {
@@ -197,7 +216,7 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
 
   // ---------- Export ----------
   window.LessonCore = {
-    $, $$,
+    $,$$,
     WORLD, SUFFIX, IS_VOCAB,
     KANA, ROMA, PAIR,
     showPart, LEXICON,
