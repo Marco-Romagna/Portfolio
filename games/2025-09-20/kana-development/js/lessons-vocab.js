@@ -103,7 +103,7 @@
     $('[data-action="next"]', part1).addEventListener('click', () => selectIndex(currentIdx + 1));
     $('[data-action="advance"]', part1).addEventListener('click', () => showPart(2));
   }
-  
+
   // ======================================================
   // Part 2 — Vocab Hunt (Immersion Passage)
   // ======================================================
@@ -232,9 +232,7 @@
     function nextQuestion() {
       grid.innerHTML = '';
       feedback.textContent = '';
-      if (queue.length === 0) {
-        queue = [...words].sort(() => Math.random() - 0.5);
-      }
+      if (queue.length === 0) queue = [...words].sort(() => Math.random() - 0.5);
       current = queue.shift();
       firstTry = true;
       promptEl.textContent = current.gloss_en;
@@ -362,7 +360,7 @@
       <input id="audio-answer" class="type-input" placeholder="Type romaji or English…" autocomplete="off" />
       <div class="quiz-feedback"><p class="feedback-text"></p></div>
       <div class="actions">
-        <button class="btn primary is-hidden" data-action="next-part">Finish Lesson</button>
+        <button class="btn primary is-hidden" data-action="finish-lesson">Finish Lesson</button>
       </div>
     `;
     part5.appendChild(panel);
@@ -370,7 +368,7 @@
     const btnPlay   = $('#play-audio', part5);
     const input     = $('#audio-answer', part5);
     const feedback  = $('.feedback-text', part5);
-    const nextBtn   = $('[data-action="next-part"]', part5);
+    const nextBtn   = $('[data-action="finish-lesson"]', part5);
   
     const GOAL = Math.max(3, Math.floor(words.length / 2));
   
@@ -442,7 +440,6 @@
   // ======================================================
   window.initVocabParts = async function () {
     const qId = document.querySelector('.lesson').dataset.lessonId;
-  
     const roleKey = getRoleKey(WORLD, SUFFIX);
     const words = await Vocab.getWorldMilestone(roleKey, LEXICON);
   
