@@ -5,6 +5,11 @@
 window.DEBUG_SKIP_ENABLED = true; // set false for production
 
 (() => {
+  // ---------- Shared Goals ----------
+  const GOAL_IDENT = 10;   // how many correct answers needed in Identify
+  const GOAL_TYPE  = 10;   // how many correct answers in Typing
+  const COMBO_LAST = 3;    // how many final combo rounds in Typing
+
   // ---------- DOM Helpers ----------
   const $  = (s, r = document) => r.querySelector(s);
   const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
@@ -32,12 +37,8 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
     LEXICON = "katakana";
   }
 
-  // ---------- Summary Detection ----------
-  let SUMMARY_DATA = null;
-
   // ---------- DOM / UI ----------
   const parts      = $$('.lesson-part');
-  const stepsList  = $('.steps');
   const progress   = $('.progressbar');
   const fill       = $('.progressbar-fill');
   const ctaWrap    = $('.lesson-cta');
@@ -50,21 +51,14 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
   const totalParts = baseParts;
 
   let currentPart = 1;
-  let KANA = []; // ✅ declared early so it's always defined
-
-  // Add back button
-  let backBtn = document.createElement('button');
-  backBtn.textContent = "← Back";
-  backBtn.className = "btn primary is-hidden";
-  backBtn.dataset.action = "back";
-  ctaWrap?.insertBefore(backBtn, nextBtn);
+  let KANA = []; // declared early so it's always defined
 
   // ---------- Core Show Function ----------
   function showPart(idx) {
     currentPart = Math.min(Math.max(idx, 1), totalParts);
 
     // --- Always ensure the part exists before showing it ---
-    if (!window.LessonCore.IS_VOCAB) {
+    if (!IS_VOCAB) {
       if (currentPart === 1 && typeof window.initPart1 === "function") window.initPart1();
       if (currentPart === 2 && typeof window.initPart2 === "function") window.initPart2();
       if (currentPart === 3 && typeof window.initPart3 === "function") window.initPart3();
@@ -81,9 +75,6 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
     parts.forEach(p =>
       p.classList.toggle('is-visible', Number(p.dataset.partIndex) === currentPart)
     );
-    $$('.steps .step').forEach(s =>
-      s.classList.toggle('is-active', Number(s.dataset.part) === currentPart)
-    );
 
     const pct = totalParts > 1 ? Math.round((currentPart - 1) / (totalParts - 1) * 100) : 100;
     if (fill) fill.style.width = `${pct}%`;
@@ -95,41 +86,6 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
     } else {
       hideCTA();
     }
-
-    backBtn.classList.toggle('is-hidden', currentPart <= 1);
-  }
-
-  // ---------- Summary Renderer ----------
-  function initSummary() {
-    const container = document.querySelector('#lesson-summary');
-    if (!container || !SUMMARY_DATA) return;
-
-    document.querySelector('.lesson-progress')?.classList.add('is-hidden');
-    $$('.lesson-part').forEach(p => p.classList.add('is-hidden'));
-    document.querySelector('.lesson-cta')?.classList.add('is-hidden');
-
-    container.classList.remove('is-hidden');
-    container.innerHTML = `
-      <div class="summary-panel">
-        ${SUMMARY_DATA.kana ? `<div class="summary-kana">${SUMMARY_DATA.kana}</div>` : ""}
-        <h2>${SUMMARY_DATA.gloss_en}</h2>
-        <p>${SUMMARY_DATA.note}</p>
-        <button class="btn primary" id="start-lesson">Start Lesson</button>
-      </div>
-    `;
-
-    document.querySelector('#start-lesson')
-      .addEventListener('click', () => {
-        container.classList.add('is-hidden');
-        document.querySelector('.lesson-progress')?.classList.remove('is-hidden');
-        document.querySelector('.lesson-cta')?.classList.remove('is-hidden');
-        $$('.lesson-part').forEach(p => p.classList.remove('is-hidden', 'is-visible'));
-        showPart(1);
-        if (typeof window.initPart1 === "function") {
-          window.initPart1();
-          window.initPart1 = null;
-        }
-      });
   }
 
   // ---------- Kana Sets ----------
@@ -189,7 +145,7 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
     'ぱ':'pa','ぴ':'pi','ぷ':'pu','ぺ':'pe','ぽ':'po',
     'パ':'pa','ピ':'pi','プ':'pu','ペ':'pe','ポ':'po',
     'ま':'ma','み':'mi','む':'mu','め':'me','も':'mo',
-    'マ':'ma','ミ':'mi','ム':'mu','メ':'mo','モ':'mo',
+    'マ':'ma','ミ':'mi','ム':'mu','メ':'me','モ':'mo',
     'や':'ya','ゆ':'yu','よ':'yo',
     'ヤ':'ya','ユ':'yu','ヨ':'yo',
     'ら':'ra','り':'ri','る':'ru','れ':'re','ろ':'ro',
@@ -216,26 +172,23 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
 
   // ---------- World Sets ----------
   function getWorldSets(world) {
-    if (world === 1) return { H_BASE: H_VOW, K_BASE: K_VOW, H_DAKU: [], K_DAKU: [] };
-    if (world === 2) return { H_BASE: H_KA, K_BASE: K_KA, H_DAKU: H_GA, K_DAKU: K_GA };
-    if (world === 3) return { H_BASE: H_SA, K_BASE: K_SA, H_DAKU: H_ZA, K_DAKU: K_ZA };
-    if (world === 4) return { H_BASE: H_TA, K_BASE: K_TA, H_DAKU: H_DA, K_DAKU: K_DA };
-    if (world === 5) return { H_BASE: H_NA, K_BASE: K_NA, H_DAKU: [], K_DAKU: [] };
-    if (world === 6) return { H_BASE: H_HA, K_BASE: K_HA, H_DAKU: H_BA, K_DAKU: K_BA, H_HANDA: H_PA, K_HANDA: K_PA };
-    if (world === 7) return { H_BASE: H_MA, K_BASE: K_MA, H_DAKU: [], K_DAKU: [] };
-    if (world === 8) return { H_BASE: H_YA, K_BASE: K_YA, H_DAKU: [], K_DAKU: [] };
-    if (world === 9) return { H_BASE: H_RA, K_BASE: K_RA, H_DAKU: [], K_DAKU: [] };
-    if (world === 10) return { H_BASE: H_WA, K_BASE: K_WA, H_DAKU: [], K_DAKU: [] };
-    return { H_BASE: [], K_BASE: [], H_DAKU: [], K_DAKU: [] };
+    if (world === 1) return { H_BASE: H_VOW, K_BASE: K_VOW };
+    if (world === 2) return { H_BASE: H_KA, K_BASE: K_KA };
+    if (world === 3) return { H_BASE: H_SA, K_BASE: K_SA };
+    if (world === 4) return { H_BASE: H_TA, K_BASE: K_TA };
+    if (world === 5) return { H_BASE: H_NA, K_BASE: K_NA };
+    if (world === 6) return { H_BASE: H_HA, K_BASE: K_HA };
+    if (world === 7) return { H_BASE: H_MA, K_BASE: K_MA };
+    if (world === 8) return { H_BASE: H_YA, K_BASE: K_YA };
+    if (world === 9) return { H_BASE: H_RA, K_BASE: K_RA };
+    if (world === 10) return { H_BASE: H_WA, K_BASE: K_WA };
+    return { H_BASE: [], K_BASE: [] };
   }
 
   function getKanaSet(world, suffix, lexicon) {
     const sets = getWorldSets(world);
     const isHira = (lexicon === "hiragana");
-    if (suffix < 6) return isHira ? [...sets.H_BASE] : [...sets.K_BASE];
-    else if (suffix >= 6 && suffix < 11) return isHira ? [...sets.H_DAKU] : [...sets.K_DAKU];
-    else if (suffix >= 11 && world === 6) return isHira ? [...sets.H_HANDA] : [...sets.K_HANDA];
-    return [];
+    return isHira ? [...sets.H_BASE] : [...sets.K_BASE];
   }
 
   if (!IS_VOCAB) {
@@ -244,10 +197,11 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
 
   // ---------- Export ----------
   window.LessonCore = {
-    $,$$,
+    $, $$,
     WORLD, SUFFIX, IS_VOCAB,
     KANA, ROMA, PAIR,
-    showPart, LEXICON
+    showPart, LEXICON,
+    GOAL_IDENT, GOAL_TYPE, COMBO_LAST
   };
 
   // ---------- Bootstrapping ----------
@@ -259,41 +213,4 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
       if (typeof window.initKanaParts === "function") window.initKanaParts();
     }
   });
-
-     // ---------- Debug navigation ----------
-      window.addEventListener("load", () => {
-        if (!window.DEBUG_SKIP_ENABLED) return;
-        console.log("[DEBUG] Debug navigation ready");
-    
-        function clickRealAdvance() {
-          // Support both `advance` and `next-part`
-          const realAdvance = document.querySelector(
-            `.lesson-part.is-visible [data-action="advance"], 
-             .lesson-part.is-visible [data-action="next-part"]`
-          );
-          if (realAdvance) {
-            console.log("[DEBUG] Triggering real advance/next-part button");
-            realAdvance.click();
-          } else {
-            console.log("[DEBUG] No advance/next-part button — fallback → showPart()");
-            showPart(currentPart + 1);
-          }
-        }
-    
-        function clickRealBack() {
-          const realBack = document.querySelector(
-            `.lesson-part.is-visible [data-action="back"]`
-          );
-          if (realBack) {
-            console.log("[DEBUG] Triggering real back button");
-            realBack.click();
-          } else {
-            console.log("[DEBUG] No back button — fallback → showPart()");
-            showPart(currentPart - 1);
-          }
-        }
-    
-        nextBtn?.addEventListener("click", clickRealAdvance);
-        backBtn?.addEventListener("click", clickRealBack);
-      });
 })();
