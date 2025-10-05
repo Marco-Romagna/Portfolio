@@ -536,6 +536,30 @@
   }
 
   // ======================================================
+  // Auto-select correct kana script before starting
+  // ======================================================
+  document.addEventListener("DOMContentLoaded", () => {
+    const lessonEl = document.querySelector(".lesson");
+    if (!lessonEl) return;
+  
+    const lessonId = lessonEl.dataset.lessonId || "";
+    let activeLexicon = "hiragana";
+  
+    // For katakana lessons (1-2, 2-2, 3-2, etc.)
+    if (lessonId.endsWith("-2")) {
+      activeLexicon = "katakana";
+    }
+  
+    // Store globally for LessonCore and other scripts
+    window.ACTIVE_LEXICON = activeLexicon;
+  
+    // Swap KANA source if katakana
+    if (activeLexicon === "katakana" && window.KANA_KATAKANA) {
+      window.LessonCore.KANA = window.KANA_KATAKANA;
+    }
+  });
+
+  // ======================================================
   // Public API
   // ======================================================
   window.initKanaParts = function(){
