@@ -240,12 +240,19 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
 
   function getKanaSet(world, suffix, lexicon) {
     const sets = getWorldSets(world);
+  
+    if (lexicon === "mixed") {
+      // Combine both Hiragana + Katakana of this world
+      return [...sets.H_BASE, ...sets.K_BASE];
+    }
+  
     const isHira = (lexicon === "hiragana");
     if (suffix < 6) return isHira ? [...sets.H_BASE] : [...sets.K_BASE];
     else if (suffix >= 6 && suffix < 11) return isHira ? [...sets.H_DAKU] : [...sets.K_DAKU];
     else if (suffix >= 11 && world === 6) return isHira ? [...sets.H_HANDA] : [...sets.K_HANDA];
     return [];
   }
+
 
   // ---------- Finalize Kana Set ----------
   if (!IS_VOCAB) {
