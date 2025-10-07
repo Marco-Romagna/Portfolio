@@ -2,12 +2,8 @@
   "meta": {"version":1,"locale":"ja-JP","script":"katakana"},
   "words": [
       {
-        "id": "iku_kata",
-        "kana": "イク",
-        "romaji": "iku",
-        "gloss_en": "to go",
-        "tags": ["core","k-row","verb"],
-        "worlds": ["2-vocab-kata"],
+        "id": "iku_kata", "kana": "イク", "romaji": "iku",
+        "gloss_en": "to go", "tags": ["core","k-row","verb"], "worlds": ["2-vocab-kata"],
         "note": "Katakana rendering of いく (iku). Used stylistically or for emphasis in signage or creative writing.",
         "examples": {
           "dictionary": [
@@ -18,12 +14,8 @@
         }
       },
       {
-        "id": "kiku_kata",
-        "kana": "キク",
-        "romaji": "kiku",
-        "gloss_en": "to listen; to ask",
-        "tags": ["core","k-row","verb"],
-        "worlds": ["2-vocab-kata"],
+        "id": "kiku_kata", "kana": "キク", "romaji": "kiku",
+        "gloss_en": "to listen; to ask", "tags": ["core","k-row","verb"], "worlds": ["2-vocab-kata"],
         "note": "Katakana version of きく (kiku). Seen in stylized text or song titles. Context decides whether it means 'listen' or 'ask'.",
         "examples": {
           "dictionary": [
@@ -34,12 +26,8 @@
         }
       },
       {
-        "id": "kau_kata",
-        "kana": "カウ",
-        "romaji": "kau",
-        "gloss_en": "to buy",
-        "tags": ["core","k-row","verb"],
-        "worlds": ["2-vocab-kata"],
+        "id": "kau_kata", "kana": "カウ", "romaji": "kau",
+        "gloss_en": "to buy", "tags": ["core","k-row","verb"], "worlds": ["2-vocab-kata"],
         "note": "Katakana rendering of かう (kau). Appears stylistically in advertisements or games.",
         "examples": {
           "dictionary": [
@@ -50,12 +38,8 @@
         }
       },
       {
-        "id": "kao_kata",
-        "kana": "カオ",
-        "romaji": "kao",
-        "gloss_en": "face",
-        "tags": ["core","k-row","body"],
-        "worlds": ["2-vocab-kata"],
+        "id": "kao_kata", "kana": "カオ", "romaji": "kao",
+        "gloss_en": "face", "tags": ["core","k-row","body"], "worlds": ["2-vocab-kata"],
         "note": "Katakana version of かお (kao). Sometimes used in stylized text or names. Means 'face'.",
         "examples": {
           "dictionary": [
@@ -66,12 +50,8 @@
         }
       },
       {
-        "id": "ike_kata",
-        "kana": "イケ",
-        "romaji": "ike",
-        "gloss_en": "pond",
-        "tags": ["core","k-row","place"],
-        "worlds": ["2-vocab-kata"],
+        "id": "ike_kata", "kana": "イケ", "romaji": "ike",
+        "gloss_en": "pond", "tags": ["core","k-row","place"], "worlds": ["2-vocab-kata"],
         "note": "Katakana rendering of いけ (ike). Rare outside stylized uses. Refers to a pond, often man-made.",
         "examples": {
           "dictionary": [
@@ -82,12 +62,8 @@
         }
       },
       {
-        "id": "koe_kata",
-        "kana": "コエ",
-        "romaji": "koe",
-        "gloss_en": "voice",
-        "tags": ["core","k-row"],
-        "worlds": ["2-vocab-kata"],
+        "id": "koe_kata", "kana": "コエ", "romaji": "koe",
+        "gloss_en": "voice", "tags": ["core","k-row"], "worlds": ["2-vocab-kata"],
         "note": "Katakana version of こえ (koe). Used for stylistic emphasis in titles or lyrics. Refers to human or animal voices.",
         "examples": {
           "dictionary": [
@@ -99,12 +75,8 @@
       },
   
       {
-        "id": "gasorin_kata",
-        "kana": "ガソリン",
-        "romaji": "gasorin",
-        "gloss_en": "gasoline",
-        "tags": ["loanword","object","g-row"],
-        "worlds": ["2-daku-kata"],
+        "id": "gasorin_kata", "kana": "ガソリン", "romaji": "gasorin",
+        "gloss_en": "gasoline", "tags": ["loanword","object","g-row"], "worlds": ["2-daku-kata"],
         "note": "Loanword from English 'gasoline'. Very common everyday word used at gas stations or when refueling a car.",
         "examples": {
           "dictionary": [
@@ -115,12 +87,8 @@
         }
       },
       {
-        "id": "gifuto_kata",
-        "kana": "ギフト",
-        "romaji": "gifuto",
-        "gloss_en": "gift; present",
-        "tags": ["loanword","object","g-row"],
-        "worlds": ["2-daku-kata"],
+        "id": "gifuto_kata", "kana": "ギフト", "romaji": "gifuto",
+        "gloss_en": "gift; present", "tags": ["loanword","object","g-row"], "worlds": ["2-daku-kata"],
         "note": "Loanword from English 'gift'. Common in stores and online shopping.",
         "examples": {
           "dictionary": [
@@ -131,12 +99,8 @@
         }
       },
       {
-        "id": "gurasu_kata",
-        "kana": "グラス",
-        "romaji": "gurasu",
-        "gloss_en": "glass (cup)",
-        "tags": ["loanword","object","g-row"],
-        "worlds": ["2-daku-kata"],
+        "id": "gurasu_kata", "kana": "グラス", "romaji": "gurasu",
+        "gloss_en": "glass (cup)","tags": ["loanword","object","g-row"], "worlds": ["2-daku-kata"],
         "note": "Loanword from English 'glass'. Refers to a drinking glass or cup.",
         "examples": {
           "dictionary": [
@@ -147,12 +111,8 @@
         }
       },
       {
-        "id": "gesuto_kata",
-        "kana": "ゲスト",
-        "romaji": "gesuto",
-        "gloss_en": "guest",
-        "tags": ["loanword","people","g-row"],
-        "worlds": ["2-daku-kata"],
+        "id": "gesuto_kata", "kana": "ゲスト", "romaji": "gesuto", "gloss_en": "guest",
+        "tags": ["loanword","people","g-row"], "worlds": ["2-daku-kata"],
         "note": "Loanword from English 'guest'. Used for visitors or invited participants.",
         "examples": {
           "dictionary": [
@@ -163,12 +123,8 @@
         }
       },
       {
-        "id": "gorufu_kata",
-        "kana": "ゴルフ",
-        "romaji": "gorufu",
-        "gloss_en": "golf",
-        "tags": ["loanword","sport","g-row"],
-        "worlds": ["2-daku-kata"],
+        "id": "gorufu_kata", "kana": "ゴルフ", "romaji": "gorufu",
+        "gloss_en": "golf", "tags": ["loanword","sport","g-row"], "worlds": ["2-daku-kata"],
         "note": "Loanword from English 'golf'. Commonly used with する (to do/play).",
         "examples": {
           "dictionary": [
@@ -179,12 +135,8 @@
         }
       },
       {
-        "id": "gamu_kata",
-        "kana": "ガム",
-        "romaji": "gamu",
-        "gloss_en": "chewing gum",
-        "tags": ["loanword","food","g-row"],
-        "worlds": ["2-daku-kata"],
+        "id": "gamu_kata", "kana": "ガム", "romaji": "gamu",
+        "gloss_en": "chewing gum", "tags": ["loanword","food","g-row"], "worlds": ["2-daku-kata"],
         "note": "Loanword from English 'gum'. Always written in katakana; refers to chewing or bubble gum.",
         "examples": {
           "dictionary": [
@@ -196,12 +148,8 @@
       },
 
       {
-        "id": "sarada_kata",
-        "kana": "サラダ",
-        "romaji": "sarada",
-        "gloss_en": "salad",
-        "tags": ["loanword","food","s-row"],
-        "worlds": ["3-vocab-kata"],
+        "id": "sarada_kata", "kana": "サラダ", "romaji": "sarada",
+        "gloss_en": "salad", "tags": ["loanword","food","s-row"], "worlds": ["3-vocab-kata"],
         "note": "Loanword from English 'salad'. Very common everyday word used in meals or restaurants.",
         "examples": {
           "dictionary": [
@@ -212,12 +160,8 @@
         }
       },
       {
-        "id": "saru_kata",
-        "kana": "サル",
-        "romaji": "saru",
-        "gloss_en": "monkey",
-        "tags": ["loanword","animal","s-row"],
-        "worlds": ["3-vocab-kata"],
+        "id": "saru_kata", "kana": "サル", "romaji": "saru",
+        "gloss_en": "monkey", "tags": ["loanword","animal","s-row"], "worlds": ["3-vocab-kata"],
         "note": "Monkey. Usually written 猿, but katakana サル is common in signs or simple texts.",
         "examples": {
           "dictionary": [
@@ -228,12 +172,8 @@
         }
       },
       {
-        "id": "semi_kata",
-        "kana": "セミ",
-        "romaji": "semi",
-        "gloss_en": "cicada",
-        "tags": ["loanword","animal","s-row"],
-        "worlds": ["3-vocab-kata"],
+        "id": "semi_kata", "kana": "セミ", "romaji": "semi",
+        "gloss_en": "cicada", "tags": ["loanword","animal","s-row"], "worlds": ["3-vocab-kata"],
         "note": "Cicada (summer insect). Usually written 蝉 but katakana セミ is common in casual writing or children’s books.",
         "examples": {
           "dictionary": [
@@ -244,12 +184,8 @@
         }
       },
       {
-        "id": "suika_kata",
-        "kana": "スイカ",
-        "romaji": "suika",
-        "gloss_en": "watermelon",
-        "tags": ["loanword","food","s-row"],
-        "worlds": ["3-vocab-kata"],
+        "id": "suika_kata", "kana": "スイカ", "romaji": "suika",
+        "gloss_en": "watermelon", "tags": ["loanword","food","s-row"], "worlds": ["3-vocab-kata"],
         "note": "Watermelon. Usually written 西瓜, but katakana スイカ is very common in modern writing.",
         "examples": {
           "dictionary": [
@@ -260,12 +196,8 @@
         }
       },
       {
-        "id": "sofa_kata",
-        "kana": "ソファ",
-        "romaji": "sofa",
-        "gloss_en": "sofa",
-        "tags": ["loanword","furniture","s-row"],
-        "worlds": ["3-vocab-kata"],
+        "id": "sofa_kata", "kana": "ソファ", "romaji": "sofa",
+        "gloss_en": "sofa", "tags": ["loanword","furniture","s-row"], "worlds": ["3-vocab-kata"],
         "note": "Loanword from English 'sofa'. Common in homes and furniture stores.",
         "examples": {
           "dictionary": [
@@ -276,12 +208,8 @@
         }
       },
       {
-        "id": "sekai_kata",
-        "kana": "セカイ",
-        "romaji": "sekai",
-        "gloss_en": "world",
-        "tags": ["loanword","abstract","s-row"],
-        "worlds": ["3-vocab-kata"],
+        "id": "sekai_kata", "kana": "セカイ", "romaji": "sekai",
+        "gloss_en": "world", "tags": ["loanword","abstract","s-row"], "worlds": ["3-vocab-kata"],
         "note": "Usually written 世界, but katakana セカイ appears often in media and songs for stylistic effect.",
         "examples": {
           "dictionary": [
@@ -293,12 +221,8 @@
       },
 
       {
-        "id": "zubon_kata",
-        "kana": "ズボン",
-        "romaji": "zubon",
-        "gloss_en": "pants",
-        "tags": ["loanword","clothing","z-row"],
-        "worlds": ["3-daku-kata"],
+        "id": "zubon_kata", "kana": "ズボン", "romaji": "zubon",
+        "gloss_en": "pants", "tags": ["loanword","clothing","z-row"], "worlds": ["3-daku-kata"],
         "note": "Loanword from French 'jupon'. Refers to trousers or pants, always written in katakana.",
         "examples": {
           "dictionary": [
@@ -309,12 +233,8 @@
         }
       },
       {
-        "id": "zonbi_kata",
-        "kana": "ゾンビ",
-        "romaji": "zonbi",
-        "gloss_en": "zombie",
-        "tags": ["loanword","creature","z-row"],
-        "worlds": ["3-daku-kata"],
+        "id": "zonbi_kata", "kana": "ゾンビ", "romaji": "zonbi",
+        "gloss_en": "zombie", "tags": ["loanword","creature","z-row"], "worlds": ["3-daku-kata"],
         "note": "Loanword from English 'zombie'. Commonly used in games, movies, and pop culture.",
         "examples": {
           "dictionary": [
@@ -325,12 +245,8 @@
         }
       },
       {
-        "id": "zemi_kata",
-        "kana": "ゼミ",
-        "romaji": "zemi",
-        "gloss_en": "seminar",
-        "tags": ["loanword","school","z-row"],
-        "worlds": ["3-daku-kata"],
+        "id": "zemi_kata", "kana": "ゼミ", "romaji": "zemi",
+        "gloss_en": "seminar", "tags": ["loanword","school","z-row"], "worlds": ["3-daku-kata"],
         "note": "Abbreviation of 'seminar'. Very common term for university study groups or discussions.",
         "examples": {
           "dictionary": [
@@ -341,12 +257,8 @@
         }
       },
       {
-        "id": "zaru_kata",
-        "kana": "ザル",
-        "romaji": "zaru",
-        "gloss_en": "basket; strainer",
-        "tags": ["loanword","object","z-row"],
-        "worlds": ["3-daku-kata"],
+        "id": "zaru_kata", "kana": "ザル", "romaji": "zaru",
+        "gloss_en": "basket; strainer", "tags": ["loanword","object","z-row"], "worlds": ["3-daku-kata"],
         "note": "Usually written ざる, but katakana ザル is often used for food items like ザルソバ (cold soba).",
         "examples": {
           "dictionary": [
@@ -357,12 +269,8 @@
         }
       },
       {
-        "id": "zame_kata",
-        "kana": "ザメ",
-        "romaji": "zame",
-        "gloss_en": "shark",
-        "tags": ["loanword","animal","z-row"],
-        "worlds": ["3-daku-kata"],
+        "id": "zame_kata", "kana": "ザメ", "romaji": "zame",
+        "gloss_en": "shark", "tags": ["loanword","animal","z-row"], "worlds": ["3-daku-kata"],
         "note": "Appears in words like フカザメ ('shark'). Sometimes used in fishing or ocean contexts.",
         "examples": {
           "dictionary": [
@@ -373,12 +281,8 @@
         }
       },
       {
-        "id": "zerachin_kata",
-        "kana": "ゼラチン",
-        "romaji": "zerachin",
-        "gloss_en": "gelatin",
-        "tags": ["loanword","food","z-row"],
-        "worlds": ["3-daku-kata"],
+        "id": "zerachin_kata", "kana": "ゼラチン", "romaji": "zerachin",
+        "gloss_en": "gelatin", "tags": ["loanword","food","z-row"], "worlds": ["3-daku-kata"],
         "note": "Loanword from German 'Gelatine'. Commonly used in desserts and cooking.",
         "examples": {
           "dictionary": [
@@ -390,12 +294,8 @@
       },
 
       {
-        "id": "taoru_kata",
-        "kana": "タオル",
-        "romaji": "taoru",
-        "gloss_en": "towel",
-        "tags": ["loanword","object","t-row"],
-        "worlds": ["4-vocab-kata"],
+        "id": "taoru_kata", "kana": "タオル", "romaji": "taoru",
+        "gloss_en": "towel", "tags": ["loanword","object","t-row"], "worlds": ["4-vocab-kata"],
         "note": "Loanword from English 'towel'. Common household item used after washing or bathing.",
         "examples": {
           "dictionary": [
@@ -410,12 +310,8 @@
         }
       },
       {
-        "id": "tanku_kata",
-        "kana": "タンク",
-        "romaji": "tanku",
-        "gloss_en": "tank",
-        "tags": ["loanword","object","t-row"],
-        "worlds": ["4-vocab-kata"],
+        "id": "tanku_kata", "kana": "タンク", "romaji": "tanku",
+        "gloss_en": "tank", "tags": ["loanword","object","t-row"], "worlds": ["4-vocab-kata"],
         "note": "Loanword from English 'tank'. Refers to containers, fuel tanks, or even armored vehicles depending on context.",
         "examples": {
           "dictionary": [
@@ -430,12 +326,8 @@
         }
       },
       {
-        "id": "tsuna_kata",
-        "kana": "ツナ",
-        "romaji": "tsuna",
-        "gloss_en": "tuna",
-        "tags": ["loanword","food","t-row"],
-        "worlds": ["4-vocab-kata"],
+        "id": "tsuna_kata", "kana": "ツナ", "romaji": "tsuna", "gloss_en": "tuna",
+        "tags": ["loanword","food","t-row"], "worlds": ["4-vocab-kata"],
         "note": "Loanword from English 'tuna'. Usually refers to canned tuna in Japan, common in sandwiches and salads.",
         "examples": {
           "dictionary": [
@@ -450,12 +342,8 @@
         }
       },
       {
-        "id": "terebi_kata",
-        "kana": "テレビ",
-        "romaji": "terebi",
-        "gloss_en": "television",
-        "tags": ["loanword","object","t-row"],
-        "worlds": ["4-vocab-kata"],
+        "id": "terebi_kata", "kana": "テレビ", "romaji": "terebi",
+        "gloss_en": "television", "tags": ["loanword","object","t-row"], "worlds": ["4-vocab-kata"],
         "note": "Loanword from English 'television'. Extremely common everyday word for TV.",
         "examples": {
           "dictionary": [
@@ -470,12 +358,8 @@
         }
       },
       {
-        "id": "tenpo_kata",
-        "kana": "テンポ",
-        "romaji": "tenpo",
-        "gloss_en": "tempo",
-        "tags": ["loanword","abstract","t-row"],
-        "worlds": ["4-vocab-kata"],
+        "id": "tenpo_kata", "kana": "テンポ", "romaji": "tenpo",
+        "gloss_en": "tempo", "tags": ["loanword","abstract","t-row"], "worlds": ["4-vocab-kata"],
         "note": "Loanword from Italian 'tempo'. Commonly used when discussing music speed or rhythm.",
         "examples": {
           "dictionary": [
@@ -490,12 +374,8 @@
         }
       },
       {
-        "id": "tomato_kata",
-        "kana": "トマト",
-        "romaji": "tomato",
-        "gloss_en": "tomato",
-        "tags": ["loanword","food","t-row"],
-        "worlds": ["4-vocab-kata"],
+        "id": "tomato_kata", "kana": "トマト", "romaji": "tomato",
+        "gloss_en": "tomato", "tags": ["loanword","food","t-row"], "worlds": ["4-vocab-kata"],
         "note": "Loanword from English 'tomato'. Commonly used for salads and cooking.",
         "examples": {
           "dictionary": [
@@ -511,12 +391,8 @@
       },
 
       {
-        "id": "denshi_kata",
-        "kana": "デンシ",
-        "romaji": "denshi",
-        "gloss_en": "electronic",
-        "tags": ["loanword","tech","d-row"],
-        "worlds": ["4-daku-kata"],
+        "id": "denshi_kata", "kana": "デンシ", "romaji": "denshi",
+        "gloss_en": "electronic", "tags": ["loanword","tech","d-row"], "worlds": ["4-daku-kata"],
         "note": "Means 'electronic'. Common in compounds such as デンシレンジ (microwave) or デンシメール (email).",
         "examples": {
           "dictionary": [
@@ -531,12 +407,8 @@
         }
       },
       {
-        "id": "dejitaru_kata",
-        "kana": "デジタル",
-        "romaji": "dejitaru",
-        "gloss_en": "digital",
-        "tags": ["loanword","tech","d-row"],
-        "worlds": ["4-daku-kata"],
+        "id": "dejitaru_kata", "kana": "デジタル", "romaji": "dejitaru",
+        "gloss_en": "digital", "tags": ["loanword","tech","d-row"], "worlds": ["4-daku-kata"],
         "note": "Loanword from English 'digital'. Used for devices or media: デジタルカメラ (digital camera), デジタルおんがく (digital music).",
         "examples": {
           "dictionary": [
@@ -551,12 +423,8 @@
         }
       },
       {
-        "id": "doresu_kata",
-        "kana": "ドレス",
-        "romaji": "doresu",
-        "gloss_en": "dress",
-        "tags": ["loanword","clothing","d-row"],
-        "worlds": ["4-daku-kata"],
+        "id": "doresu_kata", "kana": "ドレス", "romaji": "doresu",
+        "gloss_en": "dress", "tags": ["loanword","clothing","d-row"], "worlds": ["4-daku-kata"],
         "note": "Loanword from English 'dress'. Often used for formal or party clothing.",
         "examples": {
           "dictionary": [
@@ -571,12 +439,8 @@
         }
       },
       {
-        "id": "dotto_kata",
-        "kana": "ドット",
-        "romaji": "dotto",
-        "gloss_en": "dot",
-        "tags": ["loanword","object","d-row"],
-        "worlds": ["4-daku-kata"],
+        "id": "dotto_kata", "kana": "ドット", "romaji": "dotto",
+        "gloss_en": "dot", "tags": ["loanword","object","d-row"], "worlds": ["4-daku-kata"],
         "note": "Loanword from English 'dot'. Demonstrates the small ッ (sokuon). Common in tech or pattern words like ドットパターン (dot pattern).",
         "examples": {
           "dictionary": [
@@ -591,12 +455,8 @@
         }
       },
       {
-        "id": "deeto_kata",
-        "kana": "デート",
-        "romaji": "deeto",
-        "gloss_en": "date (romantic outing)",
-        "tags": ["loanword","event","d-row"],
-        "worlds": ["4-daku-kata"],
+        "id": "deeto_kata", "kana": "デート", "romaji": "deeto",
+        "gloss_en": "date (romantic outing)", "tags": ["loanword","event","d-row"], "worlds": ["4-daku-kata"],
         "note": "Loanword from English 'date'. Refers to a romantic outing, not a calendar date.",
         "examples": {
           "dictionary": [
@@ -611,12 +471,8 @@
         }
       },
       {
-        "id": "dansu_kata",
-        "kana": "ダンス",
-        "romaji": "dansu",
-        "gloss_en": "dance",
-        "tags": ["loanword","activity","d-row"],
-        "worlds": ["4-daku-kata"],
+        "id": "dansu_kata", "kana": "ダンス", "romaji": "dansu",
+        "gloss_en": "dance", "tags": ["loanword","activity","d-row"], "worlds": ["4-daku-kata"],
         "note": "Loanword from English 'dance'. Used both as noun and verb (ダンスをおどる = to dance).",
         "examples": {
           "dictionary": [
@@ -633,12 +489,8 @@
 
 
       {
-        "id": "naisu_kata",
-        "kana": "ナイス",
-        "romaji": "naisu",
-        "gloss_en": "nice",
-        "tags": ["loanword","adjective","n-row"],
-        "worlds": ["5-vocab-kata"],
+        "id": "naisu_kata", "kana": "ナイス", "romaji": "naisu",
+        "gloss_en": "nice", "tags": ["loanword","adjective","n-row"], "worlds": ["5-vocab-kata"],
         "note": "Loanword from English 'nice'. Commonly used in sports and casual conversation (ナイスショット, ナイスプレー).",
         "examples": {
           "dictionary": [
@@ -657,12 +509,8 @@
         }
       },
       {
-        "id": "nekutai_kata",
-        "kana": "ネクタイ",
-        "romaji": "nekutai",
-        "gloss_en": "necktie",
-        "tags": ["loanword","clothing","n-row"],
-        "worlds": ["5-vocab-kata"],
+        "id": "nekutai_kata", "kana": "ネクタイ", "romaji": "nekutai",
+        "gloss_en": "necktie", "tags": ["loanword","clothing","n-row"], "worlds": ["5-vocab-kata"],
         "note": "Loanword from English 'necktie'. Worn with business suits or uniforms.",
         "examples": {
           "dictionary": [
@@ -681,12 +529,8 @@
         }
       },
       {
-        "id": "natsu_kata",
-        "kana": "ナツ",
-        "romaji": "natsu",
-        "gloss_en": "summer",
-        "tags": ["loanword","season","n-row"],
-        "worlds": ["5-vocab-kata"],
+        "id": "natsu_kata", "kana": "ナツ", "romaji": "natsu",
+        "gloss_en": "summer", "tags": ["loanword","season","n-row"], "worlds": ["5-vocab-kata"],
         "note": "Native word 夏 (natsu). Katakana ナツ is used stylistically in titles, names, or advertisements.",
         "examples": {
           "dictionary": [
@@ -703,12 +547,8 @@
         }
       },
       {
-        "id": "naifu_kata",
-        "kana": "ナイフ",
-        "romaji": "naifu",
-        "gloss_en": "knife",
-        "tags": ["loanword","object","n-row"],
-        "worlds": ["5-vocab-kata"],
+        "id": "naifu_kata", "kana": "ナイフ", "romaji": "naifu",
+        "gloss_en": "knife", "tags": ["loanword","object","n-row"], "worlds": ["5-vocab-kata"],
         "note": "Loanword from English 'knife'. Used in cooking or dining.",
         "examples": {
           "dictionary": [
@@ -727,12 +567,8 @@
         }
       },
       {
-        "id": "nooto_kata",
-        "kana": "ノート",
-        "romaji": "nooto",
-        "gloss_en": "notebook",
-        "tags": ["loanword","object","n-row"],
-        "worlds": ["5-vocab-kata"],
+        "id": "nooto_kata", "kana": "ノート", "romaji": "nooto",
+        "gloss_en": "notebook", "tags": ["loanword","object","n-row"], "worlds": ["5-vocab-kata"],
         "note": "Loanword from English 'notebook'. Common in schools and offices.",
         "examples": {
           "dictionary": [
@@ -751,12 +587,8 @@
         }
       },
       {
-        "id": "netto_kata",
-        "kana": "ネット",
-        "romaji": "netto",
-        "gloss_en": "net; internet",
-        "tags": ["loanword","object","n-row"],
-        "worlds": ["5-vocab-kata"],
+        "id": "netto_kata", "kana": "ネット", "romaji": "netto",
+        "gloss_en": "net; internet", "tags": ["loanword","object","n-row"], "worlds": ["5-vocab-kata"],
         "note": "Loanword from English 'net'. Used for both physical nets and the Internet depending on context.",
         "examples": {
           "dictionary": [
@@ -776,12 +608,8 @@
       },
 
       {
-        "id": "hanbaagaa_kata",
-        "kana": "ハンバーガー",
-        "romaji": "hanbaagaa",
-        "gloss_en": "hamburger",
-        "tags": ["loanword","food","h-row"],
-        "worlds": ["6-vocab-kata"],
+        "id": "hanbaagaa_kata", "kana": "ハンバーガー", "romaji": "hanbaagaa",
+        "gloss_en": "hamburger", "tags": ["loanword","food","h-row"], "worlds": ["6-vocab-kata"],
         "note": "Loanword from English 'hamburger'. Common fast-food word used daily.",
         "examples": {
           "dictionary": [
@@ -800,12 +628,8 @@
         }
       },
       {
-        "id": "hiirou_kata",
-        "kana": "ヒーロー",
-        "romaji": "hiirou",
-        "gloss_en": "hero",
-        "tags": ["loanword","person","h-row"],
-        "worlds": ["6-vocab-kata"],
+        "id": "hiirou_kata", "kana": "ヒーロー", "romaji": "hiirou",
+        "gloss_en": "hero", "tags": ["loanword","person","h-row"], "worlds": ["6-vocab-kata"],
         "note": "Loanword from English 'hero'. Common in manga, anime, and media.",
         "examples": {
           "dictionary": [
@@ -824,12 +648,8 @@
         }
       },
       {
-        "id": "herumetto_kata",
-        "kana": "ヘルメット",
-        "romaji": "herumetto",
-        "gloss_en": "helmet",
-        "tags": ["loanword","object","h-row"],
-        "worlds": ["6-vocab-kata"],
+        "id": "herumetto_kata", "kana": "ヘルメット", "romaji": "herumetto",
+        "gloss_en": "helmet", "tags": ["loanword","object","h-row"], "worlds": ["6-vocab-kata"],
         "note": "Loanword from English 'helmet'. Common safety gear for biking or construction.",
         "examples": {
           "dictionary": [
@@ -848,12 +668,8 @@
         }
       },
       {
-        "id": "hoteru_kata",
-        "kana": "ホテル",
-        "romaji": "hoteru",
-        "gloss_en": "hotel",
-        "tags": ["loanword","place","h-row"],
-        "worlds": ["6-vocab-kata"],
+        "id": "hoteru_kata", "kana": "ホテル", "romaji": "hoteru",
+        "gloss_en": "hotel", "tags": ["loanword","place","h-row"], "worlds": ["6-vocab-kata"],
         "note": "Loanword from English 'hotel'. Very common for travel or tourism contexts.",
         "examples": {
           "dictionary": [
@@ -872,12 +688,8 @@
         }
       },
       {
-        "id": "hamu_kata",
-        "kana": "ハム",
-        "romaji": "hamu",
-        "gloss_en": "ham",
-        "tags": ["loanword","food","h-row"],
-        "worlds": ["6-vocab-kata"],
+        "id": "hamu_kata", "kana": "ハム", "romaji": "hamu",
+        "gloss_en": "ham", "tags": ["loanword","food","h-row"], "worlds": ["6-vocab-kata"],
         "note": "Loanword from English 'ham'. Commonly used in sandwiches and breakfasts.",
         "examples": {
           "dictionary": [
@@ -896,12 +708,8 @@
         }
       },
       {
-        "id": "hotto_kata",
-        "kana": "ホット",
-        "romaji": "hotto",
-        "gloss_en": "hot",
-        "tags": ["loanword","adjective","h-row"],
-        "worlds": ["6-vocab-kata"],
+        "id": "hotto_kata", "kana": "ホット", "romaji": "hotto",
+        "gloss_en": "hot", "tags": ["loanword","adjective","h-row"], "worlds": ["6-vocab-kata"],
         "note": "Loanword from English 'hot'. Often used in phrases like ホットコーヒー (hot coffee).",
         "examples": {
           "dictionary": [
@@ -921,12 +729,8 @@
       },
 
       {
-        "id": "banana_kata",
-        "kana": "バナナ",
-        "romaji": "banana",
-        "gloss_en": "banana",
-        "tags": ["loanword","food","b-row"],
-        "worlds": ["6-daku-kata"],
+        "id": "banana_kata", "kana": "バナナ", "romaji": "banana",
+        "gloss_en": "banana", "tags": ["loanword","food","b-row"], "worlds": ["6-daku-kata"],
         "note": "Loanword from English 'banana'. Common fruit word used in daily life.",
         "examples": {
           "dictionary": [
@@ -945,12 +749,8 @@
         }
       },
       {
-        "id": "bideo_kata",
-        "kana": "ビデオ",
-        "romaji": "bideo",
-        "gloss_en": "video",
-        "tags": ["loanword","object","b-row"],
-        "worlds": ["6-daku-kata"],
+        "id": "bideo_kata", "kana": "ビデオ", "romaji": "bideo",
+        "gloss_en": "video", "tags": ["loanword","object","b-row"], "worlds": ["6-daku-kata"],
         "note": "Loanword from English 'video'. Used for movies, video clips, or video cameras.",
         "examples": {
           "dictionary": [
@@ -969,12 +769,8 @@
         }
       },
       {
-        "id": "buutsu_kata",
-        "kana": "ブーツ",
-        "romaji": "buutsu",
-        "gloss_en": "boots",
-        "tags": ["loanword","object","b-row"],
-        "worlds": ["6-daku-kata"],
+        "id": "buutsu_kata", "kana": "ブーツ", "romaji": "buutsu",
+        "gloss_en": "boots", "tags": ["loanword","object","b-row"], "worlds": ["6-daku-kata"],
         "note": "Loanword from English 'boots'. Used for shoes that cover the ankle or higher.",
         "examples": {
           "dictionary": [
@@ -993,12 +789,8 @@
         }
       },
       {
-        "id": "beddo_kata",
-        "kana": "ベッド",
-        "romaji": "beddo",
-        "gloss_en": "bed",
-        "tags": ["loanword","object","b-row"],
-        "worlds": ["6-daku-kata"],
+        "id": "beddo_kata", "kana": "ベッド", "romaji": "beddo",
+        "gloss_en": "bed", "tags": ["loanword","object","b-row"], "worlds": ["6-daku-kata"],
         "note": "Loanword from English 'bed'. Very common daily-use word.",
         "examples": {
           "dictionary": [
@@ -1017,12 +809,8 @@
         }
       },
       {
-        "id": "booru_kata",
-        "kana": "ボール",
-        "romaji": "booru",
-        "gloss_en": "ball",
-        "tags": ["loanword","object","b-row"],
-        "worlds": ["6-daku-kata"],
+        "id": "booru_kata", "kana": "ボール", "romaji": "booru",
+        "gloss_en": "ball", "tags": ["loanword","object","b-row"], "worlds": ["6-daku-kata"],
         "note": "Loanword from English 'ball'. Used in many sports and games.",
         "examples": {
           "dictionary": [
@@ -1041,12 +829,8 @@
         }
       },
       {
-        "id": "basu_kata",
-        "kana": "バス",
-        "romaji": "basu",
-        "gloss_en": "bus",
-        "tags": ["loanword","transport","b-row"],
-        "worlds": ["6-daku-kata"],
+        "id": "basu_kata", "kana": "バス", "romaji": "basu",
+        "gloss_en": "bus", "tags": ["loanword","transport","b-row"], "worlds": ["6-daku-kata"],
         "note": "Loanword from English 'bus'. Common transport word for public transit.",
         "examples": {
           "dictionary": [
@@ -1067,12 +851,8 @@
 
 
       {
-        "id": "pasokon_kata",
-        "kana": "パソコン",
-        "romaji": "pasokon",
-        "gloss_en": "PC; computer",
-        "tags": ["loanword","object","p-row"],
-        "worlds": ["6-handaku-kata"],
+        "id": "pasokon_kata", "kana": "パソコン", "romaji": "pasokon",
+        "gloss_en": "PC; computer", "tags": ["loanword","object","p-row"], "worlds": ["6-handaku-kata"],
         "note": "Abbreviation of 'personal computer'. Common in daily life, work, and school.",
         "examples": {
           "dictionary": [
@@ -1091,12 +871,8 @@
         }
       },
       {
-        "id": "piza_kata",
-        "kana": "ピザ",
-        "romaji": "piza",
-        "gloss_en": "pizza",
-        "tags": ["loanword","food","p-row"],
-        "worlds": ["6-handaku-kata"],
+        "id": "piza_kata", "kana": "ピザ", "romaji": "piza",
+        "gloss_en": "pizza", "tags": ["loanword","food","p-row"], "worlds": ["6-handaku-kata"],
         "note": "Loanword from Italian 'pizza'. Extremely common food word in Japan.",
         "examples": {
           "dictionary": [
@@ -1115,12 +891,8 @@
         }
       },
       {
-        "id": "purin_kata",
-        "kana": "プリン",
-        "romaji": "purin",
-        "gloss_en": "pudding; flan",
-        "tags": ["loanword","food","p-row"],
-        "worlds": ["6-handaku-kata"],
+        "id": "purin_kata", "kana": "プリン", "romaji": "purin",
+        "gloss_en": "pudding; flan", "tags": ["loanword","food","p-row"], "worlds": ["6-handaku-kata"],
         "note": "Loanword for custard pudding or flan. Common dessert in Japan.",
         "examples": {
           "dictionary": [
@@ -1139,12 +911,8 @@
         }
       },
       {
-        "id": "pengin_kata",
-        "kana": "ペンギン",
-        "romaji": "pengin",
-        "gloss_en": "penguin",
-        "tags": ["loanword","animal","p-row"],
-        "worlds": ["6-handaku-kata"],
+        "id": "pengin_kata", "kana": "ペンギン", "romaji": "pengin",
+        "gloss_en": "penguin", "tags": ["loanword","animal","p-row"], "worlds": ["6-handaku-kata"],
         "note": "Loanword from English 'penguin'. Common word in zoos or kids' books.",
         "examples": {
           "dictionary": [
@@ -1163,12 +931,8 @@
         }
       },
       {
-        "id": "poketto_kata",
-        "kana": "ポケット",
-        "romaji": "poketto",
-        "gloss_en": "pocket",
-        "tags": ["loanword","object","p-row"],
-        "worlds": ["6-handaku-kata"],
+        "id": "poketto_kata", "kana": "ポケット", "romaji": "poketto",
+        "gloss_en": "pocket", "tags": ["loanword","object","p-row"], "worlds": ["6-handaku-kata"],
         "note": "Loanword from English 'pocket'. Common clothing or bag word.",
         "examples": {
           "dictionary": [
@@ -1187,12 +951,8 @@
         }
       },
       {
-        "id": "panda_kata",
-        "kana": "パンダ",
-        "romaji": "panda",
-        "gloss_en": "panda",
-        "tags": ["loanword","animal","p-row"],
-        "worlds": ["6-handaku-kata"],
+        "id": "panda_kata", "kana": "パンダ", "romaji": "panda",
+        "gloss_en": "panda", "tags": ["loanword","animal","p-row"], "worlds": ["6-handaku-kata"],
         "note": "Loanword from English 'panda'. Common animal word, often used in children's materials.",
         "examples": {
           "dictionary": [
@@ -1212,12 +972,8 @@
       },
 
       {
-        "id": "manga_kata",
-        "kana": "マンガ",
-        "romaji": "manga",
-        "gloss_en": "comic; manga",
-        "tags": ["loanword","culture","m-row"],
-        "worlds": ["7-vocab-kata"],
+        "id": "manga_kata", "kana": "マンガ", "romaji": "manga",
+        "gloss_en": "comic; manga", "tags": ["loanword","culture","m-row"], "worlds": ["7-vocab-kata"],
         "note": "Loanword from English 'manga'. Usually written 漫画 in kanji, but katakana マンガ is common for genre and pop culture.",
         "examples": {
           "dictionary": [
@@ -1235,12 +991,8 @@
         }
       },
       {
-        "id": "miruku_kata",
-        "kana": "ミルク",
-        "romaji": "miruku",
-        "gloss_en": "milk",
-        "tags": ["loanword","food","m-row"],
-        "worlds": ["7-vocab-kata"],
+        "id": "miruku_kata", "kana": "ミルク", "romaji": "miruku",
+        "gloss_en": "milk", "tags": ["loanword","food","m-row"], "worlds": ["7-vocab-kata"],
         "note": "Loanword from English 'milk'. Common everyday drink word.",
         "examples": {
           "dictionary": [
@@ -1258,12 +1010,8 @@
         }
       },
       {
-        "id": "monsutaa_kata",
-        "kana": "モンスター",
-        "romaji": "monsutaa",
-        "gloss_en": "monster",
-        "tags": ["loanword","fantasy","m-row"],
-        "worlds": ["7-vocab-kata"],
+        "id": "monsutaa_kata", "kana": "モンスター", "romaji": "monsutaa",
+        "gloss_en": "monster", "tags": ["loanword","fantasy","m-row"], "worlds": ["7-vocab-kata"],
         "note": "Loanword from English 'monster'. Common in games, anime, and fantasy contexts.",
         "examples": {
           "dictionary": [
@@ -1281,12 +1029,8 @@
         }
       },
       {
-        "id": "messeiji_kata",
-        "kana": "メッセージ",
-        "romaji": "messeiji",
-        "gloss_en": "message",
-        "tags": ["loanword","object","m-row"],
-        "worlds": ["7-vocab-kata"],
+        "id": "messeiji_kata", "kana": "メッセージ", "romaji": "messeiji",
+        "gloss_en": "message", "tags": ["loanword","object","m-row"], "worlds": ["7-vocab-kata"],
         "note": "Loanword from English 'message'. Used for emails, texts, and chats.",
         "examples": {
           "dictionary": [
@@ -1304,12 +1048,8 @@
         }
       },
       {
-        "id": "masuku_kata",
-        "kana": "マスク",
-        "romaji": "masuku",
-        "gloss_en": "mask",
-        "tags": ["loanword","object","m-row"],
-        "worlds": ["7-vocab-kata"],
+        "id": "masuku_kata", "kana": "マスク", "romaji": "masuku",
+        "gloss_en": "mask", "tags": ["loanword","object","m-row"], "worlds": ["7-vocab-kata"],
         "note": "Loanword from English 'mask'. Common for face masks in Japan.",
         "examples": {
           "dictionary": [
@@ -1327,12 +1067,8 @@
         }
       },
       {
-        "id": "memo_kata",
-        "kana": "メモ",
-        "romaji": "memo",
-        "gloss_en": "memo; note",
-        "tags": ["loanword","object","m-row"],
-        "worlds": ["7-vocab-kata"],
+        "id": "memo_kata", "kana": "メモ", "romaji": "memo", 
+        "gloss_en": "memo; note", "tags": ["loanword","object","m-row"], "worlds": ["7-vocab-kata"],
         "note": "Loanword from English 'memo'. Common for short notes or reminders.",
         "examples": {
           "dictionary": [
@@ -1351,12 +1087,8 @@
       }
   
       {
-        "id": "yotto_kata",
-        "kana": "ヨット",
-        "romaji": "yotto",
-        "gloss_en": "yacht",
-        "tags": ["loanword","transport","y-row"],
-        "worlds": ["8-vocab-kata"],
+        "id": "yotto_kata", "kana": "ヨット", "romaji": "yotto",
+        "gloss_en": "yacht", "tags": ["loanword","transport","y-row"], "worlds": ["8-vocab-kata"],
         "note": "Loanword from English 'yacht'. Common in leisure and sports contexts.",
         "examples": {
           "dictionary": [
@@ -1374,12 +1106,8 @@
         }
       },
       {
-        "id": "yooguruto_kata",
-        "kana": "ヨーグルト",
-        "romaji": "yooguruto",
-        "gloss_en": "yogurt",
-        "tags": ["loanword","food","y-row"],
-        "worlds": ["8-vocab-kata"],
+        "id": "yooguruto_kata", "kana": "ヨーグルト", "romaji": "yooguruto",
+        "gloss_en": "yogurt", "tags": ["loanword","food","y-row"], "worlds": ["8-vocab-kata"],
         "note": "Loanword from English 'yogurt'. Common food item eaten for breakfast or dessert.",
         "examples": {
           "dictionary": [
@@ -1397,12 +1125,8 @@
         }
       },
       {
-        "id": "yaado_kata",
-        "kana": "ヤード",
-        "romaji": "yaado",
-        "gloss_en": "yard (measure)",
-        "tags": ["loanword","measurement","y-row"],
-        "worlds": ["8-vocab-kata"],
+        "id": "yaado_kata", "kana": "ヤード", "romaji": "yaado",
+        "gloss_en": "yard (measure)", "tags": ["loanword","measurement","y-row"], "worlds": ["8-vocab-kata"],
         "note": "Loanword from English 'yard'. Used in sports and measurement contexts.",
         "examples": {
           "dictionary": [
@@ -1420,12 +1144,8 @@
         }
       },
       {
-        "id": "yuumoa_kata",
-        "kana": "ユーモア",
-        "romaji": "yuumoa",
-        "gloss_en": "humor",
-        "tags": ["loanword","abstract","y-row"],
-        "worlds": ["8-vocab-kata"],
+        "id": "yuumoa_kata", "kana": "ユーモア", "romaji": "yuumoa",
+        "gloss_en": "humor", "tags": ["loanword","abstract","y-row"], "worlds": ["8-vocab-kata"],
         "note": "Loanword from English 'humor'. Used in describing personality or tone.",
         "examples": {
           "dictionary": [
@@ -1443,12 +1163,8 @@
         }
       },
       {
-        "id": "yuuro_kata",
-        "kana": "ユーロ",
-        "romaji": "yuuro",
-        "gloss_en": "euro (currency)",
-        "tags": ["loanword","money","y-row"],
-        "worlds": ["8-vocab-kata"],
+        "id": "yuuro_kata", "kana": "ユーロ", "romaji": "yuuro",
+        "gloss_en": "euro (currency)", "tags": ["loanword","money","y-row"], "worlds": ["8-vocab-kata"],
         "note": "Loanword for the 'euro' currency. Common in travel and finance contexts.",
         "examples": {
           "dictionary": [
@@ -1466,12 +1182,8 @@
         }
       },
       {
-        "id": "yunitto_kata",
-        "kana": "ユニット",
-        "romaji": "yunitto",
-        "gloss_en": "unit",
-        "tags": ["loanword","object","y-row"],
-        "worlds": ["8-vocab-kata"],
+        "id": "yunitto_kata", "kana": "ユニット", "romaji": "yunitto",
+        "gloss_en": "unit", "tags": ["loanword","object","y-row"], "worlds": ["8-vocab-kata"],
         "note": "Loanword from English 'unit'. Used in housing, electronics, or pop-music groups.",
         "examples": {
           "dictionary": [
@@ -1489,14 +1201,9 @@
         }
       },
 
-
       {
-        "id": "raamen_kata",
-        "kana": "ラーメン",
-        "romaji": "raamen",
-        "gloss_en": "ramen",
-        "tags": ["loanword","food","r-row"],
-        "worlds": ["9-vocab-kata"],
+        "id": "raamen_kata", "kana": "ラーメン", "romaji": "raamen",
+        "gloss_en": "ramen", "tags": ["loanword","food","r-row"], "worlds": ["9-vocab-kata"],
         "note": "Loanword from Chinese 拉麺. Katakana ラーメン is the standard modern spelling.",
         "examples": {
           "dictionary": [
@@ -1514,12 +1221,8 @@
         }
       },
       {
-        "id": "rajio_kata",
-        "kana": "ラジオ",
-        "romaji": "rajio",
-        "gloss_en": "radio",
-        "tags": ["loanword","object","r-row"],
-        "worlds": ["9-vocab-kata"],
+        "id": "rajio_kata", "kana": "ラジオ", "romaji": "rajio",
+        "gloss_en": "radio", "tags": ["loanword","object","r-row"], "worlds": ["9-vocab-kata"],
         "note": "Loanword from English 'radio'. Katakana ラジオ is the standard spelling.",
         "examples": {
           "dictionary": [
@@ -1537,12 +1240,8 @@
         }
       },
       {
-        "id": "risutora_kata",
-        "kana": "リストラ",
-        "romaji": "risutora",
-        "gloss_en": "restructuring; layoff",
-        "tags": ["loanword","business","r-row"],
-        "worlds": ["9-vocab-kata"],
+        "id": "risutora_kata", "kana": "リストラ", "romaji": "risutora",
+        "gloss_en": "restructuring; layoff", "tags": ["loanword","business","r-row"], "worlds": ["9-vocab-kata"],
         "note": "Abbreviation of 'restructure'. Often used for company downsizing or layoffs.",
         "examples": {
           "dictionary": [
@@ -1560,12 +1259,8 @@
         }
       },
       {
-        "id": "risaikuru_kata",
-        "kana": "リサイクル",
-        "romaji": "risaikuru",
-        "gloss_en": "recycle",
-        "tags": ["loanword","environment","r-row"],
-        "worlds": ["9-vocab-kata"],
+        "id": "risaikuru_kata", "kana": "リサイクル", "romaji": "risaikuru",
+        "gloss_en": "recycle", "tags": ["loanword","environment","r-row"], "worlds": ["9-vocab-kata"],
         "note": "Loanword from English 'recycle'. Used widely in environmental campaigns.",
         "examples": {
           "dictionary": [
@@ -1583,12 +1278,8 @@
         }
       },
       {
-        "id": "rekoodo_kata",
-        "kana": "レコード",
-        "romaji": "rekoodo",
-        "gloss_en": "record (music)",
-        "tags": ["loanword","music","r-row"],
-        "worlds": ["9-vocab-kata"],
+        "id": "rekoodo_kata", "kana": "レコード", "romaji": "rekoodo",
+        "gloss_en": "record (music)", "tags": ["loanword","music","r-row"], "worlds": ["9-vocab-kata"],
         "note": "Loanword from English 'record'. Refers to vinyl records or musical recordings.",
         "examples": {
           "dictionary": [
@@ -1606,12 +1297,8 @@
         }
       },
       {
-        "id": "resutoran_kata",
-        "kana": "レストラン",
-        "romaji": "resutoran",
-        "gloss_en": "restaurant",
-        "tags": ["loanword","place","r-row"],
-        "worlds": ["9-vocab-kata"],
+        "id": "resutoran_kata", "kana": "レストラン", "romaji": "resutoran",
+        "gloss_en": "restaurant", "tags": ["loanword","place","r-row"], "worlds": ["9-vocab-kata"],
         "note": "Loanword from French 'restaurant'. Common in everyday Japanese.",
         "examples": {
           "dictionary": [
@@ -1630,12 +1317,8 @@
       },
 
       {
-        "id": "wan_kata",
-        "kana": "ワン",
-        "romaji": "wan",
-        "gloss_en": "woof (dog sound)",
-        "tags": ["loanword","onomatopoeia","w-row"],
-        "worlds": ["10-vocab-kata"],
+        "id": "wan_kata", "kana": "ワン", "romaji": "wan",
+        "gloss_en": "woof (dog sound)", "tags": ["loanword","onomatopoeia","w-row"], "worlds": ["10-vocab-kata"],
         "note": "ワン is the common onomatopoeia for a dog's bark, like 'woof'.",
         "examples": {
           "dictionary": [
@@ -1653,12 +1336,8 @@
         }
       },
       {
-        "id": "wain_kata",
-        "kana": "ワイン",
-        "romaji": "wain",
-        "gloss_en": "wine",
-        "tags": ["loanword","drink","w-row"],
-        "worlds": ["10-vocab-kata"],
+        "id": "wain_kata", "kana": "ワイン", "romaji": "wain",
+        "gloss_en": "wine", "tags": ["loanword","drink","w-row"], "worlds": ["10-vocab-kata"],
         "note": "Loanword from English 'wine'. Common in restaurants and casual speech.",
         "examples": {
           "dictionary": [
@@ -1676,12 +1355,8 @@
         }
       },
       {
-        "id": "wagon_kata",
-        "kana": "ワゴン",
-        "romaji": "wagon",
-        "gloss_en": "wagon; car wagon",
-        "tags": ["loanword","transport","w-row"],
-        "worlds": ["10-vocab-kata"],
+        "id": "wagon_kata", "kana": "ワゴン", "romaji": "wagon",
+        "gloss_en": "wagon; car wagon", "tags": ["loanword","transport","w-row"], "worlds": ["10-vocab-kata"],
         "note": "Loanword from English 'wagon'. Used for both wagons and wagon-type cars.",
         "examples": {
           "dictionary": [
@@ -1699,12 +1374,8 @@
         }
       },
       {
-        "id": "waado_kata",
-        "kana": "ワード",
-        "romaji": "waado",
-        "gloss_en": "word",
-        "tags": ["loanword","abstract","w-row"],
-        "worlds": ["10-vocab-kata"],
+        "id": "waado_kata", "kana": "ワード", "romaji": "waado",
+        "gloss_en": "word", "tags": ["loanword","abstract","w-row"], "worlds": ["10-vocab-kata"],
         "note": "Loanword from English 'word'. Also refers to Microsoft Word.",
         "examples": {
           "dictionary": [
@@ -1722,12 +1393,8 @@
         }
       },
       {
-        "id": "wakkusu_kata",
-        "kana": "ワックス",
-        "romaji": "wakkusu",
-        "gloss_en": "wax",
-        "tags": ["loanword","object","w-row"],
-        "worlds": ["10-vocab-kata"],
+        "id": "wakkusu_kata", "kana": "ワックス", "romaji": "wakkusu",
+        "gloss_en": "wax", "tags": ["loanword","object","w-row"], "worlds": ["10-vocab-kata"],
         "note": "Loanword from English 'wax'. Used for car polish or hair styling.",
         "examples": {
           "dictionary": [
@@ -1745,12 +1412,8 @@
         }
       },
       {
-        "id": "waffuru_kata",
-        "kana": "ワッフル",
-        "romaji": "waffuru",
-        "gloss_en": "waffle",
-        "tags": ["loanword","food","w-row"],
-        "worlds": ["10-vocab-kata"],
+        "id": "waffuru_kata", "kana": "ワッフル", "romaji": "waffuru",
+        "gloss_en": "waffle", "tags": ["loanword","food","w-row"], "worlds": ["10-vocab-kata"],
         "note": "Loanword from English 'waffle'. Common in cafes and dessert menus.",
         "examples": {
           "dictionary": [
