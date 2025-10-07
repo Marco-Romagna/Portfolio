@@ -3,7 +3,7 @@
   "words": [
       { "id": "ai_hira", "kana": "あい", "romaji": "ai",
         "gloss_en": "love; affection", "tags": ["core","vowels"], "worlds": ["1-base-hira"],
-        "note": "Often used in formal/literary contexts. In daily life, すき (suki) is more common for 'like/love'.",
+        "note": "Refers to emotional or romantic love. Sounds formal or literary; in daily life, すき (suki) is more common for 'like/love'.",
         "examples": {
           "dictionary": [
             { "kana": "あいをかんじる。", "romaji": "ai wo kanjiru", "english": "to feel love" },
@@ -14,7 +14,7 @@
       },
       { "id": "iie_hira", "kana": "いいえ", "romaji": "iie",
         "gloss_en": "no", "tags": ["core","vowels","phrase"], "worlds": ["1-base-hira"],
-        "note": "Polite 'no'. Commonly placed at the start of a sentence (いいえ、〜) to soften disagreement or refusal. Casual speech often uses ううん (uun).",
+        "note": "Polite way to say 'no'. Placed at the start of a sentence (いいえ、〜) to soften disagreement or refusal. Casual speech uses ううん (uun).",
         "examples": {
           "dictionary": [
             { "kana": "いいえ、ちがう。", "romaji": "iie, chigau", "english": "No, that’s not correct." },
@@ -25,7 +25,7 @@
       },
       { "id": "ue_hira", "kana": "うえ", "romaji": "ue",
         "gloss_en": "up; above", "tags": ["core","vowels","direction"], "worlds": ["1-base-hira"],
-        "note": "Can mean 'on top of' or 'above'. Opposite is した (shita).",
+        "note": "Means 'up' or 'above'. Often used with the particle の to say something is on top of another object (つくえのうえ). Opposite is した (shita).",
         "examples": {
           "dictionary": [
             { "kana": "つくえのうえ。", "romaji": "tsukue no ue", "english": "on the desk" },
@@ -36,7 +36,7 @@
       },
       { "id": "ie_hira", "kana": "いえ", "romaji": "ie",
         "gloss_en": "house; home", "tags": ["core","vowels","place"], "worlds": ["1-base-hira"],
-        "note": "いえ (ie) is neutral. うち (uchi) is more casual/familiar.",
+        "note": "Neutral word for 'house' or 'home'. The more casual うち (uchi) refers to one’s own home or family.",
         "examples": {
           "dictionary": [
             { "kana": "いえにかえる。", "romaji": "ie ni kaeru", "english": "to return home" },
@@ -47,7 +47,7 @@
       },
       { "id": "aoi_hira", "kana": "あおい", "romaji": "aoi",
         "gloss_en": "blue (adjective)", "tags": ["core","vowels","color"], "worlds": ["1-base-hira"],
-        "note": "Used as adjective. Noun form is あお (ao). Historically covered blue/green.",
+        "note": "い-adjective meaning 'blue'. Historically covered both blue and green shades. The noun form is あお (ao).",
         "examples": {
           "dictionary": [
             { "kana": "あおいシャツ。", "romaji": "aoi shatsu", "english": "blue shirt" },
@@ -58,7 +58,7 @@
       },
       { "id": "au_hira", "kana": "あう", "romaji": "au",
         "gloss_en": "to meet", "tags": ["core","vowels","verb"], "worlds": ["1-base-hira"],
-        "note": "Used for meeting people, usually with に particle.",
+        "note": "Means 'to meet' or 'to see (a person)'. Usually takes the particle に to mark who you meet.",
         "examples": {
           "dictionary": [
             { "kana": "ともだちにあう。", "romaji": "tomodachi ni au", "english": "to meet a friend" },
@@ -68,6 +68,140 @@
         }
       }
 
+    
+
+      { "id": "iku_hira", "kana": "いく", "romaji": "iku",
+        "gloss_en": "to go", "tags": ["core","k-row","verb"], "worlds": ["2-base-hira"],
+        "note": "A very common motion verb used with the particle に to indicate destination. Irregular past tense: いった (itta).",
+        "examples": {
+          "dictionary": [
+            { "kana": "がっこうにいく。", "romaji": "gakkou ni iku", "english": "to go to school" },
+            { "kana": "えきにいく。", "romaji": "eki ni iku", "english": "to go to the station" },
+            { "kana": "がいこくにいく。", "romaji": "gaikoku ni iku", "english": "to go abroad" }
+          ]
+        }
+      },
+      { "id": "kiku_hira", "kana": "きく", "romaji": "kiku",
+        "gloss_en": "to listen; to ask", "tags": ["core","k-row","verb"], "worlds": ["2-base-hira"],
+        "note": "A versatile verb meaning both 'to listen' (音楽をきく) and 'to ask' (先生にきく). The meaning depends on the particle used.",
+        "examples": {
+          "dictionary": [
+            { "kana": "おんがくをきく。", "romaji": "ongaku wo kiku", "english": "to listen to music" },
+            { "kana": "せんせいにきく。", "romaji": "sensei ni kiku", "english": "to ask the teacher" },
+            { "kana": "ラジオをきく。", "romaji": "rajio wo kiku", "english": "to listen to the radio" }
+          ]
+        }
+      },
+      { "id": "kau_hira", "kana": "かう", "romaji": "kau",
+        "gloss_en": "to buy", "tags": ["core","k-row","verb"], "worlds": ["2-base-hira"],
+        "note": "A basic transitive verb meaning 'to buy'. Often used with を to mark the purchased item.",
+        "examples": {
+          "dictionary": [
+            { "kana": "パンをかう。", "romaji": "pan wo kau", "english": "to buy bread" },
+            { "kana": "ほんをかう。", "romaji": "hon wo kau", "english": "to buy a book" },
+            { "kana": "プレゼントをかう。", "romaji": "purezento wo kau", "english": "to buy a present" }
+          ]
+        }
+      },
+      { "id": "kao_hira", "kana": "かお", "romaji": "kao",
+        "gloss_en": "face", "tags": ["core","k-row","body"], "worlds": ["2-base-hira"],
+        "note": "Means the physical 'face'. Used in many set phrases like かおをあらう (wash face) or かおがひろい (well-connected person).",
+        "examples": {
+          "dictionary": [
+            { "kana": "かおをあらう。", "romaji": "kao wo arau", "english": "to wash one's face" },
+            { "kana": "かおがあかい。", "romaji": "kao ga akai", "english": "face is red" },
+            { "kana": "かおをみる。", "romaji": "kao wo miru", "english": "to look at a face" }
+          ]
+        }
+      },
+      { "id": "ike_hira", "kana": "いけ", "romaji": "ike",
+        "gloss_en": "pond", "tags": ["core","k-row","place"], "worlds": ["2-base-hira"],
+        "note": "Usually refers to small, man-made ponds found in parks or gardens. Natural ponds may also be called ぬま (numa).",
+        "examples": {
+          "dictionary": [
+            { "kana": "いけにさかながいる。", "romaji": "ike ni sakana ga iru", "english": "There are fish in the pond." },
+            { "kana": "いけのそばにすわる。", "romaji": "ike no soba ni suwaru", "english": "to sit near the pond" },
+            { "kana": "ちいさいいけだ。", "romaji": "chiisai ike da", "english": "It’s a small pond." }
+          ]
+        }
+      },
+      { "id": "koe_hira", "kana": "こえ", "romaji": "koe",
+        "gloss_en": "voice", "tags": ["core","k-row"], "worlds": ["2-base-hira"],
+        "note": "Refers to human or animal voices (not mechanical sounds). For mechanical noises, use おと (oto).",
+        "examples": {
+          "dictionary": [
+            { "kana": "きれいなこえ。", "romaji": "kirei na koe", "english": "a beautiful voice" },
+            { "kana": "こえをきく。", "romaji": "koe wo kiku", "english": "to hear a voice" },
+            { "kana": "おおきいこえでいう。", "romaji": "ookii koe de iu", "english": "to speak in a loud voice" }
+          ]
+        }
+      },
+      { "id": "eiga_hira", "kana": "えいが", "romaji": "eiga",
+        "gloss_en": "movie; film", "tags": ["core","g-row"], "worlds": ["2-daku-hira"],
+        "note": "Common everyday word meaning 'movie'. Often paired with みる (to watch).",
+        "examples": {
+          "dictionary": [
+            { "kana": "えいがをみる。", "romaji": "eiga wo miru", "english": "to watch a movie" },
+            { "kana": "えいががすきだ。", "romaji": "eiga ga suki da", "english": "I like movies." },
+            { "kana": "えいがについてはなす。", "romaji": "eiga ni tsuite hanasu", "english": "to talk about a movie" }
+          ]
+        }
+      },
+      { "id": "gaikoku_hira", "kana": "がいこく", "romaji": "gaikoku",
+        "gloss_en": "foreign country", "tags": ["core","g-row"], "worlds": ["2-daku-hira"],
+        "note": "Literally 'outside country'. Used for any country other than Japan. Appears in words like がいこくじん (foreigner).",
+        "examples": {
+          "dictionary": [
+            { "kana": "がいこくにいく。", "romaji": "gaikoku ni iku", "english": "to go abroad" },
+            { "kana": "がいこくのたべもの。", "romaji": "gaikoku no tabemono", "english": "foreign food" },
+            { "kana": "がいこくのえいがをみる。", "romaji": "gaikoku no eiga wo miru", "english": "to watch a foreign movie" }
+          ]
+        }
+      },
+      { "id": "gogo_hira", "kana": "ごご", "romaji": "gogo",
+        "gloss_en": "afternoon", "tags": ["core","g-row","time"], "worlds": ["2-daku-hira"],
+        "note": "Used for the time period after noon. Usually appears before a time (ごごさんじ – 3 PM).",
+        "examples": {
+          "dictionary": [
+            { "kana": "ごごさんじ。", "romaji": "gogo sanji", "english": "three o’clock in the afternoon" },
+            { "kana": "ごごにべんきょうする。", "romaji": "gogo ni benkyou suru", "english": "to study in the afternoon" },
+            { "kana": "ごごのかいぎ。", "romaji": "gogo no kaigi", "english": "afternoon meeting" }
+          ]
+        }
+      },
+      { "id": "kagi_hira", "kana": "かぎ", "romaji": "kagi",
+        "gloss_en": "key", "tags": ["core","g-row","object"], "worlds": ["2-daku-hira"],
+        "note": "Means 'key' for locks or doors. Can also mean 'hint' or 'clue' in abstract phrases (しあいのかぎ – 'key to the match').",
+        "examples": {
+          "dictionary": [
+            { "kana": "かぎをなくす。", "romaji": "kagi wo nakusu", "english": "to lose a key" },
+            { "kana": "かぎをみつける。", "romaji": "kagi wo mitsukeru", "english": "to find a key" },
+            { "kana": "かぎをあける。", "romaji": "kagi wo akeru", "english": "to unlock with a key" }
+          ]
+        }
+      },
+      { "id": "kagu_hira", "kana": "かぐ", "romaji": "kagu",
+        "gloss_en": "furniture", "tags": ["core","g-row","object"], "worlds": ["2-daku-hira"],
+        "note": "A general term for household furniture. Often appears in compounds like でんきかぐ (electrical appliances).",
+        "examples": {
+          "dictionary": [
+            { "kana": "かぐをかう。", "romaji": "kagu wo kau", "english": "to buy furniture" },
+            { "kana": "へやにかぐがある。", "romaji": "heya ni kagu ga aru", "english": "There is furniture in the room." },
+            { "kana": "きのかぐ。", "romaji": "ki no kagu", "english": "wooden furniture" }
+          ]
+        }
+      },
+      { "id": "kage_hira", "kana": "かげ", "romaji": "kage",
+        "gloss_en": "shadow; shade", "tags": ["core","g-row","nature"], "worlds": ["2-daku-hira"],
+        "note": "Used for both physical shadows and metaphorical ones (like かげで meaning 'behind the scenes').",
+        "examples": {
+          "dictionary": [
+            { "kana": "かげができる。", "romaji": "kage ga dekiru", "english": "a shadow is cast" },
+            { "kana": "きのかげでやすむ。", "romaji": "ki no kage de yasumu", "english": "to rest in the shade of a tree" },
+            { "kana": "かげがながい。", "romaji": "kage ga nagai", "english": "the shadow is long" }
+          ]
+        }
+      }
 
 
 
