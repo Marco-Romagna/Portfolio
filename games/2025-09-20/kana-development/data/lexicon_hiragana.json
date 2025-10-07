@@ -68,8 +68,6 @@
         }
       }
 
-    
-
       { "id": "iku_hira", "kana": "いく", "romaji": "iku",
         "gloss_en": "to go", "tags": ["core","k-row","verb"], "worlds": ["2-base-hira"],
         "note": "A very common motion verb used with the particle に to indicate destination. Irregular past tense: いった (itta).",
@@ -337,145 +335,176 @@
         }
       }
 
-
+      
       { "id": "taberu_hira", "kana": "たべる", "romaji": "taberu",
         "gloss_en": "to eat", "tags": ["core","t-row","verb"], "worlds": ["4-base-hira"],
-        "note": "Very common ichidan verb meaning 'to eat'. The thing eaten takes the particle を.",
+        "note": "Very common ichidan verb meaning 'to eat'. Takes を for the object. Polite form: たべます.",
         "examples": {
           "dictionary": [
             { "kana": "りんごをたべる。", "romaji": "ringo wo taberu", "english": "to eat an apple" },
             { "kana": "ごはんをたべる。", "romaji": "gohan wo taberu", "english": "to eat rice" },
             { "kana": "ともだちとたべる。", "romaji": "tomodachi to taberu", "english": "to eat with a friend" }
+          ],
+          "polite": [
+            { "kana": "りんごをたべます。", "romaji": "ringo wo tabemasu", "english": "I eat an apple." },
+            { "kana": "ごはんをたべます。", "romaji": "gohan wo tabemasu", "english": "I eat rice." },
+            { "kana": "きょうたべます。", "romaji": "kyou tabemasu", "english": "I will eat today." }
           ]
         }
       },
       { "id": "chizu_hira", "kana": "ちず", "romaji": "chizu",
         "gloss_en": "map", "tags": ["core","t-row","object"], "worlds": ["4-base-hira"],
-        "note": "Means 'map'. Written 地図 in kanji. Common in travel or directions.",
+        "note": "Means 'map'. Written 地図. Common in travel or direction contexts.",
         "examples": {
           "dictionary": [
             { "kana": "ちずをみる。", "romaji": "chizu wo miru", "english": "to look at a map" },
             { "kana": "ちずをかく。", "romaji": "chizu wo kaku", "english": "to draw a map" },
             { "kana": "ちずでばしょをさがす。", "romaji": "chizu de basho wo sagasu", "english": "to find a place on a map" }
+          ],
+          "polite": [
+            { "kana": "ちずをみます。", "romaji": "chizu wo mimasu", "english": "I look at a map." },
+            { "kana": "ちずをかきます。", "romaji": "chizu wo kakimasu", "english": "I draw a map." }
           ]
         }
       },
       { "id": "tsuki_hira", "kana": "つき", "romaji": "tsuki",
         "gloss_en": "moon; month", "tags": ["core","t-row","nature"], "worlds": ["4-base-hira"],
-        "note": "Means both 'moon' and 'month'. Written 月 in kanji. Context decides meaning.",
+        "note": "Means both 'moon' and 'month'. Written 月. Polite expressions use です naturally.",
         "examples": {
           "dictionary": [
             { "kana": "つきがきれい。", "romaji": "tsuki ga kirei", "english": "the moon is beautiful" },
-            { "kana": "つきをみる。", "romaji": "tsuki wo miru", "english": "to look at the moon" },
-            { "kana": "こんげつはあたらしいつき。", "romaji": "kongetsu wa atarashii tsuki", "english": "this month is a new moon" }
+            { "kana": "つきをみる。", "romaji": "tsuki wo miru", "english": "to look at the moon" }
+          ],
+          "polite": [
+            { "kana": "つきがきれいです。", "romaji": "tsuki ga kirei desu", "english": "The moon is beautiful." }
           ]
         }
       },
       { "id": "tegami_hira", "kana": "てがみ", "romaji": "tegami",
         "gloss_en": "letter", "tags": ["core","t-row","object"], "worlds": ["4-base-hira"],
-        "note": "Means a handwritten letter. Written 手紙 in kanji and often paired with verbs like かく (to write).",
+        "note": "Means a handwritten letter. Written 手紙. Often used with かく (to write).",
         "examples": {
           "dictionary": [
             { "kana": "てがみをかく。", "romaji": "tegami wo kaku", "english": "to write a letter" },
-            { "kana": "てがみをよむ。", "romaji": "tegami wo yomu", "english": "to read a letter" },
-            { "kana": "ともだちからてがみがくる。", "romaji": "tomodachi kara tegami ga kuru", "english": "a letter comes from a friend" }
+            { "kana": "てがみをよむ。", "romaji": "tegami wo yomu", "english": "to read a letter" }
+          ],
+          "polite": [
+            { "kana": "てがみをかきます。", "romaji": "tegami wo kakimasu", "english": "I write a letter." },
+            { "kana": "てがみをよみます。", "romaji": "tegami wo yomimasu", "english": "I read a letter." }
           ]
         }
       },
       { "id": "tomodachi_hira", "kana": "ともだち", "romaji": "tomodachi",
         "gloss_en": "friend", "tags": ["core","t-row","person"], "worlds": ["4-base-hira"],
-        "note": "General word for 'friend'. Can be shortened to とも in casual speech.",
+        "note": "General word for 'friend'. Can be shortened to とも casually. です used only when introducing politely.",
         "examples": {
           "dictionary": [
             { "kana": "ともだちにあう。", "romaji": "tomodachi ni au", "english": "to meet a friend" },
-            { "kana": "ともだちとあそぶ。", "romaji": "tomodachi to asobu", "english": "to play with friends" },
-            { "kana": "ともだちはやさしい。", "romaji": "tomodachi wa yasashii", "english": "my friend is kind" }
+            { "kana": "ともだちとあそぶ。", "romaji": "tomodachi to asobu", "english": "to play with friends" }
+          ],
+          "polite": [
+            { "kana": "ともだちにあいます。", "romaji": "tomodachi ni aimasu", "english": "I meet my friend." },
+            { "kana": "ともだちとあそびます。", "romaji": "tomodachi to asobimasu", "english": "I play with my friend." }
           ]
         }
       },
       { "id": "tokei_hira", "kana": "とけい", "romaji": "tokei",
         "gloss_en": "clock; watch", "tags": ["core","t-row","object"], "worlds": ["4-base-hira"],
-        "note": "Means both 'clock' and 'watch'. Written 時計 in kanji. Used with verbs like みる (look).",
+        "note": "Means both 'clock' and 'watch'. Written 時計. です used naturally in polite introductions.",
         "examples": {
           "dictionary": [
             { "kana": "とけいをみる。", "romaji": "tokei wo miru", "english": "to look at a clock" },
-            { "kana": "あたらしいとけい。", "romaji": "atarashii tokei", "english": "a new watch" },
-            { "kana": "とけいがこわれている。", "romaji": "tokei ga kowarete iru", "english": "the clock is broken" }
+            { "kana": "あたらしいとけい。", "romaji": "atarashii tokei", "english": "a new watch" }
+          ],
+          "polite": [
+            { "kana": "とけいをみます。", "romaji": "tokei wo mimasu", "english": "I look at the clock." },
+            { "kana": "これはとけいです。", "romaji": "kore wa tokei desu", "english": "This is a clock." }
           ]
         }
       },
       { "id": "densha_hira", "kana": "でんしゃ", "romaji": "densha",
         "gloss_en": "train", "tags": ["core","d-row","transport"], "worlds": ["4-daku-hira"],
-        "note": "Means 'train'. Written 電車 in kanji. Common in travel and commuting contexts.",
+        "note": "Means 'train'. Written 電車. Common in travel and commuting contexts.",
         "examples": {
           "dictionary": [
             { "kana": "でんしゃにのる。", "romaji": "densha ni noru", "english": "to ride a train" },
-            { "kana": "でんしゃをまつ。", "romaji": "densha wo matsu", "english": "to wait for a train" },
-            { "kana": "でんしゃがおくれる。", "romaji": "densha ga okureru", "english": "the train is delayed" }
+            { "kana": "でんしゃをまつ。", "romaji": "densha wo matsu", "english": "to wait for a train" }
+          ],
+          "polite": [
+            { "kana": "でんしゃにのります。", "romaji": "densha ni norimasu", "english": "I ride the train." },
+            { "kana": "でんしゃをまちます。", "romaji": "densha wo machimasu", "english": "I wait for the train." }
           ]
         }
       },
       { "id": "daigaku_hira", "kana": "だいがく", "romaji": "daigaku",
         "gloss_en": "university", "tags": ["core","d-row","place"], "worlds": ["4-daku-hira"],
-        "note": "Means 'university' or 'college'. Often appears in names like 東京大学 (University of Tokyo).",
+        "note": "Means 'university' or 'college'. Written 大学. です used naturally in self-introductions.",
         "examples": {
           "dictionary": [
             { "kana": "だいがくにいく。", "romaji": "daigaku ni iku", "english": "to go to university" },
-            { "kana": "だいがくでべんきょうする。", "romaji": "daigaku de benkyou suru", "english": "to study at university" },
-            { "kana": "だいがくのせいと。", "romaji": "daigaku no seito", "english": "a university student" }
+            { "kana": "だいがくでべんきょうする。", "romaji": "daigaku de benkyou suru", "english": "to study at university" }
+          ],
+          "polite": [
+            { "kana": "だいがくにいきます。", "romaji": "daigaku ni ikimasu", "english": "I go to university." },
+            { "kana": "だいがくです。", "romaji": "daigaku desu", "english": "It’s a university." }
           ]
         }
       },
       { "id": "dekiru_hira", "kana": "できる", "romaji": "dekiru",
         "gloss_en": "to be able to; can", "tags": ["core","d-row","verb"], "worlds": ["4-daku-hira"],
-        "note": "Expresses ability or possibility. Often used with が (日本語ができる – 'can speak Japanese').",
+        "note": "Expresses ability or possibility. Often used with が (日本語ができる). Polite form: できます.",
         "examples": {
           "dictionary": [
             { "kana": "すしができる。", "romaji": "sushi ga dekiru", "english": "can make sushi" },
-            { "kana": "にほんごができる。", "romaji": "nihongo ga dekiru", "english": "can speak Japanese" },
-            { "kana": "じてんしゃができる。", "romaji": "jitensha ga dekiru", "english": "can ride a bicycle" }
+            { "kana": "にほんごができる。", "romaji": "nihongo ga dekiru", "english": "can speak Japanese" }
+          ],
+          "polite": [
+            { "kana": "すしができます。", "romaji": "sushi ga dekimasu", "english": "I can make sushi." },
+            { "kana": "にほんごができます。", "romaji": "nihongo ga dekimasu", "english": "I can speak Japanese." }
           ]
         }
       },
       { "id": "doa_hira", "kana": "どあ", "romaji": "doa",
         "gloss_en": "door", "tags": ["loanword","d-row","object"], "worlds": ["4-daku-hira"],
-        "note": "Loanword from English 'door', usually written in katakana (ドア). Common household word.",
+        "note": "Loanword from English 'door', written ドア. Can take polite です when identifying.",
         "examples": {
           "dictionary": [
             { "kana": "どあをあける。", "romaji": "doa wo akeru", "english": "to open the door" },
-            { "kana": "どあをしめる。", "romaji": "doa wo shimeru", "english": "to close the door" },
-            { "kana": "どあのまえにたつ。", "romaji": "doa no mae ni tatsu", "english": "to stand in front of the door" }
+            { "kana": "どあをしめる。", "romaji": "doa wo shimeru", "english": "to close the door" }
+          ],
+          "polite": [
+            { "kana": "どあをあけます。", "romaji": "doa wo akemasu", "english": "I open the door." },
+            { "kana": "どあです。", "romaji": "doa desu", "english": "It’s a door." }
           ]
         }
       },
       { "id": "dare_hira", "kana": "だれ", "romaji": "dare",
         "gloss_en": "who", "tags": ["core","d-row","question"], "worlds": ["4-daku-hira"],
-        "note": "Common question word meaning 'who'. Often followed by ですか in polite questions.",
+        "note": "Common question word meaning 'who'. Appears naturally inside polite questions (〜ですか).",
         "examples": {
           "dictionary": [
             { "kana": "だれですか。", "romaji": "dare desu ka", "english": "Who is it?" },
-            { "kana": "だれがくる。", "romaji": "dare ga kuru", "english": "Who is coming?" },
-            { "kana": "これはだれのですか。", "romaji": "kore wa dare no desu ka", "english": "Whose is this?" }
+            { "kana": "だれがくる。", "romaji": "dare ga kuru", "english": "Who is coming?" }
           ]
         }
       },
       { "id": "depaato_hira", "kana": "でぱーと", "romaji": "depaato",
         "gloss_en": "department store", "tags": ["loanword","d-row","place"], "worlds": ["4-daku-hira"],
-        "note": "Loanword from 'department store', usually written デパート. Common shopping term.",
+        "note": "Loanword from 'department store', written デパート. Common shopping term.",
         "examples": {
           "dictionary": [
             { "kana": "でぱーとでかいものをする。", "romaji": "depaato de kaimono wo suru", "english": "to shop at a department store" },
-            { "kana": "でぱーとにいく。", "romaji": "depaato ni iku", "english": "to go to a department store" },
-            { "kana": "でぱーとがにぎやかだ。", "romaji": "depaato ga nigiyaka da", "english": "the department store is lively" }
+            { "kana": "でぱーとにいく。", "romaji": "depaato ni iku", "english": "to go to a department store" }
+          ],
+          "polite": [
+            { "kana": "でぱーとでかいものをします。", "romaji": "depaato de kaimono wo shimasu", "english": "I shop at a department store." },
+            { "kana": "でぱーとにいきます。", "romaji": "depaato ni ikimasu", "english": "I go to a department store." }
           ]
         }
       }
 
 
-      
-      
 
-      
       {"id":"namae_hira","kana":"なまえ","romaji":"namae","gloss_en":"name","tags":["core","n-row","person"],"worlds":["5-base-hira"],"note":"Common word for someone’s name. Often asked as おなまえは？ (What is your name?).","example":{"kana":"なまえをかく","romaji":"namae wo kaku","english":"to write one’s name"}},
       {"id":"niku_hira","kana":"にく","romaji":"niku","gloss_en":"meat","tags":["core","n-row","food"],"worlds":["5-base-hira"],"note":"General word for meat. Often specified, e.g., とりにく (chicken), ぶたにく (pork).","example":{"kana":"にくをたべる","romaji":"niku wo taberu","english":"to eat meat"}},
       {"id":"neko_hira","kana":"ねこ","romaji":"neko","gloss_en":"cat","tags":["core","n-row","animal"],"worlds":["5-base-hira"],"note":"Basic word for cat, common in beginner vocabulary.","example":{"kana":"ねこがすきです","romaji":"neko ga suki desu","english":"I like cats"}},
