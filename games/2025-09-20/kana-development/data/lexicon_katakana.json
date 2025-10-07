@@ -247,14 +247,129 @@
     }
   }
 
-  
+  {
+    "id": "taoru_kata",
+    "kana": "タオル",
+    "romaji": "taoru",
+    "gloss_en": "towel",
+    "tags": ["loanword","object","t-row"],
+    "worlds": ["4-vocab-kata"],
+    "note": "Loanword from English 'towel'. Common everyday item, often used in the bathroom or gym.",
+    "examples": {
+      "dictionary": [
+        { "kana": "タオルをつかう。", "romaji": "taoru wo tsukau", "english": "to use a towel." }
+      ],
+      "polite": [
+        { "kana": "タオルをつかいます。", "romaji": "taoru wo tsukaimasu", "english": "I use a towel." }
+      ],
+      "past": [
+        { "kana": "タオルをつかいました。", "romaji": "taoru wo tsukaimashita", "english": "I used a towel." }
+      ]
+    }
+  },
+  {
+    "id": "teeburu_kata",
+    "kana": "テーブル",
+    "romaji": "teeburu",
+    "gloss_en": "table",
+    "tags": ["loanword","furniture","t-row"],
+    "worlds": ["4-vocab-kata"],
+    "note": "Loanword from English 'table'. Common household furniture item. Often seen with のうえ (on top of).",
+    "examples": {
+      "dictionary": [
+        { "kana": "テーブルのうえ。", "romaji": "teeburu no ue", "english": "on the table." },
+        { "kana": "テーブルをふく。", "romaji": "teeburu wo fuku", "english": "to wipe the table." }
+      ],
+      "polite": [
+        { "kana": "テーブルをふきます。", "romaji": "teeburu wo fukimasu", "english": "I wipe the table." }
+      ],
+      "past": [
+        { "kana": "テーブルをふきました。", "romaji": "teeburu wo fukimashita", "english": "I wiped the table." }
+      ]
+    }
+  },
+  {
+    "id": "toiretto_kata",
+    "kana": "トイレット",
+    "romaji": "toiretto",
+    "gloss_en": "toilet",
+    "tags": ["loanword","place","t-row"],
+    "worlds": ["4-vocab-kata"],
+    "note": "Loanword from English 'toilet'. Commonly appears as トイレ in everyday Japanese, a shortened form.",
+    "examples": {
+      "dictionary": [
+        { "kana": "トイレにいく。", "romaji": "toire ni iku", "english": "to go to the toilet." }
+      ],
+      "polite": [
+        { "kana": "トイレにいきます。", "romaji": "toire ni ikimasu", "english": "I go to the toilet." }
+      ],
+      "past": [
+        { "kana": "トイレにいきました。", "romaji": "toire ni ikimashita", "english": "I went to the toilet." }
+      ]
+    }
+  },
+  {
+    "id": "taksi_kata",
+    "kana": "タクシー",
+    "romaji": "takushii",
+    "gloss_en": "taxi",
+    "tags": ["loanword","transport","t-row"],
+    "worlds": ["4-vocab-kata"],
+    "note": "Loanword from English 'taxi'. Common transportation word in Japan.",
+    "examples": {
+      "dictionary": [
+        { "kana": "タクシーにのる。", "romaji": "takushii ni noru", "english": "to ride a taxi." }
+      ],
+      "polite": [
+        { "kana": "タクシーにのります。", "romaji": "takushii ni norimasu", "english": "I ride a taxi." }
+      ],
+      "past": [
+        { "kana": "タクシーにのりました。", "romaji": "takushii ni norimashita", "english": "I rode a taxi." }
+      ]
+    }
+  },
+  {
+    "id": "taipu_kata",
+    "kana": "タイプ",
+    "romaji": "taipu",
+    "gloss_en": "type; style",
+    "tags": ["loanword","abstract","t-row"],
+    "worlds": ["4-vocab-kata"],
+    "note": "Loanword from English 'type'. Common in expressions like わたしのタイプ (my type).",
+    "examples": {
+      "dictionary": [
+        { "kana": "わたしのタイプ。", "romaji": "watashi no taipu", "english": "my type." }
+      ],
+      "polite": [
+        { "kana": "わたしのタイプです。", "romaji": "watashi no taipu desu", "english": "It’s my type." }
+      ],
+      "past": [
+        { "kana": "わたしのタイプでした。", "romaji": "watashi no taipu deshita", "english": "It was my type." }
+      ]
+    }
+  },
+  {
+    "id": "taimingu_kata",
+    "kana": "タイミング",
+    "romaji": "taimingu",
+    "gloss_en": "timing",
+    "tags": ["loanword","abstract","t-row"],
+    "worlds": ["4-vocab-kata"],
+    "note": "Loanword from English 'timing'. Used in both casual and formal speech, e.g., タイミングがいい (good timing).",
+    "examples": {
+      "dictionary": [
+        { "kana": "タイミングがいい。", "romaji": "taimingu ga ii", "english": "The timing is good." }
+      ],
+      "polite": [
+        { "kana": "タイミングがいいです。", "romaji": "taimingu ga ii desu", "english": "The timing is good." }
+      ],
+      "past": [
+        { "kana": "タイミングがよかったです。", "romaji": "taimingu ga yokatta desu", "english": "The timing was good." }
+      ]
+    }
+  }
 
-  {"id":"sarada_kata","kana":"サラダ","romaji":"sarada","gloss_en":"salad","tags":["loanword","food","s-row"],"worlds":["3-vocab-kata"],"note":"Loanword from English 'salad'. Very common everyday word.","example":{"kana":"サラダをたべる","romaji":"sarada wo taberu","english":"to eat a salad"}},
-  {"id":"saru_kata","kana":"サル","romaji":"saru","gloss_en":"monkey","tags":["loanword","animal","s-row"],"worlds":["3-vocab-kata"],"note":"Monkey. Usually written 猿, but katakana サル is common in children’s books and signage.","example":{"kana":"サルがいる","romaji":"saru ga iru","english":"there is a monkey"}},
-  {"id":"semi_kata","kana":"セミ","romaji":"semi","gloss_en":"cicada","tags":["loanword","animal","s-row"],"worlds":["3-vocab-kata"],"note":"Cicada (summer insect). Normally written 蝉, but katakana セミ is common in everyday writing.","example":{"kana":"セミがなく","romaji":"semi ga naku","english":"the cicada chirps"}},
-  {"id":"suika_kata","kana":"スイカ","romaji":"suika","gloss_en":"watermelon","tags":["loanword","food","s-row"],"worlds":["3-vocab-kata"],"note":"Watermelon. Usually written 西瓜, but katakana スイカ is very common.","example":{"kana":"スイカをかう","romaji":"suika wo kau","english":"to buy a watermelon"}},
-  {"id":"sofa_kata","kana":"ソファ","romaji":"sofa","gloss_en":"sofa","tags":["loanword","furniture","s-row"],"worlds":["3-vocab-kata"],"note":"Loanword from English 'sofa'. Very common everyday word.","example":{"kana":"ソファにすわる","romaji":"sofa ni suwaru","english":"to sit on the sofa"}},
-  {"id":"sekai_kata","kana":"セカイ","romaji":"sekai","gloss_en":"world","tags":["loanword","abstract","s-row"],"worlds":["3-vocab-kata"],"note":"Usually written 世界, but katakana セカイ is common in stylistic or pop culture contexts.","example":{"kana":"セカイをみる","romaji":"sekai wo miru","english":"to see the world"}},
+  
 
   {"id":"zubon_kata","kana":"ズボン","romaji":"zubon","gloss_en":"pants","tags":["loanword","clothing","z-row"],"worlds":["3-daku-kata"],"note":"Loanword from French 'jupon'. Refers to trousers/pants.","example":{"kana":"ズボンをはく","romaji":"zubon wo haku","english":"to wear pants"}},
   {"id":"zonbi_kata","kana":"ゾンビ","romaji":"zonbi","gloss_en":"zombie","tags":["loanword","creature","z-row"],"worlds":["3-daku-kata"],"note":"Loanword from English 'zombie'. Common in pop culture.","example":{"kana":"ゾンビゲーム","romaji":"zonbi geemu","english":"zombie game"}},
