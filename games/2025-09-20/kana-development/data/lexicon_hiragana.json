@@ -504,13 +504,100 @@
       }
 
 
+      { "id": "namae_hira", "kana": "なまえ", "romaji": "namae",
+        "gloss_en": "name", "tags": ["core","n-row","person"], "worlds": ["5-base-hira"],
+        "note": "Common word for someone's name. Often asked politely as おなまえは？ ('What is your name?').",
+        "examples": {
+          "dictionary": [
+            { "kana": "なまえをかく。", "romaji": "namae wo kaku", "english": "to write one's name" },
+            { "kana": "なまえをいう。", "romaji": "namae wo iu", "english": "to say one's name" }
+          ],
+          "polite": [
+            { "kana": "なまえをかきます。", "romaji": "namae wo kakimasu", "english": "I write my name." },
+            { "kana": "なまえをいいます。", "romaji": "namae wo iimasu", "english": "I say my name." }
+          ],
+          "past": [
+            { "kana": "なまえをかきました。", "romaji": "namae wo kakimashita", "english": "I wrote my name." },
+            { "kana": "なまえをいいました。", "romaji": "namae wo iimashita", "english": "I said my name." }
+          ]
+        }
+      },
+      { "id": "niku_hira", "kana": "にく", "romaji": "niku",
+        "gloss_en": "meat", "tags": ["core","n-row","food"], "worlds": ["5-base-hira"],
+        "note": "General word for meat. Often specified as とりにく (chicken) or ぶたにく (pork).",
+        "examples": {
+          "dictionary": [
+            { "kana": "にくをたべる。", "romaji": "niku wo taberu", "english": "to eat meat" }
+          ],
+          "polite": [
+            { "kana": "にくをたべます。", "romaji": "niku wo tabemasu", "english": "I eat meat." }
+          ],
+          "past": [
+            { "kana": "にくをたべました。", "romaji": "niku wo tabemashita", "english": "I ate meat." }
+          ]
+        }
+      },
+      { "id": "neko_hira", "kana": "ねこ", "romaji": "neko",
+        "gloss_en": "cat", "tags": ["core","n-row","animal"], "worlds": ["5-base-hira"],
+        "note": "Basic word for 'cat'. Often appears with すきです ('I like ...').",
+        "examples": {
+          "dictionary": [
+            { "kana": "ねこがすき。", "romaji": "neko ga suki", "english": "I like cats." },
+            { "kana": "ねこがいる。", "romaji": "neko ga iru", "english": "There is a cat." }
+          ],
+          "polite": [
+            { "kana": "ねこがすきです。", "romaji": "neko ga suki desu", "english": "I like cats." },
+            { "kana": "ねこがいます。", "romaji": "neko ga imasu", "english": "There is a cat." }
+          ],
+          "past": [
+            { "kana": "ねこがいました。", "romaji": "neko ga imashita", "english": "There was a cat." }
+          ]
+        }
+      },
+      { "id": "nani_hira", "kana": "なに", "romaji": "nani",
+        "gloss_en": "what", "tags": ["core","n-row","question"], "worlds": ["5-base-hira"],
+        "note": "Common question word meaning 'what'. Changes to なん before certain sounds (e.g., なんですか).",
+        "examples": {
+          "dictionary": [
+            { "kana": "これはなに？", "romaji": "kore wa nani?", "english": "What is this?" }
+          ],
+          "polite": [
+            { "kana": "これはなんですか。", "romaji": "kore wa nan desu ka", "english": "What is this?" }
+          ]
+        }
+      },
+      { "id": "natsu_hira", "kana": "なつ", "romaji": "natsu",
+        "gloss_en": "summer", "tags": ["core","n-row","season"], "worlds": ["5-base-hira"],
+        "note": "Season word for 'summer'. Common in greetings like なつやすみ (summer vacation).",
+        "examples": {
+          "dictionary": [
+            { "kana": "なつがあつい。", "romaji": "natsu ga atsui", "english": "Summer is hot." }
+          ],
+          "polite": [
+            { "kana": "なつがあついです。", "romaji": "natsu ga atsui desu", "english": "Summer is hot." }
+          ],
+          "past": [
+            { "kana": "なつがあつかったです。", "romaji": "natsu ga atsukatta desu", "english": "Summer was hot." }
+          ]
+        }
+      },
+      { "id": "naka_hira", "kana": "なか", "romaji": "naka",
+        "gloss_en": "inside; middle", "tags": ["core","n-row","direction"], "worlds": ["5-base-hira"],
+        "note": "Means 'inside' or 'middle'. Often used with の: はこのなか (inside the box).",
+        "examples": {
+          "dictionary": [
+            { "kana": "はこのなか。", "romaji": "hako no naka", "english": "inside the box" },
+            { "kana": "なかにある。", "romaji": "naka ni aru", "english": "is inside" }
+          ],
+          "polite": [
+            { "kana": "なかにあります。", "romaji": "naka ni arimasu", "english": "It is inside." }
+          ],
+          "past": [
+            { "kana": "なかにありました。", "romaji": "naka ni arimashita", "english": "It was inside." }
+          ]
+        }
+      }
 
-      {"id":"namae_hira","kana":"なまえ","romaji":"namae","gloss_en":"name","tags":["core","n-row","person"],"worlds":["5-base-hira"],"note":"Common word for someone’s name. Often asked as おなまえは？ (What is your name?).","example":{"kana":"なまえをかく","romaji":"namae wo kaku","english":"to write one’s name"}},
-      {"id":"niku_hira","kana":"にく","romaji":"niku","gloss_en":"meat","tags":["core","n-row","food"],"worlds":["5-base-hira"],"note":"General word for meat. Often specified, e.g., とりにく (chicken), ぶたにく (pork).","example":{"kana":"にくをたべる","romaji":"niku wo taberu","english":"to eat meat"}},
-      {"id":"neko_hira","kana":"ねこ","romaji":"neko","gloss_en":"cat","tags":["core","n-row","animal"],"worlds":["5-base-hira"],"note":"Basic word for cat, common in beginner vocabulary.","example":{"kana":"ねこがすきです","romaji":"neko ga suki desu","english":"I like cats"}},
-      {"id":"nani_hira","kana":"なに","romaji":"nani","gloss_en":"what","tags":["core","n-row","question"],"worlds":["5-base-hira"],"note":"Common question word. Can also appear as なん before certain sounds (e.g., なんですか).","example":{"kana":"これはなに？","romaji":"kore wa nani?","english":"What is this?"}},
-      {"id":"natsu_hira","kana":"なつ","romaji":"natsu","gloss_en":"summer","tags":["core","n-row","season"],"worlds":["5-base-hira"],"note":"Season word for summer. Often used in seasonal greetings.","example":{"kana":"なつがあつい","romaji":"natsu ga atsui","english":"summer is hot"}},
-      {"id":"naka_hira","kana":"なか","romaji":"naka","gloss_en":"inside; middle","tags":["core","n-row","direction"],"worlds":["5-base-hira"],"note":"Means inside/middle. Often used with の: はこのなか (inside the box).","example":{"kana":"はこのなか","romaji":"hako no naka","english":"inside the box"}},
       
       {"id":"hana_hira","kana":"はな","romaji":"hana","gloss_en":"flower; nose","tags":["core","h-row","nature"],"worlds":["6-vocab-hira"],"note":"Can mean 'flower' (花) or 'nose' (鼻), depending on context.","example":{"kana":"はなをかぐ","romaji":"hana wo kagu","english":"to smell a flower"}},
       {"id":"hito_hira","kana":"ひと","romaji":"hito","gloss_en":"person","tags":["core","h-row","people"],"worlds":["6-vocab-hira"],"note":"Basic word for 'person'. Written 人 in kanji.","example":{"kana":"しんせつなひと","romaji":"shinsetsu na hito","english":"a kind person"}},
