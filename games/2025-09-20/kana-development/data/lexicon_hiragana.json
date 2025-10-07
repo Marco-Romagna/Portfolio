@@ -2,59 +2,72 @@
   "meta": {"version":1,"locale":"ja-JP","script":"hiragana"},
   "words": [
       { "id": "ai_hira", "kana": "あい", "romaji": "ai",
-        "gloss_en": "love; affection", "tags": ["core", "vowels"], "worlds": ["1-base-hira"],
+        "gloss_en": "love; affection", "tags": ["core","vowels"], "worlds": ["1-base-hira"],
         "note": "Often used in formal/literary contexts. In daily life, すき (suki) is more common for 'like/love'.",
-        "examples": [
-          { "kana": "あいをかんじる。", "romaji": "ai wo kanjiru", "english": "to feel love" },
-          { "kana": "かぞくのあいはつよい。", "romaji": "kazoku no ai wa tsuyoi", "english": "Family love is strong." },
-          { "kana": "あいについてはなす。", "romaji": "ai ni tsuite hanasu", "english": "to talk about love" }
-        ]
+        "examples": {
+          "dictionary": [
+            { "kana": "あいをかんじる。", "romaji": "ai wo kanjiru", "english": "to feel love" },
+            { "kana": "かぞくのあいはつよい。", "romaji": "kazoku no ai wa tsuyoi", "english": "Family love is strong." },
+            { "kana": "あいについてはなす。", "romaji": "ai ni tsuite hanasu", "english": "to talk about love" }
+          ]
+        }
       },
       { "id": "iie_hira", "kana": "いいえ", "romaji": "iie",
-        "gloss_en": "no", "tags": ["core", "vowels", "phrase"], "worlds": ["1-base-hira"],
+        "gloss_en": "no", "tags": ["core","vowels","phrase"], "worlds": ["1-base-hira"],
         "note": "Polite 'no'. Commonly placed at the start of a sentence (いいえ、〜) to soften disagreement or refusal. Casual speech often uses ううん (uun).",
-        "examples": [
-          { "kana": "いいえ、ちがう。", "romaji": "iie, chigau", "english": "No, that’s not correct." },
-          { "kana": "いいえ、けっこう。", "romaji": "iie, kekkou", "english": "No, that’s fine." },
-          { "kana": "いいえ、ともだちだ。", "romaji": "iie, tomodachi da", "english": "No, we’re friends." }
-        ]
+        "examples": {
+          "dictionary": [
+            { "kana": "いいえ、ちがう。", "romaji": "iie, chigau", "english": "No, that’s not correct." },
+            { "kana": "いいえ、けっこう。", "romaji": "iie, kekkou", "english": "No, that’s fine." },
+            { "kana": "いいえ、ともだちだ。", "romaji": "iie, tomodachi da", "english": "No, we’re friends." }
+          ]
+        }
       },
       { "id": "ue_hira", "kana": "うえ", "romaji": "ue",
-        "gloss_en": "up; above", "tags": ["core", "vowels", "direction"], "worlds": ["1-base-hira"],
+        "gloss_en": "up; above", "tags": ["core","vowels","direction"], "worlds": ["1-base-hira"],
         "note": "Can mean 'on top of' or 'above'. Opposite is した (shita).",
-        "examples": [
-          { "kana": "つくえのうえ。", "romaji": "tsukue no ue", "english": "on the desk" },
-          { "kana": "うえをみる。", "romaji": "ue wo miru", "english": "to look up" },
-          { "kana": "ほんがつくえのうえにある。", "romaji": "hon ga tsukue no ue ni aru", "english": "A book is on the desk." }
-        ]
+        "examples": {
+          "dictionary": [
+            { "kana": "つくえのうえ。", "romaji": "tsukue no ue", "english": "on the desk" },
+            { "kana": "うえをみる。", "romaji": "ue wo miru", "english": "to look up" },
+            { "kana": "ほんがつくえのうえにある。", "romaji": "hon ga tsukue no ue ni aru", "english": "A book is on the desk." }
+          ]
+        }
       },
       { "id": "ie_hira", "kana": "いえ", "romaji": "ie",
-        "gloss_en": "house; home", "tags": ["core", "vowels", "place"], "worlds": ["1-base-hira"],
+        "gloss_en": "house; home", "tags": ["core","vowels","place"], "worlds": ["1-base-hira"],
         "note": "いえ (ie) is neutral. うち (uchi) is more casual/familiar.",
-        "examples": [
-          { "kana": "いえにかえる。", "romaji": "ie ni kaeru", "english": "to return home" },
-          { "kana": "あたらしいいえだ。", "romaji": "atarashii ie da", "english": "It’s a new house." },
-          { "kana": "いえでべんきょうする。", "romaji": "ie de benkyou suru", "english": "to study at home." }
-        ]
+        "examples": {
+          "dictionary": [
+            { "kana": "いえにかえる。", "romaji": "ie ni kaeru", "english": "to return home" },
+            { "kana": "あたらしいいえだ。", "romaji": "atarashii ie da", "english": "It’s a new house." },
+            { "kana": "いえでべんきょうする。", "romaji": "ie de benkyou suru", "english": "to study at home" }
+          ]
+        }
       },
       { "id": "aoi_hira", "kana": "あおい", "romaji": "aoi",
-        "gloss_en": "blue (adjective)", "tags": ["core", "vowels", "color"], "worlds": ["1-base-hira"],
+        "gloss_en": "blue (adjective)", "tags": ["core","vowels","color"], "worlds": ["1-base-hira"],
         "note": "Used as adjective. Noun form is あお (ao). Historically covered blue/green.",
-        "examples": [
-          { "kana": "あおいシャツ。", "romaji": "aoi shatsu", "english": "blue shirt" },
-          { "kana": "そらはあおい。", "romaji": "sora wa aoi", "english": "The sky is blue." },
-          { "kana": "あおいくるまがすきだ。", "romaji": "aoi kuruma ga suki da", "english": "I like blue cars." }
-        ]
+        "examples": {
+          "dictionary": [
+            { "kana": "あおいシャツ。", "romaji": "aoi shatsu", "english": "blue shirt" },
+            { "kana": "そらはあおい。", "romaji": "sora wa aoi", "english": "The sky is blue." },
+            { "kana": "あおいくるまがすきだ。", "romaji": "aoi kuruma ga suki da", "english": "I like blue cars." }
+          ]
+        }
       },
       { "id": "au_hira", "kana": "あう", "romaji": "au",
-        "gloss_en": "to meet", "tags": ["core", "vowels", "verb"], "worlds": ["1-base-hira"],
+        "gloss_en": "to meet", "tags": ["core","vowels","verb"], "worlds": ["1-base-hira"],
         "note": "Used for meeting people, usually with に particle.",
-        "examples": [
-          { "kana": "ともだちにあう。", "romaji": "tomodachi ni au", "english": "to meet a friend" },
-          { "kana": "せんせいにあう。", "romaji": "sensei ni au", "english": "to meet a teacher" },
-          { "kana": "にほんでひとにあう。", "romaji": "nihon de hito ni au", "english": "to meet someone in Japan" }
-        ]
+        "examples": {
+          "dictionary": [
+            { "kana": "ともだちにあう。", "romaji": "tomodachi ni au", "english": "to meet a friend" },
+            { "kana": "せんせいにあう。", "romaji": "sensei ni au", "english": "to meet a teacher" },
+            { "kana": "にほんでひとにあう。", "romaji": "nihon de hito ni au", "english": "to meet someone in Japan" }
+          ]
+        }
       }
+
 
 
 
