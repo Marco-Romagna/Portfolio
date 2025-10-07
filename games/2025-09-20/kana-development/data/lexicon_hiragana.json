@@ -1,12 +1,62 @@
 {
   "meta": {"version":1,"locale":"ja-JP","script":"hiragana"},
   "words": [
-      {"id":"ai_hira","kana":"あい","romaji":"ai","gloss_en":"love; affection","tags":["core","vowels"],"worlds":["1-base-hira"],"note":"Often used in formal/literary contexts. In daily life, すき (suki) is more common for 'like/love'.","example":{"kana":"あいをかんじる","romaji":"ai wo kanjiru","english":"to feel love"}},
-      {"id":"iie_hira","kana":"いいえ","romaji":"iie","gloss_en":"no","tags":["core","vowels","phrase"],"worlds":["1-base-hira"],"note":"Polite 'no'. Casual speech often uses ううん (uun).","example":{"kana":"いいえ、ちがいます","romaji":"iie, chigaimasu","english":"No, that’s not correct"}},
-      {"id":"ue_hira","kana":"うえ","romaji":"ue","gloss_en":"up; above","tags":["core","vowels","direction"],"worlds":["1-base-hira"],"note":"Can mean 'on top of' or 'above'. Opposite is した (shita).","example":{"kana":"つくえのうえ","romaji":"tsukue no ue","english":"on the desk"}},
-      {"id":"ie_hira","kana":"いえ","romaji":"ie","gloss_en":"house; home","tags":["core","vowels","place"],"worlds":["1-base-hira"],"note":"いえ (ie) is neutral. うち (uchi) is more casual/familiar.","example":{"kana":"いえにかえる","romaji":"ie ni kaeru","english":"to return home"}},
-      {"id":"aoi_hira","kana":"あおい","romaji":"aoi","gloss_en":"blue (adjective)","tags":["core","vowels","color"],"worlds":["1-base-hira"],"note":"Used as adjective. Noun form is あお (ao). Historically covered blue/green.","example":{"kana":"あおいシャツ","romaji":"aoi shatsu","english":"blue shirt"}},
-      {"id":"au_hira","kana":"あう","romaji":"au","gloss_en":"to meet","tags":["core","vowels","verb"],"worlds":["1-base-hira"],"note":"Used for meeting people, usually with に particle.","example":{"kana":"ともだちにあう","romaji":"tomodachi ni au","english":"to meet a friend"}},
+      { "id": "ai_hira", "kana": "あい", "romaji": "ai",
+      "gloss_en": "love; affection", "tags": ["core", "vowels"], "worlds": ["1-base-hira"],
+      "note": "Often used in formal/literary contexts. In daily life, すき (suki) is more common for 'like/love'.",
+      "examples": [
+        { "kana": "あいをかんじる。", "romaji": "ai wo kanjiru", "english": "to feel love" },
+        { "kana": "かぞくのあいはつよい。", "romaji": "kazoku no ai wa tsuyoi", "english": "Family love is strong." },
+        { "kana": "あいについてはなす。", "romaji": "ai ni tsuite hanasu", "english": "to talk about love" }
+      ]
+    },
+    { "id": "iie_hira", "kana": "いいえ", "romaji": "iie",
+      "gloss_en": "no", "tags": ["core", "vowels", "phrase"], "worlds": ["1-base-hira"],
+      "note": "Polite 'no'. Commonly placed at the start of a sentence (いいえ、〜) to soften disagreement or refusal. Casual speech often uses ううん (uun).",
+      "examples": [
+        { "kana": "いいえ、ちがいます。", "romaji": "iie, chigaimasu", "english": "No, that’s not correct." },
+        { "kana": "いいえ、けっこうです。", "romaji": "iie, kekkou desu", "english": "No, thank you." },
+        { "kana": "いいえ、ともだちです。", "romaji": "iie, tomodachi desu", "english": "No, we’re friends." }
+      ]
+    },
+    { "id": "ue_hira", "kana": "うえ", "romaji": "ue",
+      "gloss_en": "up; above", "tags": ["core", "vowels", "direction"], "worlds": ["1-base-hira"],
+      "note": "Can mean 'on top of' or 'above'. Opposite is した (shita).",
+      "examples": [
+        { "kana": "つくえのうえ。", "romaji": "tsukue no ue", "english": "on the desk" },
+        { "kana": "ねこのうえにほんがあります。", "romaji": "neko no ue ni hon ga arimasu", "english": "There is a book on the cat." },
+        { "kana": "うえをみる。", "romaji": "ue wo miru", "english": "to look up" }
+      ]
+    },
+    { "id": "ie_hira", "kana": "いえ", "romaji": "ie",
+      "gloss_en": "house; home", "tags": ["core", "vowels", "place"], "worlds": ["1-base-hira"],
+      "note": "いえ (ie) is neutral. うち (uchi) is more casual/familiar.",
+      "examples": [
+        { "kana": "いえにかえる。", "romaji": "ie ni kaeru", "english": "to return home" },
+        { "kana": "あたらしいいえです。", "romaji": "atarashii ie desu", "english": "It’s a new house." },
+        { "kana": "いえでべんきょうします。", "romaji": "ie de benkyou shimasu", "english": "I study at home." }
+      ]
+    },
+    { "id": "aoi_hira", "kana": "あおい", "romaji": "aoi",
+      "gloss_en": "blue (adjective)", "tags": ["core", "vowels", "color"], "worlds": ["1-base-hira"],
+      "note": "Used as adjective. Noun form is あお (ao). Historically covered blue/green.",
+      "examples": [
+        { "kana": "あおいシャツ。", "romaji": "aoi shatsu", "english": "blue shirt" },
+        { "kana": "そらはあおい。", "romaji": "sora wa aoi", "english": "The sky is blue." },
+        { "kana": "あおいくるまがすきです。", "romaji": "aoi kuruma ga suki desu", "english": "I like blue cars." }
+      ]
+    },
+    { "id": "au_hira", "kana": "あう", "romaji": "au",
+      "gloss_en": "to meet", "tags": ["core", "vowels", "verb"], "worlds": ["1-base-hira"],
+      "note": "Used for meeting people, usually with に particle.",
+      "examples": [
+        { "kana": "ともだちにあう。", "romaji": "tomodachi ni au", "english": "to meet a friend" },
+        { "kana": "あしたかれにあいます。", "romaji": "ashita kare ni aimasu", "english": "I will meet him tomorrow." },
+        { "kana": "えきでせんせいにあいました。", "romaji": "eki de sensei ni aimashita", "english": "I met my teacher at the station." }
+      ]
+    }
+
+
       
       {"id":"iku_hira","kana":"いく","romaji":"iku","gloss_en":"to go","tags":["core","k-row","verb"],"worlds":["2-base-hira"],"note":"Basic motion verb. Past tense is irregular: いった (itta).","example":{"kana":"がっこうにいく","romaji":"gakkou ni iku","english":"to go to school"}},
       {"id":"kiku_hira","kana":"きく","romaji":"kiku","gloss_en":"to listen; to ask","tags":["core","k-row","verb"],"worlds":["2-base-hira"],"note":"Context decides meaning: 'listen' or 'ask'.","example":{"kana":"せんせいにきく","romaji":"sensei ni kiku","english":"to ask the teacher"}},
