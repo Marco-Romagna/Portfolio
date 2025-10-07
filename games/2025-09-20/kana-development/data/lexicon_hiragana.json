@@ -2,7 +2,7 @@
   "meta": {"version":1,"locale":"ja-JP","script":"hiragana"},
   "words": [
         { "id": "ai_hira", "kana": "あい", "romaji": "ai",
-          "gloss_en": "love; affection", "tags": ["core","vowels"], "worlds": ["1-base-hira"],
+          "gloss_en": "love; affection", "tags": ["core","vowels"], "worlds": ["1-vocab-hira"],
           "note": "Refers to emotional or romantic love. Sounds formal or literary; in daily life, すき (suki) is more common for 'like/love'.",
           "examples": {
             "dictionary": [
@@ -13,7 +13,7 @@
           }
         },
         { "id": "iie_hira", "kana": "いいえ", "romaji": "iie",
-          "gloss_en": "no", "tags": ["core","vowels","phrase"], "worlds": ["1-base-hira"],
+          "gloss_en": "no", "tags": ["core","vowels","phrase"], "worlds": ["1-vocab-hira"],
           "note": "Polite way to say 'no'. Placed at the start of a sentence (いいえ、〜) to soften disagreement or refusal. Casual speech uses ううん (uun).",
           "examples": {
             "dictionary": [
@@ -24,7 +24,7 @@
           }
         },
         { "id": "ue_hira", "kana": "うえ", "romaji": "ue",
-          "gloss_en": "up; above", "tags": ["core","vowels","direction"], "worlds": ["1-base-hira"],
+          "gloss_en": "up; above", "tags": ["core","vowels","direction"], "worlds": ["1-vocab-hira"],
           "note": "Means 'up' or 'above'. Often used with the particle の to say something is on top of another object (つくえのうえ). Opposite is した (shita).",
           "examples": {
             "dictionary": [
@@ -35,7 +35,7 @@
           }
         },
         { "id": "ie_hira", "kana": "いえ", "romaji": "ie",
-          "gloss_en": "house; home", "tags": ["core","vowels","place"], "worlds": ["1-base-hira"],
+          "gloss_en": "house; home", "tags": ["core","vowels","place"], "worlds": ["1-vocab-hira"],
           "note": "Neutral word for 'house' or 'home'. The more casual うち (uchi) refers to one’s own home or family.",
           "examples": {
             "dictionary": [
@@ -46,7 +46,7 @@
           }
         },
         { "id": "aoi_hira", "kana": "あおい", "romaji": "aoi",
-          "gloss_en": "blue (adjective)", "tags": ["core","vowels","color"], "worlds": ["1-base-hira"],
+          "gloss_en": "blue (adjective)", "tags": ["core","vowels","color"], "worlds": ["1-vocab-hira"],
           "note": "い-adjective meaning 'blue'. Historically covered both blue and green shades. The noun form is あお (ao).",
           "examples": {
             "dictionary": [
@@ -57,7 +57,7 @@
           }
         },
         { "id": "au_hira", "kana": "あう", "romaji": "au",
-          "gloss_en": "to meet", "tags": ["core","vowels","verb"], "worlds": ["1-base-hira"],
+          "gloss_en": "to meet", "tags": ["core","vowels","verb"], "worlds": ["1-vocab-hira"],
           "note": "Means 'to meet' or 'to see (a person)'. Usually takes the particle に to mark who you meet.",
           "examples": {
             "dictionary": [
@@ -69,7 +69,7 @@
         },
   
         { "id": "iku_hira", "kana": "いく", "romaji": "iku",
-          "gloss_en": "to go", "tags": ["core","k-row","verb"], "worlds": ["2-base-hira"],
+          "gloss_en": "to go", "tags": ["core","k-row","verb"], "worlds": ["2-vocab-hira"],
           "note": "A very common motion verb used with the particle に to indicate destination. Irregular past tense: いった (itta).",
           "examples": {
             "dictionary": [
@@ -80,7 +80,7 @@
           }
         },
         { "id": "kiku_hira", "kana": "きく", "romaji": "kiku",
-          "gloss_en": "to listen; to ask", "tags": ["core","k-row","verb"], "worlds": ["2-base-hira"],
+          "gloss_en": "to listen; to ask", "tags": ["core","k-row","verb"], "worlds": ["2-vocab-hira"],
           "note": "A versatile verb meaning both 'to listen' (音楽をきく) and 'to ask' (先生にきく). The meaning depends on the particle used.",
           "examples": {
             "dictionary": [
@@ -91,7 +91,7 @@
           }
         },
         { "id": "kau_hira", "kana": "かう", "romaji": "kau",
-          "gloss_en": "to buy", "tags": ["core","k-row","verb"], "worlds": ["2-base-hira"],
+          "gloss_en": "to buy", "tags": ["core","k-row","verb"], "worlds": ["2-vocab-hira"],
           "note": "A basic transitive verb meaning 'to buy'. Often used with を to mark the purchased item.",
           "examples": {
             "dictionary": [
@@ -102,7 +102,7 @@
           }
         },
         { "id": "kao_hira", "kana": "かお", "romaji": "kao",
-          "gloss_en": "face", "tags": ["core","k-row","body"], "worlds": ["2-base-hira"],
+          "gloss_en": "face", "tags": ["core","k-row","body"], "worlds": ["2-vocab-hira"],
           "note": "Means the physical 'face'. Used in many set phrases like かおをあらう (wash face) or かおがひろい (well-connected person).",
           "examples": {
             "dictionary": [
@@ -113,7 +113,7 @@
           }
         },
         { "id": "ike_hira", "kana": "いけ", "romaji": "ike",
-          "gloss_en": "pond", "tags": ["core","k-row","place"], "worlds": ["2-base-hira"],
+          "gloss_en": "pond", "tags": ["core","k-row","place"], "worlds": ["2-vocab-hira"],
           "note": "Usually refers to small, man-made ponds found in parks or gardens. Natural ponds may also be called ぬま (numa).",
           "examples": {
             "dictionary": [
@@ -124,7 +124,7 @@
           }
         },
         { "id": "koe_hira", "kana": "こえ", "romaji": "koe",
-          "gloss_en": "voice", "tags": ["core","k-row"], "worlds": ["2-base-hira"],
+          "gloss_en": "voice", "tags": ["core","k-row"], "worlds": ["2-vocab-hira"],
           "note": "Refers to human or animal voices (not mechanical sounds). For mechanical noises, use おと (oto).",
           "examples": {
             "dictionary": [
@@ -203,7 +203,7 @@
 
 
         { "id": "sakura_hira", "kana": "さくら", "romaji": "sakura",
-          "gloss_en": "cherry blossom", "tags": ["core","s-row"], "worlds": ["3-base-hira"],
+          "gloss_en": "cherry blossom", "tags": ["core","s-row"], "worlds": ["3-vocab-hira"],
           "note": "Japan’s most famous flower, symbolizing spring and renewal. Often seen in festivals and poetry.",
           "examples": {
             "dictionary": [
@@ -214,7 +214,7 @@
           }
         },
         { "id": "shio_hira", "kana": "しお", "romaji": "shio",
-          "gloss_en": "salt", "tags": ["core","s-row","food"], "worlds": ["3-base-hira"],
+          "gloss_en": "salt", "tags": ["core","s-row","food"], "worlds": ["3-vocab-hira"],
           "note": "Basic seasoning used in cooking. Often written with kanji 塩.",
           "examples": {
             "dictionary": [
@@ -225,7 +225,7 @@
           }
         },
         { "id": "sumu_hira", "kana": "すむ", "romaji": "sumu",
-          "gloss_en": "to live; to reside", "tags": ["core","s-row","verb"], "worlds": ["3-base-hira"],
+          "gloss_en": "to live; to reside", "tags": ["core","s-row","verb"], "worlds": ["3-vocab-hira"],
           "note": "Describes where someone lives. Always used with the particle に (e.g., 東京にすむ).",
           "examples": {
             "dictionary": [
@@ -236,7 +236,7 @@
           }
         },
         { "id": "seki_hira", "kana": "せき", "romaji": "seki",
-          "gloss_en": "seat", "tags": ["core","s-row","object"], "worlds": ["3-base-hira"],
+          "gloss_en": "seat", "tags": ["core","s-row","object"], "worlds": ["3-vocab-hira"],
           "note": "Means 'seat' or 'assigned place'. Also used for 'cough' (different kanji). Context clarifies the meaning.",
           "examples": {
             "dictionary": [
@@ -247,7 +247,7 @@
           }
         },
         { "id": "sora_hira", "kana": "そら", "romaji": "sora",
-          "gloss_en": "sky", "tags": ["core","s-row","nature"], "worlds": ["3-base-hira"],
+          "gloss_en": "sky", "tags": ["core","s-row","nature"], "worlds": ["3-vocab-hira"],
           "note": "Common word for the sky or heavens. Used in expressions like そらをみる (to look at the sky).",
           "examples": {
             "dictionary": [
@@ -258,7 +258,7 @@
           }
         },
         { "id": "sono_hira", "kana": "その", "romaji": "sono",
-          "gloss_en": "that", "tags": ["core","s-row","grammar"], "worlds": ["3-base-hira"],
+          "gloss_en": "that", "tags": ["core","s-row","grammar"], "worlds": ["3-vocab-hira"],
           "note": "Demonstrative adjective meaning 'that (near listener)'. Used before nouns, like そのほん ('that book').",
           "examples": {
             "dictionary": [
@@ -337,7 +337,7 @@
 
       
         { "id": "taberu_hira", "kana": "たべる", "romaji": "taberu",
-          "gloss_en": "to eat", "tags": ["core","t-row","verb"], "worlds": ["4-base-hira"],
+          "gloss_en": "to eat", "tags": ["core","t-row","verb"], "worlds": ["4-vocab-hira"],
           "note": "Very common ichidan verb meaning 'to eat'. Takes を for the object. Polite form: たべます.",
           "examples": {
             "dictionary": [
@@ -353,7 +353,7 @@
           }
         },
         { "id": "chizu_hira", "kana": "ちず", "romaji": "chizu",
-          "gloss_en": "map", "tags": ["core","t-row","object"], "worlds": ["4-base-hira"],
+          "gloss_en": "map", "tags": ["core","t-row","object"], "worlds": ["4-vocab-hira"],
           "note": "Means 'map'. Written 地図. Common in travel or direction contexts.",
           "examples": {
             "dictionary": [
@@ -368,7 +368,7 @@
           }
         },
         { "id": "tsuki_hira", "kana": "つき", "romaji": "tsuki",
-          "gloss_en": "moon; month", "tags": ["core","t-row","nature"], "worlds": ["4-base-hira"],
+          "gloss_en": "moon; month", "tags": ["core","t-row","nature"], "worlds": ["4-vocab-hira"],
           "note": "Means both 'moon' and 'month'. Written 月. Polite expressions use です naturally.",
           "examples": {
             "dictionary": [
@@ -381,7 +381,7 @@
           }
         },
         { "id": "tegami_hira", "kana": "てがみ", "romaji": "tegami",
-          "gloss_en": "letter", "tags": ["core","t-row","object"], "worlds": ["4-base-hira"],
+          "gloss_en": "letter", "tags": ["core","t-row","object"], "worlds": ["4-vocab-hira"],
           "note": "Means a handwritten letter. Written 手紙. Often used with かく (to write).",
           "examples": {
             "dictionary": [
@@ -395,7 +395,7 @@
           }
         },
         { "id": "tomodachi_hira", "kana": "ともだち", "romaji": "tomodachi",
-          "gloss_en": "friend", "tags": ["core","t-row","person"], "worlds": ["4-base-hira"],
+          "gloss_en": "friend", "tags": ["core","t-row","person"], "worlds": ["4-vocab-hira"],
           "note": "General word for 'friend'. Can be shortened to とも casually. です used only when introducing politely.",
           "examples": {
             "dictionary": [
@@ -409,7 +409,7 @@
           }
         },
         { "id": "tokei_hira", "kana": "とけい", "romaji": "tokei",
-          "gloss_en": "clock; watch", "tags": ["core","t-row","object"], "worlds": ["4-base-hira"],
+          "gloss_en": "clock; watch", "tags": ["core","t-row","object"], "worlds": ["4-vocab-hira"],
           "note": "Means both 'clock' and 'watch'. Written 時計. です used naturally in polite introductions.",
           "examples": {
             "dictionary": [
@@ -505,7 +505,7 @@
 
 
         { "id": "namae_hira", "kana": "なまえ", "romaji": "namae",
-          "gloss_en": "name", "tags": ["core","n-row","person"], "worlds": ["5-base-hira"],
+          "gloss_en": "name", "tags": ["core","n-row","person"], "worlds": ["5-vocab-hira"],
           "note": "Common word for someone's name. Often asked politely as おなまえは？ ('What is your name?').",
           "examples": {
             "dictionary": [
@@ -523,7 +523,7 @@
           }
         },
         { "id": "niku_hira", "kana": "にく", "romaji": "niku",
-          "gloss_en": "meat", "tags": ["core","n-row","food"], "worlds": ["5-base-hira"],
+          "gloss_en": "meat", "tags": ["core","n-row","food"], "worlds": ["5-vocab-hira"],
           "note": "General word for meat. Often specified as とりにく (chicken) or ぶたにく (pork).",
           "examples": {
             "dictionary": [
@@ -538,7 +538,7 @@
           }
         },
         { "id": "neko_hira", "kana": "ねこ", "romaji": "neko",
-          "gloss_en": "cat", "tags": ["core","n-row","animal"], "worlds": ["5-base-hira"],
+          "gloss_en": "cat", "tags": ["core","n-row","animal"], "worlds": ["5-vocab-hira"],
           "note": "Basic word for 'cat'. Often appears with すきです ('I like ...').",
           "examples": {
             "dictionary": [
@@ -555,7 +555,7 @@
           }
         },
         { "id": "nani_hira", "kana": "なに", "romaji": "nani",
-          "gloss_en": "what", "tags": ["core","n-row","question"], "worlds": ["5-base-hira"],
+          "gloss_en": "what", "tags": ["core","n-row","question"], "worlds": ["5-vocab-hira"],
           "note": "Common question word meaning 'what'. Changes to なん before certain sounds (e.g., なんですか).",
           "examples": {
             "dictionary": [
@@ -567,7 +567,7 @@
           }
         },
         { "id": "natsu_hira", "kana": "なつ", "romaji": "natsu",
-          "gloss_en": "summer", "tags": ["core","n-row","season"], "worlds": ["5-base-hira"],
+          "gloss_en": "summer", "tags": ["core","n-row","season"], "worlds": ["5-vocab-hira"],
           "note": "Season word for 'summer'. Common in greetings like なつやすみ (summer vacation).",
           "examples": {
             "dictionary": [
@@ -582,7 +582,7 @@
           }
         },
         { "id": "naka_hira", "kana": "なか", "romaji": "naka",
-          "gloss_en": "inside; middle", "tags": ["core","n-row","direction"], "worlds": ["5-base-hira"],
+          "gloss_en": "inside; middle", "tags": ["core","n-row","direction"], "worlds": ["5-vocab-hira"],
           "note": "Means 'inside' or 'middle'. Often used with の: はこのなか (inside the box).",
           "examples": {
             "dictionary": [
