@@ -123,13 +123,131 @@
       }
     }
 
+    {
+    "id": "zoo_kata",
+    "kana": "ズー",
+    "romaji": "zuu",
+    "gloss_en": "zoo",
+    "tags": ["loanword","place","z-row"],
+    "worlds": ["3-daku-kata"],
+    "note": "Loanword from English 'zoo'. Refers to an animal park. In kanji, the native form is 動物園 (doubutsuen).",
+    "examples": {
+      "dictionary": [
+        { "kana": "ズーにいく。", "romaji": "zuu ni iku", "english": "to go to the zoo." }
+      ],
+      "polite": [
+        { "kana": "ズーにいきます。", "romaji": "zuu ni ikimasu", "english": "I go to the zoo." }
+      ],
+      "past": [
+        { "kana": "ズーにいきました。", "romaji": "zuu ni ikimashita", "english": "I went to the zoo." }
+      ]
+    }
+  },
+  {
+    "id": "jazu_kata",
+    "kana": "ジャズ",
+    "romaji": "jazu",
+    "gloss_en": "jazz (music)",
+    "tags": ["loanword","music","z-row"],
+    "worlds": ["3-daku-kata"],
+    "note": "Loanword from English 'jazz'. Refers to the musical genre. Often paired with verbs like きく (to listen).",
+    "examples": {
+      "dictionary": [
+        { "kana": "ジャズをきく。", "romaji": "jazu wo kiku", "english": "to listen to jazz." }
+      ],
+      "polite": [
+        { "kana": "ジャズをききます。", "romaji": "jazu wo kikimasu", "english": "I listen to jazz." }
+      ],
+      "past": [
+        { "kana": "ジャズをききました。", "romaji": "jazu wo kikimashita", "english": "I listened to jazz." }
+      ]
+    }
+  },
+  {
+    "id": "zero_kata",
+    "kana": "ゼロ",
+    "romaji": "zero",
+    "gloss_en": "zero; nothing",
+    "tags": ["loanword","number","z-row"],
+    "worlds": ["3-daku-kata"],
+    "note": "Loanword from English 'zero'. Used in scores, math, and phrases like ゼロから (from zero).",
+    "examples": {
+      "dictionary": [
+        { "kana": "スコアはゼロ。", "romaji": "sukoa wa zero", "english": "The score is zero." }
+      ],
+      "polite": [
+        { "kana": "スコアはゼロです。", "romaji": "sukoa wa zero desu", "english": "The score is zero." }
+      ],
+      "past": [
+        { "kana": "スコアはゼロでした。", "romaji": "sukoa wa zero deshita", "english": "The score was zero." }
+      ]
+    }
+  },
+  {
+    "id": "doa_kata",
+    "kana": "ドア",
+    "romaji": "doa",
+    "gloss_en": "door",
+    "tags": ["loanword","object","d-row"],
+    "worlds": ["3-daku-kata"],
+    "note": "Loanword from English 'door'. Common household or building term, always written in katakana.",
+    "examples": {
+      "dictionary": [
+        { "kana": "ドアをあける。", "romaji": "doa wo akeru", "english": "to open the door." },
+        { "kana": "ドアをしめる。", "romaji": "doa wo shimeru", "english": "to close the door." }
+      ],
+      "polite": [
+        { "kana": "ドアをあけます。", "romaji": "doa wo akemasu", "english": "I open the door." },
+        { "kana": "ドアをしめます。", "romaji": "doa wo shimemasu", "english": "I close the door." }
+      ],
+      "past": [
+        { "kana": "ドアをあけました。", "romaji": "doa wo akemashita", "english": "I opened the door." },
+        { "kana": "ドアをしめました。", "romaji": "doa wo shimemashita", "english": "I closed the door." }
+      ]
+    }
+  },
+  {
+    "id": "doggu_kata",
+    "kana": "ドッグ",
+    "romaji": "doggu",
+    "gloss_en": "dog (loanword form)",
+    "tags": ["loanword","animal","d-row"],
+    "worlds": ["3-daku-kata"],
+    "note": "Loanword from English 'dog'. Native Japanese word is イヌ (inu). ドッグ appears in compounds like ホットドッグ (hot dog) or ペットドッグ (pet dog).",
+    "examples": {
+      "dictionary": [
+        { "kana": "ドッグをみる。", "romaji": "doggu wo miru", "english": "to see a dog." }
+      ],
+      "polite": [
+        { "kana": "ドッグをみます。", "romaji": "doggu wo mimasu", "english": "I see a dog." }
+      ],
+      "past": [
+        { "kana": "ドッグをみました。", "romaji": "doggu wo mimashita", "english": "I saw a dog." }
+      ]
+    }
+  },
+  {
+    "id": "baggu_kata",
+    "kana": "バッグ",
+    "romaji": "baggu",
+    "gloss_en": "bag",
+    "tags": ["loanword","object","b-row"],
+    "worlds": ["3-daku-kata"],
+    "note": "Loanword from English 'bag'. Common in fashion and travel contexts. Used in phrases like ハンドバッグ (handbag).",
+    "examples": {
+      "dictionary": [
+        { "kana": "バッグをもつ。", "romaji": "baggu wo motsu", "english": "to carry a bag." }
+      ],
+      "polite": [
+        { "kana": "バッグをもちます。", "romaji": "baggu wo mochimasu", "english": "I carry a bag." }
+      ],
+      "past": [
+        { "kana": "バッグをもちました。", "romaji": "baggu wo mochimashita", "english": "I carried a bag." }
+      ]
+    }
+  }
 
-  {"id":"gasorin_kata","kana":"ガソリン","romaji":"gasorin","gloss_en":"gasoline","tags":["loanword","object","g-row"],"worlds":["2-daku-kata"],"note":"Loanword from English 'gasoline'. Common everyday word.","example":{"kana":"ガソリンをいれる","romaji":"gasorin wo ireru","english":"to put in gasoline"}},
-  {"id":"gifuto_kata","kana":"ギフト","romaji":"gifuto","gloss_en":"gift; present","tags":["loanword","object","g-row"],"worlds":["2-daku-kata"],"note":"Loanword from English 'gift'. Often used in shopping and online contexts.","example":{"kana":"ギフトをおくる","romaji":"gifuto wo okuru","english":"to give a gift"}},
-  {"id":"gurasu_kata","kana":"グラス","romaji":"gurasu","gloss_en":"glass (cup)","tags":["loanword","object","g-row"],"worlds":["2-daku-kata"],"note":"Loanword from English 'glass'. Refers to a drinking glass.","example":{"kana":"グラスにみずをいれる","romaji":"gurasu ni mizu wo ireru","english":"to pour water into a glass"}},
-  {"id":"gesuto_kata","kana":"ゲスト","romaji":"gesuto","gloss_en":"guest","tags":["loanword","people","g-row"],"worlds":["2-daku-kata"],"note":"Loanword from English 'guest'. Used in daily and media contexts.","example":{"kana":"ゲストがくる","romaji":"gesuto ga kuru","english":"a guest is coming"}},
-  {"id":"gorufu_kata","kana":"ゴルフ","romaji":"gorufu","gloss_en":"golf","tags":["loanword","sport","g-row"],"worlds":["2-daku-kata"],"note":"Loanword from English 'golf'.","example":{"kana":"ゴルフをする","romaji":"gorufu wo suru","english":"to play golf"}},
-  {"id":"gamu_kata","kana":"ガム","romaji":"gamu","gloss_en":"chewing gum","tags":["loanword","food","g-row"],"worlds":["2-daku-kata"],"note":"Loanword from English 'gum'. Always written in katakana.","example":{"kana":"ガムをかむ","romaji":"gamu wo kamu","english":"to chew gum"}},
+  
 
   {"id":"sarada_kata","kana":"サラダ","romaji":"sarada","gloss_en":"salad","tags":["loanword","food","s-row"],"worlds":["3-vocab-kata"],"note":"Loanword from English 'salad'. Very common everyday word.","example":{"kana":"サラダをたべる","romaji":"sarada wo taberu","english":"to eat a salad"}},
   {"id":"saru_kata","kana":"サル","romaji":"saru","gloss_en":"monkey","tags":["loanword","animal","s-row"],"worlds":["3-vocab-kata"],"note":"Monkey. Usually written 猿, but katakana サル is common in children’s books and signage.","example":{"kana":"サルがいる","romaji":"saru ga iru","english":"there is a monkey"}},
