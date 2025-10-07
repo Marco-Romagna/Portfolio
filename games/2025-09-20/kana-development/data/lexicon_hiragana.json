@@ -599,12 +599,108 @@
       }
 
       
-      {"id":"hana_hira","kana":"はな","romaji":"hana","gloss_en":"flower; nose","tags":["core","h-row","nature"],"worlds":["6-vocab-hira"],"note":"Can mean 'flower' (花) or 'nose' (鼻), depending on context.","example":{"kana":"はなをかぐ","romaji":"hana wo kagu","english":"to smell a flower"}},
-      {"id":"hito_hira","kana":"ひと","romaji":"hito","gloss_en":"person","tags":["core","h-row","people"],"worlds":["6-vocab-hira"],"note":"Basic word for 'person'. Written 人 in kanji.","example":{"kana":"しんせつなひと","romaji":"shinsetsu na hito","english":"a kind person"}},
-      {"id":"fune_hira","kana":"ふね","romaji":"fune","gloss_en":"boat; ship","tags":["core","h-row","transport"],"worlds":["6-vocab-hira"],"note":"Common word for boat/ship. Written 船 in kanji.","example":{"kana":"ふねにのる","romaji":"fune ni noru","english":"to ride a boat"}},
-      {"id":"heta_hira","kana":"へた","romaji":"heta","gloss_en":"unskillful; poor at","tags":["core","h-row","adjective"],"worlds":["6-vocab-hira"],"note":"Often used to describe lack of ability. Written 下手 in kanji.","example":{"kana":"うたがへたです","romaji":"uta ga heta desu","english":"I am poor at singing"}},
-      {"id":"hoshi_hira","kana":"ほし","romaji":"hoshi","gloss_en":"star","tags":["core","h-row","nature"],"worlds":["6-vocab-hira"],"note":"Common word for 'star'. Written 星 in kanji.","example":{"kana":"ほしをみる","romaji":"hoshi wo miru","english":"to look at the stars"}},
-      {"id":"haha_hira","kana":"はは","romaji":"haha","gloss_en":"mother","tags":["core","h-row","family"],"worlds":["6-vocab-hira"],"note":"Polite humble term for 'my mother'. Written 母 in kanji.","example":{"kana":"ははのりょうり","romaji":"haha no ryouri","english":"my mother’s cooking"}},
+      { "id": "hana_hira", "kana": "はな", "romaji": "hana",
+        "gloss_en": "flower; nose", "tags": ["core","h-row","nature"], "worlds": ["6-vocab-hira"],
+        "note": "Can mean 'flower' (花) or 'nose' (鼻) depending on context.",
+        "examples": {
+          "dictionary": [
+            { "kana": "はなをかぐ。", "romaji": "hana wo kagu", "english": "to smell a flower" },
+            { "kana": "きれいなはな。", "romaji": "kirei na hana", "english": "a beautiful flower" }
+          ],
+          "polite": [
+            { "kana": "はなをかぎます。", "romaji": "hana wo kagimasu", "english": "I smell a flower." },
+            { "kana": "きれいなはなです。", "romaji": "kirei na hana desu", "english": "It’s a beautiful flower." }
+          ],
+          "past": [
+            { "kana": "はなをかぎました。", "romaji": "hana wo kagimashita", "english": "I smelled a flower." },
+            { "kana": "はながきれいでした。", "romaji": "hana ga kirei deshita", "english": "The flower was beautiful." }
+          ]
+        }
+      },
+      { "id": "hito_hira", "kana": "ひと", "romaji": "hito",
+        "gloss_en": "person", "tags": ["core","h-row","people"], "worlds": ["6-vocab-hira"],
+        "note": "Basic word for 'person'. Written 人. Often used with adjectives like しんせつな (kind).",
+        "examples": {
+          "dictionary": [
+            { "kana": "しんせつなひと。", "romaji": "shinsetsu na hito", "english": "a kind person" },
+            { "kana": "ひとがいる。", "romaji": "hito ga iru", "english": "There is a person." }
+          ],
+          "polite": [
+            { "kana": "しんせつなひとです。", "romaji": "shinsetsu na hito desu", "english": "They are a kind person." },
+            { "kana": "ひとがいます。", "romaji": "hito ga imasu", "english": "There is a person." }
+          ],
+          "past": [
+            { "kana": "ひとがいました。", "romaji": "hito ga imashita", "english": "There was a person." }
+          ]
+        }
+      },
+      { "id": "fune_hira", "kana": "ふね", "romaji": "fune",
+        "gloss_en": "boat; ship", "tags": ["core","h-row","transport"], "worlds": ["6-vocab-hira"],
+        "note": "Common word for 'boat' or 'ship'. Written 船. Frequently pairs with のる (ride).",
+        "examples": {
+          "dictionary": [
+            { "kana": "ふねにのる。", "romaji": "fune ni noru", "english": "to ride a boat" },
+            { "kana": "ふねがうみをわたる。", "romaji": "fune ga umi wo wataru", "english": "A boat crosses the sea." }
+          ],
+          "polite": [
+            { "kana": "ふねにのります。", "romaji": "fune ni norimasu", "english": "I ride a boat." },
+            { "kana": "ふねがうみをわたります。", "romaji": "fune ga umi wo watarimasu", "english": "A boat crosses the sea." }
+          ],
+          "past": [
+            { "kana": "ふねにのりました。", "romaji": "fune ni norimashita", "english": "I rode a boat." }
+          ]
+        }
+      },
+      { "id": "heta_hira", "kana": "へた", "romaji": "heta",
+        "gloss_en": "unskillful; poor at", "tags": ["core","h-row","adjective"], "worlds": ["6-vocab-hira"],
+        "note": "Often used with が to describe a lack of ability. Polite forms take です／でした.",
+        "examples": {
+          "dictionary": [
+            { "kana": "うたがへた。", "romaji": "uta ga heta", "english": "I’m bad at singing." }
+          ],
+          "polite": [
+            { "kana": "うたがへたです。", "romaji": "uta ga heta desu", "english": "I’m bad at singing." }
+          ],
+          "past": [
+            { "kana": "うたがへたでした。", "romaji": "uta ga heta deshita", "english": "I was bad at singing." }
+          ]
+        }
+      },
+      { "id": "hoshi_hira", "kana": "ほし", "romaji": "hoshi",
+        "gloss_en": "star", "tags": ["core","h-row","nature"], "worlds": ["6-vocab-hira"],
+        "note": "Common word for 'star'. Written 星. Appears in phrases like ほしをみる (to look at the stars).",
+        "examples": {
+          "dictionary": [
+            { "kana": "ほしをみる。", "romaji": "hoshi wo miru", "english": "to look at the stars" },
+            { "kana": "そらにほしがある。", "romaji": "sora ni hoshi ga aru", "english": "There are stars in the sky." }
+          ],
+          "polite": [
+            { "kana": "ほしをみます。", "romaji": "hoshi wo mimasu", "english": "I look at the stars." },
+            { "kana": "そらにほしがあります。", "romaji": "sora ni hoshi ga arimasu", "english": "There are stars in the sky." }
+          ],
+          "past": [
+            { "kana": "ほしをみました。", "romaji": "hoshi wo mimashita", "english": "I looked at the stars." }
+          ]
+        }
+      },
+      { "id": "haha_hira", "kana": "はは", "romaji": "haha",
+        "gloss_en": "mother", "tags": ["core","h-row","family"], "worlds": ["6-vocab-hira"],
+        "note": "Humble word for 'my mother'. Written 母. For someone else’s mother, use おかあさん.",
+        "examples": {
+          "dictionary": [
+            { "kana": "ははのりょうり。", "romaji": "haha no ryouri", "english": "my mother’s cooking" },
+            { "kana": "ははがすき。", "romaji": "haha ga suki", "english": "I love my mother." }
+          ],
+          "polite": [
+            { "kana": "ははのりょうりです。", "romaji": "haha no ryouri desu", "english": "It’s my mother’s cooking." },
+            { "kana": "ははがすきです。", "romaji": "haha ga suki desu", "english": "I love my mother." }
+          ],
+          "past": [
+            { "kana": "ははのりょうりでした。", "romaji": "haha no ryouri deshita", "english": "It was my mother’s cooking." }
+          ]
+        }
+      }
+
       
       {"id":"baka_hira","kana":"ばか","romaji":"baka","gloss_en":"fool; stupid","tags":["core","b-row","expression"],"worlds":["6-daku-hira"],"note":"Common everyday word, can be rude depending on context. Written 馬鹿 in kanji.","example":{"kana":"ばかをいう","romaji":"baka wo iu","english":"to say something stupid"}},
       {"id":"bijin_hira","kana":"びじん","romaji":"bijin","gloss_en":"beautiful woman","tags":["core","b-row","people"],"worlds":["6-daku-hira"],"note":"Uses じ from the Z-row (already learned). Written 美人 in kanji.","example":{"kana":"かのじょはびじんです","romaji":"kanojo wa bijin desu","english":"She is a beautiful woman"}},
