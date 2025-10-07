@@ -701,13 +701,105 @@
         }
       }
 
+    
+      { "id": "baka_hira", "kana": "ばか", "romaji": "baka",
+      "gloss_en": "fool; stupid", "tags": ["core","b-row","expression"], "worlds": ["6-daku-hira"],
+      "note": "Common everyday word meaning 'fool' or 'stupid'. Can sound rude depending on context. Written 馬鹿.",
+      "examples": {
+        "dictionary": [
+          { "kana": "ばかをいう。", "romaji": "baka wo iu", "english": "to say something stupid" },
+          { "kana": "ばかなひと。", "romaji": "baka na hito", "english": "a foolish person" }
+        ],
+        "polite": [
+          { "kana": "ばかをいいます。", "romaji": "baka wo iimasu", "english": "I say something foolish." },
+          { "kana": "ばかです。", "romaji": "baka desu", "english": "That’s foolish." }
+        ],
+        "past": [
+          { "kana": "ばかをいいました。", "romaji": "baka wo iimashita", "english": "I said something foolish." },
+          { "kana": "ばかでした。", "romaji": "baka deshita", "english": "That was foolish." }
+        ]
+      }
+    },
+    { "id": "bijin_hira", "kana": "びじん", "romaji": "bijin",
+      "gloss_en": "beautiful woman", "tags": ["core","b-row","people"], "worlds": ["6-daku-hira"],
+      "note": "Means 'beautiful woman'. Uses じ from the Z-row. Written 美人.",
+      "examples": {
+        "dictionary": [
+          { "kana": "かのじょはびじん。", "romaji": "kanojo wa bijin", "english": "She is a beautiful woman." }
+        ],
+        "polite": [
+          { "kana": "かのじょはびじんです。", "romaji": "kanojo wa bijin desu", "english": "She is a beautiful woman." }
+        ],
+        "past": [
+          { "kana": "かのじょはびじんでした。", "romaji": "kanojo wa bijin deshita", "english": "She was a beautiful woman." }
+        ]
+      }
+    },
+    { "id": "buta_hira", "kana": "ぶた", "romaji": "buta",
+      "gloss_en": "pig", "tags": ["core","b-row","animal"], "worlds": ["6-daku-hira"],
+      "note": "Common farm animal. Written 豚. Also appears in words like ぶたにく (pork).",
+      "examples": {
+        "dictionary": [
+          { "kana": "ぶたのにく。", "romaji": "buta no niku", "english": "pork" },
+          { "kana": "ぶたをかう。", "romaji": "buta wo kau", "english": "to raise pigs" }
+        ],
+        "polite": [
+          { "kana": "ぶたをかいます。", "romaji": "buta wo kaimasu", "english": "I raise pigs." }
+        ],
+        "past": [
+          { "kana": "ぶたをかいました。", "romaji": "buta wo kaimashita", "english": "I raised pigs." }
+        ]
+      }
+    },
+    { "id": "betsu_hira", "kana": "べつ", "romaji": "betsu",
+      "gloss_en": "separate; another", "tags": ["core","b-row","abstract"], "worlds": ["6-daku-hira"],
+      "note": "Means 'separate' or 'different'. Common in べつべつ (separately). Written 別.",
+      "examples": {
+        "dictionary": [
+          { "kana": "べつのほん。", "romaji": "betsu no hon", "english": "a different book" },
+          { "kana": "べつべつにする。", "romaji": "betsu-betsu ni suru", "english": "to do separately" }
+        ],
+        "polite": [
+          { "kana": "べつべつにします。", "romaji": "betsu-betsu ni shimasu", "english": "We do it separately." }
+        ],
+        "past": [
+          { "kana": "べつべつにしました。", "romaji": "betsu-betsu ni shimashita", "english": "We did it separately." }
+        ]
+      }
+    },
+    { "id": "boushi_hira", "kana": "ぼうし", "romaji": "boushi",
+      "gloss_en": "hat", "tags": ["core","b-row","object"], "worlds": ["6-daku-hira"],
+      "note": "Common everyday item meaning 'hat' or 'cap'. Written 帽子.",
+      "examples": {
+        "dictionary": [
+          { "kana": "ぼうしをかぶる。", "romaji": "boushi wo kaburu", "english": "to wear a hat" },
+          { "kana": "あかいぼうし。", "romaji": "akai boushi", "english": "a red hat" }
+        ],
+        "polite": [
+          { "kana": "ぼうしをかぶります。", "romaji": "boushi wo kaburimasu", "english": "I wear a hat." }
+        ],
+        "past": [
+          { "kana": "ぼうしをかぶりました。", "romaji": "boushi wo kaburimashita", "english": "I wore a hat." }
+        ]
+      }
+    },
+    { "id": "bai_hira", "kana": "ばい", "romaji": "bai",
+      "gloss_en": "times; multiplier", "tags": ["core","b-row","abstract"], "worlds": ["6-daku-hira"],
+      "note": "Used to express multiples (e.g., twice = にばい). Written 倍.",
+      "examples": {
+        "dictionary": [
+          { "kana": "にばいになる。", "romaji": "ni bai ni naru", "english": "to become double" }
+        ],
+        "polite": [
+          { "kana": "にばいになります。", "romaji": "ni bai ni narimasu", "english": "It becomes double." }
+        ],
+        "past": [
+          { "kana": "にばいになりました。", "romaji": "ni bai ni narimashita", "english": "It became double." }
+        ]
+      }
+    }
+
       
-      {"id":"baka_hira","kana":"ばか","romaji":"baka","gloss_en":"fool; stupid","tags":["core","b-row","expression"],"worlds":["6-daku-hira"],"note":"Common everyday word, can be rude depending on context. Written 馬鹿 in kanji.","example":{"kana":"ばかをいう","romaji":"baka wo iu","english":"to say something stupid"}},
-      {"id":"bijin_hira","kana":"びじん","romaji":"bijin","gloss_en":"beautiful woman","tags":["core","b-row","people"],"worlds":["6-daku-hira"],"note":"Uses じ from the Z-row (already learned). Written 美人 in kanji.","example":{"kana":"かのじょはびじんです","romaji":"kanojo wa bijin desu","english":"She is a beautiful woman"}},
-      {"id":"buta_hira","kana":"ぶた","romaji":"buta","gloss_en":"pig","tags":["core","b-row","animal"],"worlds":["6-daku-hira"],"note":"Common farm animal. Written 豚 in kanji.","example":{"kana":"ぶたのにく","romaji":"buta no niku","english":"pork"}},
-      {"id":"betsu_hira","kana":"べつ","romaji":"betsu","gloss_en":"separate; another","tags":["core","b-row","abstract"],"worlds":["6-daku-hira"],"note":"Often used in the phrase 'べつべつ' (separately). Written 別 in kanji.","example":{"kana":"べつのほん","romaji":"betsu no hon","english":"a different book"}},
-      {"id":"boushi_hira","kana":"ぼうし","romaji":"boushi","gloss_en":"hat","tags":["core","b-row","object"],"worlds":["6-daku-hira"],"note":"Common everyday item. Written 帽子 in kanji.","example":{"kana":"ぼうしをかぶる","romaji":"boushi wo kaburu","english":"to wear a hat"}},
-      {"id":"bai_hira","kana":"ばい","romaji":"bai","gloss_en":"times; multiplier","tags":["core","b-row","abstract"],"worlds":["6-daku-hira"],"note":"Used to express multiples (e.g. twice = にばい). Written 倍 in kanji.","example":{"kana":"にばいになります","romaji":"ni bai ni narimasu","english":"It becomes double"}},
       
       {"id":"ippai_hira","kana":"いっぱい","romaji":"ippai","gloss_en":"full; a lot","tags":["core","p-row","quantity"],"worlds":["6-handaku-hira"],"note":"Very common everyday word. Written 一杯 in kanji.","example":{"kana":"みずがいっぱい","romaji":"mizu ga ippai","english":"a lot of water"}},
       {"id":"happa_hira","kana":"はっぱ","romaji":"happa","gloss_en":"leaf","tags":["core","p-row","nature"],"worlds":["6-handaku-hira"],"note":"Means 'leaf' (of a plant/tree). Written 葉っぱ in kanji.","example":{"kana":"はっぱがおちる","romaji":"happa ga ochiru","english":"a leaf falls"}},
