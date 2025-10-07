@@ -1084,21 +1084,198 @@
         }
       }
 
+    { "id": "rekishi_hira", "kana": "れきし", "romaji": "rekishi",
+      "gloss_en": "history", "tags": ["core","r-row","abstract"], "worlds": ["9-vocab-hira"],
+      "note": "Common school subject word. Written 歴史.",
+      "examples": {
+        "dictionary": [
+          { "kana": "にほんのれきし。", "romaji": "nihon no rekishi", "english": "Japanese history." },
+          { "kana": "れきしをべんきょうする。", "romaji": "rekishi wo benkyou suru", "english": "to study history." }
+        ],
+        "polite": [
+          { "kana": "れきしをべんきょうします。", "romaji": "rekishi wo benkyou shimasu", "english": "I study history." }
+        ],
+        "past": [
+          { "kana": "れきしをべんきょうしました。", "romaji": "rekishi wo benkyou shimashita", "english": "I studied history." },
+          { "kana": "れきしをべんきょうした。", "romaji": "rekishi wo benkyou shita", "english": "I studied history. (plain past)" }
+        ]
+      }
+    },
+    { "id": "rusu_hira", "kana": "るす", "romaji": "rusu",
+      "gloss_en": "absence; not at home", "tags": ["core","r-row","expression"], "worlds": ["9-vocab-hira"],
+      "note": "Used when someone is away from home. Written 留守.",
+      "examples": {
+        "dictionary": [
+          { "kana": "るすです。", "romaji": "rusu desu", "english": "(They are) not at home." }
+        ],
+        "polite": [
+          { "kana": "るすにしています。", "romaji": "rusu ni shiteimasu", "english": "They are away from home." }
+        ],
+        "past": [
+          { "kana": "るすでした。", "romaji": "rusu deshita", "english": "They were not at home." }
+        ]
+      }
+    },
+    { "id": "raku_hira", "kana": "らく", "romaji": "raku",
+      "gloss_en": "comfort; easy", "tags": ["core","r-row","adjective"], "worlds": ["9-vocab-hira"],
+      "note": "Used in phrases like らくな (easy/comfortable). Written 楽.",
+      "examples": {
+        "dictionary": [
+          { "kana": "らくなしごと。", "romaji": "raku na shigoto", "english": "an easy job." },
+          { "kana": "このしごとはらくだ。", "romaji": "kono shigoto wa raku da", "english": "This job is easy." }
+        ],
+        "polite": [
+          { "kana": "このしごとはらくです。", "romaji": "kono shigoto wa raku desu", "english": "This job is easy." }
+        ],
+        "past": [
+          { "kana": "このしごとはらくでした。", "romaji": "kono shigoto wa raku deshita", "english": "This job was easy." }
+        ]
+      }
+    },
+    { "id": "risu_hira", "kana": "りす", "romaji": "risu",
+      "gloss_en": "squirrel", "tags": ["core","r-row","animal"], "worlds": ["9-vocab-hira"],
+      "note": "Animal word. Written 栗鼠 (rare). Often appears with とぶ (to jump).",
+      "examples": {
+        "dictionary": [
+          { "kana": "りすがとぶ。", "romaji": "risu ga tobu", "english": "A squirrel jumps." },
+          { "kana": "りすがはしる。", "romaji": "risu ga hashiru", "english": "A squirrel runs." }
+        ],
+        "polite": [
+          { "kana": "りすがとびます。", "romaji": "risu ga tobimasu", "english": "A squirrel jumps." }
+        ],
+        "past": [
+          { "kana": "りすがとびました。", "romaji": "risu ga tobimashita", "english": "A squirrel jumped." },
+          { "kana": "りすがとんだ。", "romaji": "risu ga tonda", "english": "A squirrel jumped. (plain past)" }
+        ]
+      }
+    },
+    { "id": "rouka_hira", "kana": "ろうか", "romaji": "rouka",
+      "gloss_en": "corridor; hallway", "tags": ["core","r-row","place"], "worlds": ["9-vocab-hira"],
+      "note": "Common school and building word. Written 廊下.",
+      "examples": {
+        "dictionary": [
+          { "kana": "ろうかをあるく。", "romaji": "rouka wo aruku", "english": "to walk in the hallway." }
+        ],
+        "polite": [
+          { "kana": "ろうかをあるきます。", "romaji": "rouka wo arukimasu", "english": "I walk in the hallway." }
+        ],
+        "past": [
+          { "kana": "ろうかをあるきました。", "romaji": "rouka wo arukimashita", "english": "I walked in the hallway." },
+          { "kana": "ろうかをあるいた。", "romaji": "rouka wo aruita", "english": "I walked in the hallway. (plain past)" }
+        ]
+      }
+    },
+    { "id": "rappa_hira", "kana": "らっぱ", "romaji": "rappa",
+      "gloss_en": "trumpet", "tags": ["core","r-row","object"], "worlds": ["9-vocab-hira"],
+      "note": "Everyday object word meaning 'trumpet'. Written 喇叭 (rare, often kana). Uses small っ.",
+      "examples": {
+        "dictionary": [
+          { "kana": "らっぱをふく。", "romaji": "rappa wo fuku", "english": "to play the trumpet." }
+        ],
+        "polite": [
+          { "kana": "らっぱをふきます。", "romaji": "rappa wo fukimasu", "english": "I play the trumpet." }
+        ],
+        "past": [
+          { "kana": "らっぱをふきました。", "romaji": "rappa wo fukimashita", "english": "I played the trumpet." },
+          { "kana": "らっぱをふいた。", "romaji": "rappa wo fuita", "english": "I played the trumpet. (plain past)" }
+        ]
+      }
+    }
 
-      
-      {"id":"rekishi_hira","kana":"れきし","romaji":"rekishi","gloss_en":"history","tags":["core","r-row","abstract"],"worlds":["9-vocab-hira"],"note":"Common school subject word. Written 歴史 in kanji.","example":{"kana":"にほんのれきし","romaji":"nihon no rekishi","english":"Japanese history"}},
-      {"id":"rusu_hira","kana":"るす","romaji":"rusu","gloss_en":"absence; not at home","tags":["core","r-row","expression"],"worlds":["9-vocab-hira"],"note":"Used when someone is away from home. Written 留守 in kanji.","example":{"kana":"るすです","romaji":"rusu desu","english":"(They are) not at home"}},
-      {"id":"raku_hira","kana":"らく","romaji":"raku","gloss_en":"comfort; easy","tags":["core","r-row","adjective"],"worlds":["9-vocab-hira"],"note":"Used in phrases like らくな (easy/comfortable). Written 楽 in kanji.","example":{"kana":"らくなしごと","romaji":"raku na shigoto","english":"an easy job"}},
-      {"id":"risu_hira","kana":"りす","romaji":"risu","gloss_en":"squirrel","tags":["core","r-row","animal"],"worlds":["9-vocab-hira"],"note":"Animal word. Written 栗鼠 in kanji (rare).","example":{"kana":"りすがとぶ","romaji":"risu ga tobu","english":"a squirrel jumps"}},
-      {"id":"rouka_hira","kana":"ろうか","romaji":"rouka","gloss_en":"corridor; hallway","tags":["core","r-row","place"],"worlds":["9-vocab-hira"],"note":"Common school and building word. Written 廊下 in kanji.","example":{"kana":"ろうかをあるく","romaji":"rouka wo aruku","english":"to walk in the hallway"}},
-      {"id":"rappa_hira","kana":"らっぱ","romaji":"rappa","gloss_en":"trumpet","tags":["core","r-row","object"],"worlds":["9-vocab-hira"],"note":"Everyday object word. Written 喇叭 in kanji (rare, often kana). Uses small っ.","example":{"kana":"らっぱをふく","romaji":"rappa wo fuku","english":"to play the trumpet"}},
-      
-      {"id":"wani_hira","kana":"わに","romaji":"wani","gloss_en":"crocodile; alligator","tags":["core","w-row","animal"],"worlds":["10-vocab-hira"],"note":"Common animal word. Written 鰐 in kanji.","example":{"kana":"わにがかわにいる","romaji":"wani ga kawa ni iru","english":"the crocodile is in the river"}},
-      {"id":"watashi_hira","kana":"わたし","romaji":"watashi","gloss_en":"I; me","tags":["core","w-row","people"],"worlds":["10-vocab-hira"],"note":"Common first-person pronoun. Written 私 in kanji.","example":{"kana":"わたしはがくせいです","romaji":"watashi wa gakusei desu","english":"I am a student"}},
-      {"id":"hon_hira","kana":"ほん","romaji":"hon","gloss_en":"book","tags":["core","n-ending","object"],"worlds":["10-vocab-hira"],"note":"Basic everyday noun. Written 本 in kanji.","example":{"kana":"ほんをよむ","romaji":"hon wo yomu","english":"to read a book"}},
-      {"id":"ongaku_hira","kana":"おんがく","romaji":"ongaku","gloss_en":"music","tags":["core","n-ending","abstract"],"worlds":["10-vocab-hira"],"note":"Common abstract noun. Written 音楽 in kanji.","example":{"kana":"おんがくをきく","romaji":"ongaku wo kiku","english":"to listen to music"}},
-      {"id":"sensei_hira","kana":"せんせい","romaji":"sensei","gloss_en":"teacher","tags":["core","n-ending","people"],"worlds":["10-vocab-hira"],"note":"Common noun for teacher/doctor/master. Written 先生 in kanji.","example":{"kana":"せんせいはやさしいです","romaji":"sensei wa yasashii desu","english":"the teacher is kind"}},
-      {"id":"denwa_hira","kana":"でんわ","romaji":"denwa","gloss_en":"telephone","tags":["core","n-ending","object"],"worlds":["10-vocab-hira"],"note":"Everyday word for telephone. Written 電話 in kanji.","example":{"kana":"でんわをかける","romaji":"denwa wo kakeru","english":"to make a phone call"}}
+    { "id": "wani_hira", "kana": "わに", "romaji": "wani",
+      "gloss_en": "crocodile; alligator", "tags": ["core","w-row","animal"], "worlds": ["10-vocab-hira"],
+      "note": "Common animal word. Written 鰐. Often appears in phrases about rivers or water.",
+      "examples": {
+        "dictionary": [
+          { "kana": "わにがかわにいる。", "romaji": "wani ga kawa ni iru", "english": "The crocodile is in the river." }
+        ],
+        "polite": [
+          { "kana": "わにがかわにいます。", "romaji": "wani ga kawa ni imasu", "english": "The crocodile is in the river." }
+        ],
+        "past": [
+          { "kana": "わにがかわにいました。", "romaji": "wani ga kawa ni imashita", "english": "The crocodile was in the river." }
+        ]
+      }
+    },
+    { "id": "watashi_hira", "kana": "わたし", "romaji": "watashi",
+      "gloss_en": "I; me", "tags": ["core","w-row","people"], "worlds": ["10-vocab-hira"],
+      "note": "Common first-person pronoun. Written 私. Used in formal or neutral speech.",
+      "examples": {
+        "dictionary": [
+          { "kana": "わたしはがくせい。", "romaji": "watashi wa gakusei", "english": "I am a student." }
+        ],
+        "polite": [
+          { "kana": "わたしはがくせいです。", "romaji": "watashi wa gakusei desu", "english": "I am a student." }
+        ],
+        "past": [
+          { "kana": "わたしはがくせいでした。", "romaji": "watashi wa gakusei deshita", "english": "I was a student." }
+        ]
+      }
+    },
+    { "id": "hon_hira", "kana": "ほん", "romaji": "hon",
+      "gloss_en": "book", "tags": ["core","n-ending","object"], "worlds": ["10-vocab-hira"],
+      "note": "Basic everyday noun meaning 'book'. Written 本.",
+      "examples": {
+        "dictionary": [
+          { "kana": "ほんをよむ。", "romaji": "hon wo yomu", "english": "to read a book." }
+        ],
+        "polite": [
+          { "kana": "ほんをよみます。", "romaji": "hon wo yomimasu", "english": "I read a book." }
+        ],
+        "past": [
+          { "kana": "ほんをよみました。", "romaji": "hon wo yomimashita", "english": "I read a book." },
+          { "kana": "ほんをよんだ。", "romaji": "hon wo yonda", "english": "I read a book. (plain past)" }
+        ]
+      }
+    },
+    { "id": "ongaku_hira", "kana": "おんがく", "romaji": "ongaku",
+      "gloss_en": "music", "tags": ["core","n-ending","abstract"], "worlds": ["10-vocab-hira"],
+      "note": "Common abstract noun meaning 'music'. Written 音楽.",
+      "examples": {
+        "dictionary": [
+          { "kana": "おんがくをきく。", "romaji": "ongaku wo kiku", "english": "to listen to music." }
+        ],
+        "polite": [
+          { "kana": "おんがくをききます。", "romaji": "ongaku wo kikimasu", "english": "I listen to music." }
+        ],
+        "past": [
+          { "kana": "おんがくをききました。", "romaji": "ongaku wo kikimashita", "english": "I listened to music." },
+          { "kana": "おんがくをきいた。", "romaji": "ongaku wo kiita", "english": "I listened to music. (plain past)" }
+        ]
+      }
+    },
+    { "id": "sensei_hira", "kana": "せんせい", "romaji": "sensei",
+      "gloss_en": "teacher", "tags": ["core","n-ending","people"], "worlds": ["10-vocab-hira"],
+      "note": "Common noun for teacher, doctor, or master. Written 先生.",
+      "examples": {
+        "dictionary": [
+          { "kana": "せんせいはやさしい。", "romaji": "sensei wa yasashii", "english": "The teacher is kind." }
+        ],
+        "polite": [
+          { "kana": "せんせいはやさしいです。", "romaji": "sensei wa yasashii desu", "english": "The teacher is kind." }
+        ],
+        "past": [
+          { "kana": "せんせいはやさしかったです。", "romaji": "sensei wa yasashikatta desu", "english": "The teacher was kind." }
+        ]
+      }
+    },
+    { "id": "denwa_hira", "kana": "でんわ", "romaji": "denwa",
+      "gloss_en": "telephone", "tags": ["core","n-ending","object"], "worlds": ["10-vocab-hira"],
+      "note": "Everyday word for 'telephone'. Written 電話. Common with かける (to make a call).",
+      "examples": {
+        "dictionary": [
+          { "kana": "でんわをかける。", "romaji": "denwa wo kakeru", "english": "to make a phone call." }
+        ],
+        "polite": [
+          { "kana": "でんわをかけます。", "romaji": "denwa wo kakemasu", "english": "I make a phone call." }
+        ],
+        "past": [
+          { "kana": "でんわをかけました。", "romaji": "denwa wo kakemashita", "english": "I made a phone call." },
+          { "kana": "でんわをかけた。", "romaji": "denwa wo kaketa", "english": "I made a phone call. (plain past)" }
+        ]
+      }
+    }
+
   ],
   "byWorld": {
     "1-vocab-hira": ["ai_hira","iie_hira","ue_hira","ie_hira","aoi_hira","au_hira"],
