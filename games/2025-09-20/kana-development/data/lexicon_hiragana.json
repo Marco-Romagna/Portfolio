@@ -204,33 +204,143 @@
       }
 
 
+      { "id": "sakura_hira", "kana": "さくら", "romaji": "sakura",
+        "gloss_en": "cherry blossom", "tags": ["core","s-row"], "worlds": ["3-base-hira"],
+        "note": "Japan’s most famous flower, symbolizing spring and renewal. Often seen in festivals and poetry.",
+        "examples": {
+          "dictionary": [
+            { "kana": "さくらのはな。", "romaji": "sakura no hana", "english": "cherry blossom flowers" },
+            { "kana": "さくらがさく。", "romaji": "sakura ga saku", "english": "the cherry blossoms bloom" },
+            { "kana": "さくらのきのしたをあるく。", "romaji": "sakura no ki no shita wo aruku", "english": "to walk under the cherry trees" }
+          ]
+        }
+      },
+      { "id": "shio_hira", "kana": "しお", "romaji": "shio",
+        "gloss_en": "salt", "tags": ["core","s-row","food"], "worlds": ["3-base-hira"],
+        "note": "Basic seasoning used in cooking. Often written with kanji 塩.",
+        "examples": {
+          "dictionary": [
+            { "kana": "しおをいれる。", "romaji": "shio wo ireru", "english": "to add salt" },
+            { "kana": "しおがからい。", "romaji": "shio ga karai", "english": "the salt is strong/salty" },
+            { "kana": "しおとさとう。", "romaji": "shio to satou", "english": "salt and sugar" }
+          ]
+        }
+      },
+      { "id": "sumu_hira", "kana": "すむ", "romaji": "sumu",
+        "gloss_en": "to live; to reside", "tags": ["core","s-row","verb"], "worlds": ["3-base-hira"],
+        "note": "Describes where someone lives. Always used with the particle に (e.g., 東京にすむ).",
+        "examples": {
+          "dictionary": [
+            { "kana": "とうきょうにすむ。", "romaji": "toukyou ni sumu", "english": "to live in Tokyo" },
+            { "kana": "いえにすむ。", "romaji": "ie ni sumu", "english": "to live in a house" },
+            { "kana": "にほんにすむ。", "romaji": "nihon ni sumu", "english": "to live in Japan" }
+          ]
+        }
+      },
+      { "id": "seki_hira", "kana": "せき", "romaji": "seki",
+        "gloss_en": "seat", "tags": ["core","s-row","object"], "worlds": ["3-base-hira"],
+        "note": "Means 'seat' or 'assigned place'. Also used for 'cough' (different kanji). Context clarifies the meaning.",
+        "examples": {
+          "dictionary": [
+            { "kana": "せきにすわる。", "romaji": "seki ni suwaru", "english": "to sit in a seat" },
+            { "kana": "せきをたつ。", "romaji": "seki wo tatsu", "english": "to stand up from a seat" },
+            { "kana": "せきがない。", "romaji": "seki ga nai", "english": "there are no seats" }
+          ]
+        }
+      },
+      { "id": "sora_hira", "kana": "そら", "romaji": "sora",
+        "gloss_en": "sky", "tags": ["core","s-row","nature"], "worlds": ["3-base-hira"],
+        "note": "Common word for the sky or heavens. Used in expressions like そらをみる (to look at the sky).",
+        "examples": {
+          "dictionary": [
+            { "kana": "そらがあおい。", "romaji": "sora ga aoi", "english": "the sky is blue" },
+            { "kana": "そらをみる。", "romaji": "sora wo miru", "english": "to look at the sky" },
+            { "kana": "そらにとりがとぶ。", "romaji": "sora ni tori ga tobu", "english": "a bird flies in the sky" }
+          ]
+        }
+      },
+      { "id": "sono_hira", "kana": "その", "romaji": "sono",
+        "gloss_en": "that", "tags": ["core","s-row","grammar"], "worlds": ["3-base-hira"],
+        "note": "Demonstrative adjective meaning 'that (near listener)'. Used before nouns, like そのほん ('that book').",
+        "examples": {
+          "dictionary": [
+            { "kana": "そのほんをよむ。", "romaji": "sono hon wo yomu", "english": "read that book" },
+            { "kana": "そのひと。", "romaji": "sono hito", "english": "that person" },
+            { "kana": "そのとき。", "romaji": "sono toki", "english": "that time" }
+          ]
+        }
+      },
+      { "id": "zaru_hira", "kana": "ざる", "romaji": "zaru",
+        "gloss_en": "basket; strainer", "tags": ["core","z-row","object"], "worlds": ["3-daku-hira"],
+        "note": "Refers to a bamboo strainer or colander, common in Japanese kitchens. Appears in ざるそば (cold soba dish).",
+        "examples": {
+          "dictionary": [
+            { "kana": "ざるをつかう。", "romaji": "zaru wo tsukau", "english": "to use a strainer" },
+            { "kana": "ざるにやさいをいれる。", "romaji": "zaru ni yasai wo ireru", "english": "to put vegetables in a strainer" },
+            { "kana": "ざるそばをたべる。", "romaji": "zaru soba wo taberu", "english": "to eat cold soba noodles" }
+          ]
+        }
+      },
+      { "id": "jisho_hira", "kana": "じしょ", "romaji": "jisho",
+        "gloss_en": "dictionary", "tags": ["core","z-row","object"], "worlds": ["3-daku-hira"],
+        "note": "A book or digital tool for looking up words. Often used with the verb つかう (to use).",
+        "examples": {
+          "dictionary": [
+            { "kana": "じしょをつかう。", "romaji": "jisho wo tsukau", "english": "to use a dictionary" },
+            { "kana": "じしょでことばをさがす。", "romaji": "jisho de kotoba wo sagasu", "english": "to look up a word in a dictionary" },
+            { "kana": "あたらしいじしょをかう。", "romaji": "atarashii jisho wo kau", "english": "to buy a new dictionary" }
+          ]
+        }
+      },
+      { "id": "zu_hira", "kana": "ず", "romaji": "zu",
+        "gloss_en": "figure; diagram", "tags": ["core","z-row","abstract"], "worlds": ["3-daku-hira"],
+        "note": "Used for diagrams, figures, or drawings (e.g., 地図 – 'map'). Appears in compound words like 図書館 (library).",
+        "examples": {
+          "dictionary": [
+            { "kana": "ずをかく。", "romaji": "zu wo kaku", "english": "to draw a diagram" },
+            { "kana": "ちずにずをかく。", "romaji": "chizu ni zu wo kaku", "english": "to draw a figure on a map" },
+            { "kana": "ずをみる。", "romaji": "zu wo miru", "english": "to look at a diagram" }
+          ]
+        }
+      },
+      { "id": "zei_hira", "kana": "ぜい", "romaji": "zei",
+        "gloss_en": "tax", "tags": ["core","z-row","abstract"], "worlds": ["3-daku-hira"],
+        "note": "Common noun meaning 'tax'. Seen in compounds like ぜいきん (tax money) and ぜいぬき (before tax).",
+        "examples": {
+          "dictionary": [
+            { "kana": "ぜいをはらう。", "romaji": "zei wo harau", "english": "to pay tax" },
+            { "kana": "ぜいがたかい。", "romaji": "zei ga takai", "english": "the tax is high" },
+            { "kana": "ぜいきんをしらべる。", "romaji": "zeikin wo shiraberu", "english": "to check tax information" }
+          ]
+        }
+      },
+      { "id": "zou_hira", "kana": "ぞう", "romaji": "zou",
+        "gloss_en": "elephant", "tags": ["core","z-row","animal"], "worlds": ["3-daku-hira"],
+        "note": "Common animal word for 'elephant'. Used in expressions like ぞうのはな (elephant’s trunk).",
+        "examples": {
+          "dictionary": [
+            { "kana": "ぞうはおおきい。", "romaji": "zou wa ookii", "english": "the elephant is big" },
+            { "kana": "ぞうをみる。", "romaji": "zou wo miru", "english": "to see an elephant" },
+            { "kana": "どうぶつえんにぞうがいる。", "romaji": "doubutsuen ni zou ga iru", "english": "there is an elephant in the zoo" }
+          ]
+        }
+      },
+      { "id": "jiko_hira", "kana": "じこ", "romaji": "jiko",
+        "gloss_en": "accident", "tags": ["core","z-row","event"], "worlds": ["3-daku-hira"],
+        "note": "Means 'accident', commonly used for traffic accidents (こうつうじこ).",
+        "examples": {
+          "dictionary": [
+            { "kana": "くるまのじこ。", "romaji": "kuruma no jiko", "english": "a car accident" },
+            { "kana": "じこがおきる。", "romaji": "jiko ga okiru", "english": "an accident happens" },
+            { "kana": "じこにあう。", "romaji": "jiko ni au", "english": "to get into an accident" }
+          ]
+        }
+      }
+
 
       
-      {"id":"iku_hira","kana":"いく","romaji":"iku","gloss_en":"to go","tags":["core","k-row","verb"],"worlds":["2-base-hira"],"note":"Basic motion verb. Past tense is irregular: いった (itta).","example":{"kana":"がっこうにいく","romaji":"gakkou ni iku","english":"to go to school"}},
-      {"id":"kiku_hira","kana":"きく","romaji":"kiku","gloss_en":"to listen; to ask","tags":["core","k-row","verb"],"worlds":["2-base-hira"],"note":"Context decides meaning: 'listen' or 'ask'.","example":{"kana":"せんせいにきく","romaji":"sensei ni kiku","english":"to ask the teacher"}},
-      {"id":"kau_hira","kana":"かう","romaji":"kau","gloss_en":"to buy","tags":["core","k-row","verb"],"worlds":["2-base-hira"],"note":"Common everyday verb.","example":{"kana":"パンをかう","romaji":"pan wo kau","english":"to buy bread"}},
-      {"id":"kao_hira","kana":"かお","romaji":"kao","gloss_en":"face","tags":["core","k-row","body"],"worlds":["2-base-hira"],"note":"Literal 'face'.","example":{"kana":"かおをあらう","romaji":"kao wo arau","english":"to wash one’s face"}},
-      {"id":"ike_hira","kana":"いけ","romaji":"ike","gloss_en":"pond","tags":["core","k-row","place"],"worlds":["2-base-hira"],"note":"Refers to a pond, often man-made.","example":{"kana":"いけにさかながいる","romaji":"ike ni sakana ga iru","english":"There are fish in the pond"}},
-      {"id":"koe_hira","kana":"こえ","romaji":"koe","gloss_en":"voice","tags":["core","k-row"],"worlds":["2-base-hira"],"note":"Used for human/animal voices.","example":{"kana":"きれいなこえ","romaji":"kirei na koe","english":"a beautiful voice"}},
-      {"id":"eiga_hira","kana":"えいが","romaji":"eiga","gloss_en":"movie; film","tags":["core","g-row"],"worlds":["2-daku-hira"],"note":"Common everyday word.","example":{"kana":"えいがをみる","romaji":"eiga wo miru","english":"to watch a movie"}},
-      {"id":"gaikoku_hira","kana":"がいこく","romaji":"gaikoku","gloss_en":"foreign country","tags":["core","g-row"],"worlds":["2-daku-hira"],"note":"Literally 'outside country'.","example":{"kana":"がいこくにいく","romaji":"gaikoku ni iku","english":"to go abroad"}},
-      {"id":"gogo_hira","kana":"ごご","romaji":"gogo","gloss_en":"afternoon","tags":["core","g-row","time"],"worlds":["2-daku-hira"],"note":"Refers to the afternoon (PM).","example":{"kana":"ごごさんじ","romaji":"gogo sanji","english":"3 o’clock in the afternoon"}},
-      {"id":"kagi_hira","kana":"かぎ","romaji":"kagi","gloss_en":"key","tags":["core","g-row","object"],"worlds":["2-daku-hira"],"note":"Common word for key (lock).","example":{"kana":"かぎをなくす","romaji":"kagi wo nakusu","english":"to lose a key"}},
-      {"id":"kagu_hira","kana":"かぐ","romaji":"kagu","gloss_en":"furniture","tags":["core","g-row","object"],"worlds":["2-daku-hira"],"note":"General word for furniture.","example":{"kana":"かぐをかう","romaji":"kagu wo kau","english":"to buy furniture"}},
-      {"id":"kage_hira","kana":"かげ","romaji":"kage","gloss_en":"shadow; shade","tags":["core","g-row","nature"],"worlds":["2-daku-hira"],"note":"Refers to a shadow or shade.","example":{"kana":"かげができる","romaji":"kage ga dekiru","english":"a shadow is cast"}},
+
       
-      {"id":"sakura_hira","kana":"さくら","romaji":"sakura","gloss_en":"cherry blossom","tags":["core","s-row"],"worlds":["3-base-hira"],"note":"Iconic Japanese flower.","example":{"kana":"さくらのはな","romaji":"sakura no hana","english":"cherry blossom flowers"}},
-      {"id":"shio_hira","kana":"しお","romaji":"shio","gloss_en":"salt","tags":["core","s-row"],"worlds":["3-base-hira"],"note":"Common seasoning.","example":{"kana":"しおをいれる","romaji":"shio wo ireru","english":"add salt"}},
-      {"id":"sumu_hira","kana":"すむ","romaji":"sumu","gloss_en":"to live; to reside","tags":["core","s-row"],"worlds":["3-base-hira"],"note":"Describes where someone lives.","example":{"kana":"とうきょうにすむ","romaji":"toukyou ni sumu","english":"to live in Tokyo"}},
-      {"id":"seki_hira","kana":"せき","romaji":"seki","gloss_en":"seat","tags":["core","s-row"],"worlds":["3-base-hira"],"note":"Refers to a physical seat.","example":{"kana":"せきにすわる","romaji":"seki ni suwaru","english":"to sit in a seat"}},
-      {"id":"sora_hira","kana":"そら","romaji":"sora","gloss_en":"sky","tags":["core","s-row"],"worlds":["3-base-hira"],"note":"Common word for sky.","example":{"kana":"そらがあおい","romaji":"sora ga aoi","english":"the sky is blue"}},
-      {"id":"sono_hira","kana":"その","romaji":"sono","gloss_en":"that","tags":["core","s-row"],"worlds":["3-base-hira"],"note":"Demonstrative adjective.","example":{"kana":"そのほんをよむ","romaji":"sono hon wo yomu","english":"read that book"}},
-      {"id":"zaru_hira","kana":"ざる","romaji":"zaru","gloss_en":"basket; strainer","tags":["core","z-row","object"],"worlds":["3-daku-hira"],"note":"Refers to a bamboo basket or strainer, common in daily life.","example":{"kana":"ざるをつかう","romaji":"zaru wo tsukau","english":"to use a strainer"}},
-      {"id":"jisho_hira","kana":"じしょ","romaji":"jisho","gloss_en":"dictionary","tags":["core","z-row","object"],"worlds":["3-daku-hira"],"note":"Common study word.","example":{"kana":"じしょをつかう","romaji":"jisho wo tsukau","english":"to use a dictionary"}},
-      {"id":"zu_hira","kana":"ず","romaji":"zu","gloss_en":"figure; diagram","tags":["core","z-row","abstract"],"worlds":["3-daku-hira"],"note":"Used for maps, charts, or figures.","example":{"kana":"ちずにずをかく","romaji":"chizu ni zu wo kaku","english":"to draw a figure on a map"}},
-      {"id":"zei_hira","kana":"ぜい","romaji":"zei","gloss_en":"tax","tags":["core","z-row","abstract"],"worlds":["3-daku-hira"],"note":"Common everyday word, usually seen in compounds like ぜいきん (tax).","example":{"kana":"ぜいをはらう","romaji":"zei wo harau","english":"to pay tax"}},
-      {"id":"zou_hira","kana":"ぞう","romaji":"zou","gloss_en":"elephant","tags":["core","z-row","animal"],"worlds":["3-daku-hira"],"note":"Common animal word.","example":{"kana":"ぞうはおおきい","romaji":"zou wa ookii","english":"the elephant is big"}},
-      {"id":"jiko_hira","kana":"じこ","romaji":"jiko","gloss_en":"accident","tags":["core","z-row","event"],"worlds":["3-daku-hira"],"note":"Common everyday word, often used for traffic accidents (こうつうじこ).","example":{"kana":"くるまのじこ","romaji":"kuruma no jiko","english":"a car accident"}},
       
       {"id":"taberu_hira","kana":"たべる","romaji":"taberu","gloss_en":"to eat","tags":["core","t-row","verb"],"worlds":["4-base-hira"],"note":"Very common verb. Used with を to mark the object.","example":{"kana":"りんごをたべる","romaji":"ringo wo taberu","english":"to eat an apple"}},
       {"id":"chizu_hira","kana":"ちず","romaji":"chizu","gloss_en":"map","tags":["core","t-row","object"],"worlds":["4-base-hira"],"note":"Common in travel contexts. Written with kanji 地図.","example":{"kana":"ちずをみる","romaji":"chizu wo miru","english":"to look at a map"}},
