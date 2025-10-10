@@ -490,7 +490,7 @@
         },
         { "id": "depaato_hira", "kana": "でぱーと", "romaji": "depaato",
           "gloss_en": "department store", "tags": ["loanword","d-row","place"], "worlds": ["4-daku-hira"],
-          "note": "Loanword from 'department store', written デパート. Common shopping term.",
+          "note": "Loanword from 'department store', written デパート. Common shopping term. Shown here in hiragana for reading practice, but normally written in katakana.",
           "examples": {
             "dictionary": [
               { "kana": "でぱーとでかいものをする。", "romaji": "depaato de kaimono wo suru", "english": "to shop at a department store" },
