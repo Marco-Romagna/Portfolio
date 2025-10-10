@@ -466,7 +466,7 @@
         },
         { "id": "doa_hira", "kana": "どあ", "romaji": "doa",
           "gloss_en": "door", "tags": ["loanword","d-row","object"], "worlds": ["4-daku-hira"],
-          "note": "Loanword from English 'door', written ドア. Can take polite です when identifying.",
+          "note": "Loanword from English 'door', written ドア. Common everyday term used for doors in buildings, rooms, and vehicles. Shown here in hiragana for reading practice, but normally written in katakana.",
           "examples": {
             "dictionary": [
               { "kana": "どあをあける。", "romaji": "doa wo akeru", "english": "to open the door" },
