@@ -1,107 +1,1281 @@
 {
   "meta": {"version":1,"locale":"ja-JP","script":"hiragana"},
   "words": [
-      {"id":"ai_hira","kana":"あい","romaji":"ai","gloss_en":"love; affection","tags":["core","vowels"],"worlds":["1-base-hira"],"note":"Often used in formal/literary contexts. In daily life, すき (suki) is more common for 'like/love'.","example":{"kana":"あいをかんじる","romaji":"ai wo kanjiru","english":"to feel love"}},
-      {"id":"iie_hira","kana":"いいえ","romaji":"iie","gloss_en":"no","tags":["core","vowels","phrase"],"worlds":["1-base-hira"],"note":"Polite 'no'. Casual speech often uses ううん (uun).","example":{"kana":"いいえ、ちがいます","romaji":"iie, chigaimasu","english":"No, that’s not correct"}},
-      {"id":"ue_hira","kana":"うえ","romaji":"ue","gloss_en":"up; above","tags":["core","vowels","direction"],"worlds":["1-base-hira"],"note":"Can mean 'on top of' or 'above'. Opposite is した (shita).","example":{"kana":"つくえのうえ","romaji":"tsukue no ue","english":"on the desk"}},
-      {"id":"ie_hira","kana":"いえ","romaji":"ie","gloss_en":"house; home","tags":["core","vowels","place"],"worlds":["1-base-hira"],"note":"いえ (ie) is neutral. うち (uchi) is more casual/familiar.","example":{"kana":"いえにかえる","romaji":"ie ni kaeru","english":"to return home"}},
-      {"id":"aoi_hira","kana":"あおい","romaji":"aoi","gloss_en":"blue (adjective)","tags":["core","vowels","color"],"worlds":["1-base-hira"],"note":"Used as adjective. Noun form is あお (ao). Historically covered blue/green.","example":{"kana":"あおいシャツ","romaji":"aoi shatsu","english":"blue shirt"}},
-      {"id":"au_hira","kana":"あう","romaji":"au","gloss_en":"to meet","tags":["core","vowels","verb"],"worlds":["1-base-hira"],"note":"Used for meeting people, usually with に particle.","example":{"kana":"ともだちにあう","romaji":"tomodachi ni au","english":"to meet a friend"}},
+        { "id": "ai_hira", "kana": "あい", "romaji": "ai",
+          "gloss_en": "love; affection", "tags": ["core","vowels"], "worlds": ["1-vocab-hira"],
+          "note": "Refers to emotional or romantic love. Sounds formal or literary; in daily life, すき (suki) is more common for 'like/love'.",
+          "examples": {
+            "dictionary": [
+              { "kana": "あいをかんじる。", "romaji": "ai wo kanjiru", "english": "to feel love" },
+              { "kana": "かぞくのあいはつよい。", "romaji": "kazoku no ai wa tsuyoi", "english": "Family love is strong." },
+              { "kana": "あいについてはなす。", "romaji": "ai ni tsuite hanasu", "english": "to talk about love" }
+            ]
+          }
+        },
+        { "id": "iie_hira", "kana": "いいえ", "romaji": "iie",
+          "gloss_en": "no", "tags": ["core","vowels","phrase"], "worlds": ["1-vocab-hira"],
+          "note": "Polite way to say 'no'. Placed at the start of a sentence (いいえ、〜) to soften disagreement or refusal. Casual speech uses ううん (uun).",
+          "examples": {
+            "dictionary": [
+              { "kana": "いいえ、ちがう。", "romaji": "iie, chigau", "english": "No, that’s not correct." },
+              { "kana": "いいえ、けっこう。", "romaji": "iie, kekkou", "english": "No, that’s fine." },
+              { "kana": "いいえ、ともだちだ。", "romaji": "iie, tomodachi da", "english": "No, we’re friends." }
+            ]
+          }
+        },
+        { "id": "ue_hira", "kana": "うえ", "romaji": "ue",
+          "gloss_en": "up; above", "tags": ["core","vowels","direction"], "worlds": ["1-vocab-hira"],
+          "note": "Means 'up' or 'above'. Often used with the particle の to say something is on top of another object (つくえのうえ). Opposite is した (shita).",
+          "examples": {
+            "dictionary": [
+              { "kana": "つくえのうえ。", "romaji": "tsukue no ue", "english": "on the desk" },
+              { "kana": "うえをみる。", "romaji": "ue wo miru", "english": "to look up" },
+              { "kana": "ほんがつくえのうえにある。", "romaji": "hon ga tsukue no ue ni aru", "english": "A book is on the desk." }
+            ]
+          }
+        },
+        { "id": "ie_hira", "kana": "いえ", "romaji": "ie",
+          "gloss_en": "house; home", "tags": ["core","vowels","place"], "worlds": ["1-vocab-hira"],
+          "note": "Neutral word for 'house' or 'home'. The more casual うち (uchi) refers to one’s own home or family.",
+          "examples": {
+            "dictionary": [
+              { "kana": "いえにかえる。", "romaji": "ie ni kaeru", "english": "to return home" },
+              { "kana": "あたらしいいえだ。", "romaji": "atarashii ie da", "english": "It’s a new house." },
+              { "kana": "いえでべんきょうする。", "romaji": "ie de benkyou suru", "english": "to study at home" }
+            ]
+          }
+        },
+        { "id": "aoi_hira", "kana": "あおい", "romaji": "aoi",
+          "gloss_en": "blue (adjective)", "tags": ["core","vowels","color"], "worlds": ["1-vocab-hira"],
+          "note": "い-adjective meaning 'blue'. Historically covered both blue and green shades. The noun form is あお (ao).",
+          "examples": {
+            "dictionary": [
+              { "kana": "あおいシャツ。", "romaji": "aoi shatsu", "english": "blue shirt" },
+              { "kana": "そらはあおい。", "romaji": "sora wa aoi", "english": "The sky is blue." },
+              { "kana": "あおいくるまがすきだ。", "romaji": "aoi kuruma ga suki da", "english": "I like blue cars." }
+            ]
+          }
+        },
+        { "id": "au_hira", "kana": "あう", "romaji": "au",
+          "gloss_en": "to meet", "tags": ["core","vowels","verb"], "worlds": ["1-vocab-hira"],
+          "note": "Means 'to meet' or 'to see (a person)'. Usually takes the particle に to mark who you meet.",
+          "examples": {
+            "dictionary": [
+              { "kana": "ともだちにあう。", "romaji": "tomodachi ni au", "english": "to meet a friend" },
+              { "kana": "せんせいにあう。", "romaji": "sensei ni au", "english": "to meet a teacher" },
+              { "kana": "にほんでひとにあう。", "romaji": "nihon de hito ni au", "english": "to meet someone in Japan" }
+            ]
+          }
+        },
+  
+        { "id": "iku_hira", "kana": "いく", "romaji": "iku",
+          "gloss_en": "to go", "tags": ["core","k-row","verb"], "worlds": ["2-vocab-hira"],
+          "note": "A very common motion verb used with the particle に to indicate destination. Irregular past tense: いった (itta).",
+          "examples": {
+            "dictionary": [
+              { "kana": "がっこうにいく。", "romaji": "gakkou ni iku", "english": "to go to school" },
+              { "kana": "えきにいく。", "romaji": "eki ni iku", "english": "to go to the station" },
+              { "kana": "がいこくにいく。", "romaji": "gaikoku ni iku", "english": "to go abroad" }
+            ]
+          }
+        },
+        { "id": "kiku_hira", "kana": "きく", "romaji": "kiku",
+          "gloss_en": "to listen; to ask", "tags": ["core","k-row","verb"], "worlds": ["2-vocab-hira"],
+          "note": "A versatile verb meaning both 'to listen' (音楽をきく) and 'to ask' (先生にきく). The meaning depends on the particle used.",
+          "examples": {
+            "dictionary": [
+              { "kana": "おんがくをきく。", "romaji": "ongaku wo kiku", "english": "to listen to music" },
+              { "kana": "せんせいにきく。", "romaji": "sensei ni kiku", "english": "to ask the teacher" },
+              { "kana": "ラジオをきく。", "romaji": "rajio wo kiku", "english": "to listen to the radio" }
+            ]
+          }
+        },
+        { "id": "kau_hira", "kana": "かう", "romaji": "kau",
+          "gloss_en": "to buy", "tags": ["core","k-row","verb"], "worlds": ["2-vocab-hira"],
+          "note": "A basic transitive verb meaning 'to buy'. Often used with を to mark the purchased item.",
+          "examples": {
+            "dictionary": [
+              { "kana": "パンをかう。", "romaji": "pan wo kau", "english": "to buy bread" },
+              { "kana": "ほんをかう。", "romaji": "hon wo kau", "english": "to buy a book" },
+              { "kana": "プレゼントをかう。", "romaji": "purezento wo kau", "english": "to buy a present" }
+            ]
+          }
+        },
+        { "id": "kao_hira", "kana": "かお", "romaji": "kao",
+          "gloss_en": "face", "tags": ["core","k-row","body"], "worlds": ["2-vocab-hira"],
+          "note": "Means the physical 'face'. Used in many set phrases like かおをあらう (wash face) or かおがひろい (well-connected person).",
+          "examples": {
+            "dictionary": [
+              { "kana": "かおをあらう。", "romaji": "kao wo arau", "english": "to wash one's face" },
+              { "kana": "かおがあかい。", "romaji": "kao ga akai", "english": "face is red" },
+              { "kana": "かおをみる。", "romaji": "kao wo miru", "english": "to look at a face" }
+            ]
+          }
+        },
+        { "id": "ike_hira", "kana": "いけ", "romaji": "ike",
+          "gloss_en": "pond", "tags": ["core","k-row","place"], "worlds": ["2-vocab-hira"],
+          "note": "Usually refers to small, man-made ponds found in parks or gardens. Natural ponds may also be called ぬま (numa).",
+          "examples": {
+            "dictionary": [
+              { "kana": "いけにさかながいる。", "romaji": "ike ni sakana ga iru", "english": "There are fish in the pond." },
+              { "kana": "いけのそばにすわる。", "romaji": "ike no soba ni suwaru", "english": "to sit near the pond" },
+              { "kana": "ちいさいいけだ。", "romaji": "chiisai ike da", "english": "It’s a small pond." }
+            ]
+          }
+        },
+        { "id": "koe_hira", "kana": "こえ", "romaji": "koe",
+          "gloss_en": "voice", "tags": ["core","k-row"], "worlds": ["2-vocab-hira"],
+          "note": "Refers to human or animal voices (not mechanical sounds). For mechanical noises, use おと (oto).",
+          "examples": {
+            "dictionary": [
+              { "kana": "きれいなこえ。", "romaji": "kirei na koe", "english": "a beautiful voice" },
+              { "kana": "こえをきく。", "romaji": "koe wo kiku", "english": "to hear a voice" },
+              { "kana": "おおきいこえでいう。", "romaji": "ookii koe de iu", "english": "to speak in a loud voice" }
+            ]
+          }
+        },
+        { "id": "eiga_hira", "kana": "えいが", "romaji": "eiga",
+          "gloss_en": "movie; film", "tags": ["core","g-row"], "worlds": ["2-daku-hira"],
+          "note": "Common everyday word meaning 'movie'. Often paired with みる (to watch).",
+          "examples": {
+            "dictionary": [
+              { "kana": "えいがをみる。", "romaji": "eiga wo miru", "english": "to watch a movie" },
+              { "kana": "えいががすきだ。", "romaji": "eiga ga suki da", "english": "I like movies." },
+              { "kana": "えいがについてはなす。", "romaji": "eiga ni tsuite hanasu", "english": "to talk about a movie" }
+            ]
+          }
+        },
+        { "id": "gaikoku_hira", "kana": "がいこく", "romaji": "gaikoku",
+          "gloss_en": "foreign country", "tags": ["core","g-row"], "worlds": ["2-daku-hira"],
+          "note": "Literally 'outside country'. Used for any country other than Japan. Appears in words like がいこくじん (foreigner).",
+          "examples": {
+            "dictionary": [
+              { "kana": "がいこくにいく。", "romaji": "gaikoku ni iku", "english": "to go abroad" },
+              { "kana": "がいこくのたべもの。", "romaji": "gaikoku no tabemono", "english": "foreign food" },
+              { "kana": "がいこくのえいがをみる。", "romaji": "gaikoku no eiga wo miru", "english": "to watch a foreign movie" }
+            ]
+          }
+        },
+        { "id": "gogo_hira", "kana": "ごご", "romaji": "gogo",
+          "gloss_en": "afternoon", "tags": ["core","g-row","time"], "worlds": ["2-daku-hira"],
+          "note": "Used for the time period after noon. Usually appears before a time (ごごさんじ – 3 PM).",
+          "examples": {
+            "dictionary": [
+              { "kana": "ごごさんじ。", "romaji": "gogo sanji", "english": "three o’clock in the afternoon" },
+              { "kana": "ごごにべんきょうする。", "romaji": "gogo ni benkyou suru", "english": "to study in the afternoon" },
+              { "kana": "ごごのかいぎ。", "romaji": "gogo no kaigi", "english": "afternoon meeting" }
+            ]
+          }
+        },
+        { "id": "kagi_hira", "kana": "かぎ", "romaji": "kagi",
+          "gloss_en": "key", "tags": ["core","g-row","object"], "worlds": ["2-daku-hira"],
+          "note": "Means 'key' for locks or doors. Can also mean 'hint' or 'clue' in abstract phrases (しあいのかぎ – 'key to the match').",
+          "examples": {
+            "dictionary": [
+              { "kana": "かぎをなくす。", "romaji": "kagi wo nakusu", "english": "to lose a key" },
+              { "kana": "かぎをみつける。", "romaji": "kagi wo mitsukeru", "english": "to find a key" },
+              { "kana": "かぎをあける。", "romaji": "kagi wo akeru", "english": "to unlock with a key" }
+            ]
+          }
+        },
+        { "id": "kagu_hira", "kana": "かぐ", "romaji": "kagu",
+          "gloss_en": "furniture", "tags": ["core","g-row","object"], "worlds": ["2-daku-hira"],
+          "note": "A general term for household furniture. Often appears in compounds like でんきかぐ (electrical appliances).",
+          "examples": {
+            "dictionary": [
+              { "kana": "かぐをかう。", "romaji": "kagu wo kau", "english": "to buy furniture" },
+              { "kana": "へやにかぐがある。", "romaji": "heya ni kagu ga aru", "english": "There is furniture in the room." },
+              { "kana": "きのかぐ。", "romaji": "ki no kagu", "english": "wooden furniture" }
+            ]
+          }
+        },
+        { "id": "kage_hira", "kana": "かげ", "romaji": "kage",
+          "gloss_en": "shadow; shade", "tags": ["core","g-row","nature"], "worlds": ["2-daku-hira"],
+          "note": "Used for both physical shadows and metaphorical ones (like かげで meaning 'behind the scenes').",
+          "examples": {
+            "dictionary": [
+              { "kana": "かげができる。", "romaji": "kage ga dekiru", "english": "a shadow is cast" },
+              { "kana": "きのかげでやすむ。", "romaji": "ki no kage de yasumu", "english": "to rest in the shade of a tree" },
+              { "kana": "かげがながい。", "romaji": "kage ga nagai", "english": "the shadow is long" }
+            ]
+          }
+        },
+
+
+        { "id": "sakura_hira", "kana": "さくら", "romaji": "sakura",
+          "gloss_en": "cherry blossom", "tags": ["core","s-row"], "worlds": ["3-vocab-hira"],
+          "note": "Japan’s most famous flower, symbolizing spring and renewal. Often seen in festivals and poetry.",
+          "examples": {
+            "dictionary": [
+              { "kana": "さくらのはな。", "romaji": "sakura no hana", "english": "cherry blossom flowers" },
+              { "kana": "さくらがさく。", "romaji": "sakura ga saku", "english": "the cherry blossoms bloom" },
+              { "kana": "さくらのきのしたをあるく。", "romaji": "sakura no ki no shita wo aruku", "english": "to walk under the cherry trees" }
+            ]
+          }
+        },
+        { "id": "shio_hira", "kana": "しお", "romaji": "shio",
+          "gloss_en": "salt", "tags": ["core","s-row","food"], "worlds": ["3-vocab-hira"],
+          "note": "Basic seasoning used in cooking. Often written with kanji 塩.",
+          "examples": {
+            "dictionary": [
+              { "kana": "しおをいれる。", "romaji": "shio wo ireru", "english": "to add salt" },
+              { "kana": "しおがからい。", "romaji": "shio ga karai", "english": "the salt is strong/salty" },
+              { "kana": "しおとさとう。", "romaji": "shio to satou", "english": "salt and sugar" }
+            ]
+          }
+        },
+        { "id": "sumu_hira", "kana": "すむ", "romaji": "sumu",
+          "gloss_en": "to live; to reside", "tags": ["core","s-row","verb"], "worlds": ["3-vocab-hira"],
+          "note": "Describes where someone lives. Always used with the particle に (e.g., 東京にすむ).",
+          "examples": {
+            "dictionary": [
+              { "kana": "とうきょうにすむ。", "romaji": "toukyou ni sumu", "english": "to live in Tokyo" },
+              { "kana": "いえにすむ。", "romaji": "ie ni sumu", "english": "to live in a house" },
+              { "kana": "にほんにすむ。", "romaji": "nihon ni sumu", "english": "to live in Japan" }
+            ]
+          }
+        },
+        { "id": "seki_hira", "kana": "せき", "romaji": "seki",
+          "gloss_en": "seat", "tags": ["core","s-row","object"], "worlds": ["3-vocab-hira"],
+          "note": "Means 'seat' or 'assigned place'. Also used for 'cough' (different kanji). Context clarifies the meaning.",
+          "examples": {
+            "dictionary": [
+              { "kana": "せきにすわる。", "romaji": "seki ni suwaru", "english": "to sit in a seat" },
+              { "kana": "せきをたつ。", "romaji": "seki wo tatsu", "english": "to stand up from a seat" },
+              { "kana": "せきがない。", "romaji": "seki ga nai", "english": "there are no seats" }
+            ]
+          }
+        },
+        { "id": "sora_hira", "kana": "そら", "romaji": "sora",
+          "gloss_en": "sky", "tags": ["core","s-row","nature"], "worlds": ["3-vocab-hira"],
+          "note": "Common word for the sky or heavens. Used in expressions like そらをみる (to look at the sky).",
+          "examples": {
+            "dictionary": [
+              { "kana": "そらがあおい。", "romaji": "sora ga aoi", "english": "the sky is blue" },
+              { "kana": "そらをみる。", "romaji": "sora wo miru", "english": "to look at the sky" },
+              { "kana": "そらにとりがとぶ。", "romaji": "sora ni tori ga tobu", "english": "a bird flies in the sky" }
+            ]
+          }
+        },
+        { "id": "sono_hira", "kana": "その", "romaji": "sono",
+          "gloss_en": "that", "tags": ["core","s-row","grammar"], "worlds": ["3-vocab-hira"],
+          "note": "Demonstrative adjective meaning 'that (near listener)'. Used before nouns, like そのほん ('that book').",
+          "examples": {
+            "dictionary": [
+              { "kana": "そのほんをよむ。", "romaji": "sono hon wo yomu", "english": "read that book" },
+              { "kana": "そのひと。", "romaji": "sono hito", "english": "that person" },
+              { "kana": "そのとき。", "romaji": "sono toki", "english": "that time" }
+            ]
+          }
+        },
+        { "id": "zaru_hira", "kana": "ざる", "romaji": "zaru",
+          "gloss_en": "basket; strainer", "tags": ["core","z-row","object"], "worlds": ["3-daku-hira"],
+          "note": "Refers to a bamboo strainer or colander, common in Japanese kitchens. Appears in ざるそば (cold soba dish).",
+          "examples": {
+            "dictionary": [
+              { "kana": "ざるをつかう。", "romaji": "zaru wo tsukau", "english": "to use a strainer" },
+              { "kana": "ざるにやさいをいれる。", "romaji": "zaru ni yasai wo ireru", "english": "to put vegetables in a strainer" },
+              { "kana": "ざるそばをたべる。", "romaji": "zaru soba wo taberu", "english": "to eat cold soba noodles" }
+            ]
+          }
+        },
+        { "id": "jisho_hira", "kana": "じしょ", "romaji": "jisho",
+          "gloss_en": "dictionary", "tags": ["core","z-row","object"], "worlds": ["3-daku-hira"],
+          "note": "A book or digital tool for looking up words. Often used with the verb つかう (to use).",
+          "examples": {
+            "dictionary": [
+              { "kana": "じしょをつかう。", "romaji": "jisho wo tsukau", "english": "to use a dictionary" },
+              { "kana": "じしょでことばをさがす。", "romaji": "jisho de kotoba wo sagasu", "english": "to look up a word in a dictionary" },
+              { "kana": "あたらしいじしょをかう。", "romaji": "atarashii jisho wo kau", "english": "to buy a new dictionary" }
+            ]
+          }
+        },
+        { "id": "zu_hira", "kana": "ず", "romaji": "zu",
+          "gloss_en": "figure; diagram", "tags": ["core","z-row","abstract"], "worlds": ["3-daku-hira"],
+          "note": "Used for diagrams, figures, or drawings (e.g., 地図 – 'map'). Appears in compound words like 図書館 (library).",
+          "examples": {
+            "dictionary": [
+              { "kana": "ずをかく。", "romaji": "zu wo kaku", "english": "to draw a diagram" },
+              { "kana": "ちずにずをかく。", "romaji": "chizu ni zu wo kaku", "english": "to draw a figure on a map" },
+              { "kana": "ずをみる。", "romaji": "zu wo miru", "english": "to look at a diagram" }
+            ]
+          }
+        },
+        { "id": "zei_hira", "kana": "ぜい", "romaji": "zei",
+          "gloss_en": "tax", "tags": ["core","z-row","abstract"], "worlds": ["3-daku-hira"],
+          "note": "Common noun meaning 'tax'. Seen in compounds like ぜいきん (tax money) and ぜいぬき (before tax).",
+          "examples": {
+            "dictionary": [
+              { "kana": "ぜいをはらう。", "romaji": "zei wo harau", "english": "to pay tax" },
+              { "kana": "ぜいがたかい。", "romaji": "zei ga takai", "english": "the tax is high" },
+              { "kana": "ぜいきんをしらべる。", "romaji": "zeikin wo shiraberu", "english": "to check tax information" }
+            ]
+          }
+        },
+        { "id": "zou_hira", "kana": "ぞう", "romaji": "zou",
+          "gloss_en": "elephant", "tags": ["core","z-row","animal"], "worlds": ["3-daku-hira"],
+          "note": "Common animal word for 'elephant'. Used in expressions like ぞうのはな (elephant’s trunk).",
+          "examples": {
+            "dictionary": [
+              { "kana": "ぞうはおおきい。", "romaji": "zou wa ookii", "english": "the elephant is big" },
+              { "kana": "ぞうをみる。", "romaji": "zou wo miru", "english": "to see an elephant" },
+              { "kana": "どうぶつえんにぞうがいる。", "romaji": "doubutsuen ni zou ga iru", "english": "there is an elephant in the zoo" }
+            ]
+          }
+        },
+        { "id": "jiko_hira", "kana": "じこ", "romaji": "jiko",
+          "gloss_en": "accident", "tags": ["core","z-row","event"], "worlds": ["3-daku-hira"],
+          "note": "Means 'accident', commonly used for traffic accidents (こうつうじこ).",
+          "examples": {
+            "dictionary": [
+              { "kana": "くるまのじこ。", "romaji": "kuruma no jiko", "english": "a car accident" },
+              { "kana": "じこがおきる。", "romaji": "jiko ga okiru", "english": "an accident happens" },
+              { "kana": "じこにあう。", "romaji": "jiko ni au", "english": "to get into an accident" }
+            ]
+          }
+        },
+
       
-      {"id":"iku_hira","kana":"いく","romaji":"iku","gloss_en":"to go","tags":["core","k-row","verb"],"worlds":["2-base-hira"],"note":"Basic motion verb. Past tense is irregular: いった (itta).","example":{"kana":"がっこうにいく","romaji":"gakkou ni iku","english":"to go to school"}},
-      {"id":"kiku_hira","kana":"きく","romaji":"kiku","gloss_en":"to listen; to ask","tags":["core","k-row","verb"],"worlds":["2-base-hira"],"note":"Context decides meaning: 'listen' or 'ask'.","example":{"kana":"せんせいにきく","romaji":"sensei ni kiku","english":"to ask the teacher"}},
-      {"id":"kau_hira","kana":"かう","romaji":"kau","gloss_en":"to buy","tags":["core","k-row","verb"],"worlds":["2-base-hira"],"note":"Common everyday verb.","example":{"kana":"パンをかう","romaji":"pan wo kau","english":"to buy bread"}},
-      {"id":"kao_hira","kana":"かお","romaji":"kao","gloss_en":"face","tags":["core","k-row","body"],"worlds":["2-base-hira"],"note":"Literal 'face'.","example":{"kana":"かおをあらう","romaji":"kao wo arau","english":"to wash one’s face"}},
-      {"id":"ike_hira","kana":"いけ","romaji":"ike","gloss_en":"pond","tags":["core","k-row","place"],"worlds":["2-base-hira"],"note":"Refers to a pond, often man-made.","example":{"kana":"いけにさかながいる","romaji":"ike ni sakana ga iru","english":"There are fish in the pond"}},
-      {"id":"koe_hira","kana":"こえ","romaji":"koe","gloss_en":"voice","tags":["core","k-row"],"worlds":["2-base-hira"],"note":"Used for human/animal voices.","example":{"kana":"きれいなこえ","romaji":"kirei na koe","english":"a beautiful voice"}},
-      {"id":"eiga_hira","kana":"えいが","romaji":"eiga","gloss_en":"movie; film","tags":["core","g-row"],"worlds":["2-daku-hira"],"note":"Common everyday word.","example":{"kana":"えいがをみる","romaji":"eiga wo miru","english":"to watch a movie"}},
-      {"id":"gaikoku_hira","kana":"がいこく","romaji":"gaikoku","gloss_en":"foreign country","tags":["core","g-row"],"worlds":["2-daku-hira"],"note":"Literally 'outside country'.","example":{"kana":"がいこくにいく","romaji":"gaikoku ni iku","english":"to go abroad"}},
-      {"id":"gogo_hira","kana":"ごご","romaji":"gogo","gloss_en":"afternoon","tags":["core","g-row","time"],"worlds":["2-daku-hira"],"note":"Refers to the afternoon (PM).","example":{"kana":"ごごさんじ","romaji":"gogo sanji","english":"3 o’clock in the afternoon"}},
-      {"id":"kagi_hira","kana":"かぎ","romaji":"kagi","gloss_en":"key","tags":["core","g-row","object"],"worlds":["2-daku-hira"],"note":"Common word for key (lock).","example":{"kana":"かぎをなくす","romaji":"kagi wo nakusu","english":"to lose a key"}},
-      {"id":"kagu_hira","kana":"かぐ","romaji":"kagu","gloss_en":"furniture","tags":["core","g-row","object"],"worlds":["2-daku-hira"],"note":"General word for furniture.","example":{"kana":"かぐをかう","romaji":"kagu wo kau","english":"to buy furniture"}},
-      {"id":"kage_hira","kana":"かげ","romaji":"kage","gloss_en":"shadow; shade","tags":["core","g-row","nature"],"worlds":["2-daku-hira"],"note":"Refers to a shadow or shade.","example":{"kana":"かげができる","romaji":"kage ga dekiru","english":"a shadow is cast"}},
+        { "id": "taberu_hira", "kana": "たべる", "romaji": "taberu",
+          "gloss_en": "to eat", "tags": ["core","t-row","verb"], "worlds": ["4-vocab-hira"],
+          "note": "Very common ichidan verb meaning 'to eat'. Takes を for the object. Polite form: たべます.",
+          "examples": {
+            "dictionary": [
+              { "kana": "りんごをたべる。", "romaji": "ringo wo taberu", "english": "to eat an apple" },
+              { "kana": "ごはんをたべる。", "romaji": "gohan wo taberu", "english": "to eat rice" },
+              { "kana": "ともだちとたべる。", "romaji": "tomodachi to taberu", "english": "to eat with a friend" }
+            ],
+            "polite": [
+              { "kana": "りんごをたべます。", "romaji": "ringo wo tabemasu", "english": "I eat an apple." },
+              { "kana": "ごはんをたべます。", "romaji": "gohan wo tabemasu", "english": "I eat rice." },
+              { "kana": "きょうたべます。", "romaji": "kyou tabemasu", "english": "I will eat today." }
+            ]
+          }
+        },
+        { "id": "chizu_hira", "kana": "ちず", "romaji": "chizu",
+          "gloss_en": "map", "tags": ["core","t-row","object"], "worlds": ["4-vocab-hira"],
+          "note": "Means 'map'. Written 地図. Common in travel or direction contexts.",
+          "examples": {
+            "dictionary": [
+              { "kana": "ちずをみる。", "romaji": "chizu wo miru", "english": "to look at a map" },
+              { "kana": "ちずをかく。", "romaji": "chizu wo kaku", "english": "to draw a map" },
+              { "kana": "ちずでばしょをさがす。", "romaji": "chizu de basho wo sagasu", "english": "to find a place on a map" }
+            ],
+            "polite": [
+              { "kana": "ちずをみます。", "romaji": "chizu wo mimasu", "english": "I look at a map." },
+              { "kana": "ちずをかきます。", "romaji": "chizu wo kakimasu", "english": "I draw a map." }
+            ]
+          }
+        },
+        { "id": "tsuki_hira", "kana": "つき", "romaji": "tsuki",
+          "gloss_en": "moon; month", "tags": ["core","t-row","nature"], "worlds": ["4-vocab-hira"],
+          "note": "Means both 'moon' and 'month'. Written 月. Polite expressions use です naturally.",
+          "examples": {
+            "dictionary": [
+              { "kana": "つきがきれい。", "romaji": "tsuki ga kirei", "english": "the moon is beautiful" },
+              { "kana": "つきをみる。", "romaji": "tsuki wo miru", "english": "to look at the moon" }
+            ],
+            "polite": [
+              { "kana": "つきがきれいです。", "romaji": "tsuki ga kirei desu", "english": "The moon is beautiful." }
+            ]
+          }
+        },
+        { "id": "tegami_hira", "kana": "てがみ", "romaji": "tegami",
+          "gloss_en": "letter", "tags": ["core","t-row","object"], "worlds": ["4-vocab-hira"],
+          "note": "Means a handwritten letter. Written 手紙. Often used with かく (to write).",
+          "examples": {
+            "dictionary": [
+              { "kana": "てがみをかく。", "romaji": "tegami wo kaku", "english": "to write a letter" },
+              { "kana": "てがみをよむ。", "romaji": "tegami wo yomu", "english": "to read a letter" }
+            ],
+            "polite": [
+              { "kana": "てがみをかきます。", "romaji": "tegami wo kakimasu", "english": "I write a letter." },
+              { "kana": "てがみをよみます。", "romaji": "tegami wo yomimasu", "english": "I read a letter." }
+            ]
+          }
+        },
+        { "id": "tomodachi_hira", "kana": "ともだち", "romaji": "tomodachi",
+          "gloss_en": "friend", "tags": ["core","t-row","person"], "worlds": ["4-vocab-hira"],
+          "note": "General word for 'friend'. Can be shortened to とも casually. です used only when introducing politely.",
+          "examples": {
+            "dictionary": [
+              { "kana": "ともだちにあう。", "romaji": "tomodachi ni au", "english": "to meet a friend" },
+              { "kana": "ともだちとあそぶ。", "romaji": "tomodachi to asobu", "english": "to play with friends" }
+            ],
+            "polite": [
+              { "kana": "ともだちにあいます。", "romaji": "tomodachi ni aimasu", "english": "I meet my friend." },
+              { "kana": "ともだちとあそびます。", "romaji": "tomodachi to asobimasu", "english": "I play with my friend." }
+            ]
+          }
+        },
+        { "id": "tokei_hira", "kana": "とけい", "romaji": "tokei",
+          "gloss_en": "clock; watch", "tags": ["core","t-row","object"], "worlds": ["4-vocab-hira"],
+          "note": "Means both 'clock' and 'watch'. Written 時計. です used naturally in polite introductions.",
+          "examples": {
+            "dictionary": [
+              { "kana": "とけいをみる。", "romaji": "tokei wo miru", "english": "to look at a clock" },
+              { "kana": "あたらしいとけい。", "romaji": "atarashii tokei", "english": "a new watch" }
+            ],
+            "polite": [
+              { "kana": "とけいをみます。", "romaji": "tokei wo mimasu", "english": "I look at the clock." },
+              { "kana": "これはとけいです。", "romaji": "kore wa tokei desu", "english": "This is a clock." }
+            ]
+          }
+        },
+        { "id": "densha_hira", "kana": "でんしゃ", "romaji": "densha",
+          "gloss_en": "train", "tags": ["core","d-row","transport"], "worlds": ["4-daku-hira"],
+          "note": "Means 'train'. Written 電車. Common in travel and commuting contexts.",
+          "examples": {
+            "dictionary": [
+              { "kana": "でんしゃにのる。", "romaji": "densha ni noru", "english": "to ride a train" },
+              { "kana": "でんしゃをまつ。", "romaji": "densha wo matsu", "english": "to wait for a train" }
+            ],
+            "polite": [
+              { "kana": "でんしゃにのります。", "romaji": "densha ni norimasu", "english": "I ride the train." },
+              { "kana": "でんしゃをまちます。", "romaji": "densha wo machimasu", "english": "I wait for the train." }
+            ]
+          }
+        },
+        { "id": "daigaku_hira", "kana": "だいがく", "romaji": "daigaku",
+          "gloss_en": "university", "tags": ["core","d-row","place"], "worlds": ["4-daku-hira"],
+          "note": "Means 'university' or 'college'. Written 大学. です used naturally in self-introductions.",
+          "examples": {
+            "dictionary": [
+              { "kana": "だいがくにいく。", "romaji": "daigaku ni iku", "english": "to go to university" },
+              { "kana": "だいがくでべんきょうする。", "romaji": "daigaku de benkyou suru", "english": "to study at university" }
+            ],
+            "polite": [
+              { "kana": "だいがくにいきます。", "romaji": "daigaku ni ikimasu", "english": "I go to university." },
+              { "kana": "だいがくです。", "romaji": "daigaku desu", "english": "It’s a university." }
+            ]
+          }
+        },
+        { "id": "dekiru_hira", "kana": "できる", "romaji": "dekiru",
+          "gloss_en": "to be able to; can", "tags": ["core","d-row","verb"], "worlds": ["4-daku-hira"],
+          "note": "Expresses ability or possibility. Often used with が (日本語ができる). Polite form: できます.",
+          "examples": {
+            "dictionary": [
+              { "kana": "すしができる。", "romaji": "sushi ga dekiru", "english": "can make sushi" },
+              { "kana": "にほんごができる。", "romaji": "nihongo ga dekiru", "english": "can speak Japanese" }
+            ],
+            "polite": [
+              { "kana": "すしができます。", "romaji": "sushi ga dekimasu", "english": "I can make sushi." },
+              { "kana": "にほんごができます。", "romaji": "nihongo ga dekimasu", "english": "I can speak Japanese." }
+            ]
+          }
+        },
+        { "id": "doa_hira", "kana": "どあ", "romaji": "doa",
+          "gloss_en": "door", "tags": ["loanword","d-row","object"], "worlds": ["4-daku-hira"],
+          "note": "Loanword from English 'door', written ドア. Common everyday term used for doors in buildings, rooms, and vehicles. Shown here in hiragana for reading practice, but normally written in katakana.",
+          "examples": {
+            "dictionary": [
+              { "kana": "どあをあける。", "romaji": "doa wo akeru", "english": "to open the door" },
+              { "kana": "どあをしめる。", "romaji": "doa wo shimeru", "english": "to close the door" }
+            ],
+            "polite": [
+              { "kana": "どあをあけます。", "romaji": "doa wo akemasu", "english": "I open the door." },
+              { "kana": "どあです。", "romaji": "doa desu", "english": "It’s a door." }
+            ]
+          }
+        },
+        { "id": "dare_hira", "kana": "だれ", "romaji": "dare",
+          "gloss_en": "who", "tags": ["core","d-row","question"], "worlds": ["4-daku-hira"],
+          "note": "Common question word meaning 'who'. Appears naturally inside polite questions (〜ですか).",
+          "examples": {
+            "dictionary": [
+              { "kana": "だれですか。", "romaji": "dare desu ka", "english": "Who is it?" },
+              { "kana": "だれがくる。", "romaji": "dare ga kuru", "english": "Who is coming?" }
+            ]
+          }
+        },
+        { "id": "depaato_hira", "kana": "でぱーと", "romaji": "depaato",
+          "gloss_en": "department store", "tags": ["loanword","d-row","place"], "worlds": ["4-daku-hira"],
+          "note": "Loanword from 'department store', written デパート. Common shopping term. Shown here in hiragana for reading practice, but normally written in katakana.",
+          "examples": {
+            "dictionary": [
+              { "kana": "でぱーとでかいものをする。", "romaji": "depaato de kaimono wo suru", "english": "to shop at a department store" },
+              { "kana": "でぱーとにいく。", "romaji": "depaato ni iku", "english": "to go to a department store" }
+            ],
+            "polite": [
+              { "kana": "でぱーとでかいものをします。", "romaji": "depaato de kaimono wo shimasu", "english": "I shop at a department store." },
+              { "kana": "でぱーとにいきます。", "romaji": "depaato ni ikimasu", "english": "I go to a department store." }
+            ]
+          }
+        },
+
+
+        { "id": "namae_hira", "kana": "なまえ", "romaji": "namae",
+          "gloss_en": "name", "tags": ["core","n-row","person"], "worlds": ["5-vocab-hira"],
+          "note": "Common word for someone's name. Often asked politely as おなまえは？ ('What is your name?').",
+          "examples": {
+            "dictionary": [
+              { "kana": "なまえをかく。", "romaji": "namae wo kaku", "english": "to write one's name" },
+              { "kana": "なまえをいう。", "romaji": "namae wo iu", "english": "to say one's name" }
+            ],
+            "polite": [
+              { "kana": "なまえをかきます。", "romaji": "namae wo kakimasu", "english": "I write my name." },
+              { "kana": "なまえをいいます。", "romaji": "namae wo iimasu", "english": "I say my name." }
+            ],
+            "past": [
+              { "kana": "なまえをかきました。", "romaji": "namae wo kakimashita", "english": "I wrote my name." },
+              { "kana": "なまえをいいました。", "romaji": "namae wo iimashita", "english": "I said my name." }
+            ]
+          }
+        },
+        { "id": "niku_hira", "kana": "にく", "romaji": "niku",
+          "gloss_en": "meat", "tags": ["core","n-row","food"], "worlds": ["5-vocab-hira"],
+          "note": "General word for meat. Often specified as とりにく (chicken) or ぶたにく (pork).",
+          "examples": {
+            "dictionary": [
+              { "kana": "にくをたべる。", "romaji": "niku wo taberu", "english": "to eat meat" }
+            ],
+            "polite": [
+              { "kana": "にくをたべます。", "romaji": "niku wo tabemasu", "english": "I eat meat." }
+            ],
+            "past": [
+              { "kana": "にくをたべました。", "romaji": "niku wo tabemashita", "english": "I ate meat." }
+            ]
+          }
+        },
+        { "id": "neko_hira", "kana": "ねこ", "romaji": "neko",
+          "gloss_en": "cat", "tags": ["core","n-row","animal"], "worlds": ["5-vocab-hira"],
+          "note": "Basic word for 'cat'. Often appears with すきです ('I like ...').",
+          "examples": {
+            "dictionary": [
+              { "kana": "ねこがすき。", "romaji": "neko ga suki", "english": "I like cats." },
+              { "kana": "ねこがいる。", "romaji": "neko ga iru", "english": "There is a cat." }
+            ],
+            "polite": [
+              { "kana": "ねこがすきです。", "romaji": "neko ga suki desu", "english": "I like cats." },
+              { "kana": "ねこがいます。", "romaji": "neko ga imasu", "english": "There is a cat." }
+            ],
+            "past": [
+              { "kana": "ねこがいました。", "romaji": "neko ga imashita", "english": "There was a cat." }
+            ]
+          }
+        },
+        { "id": "nani_hira", "kana": "なに", "romaji": "nani",
+          "gloss_en": "what", "tags": ["core","n-row","question"], "worlds": ["5-vocab-hira"],
+          "note": "Common question word meaning 'what'. Changes to なん before certain sounds (e.g., なんですか).",
+          "examples": {
+            "dictionary": [
+              { "kana": "これはなに？", "romaji": "kore wa nani?", "english": "What is this?" }
+            ],
+            "polite": [
+              { "kana": "これはなんですか。", "romaji": "kore wa nan desu ka", "english": "What is this?" }
+            ]
+          }
+        },
+        { "id": "natsu_hira", "kana": "なつ", "romaji": "natsu",
+          "gloss_en": "summer", "tags": ["core","n-row","season"], "worlds": ["5-vocab-hira"],
+          "note": "Season word for 'summer'. Common in greetings like なつやすみ (summer vacation).",
+          "examples": {
+            "dictionary": [
+              { "kana": "なつがあつい。", "romaji": "natsu ga atsui", "english": "Summer is hot." }
+            ],
+            "polite": [
+              { "kana": "なつがあついです。", "romaji": "natsu ga atsui desu", "english": "Summer is hot." }
+            ],
+            "past": [
+              { "kana": "なつがあつかったです。", "romaji": "natsu ga atsukatta desu", "english": "Summer was hot." }
+            ]
+          }
+        },
+        { "id": "naka_hira", "kana": "なか", "romaji": "naka",
+          "gloss_en": "inside; middle", "tags": ["core","n-row","direction"], "worlds": ["5-vocab-hira"],
+          "note": "Means 'inside' or 'middle'. Often used with の: はこのなか (inside the box).",
+          "examples": {
+            "dictionary": [
+              { "kana": "はこのなか。", "romaji": "hako no naka", "english": "inside the box" },
+              { "kana": "なかにある。", "romaji": "naka ni aru", "english": "is inside" }
+            ],
+            "polite": [
+              { "kana": "なかにあります。", "romaji": "naka ni arimasu", "english": "It is inside." }
+            ],
+            "past": [
+              { "kana": "なかにありました。", "romaji": "naka ni arimashita", "english": "It was inside." }
+            ]
+          }
+        },
+
       
-      {"id":"sakura_hira","kana":"さくら","romaji":"sakura","gloss_en":"cherry blossom","tags":["core","s-row"],"worlds":["3-base-hira"],"note":"Iconic Japanese flower.","example":{"kana":"さくらのはな","romaji":"sakura no hana","english":"cherry blossom flowers"}},
-      {"id":"shio_hira","kana":"しお","romaji":"shio","gloss_en":"salt","tags":["core","s-row"],"worlds":["3-base-hira"],"note":"Common seasoning.","example":{"kana":"しおをいれる","romaji":"shio wo ireru","english":"add salt"}},
-      {"id":"sumu_hira","kana":"すむ","romaji":"sumu","gloss_en":"to live; to reside","tags":["core","s-row"],"worlds":["3-base-hira"],"note":"Describes where someone lives.","example":{"kana":"とうきょうにすむ","romaji":"toukyou ni sumu","english":"to live in Tokyo"}},
-      {"id":"seki_hira","kana":"せき","romaji":"seki","gloss_en":"seat","tags":["core","s-row"],"worlds":["3-base-hira"],"note":"Refers to a physical seat.","example":{"kana":"せきにすわる","romaji":"seki ni suwaru","english":"to sit in a seat"}},
-      {"id":"sora_hira","kana":"そら","romaji":"sora","gloss_en":"sky","tags":["core","s-row"],"worlds":["3-base-hira"],"note":"Common word for sky.","example":{"kana":"そらがあおい","romaji":"sora ga aoi","english":"the sky is blue"}},
-      {"id":"sono_hira","kana":"その","romaji":"sono","gloss_en":"that","tags":["core","s-row"],"worlds":["3-base-hira"],"note":"Demonstrative adjective.","example":{"kana":"そのほんをよむ","romaji":"sono hon wo yomu","english":"read that book"}},
-      {"id":"zaru_hira","kana":"ざる","romaji":"zaru","gloss_en":"basket; strainer","tags":["core","z-row","object"],"worlds":["3-daku-hira"],"note":"Refers to a bamboo basket or strainer, common in daily life.","example":{"kana":"ざるをつかう","romaji":"zaru wo tsukau","english":"to use a strainer"}},
-      {"id":"jisho_hira","kana":"じしょ","romaji":"jisho","gloss_en":"dictionary","tags":["core","z-row","object"],"worlds":["3-daku-hira"],"note":"Common study word.","example":{"kana":"じしょをつかう","romaji":"jisho wo tsukau","english":"to use a dictionary"}},
-      {"id":"zu_hira","kana":"ず","romaji":"zu","gloss_en":"figure; diagram","tags":["core","z-row","abstract"],"worlds":["3-daku-hira"],"note":"Used for maps, charts, or figures.","example":{"kana":"ちずにずをかく","romaji":"chizu ni zu wo kaku","english":"to draw a figure on a map"}},
-      {"id":"zei_hira","kana":"ぜい","romaji":"zei","gloss_en":"tax","tags":["core","z-row","abstract"],"worlds":["3-daku-hira"],"note":"Common everyday word, usually seen in compounds like ぜいきん (tax).","example":{"kana":"ぜいをはらう","romaji":"zei wo harau","english":"to pay tax"}},
-      {"id":"zou_hira","kana":"ぞう","romaji":"zou","gloss_en":"elephant","tags":["core","z-row","animal"],"worlds":["3-daku-hira"],"note":"Common animal word.","example":{"kana":"ぞうはおおきい","romaji":"zou wa ookii","english":"the elephant is big"}},
-      {"id":"jiko_hira","kana":"じこ","romaji":"jiko","gloss_en":"accident","tags":["core","z-row","event"],"worlds":["3-daku-hira"],"note":"Common everyday word, often used for traffic accidents (こうつうじこ).","example":{"kana":"くるまのじこ","romaji":"kuruma no jiko","english":"a car accident"}},
-      
-      {"id":"taberu_hira","kana":"たべる","romaji":"taberu","gloss_en":"to eat","tags":["core","t-row","verb"],"worlds":["4-base-hira"],"note":"Very common verb. Used with を to mark the object.","example":{"kana":"りんごをたべる","romaji":"ringo wo taberu","english":"to eat an apple"}},
-      {"id":"chizu_hira","kana":"ちず","romaji":"chizu","gloss_en":"map","tags":["core","t-row","object"],"worlds":["4-base-hira"],"note":"Common in travel contexts. Written with kanji 地図.","example":{"kana":"ちずをみる","romaji":"chizu wo miru","english":"to look at a map"}},
-      {"id":"tsuki_hira","kana":"つき","romaji":"tsuki","gloss_en":"moon; month","tags":["core","t-row","nature"],"worlds":["4-base-hira"],"note":"Means both 'moon' and 'month'. Written with different kanji (月).","example":{"kana":"つきがきれいです","romaji":"tsuki ga kirei desu","english":"The moon is beautiful"}},
-      {"id":"tegami_hira","kana":"てがみ","romaji":"tegami","gloss_en":"letter","tags":["core","t-row","object"],"worlds":["4-base-hira"],"note":"Means a handwritten letter. Common word in beginner vocab.","example":{"kana":"てがみをかく","romaji":"tegami wo kaku","english":"to write a letter"}},
-      {"id":"tomodachi_hira","kana":"ともだち","romaji":"tomodachi","gloss_en":"friend","tags":["core","t-row","person"],"worlds":["4-base-hira"],"note":"General word for 'friend'. Often shortened to とも.","example":{"kana":"ともだちにあう","romaji":"tomodachi ni au","english":"to meet a friend"}},
-      {"id":"tokei_hira","kana":"とけい","romaji":"tokei","gloss_en":"clock; watch","tags":["core","t-row","object"],"worlds":["4-base-hira"],"note":"Means both clocks and wristwatches. Written 時計 in kanji.","example":{"kana":"とけいをみる","romaji":"tokei wo miru","english":"to look at a clock"}},
-      {"id":"densha_hira","kana":"でんしゃ","romaji":"densha","gloss_en":"train","tags":["core","d-row","transport"],"worlds":["4-daku-hira"],"note":"Common everyday transport word. Written 電車 in kanji.","example":{"kana":"でんしゃにのる","romaji":"densha ni noru","english":"to ride a train"}},
-      {"id":"daigaku_hira","kana":"だいがく","romaji":"daigaku","gloss_en":"university","tags":["core","d-row","place"],"worlds":["4-daku-hira"],"note":"Refers to university/college. Often combined, e.g. 東京大学 (University of Tokyo).","example":{"kana":"だいがくにいく","romaji":"daigaku ni iku","english":"to go to university"}},
-      {"id":"dekiru_hira","kana":"できる","romaji":"dekiru","gloss_en":"to be able to; can","tags":["core","d-row","verb"],"worlds":["4-daku-hira"],"note":"Expresses ability. Often used with 〜が: 日本語ができる (can speak Japanese).","example":{"kana":"すしができる","romaji":"sushi ga dekiru","english":"can make sushi"}},
-      {"id":"doa_hira","kana":"どあ","romaji":"doa","gloss_en":"door","tags":["loanword","d-row","object"],"worlds":["4-daku-hira"],"note":"Loanword from English 'door'. Commonly written in katakana ドア.","example":{"kana":"どあをあける","romaji":"doa wo akeru","english":"to open the door"}},
-      {"id":"dare_hira","kana":"だれ","romaji":"dare","gloss_en":"who","tags":["core","d-row","question"],"worlds":["4-daku-hira"],"note":"Common question word.","example":{"kana":"だれですか","romaji":"dare desu ka","english":"Who is it?"}},
-      {"id":"depaato_hira","kana":"でぱーと","romaji":"depaato","gloss_en":"department store","tags":["loanword","d-row","place"],"worlds":["4-daku-hira"],"note":"Loanword from 'department'. Usually written デパート in katakana.","example":{"kana":"でぱーとでかいものをする","romaji":"depaato de kaimono wo suru","english":"to shop at a department store"}},
-      
-      {"id":"namae_hira","kana":"なまえ","romaji":"namae","gloss_en":"name","tags":["core","n-row","person"],"worlds":["5-base-hira"],"note":"Common word for someone’s name. Often asked as おなまえは？ (What is your name?).","example":{"kana":"なまえをかく","romaji":"namae wo kaku","english":"to write one’s name"}},
-      {"id":"niku_hira","kana":"にく","romaji":"niku","gloss_en":"meat","tags":["core","n-row","food"],"worlds":["5-base-hira"],"note":"General word for meat. Often specified, e.g., とりにく (chicken), ぶたにく (pork).","example":{"kana":"にくをたべる","romaji":"niku wo taberu","english":"to eat meat"}},
-      {"id":"neko_hira","kana":"ねこ","romaji":"neko","gloss_en":"cat","tags":["core","n-row","animal"],"worlds":["5-base-hira"],"note":"Basic word for cat, common in beginner vocabulary.","example":{"kana":"ねこがすきです","romaji":"neko ga suki desu","english":"I like cats"}},
-      {"id":"nani_hira","kana":"なに","romaji":"nani","gloss_en":"what","tags":["core","n-row","question"],"worlds":["5-base-hira"],"note":"Common question word. Can also appear as なん before certain sounds (e.g., なんですか).","example":{"kana":"これはなに？","romaji":"kore wa nani?","english":"What is this?"}},
-      {"id":"natsu_hira","kana":"なつ","romaji":"natsu","gloss_en":"summer","tags":["core","n-row","season"],"worlds":["5-base-hira"],"note":"Season word for summer. Often used in seasonal greetings.","example":{"kana":"なつがあつい","romaji":"natsu ga atsui","english":"summer is hot"}},
-      {"id":"naka_hira","kana":"なか","romaji":"naka","gloss_en":"inside; middle","tags":["core","n-row","direction"],"worlds":["5-base-hira"],"note":"Means inside/middle. Often used with の: はこのなか (inside the box).","example":{"kana":"はこのなか","romaji":"hako no naka","english":"inside the box"}},
-      
-      {"id":"hana_hira","kana":"はな","romaji":"hana","gloss_en":"flower; nose","tags":["core","h-row","nature"],"worlds":["6-vocab-hira"],"note":"Can mean 'flower' (花) or 'nose' (鼻), depending on context.","example":{"kana":"はなをかぐ","romaji":"hana wo kagu","english":"to smell a flower"}},
-      {"id":"hito_hira","kana":"ひと","romaji":"hito","gloss_en":"person","tags":["core","h-row","people"],"worlds":["6-vocab-hira"],"note":"Basic word for 'person'. Written 人 in kanji.","example":{"kana":"しんせつなひと","romaji":"shinsetsu na hito","english":"a kind person"}},
-      {"id":"fune_hira","kana":"ふね","romaji":"fune","gloss_en":"boat; ship","tags":["core","h-row","transport"],"worlds":["6-vocab-hira"],"note":"Common word for boat/ship. Written 船 in kanji.","example":{"kana":"ふねにのる","romaji":"fune ni noru","english":"to ride a boat"}},
-      {"id":"heta_hira","kana":"へた","romaji":"heta","gloss_en":"unskillful; poor at","tags":["core","h-row","adjective"],"worlds":["6-vocab-hira"],"note":"Often used to describe lack of ability. Written 下手 in kanji.","example":{"kana":"うたがへたです","romaji":"uta ga heta desu","english":"I am poor at singing"}},
-      {"id":"hoshi_hira","kana":"ほし","romaji":"hoshi","gloss_en":"star","tags":["core","h-row","nature"],"worlds":["6-vocab-hira"],"note":"Common word for 'star'. Written 星 in kanji.","example":{"kana":"ほしをみる","romaji":"hoshi wo miru","english":"to look at the stars"}},
-      {"id":"haha_hira","kana":"はは","romaji":"haha","gloss_en":"mother","tags":["core","h-row","family"],"worlds":["6-vocab-hira"],"note":"Polite humble term for 'my mother'. Written 母 in kanji.","example":{"kana":"ははのりょうり","romaji":"haha no ryouri","english":"my mother’s cooking"}},
-      
-      {"id":"baka_hira","kana":"ばか","romaji":"baka","gloss_en":"fool; stupid","tags":["core","b-row","expression"],"worlds":["6-daku-hira"],"note":"Common everyday word, can be rude depending on context. Written 馬鹿 in kanji.","example":{"kana":"ばかをいう","romaji":"baka wo iu","english":"to say something stupid"}},
-      {"id":"bijin_hira","kana":"びじん","romaji":"bijin","gloss_en":"beautiful woman","tags":["core","b-row","people"],"worlds":["6-daku-hira"],"note":"Uses じ from the Z-row (already learned). Written 美人 in kanji.","example":{"kana":"かのじょはびじんです","romaji":"kanojo wa bijin desu","english":"She is a beautiful woman"}},
-      {"id":"buta_hira","kana":"ぶた","romaji":"buta","gloss_en":"pig","tags":["core","b-row","animal"],"worlds":["6-daku-hira"],"note":"Common farm animal. Written 豚 in kanji.","example":{"kana":"ぶたのにく","romaji":"buta no niku","english":"pork"}},
-      {"id":"betsu_hira","kana":"べつ","romaji":"betsu","gloss_en":"separate; another","tags":["core","b-row","abstract"],"worlds":["6-daku-hira"],"note":"Often used in the phrase 'べつべつ' (separately). Written 別 in kanji.","example":{"kana":"べつのほん","romaji":"betsu no hon","english":"a different book"}},
-      {"id":"boushi_hira","kana":"ぼうし","romaji":"boushi","gloss_en":"hat","tags":["core","b-row","object"],"worlds":["6-daku-hira"],"note":"Common everyday item. Written 帽子 in kanji.","example":{"kana":"ぼうしをかぶる","romaji":"boushi wo kaburu","english":"to wear a hat"}},
-      {"id":"bai_hira","kana":"ばい","romaji":"bai","gloss_en":"times; multiplier","tags":["core","b-row","abstract"],"worlds":["6-daku-hira"],"note":"Used to express multiples (e.g. twice = にばい). Written 倍 in kanji.","example":{"kana":"にばいになります","romaji":"ni bai ni narimasu","english":"It becomes double"}},
-      
-      {"id":"ippai_hira","kana":"いっぱい","romaji":"ippai","gloss_en":"full; a lot","tags":["core","p-row","quantity"],"worlds":["6-handaku-hira"],"note":"Very common everyday word. Written 一杯 in kanji.","example":{"kana":"みずがいっぱい","romaji":"mizu ga ippai","english":"a lot of water"}},
-      {"id":"happa_hira","kana":"はっぱ","romaji":"happa","gloss_en":"leaf","tags":["core","p-row","nature"],"worlds":["6-handaku-hira"],"note":"Means 'leaf' (of a plant/tree). Written 葉っぱ in kanji.","example":{"kana":"はっぱがおちる","romaji":"happa ga ochiru","english":"a leaf falls"}},
-      {"id":"pikapika_hira","kana":"ぴかぴか","romaji":"pikapika","gloss_en":"shiny; glittering","tags":["core","p-row","mimetic"],"worlds":["6-handaku-hira"],"note":"Mimetic word describing something shiny or sparkling.","example":{"kana":"くるまがぴかぴかです","romaji":"kuruma ga pikapika desu","english":"the car is shiny"}},
-      {"id":"perapera_hira","kana":"ぺらぺら","romaji":"perapera","gloss_en":"fluent; smooth-spoken","tags":["core","p-row","mimetic"],"worlds":["6-handaku-hira"],"note":"Mimetic word often used to describe language fluency.","example":{"kana":"にほんごがぺらぺらです","romaji":"nihongo ga perapera desu","english":"I am fluent in Japanese"}},
-      {"id":"pokapoka_hira","kana":"ぽかぽか","romaji":"pokapoka","gloss_en":"warm; comfortably warm","tags":["core","p-row","mimetic"],"worlds":["6-handaku-hira"],"note":"Mimetic word describing gentle warmth, like spring sunlight.","example":{"kana":"へやがぽかぽかです","romaji":"heya ga pokapoka desu","english":"the room is warm"}},
-      {"id":"patapata_hira","kana":"ぱたぱた","romaji":"patapata","gloss_en":"flapping; pattering","tags":["core","p-row","mimetic"],"worlds":["6-handaku-hira"],"note":"Mimetic word describing a flapping or pattering sound.","example":{"kana":"とりがぱたぱたととぶ","romaji":"tori ga patapata to tobu","english":"a bird flaps its wings"}},
-      
-      {"id":"mizu_hira","kana":"みず","romaji":"mizu","gloss_en":"water","tags":["core","m-row","nature"],"worlds":["7-vocab-hira"],"note":"Essential everyday word. Written 水 in kanji.","example":{"kana":"みずをのむ","romaji":"mizu wo nomu","english":"to drink water"}},
-      {"id":"machi_hira","kana":"まち","romaji":"machi","gloss_en":"town; city","tags":["core","m-row","place"],"worlds":["7-vocab-hira"],"note":"Common word for town or city. Written 町 in kanji.","example":{"kana":"おおきいまち","romaji":"ookii machi","english":"a big city"}},
-      {"id":"mimi_hira","kana":"みみ","romaji":"mimi","gloss_en":"ear","tags":["core","m-row","body"],"worlds":["7-vocab-hira"],"note":"Basic body part word. Written 耳 in kanji.","example":{"kana":"みみでおとをきく","romaji":"mimi de oto wo kiku","english":"to hear a sound with your ear"}},
-      {"id":"mushi_hira","kana":"むし","romaji":"mushi","gloss_en":"insect; bug","tags":["core","m-row","animal"],"worlds":["7-vocab-hira"],"note":"Common everyday word. Written 虫 in kanji.","example":{"kana":"むしがとぶ","romaji":"mushi ga tobu","english":"an insect flies"}},
-      {"id":"megane_hira","kana":"めがね","romaji":"megane","gloss_en":"glasses","tags":["core","m-row","object"],"worlds":["7-vocab-hira"],"note":"Common word for eyeglasses. Written 眼鏡 in kanji.","example":{"kana":"めがねをかける","romaji":"megane wo kakeru","english":"to wear glasses"}},
-      {"id":"momo_hira","kana":"もも","romaji":"momo","gloss_en":"peach","tags":["core","m-row","food"],"worlds":["7-vocab-hira"],"note":"Common fruit. Written 桃 in kanji.","example":{"kana":"ももをたべる","romaji":"momo wo taberu","english":"to eat a peach"}},
-      
-      {"id":"yama_hira","kana":"やま","romaji":"yama","gloss_en":"mountain","tags":["core","y-row","nature"],"worlds":["8-vocab-hira"],"note":"Common everyday word. Written 山 in kanji.","example":{"kana":"やまにのぼる","romaji":"yama ni noboru","english":"to climb a mountain"}},
-      {"id":"yasai_hira","kana":"やさい","romaji":"yasai","gloss_en":"vegetable","tags":["core","y-row","food"],"worlds":["8-vocab-hira"],"note":"Common food category word. Written 野菜 in kanji.","example":{"kana":"やさいをたべる","romaji":"yasai wo taberu","english":"to eat vegetables"}},
-      {"id":"yuki_hira","kana":"ゆき","romaji":"yuki","gloss_en":"snow","tags":["core","y-row","nature"],"worlds":["8-vocab-hira"],"note":"Very common seasonal word. Written 雪 in kanji.","example":{"kana":"ゆきがふる","romaji":"yuki ga furu","english":"snow falls"}},
-      {"id":"yubi_hira","kana":"ゆび","romaji":"yubi","gloss_en":"finger","tags":["core","y-row","body"],"worlds":["8-vocab-hira"],"note":"Basic body part word. Written 指 in kanji.","example":{"kana":"ゆびをさす","romaji":"yubi wo sasu","english":"to point a finger"}},
-      {"id":"yume_hira","kana":"ゆめ","romaji":"yume","gloss_en":"dream","tags":["core","y-row","abstract"],"worlds":["8-vocab-hira"],"note":"Common abstract noun. Written 夢 in kanji.","example":{"kana":"ゆめをみる","romaji":"yume wo miru","english":"to dream"}},
-      {"id":"yoko_hira","kana":"よこ","romaji":"yoko","gloss_en":"side","tags":["core","y-row","position"],"worlds":["8-vocab-hira"],"note":"Common word for 'side' or 'beside'. Written 横 in kanji.","example":{"kana":"よこのへや","romaji":"yoko no heya","english":"the room next door"}},
-      
-      {"id":"rekishi_hira","kana":"れきし","romaji":"rekishi","gloss_en":"history","tags":["core","r-row","abstract"],"worlds":["9-vocab-hira"],"note":"Common school subject word. Written 歴史 in kanji.","example":{"kana":"にほんのれきし","romaji":"nihon no rekishi","english":"Japanese history"}},
-      {"id":"rusu_hira","kana":"るす","romaji":"rusu","gloss_en":"absence; not at home","tags":["core","r-row","expression"],"worlds":["9-vocab-hira"],"note":"Used when someone is away from home. Written 留守 in kanji.","example":{"kana":"るすです","romaji":"rusu desu","english":"(They are) not at home"}},
-      {"id":"raku_hira","kana":"らく","romaji":"raku","gloss_en":"comfort; easy","tags":["core","r-row","adjective"],"worlds":["9-vocab-hira"],"note":"Used in phrases like らくな (easy/comfortable). Written 楽 in kanji.","example":{"kana":"らくなしごと","romaji":"raku na shigoto","english":"an easy job"}},
-      {"id":"risu_hira","kana":"りす","romaji":"risu","gloss_en":"squirrel","tags":["core","r-row","animal"],"worlds":["9-vocab-hira"],"note":"Animal word. Written 栗鼠 in kanji (rare).","example":{"kana":"りすがとぶ","romaji":"risu ga tobu","english":"a squirrel jumps"}},
-      {"id":"rouka_hira","kana":"ろうか","romaji":"rouka","gloss_en":"corridor; hallway","tags":["core","r-row","place"],"worlds":["9-vocab-hira"],"note":"Common school and building word. Written 廊下 in kanji.","example":{"kana":"ろうかをあるく","romaji":"rouka wo aruku","english":"to walk in the hallway"}},
-      {"id":"rappa_hira","kana":"らっぱ","romaji":"rappa","gloss_en":"trumpet","tags":["core","r-row","object"],"worlds":["9-vocab-hira"],"note":"Everyday object word. Written 喇叭 in kanji (rare, often kana). Uses small っ.","example":{"kana":"らっぱをふく","romaji":"rappa wo fuku","english":"to play the trumpet"}},
-      
-      {"id":"wani_hira","kana":"わに","romaji":"wani","gloss_en":"crocodile; alligator","tags":["core","w-row","animal"],"worlds":["10-vocab-hira"],"note":"Common animal word. Written 鰐 in kanji.","example":{"kana":"わにがかわにいる","romaji":"wani ga kawa ni iru","english":"the crocodile is in the river"}},
-      {"id":"watashi_hira","kana":"わたし","romaji":"watashi","gloss_en":"I; me","tags":["core","w-row","people"],"worlds":["10-vocab-hira"],"note":"Common first-person pronoun. Written 私 in kanji.","example":{"kana":"わたしはがくせいです","romaji":"watashi wa gakusei desu","english":"I am a student"}},
-      {"id":"hon_hira","kana":"ほん","romaji":"hon","gloss_en":"book","tags":["core","n-ending","object"],"worlds":["10-vocab-hira"],"note":"Basic everyday noun. Written 本 in kanji.","example":{"kana":"ほんをよむ","romaji":"hon wo yomu","english":"to read a book"}},
-      {"id":"ongaku_hira","kana":"おんがく","romaji":"ongaku","gloss_en":"music","tags":["core","n-ending","abstract"],"worlds":["10-vocab-hira"],"note":"Common abstract noun. Written 音楽 in kanji.","example":{"kana":"おんがくをきく","romaji":"ongaku wo kiku","english":"to listen to music"}},
-      {"id":"sensei_hira","kana":"せんせい","romaji":"sensei","gloss_en":"teacher","tags":["core","n-ending","people"],"worlds":["10-vocab-hira"],"note":"Common noun for teacher/doctor/master. Written 先生 in kanji.","example":{"kana":"せんせいはやさしいです","romaji":"sensei wa yasashii desu","english":"the teacher is kind"}},
-      {"id":"denwa_hira","kana":"でんわ","romaji":"denwa","gloss_en":"telephone","tags":["core","n-ending","object"],"worlds":["10-vocab-hira"],"note":"Everyday word for telephone. Written 電話 in kanji.","example":{"kana":"でんわをかける","romaji":"denwa wo kakeru","english":"to make a phone call"}}
+        { "id": "hana_hira", "kana": "はな", "romaji": "hana",
+          "gloss_en": "flower; nose", "tags": ["core","h-row","nature"], "worlds": ["6-vocab-hira"],
+          "note": "Can mean 'flower' (花) or 'nose' (鼻) depending on context.",
+          "examples": {
+            "dictionary": [
+              { "kana": "はなをかぐ。", "romaji": "hana wo kagu", "english": "to smell a flower" },
+              { "kana": "きれいなはな。", "romaji": "kirei na hana", "english": "a beautiful flower" }
+            ],
+            "polite": [
+              { "kana": "はなをかぎます。", "romaji": "hana wo kagimasu", "english": "I smell a flower." },
+              { "kana": "きれいなはなです。", "romaji": "kirei na hana desu", "english": "It’s a beautiful flower." }
+            ],
+            "past": [
+              { "kana": "はなをかぎました。", "romaji": "hana wo kagimashita", "english": "I smelled a flower." },
+              { "kana": "はながきれいでした。", "romaji": "hana ga kirei deshita", "english": "The flower was beautiful." }
+            ]
+          }
+        },
+        { "id": "hito_hira", "kana": "ひと", "romaji": "hito",
+          "gloss_en": "person", "tags": ["core","h-row","people"], "worlds": ["6-vocab-hira"],
+          "note": "Basic word for 'person'. Written 人. Often used with adjectives like しんせつな (kind).",
+          "examples": {
+            "dictionary": [
+              { "kana": "しんせつなひと。", "romaji": "shinsetsu na hito", "english": "a kind person" },
+              { "kana": "ひとがいる。", "romaji": "hito ga iru", "english": "There is a person." }
+            ],
+            "polite": [
+              { "kana": "しんせつなひとです。", "romaji": "shinsetsu na hito desu", "english": "They are a kind person." },
+              { "kana": "ひとがいます。", "romaji": "hito ga imasu", "english": "There is a person." }
+            ],
+            "past": [
+              { "kana": "ひとがいました。", "romaji": "hito ga imashita", "english": "There was a person." }
+            ]
+          }
+        },
+        { "id": "fune_hira", "kana": "ふね", "romaji": "fune",
+          "gloss_en": "boat; ship", "tags": ["core","h-row","transport"], "worlds": ["6-vocab-hira"],
+          "note": "Common word for 'boat' or 'ship'. Written 船. Frequently pairs with のる (ride).",
+          "examples": {
+            "dictionary": [
+              { "kana": "ふねにのる。", "romaji": "fune ni noru", "english": "to ride a boat" },
+              { "kana": "ふねがうみをわたる。", "romaji": "fune ga umi wo wataru", "english": "A boat crosses the sea." }
+            ],
+            "polite": [
+              { "kana": "ふねにのります。", "romaji": "fune ni norimasu", "english": "I ride a boat." },
+              { "kana": "ふねがうみをわたります。", "romaji": "fune ga umi wo watarimasu", "english": "A boat crosses the sea." }
+            ],
+            "past": [
+              { "kana": "ふねにのりました。", "romaji": "fune ni norimashita", "english": "I rode a boat." }
+            ]
+          }
+        },
+        { "id": "heta_hira", "kana": "へた", "romaji": "heta",
+          "gloss_en": "unskillful; poor at", "tags": ["core","h-row","adjective"], "worlds": ["6-vocab-hira"],
+          "note": "Often used with が to describe a lack of ability. Polite forms take です／でした.",
+          "examples": {
+            "dictionary": [
+              { "kana": "うたがへた。", "romaji": "uta ga heta", "english": "I’m bad at singing." }
+            ],
+            "polite": [
+              { "kana": "うたがへたです。", "romaji": "uta ga heta desu", "english": "I’m bad at singing." }
+            ],
+            "past": [
+              { "kana": "うたがへたでした。", "romaji": "uta ga heta deshita", "english": "I was bad at singing." }
+            ]
+          }
+        },
+        { "id": "hoshi_hira", "kana": "ほし", "romaji": "hoshi",
+          "gloss_en": "star", "tags": ["core","h-row","nature"], "worlds": ["6-vocab-hira"],
+          "note": "Common word for 'star'. Written 星. Appears in phrases like ほしをみる (to look at the stars).",
+          "examples": {
+            "dictionary": [
+              { "kana": "ほしをみる。", "romaji": "hoshi wo miru", "english": "to look at the stars" },
+              { "kana": "そらにほしがある。", "romaji": "sora ni hoshi ga aru", "english": "There are stars in the sky." }
+            ],
+            "polite": [
+              { "kana": "ほしをみます。", "romaji": "hoshi wo mimasu", "english": "I look at the stars." },
+              { "kana": "そらにほしがあります。", "romaji": "sora ni hoshi ga arimasu", "english": "There are stars in the sky." }
+            ],
+            "past": [
+              { "kana": "ほしをみました。", "romaji": "hoshi wo mimashita", "english": "I looked at the stars." }
+            ]
+          }
+        },
+        { "id": "haha_hira", "kana": "はは", "romaji": "haha",
+          "gloss_en": "mother", "tags": ["core","h-row","family"], "worlds": ["6-vocab-hira"],
+          "note": "Humble word for 'my mother'. Written 母. For someone else’s mother, use おかあさん.",
+          "examples": {
+            "dictionary": [
+              { "kana": "ははのりょうり。", "romaji": "haha no ryouri", "english": "my mother’s cooking" },
+              { "kana": "ははがすき。", "romaji": "haha ga suki", "english": "I love my mother." }
+            ],
+            "polite": [
+              { "kana": "ははのりょうりです。", "romaji": "haha no ryouri desu", "english": "It’s my mother’s cooking." },
+              { "kana": "ははがすきです。", "romaji": "haha ga suki desu", "english": "I love my mother." }
+            ],
+            "past": [
+              { "kana": "ははのりょうりでした。", "romaji": "haha no ryouri deshita", "english": "It was my mother’s cooking." }
+            ]
+          }
+        },
+
+    
+        { "id": "baka_hira", "kana": "ばか", "romaji": "baka",
+        "gloss_en": "fool; stupid", "tags": ["core","b-row","expression"], "worlds": ["6-daku-hira"],
+        "note": "Common everyday word meaning 'fool' or 'stupid'. Can sound rude depending on context. Written 馬鹿.",
+        "examples": {
+          "dictionary": [
+            { "kana": "ばかをいう。", "romaji": "baka wo iu", "english": "to say something stupid" },
+            { "kana": "ばかなひと。", "romaji": "baka na hito", "english": "a foolish person" }
+          ],
+          "polite": [
+            { "kana": "ばかをいいます。", "romaji": "baka wo iimasu", "english": "I say something foolish." },
+            { "kana": "ばかです。", "romaji": "baka desu", "english": "That’s foolish." }
+          ],
+          "past": [
+            { "kana": "ばかをいいました。", "romaji": "baka wo iimashita", "english": "I said something foolish." },
+            { "kana": "ばかでした。", "romaji": "baka deshita", "english": "That was foolish." }
+          ]
+        }
+      },
+      { "id": "bijin_hira", "kana": "びじん", "romaji": "bijin",
+        "gloss_en": "beautiful woman", "tags": ["core","b-row","people"], "worlds": ["6-daku-hira"],
+        "note": "Means 'beautiful woman'. Uses じ from the Z-row. Written 美人.",
+        "examples": {
+          "dictionary": [
+            { "kana": "かのじょはびじん。", "romaji": "kanojo wa bijin", "english": "She is a beautiful woman." }
+          ],
+          "polite": [
+            { "kana": "かのじょはびじんです。", "romaji": "kanojo wa bijin desu", "english": "She is a beautiful woman." }
+          ],
+          "past": [
+            { "kana": "かのじょはびじんでした。", "romaji": "kanojo wa bijin deshita", "english": "She was a beautiful woman." }
+          ]
+        }
+      },
+      { "id": "buta_hira", "kana": "ぶた", "romaji": "buta",
+        "gloss_en": "pig", "tags": ["core","b-row","animal"], "worlds": ["6-daku-hira"],
+        "note": "Common farm animal. Written 豚. Also appears in words like ぶたにく (pork).",
+        "examples": {
+          "dictionary": [
+            { "kana": "ぶたのにく。", "romaji": "buta no niku", "english": "pork" },
+            { "kana": "ぶたをかう。", "romaji": "buta wo kau", "english": "to raise pigs" }
+          ],
+          "polite": [
+            { "kana": "ぶたをかいます。", "romaji": "buta wo kaimasu", "english": "I raise pigs." }
+          ],
+          "past": [
+            { "kana": "ぶたをかいました。", "romaji": "buta wo kaimashita", "english": "I raised pigs." }
+          ]
+        }
+      },
+      { "id": "betsu_hira", "kana": "べつ", "romaji": "betsu",
+        "gloss_en": "separate; another", "tags": ["core","b-row","abstract"], "worlds": ["6-daku-hira"],
+        "note": "Means 'separate' or 'different'. Common in べつべつ (separately). Written 別.",
+        "examples": {
+          "dictionary": [
+            { "kana": "べつのほん。", "romaji": "betsu no hon", "english": "a different book" },
+            { "kana": "べつべつにする。", "romaji": "betsu-betsu ni suru", "english": "to do separately" }
+          ],
+          "polite": [
+            { "kana": "べつべつにします。", "romaji": "betsu-betsu ni shimasu", "english": "We do it separately." }
+          ],
+          "past": [
+            { "kana": "べつべつにしました。", "romaji": "betsu-betsu ni shimashita", "english": "We did it separately." }
+          ]
+        }
+      },
+      { "id": "boushi_hira", "kana": "ぼうし", "romaji": "boushi",
+        "gloss_en": "hat", "tags": ["core","b-row","object"], "worlds": ["6-daku-hira"],
+        "note": "Common everyday item meaning 'hat' or 'cap'. Written 帽子.",
+        "examples": {
+          "dictionary": [
+            { "kana": "ぼうしをかぶる。", "romaji": "boushi wo kaburu", "english": "to wear a hat" },
+            { "kana": "あかいぼうし。", "romaji": "akai boushi", "english": "a red hat" }
+          ],
+          "polite": [
+            { "kana": "ぼうしをかぶります。", "romaji": "boushi wo kaburimasu", "english": "I wear a hat." }
+          ],
+          "past": [
+            { "kana": "ぼうしをかぶりました。", "romaji": "boushi wo kaburimashita", "english": "I wore a hat." }
+          ]
+        }
+      },
+      { "id": "bai_hira", "kana": "ばい", "romaji": "bai",
+        "gloss_en": "times; multiplier", "tags": ["core","b-row","abstract"], "worlds": ["6-daku-hira"],
+        "note": "Used to express multiples (e.g., twice = にばい). Written 倍.",
+        "examples": {
+          "dictionary": [
+            { "kana": "にばいになる。", "romaji": "ni bai ni naru", "english": "to become double" }
+          ],
+          "polite": [
+            { "kana": "にばいになります。", "romaji": "ni bai ni narimasu", "english": "It becomes double." }
+          ],
+          "past": [
+            { "kana": "にばいになりました。", "romaji": "ni bai ni narimashita", "english": "It became double." }
+          ]
+        }
+      },
+
+      { "id": "ippai_hira", "kana": "いっぱい", "romaji": "ippai",
+      "gloss_en": "full; a lot", "tags": ["core","p-row","quantity"], "worlds": ["6-handaku-hira"],
+      "note": "Very common everyday word meaning 'full' or 'a lot'. Written 一杯.",
+      "examples": {
+        "dictionary": [
+          { "kana": "みずがいっぱい。", "romaji": "mizu ga ippai", "english": "A lot of water." },
+          { "kana": "おちゃがいっぱいある。", "romaji": "ocha ga ippai aru", "english": "There is plenty of tea." }
+        ],
+        "polite": [
+          { "kana": "みずがいっぱいです。", "romaji": "mizu ga ippai desu", "english": "There is a lot of water." },
+          { "kana": "おちゃがいっぱいあります。", "romaji": "ocha ga ippai arimasu", "english": "There is plenty of tea." }
+        ],
+        "past": [
+          { "kana": "みずがいっぱいでした。", "romaji": "mizu ga ippai deshita", "english": "It was full of water." }
+        ]
+      }
+    },
+    { "id": "happa_hira", "kana": "はっぱ", "romaji": "happa",
+      "gloss_en": "leaf", "tags": ["core","p-row","nature"], "worlds": ["6-handaku-hira"],
+      "note": "Means 'leaf' (of a plant/tree). Written 葉っぱ. Doubled consonant adds natural sound emphasis.",
+      "examples": {
+        "dictionary": [
+          { "kana": "はっぱがおちる。", "romaji": "happa ga ochiru", "english": "A leaf falls." },
+          { "kana": "みどりのはっぱ。", "romaji": "midori no happa", "english": "a green leaf." }
+        ],
+        "polite": [
+          { "kana": "はっぱがおちます。", "romaji": "happa ga ochimasu", "english": "A leaf falls." }
+        ],
+        "past": [
+          { "kana": "はっぱがおちました。", "romaji": "happa ga ochimashita", "english": "A leaf fell." }
+        ]
+      }
+    },
+    { "id": "pikapika_hira", "kana": "ぴかぴか", "romaji": "pikapika",
+      "gloss_en": "shiny; glittering", "tags": ["core","p-row","mimetic"], "worlds": ["6-handaku-hira"],
+      "note": "Mimetic word describing something shiny or sparkling. Common with です／でした.",
+      "examples": {
+        "dictionary": [
+          { "kana": "くるまがぴかぴか。", "romaji": "kuruma ga pikapika", "english": "The car is shiny." }
+        ],
+        "polite": [
+          { "kana": "くるまがぴかぴかです。", "romaji": "kuruma ga pikapika desu", "english": "The car is shiny." }
+        ],
+        "past": [
+          { "kana": "くるまがぴかぴかでした。", "romaji": "kuruma ga pikapika deshita", "english": "The car was shiny." }
+        ]
+      }
+    },
+    { "id": "perapera_hira", "kana": "ぺらぺら", "romaji": "perapera",
+      "gloss_en": "fluent; smooth-spoken", "tags": ["core","p-row","mimetic"], "worlds": ["6-handaku-hira"],
+      "note": "Mimetic word often used for language fluency. Written ペラペラ.",
+      "examples": {
+        "dictionary": [
+          { "kana": "にほんごがぺらぺら。", "romaji": "nihongo ga perapera", "english": "Speaks Japanese fluently." }
+        ],
+        "polite": [
+          { "kana": "にほんごがぺらぺらです。", "romaji": "nihongo ga perapera desu", "english": "I am fluent in Japanese." }
+        ],
+        "past": [
+          { "kana": "にほんごがぺらぺらでした。", "romaji": "nihongo ga perapera deshita", "english": "I was fluent in Japanese." }
+        ]
+      }
+    },
+    { "id": "pokapoka_hira", "kana": "ぽかぽか", "romaji": "pokapoka",
+      "gloss_en": "warm; comfortably warm", "tags": ["core","p-row","mimetic"], "worlds": ["6-handaku-hira"],
+      "note": "Mimetic word describing gentle warmth, like spring sunlight. Written ポカポカ.",
+      "examples": {
+        "dictionary": [
+          { "kana": "へやがぽかぽか。", "romaji": "heya ga pokapoka", "english": "The room is warm." }
+        ],
+        "polite": [
+          { "kana": "へやがぽかぽかです。", "romaji": "heya ga pokapoka desu", "english": "The room is warm." }
+        ],
+        "past": [
+          { "kana": "へやがぽかぽかでした。", "romaji": "heya ga pokapoka deshita", "english": "The room was warm." }
+        ]
+      }
+    },
+    { "id": "patapata_hira", "kana": "ぱたぱた", "romaji": "patapata",
+      "gloss_en": "flapping; pattering", "tags": ["core","p-row","mimetic"], "worlds": ["6-handaku-hira"],
+      "note": "Mimetic word describing a flapping or pattering sound. Often paired with と (onomatopoeic particle).",
+      "examples": {
+        "dictionary": [
+          { "kana": "とりがぱたぱたととぶ。", "romaji": "tori ga patapata to tobu", "english": "A bird flaps its wings." }
+        ],
+        "polite": [
+          { "kana": "とりがぱたぱたととびます。", "romaji": "tori ga patapata to tobimasu", "english": "A bird flaps its wings." }
+        ],
+        "past": [
+          { "kana": "とりがぱたぱたととびました。", "romaji": "tori ga patapata to tobimashita", "english": "A bird flapped its wings." }
+        ]
+      }
+    },
+    
+      { "id": "mizu_hira", "kana": "みず", "romaji": "mizu",
+      "gloss_en": "water", "tags": ["core","m-row","nature"], "worlds": ["7-vocab-hira"],
+      "note": "Essential everyday word. Written 水. Often used with のむ (to drink).",
+      "examples": {
+        "dictionary": [
+          { "kana": "みずをのむ。", "romaji": "mizu wo nomu", "english": "to drink water." }
+        ],
+        "polite": [
+          { "kana": "みずをのみます。", "romaji": "mizu wo nomimasu", "english": "I drink water." }
+        ],
+        "past": [
+          { "kana": "みずをのみました。", "romaji": "mizu wo nomimashita", "english": "I drank water." }
+        ]
+      }
+    },
+    { "id": "machi_hira", "kana": "まち", "romaji": "machi",
+      "gloss_en": "town; city", "tags": ["core","m-row","place"], "worlds": ["7-vocab-hira"],
+      "note": "Common word for town or city. Written 町.",
+      "examples": {
+        "dictionary": [
+          { "kana": "おおきいまち。", "romaji": "ookii machi", "english": "a big city." },
+          { "kana": "まちをあるく。", "romaji": "machi wo aruku", "english": "to walk around the city." }
+        ],
+        "polite": [
+          { "kana": "まちをあるきます。", "romaji": "machi wo arukimasu", "english": "I walk around the city." }
+        ],
+        "past": [
+          { "kana": "まちをあるきました。", "romaji": "machi wo arukimashita", "english": "I walked around the city." }
+        ]
+      }
+    },
+    { "id": "mimi_hira", "kana": "みみ", "romaji": "mimi",
+      "gloss_en": "ear", "tags": ["core","m-row","body"], "worlds": ["7-vocab-hira"],
+      "note": "Basic word for 'ear'. Written 耳. Appears in phrases with きく (to listen).",
+      "examples": {
+        "dictionary": [
+          { "kana": "みみでおとをきく。", "romaji": "mimi de oto wo kiku", "english": "to hear a sound with your ear." }
+        ],
+        "polite": [
+          { "kana": "みみでおとをききます。", "romaji": "mimi de oto wo kikimasu", "english": "I hear a sound with my ear." }
+        ],
+        "past": [
+          { "kana": "みみでおとをききました。", "romaji": "mimi de oto wo kikimashita", "english": "I heard a sound with my ear." }
+        ]
+      }
+    },
+    { "id": "mushi_hira", "kana": "むし", "romaji": "mushi",
+      "gloss_en": "insect; bug", "tags": ["core","m-row","animal"], "worlds": ["7-vocab-hira"],
+      "note": "Common everyday word. Written 虫.",
+      "examples": {
+        "dictionary": [
+          { "kana": "むしがとぶ。", "romaji": "mushi ga tobu", "english": "An insect flies." },
+          { "kana": "むしがなく。", "romaji": "mushi ga naku", "english": "A bug chirps." }
+        ],
+        "polite": [
+          { "kana": "むしがとびます。", "romaji": "mushi ga tobimasu", "english": "An insect flies." }
+        ],
+        "past": [
+          { "kana": "むしがとびました。", "romaji": "mushi ga tobimashita", "english": "An insect flew." }
+        ]
+      }
+    },
+    { "id": "megane_hira", "kana": "めがね", "romaji": "megane",
+      "gloss_en": "glasses", "tags": ["core","m-row","object"], "worlds": ["7-vocab-hira"],
+      "note": "Common word for eyeglasses. Written 眼鏡. Often used with かける (to wear).",
+      "examples": {
+        "dictionary": [
+          { "kana": "めがねをかける。", "romaji": "megane wo kakeru", "english": "to wear glasses." }
+        ],
+        "polite": [
+          { "kana": "めがねをかけます。", "romaji": "megane wo kakemasu", "english": "I wear glasses." }
+        ],
+        "past": [
+          { "kana": "めがねをかけました。", "romaji": "megane wo kakemashita", "english": "I wore glasses." }
+        ]
+      }
+    },
+    { "id": "momo_hira", "kana": "もも", "romaji": "momo",
+      "gloss_en": "peach", "tags": ["core","m-row","food"], "worlds": ["7-vocab-hira"],
+      "note": "Common fruit. Written 桃. Often appears in phrases like ももをたべる.",
+      "examples": {
+        "dictionary": [
+          { "kana": "ももをたべる。", "romaji": "momo wo taberu", "english": "to eat a peach." }
+        ],
+        "polite": [
+          { "kana": "ももをたべます。", "romaji": "momo wo tabemasu", "english": "I eat a peach." }
+        ],
+        "past": [
+          { "kana": "ももをたべました。", "romaji": "momo wo tabemashita", "english": "I ate a peach." }
+        ]
+      }
+    },
+        
+
+      { "id": "yama_hira", "kana": "やま", "romaji": "yama",
+        "gloss_en": "mountain", "tags": ["core","y-row","nature"], "worlds": ["8-vocab-hira"],
+        "note": "Common everyday word meaning 'mountain'. Written 山.",
+        "examples": {
+          "dictionary": [
+            { "kana": "やまにのぼる。", "romaji": "yama ni noboru", "english": "to climb a mountain." }
+          ],
+          "polite": [
+            { "kana": "やまにのぼります。", "romaji": "yama ni noborimasu", "english": "I climb a mountain." }
+          ],
+          "past": [
+            { "kana": "やまにのぼりました。", "romaji": "yama ni noborimashita", "english": "I climbed a mountain." },
+            { "kana": "やまにのぼった。", "romaji": "yama ni nobotta", "english": "I climbed a mountain. (plain past)" }
+          ]
+        }
+      },
+      { "id": "yasai_hira", "kana": "やさい", "romaji": "yasai",
+        "gloss_en": "vegetable", "tags": ["core","y-row","food"], "worlds": ["8-vocab-hira"],
+        "note": "Common food category word. Written 野菜. Often used with たべる (to eat).",
+        "examples": {
+          "dictionary": [
+            { "kana": "やさいをたべる。", "romaji": "yasai wo taberu", "english": "to eat vegetables." }
+          ],
+          "polite": [
+            { "kana": "やさいをたべます。", "romaji": "yasai wo tabemasu", "english": "I eat vegetables." }
+          ],
+          "past": [
+            { "kana": "やさいをたべました。", "romaji": "yasai wo tabemashita", "english": "I ate vegetables." },
+            { "kana": "やさいをたべた。", "romaji": "yasai wo tabeta", "english": "I ate vegetables. (plain past)" }
+          ]
+        }
+      },
+      { "id": "yuki_hira", "kana": "ゆき", "romaji": "yuki",
+        "gloss_en": "snow", "tags": ["core","y-row","nature"], "worlds": ["8-vocab-hira"],
+        "note": "Very common seasonal word. Written 雪. Often used with ふる (to fall).",
+        "examples": {
+          "dictionary": [
+            { "kana": "ゆきがふる。", "romaji": "yuki ga furu", "english": "Snow falls." }
+          ],
+          "polite": [
+            { "kana": "ゆきがふります。", "romaji": "yuki ga furimasu", "english": "It snows." }
+          ],
+          "past": [
+            { "kana": "ゆきがふりました。", "romaji": "yuki ga furimashita", "english": "It snowed." },
+            { "kana": "ゆきがふった。", "romaji": "yuki ga futta", "english": "It snowed. (plain past)" }
+          ]
+        }
+      },
+      { "id": "yubi_hira", "kana": "ゆび", "romaji": "yubi",
+        "gloss_en": "finger", "tags": ["core","y-row","body"], "worlds": ["8-vocab-hira"],
+        "note": "Basic body part word meaning 'finger'. Written 指. Often used with さす (to point).",
+        "examples": {
+          "dictionary": [
+            { "kana": "ゆびをさす。", "romaji": "yubi wo sasu", "english": "to point a finger." }
+          ],
+          "polite": [
+            { "kana": "ゆびをさします。", "romaji": "yubi wo sashimasu", "english": "I point my finger." }
+          ],
+          "past": [
+            { "kana": "ゆびをさしました。", "romaji": "yubi wo sashimashita", "english": "I pointed my finger." },
+            { "kana": "ゆびをさした。", "romaji": "yubi wo sashita", "english": "I pointed my finger. (plain past)" }
+          ]
+        }
+      },
+      { "id": "yume_hira", "kana": "ゆめ", "romaji": "yume",
+        "gloss_en": "dream", "tags": ["core","y-row","abstract"], "worlds": ["8-vocab-hira"],
+        "note": "Common abstract noun meaning 'dream'. Written 夢. Appears with みる (to see/dream).",
+        "examples": {
+          "dictionary": [
+            { "kana": "ゆめをみる。", "romaji": "yume wo miru", "english": "to dream." }
+          ],
+          "polite": [
+            { "kana": "ゆめをみます。", "romaji": "yume wo mimasu", "english": "I dream." }
+          ],
+          "past": [
+            { "kana": "ゆめをみました。", "romaji": "yume wo mimashita", "english": "I dreamed." },
+            { "kana": "ゆめをみた。", "romaji": "yume wo mita", "english": "I dreamed. (plain past)" }
+          ]
+        }
+      },
+      { "id": "yoko_hira", "kana": "よこ", "romaji": "yoko",
+        "gloss_en": "side; beside", "tags": ["core","y-row","position"], "worlds": ["8-vocab-hira"],
+        "note": "Common word for 'side' or 'beside'. Written 横. Often used with の.",
+        "examples": {
+          "dictionary": [
+            { "kana": "よこのへや。", "romaji": "yoko no heya", "english": "the room next door." },
+            { "kana": "いすのよこ。", "romaji": "isu no yoko", "english": "beside the chair." }
+          ],
+          "polite": [
+            { "kana": "よこです。", "romaji": "yoko desu", "english": "It’s beside." }
+          ],
+          "past": [
+            { "kana": "よこでした。", "romaji": "yoko deshita", "english": "It was beside." }
+          ]
+        }
+      },
+
+      { "id": "rekishi_hira", "kana": "れきし", "romaji": "rekishi",
+        "gloss_en": "history", "tags": ["core","r-row","abstract"], "worlds": ["9-vocab-hira"],
+        "note": "Common school subject word. Written 歴史.",
+        "examples": {
+          "dictionary": [
+            { "kana": "にほんのれきし。", "romaji": "nihon no rekishi", "english": "Japanese history." },
+            { "kana": "れきしをべんきょうする。", "romaji": "rekishi wo benkyou suru", "english": "to study history." }
+          ],
+          "polite": [
+            { "kana": "れきしをべんきょうします。", "romaji": "rekishi wo benkyou shimasu", "english": "I study history." }
+          ],
+          "past": [
+            { "kana": "れきしをべんきょうしました。", "romaji": "rekishi wo benkyou shimashita", "english": "I studied history." },
+            { "kana": "れきしをべんきょうした。", "romaji": "rekishi wo benkyou shita", "english": "I studied history. (plain past)" }
+          ]
+        }
+      },
+      { "id": "rusu_hira", "kana": "るす", "romaji": "rusu",
+        "gloss_en": "absence; not at home", "tags": ["core","r-row","expression"], "worlds": ["9-vocab-hira"],
+        "note": "Used when someone is away from home. Written 留守.",
+        "examples": {
+          "dictionary": [
+            { "kana": "るすです。", "romaji": "rusu desu", "english": "(They are) not at home." }
+          ],
+          "polite": [
+            { "kana": "るすにしています。", "romaji": "rusu ni shiteimasu", "english": "They are away from home." }
+          ],
+          "past": [
+            { "kana": "るすでした。", "romaji": "rusu deshita", "english": "They were not at home." }
+          ]
+        }
+      },
+      { "id": "raku_hira", "kana": "らく", "romaji": "raku",
+        "gloss_en": "comfort; easy", "tags": ["core","r-row","adjective"], "worlds": ["9-vocab-hira"],
+        "note": "Used in phrases like らくな (easy/comfortable). Written 楽.",
+        "examples": {
+          "dictionary": [
+            { "kana": "らくなしごと。", "romaji": "raku na shigoto", "english": "an easy job." },
+            { "kana": "このしごとはらくだ。", "romaji": "kono shigoto wa raku da", "english": "This job is easy." }
+          ],
+          "polite": [
+            { "kana": "このしごとはらくです。", "romaji": "kono shigoto wa raku desu", "english": "This job is easy." }
+          ],
+          "past": [
+            { "kana": "このしごとはらくでした。", "romaji": "kono shigoto wa raku deshita", "english": "This job was easy." }
+          ]
+        }
+      },
+      { "id": "risu_hira", "kana": "りす", "romaji": "risu",
+        "gloss_en": "squirrel", "tags": ["core","r-row","animal"], "worlds": ["9-vocab-hira"],
+        "note": "Animal word. Written 栗鼠 (rare). Often appears with とぶ (to jump).",
+        "examples": {
+          "dictionary": [
+            { "kana": "りすがとぶ。", "romaji": "risu ga tobu", "english": "A squirrel jumps." },
+            { "kana": "りすがはしる。", "romaji": "risu ga hashiru", "english": "A squirrel runs." }
+          ],
+          "polite": [
+            { "kana": "りすがとびます。", "romaji": "risu ga tobimasu", "english": "A squirrel jumps." }
+          ],
+          "past": [
+            { "kana": "りすがとびました。", "romaji": "risu ga tobimashita", "english": "A squirrel jumped." },
+            { "kana": "りすがとんだ。", "romaji": "risu ga tonda", "english": "A squirrel jumped. (plain past)" }
+          ]
+        }
+      },
+      { "id": "rouka_hira", "kana": "ろうか", "romaji": "rouka",
+        "gloss_en": "corridor; hallway", "tags": ["core","r-row","place"], "worlds": ["9-vocab-hira"],
+        "note": "Common school and building word. Written 廊下.",
+        "examples": {
+          "dictionary": [
+            { "kana": "ろうかをあるく。", "romaji": "rouka wo aruku", "english": "to walk in the hallway." }
+          ],
+          "polite": [
+            { "kana": "ろうかをあるきます。", "romaji": "rouka wo arukimasu", "english": "I walk in the hallway." }
+          ],
+          "past": [
+            { "kana": "ろうかをあるきました。", "romaji": "rouka wo arukimashita", "english": "I walked in the hallway." },
+            { "kana": "ろうかをあるいた。", "romaji": "rouka wo aruita", "english": "I walked in the hallway. (plain past)" }
+          ]
+        }
+      },
+      { "id": "rappa_hira", "kana": "らっぱ", "romaji": "rappa",
+        "gloss_en": "trumpet", "tags": ["core","r-row","object"], "worlds": ["9-vocab-hira"],
+        "note": "Everyday object word meaning 'trumpet'. Written 喇叭 (rare, often kana). Uses small っ.",
+        "examples": {
+          "dictionary": [
+            { "kana": "らっぱをふく。", "romaji": "rappa wo fuku", "english": "to play the trumpet." }
+          ],
+          "polite": [
+            { "kana": "らっぱをふきます。", "romaji": "rappa wo fukimasu", "english": "I play the trumpet." }
+          ],
+          "past": [
+            { "kana": "らっぱをふきました。", "romaji": "rappa wo fukimashita", "english": "I played the trumpet." },
+            { "kana": "らっぱをふいた。", "romaji": "rappa wo fuita", "english": "I played the trumpet. (plain past)" }
+          ]
+        }
+      },
+
+      { "id": "wani_hira", "kana": "わに", "romaji": "wani",
+        "gloss_en": "crocodile; alligator", "tags": ["core","w-row","animal"], "worlds": ["10-vocab-hira"],
+        "note": "Common animal word. Written 鰐. Often appears in phrases about rivers or water.",
+        "examples": {
+          "dictionary": [
+            { "kana": "わにがかわにいる。", "romaji": "wani ga kawa ni iru", "english": "The crocodile is in the river." }
+          ],
+          "polite": [
+            { "kana": "わにがかわにいます。", "romaji": "wani ga kawa ni imasu", "english": "The crocodile is in the river." }
+          ],
+          "past": [
+            { "kana": "わにがかわにいました。", "romaji": "wani ga kawa ni imashita", "english": "The crocodile was in the river." }
+          ]
+        }
+      },
+      { "id": "watashi_hira", "kana": "わたし", "romaji": "watashi",
+        "gloss_en": "I; me", "tags": ["core","w-row","people"], "worlds": ["10-vocab-hira"],
+        "note": "Common first-person pronoun. Written 私. Used in formal or neutral speech.",
+        "examples": {
+          "dictionary": [
+            { "kana": "わたしはがくせい。", "romaji": "watashi wa gakusei", "english": "I am a student." }
+          ],
+          "polite": [
+            { "kana": "わたしはがくせいです。", "romaji": "watashi wa gakusei desu", "english": "I am a student." }
+          ],
+          "past": [
+            { "kana": "わたしはがくせいでした。", "romaji": "watashi wa gakusei deshita", "english": "I was a student." }
+          ]
+        }
+      },
+      { "id": "hon_hira", "kana": "ほん", "romaji": "hon",
+        "gloss_en": "book", "tags": ["core","n-ending","object"], "worlds": ["10-vocab-hira"],
+        "note": "Basic everyday noun meaning 'book'. Written 本.",
+        "examples": {
+          "dictionary": [
+            { "kana": "ほんをよむ。", "romaji": "hon wo yomu", "english": "to read a book." }
+          ],
+          "polite": [
+            { "kana": "ほんをよみます。", "romaji": "hon wo yomimasu", "english": "I read a book." }
+          ],
+          "past": [
+            { "kana": "ほんをよみました。", "romaji": "hon wo yomimashita", "english": "I read a book." },
+            { "kana": "ほんをよんだ。", "romaji": "hon wo yonda", "english": "I read a book. (plain past)" }
+          ]
+        }
+      },
+      { "id": "ongaku_hira", "kana": "おんがく", "romaji": "ongaku",
+        "gloss_en": "music", "tags": ["core","n-ending","abstract"], "worlds": ["10-vocab-hira"],
+        "note": "Common abstract noun meaning 'music'. Written 音楽.",
+        "examples": {
+          "dictionary": [
+            { "kana": "おんがくをきく。", "romaji": "ongaku wo kiku", "english": "to listen to music." }
+          ],
+          "polite": [
+            { "kana": "おんがくをききます。", "romaji": "ongaku wo kikimasu", "english": "I listen to music." }
+          ],
+          "past": [
+            { "kana": "おんがくをききました。", "romaji": "ongaku wo kikimashita", "english": "I listened to music." },
+            { "kana": "おんがくをきいた。", "romaji": "ongaku wo kiita", "english": "I listened to music. (plain past)" }
+          ]
+        }
+      },
+      { "id": "sensei_hira", "kana": "せんせい", "romaji": "sensei",
+        "gloss_en": "teacher", "tags": ["core","n-ending","people"], "worlds": ["10-vocab-hira"],
+        "note": "Common noun for teacher, doctor, or master. Written 先生.",
+        "examples": {
+          "dictionary": [
+            { "kana": "せんせいはやさしい。", "romaji": "sensei wa yasashii", "english": "The teacher is kind." }
+          ],
+          "polite": [
+            { "kana": "せんせいはやさしいです。", "romaji": "sensei wa yasashii desu", "english": "The teacher is kind." }
+          ],
+          "past": [
+            { "kana": "せんせいはやさしかったです。", "romaji": "sensei wa yasashikatta desu", "english": "The teacher was kind." }
+          ]
+        }
+      },
+      { "id": "denwa_hira", "kana": "でんわ", "romaji": "denwa",
+        "gloss_en": "telephone", "tags": ["core","n-ending","object"], "worlds": ["10-vocab-hira"],
+        "note": "Everyday word for 'telephone'. Written 電話. Common with かける (to make a call).",
+        "examples": {
+          "dictionary": [
+            { "kana": "でんわをかける。", "romaji": "denwa wo kakeru", "english": "to make a phone call." }
+          ],
+          "polite": [
+            { "kana": "でんわをかけます。", "romaji": "denwa wo kakemasu", "english": "I make a phone call." }
+          ],
+          "past": [
+            { "kana": "でんわをかけました。", "romaji": "denwa wo kakemashita", "english": "I made a phone call." },
+            { "kana": "でんわをかけた。", "romaji": "denwa wo kaketa", "english": "I made a phone call. (plain past)" }
+          ]
+        }
+      }
+
   ],
   "byWorld": {
     "1-vocab-hira": ["ai_hira","iie_hira","ue_hira","ie_hira","aoi_hira","au_hira"],
