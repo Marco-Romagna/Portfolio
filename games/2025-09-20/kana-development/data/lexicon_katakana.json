@@ -503,8 +503,7 @@
             { "kana": "ナイスプレーデシタ。", "romaji": "naisu puree deshita", "english": "That was a nice play." }
           ],
           "past": [
-            { "kana": "ナイスダッタ。", "romaji": "naisu datta", "english": "It was nice. (plain past)" },
-            { "kana": "ナイスデシタ。", "romaji": "naisu deshita", "english": "It was nice. (polite past)" }
+            { "kana": "ナイスダッタ。", "romaji": "naisu datta", "english": "It was nice. (plain past)" }
           ]
         }
       },
