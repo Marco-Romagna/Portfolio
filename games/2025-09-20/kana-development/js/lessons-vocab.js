@@ -418,7 +418,7 @@
     
       const scriptType = LessonCore.LEXICON || "hiragana";
       const folderWord = currentWord.replace(/_hira|_kata/g, ''); // matches actual folder name ("ue")
-      const basePath = const basePath = `../../kana-development/assets/audio/vocab_examples/${currentTense}/${scriptType}/${folderWord}/`;
+      const basePath = `../../kana-development/assets/audio/vocab_examples/${currentTense}/${scriptType}/${folderWord}/`;
     
       // Random example ex1–ex3
       const n = Math.floor(Math.random() * 3) + 1;
