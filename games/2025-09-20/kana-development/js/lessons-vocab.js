@@ -499,11 +499,21 @@
       feedback.classList.remove('correct', 'wrong');
       feedback.classList.add(correct ? 'correct' : 'wrong');
       feedback.textContent = correct ? '✅ Correct!' : '❌ Incorrect!';
-  
+    
       if (correct) {
         if (!hintUsed) score++;
         updateMeter();
-        setTimeout(pickNext, 900);
+    
+        if (score >= goal) {
+          feedback.textContent = '🎉 Lesson Complete!';
+          btnPlay.disabled = true;
+          opts.querySelectorAll('button').forEach(b => (b.disabled = true));
+          exampleBox.classList.add('is-hidden');
+          finishBtn.classList.remove('is-hidden');
+        } else {
+          setTimeout(pickNext, 900);
+        }
+    
       } else {
         const exSet = current.examples?.[currentTense] || current.examples?.dictionary || [];
         const ex = exSet[currentExIndex] || exSet[0];
@@ -517,6 +527,7 @@
         playAudio(currentAudioSrc, currentFallback);
       }
     }
+
   
     // --- Button actions ---
     btnPlay.onclick = () => {
