@@ -365,31 +365,125 @@
   }
 
   // ======================================================
-  // Part 5 — Audio
+  // Part 5 — Audio Recognition (Vocab Immersion)
   // ======================================================
   async function initPart5(words) {
     const part5 = $('#part-5');
     if (!part5) return;
-    part5.innerHTML = '<h2 class="part-title">Audio Quiz</h2>';
-    const panel = document.createElement('div');
-    panel.className = 'speak-panel';
-    panel.innerHTML = `
-      <button class="btn primary" id="play-audio">Play Audio</button>
-      <input id="audio-answer" class="type-input" placeholder="Type romaji or English…" />
-      <div class="actions"><button class="btn primary" data-action="finish-lesson">Finish</button></div>
+  
+    // Inject fresh layout
+    part5.innerHTML = `
+      <h2 class="part-title">Audio Recognition</h2>
+      <div class="audio-instructions">🎧 Listen and choose the word you heard.</div>
+      <button class="btn primary replay">▶ Replay Audio</button>
+      <div class="options-grid"></div>
+      <div class="tense-grid is-hidden"></div>
+      <div class="quiz-feedback"></div>
+      <div class="quiz-progress"></div>
     `;
-    part5.appendChild(panel);
-
-    const btnPlay = $('#play-audio', part5);
-    const input = $('#audio-answer', part5);
-    const finishBtn = $('[data-action="finish-lesson"]', part5);
-
-    let current = words[Math.floor(Math.random() * words.length)];
-    btnPlay.addEventListener('click', () => {
-      if (current.audio) new Audio(current.audio).play();
-      else alert("No audio file found for this word yet.");
+  
+    const replayBtn = $('.replay', part5);
+    const optionsGrid = $('.options-grid', part5);
+    const tenseGrid = $('.tense-grid', part5);
+    const feedbackEl = $('.quiz-feedback', part5);
+  
+    // Determine which tenses are unlocked based on world
+    const worldCode = LessonCore.currentWorld;
+    const availableTenses = LessonCore.getAvailableTensesForWorld(worldCode);
+  
+    let currentWord = null;
+    let currentTense = null;
+    let currentAudio = null;
+    let selectedWord = null;
+    let selectedTense = null;
+  
+    // Utility to pick and play an example
+    function loadNewPrompt() {
+      const wordList = LessonCore.getWordsForWorld(worldCode);
+      currentWord = LessonCore.pickRandom(wordList);
+      currentTense = LessonCore.pickRandom(availableTenses);
+  
+      // Choose random example index (1–3). Adjust if fewer exist.
+      const exampleNum = Math.floor(Math.random() * 3) + 1;
+      const path = `assets/audio/vocab_examples/${currentWord}/${currentTense}/ex${exampleNum}.mp3`;
+  
+      currentAudio = new Audio(path);
+      currentAudio.play().catch(() => console.warn('Missing audio file:', path));
+  
+      // Reset UI
+      selectedWord = null;
+      selectedTense = null;
+      feedbackEl.textContent = '';
+  
+      populateWordOptions(wordList);
+      populateTenseOptions(availableTenses);
+    }
+  
+    // Populate word buttons from this world’s vocab
+    function populateWordOptions(list) {
+      optionsGrid.innerHTML = '';
+      LessonCore.shuffle(list).forEach(word => {
+        const btn = document.createElement('button');
+        btn.className = 'btn';
+        btn.textContent = LessonCore.getWordKana(word);
+        btn.addEventListener('click', () => onWordSelect(word));
+        optionsGrid.appendChild(btn);
+      });
+    }
+  
+    // Populate tense buttons if more than one tense unlocked
+    function populateTenseOptions(tenses) {
+      tenseGrid.innerHTML = '';
+      if (tenses.length > 1) {
+        tenseGrid.classList.remove('is-hidden');
+        tenses.forEach(t => {
+          const btn = document.createElement('button');
+          btn.className = 'btn ghost';
+          btn.textContent = LessonCore.formatTenseLabel(t);
+          btn.addEventListener('click', () => onTenseSelect(t));
+          tenseGrid.appendChild(btn);
+        });
+      } else {
+        tenseGrid.classList.add('is-hidden');
+      }
+    }
+  
+    // --- Interaction logic ---
+    function onWordSelect(word) {
+      selectedWord = word;
+      checkAnswer();
+    }
+    function onTenseSelect(tense) {
+      selectedTense = tense;
+      checkAnswer();
+    }
+  
+    function checkAnswer() {
+      const needsTense = availableTenses.length > 1;
+      if (!selectedWord) return;
+      if (needsTense && !selectedTense) return;
+  
+      const correctWord = selectedWord === currentWord;
+      const correctTense = !needsTense || selectedTense === currentTense;
+  
+      if (correctWord && correctTense) {
+        feedbackEl.textContent = '✅ Correct!';
+        LessonCore.updateProgress(true);
+        setTimeout(loadNewPrompt, 1200);
+      } else {
+        feedbackEl.textContent = '❌ Try again.';
+        LessonCore.updateProgress(false);
+        // user can replay and retry
+      }
+    }
+  
+    // --- Replay current clip ---
+    replayBtn.addEventListener('click', () => {
+      if (currentAudio) currentAudio.play();
     });
-    finishBtn.addEventListener('click', () => { window.location.href = '../index.html'; });
+  
+    // --- Start first prompt ---
+    loadNewPrompt();
   }
 
   // ======================================================
