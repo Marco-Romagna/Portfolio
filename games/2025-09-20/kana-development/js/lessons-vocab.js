@@ -449,34 +449,36 @@
       hintBtn.classList.add('is-hidden');
       replayCount = 0;
       hintUsed = false;
-  
-      // prevent playing the same word's audio twice in a row, 
-      // but allow it to still appear as an option
+    
+      // --- prevent same word/audio twice in a row ---
       let next;
       do {
         next = LessonCore.pickRandom(words);
       } while (current && next.id === current.id);
-  
       current = next;
+    
       currentTense = LessonCore.pickRandom(tenses);
-  
+    
       const scriptType = LessonCore.LEXICON || 'hiragana';
       const folderWord = current.id.replace(/_hira|_kata/g, '');
       const exSet = current.examples?.[currentTense] || current.examples?.dictionary || [];
       const n = Math.floor(Math.random() * exSet.length) + 1;
       currentExIndex = n - 1;
-  
+    
       const basePath = `../../kana-development/assets/audio/vocab_examples/${currentTense}/${scriptType}/${folderWord}/`;
       currentAudioSrc = `${basePath}ex${n}.mp3`;
       currentFallback = `../../kana-development/assets/audio/vocab_examples/dictionary/${scriptType}/${folderWord}/ex1.mp3`;
-  
-      if (currentAudioSrc === lastAudio) return pickNext();
-      lastAudio = currentAudioSrc;
-  
+    
+      // Play audio on new round
       playAudio(currentAudioSrc, currentFallback);
-  
+    
+      // --- Build answer grid ---
       const shuffled = LessonCore.shuffle(words).slice(0, 5);
-      if (!shuffled.includes(current)) shuffled[Math.floor(Math.random() * shuffled.length)] = current;
+      // Ensure current word always appears
+      if (!shuffled.includes(current)) {
+        shuffled[Math.floor(Math.random() * shuffled.length)] = current;
+      }
+    
       shuffled.forEach(w => {
         const btn = document.createElement('button');
         btn.className = 'btn vocab-choice';
@@ -484,8 +486,10 @@
         btn.onclick = () => handleAnswer(w);
         opts.appendChild(btn);
       });
+    
       opts.style.gridTemplateColumns = 'repeat(3, 1fr)';
     }
+
   
     // --- Answer handler ---
     function handleAnswer(sel) {
