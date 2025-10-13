@@ -74,7 +74,7 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
     currentPart = Math.min(Math.max(idx, 1), totalParts);
 
     // --- Always ensure the part exists before showing it ---
-    if (!window.LessonCore.IS_VOCAB) {
+    if (!window.LessonCore?.IS_VOCAB) {
       if (currentPart === 1 && typeof window.initPart1 === "function") window.initPart1();
       if (currentPart === 2 && typeof window.initPart2 === "function") window.initPart2();
       if (currentPart === 3 && typeof window.initPart3 === "function") window.initPart3();
@@ -240,12 +240,8 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
 
   function getKanaSet(world, suffix, lexicon) {
     const sets = getWorldSets(world);
-  
-    if (lexicon === "mixed") {
-      // Combine both Hiragana + Katakana of this world
-      return [...sets.H_BASE, ...sets.K_BASE];
-    }
-  
+    if (lexicon === "mixed") return [...sets.H_BASE, ...sets.K_BASE];
+
     const isHira = (lexicon === "hiragana");
     if (suffix < 6) return isHira ? [...sets.H_BASE] : [...sets.K_BASE];
     else if (suffix >= 6 && suffix < 11) return isHira ? [...sets.H_DAKU] : [...sets.K_DAKU];
@@ -253,11 +249,11 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
     return [];
   }
 
-
   // ---------- Finalize Kana Set ----------
   if (!IS_VOCAB) {
     KANA = getKanaSet(WORLD, SUFFIX, LEXICON);
   }
+
   // ---------- Step Labels ----------
   (function initSteps() {
     if (!stepsList) return;
@@ -281,38 +277,47 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
     });
   })();
 
-    // ---------- Export ----------
-    window.LessonCore = {
-      $,$$,
-      WORLD, SUFFIX, IS_VOCAB,
-      KANA, ROMA, PAIR,
-      showPart, LEXICON,
-      GOAL_IDENT, GOAL_TYPE, COMBO_LAST
-    };
-  
-    // ---------- Vocab Audio Helpers ----------
-    LessonCore.getAvailableTensesForWorld = function(world) {
-      const n = parseInt(world);
-      if (n <= 3) return ['dictionary'];
-      if (n <= 5) return ['dictionary', 'polite'];
-      return ['dictionary', 'polite', 'past'];
-    };
-  
-    LessonCore.getWordsForLevel = function(lessonId) {
-      const lexiconKey = Object.keys(window.VOCAB_WORDS_BY_LEVEL)
-        .find(k => lessonId.includes(k.split('-')[0])); // match world prefix
-      return lexiconKey ? window.VOCAB_WORDS_BY_LEVEL[lexiconKey] : [];
-    };
-  
-    LessonCore.pickRandom = arr => arr[Math.floor(Math.random() * arr.length)];
-    LessonCore.shuffle = arr => [...arr].sort(() => Math.random() - 0.5);
-  
-    LessonCore.formatTenseLabel = t => ({
-      dictionary: 'Dictionary',
-      polite: 'Polite',
-      past: 'Past'
-    }[t] || t);
+  // ---------- Vocab Audio Helpers ----------
+  const getAvailableTensesForWorld = function(world) {
+    const n = parseInt(world);
+    if (n <= 3) return ['dictionary'];
+    if (n <= 5) return ['dictionary', 'polite'];
+    return ['dictionary', 'polite', 'past'];
+  };
 
+  const getWordsForLevel = function(lessonId) {
+    const lexiconKey = Object.keys(window.VOCAB_WORDS_BY_LEVEL)
+      .find(k => lessonId.includes(k.split('-')[0]));
+    return lexiconKey ? window.VOCAB_WORDS_BY_LEVEL[lexiconKey] : [];
+  };
+
+  const pickRandom = arr => arr[Math.floor(Math.random() * arr.length)];
+  const shuffle = arr => [...arr].sort(() => Math.random() - 0.5);
+  const formatTenseLabel = t => ({
+    dictionary: 'Dictionary',
+    polite: 'Polite',
+    past: 'Past'
+  }[t] || t);
+
+  // ---------- Progress Stub ----------
+  const updateProgress = function(isCorrect) {
+    console.log(`[DEBUG] Progress ${isCorrect ? '✅ correct' : '❌ wrong'}`);
+  };
+
+  // ---------- Export ----------
+  window.LessonCore = {
+    $,$$,
+    WORLD, SUFFIX, IS_VOCAB,
+    KANA, ROMA, PAIR,
+    showPart, LEXICON,
+    GOAL_IDENT, GOAL_TYPE, COMBO_LAST,
+    updateProgress,
+    getAvailableTensesForWorld,
+    getWordsForLevel,
+    pickRandom,
+    shuffle,
+    formatTenseLabel
+  };
 
   // ---------- Bootstrapping ----------
   document.addEventListener("DOMContentLoaded", () => {
