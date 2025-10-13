@@ -409,13 +409,21 @@
     let currentWord = null;
     let currentTense = null;
   
+    let retryCount = 0;
+    const MAX_RETRIES = 10;
+    
     async function pickNext() {
+      if (retryCount > MAX_RETRIES) {
+        console.warn("No playable audio found after several attempts.");
+        opts.innerHTML = `<p>No valid audio files found for this lesson.</p>`;
+        btnPlay.disabled = true;
+        return;
+      }
+    
       currentWord = LessonCore.pickRandom(words);
       currentTense = LessonCore.pickRandom(tenses);
     
       const basePath = `../../assets/audio/vocab_examples/${currentWord}/${currentTense}/`;
-    
-      // Try to find a valid file
       const possibleFiles = ["1.mp3", "2.mp3", "3.mp3"];
       let foundFile = null;
     
@@ -426,15 +434,11 @@
             foundFile = f;
             break;
           }
-        } catch {
-          // ignore failed fetch
-        }
+        } catch {}
       }
     
-      // Fallback if no example exists for this tense
+      // Fallback check
       if (!foundFile && currentTense !== "dictionary") {
-        console.warn(`[Fallback] No ${currentTense} audio for ${currentWord}, using dictionary`);
-        currentTense = "dictionary";
         const fallbackBase = `../../assets/audio/vocab_examples/${currentWord}/dictionary/`;
         for (const f of possibleFiles) {
           try {
@@ -447,11 +451,13 @@
         }
       }
     
-      // If still nothing, skip this word
       if (!foundFile) {
-        console.warn(`[Skip] No valid audio found for ${currentWord} (${currentTense})`);
-        return pickNext();
+        retryCount++;
+        console.warn(`[Skip] No valid audio for ${currentWord} (${currentTense}) [${retryCount}/${MAX_RETRIES}]`);
+        return pickNext(); // Try again with a different word
       }
+    
+      retryCount = 0; // Reset counter when successful
     
       const audioSrc = `${basePath}${foundFile}`;
       btnPlay.onclick = () => new Audio(audioSrc).play();
@@ -467,6 +473,7 @@
         opts.appendChild(btn);
       });
     }
+
 
   
     function checkAnswer(id) {
