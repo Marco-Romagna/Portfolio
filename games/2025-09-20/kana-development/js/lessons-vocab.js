@@ -365,32 +365,119 @@
   }
 
   // ======================================================
-  // Part 5 — Audio
+  // Part 5 — Audio 
   // ======================================================
-  async function initPart5(words) {
+  async function initPart5() {
     const part5 = $('#part-5');
     if (!part5) return;
-    part5.innerHTML = '<h2 class="part-title">Audio Quiz</h2>';
+  
+    part5.innerHTML = '<h2 class="part-title">Audio Recognition</h2>';
+  
     const panel = document.createElement('div');
     panel.className = 'speak-panel';
-    panel.innerHTML = `
-      <button class="btn primary" id="play-audio">Play Audio</button>
-      <input id="audio-answer" class="type-input" placeholder="Type romaji or English…" />
-      <div class="actions"><button class="btn primary" data-action="finish-lesson">Finish</button></div>
-    `;
     part5.appendChild(panel);
+  
+    const lessonId = document.body.dataset.lessonId;
+    const words = LessonCore.getWordsForLevel(lessonId);
+    const tenses = LessonCore.getAvailableTensesForWorld(LessonCore.WORLD);
+  
+    if (!words.length) {
+      panel.innerHTML = `<p>No vocab words found for this lesson.</p>`;
+      return;
+    }
+  
+    // UI Layout
+    panel.innerHTML = `
+      <div class="audio-quiz">
+        <button class="btn primary" id="play-audio">▶ Play Audio</button>
+        <div id="options" class="options-grid"></div>
+        <div id="feedback" class="quiz-feedback"></div>
+        <div class="actions">
+          <button class="btn primary" data-action="finish-lesson">Finish</button>
+        </div>
+      </div>
+    `;
+  
+    const btnPlay = $('#play-audio', panel);
+    const opts = $('#options', panel);
+    const feedback = $('#feedback', panel);
+    const finishBtn = $('[data-action="finish-lesson"]', panel);
+  
+    // --- Setup game loop ---
+    let score = 0;
+    const goal = 10;
+    let currentWord = null;
+    let currentTense = null;
+  
+    let retryCount = 0;
+    const MAX_RETRIES = 10;
+    
+    function pickNext() {
+      currentWord = LessonCore.pickRandom(words); // e.g., "ue_hira"
+      currentTense = LessonCore.pickRandom(tenses);
+    
+      const scriptType = LessonCore.LEXICON || "hiragana";
+      const folderWord = currentWord.replace(/_hira|_kata/g, ''); // matches actual folder name ("ue")
+      const basePath = `../../kana-development/assets/audio/vocab_examples/${currentTense}/${scriptType}/${folderWord}/`;
+    
+      // Random example ex1–ex3
+      const n = Math.floor(Math.random() * 3) + 1;
+      let audioSrc = `${basePath}ex${n}.mp3`;
+    
+      // Fallback to dictionary/ex1 if not available
+      if (currentTense !== "dictionary") {
+        const fallback = `../../assets/audio/vocab_examples/dictionary/${scriptType}/${folderWord}/ex1.mp3`;
+        const testAudio = new Audio(audioSrc);
+    
+        testAudio.onerror = () => {
+          console.warn(`⚠️ Falling back to dictionary for ${currentWord}`);
+          new Audio(fallback).play();
+        };
+    
+        btnPlay.onclick = () => testAudio.play();
+      } else {
+        btnPlay.onclick = () => new Audio(audioSrc).play();
+      }
+    
+      // Populate word buttons
+      const shuffled = LessonCore.shuffle(words);
+      opts.innerHTML = '';
+      shuffled.forEach(id => {
+        const btn = document.createElement('button');
+        btn.className = 'btn';
+        btn.textContent = id.replace(/_hira|_kata/g, '');
+        btn.onclick = () => checkAnswer(id);
+        opts.appendChild(btn);
+      });
+    }
 
-    const btnPlay = $('#play-audio', part5);
-    const input = $('#audio-answer', part5);
-    const finishBtn = $('[data-action="finish-lesson"]', part5);
 
-    let current = words[Math.floor(Math.random() * words.length)];
-    btnPlay.addEventListener('click', () => {
-      if (current.audio) new Audio(current.audio).play();
-      else alert("No audio file found for this word yet.");
+    function checkAnswer(id) {
+      if (id === currentWord) {
+        feedback.textContent = '✅ Correct!';
+        LessonCore.updateProgress(true);
+        score++;
+      } else {
+        feedback.textContent = '❌ Incorrect!';
+        LessonCore.updateProgress(false);
+        score = Math.max(0, score - 1);
+      }
+  
+      if (score >= goal) {
+        feedback.textContent = ' Lesson Complete!';
+        setTimeout(() => window.location.href = '../index.html', 800);
+      } else {
+        setTimeout(pickNext, 800);
+      }
+    }
+  
+    pickNext();
+  
+    finishBtn.addEventListener('click', () => {
+      window.location.href = '../index.html';
     });
-    finishBtn.addEventListener('click', () => { window.location.href = '../index.html'; });
   }
+
 
   // ======================================================
   // Public API

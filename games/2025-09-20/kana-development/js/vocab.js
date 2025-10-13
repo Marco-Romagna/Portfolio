@@ -17,6 +17,10 @@
     const res = await fetch(url);
     const data = await res.json();
     cache[type] = data;
+
+    // Build vocab-level mapping from this lexicon’s byWorld data
+    buildVocabMapFromLexicon(data);
+
     return data;
   }
 
@@ -26,6 +30,17 @@
     const data = await res.json();
     summariesCache = data.summaries || [];
     return summariesCache;
+  }
+
+  // ---------- Build Global Map from Lexicons ----------
+  window.VOCAB_WORDS_BY_LEVEL = window.VOCAB_WORDS_BY_LEVEL || {};
+
+  function buildVocabMapFromLexicon(lexicon) {
+    if (!lexicon.byWorld) return;
+    for (const [key, wordIds] of Object.entries(lexicon.byWorld)) {
+      // Directly use "2-vocab-hira", "4-vocab-kata", etc.
+      window.VOCAB_WORDS_BY_LEVEL[key] = wordIds;
+    }
   }
 
   // ---------- Get words for a world milestone ----------

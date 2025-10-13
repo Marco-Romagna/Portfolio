@@ -31,7 +31,7 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
   const KATA_VOCAB_SUFFIXES = [5, 10, 15];
   const IS_VOCAB = [...HIRA_VOCAB_SUFFIXES, ...KATA_VOCAB_SUFFIXES].includes(SUFFIX);
 
-  // ---------- Lexicon Detection (for Kana Lessons) ----------
+  // ---------- Lexicon Detection ----------
   let LEXICON = "hiragana";
   if ([2, 7, 12].includes(SUFFIX)) {
     LEXICON = "katakana";
@@ -41,9 +41,6 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
     LEXICON = "katakana";
   }
   lesson.dataset.lexicon = LEXICON;
-
-  // ---------- Summary Detection ----------
-  let SUMMARY_DATA = null;
 
   // ---------- DOM / UI ----------
   const parts      = $$('.lesson-part');
@@ -63,7 +60,7 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
   let KANA = []; // defined early
 
   // Add back button
-  let backBtn = document.createElement('button');
+  const backBtn = document.createElement('button');
   backBtn.textContent = "← Back";
   backBtn.className = "btn primary is-hidden";
   backBtn.dataset.action = "back";
@@ -74,7 +71,7 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
     currentPart = Math.min(Math.max(idx, 1), totalParts);
 
     // --- Always ensure the part exists before showing it ---
-    if (!window.LessonCore.IS_VOCAB) {
+    if (!IS_VOCAB) {
       if (currentPart === 1 && typeof window.initPart1 === "function") window.initPart1();
       if (currentPart === 2 && typeof window.initPart2 === "function") window.initPart2();
       if (currentPart === 3 && typeof window.initPart3 === "function") window.initPart3();
@@ -106,39 +103,6 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
     }
 
     backBtn.classList.toggle('is-hidden', currentPart <= 1);
-  }
-
-  // ---------- Summary Renderer ----------
-  function initSummary() {
-    const container = document.querySelector('#lesson-summary');
-    if (!container || !SUMMARY_DATA) return;
-
-    document.querySelector('.lesson-progress')?.classList.add('is-hidden');
-    $$('.lesson-part').forEach(p => p.classList.add('is-hidden'));
-    document.querySelector('.lesson-cta')?.classList.add('is-hidden');
-
-    container.classList.remove('is-hidden');
-    container.innerHTML = `
-      <div class="summary-panel">
-        ${SUMMARY_DATA.kana ? `<div class="summary-kana">${SUMMARY_DATA.kana}</div>` : ""}
-        <h2>${SUMMARY_DATA.gloss_en}</h2>
-        <p>${SUMMARY_DATA.note}</p>
-        <button class="btn primary" id="start-lesson">Start Lesson</button>
-      </div>
-    `;
-
-    document.querySelector('#start-lesson')
-      .addEventListener('click', () => {
-        container.classList.add('is-hidden');
-        document.querySelector('.lesson-progress')?.classList.remove('is-hidden');
-        document.querySelector('.lesson-cta')?.classList.remove('is-hidden');
-        $$('.lesson-part').forEach(p => p.classList.remove('is-hidden', 'is-visible'));
-        showPart(1);
-        if (typeof window.initPart1 === "function") {
-          window.initPart1();
-          window.initPart1 = null;
-        }
-      });
   }
 
   // ---------- Kana Sets ----------
@@ -240,12 +204,9 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
 
   function getKanaSet(world, suffix, lexicon) {
     const sets = getWorldSets(world);
-  
     if (lexicon === "mixed") {
-      // Combine both Hiragana + Katakana of this world
       return [...sets.H_BASE, ...sets.K_BASE];
     }
-  
     const isHira = (lexicon === "hiragana");
     if (suffix < 6) return isHira ? [...sets.H_BASE] : [...sets.K_BASE];
     else if (suffix >= 6 && suffix < 11) return isHira ? [...sets.H_DAKU] : [...sets.K_DAKU];
@@ -253,23 +214,23 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
     return [];
   }
 
-
   // ---------- Finalize Kana Set ----------
   if (!IS_VOCAB) {
     KANA = getKanaSet(WORLD, SUFFIX, LEXICON);
   }
+
   // ---------- Step Labels ----------
   (function initSteps() {
     if (!stepsList) return;
     stepsList.innerHTML = '';
     let labels;
-  
+
     if (IS_VOCAB) {
       labels = ['Explorer','Hunt','Identify','Typing','Audio'];
     } else {
       labels = ['Preview','Identify','Typing','Speak'];
     }
-  
+
     labels.forEach((label, idx) => {
       const li = document.createElement('li');
       li.className = `step ${idx===0 ? 'is-active' : ''}`;
@@ -281,23 +242,58 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
     });
   })();
 
+  // ---------- Vocab Audio Helpers ----------
+  function getAvailableTensesForWorld(world) {
+    const n = parseInt(world);
+    if (n <= 3) return ['dictionary'];
+    if (n <= 5) return ['dictionary', 'polite'];
+    return ['dictionary', 'polite', 'past'];
+  }
+
+  function getWordsForLevel(lessonId) {
+    const lexiconKey = Object.keys(window.VOCAB_WORDS_BY_LEVEL || {}).find(
+      k => lessonId.includes(k.split('-')[0])
+    );
+    return lexiconKey ? window.VOCAB_WORDS_BY_LEVEL[lexiconKey] : [];
+  }
+
+  const pickRandom = arr => arr[Math.floor(Math.random() * arr.length)];
+  const shuffle = arr => [...arr].sort(() => Math.random() - 0.5);
+  const formatTenseLabel = t => ({
+    dictionary: 'Dictionary',
+    polite: 'Polite',
+    past: 'Past'
+  }[t] || t);
+
+  function updateProgress(isCorrect) {
+    console.log(`[DEBUG] Progress ${isCorrect ? '✅ correct' : '❌ wrong'}`);
+  }
+
   // ---------- Export ----------
   window.LessonCore = {
     $,$$,
     WORLD, SUFFIX, IS_VOCAB,
     KANA, ROMA, PAIR,
     showPart, LEXICON,
-    GOAL_IDENT, GOAL_TYPE, COMBO_LAST
+    GOAL_IDENT, GOAL_TYPE, COMBO_LAST,
+    updateProgress,
+    getAvailableTensesForWorld,
+    getWordsForLevel,
+    pickRandom,
+    shuffle,
+    formatTenseLabel
   };
 
   // ---------- Bootstrapping ----------
-  document.addEventListener("DOMContentLoaded", () => {
+  window.addEventListener("DOMContentLoaded", () => {
     console.log("[DEBUG] DOM Ready — Bootstrapping lessons");
-    if (IS_VOCAB) {
-      if (typeof window.initVocabParts === "function") window.initVocabParts();
-    } else {
-      if (typeof window.initKanaParts === "function") window.initKanaParts();
-    }
+    setTimeout(() => {
+      if (IS_VOCAB && typeof window.initVocabParts === "function") {
+        window.initVocabParts();
+      } else if (!IS_VOCAB && typeof window.initKanaParts === "function") {
+        window.initKanaParts();
+      }
+    }, 10);
   });
 
   // ---------- Debug navigation ----------
