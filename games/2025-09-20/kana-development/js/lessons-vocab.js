@@ -409,34 +409,36 @@
       if (score >= goal) finishBtn.classList.remove('is-hidden');
     }
   
-    function pickNext() {
-      const currentWord = LessonCore.pickRandom(words);
+   function pickNext() {
+      const current = LessonCore.pickRandom(words); // full object
+      const currentId = current.id || current.romaji; // use a unique string
       const currentTense = LessonCore.pickRandom(tenses);
       const scriptType = LessonCore.LEXICON || "hiragana";
-      const folderWord = currentWord.replace(/_hira|_kata/g, '');
+      const folderWord = currentId.replace(/_hira|_kata/g, ''); // clean ID
       const basePath = `../../kana-development/assets/audio/vocab_examples/${currentTense}/${scriptType}/${folderWord}/`;
       const n = Math.floor(Math.random() * 3) + 1;
       const audioSrc = `${basePath}ex${n}.mp3`;
       const fallback = `../../kana-development/assets/audio/vocab_examples/dictionary/${scriptType}/${folderWord}/ex1.mp3`;
-  
+    
       const testAudio = new Audio(audioSrc);
       testAudio.onerror = () => {
-        console.warn(`⚠️ Fallback to dictionary for ${currentWord}`);
+        console.warn(` Fallback to dictionary for ${currentId}`);
         new Audio(fallback).play();
       };
       btnPlay.onclick = () => testAudio.play();
-  
+    
       // build options
       const shuffled = LessonCore.shuffle(words);
       opts.innerHTML = '';
-      shuffled.forEach(id => {
+      shuffled.forEach(w => {
         const btn = document.createElement('button');
         btn.className = 'btn';
-        btn.textContent = id.replace(/_hira|_kata/g, '');
-        btn.onclick = () => checkAnswer(id, currentWord);
+        btn.textContent = (w.id || w.romaji).replace(/_hira|_kata/g, '');
+        btn.onclick = () => checkAnswer(w.id || w.romaji, currentId);
         opts.appendChild(btn);
       });
     }
+
   
     function checkAnswer(id, currentWord) {
       if (id === currentWord) {
