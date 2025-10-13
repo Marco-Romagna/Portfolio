@@ -298,12 +298,10 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
       return ['dictionary', 'polite', 'past'];
     };
   
-    LessonCore.getWordsForWorld = function(world) {
-      if (window.VOCAB_WORDS_BY_WORLD && window.VOCAB_WORDS_BY_WORLD[world]) {
-        return window.VOCAB_WORDS_BY_WORLD[world];
-      }
-      console.warn('No vocab words found for world', world);
-      return [];
+    LessonCore.getWordsForLevel = function(lessonId) {
+      const lexiconKey = Object.keys(window.VOCAB_WORDS_BY_LEVEL)
+        .find(k => lessonId.includes(k.split('-')[0])); // match world prefix
+      return lexiconKey ? window.VOCAB_WORDS_BY_LEVEL[lexiconKey] : [];
     };
   
     LessonCore.pickRandom = arr => arr[Math.floor(Math.random() * arr.length)];
