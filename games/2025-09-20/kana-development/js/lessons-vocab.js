@@ -423,8 +423,11 @@
       currentWord = LessonCore.pickRandom(words);
       currentTense = LessonCore.pickRandom(tenses);
     
-      const basePath = `../../assets/audio/vocab_examples/${currentWord}/${currentTense}/`;
-      const possibleFiles = ["1.mp3", "2.mp3", "3.mp3"];
+      // Determine script type (hiragana or katakana)
+      const scriptType = LessonCore.LEXICON || "hiragana";
+      const basePath = `../../assets/audio/vocab_examples/${currentTense}/${scriptType}/${currentWord}/`;
+  
+      const possibleFiles = ["ex1.mp3", "ex2.mp3", "ex3.mp3"];
       let foundFile = null;
     
       for (const f of possibleFiles) {
@@ -437,9 +440,10 @@
         } catch {}
       }
     
-      // Fallback check
+      // Fallback check (to dictionary if polite/past missing)
       if (!foundFile && currentTense !== "dictionary") {
-        const fallbackBase = `../../assets/audio/vocab_examples/${currentWord}/dictionary/`;
+        console.warn(`[Fallback] No ${currentTense} audio for ${currentWord}, trying dictionary`);
+        const fallbackBase = `../../assets/audio/vocab_examples/dictionary/${scriptType}/${currentWord}/`;
         for (const f of possibleFiles) {
           try {
             const res = await fetch(fallbackBase + f, { method: "HEAD" });
@@ -451,13 +455,15 @@
         }
       }
     
+      // If still no valid file, skip word safely (no infinite loop)
       if (!foundFile) {
         retryCount++;
         console.warn(`[Skip] No valid audio for ${currentWord} (${currentTense}) [${retryCount}/${MAX_RETRIES}]`);
-        return pickNext(); // Try again with a different word
+        await new Promise(r => setTimeout(r, 100)); // tiny delay to avoid runaway recursion
+        return pickNext(); // Try another word
       }
     
-      retryCount = 0; // Reset counter when successful
+      retryCount = 0; // Reset counter once success found
     
       const audioSrc = `${basePath}${foundFile}`;
       btnPlay.onclick = () => new Audio(audioSrc).play();
@@ -488,7 +494,7 @@
       }
   
       if (score >= goal) {
-        feedback.textContent = '🎉 Lesson Complete!';
+        feedback.textContent = ' Lesson Complete!';
         setTimeout(() => window.location.href = '../index.html', 800);
       } else {
         setTimeout(pickNext, 800);
