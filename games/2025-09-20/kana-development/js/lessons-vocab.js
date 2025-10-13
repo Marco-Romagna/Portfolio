@@ -365,7 +365,7 @@
   }
 
   // ======================================================
-  // Part 5 — Audio Recognition (Hint + Slow + Manual Proceed)
+  // Part 5 — Audio Recognition (Smart Hint + Synced Examples)
   // ======================================================
   async function initPart5(words) {
     const part5 = $('#part-5');
@@ -380,16 +380,19 @@
         <div id="options" class="options-grid fixed-grid"></div>
         <div id="feedback" class="quiz-feedback"></div>
         <div id="example-display" class="example-display is-hidden"></div>
+  
         <div class="quiz-progress">
           <div class="meter"><div class="meter-fill"></div></div>
           <div class="meter-label"></div>
         </div>
+  
         <div class="actions">
           <button class="btn primary is-hidden" data-action="finish-lesson">Finish</button>
         </div>
       </div>
     `;
   
+    // UI elements
     const btnPlay = $('#play-audio', part5);
     const opts = $('#options', part5);
     const feedback = $('#feedback', part5);
@@ -399,6 +402,7 @@
     const meterLabel = $('.meter-label', part5);
     const audioSection = $('.audio-section', part5);
   
+    // Lesson data
     const tenses = LessonCore.getAvailableTensesForWorld(LessonCore.WORLD);
     const goal = 10;
     let score = 0;
@@ -406,12 +410,17 @@
     let hintUsed = false;
     let slowMode = false;
     let locked = false;
+    let currentTense = 'dictionary';
+    let currentWord = null;
+    let currentAudioSrc = '';
+    let currentFallback = '';
+    let currentExIndex = 0;
   
-    // --- UI setup ---
+    // --- Control Buttons ---
     const hintBtn = document.createElement('button');
     hintBtn.id = 'hint-btn';
     hintBtn.className = 'btn ghost is-hidden';
-    hintBtn.textContent = '💡 Show Hint';
+    hintBtn.textContent = '💡 Hint';
     audioSection.appendChild(hintBtn);
   
     const slowToggle = document.createElement('button');
@@ -434,6 +443,7 @@
     };
     audioSection.appendChild(continueBtn);
   
+    // --- Utility: Progress ---
     function updateMeter() {
       const pct = Math.round((score / goal) * 100);
       meterFill.style.width = `${pct}%`;
@@ -441,6 +451,7 @@
       if (score >= goal) finishBtn.classList.remove('is-hidden');
     }
   
+    // --- Utility: Audio ---
     function playAudio(src, fallback, slow) {
       const audio = new Audio(src);
       audio.playbackRate = slow ? 0.7 : 1.0;
@@ -452,56 +463,74 @@
       audio.play().catch(() => {});
     }
   
-    async function pickNext() {
+    // --- Utility: Smart Kana Hint ---
+    function getKanaHint(word) {
+      if (!word?.kana) return "Listen carefully to the vowel pattern.";
+      const kanaParts = word.kana.split('').join('・');
+      return `Hint: Listen for the sounds ${kanaParts}`;
+    }
+  
+    // --- Main Round Picker ---
+    function pickNext() {
       locked = false;
       hintUsed = false;
       replayCount = 0;
       hintBtn.classList.add('is-hidden');
       exampleBox.classList.add('is-hidden');
       exampleBox.innerHTML = '';
+      feedback.textContent = '';
   
-      const current = LessonCore.pickRandom(words);
-      const currentId = current.id || current.romaji;
-      const currentTense = LessonCore.pickRandom(tenses);
+      // Pick random word & tense
+      currentWord = LessonCore.pickRandom(words);
+      currentTense = LessonCore.pickRandom(tenses);
       const scriptType = LessonCore.LEXICON || "hiragana";
-      const folderWord = currentId.replace(/_hira|_kata/g, '');
+      const folderWord = currentWord.id.replace(/_hira|_kata/g, '');
+      const exSet = currentWord.examples?.[currentTense] || currentWord.examples?.dictionary || [];
+      const n = Math.floor(Math.random() * exSet.length) + 1;
+      currentExIndex = n - 1;
+  
+      // Build paths
       const basePath = `../../kana-development/assets/audio/vocab_examples/${currentTense}/${scriptType}/${folderWord}/`;
-      const n = Math.floor(Math.random() * 3) + 1;
-      const audioSrc = `${basePath}ex${n}.mp3`;
-      const fallback = `../../kana-development/assets/audio/vocab_examples/dictionary/${scriptType}/${folderWord}/ex1.mp3`;
+      currentAudioSrc = `${basePath}ex${n}.mp3`;
+      currentFallback = `../../kana-development/assets/audio/vocab_examples/dictionary/${scriptType}/${folderWord}/ex1.mp3`;
   
-      playAudio(audioSrc, fallback, slowMode);
+      // Play initial audio once
+      playAudio(currentAudioSrc, currentFallback, slowMode);
   
+      // --- Button logic ---
       btnPlay.onclick = () => {
         replayCount++;
-        playAudio(audioSrc, fallback, slowMode);
+        playAudio(currentAudioSrc, currentFallback, slowMode);
         if (replayCount >= 3 && !hintUsed) hintBtn.classList.remove('is-hidden');
       };
   
       hintBtn.onclick = () => {
         hintUsed = true;
         hintBtn.classList.add('is-hidden');
-        feedback.innerHTML = `💡 Hint: <strong>${current.romaji}</strong>`;
-        playAudio(audioSrc, fallback, true);
+        feedback.innerHTML = `💡 ${getKanaHint(currentWord)}`;
+        playAudio(currentAudioSrc, currentFallback, true);
       };
   
-      // Render 2x3 options
+      // --- Build answer grid (2 rows of 3) ---
       opts.innerHTML = '';
       const shuffled = LessonCore.shuffle(words).slice(0, 6);
       shuffled.forEach(w => {
         const btn = document.createElement('button');
         btn.className = 'btn vocab-choice';
-        btn.textContent = (w.id || w.romaji).replace(/_hira|_kata/g, '');
-        btn.onclick = () => handleAnswer(btn, w, current, currentId, audioSrc, fallback);
+        btn.textContent = w.kana;
+        btn.onclick = () => handleAnswer(btn, w);
         opts.appendChild(btn);
       });
+  
+      opts.style.gridTemplateColumns = 'repeat(3, 1fr)';
     }
   
-    function handleAnswer(btn, chosen, current, correctId, audioSrc, fallback) {
+    // --- Handle answer ---
+    function handleAnswer(btn, chosenWord) {
       if (locked) return;
       locked = true;
   
-      const isCorrect = (chosen.id || chosen.romaji) === correctId;
+      const isCorrect = chosenWord.id === currentWord.id;
       opts.querySelectorAll('button').forEach(b => b.disabled = true);
       feedback.classList.remove('correct', 'wrong');
       feedback.classList.add(isCorrect ? 'correct' : 'wrong');
@@ -513,16 +542,21 @@
         updateMeter();
         setTimeout(() => pickNext(), 900);
       } else {
-        // Show full kana + example
-        const ex = current.example;
+        // Show example sentence matching the played ex#
+        const exSet = currentWord.examples?.[currentTense] || currentWord.examples?.dictionary || [];
+        const ex = exSet[currentExIndex] || exSet[0];
         exampleBox.innerHTML = `
           <p class="ex-header">Correct Answer:</p>
-          <p class="ex-jp">${current.kana}</p>
+          <p class="ex-jp">${currentWord.kana}</p>
           ${ex ? `
+            <p class="ex-sentence">${ex.kana}</p>
             <p class="ex-romaji">${ex.romaji}</p>
             <p class="ex-en">${ex.english}</p>` : ""}
         `;
         exampleBox.classList.remove('is-hidden');
+  
+        // Replay the same audio slowly for clarity
+        playAudio(currentAudioSrc, currentFallback, true);
         continueBtn.classList.remove('is-hidden');
       }
     }
@@ -531,6 +565,7 @@
     updateMeter();
     pickNext();
   }
+
 
 
 
