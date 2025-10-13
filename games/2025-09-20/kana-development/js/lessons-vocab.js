@@ -405,7 +405,7 @@
   
     // --- State ---
     const tenses = LessonCore.getAvailableTensesForWorld(LessonCore.WORLD);
-    const goal = words.length;
+    const goal = words.length*2;
     let score = 0;
     let used = new Set();
     let lastAudio = null;
