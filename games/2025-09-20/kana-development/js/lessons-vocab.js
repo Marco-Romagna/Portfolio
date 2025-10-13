@@ -365,7 +365,7 @@
   }
 
   // ======================================================
-  // Part 5 — Audio Recognition (Smart Hint + Synced Examples)
+  // Part 5 — Audio Recognition (Compact, Slow Mode + Hint)
   // ======================================================
   async function initPart5(words) {
     const part5 = $('#part-5');
@@ -375,200 +375,167 @@
       <h2 class="part-title">Audio Recognition</h2>
       <div class="quiz-panel">
         <div class="audio-section">
-          <button class="btn primary" id="play-audio">▶ Play Audio</button>
+          <button class="btn primary" id="play-audio">▶ Play</button>
+          <button class="btn ghost" id="slow-toggle">🐢 Slow: Off</button>
+          <button class="btn ghost is-hidden" id="hint-btn">💡 Hint</button>
         </div>
         <div id="options" class="options-grid fixed-grid"></div>
         <div id="feedback" class="quiz-feedback"></div>
         <div id="example-display" class="example-display is-hidden"></div>
-  
         <div class="quiz-progress">
           <div class="meter"><div class="meter-fill"></div></div>
           <div class="meter-label"></div>
         </div>
-  
         <div class="actions">
           <button class="btn primary is-hidden" data-action="finish-lesson">Finish</button>
         </div>
       </div>
     `;
   
-    // UI elements
+    // --- UI elements ---
     const btnPlay = $('#play-audio', part5);
+    const slowToggle = $('#slow-toggle', part5);
+    const hintBtn = $('#hint-btn', part5);
     const opts = $('#options', part5);
     const feedback = $('#feedback', part5);
     const exampleBox = $('#example-display', part5);
     const finishBtn = $('[data-action="finish-lesson"]', part5);
     const meterFill = $('.meter-fill', part5);
     const meterLabel = $('.meter-label', part5);
-    const audioSection = $('.audio-section', part5);
   
-    // Lesson data
+    // --- State ---
     const tenses = LessonCore.getAvailableTensesForWorld(LessonCore.WORLD);
-    const goal = 10;
+    const goal = words.length;
     let score = 0;
-    let replayCount = 0;
-    let hintUsed = false;
-    let slowMode = false;
-    let locked = false;
+    let used = new Set();
+    let lastAudio = null;
+    let current = null;
     let currentTense = 'dictionary';
-    let currentWord = null;
     let currentAudioSrc = '';
     let currentFallback = '';
     let currentExIndex = 0;
+    let slowMode = false;
+    let replayCount = 0;
+    let hintUsed = false;
   
-    // --- Control Buttons ---
-    const hintBtn = document.createElement('button');
-    hintBtn.id = 'hint-btn';
-    hintBtn.className = 'btn ghost is-hidden';
-    hintBtn.textContent = '💡 Hint';
-    audioSection.appendChild(hintBtn);
-  
-    const slowToggle = document.createElement('button');
-    slowToggle.id = 'slow-mode-toggle';
-    slowToggle.className = 'btn ghost';
-    slowToggle.textContent = '🐢 Slow Mode: Off';
-    slowToggle.onclick = () => {
-      slowMode = !slowMode;
-      slowToggle.textContent = slowMode ? '🐢 Slow Mode: On' : '🐢 Slow Mode: Off';
-    };
-    audioSection.appendChild(slowToggle);
-  
-    const continueBtn = document.createElement('button');
-    continueBtn.id = 'continue-btn';
-    continueBtn.className = 'btn primary is-hidden';
-    continueBtn.textContent = 'Continue →';
-    continueBtn.onclick = () => {
-      continueBtn.classList.add('is-hidden');
-      pickNext();
-    };
-    audioSection.appendChild(continueBtn);
-  
-    // --- Utility: Progress ---
-    function updateMeter() {
+    // --- Helpers ---
+    const updateMeter = () => {
       const pct = Math.round((score / goal) * 100);
       meterFill.style.width = `${pct}%`;
       meterLabel.textContent = `Progress: ${score} / ${goal}`;
       if (score >= goal) finishBtn.classList.remove('is-hidden');
-    }
+    };
   
-    // --- Utility: Audio ---
-    function playAudio(src, fallback, slow) {
-      const audio = new Audio(src);
-      audio.playbackRate = slow ? 0.7 : 1.0;
-      audio.onerror = () => {
-        const fb = new Audio(fallback);
-        fb.playbackRate = slow ? 0.7 : 1.0;
-        fb.play();
+    const playAudio = (src, fallback) => {
+      const a = new Audio(src);
+      a.playbackRate = slowMode ? 0.7 : 1.0;
+      a.onerror = () => {
+        const b = new Audio(fallback);
+        b.playbackRate = a.playbackRate;
+        b.play();
       };
-      audio.play().catch(() => {});
-    }
+      a.play().catch(() => {});
+    };
   
-    // --- Utility: Smart Kana Hint ---
-    function getKanaHint(word) {
-      if (!word?.kana) return "Listen carefully to the vowel pattern.";
-      const kanaParts = word.kana.split('').join('・');
-      return `Hint: Listen for the sounds ${kanaParts}`;
-    }
+    const getKanaHint = word =>
+      word?.kana ? `Hint: listen for ${word.kana.split('').join('・')}` : 'Listen carefully to the vowel pattern.';
   
-    // --- Main Round Picker ---
+    // --- Pick next ---
     function pickNext() {
-      locked = false;
-      hintUsed = false;
-      replayCount = 0;
-      hintBtn.classList.add('is-hidden');
+      opts.innerHTML = '';
+      feedback.textContent = '';
       exampleBox.classList.add('is-hidden');
       exampleBox.innerHTML = '';
-      feedback.textContent = '';
+      hintBtn.classList.add('is-hidden');
+      replayCount = 0;
+      hintUsed = false;
   
-      // Pick random word & tense
-      currentWord = LessonCore.pickRandom(words);
+      if (used.size === words.length) used.clear();
+      let next;
+      do { next = LessonCore.pickRandom(words); } while (used.has(next.id));
+      used.add(next.id);
+  
+      current = next;
       currentTense = LessonCore.pickRandom(tenses);
-      const scriptType = LessonCore.LEXICON || "hiragana";
-      const folderWord = currentWord.id.replace(/_hira|_kata/g, '');
-      const exSet = currentWord.examples?.[currentTense] || currentWord.examples?.dictionary || [];
+  
+      const scriptType = LessonCore.LEXICON || 'hiragana';
+      const folderWord = current.id.replace(/_hira|_kata/g, '');
+      const exSet = current.examples?.[currentTense] || current.examples?.dictionary || [];
       const n = Math.floor(Math.random() * exSet.length) + 1;
       currentExIndex = n - 1;
   
-      // Build paths
       const basePath = `../../kana-development/assets/audio/vocab_examples/${currentTense}/${scriptType}/${folderWord}/`;
       currentAudioSrc = `${basePath}ex${n}.mp3`;
       currentFallback = `../../kana-development/assets/audio/vocab_examples/dictionary/${scriptType}/${folderWord}/ex1.mp3`;
   
-      // Play initial audio once
-      playAudio(currentAudioSrc, currentFallback, slowMode);
+      if (currentAudioSrc === lastAudio) return pickNext();
+      lastAudio = currentAudioSrc;
   
-      // --- Button logic ---
-      btnPlay.onclick = () => {
-        replayCount++;
-        playAudio(currentAudioSrc, currentFallback, slowMode);
-        if (replayCount >= 3 && !hintUsed) hintBtn.classList.remove('is-hidden');
-      };
+      playAudio(currentAudioSrc, currentFallback);
   
-      hintBtn.onclick = () => {
-        hintUsed = true;
-        hintBtn.classList.add('is-hidden');
-        feedback.innerHTML = `💡 ${getKanaHint(currentWord)}`;
-        playAudio(currentAudioSrc, currentFallback, true);
-      };
-  
-      // --- Build answer grid (2 rows of 3) ---
-      opts.innerHTML = '';
-      const shuffled = LessonCore.shuffle(words).slice(0, 6);
+      const shuffled = LessonCore.shuffle(words).slice(0, 5);
+      if (!shuffled.includes(current)) shuffled[Math.floor(Math.random() * shuffled.length)] = current;
       shuffled.forEach(w => {
         const btn = document.createElement('button');
         btn.className = 'btn vocab-choice';
-        btn.textContent = w.kana;
-        btn.onclick = () => handleAnswer(btn, w);
+        btn.textContent = w.romaji;
+        btn.onclick = () => handleAnswer(w);
         opts.appendChild(btn);
       });
-  
       opts.style.gridTemplateColumns = 'repeat(3, 1fr)';
     }
   
-    // --- Handle answer ---
-    function handleAnswer(btn, chosenWord) {
-      if (locked) return;
-      locked = true;
-  
-      const isCorrect = chosenWord.id === currentWord.id;
-      opts.querySelectorAll('button').forEach(b => b.disabled = true);
+    // --- Answer handler ---
+    function handleAnswer(sel) {
+      const correct = sel.id === current.id;
+      opts.querySelectorAll('button').forEach(b => (b.disabled = true));
       feedback.classList.remove('correct', 'wrong');
-      feedback.classList.add(isCorrect ? 'correct' : 'wrong');
-      feedback.textContent = isCorrect ? '✅ Correct!' : '❌ Incorrect!';
+      feedback.classList.add(correct ? 'correct' : 'wrong');
+      feedback.textContent = correct ? '✅ Correct!' : '❌ Incorrect!';
   
-      if (isCorrect) {
-        const gain = hintUsed ? 0.5 : 1;
-        score += gain;
+      if (correct) {
+        if (!hintUsed) score++;
         updateMeter();
-        setTimeout(() => pickNext(), 900);
+        setTimeout(pickNext, 900);
       } else {
-        // Show example sentence matching the played ex#
-        const exSet = currentWord.examples?.[currentTense] || currentWord.examples?.dictionary || [];
+        const exSet = current.examples?.[currentTense] || current.examples?.dictionary || [];
         const ex = exSet[currentExIndex] || exSet[0];
         exampleBox.innerHTML = `
-          <p class="ex-header">Correct Answer:</p>
-          <p class="ex-jp">${currentWord.kana}</p>
-          ${ex ? `
-            <p class="ex-sentence">${ex.kana}</p>
-            <p class="ex-romaji">${ex.romaji}</p>
-            <p class="ex-en">${ex.english}</p>` : ""}
+          <p class="ex-jp">${ex.kana}</p>
+          <p class="ex-en">${ex.english}</p>
+          <button class="btn small mt-2" id="next-btn">Continue →</button>
         `;
         exampleBox.classList.remove('is-hidden');
-  
-        // Replay the same audio slowly for clarity
-        playAudio(currentAudioSrc, currentFallback, true);
-        continueBtn.classList.remove('is-hidden');
+        $('#next-btn', exampleBox).onclick = () => pickNext();
+        playAudio(currentAudioSrc, currentFallback);
       }
     }
   
-    finishBtn.addEventListener('click', () => window.location.href = '../index.html');
+    // --- Button actions ---
+    btnPlay.onclick = () => {
+      replayCount++;
+      playAudio(currentAudioSrc, currentFallback);
+      if (replayCount >= 2 && !hintUsed) hintBtn.classList.remove('is-hidden');
+    };
+  
+    slowToggle.onclick = () => {
+      slowMode = !slowMode;
+      slowToggle.textContent = slowMode ? '🐢 Slow: On' : '🐢 Slow: Off';
+    };
+  
+    hintBtn.onclick = () => {
+      hintUsed = true;
+      feedback.textContent = getKanaHint(current);
+      hintBtn.classList.add('is-hidden');
+    };
+  
+    finishBtn.onclick = () => (window.location.href = '../index.html');
+  
     updateMeter();
     pickNext();
   }
 
-
-
-
+  
   // ======================================================
   // Public API
   // ======================================================
