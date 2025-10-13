@@ -794,4 +794,137 @@ body.site {
   background: color-mix(in oklab, var(--kp-accent) 15%, var(--kp-surface-2));
   transform: translateY(-1px);
 }
+/* =========================================================
+   Part 5 — Audio Recognition
+   ========================================================= */
+
+/* Audio + Control Buttons */
+.audio-section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 1.2rem;
+}
+
+.audio-section #play-audio {
+  font-size: 1.1rem;
+  padding: 0.8rem 1.4rem;
+  border-radius: 12px;
+  box-shadow: 0 0 14px rgba(130, 0, 255, 0.3);
+  transition: transform 0.15s ease, box-shadow 0.2s ease, background 0.3s;
+}
+
+.audio-section #play-audio:hover {
+  transform: scale(1.06);
+  box-shadow: 0 0 20px rgba(150, 50, 255, 0.55);
+  background: linear-gradient(90deg, #8a63ff, #a74bff);
+}
+
+#hint-btn,
+#slow-mode-toggle {
+  font-size: 0.9rem;
+  padding: 0.45rem 0.9rem;
+  opacity: 0.85;
+  transition: opacity 0.3s ease, transform 0.2s;
+}
+#hint-btn:hover,
+#slow-mode-toggle:hover {
+  opacity: 1;
+  transform: scale(1.03);
+}
+#hint-btn.is-hidden {
+  display: none;
+}
+
+/* Answer Grid */
+.options-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.8rem;
+  justify-items: center;
+  align-items: center;
+  max-width: 620px;
+  margin: 1.2rem auto 1.5rem;
+}
+
+.options-grid .btn {
+  font-size: 1.05rem;
+  font-weight: 600;
+  padding: 0.7rem 1.1rem;
+  border-radius: 10px;
+  width: 100%;
+  transition: background 0.25s, transform 0.15s, color 0.25s;
+}
+
+.options-grid .btn:hover {
+  transform: translateY(-2px);
+  background: rgba(255,255,255,0.1);
+}
+
+.options-grid .btn.is-correct {
+  background-color: #3cdfff !important;
+  color: #000;
+}
+.options-grid .btn.is-wrong {
+  background-color: #ff6f6f !important;
+  color: #fff;
+}
+
+/* Feedback */
+.quiz-feedback {
+  text-align: center;
+  font-size: 1.1rem;
+  font-weight: 600;
+  min-height: 1.5rem;
+  margin-bottom: 1rem;
+  transition: color 0.3s ease;
+}
+.quiz-feedback.correct { color: #4effc3; }
+.quiz-feedback.wrong   { color: #ff7676; }
+
+/* Example Sentence Reveal */
+.example-display {
+  background: rgba(255,255,255,0.05);
+  padding: 1rem;
+  margin: 1rem auto;
+  border-radius: 10px;
+  max-width: 600px;
+  text-align: center;
+  line-height: 1.6;
+  animation: fadeIn 0.3s ease;
+}
+.example-display.is-hidden { display: none; }
+.example-display p { margin: 0.25rem 0; }
+.example-display .ex-jp { font-size: 1.3rem; color: #fff; }
+.example-display .ex-en { font-size: 0.95rem; color: #ccc; }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Progress Bar */
+.quiz-progress {
+  width: 65%;
+  max-width: 420px;
+  margin: 0.8rem auto 1rem;
+  text-align: center;
+}
+.quiz-progress .meter {
+  height: 6px;
+  border-radius: 6px;
+  background: rgba(255,255,255,0.1);
+  overflow: hidden;
+}
+.quiz-progress .meter-fill {
+  background: linear-gradient(90deg, #8a63ff, #37e2d5);
+  height: 100%;
+  transition: width 0.4s ease;
+}
+.quiz-progress .meter-label {
+  margin-top: 0.4rem;
+  font-size: 0.9rem;
+  opacity: 0.85;
+}
 
