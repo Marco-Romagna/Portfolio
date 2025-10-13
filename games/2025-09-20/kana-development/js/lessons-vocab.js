@@ -376,7 +376,7 @@
       <div class="quiz-panel">
         <div class="audio-section">
           <button class="btn primary" id="play-audio">▶ Play</button>
-          <button class="btn ghost" id="slow-toggle">🐢 Slow: Off</button>
+          <button class="btn ghost" id="slow-toggle"> Slow: Off</button>
           <button class="btn ghost is-hidden" id="hint-btn">💡 Hint</button>
         </div>
         <div id="options" class="options-grid fixed-grid"></div>
@@ -473,11 +473,12 @@
       playAudio(currentAudioSrc, currentFallback);
     
       // --- Build answer grid ---
-      const shuffled = LessonCore.shuffle(words).slice(0, 5);
-      // Ensure current word always appears
+      // Always show 6 options total, ensure the correct one is included
+      let shuffled = LessonCore.shuffle(words).slice(0, 6);
       if (!shuffled.includes(current)) {
         shuffled[Math.floor(Math.random() * shuffled.length)] = current;
       }
+
     
       shuffled.forEach(w => {
         const btn = document.createElement('button');
