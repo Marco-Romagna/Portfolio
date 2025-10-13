@@ -365,7 +365,7 @@
   }
 
   // ======================================================
-  // Part 5 — Audio Recognition
+  // Part 5 — Audio Recognition 
   // ======================================================
   async function initPart5(words) {
     const part5 = $('#part-5');
@@ -377,8 +377,11 @@
         <div class="audio-section">
           <button class="btn primary" id="play-audio">▶ Play Audio</button>
         </div>
+  
         <div id="options" class="options-grid"></div>
         <div id="feedback" class="quiz-feedback"></div>
+  
+        <div id="example-display" class="example-display is-hidden"></div>
   
         <div class="quiz-progress">
           <div class="meter"><div class="meter-fill"></div></div>
@@ -394,6 +397,7 @@
     const btnPlay = $('#play-audio', part5);
     const opts = $('#options', part5);
     const feedback = $('#feedback', part5);
+    const exampleBox = $('#example-display', part5);
     const finishBtn = $('[data-action="finish-lesson"]', part5);
     const meterFill = $('.meter-fill', part5);
     const meterLabel = $('.meter-label', part5);
@@ -410,9 +414,17 @@
       if (score >= goal) finishBtn.classList.remove('is-hidden');
     }
   
-    // ---- Build and play next question ----
+    function playAudio(src, fallback) {
+      const audio = new Audio(src);
+      audio.onerror = () => new Audio(fallback).play();
+      audio.play().catch(() => {});
+    }
+  
     function pickNext() {
       locked = false;
+      exampleBox.classList.add('is-hidden');
+      exampleBox.innerHTML = '';
+  
       const current = LessonCore.pickRandom(words);
       const currentId = current.id || current.romaji;
       const currentTense = LessonCore.pickRandom(tenses);
@@ -423,23 +435,22 @@
       const audioSrc = `${basePath}ex${n}.mp3`;
       const fallback = `../../kana-development/assets/audio/vocab_examples/dictionary/${scriptType}/${folderWord}/ex1.mp3`;
   
-      // preload and play audio immediately
-      const audio = new Audio(audioSrc);
-      audio.onerror = () => new Audio(fallback).play();
-      audio.play().catch(()=>{}); // auto-play on load
-      btnPlay.onclick = () => audio.play();
+      // auto play on round start
+      playAudio(audioSrc, fallback);
+      btnPlay.onclick = () => playAudio(audioSrc, fallback);
   
-      // build options
+      // build grid
       const shuffled = LessonCore.shuffle(words);
       opts.innerHTML = '';
-      shuffled.forEach(w => {
+      shuffled.forEach((w, i) => {
         const btn = document.createElement('button');
-        btn.className = 'btn';
+        btn.className = 'btn vocab-choice';
         btn.textContent = (w.id || w.romaji).replace(/_hira|_kata/g, '');
         btn.onclick = () => {
           if (locked) return;
           locked = true;
           const correct = (w.id || w.romaji) === currentId;
+  
           btn.classList.add(correct ? 'is-correct' : 'is-wrong');
           feedback.classList.remove('correct', 'wrong');
           feedback.classList.add(correct ? 'correct' : 'wrong');
@@ -448,6 +459,17 @@
           score += correct ? 1 : -1;
           if (score < 0) score = 0;
           updateMeter();
+  
+          if (!correct && current.example) {
+            const ex = current.example;
+            exampleBox.innerHTML = `
+              <p class="ex-header">Example Sentence:</p>
+              <p class="ex-jp">${ex.kana}</p>
+              <p class="ex-romaji">${ex.romaji}</p>
+              <p class="ex-en">${ex.english}</p>
+            `;
+            exampleBox.classList.remove('is-hidden');
+          }
   
           setTimeout(() => {
             btn.classList.remove('is-correct', 'is-wrong');
@@ -458,7 +480,7 @@
             } else {
               pickNext();
             }
-          }, 800);
+          }, correct ? 700 : 1700);
         };
         opts.appendChild(btn);
       });
@@ -466,9 +488,8 @@
   
     finishBtn.addEventListener('click', () => window.location.href = '../index.html');
     updateMeter();
-    pickNext(); // start automatically
+    pickNext();
   }
-
 
 
 
