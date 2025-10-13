@@ -365,7 +365,7 @@
   }
 
   // ======================================================
-  // Part 5 — Audio Recognition (Compact, Slow Mode + Hint)
+  // Part 5 — Audio Recognition (Refined No-Hint Version)
   // ======================================================
   async function initPart5(words) {
     const part5 = $('#part-5');
@@ -376,26 +376,27 @@
       <div class="quiz-panel">
         <div class="audio-section">
           <button class="btn primary" id="play-audio">▶ Play</button>
-          <button class="btn ghost" id="slow-toggle"> Slow: Off</button>
-          <button class="btn ghost is-hidden" id="hint-btn">💡 Hint</button>
+          <button class="btn ghost" id="slow-mode-toggle"> Slow: Off</button>
         </div>
-        <div id="options" class="options-grid fixed-grid"></div>
+  
+        <div id="options" class="options-grid"></div>
         <div id="feedback" class="quiz-feedback"></div>
         <div id="example-display" class="example-display is-hidden"></div>
+  
         <div class="quiz-progress">
           <div class="meter"><div class="meter-fill"></div></div>
           <div class="meter-label"></div>
         </div>
+  
         <div class="actions">
           <button class="btn primary is-hidden" data-action="finish-lesson">Finish</button>
         </div>
       </div>
     `;
   
-    // --- UI elements ---
+    // UI refs
     const btnPlay = $('#play-audio', part5);
-    const slowToggle = $('#slow-toggle', part5);
-    const hintBtn = $('#hint-btn', part5);
+    const slowToggle = $('#slow-mode-toggle', part5);
     const opts = $('#options', part5);
     const feedback = $('#feedback', part5);
     const exampleBox = $('#example-display', part5);
@@ -403,83 +404,80 @@
     const meterFill = $('.meter-fill', part5);
     const meterLabel = $('.meter-label', part5);
   
-    // --- State ---
+    // lesson data
     const tenses = LessonCore.getAvailableTensesForWorld(LessonCore.WORLD);
-    const goal = words.length*2;
+    const goal = words.length * 2;
     let score = 0;
-    let used = new Set();
-    let lastAudio = null;
+    let slowMode = false;
     let current = null;
-    let currentTense = 'dictionary';
+    let lastAudio = '';
     let currentAudioSrc = '';
     let currentFallback = '';
+    let currentTense = '';
     let currentExIndex = 0;
-    let slowMode = false;
-    let replayCount = 0;
-    let hintUsed = false;
+    let locked = false;
   
-    // --- Helpers ---
-    const updateMeter = () => {
+    // --- progress updater
+    function updateMeter() {
       const pct = Math.round((score / goal) * 100);
       meterFill.style.width = `${pct}%`;
       meterLabel.textContent = `Progress: ${score} / ${goal}`;
       if (score >= goal) finishBtn.classList.remove('is-hidden');
-    };
+    }
   
-    const playAudio = (src, fallback) => {
+    // --- audio helper
+    function playAudio(src, fallback, slow = false) {
       const a = new Audio(src);
-      a.playbackRate = slowMode ? 0.7 : 1.0;
+      a.playbackRate = slow ? 0.7 : 1.0;
       a.onerror = () => {
-        const b = new Audio(fallback);
-        b.playbackRate = a.playbackRate;
-        b.play();
+        const fb = new Audio(fallback);
+        fb.playbackRate = slow ? 0.7 : 1.0;
+        fb.play();
       };
       a.play().catch(() => {});
+    }
+  
+    // --- toggle slow mode
+    slowToggle.onclick = () => {
+      slowMode = !slowMode;
+      slowToggle.textContent = slowMode ? ' Slow: On' : ' Slow: Off';
     };
   
-    const getKanaHint = word =>
-      word?.kana ? `Hint: listen for ${word.kana.split('').join('・')}` : 'Listen carefully to the vowel pattern.';
-  
-    // --- Pick next ---
+    // --- next round picker
     function pickNext() {
       opts.innerHTML = '';
       feedback.textContent = '';
       exampleBox.classList.add('is-hidden');
       exampleBox.innerHTML = '';
-      hintBtn.classList.add('is-hidden');
-      replayCount = 0;
-      hintUsed = false;
-    
-      // --- prevent same word/audio twice in a row ---
+      locked = false;
+  
+      // prevent same audio twice consecutively
       let next;
       do {
         next = LessonCore.pickRandom(words);
       } while (current && next.id === current.id);
+  
       current = next;
-    
       currentTense = LessonCore.pickRandom(tenses);
-    
+  
       const scriptType = LessonCore.LEXICON || 'hiragana';
       const folderWord = current.id.replace(/_hira|_kata/g, '');
       const exSet = current.examples?.[currentTense] || current.examples?.dictionary || [];
       const n = Math.floor(Math.random() * exSet.length) + 1;
       currentExIndex = n - 1;
-    
+  
       const basePath = `../../kana-development/assets/audio/vocab_examples/${currentTense}/${scriptType}/${folderWord}/`;
       currentAudioSrc = `${basePath}ex${n}.mp3`;
       currentFallback = `../../kana-development/assets/audio/vocab_examples/dictionary/${scriptType}/${folderWord}/ex1.mp3`;
-    
-      // Play audio on new round
-      playAudio(currentAudioSrc, currentFallback);
-    
-      // --- Build answer grid ---
-      // Always show 6 options total, ensure the correct one is included
-      let shuffled = LessonCore.shuffle(words).slice(0, 6);
-      if (!shuffled.includes(current)) {
+  
+      // play once at start
+      playAudio(currentAudioSrc, currentFallback, slowMode);
+  
+      // --- build answer grid (always 6 options)
+      const shuffled = LessonCore.shuffle(words).slice(0, 6);
+      if (!shuffled.includes(current))
         shuffled[Math.floor(Math.random() * shuffled.length)] = current;
-      }
-
-    
+  
       shuffled.forEach(w => {
         const btn = document.createElement('button');
         btn.className = 'btn vocab-choice';
@@ -487,34 +485,32 @@
         btn.onclick = () => handleAnswer(w);
         opts.appendChild(btn);
       });
-    
       opts.style.gridTemplateColumns = 'repeat(3, 1fr)';
     }
-
   
-    // --- Answer handler ---
+    // --- handle answer click
     function handleAnswer(sel) {
+      if (locked) return;
+      locked = true;
+  
       const correct = sel.id === current.id;
       opts.querySelectorAll('button').forEach(b => (b.disabled = true));
       feedback.classList.remove('correct', 'wrong');
       feedback.classList.add(correct ? 'correct' : 'wrong');
-      feedback.textContent = correct ? '✅ Correct!' : '❌ Incorrect!';
-    
+      feedback.textContent = correct ? ' Correct!' : ' Incorrect!';
+  
       if (correct) {
-        if (!hintUsed) score++;
+        score++;
         updateMeter();
-    
-        if (score >= goal) {
-          feedback.textContent = '🎉 Lesson Complete!';
-          btnPlay.disabled = true;
-          opts.querySelectorAll('button').forEach(b => (b.disabled = true));
-          exampleBox.classList.add('is-hidden');
-          finishBtn.classList.remove('is-hidden');
-        } else {
+  
+        if (score < goal) {
           setTimeout(pickNext, 900);
+        } else {
+          // reached goal, stop autoplay
+          feedback.textContent = ' Lesson Complete!';
         }
-    
       } else {
+        // show the example sentence
         const exSet = current.examples?.[currentTense] || current.examples?.dictionary || [];
         const ex = exSet[currentExIndex] || exSet[0];
         exampleBox.innerHTML = `
@@ -524,34 +520,17 @@
         `;
         exampleBox.classList.remove('is-hidden');
         $('#next-btn', exampleBox).onclick = () => pickNext();
-        playAudio(currentAudioSrc, currentFallback);
+        playAudio(currentAudioSrc, currentFallback, true);
       }
     }
-
   
-    // --- Button actions ---
-    btnPlay.onclick = () => {
-      replayCount++;
-      playAudio(currentAudioSrc, currentFallback);
-      if (replayCount >= 2 && !hintUsed) hintBtn.classList.remove('is-hidden');
-    };
-  
-    slowToggle.onclick = () => {
-      slowMode = !slowMode;
-      slowToggle.textContent = slowMode ? ' Slow: On' : ' Slow: Off';
-    };
-  
-    hintBtn.onclick = () => {
-      hintUsed = true;
-      feedback.textContent = getKanaHint(current);
-      hintBtn.classList.add('is-hidden');
-    };
-  
+    btnPlay.onclick = () => playAudio(currentAudioSrc, currentFallback, slowMode);
     finishBtn.onclick = () => (window.location.href = '../index.html');
   
     updateMeter();
     pickNext();
   }
+
 
   
   // ======================================================
