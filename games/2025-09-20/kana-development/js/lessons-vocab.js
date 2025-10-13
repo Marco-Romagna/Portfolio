@@ -412,76 +412,41 @@
     let retryCount = 0;
     const MAX_RETRIES = 10;
     
-    async function pickNext() {
-      if (retryCount > MAX_RETRIES) {
-        console.warn("No playable audio found after several attempts.");
-        opts.innerHTML = `<p>No valid audio files found for this lesson.</p>`;
-        btnPlay.disabled = true;
-        return;
-      }
-    
+    function pickNext() {
       currentWord = LessonCore.pickRandom(words);
       currentTense = LessonCore.pickRandom(tenses);
     
-      // Determine script type (hiragana or katakana)
       const scriptType = LessonCore.LEXICON || "hiragana";
       const basePath = `../../assets/audio/vocab_examples/${currentTense}/${scriptType}/${currentWord}/`;
-  
-      const possibleFiles = ["ex1.mp3", "ex2.mp3", "ex3.mp3"];
-      let foundFile = null;
     
-      for (const f of possibleFiles) {
-        try {
-          const res = await fetch(basePath + f, { method: "HEAD" });
-          if (res.ok) {
-            foundFile = f;
-            break;
-          }
-        } catch {}
+      // Try to pick a random example (ex1–ex3)
+      const n = Math.floor(Math.random() * 3) + 1;
+      let audioSrc = `${basePath}ex${n}.mp3`;
+    
+      // Fallback if polite/past missing → dictionary/ex1.mp3
+      if (currentTense !== "dictionary") {
+        const fallback = `../../assets/audio/vocab_examples/dictionary/${scriptType}/${currentWord}/ex1.mp3`;
+        const testAudio = new Audio(audioSrc);
+    
+        // Graceful fallback — if main fails to play, retry with dictionary ex1
+        testAudio.onerror = () => new Audio(fallback).play();
+        btnPlay.onclick = () => testAudio.play();
+      } else {
+        btnPlay.onclick = () => new Audio(audioSrc).play();
       }
-    
-      // Fallback check (to dictionary if polite/past missing)
-      if (!foundFile && currentTense !== "dictionary") {
-        console.warn(`[Fallback] No ${currentTense} audio for ${currentWord}, trying dictionary`);
-        const fallbackBase = `../../assets/audio/vocab_examples/dictionary/${scriptType}/${currentWord}/`;
-        for (const f of possibleFiles) {
-          try {
-            const res = await fetch(fallbackBase + f, { method: "HEAD" });
-            if (res.ok) {
-              foundFile = f;
-              break;
-            }
-          } catch {}
-        }
-      }
-    
-      // If still no valid file, skip word safely (no infinite loop)
-      if (!foundFile) {
-        retryCount++;
-        console.warn(`[Skip] No valid audio for ${currentWord} (${currentTense}) [${retryCount}/${MAX_RETRIES}]`);
-        await new Promise(r => setTimeout(r, 100)); // tiny delay to avoid runaway recursion
-        return pickNext(); // Try another word
-      }
-    
-      retryCount = 0; // Reset counter once success found
-    
-      const audioSrc = `${basePath}${foundFile}`;
-      btnPlay.onclick = () => new Audio(audioSrc).play();
     
       // Populate answer buttons
       const shuffled = LessonCore.shuffle(words);
-      opts.innerHTML = '';
+      opts.innerHTML = "";
       shuffled.forEach(id => {
-        const btn = document.createElement('button');
-        btn.className = 'btn';
-        btn.textContent = id.replace(/_kata|_hira/g, '');
+        const btn = document.createElement("button");
+        btn.className = "btn";
+        btn.textContent = id.replace(/_kata|_hira/g, "");
         btn.onclick = () => checkAnswer(id);
         opts.appendChild(btn);
       });
     }
 
-
-  
     function checkAnswer(id) {
       if (id === currentWord) {
         feedback.textContent = '✅ Correct!';
