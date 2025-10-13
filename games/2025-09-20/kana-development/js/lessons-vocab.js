@@ -413,39 +413,44 @@
     const MAX_RETRIES = 10;
     
     function pickNext() {
-      currentWord = LessonCore.pickRandom(words);
+      currentWord = LessonCore.pickRandom(words); // e.g., "ue_hira"
       currentTense = LessonCore.pickRandom(tenses);
     
       const scriptType = LessonCore.LEXICON || "hiragana";
-      const basePath = `../../assets/audio/vocab_examples/${currentTense}/${scriptType}/${currentWord}/`;
+      const folderWord = currentWord.replace(/_hira|_kata/g, ''); // matches actual folder name ("ue")
+      const basePath = `../../assets/audio/vocab_examples/${currentTense}/${scriptType}/${folderWord}/`;
     
-      // Try to pick a random example (ex1–ex3)
+      // Random example ex1–ex3
       const n = Math.floor(Math.random() * 3) + 1;
       let audioSrc = `${basePath}ex${n}.mp3`;
     
-      // Fallback if polite/past missing → dictionary/ex1.mp3
+      // Fallback to dictionary/ex1 if not available
       if (currentTense !== "dictionary") {
-        const fallback = `../../assets/audio/vocab_examples/dictionary/${scriptType}/${currentWord}/ex1.mp3`;
+        const fallback = `../../assets/audio/vocab_examples/dictionary/${scriptType}/${folderWord}/ex1.mp3`;
         const testAudio = new Audio(audioSrc);
     
-        // Graceful fallback — if main fails to play, retry with dictionary ex1
-        testAudio.onerror = () => new Audio(fallback).play();
+        testAudio.onerror = () => {
+          console.warn(`⚠️ Falling back to dictionary for ${currentWord}`);
+          new Audio(fallback).play();
+        };
+    
         btnPlay.onclick = () => testAudio.play();
       } else {
         btnPlay.onclick = () => new Audio(audioSrc).play();
       }
     
-      // Populate answer buttons
+      // Populate word buttons
       const shuffled = LessonCore.shuffle(words);
-      opts.innerHTML = "";
+      opts.innerHTML = '';
       shuffled.forEach(id => {
-        const btn = document.createElement("button");
-        btn.className = "btn";
-        btn.textContent = id.replace(/_kata|_hira/g, "");
+        const btn = document.createElement('button');
+        btn.className = 'btn';
+        btn.textContent = id.replace(/_hira|_kata/g, '');
         btn.onclick = () => checkAnswer(id);
         opts.appendChild(btn);
       });
     }
+
 
     function checkAnswer(id) {
       if (id === currentWord) {
