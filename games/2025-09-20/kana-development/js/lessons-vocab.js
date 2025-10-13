@@ -365,126 +365,136 @@
   }
 
   // ======================================================
-  // Part 5 — Audio Recognition (Vocab Immersion)
+  // Part 5 — Audio 
   // ======================================================
-  async function initPart5(words) {
+  async function initPart5() {
     const part5 = $('#part-5');
     if (!part5) return;
   
-    // Inject fresh layout
-    part5.innerHTML = `
-      <h2 class="part-title">Audio Recognition</h2>
-      <div class="audio-instructions">🎧 Listen and choose the word you heard.</div>
-      <button class="btn primary replay">▶ Replay Audio</button>
-      <div class="options-grid"></div>
-      <div class="tense-grid is-hidden"></div>
-      <div class="quiz-feedback"></div>
-      <div class="quiz-progress"></div>
+    part5.innerHTML = '<h2 class="part-title">Audio Recognition</h2>';
+  
+    const panel = document.createElement('div');
+    panel.className = 'speak-panel';
+    part5.appendChild(panel);
+  
+    const lessonId = document.body.dataset.lessonId;
+    const words = LessonCore.getWordsForLevel(lessonId);
+    const tenses = LessonCore.getAvailableTensesForWorld(LessonCore.WORLD);
+  
+    if (!words.length) {
+      panel.innerHTML = `<p>No vocab words found for this lesson.</p>`;
+      return;
+    }
+  
+    // UI Layout
+    panel.innerHTML = `
+      <div class="audio-quiz">
+        <button class="btn primary" id="play-audio">▶ Play Audio</button>
+        <div id="options" class="options-grid"></div>
+        <div id="feedback" class="quiz-feedback"></div>
+        <div class="actions">
+          <button class="btn primary" data-action="finish-lesson">Finish</button>
+        </div>
+      </div>
     `;
   
-    const replayBtn = $('.replay', part5);
-    const optionsGrid = $('.options-grid', part5);
-    const tenseGrid = $('.tense-grid', part5);
-    const feedbackEl = $('.quiz-feedback', part5);
+    const btnPlay = $('#play-audio', panel);
+    const opts = $('#options', panel);
+    const feedback = $('#feedback', panel);
+    const finishBtn = $('[data-action="finish-lesson"]', panel);
   
-    // Determine which tenses are unlocked based on world
-    const worldCode = LessonCore.currentWorld;
-    const availableTenses = LessonCore.getAvailableTensesForWorld(worldCode);
-  
+    // --- Setup game loop ---
+    let score = 0;
+    const goal = 10;
     let currentWord = null;
     let currentTense = null;
-    let currentAudio = null;
-    let selectedWord = null;
-    let selectedTense = null;
   
-    // Utility to pick and play an example
-    function loadNewPrompt() {
-      const wordList = LessonCore.getWordsForWorld(worldCode);
-      currentWord = LessonCore.pickRandom(wordList);
-      currentTense = LessonCore.pickRandom(availableTenses);
-  
-      // Choose random example index (1–3). Adjust if fewer exist.
-      const exampleNum = Math.floor(Math.random() * 3) + 1;
-      const path = `assets/audio/vocab_examples/${currentWord}/${currentTense}/ex${exampleNum}.mp3`;
-  
-      currentAudio = new Audio(path);
-      currentAudio.play().catch(() => console.warn('Missing audio file:', path));
-  
-      // Reset UI
-      selectedWord = null;
-      selectedTense = null;
-      feedbackEl.textContent = '';
-  
-      populateWordOptions(wordList);
-      populateTenseOptions(availableTenses);
-    }
-  
-    // Populate word buttons from this world’s vocab
-    function populateWordOptions(list) {
-      optionsGrid.innerHTML = '';
-      LessonCore.shuffle(list).forEach(word => {
+    async function pickNext() {
+      currentWord = LessonCore.pickRandom(words);
+      currentTense = LessonCore.pickRandom(tenses);
+    
+      const basePath = `../../assets/audio/vocab_examples/${currentWord}/${currentTense}/`;
+    
+      // Try to find a valid file
+      const possibleFiles = ["1.mp3", "2.mp3", "3.mp3"];
+      let foundFile = null;
+    
+      for (const f of possibleFiles) {
+        try {
+          const res = await fetch(basePath + f, { method: "HEAD" });
+          if (res.ok) {
+            foundFile = f;
+            break;
+          }
+        } catch {
+          // ignore failed fetch
+        }
+      }
+    
+      // Fallback if no example exists for this tense
+      if (!foundFile && currentTense !== "dictionary") {
+        console.warn(`[Fallback] No ${currentTense} audio for ${currentWord}, using dictionary`);
+        currentTense = "dictionary";
+        const fallbackBase = `../../assets/audio/vocab_examples/${currentWord}/dictionary/`;
+        for (const f of possibleFiles) {
+          try {
+            const res = await fetch(fallbackBase + f, { method: "HEAD" });
+            if (res.ok) {
+              foundFile = f;
+              break;
+            }
+          } catch {}
+        }
+      }
+    
+      // If still nothing, skip this word
+      if (!foundFile) {
+        console.warn(`[Skip] No valid audio found for ${currentWord} (${currentTense})`);
+        return pickNext();
+      }
+    
+      const audioSrc = `${basePath}${foundFile}`;
+      btnPlay.onclick = () => new Audio(audioSrc).play();
+    
+      // Populate answer buttons
+      const shuffled = LessonCore.shuffle(words);
+      opts.innerHTML = '';
+      shuffled.forEach(id => {
         const btn = document.createElement('button');
         btn.className = 'btn';
-        btn.textContent = LessonCore.getWordKana(word);
-        btn.addEventListener('click', () => onWordSelect(word));
-        optionsGrid.appendChild(btn);
+        btn.textContent = id.replace(/_kata|_hira/g, '');
+        btn.onclick = () => checkAnswer(id);
+        opts.appendChild(btn);
       });
     }
+
   
-    // Populate tense buttons if more than one tense unlocked
-    function populateTenseOptions(tenses) {
-      tenseGrid.innerHTML = '';
-      if (tenses.length > 1) {
-        tenseGrid.classList.remove('is-hidden');
-        tenses.forEach(t => {
-          const btn = document.createElement('button');
-          btn.className = 'btn ghost';
-          btn.textContent = LessonCore.formatTenseLabel(t);
-          btn.addEventListener('click', () => onTenseSelect(t));
-          tenseGrid.appendChild(btn);
-        });
-      } else {
-        tenseGrid.classList.add('is-hidden');
-      }
-    }
-  
-    // --- Interaction logic ---
-    function onWordSelect(word) {
-      selectedWord = word;
-      checkAnswer();
-    }
-    function onTenseSelect(tense) {
-      selectedTense = tense;
-      checkAnswer();
-    }
-  
-    function checkAnswer() {
-      const needsTense = availableTenses.length > 1;
-      if (!selectedWord) return;
-      if (needsTense && !selectedTense) return;
-  
-      const correctWord = selectedWord === currentWord;
-      const correctTense = !needsTense || selectedTense === currentTense;
-  
-      if (correctWord && correctTense) {
-        feedbackEl.textContent = '✅ Correct!';
+    function checkAnswer(id) {
+      if (id === currentWord) {
+        feedback.textContent = '✅ Correct!';
         LessonCore.updateProgress(true);
-        setTimeout(loadNewPrompt, 1200);
+        score++;
       } else {
-        feedbackEl.textContent = '❌ Try again.';
+        feedback.textContent = '❌ Incorrect!';
         LessonCore.updateProgress(false);
-        // user can replay and retry
+        score = Math.max(0, score - 1);
+      }
+  
+      if (score >= goal) {
+        feedback.textContent = '🎉 Lesson Complete!';
+        setTimeout(() => window.location.href = '../index.html', 800);
+      } else {
+        setTimeout(pickNext, 800);
       }
     }
   
-    // --- Replay current clip ---
-    replayBtn.addEventListener('click', () => {
-      if (currentAudio) currentAudio.play();
-    });
+    pickNext();
   
-    // --- Start first prompt ---
-    loadNewPrompt();
+    finishBtn.addEventListener('click', () => {
+      window.location.href = '../index.html';
+    });
   }
+
 
   // ======================================================
   // Public API
