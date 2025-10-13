@@ -281,6 +281,33 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
     });
   })();
 
+    // ---------- Vocab Audio Helpers ----------
+    LessonCore.getAvailableTensesForWorld = function(world) {
+      const n = parseInt(world);
+      if (n <= 3) return ['dictionary'];
+      if (n <= 5) return ['dictionary', 'polite'];
+      return ['dictionary', 'polite', 'past'];
+    };
+  
+    LessonCore.getWordsForWorld = function(world) {
+      // your vocab init scripts populate words per world
+      if (window.VOCAB_WORDS_BY_WORLD && window.VOCAB_WORDS_BY_WORLD[world]) {
+        return window.VOCAB_WORDS_BY_WORLD[world];
+      }
+      console.warn('No vocab words found for world', world);
+      return [];
+    };
+  
+    LessonCore.pickRandom = arr => arr[Math.floor(Math.random() * arr.length)];
+    LessonCore.shuffle = arr => [...arr].sort(() => Math.random() - 0.5);
+  
+    LessonCore.formatTenseLabel = t => ({
+      dictionary: 'Dictionary',
+      polite: 'Polite',
+      past: 'Past'
+    }[t] || t);
+
+  
   // ---------- Export ----------
   window.LessonCore = {
     $,$$,
