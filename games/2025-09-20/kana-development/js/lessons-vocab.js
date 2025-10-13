@@ -441,25 +441,29 @@
 
   
     function checkAnswer(id, currentWord) {
+      feedback.classList.remove('correct', 'wrong');
       if (id === currentWord) {
         feedback.textContent = '✅ Correct!';
+        feedback.classList.add('correct');
         LessonCore.updateProgress(true);
         score++;
       } else {
         feedback.textContent = '❌ Incorrect!';
+        feedback.classList.add('wrong');
         LessonCore.updateProgress(false);
         score = Math.max(0, score - 1);
       }
-  
+    
       updateMeter();
-  
+    
       if (score < goal) {
         setTimeout(() => {
           feedback.textContent = '';
+          feedback.classList.remove('correct', 'wrong');
           pickNext();
-        }, 700);
+        }, 800);
       } else {
-        feedback.textContent = '🎉 Lesson Complete!';
+        feedback.outerHTML = `<div class="lesson-complete"> Lesson Complete!</div>` + feedback.outerHTML;
       }
     }
   
