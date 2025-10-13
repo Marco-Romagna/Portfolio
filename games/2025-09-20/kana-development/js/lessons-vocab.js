@@ -365,7 +365,7 @@
   }
 
   // ======================================================
-  // Part 5 — Audio Recognition 
+  // Part 5 — Audio Recognition (Hint + Slow + Manual Proceed)
   // ======================================================
   async function initPart5(words) {
     const part5 = $('#part-5');
@@ -377,17 +377,13 @@
         <div class="audio-section">
           <button class="btn primary" id="play-audio">▶ Play Audio</button>
         </div>
-  
-        <div id="options" class="options-grid"></div>
+        <div id="options" class="options-grid fixed-grid"></div>
         <div id="feedback" class="quiz-feedback"></div>
-  
         <div id="example-display" class="example-display is-hidden"></div>
-  
         <div class="quiz-progress">
           <div class="meter"><div class="meter-fill"></div></div>
           <div class="meter-label"></div>
         </div>
-  
         <div class="actions">
           <button class="btn primary is-hidden" data-action="finish-lesson">Finish</button>
         </div>
@@ -401,11 +397,42 @@
     const finishBtn = $('[data-action="finish-lesson"]', part5);
     const meterFill = $('.meter-fill', part5);
     const meterLabel = $('.meter-label', part5);
+    const audioSection = $('.audio-section', part5);
   
     const tenses = LessonCore.getAvailableTensesForWorld(LessonCore.WORLD);
     const goal = 10;
     let score = 0;
+    let replayCount = 0;
+    let hintUsed = false;
+    let slowMode = false;
     let locked = false;
+  
+    // --- UI setup ---
+    const hintBtn = document.createElement('button');
+    hintBtn.id = 'hint-btn';
+    hintBtn.className = 'btn ghost is-hidden';
+    hintBtn.textContent = '💡 Show Hint';
+    audioSection.appendChild(hintBtn);
+  
+    const slowToggle = document.createElement('button');
+    slowToggle.id = 'slow-mode-toggle';
+    slowToggle.className = 'btn ghost';
+    slowToggle.textContent = '🐢 Slow Mode: Off';
+    slowToggle.onclick = () => {
+      slowMode = !slowMode;
+      slowToggle.textContent = slowMode ? '🐢 Slow Mode: On' : '🐢 Slow Mode: Off';
+    };
+    audioSection.appendChild(slowToggle);
+  
+    const continueBtn = document.createElement('button');
+    continueBtn.id = 'continue-btn';
+    continueBtn.className = 'btn primary is-hidden';
+    continueBtn.textContent = 'Continue →';
+    continueBtn.onclick = () => {
+      continueBtn.classList.add('is-hidden');
+      pickNext();
+    };
+    audioSection.appendChild(continueBtn);
   
     function updateMeter() {
       const pct = Math.round((score / goal) * 100);
@@ -414,14 +441,22 @@
       if (score >= goal) finishBtn.classList.remove('is-hidden');
     }
   
-    function playAudio(src, fallback) {
+    function playAudio(src, fallback, slow) {
       const audio = new Audio(src);
-      audio.onerror = () => new Audio(fallback).play();
+      audio.playbackRate = slow ? 0.7 : 1.0;
+      audio.onerror = () => {
+        const fb = new Audio(fallback);
+        fb.playbackRate = slow ? 0.7 : 1.0;
+        fb.play();
+      };
       audio.play().catch(() => {});
     }
   
-    function pickNext() {
+    async function pickNext() {
       locked = false;
+      hintUsed = false;
+      replayCount = 0;
+      hintBtn.classList.add('is-hidden');
       exampleBox.classList.add('is-hidden');
       exampleBox.innerHTML = '';
   
@@ -435,55 +470,61 @@
       const audioSrc = `${basePath}ex${n}.mp3`;
       const fallback = `../../kana-development/assets/audio/vocab_examples/dictionary/${scriptType}/${folderWord}/ex1.mp3`;
   
-      // auto play on round start
-      playAudio(audioSrc, fallback);
-      btnPlay.onclick = () => playAudio(audioSrc, fallback);
+      playAudio(audioSrc, fallback, slowMode);
   
-      // build grid
-      const shuffled = LessonCore.shuffle(words);
+      btnPlay.onclick = () => {
+        replayCount++;
+        playAudio(audioSrc, fallback, slowMode);
+        if (replayCount >= 3 && !hintUsed) hintBtn.classList.remove('is-hidden');
+      };
+  
+      hintBtn.onclick = () => {
+        hintUsed = true;
+        hintBtn.classList.add('is-hidden');
+        feedback.innerHTML = `💡 Hint: <strong>${current.romaji}</strong>`;
+        playAudio(audioSrc, fallback, true);
+      };
+  
+      // Render 2x3 options
       opts.innerHTML = '';
-      shuffled.forEach((w, i) => {
+      const shuffled = LessonCore.shuffle(words).slice(0, 6);
+      shuffled.forEach(w => {
         const btn = document.createElement('button');
         btn.className = 'btn vocab-choice';
         btn.textContent = (w.id || w.romaji).replace(/_hira|_kata/g, '');
-        btn.onclick = () => {
-          if (locked) return;
-          locked = true;
-          const correct = (w.id || w.romaji) === currentId;
-  
-          btn.classList.add(correct ? 'is-correct' : 'is-wrong');
-          feedback.classList.remove('correct', 'wrong');
-          feedback.classList.add(correct ? 'correct' : 'wrong');
-          feedback.textContent = correct ? '✅ Correct!' : '❌ Incorrect!';
-          LessonCore.updateProgress(correct);
-          score += correct ? 1 : -1;
-          if (score < 0) score = 0;
-          updateMeter();
-  
-          if (!correct && current.example) {
-            const ex = current.example;
-            exampleBox.innerHTML = `
-              <p class="ex-header">Example Sentence:</p>
-              <p class="ex-jp">${ex.kana}</p>
-              <p class="ex-romaji">${ex.romaji}</p>
-              <p class="ex-en">${ex.english}</p>
-            `;
-            exampleBox.classList.remove('is-hidden');
-          }
-  
-          setTimeout(() => {
-            btn.classList.remove('is-correct', 'is-wrong');
-            feedback.textContent = '';
-            feedback.classList.remove('correct', 'wrong');
-            if (score >= goal) {
-              feedback.outerHTML = `<div class="lesson-complete">🎉 Lesson Complete!</div>` + feedback.outerHTML;
-            } else {
-              pickNext();
-            }
-          }, correct ? 700 : 1700);
-        };
+        btn.onclick = () => handleAnswer(btn, w, current, currentId, audioSrc, fallback);
         opts.appendChild(btn);
       });
+    }
+  
+    function handleAnswer(btn, chosen, current, correctId, audioSrc, fallback) {
+      if (locked) return;
+      locked = true;
+  
+      const isCorrect = (chosen.id || chosen.romaji) === correctId;
+      opts.querySelectorAll('button').forEach(b => b.disabled = true);
+      feedback.classList.remove('correct', 'wrong');
+      feedback.classList.add(isCorrect ? 'correct' : 'wrong');
+      feedback.textContent = isCorrect ? '✅ Correct!' : '❌ Incorrect!';
+  
+      if (isCorrect) {
+        const gain = hintUsed ? 0.5 : 1;
+        score += gain;
+        updateMeter();
+        setTimeout(() => pickNext(), 900);
+      } else {
+        // Show full kana + example
+        const ex = current.example;
+        exampleBox.innerHTML = `
+          <p class="ex-header">Correct Answer:</p>
+          <p class="ex-jp">${current.kana}</p>
+          ${ex ? `
+            <p class="ex-romaji">${ex.romaji}</p>
+            <p class="ex-en">${ex.english}</p>` : ""}
+        `;
+        exampleBox.classList.remove('is-hidden');
+        continueBtn.classList.remove('is-hidden');
+      }
     }
   
     finishBtn.addEventListener('click', () => window.location.href = '../index.html');
