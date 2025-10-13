@@ -520,7 +520,7 @@
   
     slowToggle.onclick = () => {
       slowMode = !slowMode;
-      slowToggle.textContent = slowMode ? '🐢 Slow: On' : '🐢 Slow: Off';
+      slowToggle.textContent = slowMode ? ' Slow: On' : ' Slow: Off';
     };
   
     hintBtn.onclick = () => {
