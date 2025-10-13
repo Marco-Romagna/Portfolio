@@ -367,7 +367,7 @@
   // ======================================================
   // Part 5 — Audio Recognition
   // ======================================================
-   async function initPart5(words) {
+  async function initPart5(words) {
     const part5 = $('#part-5');
     if (!part5) return;
   
@@ -401,6 +401,7 @@
     const tenses = LessonCore.getAvailableTensesForWorld(LessonCore.WORLD);
     const goal = 10;
     let score = 0;
+    let locked = false;
   
     function updateMeter() {
       const pct = Math.round((score / goal) * 100);
@@ -409,24 +410,25 @@
       if (score >= goal) finishBtn.classList.remove('is-hidden');
     }
   
-   function pickNext() {
-      const current = LessonCore.pickRandom(words); // full object
-      const currentId = current.id || current.romaji; // use a unique string
+    // ---- Build and play next question ----
+    function pickNext() {
+      locked = false;
+      const current = LessonCore.pickRandom(words);
+      const currentId = current.id || current.romaji;
       const currentTense = LessonCore.pickRandom(tenses);
       const scriptType = LessonCore.LEXICON || "hiragana";
-      const folderWord = currentId.replace(/_hira|_kata/g, ''); // clean ID
+      const folderWord = currentId.replace(/_hira|_kata/g, '');
       const basePath = `../../kana-development/assets/audio/vocab_examples/${currentTense}/${scriptType}/${folderWord}/`;
       const n = Math.floor(Math.random() * 3) + 1;
       const audioSrc = `${basePath}ex${n}.mp3`;
       const fallback = `../../kana-development/assets/audio/vocab_examples/dictionary/${scriptType}/${folderWord}/ex1.mp3`;
-    
-      const testAudio = new Audio(audioSrc);
-      testAudio.onerror = () => {
-        console.warn(` Fallback to dictionary for ${currentId}`);
-        new Audio(fallback).play();
-      };
-      btnPlay.onclick = () => testAudio.play();
-    
+  
+      // preload and play audio immediately
+      const audio = new Audio(audioSrc);
+      audio.onerror = () => new Audio(fallback).play();
+      audio.play().catch(()=>{}); // auto-play on load
+      btnPlay.onclick = () => audio.play();
+  
       // build options
       const shuffled = LessonCore.shuffle(words);
       opts.innerHTML = '';
@@ -434,43 +436,39 @@
         const btn = document.createElement('button');
         btn.className = 'btn';
         btn.textContent = (w.id || w.romaji).replace(/_hira|_kata/g, '');
-        btn.onclick = () => checkAnswer(w.id || w.romaji, currentId);
+        btn.onclick = () => {
+          if (locked) return;
+          locked = true;
+          const correct = (w.id || w.romaji) === currentId;
+          btn.classList.add(correct ? 'is-correct' : 'is-wrong');
+          feedback.classList.remove('correct', 'wrong');
+          feedback.classList.add(correct ? 'correct' : 'wrong');
+          feedback.textContent = correct ? '✅ Correct!' : '❌ Incorrect!';
+          LessonCore.updateProgress(correct);
+          score += correct ? 1 : -1;
+          if (score < 0) score = 0;
+          updateMeter();
+  
+          setTimeout(() => {
+            btn.classList.remove('is-correct', 'is-wrong');
+            feedback.textContent = '';
+            feedback.classList.remove('correct', 'wrong');
+            if (score >= goal) {
+              feedback.outerHTML = `<div class="lesson-complete">🎉 Lesson Complete!</div>` + feedback.outerHTML;
+            } else {
+              pickNext();
+            }
+          }, 800);
+        };
         opts.appendChild(btn);
       });
-    }
-
-  
-    function checkAnswer(id, currentWord) {
-      feedback.classList.remove('correct', 'wrong');
-      if (id === currentWord) {
-        feedback.textContent = '✅ Correct!';
-        feedback.classList.add('correct');
-        LessonCore.updateProgress(true);
-        score++;
-      } else {
-        feedback.textContent = '❌ Incorrect!';
-        feedback.classList.add('wrong');
-        LessonCore.updateProgress(false);
-        score = Math.max(0, score - 1);
-      }
-    
-      updateMeter();
-    
-      if (score < goal) {
-        setTimeout(() => {
-          feedback.textContent = '';
-          feedback.classList.remove('correct', 'wrong');
-          pickNext();
-        }, 800);
-      } else {
-        feedback.outerHTML = `<div class="lesson-complete"> Lesson Complete!</div>` + feedback.outerHTML;
-      }
     }
   
     finishBtn.addEventListener('click', () => window.location.href = '../index.html');
     updateMeter();
-    pickNext();
+    pickNext(); // start automatically
   }
+
 
 
 
