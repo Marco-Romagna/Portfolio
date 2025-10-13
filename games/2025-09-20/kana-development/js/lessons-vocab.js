@@ -450,10 +450,12 @@
       replayCount = 0;
       hintUsed = false;
   
-      if (used.size === words.length) used.clear();
+      // prevent playing the same word's audio twice in a row, 
+      // but allow it to still appear as an option
       let next;
-      do { next = LessonCore.pickRandom(words); } while (used.has(next.id));
-      used.add(next.id);
+      do {
+        next = LessonCore.pickRandom(words);
+      } while (current && next.id === current.id);
   
       current = next;
       currentTense = LessonCore.pickRandom(tenses);
