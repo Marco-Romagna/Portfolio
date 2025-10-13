@@ -281,6 +281,15 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
     });
   })();
 
+    // ---------- Export ----------
+    window.LessonCore = {
+      $,$$,
+      WORLD, SUFFIX, IS_VOCAB,
+      KANA, ROMA, PAIR,
+      showPart, LEXICON,
+      GOAL_IDENT, GOAL_TYPE, COMBO_LAST
+    };
+  
     // ---------- Vocab Audio Helpers ----------
     LessonCore.getAvailableTensesForWorld = function(world) {
       const n = parseInt(world);
@@ -290,7 +299,6 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
     };
   
     LessonCore.getWordsForWorld = function(world) {
-      // your vocab init scripts populate words per world
       if (window.VOCAB_WORDS_BY_WORLD && window.VOCAB_WORDS_BY_WORLD[world]) {
         return window.VOCAB_WORDS_BY_WORLD[world];
       }
@@ -307,15 +315,6 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
       past: 'Past'
     }[t] || t);
 
-  
-  // ---------- Export ----------
-  window.LessonCore = {
-    $,$$,
-    WORLD, SUFFIX, IS_VOCAB,
-    KANA, ROMA, PAIR,
-    showPart, LEXICON,
-    GOAL_IDENT, GOAL_TYPE, COMBO_LAST
-  };
 
   // ---------- Bootstrapping ----------
   document.addEventListener("DOMContentLoaded", () => {
