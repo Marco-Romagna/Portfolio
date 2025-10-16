@@ -922,98 +922,30 @@ body.site {
 }
 
 /* =========================================================
-   Horizontal Carousel Layout (Worlds)
+   Horizontal Carousel Layout (Worlds) 
    ========================================================= */
 .world-carousel {
   position: relative;
   overflow: hidden;
   width: 100%;
-  max-width: 960px;
+  max-width: 1000px;
   margin: 2rem auto 4rem;
 }
 
-/* Track containing all worlds */
 #worlds-track {
   display: flex;
-  flex-direction: row;
+  flex-wrap: nowrap;
   transition: transform 0.6s ease;
   will-change: transform;
-  overflow: hidden;
-  backface-visibility: hidden;
   transform-style: preserve-3d;
+  backface-visibility: hidden;
 }
 
-/* Each individual world (slide) */
 #worlds-track > .world {
   flex: 0 0 100%;
-  max-width: 100%;
+  width: 100%;
   box-sizing: border-box;
-  padding: 2rem 1rem;
   position: relative;
+  min-height: 70vh; /* ensures full slide height */
   overflow: hidden;
-  backface-visibility: hidden;
-}
-
-/* Anti-aliasing seam fix — hides subpixel line between slides */
-#worlds-track::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  pointer-events: none;
-  background: #0f172a; /* match your background color */
-  mix-blend-mode: multiply;
-  opacity: 0.002; /* invisible but hides seam */
-}
-
-/* =========================================================
-   Carousel Navigation
-   ========================================================= */
-.carousel-nav {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 0.6rem;
-  margin-top: 1.5rem;
-}
-
-.carousel-nav button {
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  border: none;
-  background: rgba(255, 255, 255, 0.25);
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-.carousel-nav button:hover {
-  background: rgba(255, 255, 255, 0.5);
-}
-.carousel-nav button.active {
-  background: #f5e6c4;
-  box-shadow: 0 0 10px rgba(255, 255, 200, 0.7);
-}
-
-/* =========================================================
-   Subtle Fade Edges
-   ========================================================= */
-.world-carousel::before,
-.world-carousel::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  width: 80px;
-  height: 100%;
-  z-index: 2;
-  pointer-events: none;
-}
-.world-carousel::before {
-  left: 0;
-  background: linear-gradient(to right, #0f172a 30%, transparent);
-}
-.world-carousel::after {
-  right: 0;
-  background: linear-gradient(to left, #0f172a 30%, transparent);
 }
