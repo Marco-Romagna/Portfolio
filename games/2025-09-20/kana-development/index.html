@@ -3,13 +3,14 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Kana Development • Stages</title>
+  <title>Kana Development • Worlds</title>
 
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Noto+Serif+JP:wght@500;700&display=swap" rel="stylesheet">
-  <!-- Global site styles -->
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Noto+Serif+JP:wght@500;700&family=Shippori+Mincho:wght@500&display=swap" rel="stylesheet">
+
+  <!-- Global Styles -->
   <link rel="stylesheet" href="../../../css/main.css">
-  <!-- Game-specific styles -->
-  <link rel="stylesheet" href="../../../css/games/kana-development/stages.css">
+  <link rel="stylesheet" href="../../../css/games/kana-development/lessons.css">
 </head>
 
 <body class="site">
@@ -49,10 +50,8 @@
       </p>
     </section>
 
-
-
-    <!-- Worlds container -->
-    <div id="worlds-root"></div>
+    <!-- Dynamic Worlds List -->
+    <section id="worlds-root"></section>
   </main>
 
   <!-- Footer -->
@@ -71,17 +70,23 @@
 
   <template id="tpl-level-row">
     <li class="level-row card">
-      <!-- Clickable header (no expand/collapse) -->
       <div class="level-head">
         <span class="level-icon no-thumb-mark"></span>
         <span class="level-title"></span>
       </div>
     </li>
-</template>
+  </template>
 
   <!-- Scripts -->
-  <script src="js/stages.js"></script>
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
+
+  <!-- Data & Rendering Logic -->
+  <script src="js/lessons-core.js"></script>
+  <script src="js/lessons-kana.js"></script>
   <script src="js/render.js"></script>
+  <script src="js/stages.js"></script>
   <script src="js/init.js"></script>
 </body>
 </html>
