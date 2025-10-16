@@ -62,7 +62,7 @@ function waitFor(check, interval = 25, timeout = 5000) {
 }
 
 
-// ==========================================================
+/ ==========================================================
 // Part 0 — Optional Summary (Pre-Lesson Screen)
 // ==========================================================
 async function maybeShowSummary() {
@@ -72,23 +72,22 @@ async function maybeShowSummary() {
     const lessonId = params.get("lesson") || params.get("id");
     if (!lessonId) return false;
 
+    // adjust relative path if needed
     const summaryPath = "../data/lexicon_summaries.json";
     const res = await fetch(summaryPath);
     if (!res.ok) throw new Error(`fetch failed (${res.status})`);
     const data = await res.json();
 
-    //  Look through the summaries array to find one that matches
+    // Find summary where `worlds` includes the lesson ID or matches directly by ID
     let summary = null;
-
     if (Array.isArray(data.summaries)) {
-      summary = data.summaries.find(s =>
-        s.worlds.includes(lessonId) || s.id === lessonId
+      summary = data.summaries.find(
+        s => (Array.isArray(s.worlds) && s.worlds.includes(lessonId)) || s.id === lessonId
       );
     }
 
     if (!summary) return false;
 
-    // Prefer the long note, fall back to gloss_en if needed
     const summaryText = summary.note || summary.gloss_en || "No summary available";
 
     // Build summary section matching your CSS
