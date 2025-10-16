@@ -18,7 +18,7 @@
       if (!lessonId) return false;
 
       // 2. Fetch summaries JSON
-      const res = await fetch("../data/lexicon_summaries.json");
+      const res = await fetch("../../data/lexicon_summaries.json");
       const summaries = await res.json();
 
       // 3. Look up this lesson’s summary text
