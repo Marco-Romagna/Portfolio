@@ -949,3 +949,58 @@ body.site {
   min-height: 70vh; /* ensures full slide height */
   overflow: hidden;
 }
+
+/* =========================================================
+   World Panel Styling 
+   ========================================================= */
+#worlds-track > .world {
+  background: rgba(33, 33, 33, 0.7);
+  border: 1px solid rgba(140, 120, 80, 0.4);
+  border-radius: 20px;
+  padding: 2rem;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+  max-width: 780px;
+  margin: 0 auto;
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+#worlds-track > .world:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 40px rgba(180, 160, 100, 0.4);
+}
+
+#worlds-track .world-title {
+  font-size: 1.8rem;
+  margin-bottom: 0.75rem;
+  color: #f4e3b0;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+}
+
+#worlds-track .world-desc {
+  font-size: 1.05rem;
+  line-height: 1.8;
+  color: #e6dcb5;
+  max-width: 600px;
+  margin: 0 auto 1.5rem;
+}
+
+#worlds-track .levels-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+#worlds-track .level-row {
+  background: rgba(40, 40, 40, 0.6);
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  border: 1px solid rgba(120, 100, 70, 0.3);
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+#worlds-track .level-row:hover {
+  background: rgba(60, 50, 40, 0.7);
+  transform: translateY(-2px);
+}
