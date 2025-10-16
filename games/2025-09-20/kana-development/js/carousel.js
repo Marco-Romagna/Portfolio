@@ -49,11 +49,10 @@ window.initCarousel = function () {
 
     track.style.display = "flex";
     track.style.transition = "transform 0.6s ease";
-    track.style.width = `${slides.length * 100}%`;
-
+    track.style.width = "";
     [...slides].forEach(slide => {
-      slide.style.width = "100%";
-      slide.style.flexShrink = "0";
+      slide.style.flex = "0 0 100%";
+      slide.style.maxWidth = "100%";
     });
 
     // Build nav dots
