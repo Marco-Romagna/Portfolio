@@ -6,8 +6,8 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
 
 (() => {
   // ---------- Shared Goals ----------
-  const GOAL_IDENT = 10;   // how many correct answers needed in Identify
-  const GOAL_TYPE  = 10;   // how many correct answers in Typing
+  const GOAL_IDENT = 12;   // how many correct answers needed in Identify
+  const GOAL_TYPE  = 15;   // how many correct answers in Typing
   const COMBO_LAST = 3;    // how many final combo rounds in Typing
 
   // ---------- DOM Helpers ----------
