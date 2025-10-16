@@ -1,56 +1,40 @@
+
 // ==========================================================
 // lessons.js
 // ==========================================================
 
-console.log("🟢 lessons.js file fetched, script starting");
-
 (async () => {
   try {
-    console.log("🟢 lessons.js executing immediately");
-
-    // ------------------------------------------------------
     // Wait for LessonCore to exist before continuing
-    // ------------------------------------------------------
     await waitFor(() => window.LessonCore && typeof window.LessonCore.showPart === "function");
-    console.log("🟢 LessonCore found:", window.LessonCore);
 
     const { IS_VOCAB, showPart } = window.LessonCore;
 
-    // ------------------------------------------------------
     // 1️⃣ Prepare the correct lesson initializer (deferred)
-    // ------------------------------------------------------
     let startLessonFn = null;
 
     if (IS_VOCAB && typeof initVocabParts === "function") {
-      console.log("🟢 Deferring vocab lesson init until summary handled");
       startLessonFn = initVocabParts;
     } else if (!IS_VOCAB && typeof initKanaParts === "function") {
-      console.log("🟢 Deferring kana lesson init until summary handled");
       startLessonFn = initKanaParts;
     } else {
-      console.error("❌ initVocabParts / initKanaParts not found. Check script includes.");
+      console.error("initVocabParts / initKanaParts not found. Check script includes.");
       return;
     }
 
-    // ------------------------------------------------------
     // 2️⃣ Try to show summary first; otherwise start directly
-    // ------------------------------------------------------
     const hadSummary = await maybeShowSummary();
-    console.log("🟢 maybeShowSummary returned:", hadSummary);
 
     // Always initialize lesson parts (build DOM, preload data)
     startLessonFn();
 
     if (!hadSummary) {
-      console.log("🟢 No summary found → starting Part 1 immediately");
       showPart(1);
-    } else {
-      console.log("🟢 Summary shown → lesson will start after Begin button");
-      // The summary panel handles showPart(1) when clicked
     }
+    // If hadSummary === true, the summary button will start Part 1 later.
 
   } catch (err) {
-    console.error("❌ lessons.js crashed:", err);
+    console.error("lessons.js crashed:", err);
   }
 })();
 
@@ -81,22 +65,18 @@ function waitFor(check, interval = 25, timeout = 5000) {
 // Part 0 — Optional Summary (Pre-Lesson Screen)
 // ==========================================================
 async function maybeShowSummary() {
-  console.log("🟢 maybeShowSummary() entered");
-
   try {
-    const lessonId = new URLSearchParams(location.search).get("lesson");
-    console.log("🟢 lessonId from URL:", lessonId);
+    // Support both ?lesson= and ?id= so it works with any link format
+    const params = new URLSearchParams(location.search);
+    const lessonId = params.get("lesson") || params.get("id");
     if (!lessonId) return false;
 
     const summaryPath = "../data/lexicon_summaries.json";
-    console.log("🟢 Fetching summaries from:", summaryPath);
     const res = await fetch(summaryPath);
     if (!res.ok) throw new Error(`fetch failed (${res.status})`);
     const summaries = await res.json();
-    console.log("🟢 summaries keys:", Object.keys(summaries || {}));
 
     const summaryText = summaries?.[lessonId];
-    console.log("🟢 summaryText for", lessonId, "=", summaryText);
     if (!summaryText) return false;
 
     // Build summary section matching your CSS
@@ -113,18 +93,15 @@ async function maybeShowSummary() {
     `;
     container.prepend(part0);
 
-    console.log("🟢 Summary panel inserted");
-
     // Button → remove summary + begin lesson
     part0.querySelector("#start-lesson").addEventListener("click", () => {
-      console.log("🟢 Begin Lesson clicked → removing summary");
       part0.remove();
       window.LessonCore.showPart(1);
     });
 
     return true;
   } catch (err) {
-    console.warn("⚠️ Summary load failed:", err);
+    console.warn("Summary load failed:", err);
     return false;
   }
 }
