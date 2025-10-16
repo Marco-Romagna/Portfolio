@@ -991,25 +991,64 @@ body.site {
   left: auto;
   transform: rotate(180deg);
 }
-/* Carousel slide container fix */
+
+/* =========================================================
+   Carousel layout and visual fix
+   ========================================================= */
+.world-carousel {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+}
+
 #worlds-track {
   display: flex;
   transition: transform 0.6s ease;
   will-change: transform;
   overflow: hidden;
+  backface-visibility: hidden;
+  transform-style: preserve-3d;
 }
 
 #worlds-track > .world-panel {
   flex: 0 0 100%;
   max-width: 100%;
   box-sizing: border-box;
-}
-
-.world-carousel {
-  overflow: hidden;
   position: relative;
+  overflow: hidden;
+  backface-visibility: hidden;
 }
 
-.ancient-theme {
-  background: radial-gradient(circle at center, #0f172a 0%, #0a0a0a 90%);
+/* Anti-aliasing seam fix — hides subpixel line between slides */
+#worlds-track::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  background: #0f172a; /* match your background */
+  mix-blend-mode: multiply;
+  opacity: 0.002; /* invisible but removes visible seam */
+}
+
+
+.world-carousel::before,
+.world-carousel::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  width: 80px;
+  height: 100%;
+  z-index: 2;
+  pointer-events: none;
+}
+.world-carousel::before {
+  left: 0;
+  background: linear-gradient(to right, #0f172a 30%, transparent);
+}
+.world-carousel::after {
+  right: 0;
+  background: linear-gradient(to left, #0f172a 30%, transparent);
 }
