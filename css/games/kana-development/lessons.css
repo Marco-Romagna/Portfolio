@@ -869,6 +869,7 @@ body.site {
   text-align: center;
 }
 
+/* Individual world panel cards */
 .world-panel {
   background: rgba(33, 33, 33, 0.7);
   border: 1px solid rgba(140, 120, 80, 0.4);
@@ -898,6 +899,7 @@ body.site {
   margin: 0 auto 1rem;
 }
 
+/* Buttons within each world */
 .world-buttons {
   display: flex;
   flex-wrap: wrap;
@@ -917,6 +919,31 @@ body.site {
 .world-buttons .btn:hover {
   background: linear-gradient(90deg, #7a5b43, #b48c61);
   transform: translateY(-2px);
+}
+
+/* =========================================================
+   Horizontal Carousel Layout (Worlds)
+   ========================================================= */
+.world-carousel {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  max-width: 960px;
+  margin: 2rem auto 4rem;
+}
+
+#worlds-track {
+  display: flex;
+  flex-direction: row;
+  transition: transform 0.6s ease;
+  width: 100%;
+  will-change: transform;
+}
+
+#worlds-track > .world {
+  flex: 0 0 100%;
+  padding: 2rem 1rem;
+  box-sizing: border-box;
 }
 
 /* Carousel Navigation */
@@ -947,4 +974,20 @@ body.site {
   box-shadow: 0 0 10px rgba(255, 255, 200, 0.7);
 }
 
-
+/* Optional: subtle fade edges for aesthetic polish */
+.world-carousel::before,
+.world-carousel::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  width: 50px;
+  height: 100%;
+  pointer-events: none;
+  z-index: 2;
+  background: linear-gradient(to right, var(--kp-bg) 0%, transparent 100%);
+}
+.world-carousel::after {
+  right: 0;
+  left: auto;
+  transform: rotate(180deg);
+}
