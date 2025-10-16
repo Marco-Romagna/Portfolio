@@ -10,11 +10,13 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
   const GOAL_TYPE  = 15;   // how many correct answers in Typing
   const COMBO_LAST = 5;    // how many final combo rounds in Typing
 
-  // ---------- DOM Helpers ----------
+   // ---------- DOM Helpers ----------
   const $  = (s, r = document) => r.querySelector(s);
   const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
 
-  // ---------- Lesson Setup ----------
+  // Always expose LessonCore early — even if no .lesson exists
+  window.LessonCore = { $, $$ };
+
   const lesson = $('.lesson');
   if (!lesson) return;
 
