@@ -943,7 +943,7 @@ body.site {
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: calc(100vh - 60px); /* full height minus header */
+  min-height: calc(100vh - 80px); 
   background: var(--kp-bg, #0f172a);
   padding-top: 2rem;
 }
