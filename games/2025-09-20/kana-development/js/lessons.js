@@ -62,23 +62,20 @@ function waitFor(check, interval = 25, timeout = 5000) {
 }
 
 
-/ ==========================================================
+// ==========================================================
 // Part 0 — Optional Summary (Pre-Lesson Screen)
 // ==========================================================
 async function maybeShowSummary() {
   try {
-    // Support both ?lesson= and ?id= so it works with any link format
     const params = new URLSearchParams(location.search);
     const lessonId = params.get("lesson") || params.get("id");
     if (!lessonId) return false;
 
-    // adjust relative path if needed
     const summaryPath = "../data/lexicon_summaries.json";
     const res = await fetch(summaryPath);
     if (!res.ok) throw new Error(`fetch failed (${res.status})`);
     const data = await res.json();
 
-    // Find summary where `worlds` includes the lesson ID or matches directly by ID
     let summary = null;
     if (Array.isArray(data.summaries)) {
       summary = data.summaries.find(
@@ -89,9 +86,11 @@ async function maybeShowSummary() {
     if (!summary) return false;
 
     const summaryText = summary.note || summary.gloss_en || "No summary available";
-
-    // Build summary section matching your CSS
     const container = document.querySelector(".lesson") || document.body;
+
+    // 🔹 add flag class to hide other parts
+    container.classList.add("has-summary");
+
     const part0 = document.createElement("section");
     part0.className = "lesson-summary";
     part0.innerHTML = `
@@ -106,6 +105,7 @@ async function maybeShowSummary() {
 
     // Button → remove summary + begin lesson
     part0.querySelector("#start-lesson").addEventListener("click", () => {
+      container.classList.remove("has-summary"); // 🔹 show parts again
       part0.remove();
       window.LessonCore.showPart(1);
     });
