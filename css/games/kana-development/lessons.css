@@ -923,21 +923,28 @@ body.site {
 .carousel-nav {
   display: flex;
   justify-content: center;
-  gap: 0.5rem;
-  margin-top: 1rem;
+  align-items: center;
+  gap: 0.6rem;
+  margin-top: 1.5rem;
 }
+
 .carousel-nav button {
   width: 12px;
   height: 12px;
   border-radius: 50%;
   border: none;
-  background: rgba(255,255,255,0.25);
+  background: rgba(255, 255, 255, 0.25);
   cursor: pointer;
-  transition: background 0.25s;
+  transition: all 0.3s ease;
 }
+
+.carousel-nav button:hover {
+  background: rgba(255, 255, 255, 0.5);
+}
+
 .carousel-nav button.active {
-  background: #e9d8a6;
-  box-shadow: 0 0 8px rgba(255,255,200,0.7);
+  background: #f5e6c4;
+  box-shadow: 0 0 10px rgba(255, 255, 200, 0.7);
 }
 
 
