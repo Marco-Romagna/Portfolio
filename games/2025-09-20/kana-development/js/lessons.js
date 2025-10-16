@@ -1,20 +1,24 @@
 // ==========================================================
-// lessons.js — Reliable startup + diagnostic logging
+// lessons.js — Final stable version (instant startup + summary)
 // ==========================================================
 
 console.log("🟢 lessons.js file fetched, script starting");
 
-document.addEventListener("DOMContentLoaded", async () => {
+(async () => {
   try {
-    console.log("🟢 DOMContentLoaded fired in lessons.js");
+    console.log("🟢 lessons.js executing immediately");
 
+    // ------------------------------------------------------
     // Wait for LessonCore to exist before continuing
+    // ------------------------------------------------------
     await waitFor(() => window.LessonCore && typeof window.LessonCore.showPart === "function");
     console.log("🟢 LessonCore found:", window.LessonCore);
 
     const { IS_VOCAB, showPart } = window.LessonCore;
 
+    // ------------------------------------------------------
     // 1️⃣ Initialize lesson parts
+    // ------------------------------------------------------
     if (IS_VOCAB && typeof initVocabParts === "function") {
       console.log("🟢 Initializing vocab lesson");
       initVocabParts();
@@ -26,7 +30,9 @@ document.addEventListener("DOMContentLoaded", async () => {
       return;
     }
 
+    // ------------------------------------------------------
     // 2️⃣ Try to show summary first; otherwise start directly
+    // ------------------------------------------------------
     const hadSummary = await maybeShowSummary();
     console.log("🟢 maybeShowSummary returned:", hadSummary);
 
@@ -38,11 +44,11 @@ document.addEventListener("DOMContentLoaded", async () => {
   } catch (err) {
     console.error("❌ lessons.js crashed:", err);
   }
-});
+})();
 
-// ----------------------------------------------------------
+// ==========================================================
 // Utility: wait for a condition to become true
-// ----------------------------------------------------------
+// ==========================================================
 function waitFor(check, interval = 25, timeout = 5000) {
   return new Promise((resolve, reject) => {
     const start = performance.now();
@@ -63,9 +69,9 @@ function waitFor(check, interval = 25, timeout = 5000) {
   });
 }
 
-// ----------------------------------------------------------
+// ==========================================================
 // Part 0 — Optional Summary (Pre-Lesson Screen)
-// ----------------------------------------------------------
+// ==========================================================
 async function maybeShowSummary() {
   console.log("🟢 maybeShowSummary() entered");
 
@@ -74,7 +80,7 @@ async function maybeShowSummary() {
     console.log("🟢 lessonId from URL:", lessonId);
     if (!lessonId) return false;
 
-    // adjust relative path if needed
+    // Adjust relative path if needed
     const summaryPath = "../data/lexicon_summaries.json";
     console.log("🟢 Fetching summaries from:", summaryPath);
     const res = await fetch(summaryPath);
