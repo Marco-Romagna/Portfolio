@@ -8,7 +8,7 @@ window.DEBUG_SKIP_ENABLED = true; // set false for production
   // ---------- Shared Goals ----------
   const GOAL_IDENT = 12;   // how many correct answers needed in Identify
   const GOAL_TYPE  = 15;   // how many correct answers in Typing
-  const COMBO_LAST = 3;    // how many final combo rounds in Typing
+  const COMBO_LAST = 5;    // how many final combo rounds in Typing
 
   // ---------- DOM Helpers ----------
   const $  = (s, r = document) => r.querySelector(s);
