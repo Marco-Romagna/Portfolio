@@ -1,15 +1,42 @@
-(function init() {
-  // footer year
-  const y = document.getElementById("year");
-  if (y) y.textContent = new Date().getFullYear();
+// ==========================================================
+// init.js — initialize world carousel once data is ready
+// ==========================================================
+window.addEventListener("DOMContentLoaded", () => {
+  // Wait for both stages + render.js to be loaded
+  if (!window.WORLDS || !window.renderWorlds) {
+    console.warn("[Init] Worlds or render function not ready yet.");
+    return;
+  }
 
-  // merge (world level codes → level objects) then render
-  const { worlds, levels } = window.KANA_STAGES;
-  const index = Object.fromEntries(levels.map(l => [l.code, l]));
-  const merged = worlds.map(w => ({
-    ...w,
-    levels: (w.levels || []).map(code => index[code]).filter(Boolean)
-  }));
+  // Render the worlds inside the track
+  const track = document.getElementById("worlds-track");
+  if (track) {
+    // Clear and render each world as a slide
+    track.innerHTML = "";
+    window.WORLDS.forEach(world => {
+      const slide = document.createElement("div");
+      slide.className = "world-panel";
+      slide.innerHTML = `
+        <h2>${world.title}</h2>
+        <p>${world.desc}</p>
+        <div class="world-buttons">
+          ${(world.levels || [])
+            .map(
+              lv => `<a href="${lv.href}" class="btn">${lv.thumb || lv.title}</a>`
+            )
+            .join("")}
+        </div>
+      `;
+      track.appendChild(slide);
+    });
 
-  window.renderWorlds(merged);
-})();
+    console.log(`[Init] Rendered ${window.WORLDS.length} worlds in carousel`);
+  }
+
+  // Start the carousel behavior
+  if (typeof window.initCarousel === "function") {
+    window.initCarousel();
+  } else {
+    console.warn("[Init] Carousel script not found or not loaded yet.");
+  }
+});
