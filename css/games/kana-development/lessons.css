@@ -940,9 +940,9 @@ body.site {
 .lesson-summary {
   display: flex;
   justify-content: center;
-  align-items: flex-start; 
-  min-height: calc(100vh - 120px); 
-  padding-top: 6vh; 
+  align-items: flex-start;
+  min-height: calc(100vh - 120px);
+  padding-top: 12vh;
   background: var(--kp-bg, #0f172a);
 }
 
