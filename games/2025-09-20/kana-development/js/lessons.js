@@ -101,7 +101,8 @@ async function maybeShowSummary() {
         <button id="start-lesson" class="btn primary">Begin Lesson</button>
       </div>
     `;
-    container.prepend(part0);
+    const main = document.querySelector("main") || container;
+    main.prepend(part0);
 
     // Button → remove summary + begin lesson
     part0.querySelector("#start-lesson").addEventListener("click", () => {
