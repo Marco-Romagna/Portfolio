@@ -1,5 +1,5 @@
 // ==========================================================
-// lessons.js — Final stable version (instant startup + summary)
+// lessons.js
 // ==========================================================
 
 console.log("🟢 lessons.js file fetched, script starting");
@@ -17,14 +17,16 @@ console.log("🟢 lessons.js file fetched, script starting");
     const { IS_VOCAB, showPart } = window.LessonCore;
 
     // ------------------------------------------------------
-    // 1️⃣ Initialize lesson parts
+    // 1️⃣ Prepare the correct lesson initializer (deferred)
     // ------------------------------------------------------
+    let startLessonFn = null;
+
     if (IS_VOCAB && typeof initVocabParts === "function") {
-      console.log("🟢 Initializing vocab lesson");
-      initVocabParts();
+      console.log("🟢 Deferring vocab lesson init until summary handled");
+      startLessonFn = initVocabParts;
     } else if (!IS_VOCAB && typeof initKanaParts === "function") {
-      console.log("🟢 Initializing kana lesson");
-      initKanaParts();
+      console.log("🟢 Deferring kana lesson init until summary handled");
+      startLessonFn = initKanaParts;
     } else {
       console.error("❌ initVocabParts / initKanaParts not found. Check script includes.");
       return;
@@ -36,9 +38,15 @@ console.log("🟢 lessons.js file fetched, script starting");
     const hadSummary = await maybeShowSummary();
     console.log("🟢 maybeShowSummary returned:", hadSummary);
 
+    // Always initialize lesson parts (build DOM, preload data)
+    startLessonFn();
+
     if (!hadSummary) {
-      console.log("🟢 No summary found → starting Part 1");
+      console.log("🟢 No summary found → starting Part 1 immediately");
       showPart(1);
+    } else {
+      console.log("🟢 Summary shown → lesson will start after Begin button");
+      // The summary panel handles showPart(1) when clicked
     }
 
   } catch (err) {
@@ -80,7 +88,6 @@ async function maybeShowSummary() {
     console.log("🟢 lessonId from URL:", lessonId);
     if (!lessonId) return false;
 
-    // Adjust relative path if needed
     const summaryPath = "../data/lexicon_summaries.json";
     console.log("🟢 Fetching summaries from:", summaryPath);
     const res = await fetch(summaryPath);
