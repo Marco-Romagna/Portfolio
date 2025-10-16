@@ -64,7 +64,7 @@ document.addEventListener("DOMContentLoaded", () => {
       list.appendChild(node);
     });
 
-    track.appendChild(wNode);
+    track.appendChild(wEl);
   });
 
   // --- Initialize carousel layout ---
