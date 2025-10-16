@@ -61,6 +61,7 @@ function waitFor(check, interval = 25, timeout = 5000) {
   });
 }
 
+
 // ==========================================================
 // Part 0 — Optional Summary (Pre-Lesson Screen)
 // ==========================================================
@@ -74,10 +75,21 @@ async function maybeShowSummary() {
     const summaryPath = "../data/lexicon_summaries.json";
     const res = await fetch(summaryPath);
     if (!res.ok) throw new Error(`fetch failed (${res.status})`);
-    const summaries = await res.json();
+    const data = await res.json();
 
-    const summaryText = summaries?.[lessonId];
-    if (!summaryText) return false;
+    //  Look through the summaries array to find one that matches
+    let summary = null;
+
+    if (Array.isArray(data.summaries)) {
+      summary = data.summaries.find(s =>
+        s.worlds.includes(lessonId) || s.id === lessonId
+      );
+    }
+
+    if (!summary) return false;
+
+    // Prefer the long note, fall back to gloss_en if needed
+    const summaryText = summary.note || summary.gloss_en || "No summary available";
 
     // Build summary section matching your CSS
     const container = document.querySelector(".lesson") || document.body;
@@ -85,8 +97,8 @@ async function maybeShowSummary() {
     part0.className = "lesson-summary";
     part0.innerHTML = `
       <div class="summary-panel">
-        <div class="summary-kana">${lessonId}</div>
-        <h2>Summary</h2>
+        <div class="summary-kana">${summary.kana ?? ""}</div>
+        <h2>${summary.gloss_en ?? "Summary"}</h2>
         <p>${summaryText}</p>
         <button id="start-lesson" class="btn primary">Begin Lesson</button>
       </div>
