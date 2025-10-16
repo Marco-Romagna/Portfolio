@@ -1,28 +1,42 @@
 // ==========================================================
-// lessons.js (Bootstrap only)
-// Reliable lesson startup + optional Part 0 Summary
+// lessons.js — Reliable startup + diagnostic logging
 // ==========================================================
 
+console.log("🟢 lessons.js file fetched, script starting");
+
 document.addEventListener("DOMContentLoaded", async () => {
-  // Wait for LessonCore to exist before continuing
-  await waitFor(() => window.LessonCore && typeof window.LessonCore.showPart === "function");
+  try {
+    console.log("🟢 DOMContentLoaded fired in lessons.js");
 
-  const { IS_VOCAB, showPart } = window.LessonCore;
+    // Wait for LessonCore to exist before continuing
+    await waitFor(() => window.LessonCore && typeof window.LessonCore.showPart === "function");
+    console.log("🟢 LessonCore found:", window.LessonCore);
 
-  // 1 Initialize lesson parts
-  if (IS_VOCAB && typeof initVocabParts === "function") {
-    initVocabParts();
-  } else if (!IS_VOCAB && typeof initKanaParts === "function") {
-    initKanaParts();
-  } else {
-    console.error("initVocabParts / initKanaParts not found. Check script includes.");
-    return;
-  }
+    const { IS_VOCAB, showPart } = window.LessonCore;
 
-  // 2 Try to show summary first; otherwise start directly
-  const hadSummary = await maybeShowSummary();
-  if (!hadSummary) {
-    showPart(1);
+    // 1️⃣ Initialize lesson parts
+    if (IS_VOCAB && typeof initVocabParts === "function") {
+      console.log("🟢 Initializing vocab lesson");
+      initVocabParts();
+    } else if (!IS_VOCAB && typeof initKanaParts === "function") {
+      console.log("🟢 Initializing kana lesson");
+      initKanaParts();
+    } else {
+      console.error("❌ initVocabParts / initKanaParts not found. Check script includes.");
+      return;
+    }
+
+    // 2️⃣ Try to show summary first; otherwise start directly
+    const hadSummary = await maybeShowSummary();
+    console.log("🟢 maybeShowSummary returned:", hadSummary);
+
+    if (!hadSummary) {
+      console.log("🟢 No summary found → starting Part 1");
+      showPart(1);
+    }
+
+  } catch (err) {
+    console.error("❌ lessons.js crashed:", err);
   }
 });
 
@@ -33,12 +47,17 @@ function waitFor(check, interval = 25, timeout = 5000) {
   return new Promise((resolve, reject) => {
     const start = performance.now();
     const timer = setInterval(() => {
-      if (check()) {
+      try {
+        if (check()) {
+          clearInterval(timer);
+          resolve(true);
+        } else if (performance.now() - start > timeout) {
+          clearInterval(timer);
+          reject(new Error("waitFor timeout"));
+        }
+      } catch (err) {
         clearInterval(timer);
-        resolve(true);
-      } else if (performance.now() - start > timeout) {
-        clearInterval(timer);
-        reject(new Error("waitFor timeout"));
+        reject(err);
       }
     }, interval);
   });
@@ -48,16 +67,23 @@ function waitFor(check, interval = 25, timeout = 5000) {
 // Part 0 — Optional Summary (Pre-Lesson Screen)
 // ----------------------------------------------------------
 async function maybeShowSummary() {
+  console.log("🟢 maybeShowSummary() entered");
+
   try {
     const lessonId = new URLSearchParams(location.search).get("lesson");
+    console.log("🟢 lessonId from URL:", lessonId);
     if (!lessonId) return false;
 
     // adjust relative path if needed
-    const res = await fetch("../data/lexicon_summaries.json");
+    const summaryPath = "../data/lexicon_summaries.json";
+    console.log("🟢 Fetching summaries from:", summaryPath);
+    const res = await fetch(summaryPath);
     if (!res.ok) throw new Error(`fetch failed (${res.status})`);
     const summaries = await res.json();
+    console.log("🟢 summaries keys:", Object.keys(summaries || {}));
 
     const summaryText = summaries?.[lessonId];
+    console.log("🟢 summaryText for", lessonId, "=", summaryText);
     if (!summaryText) return false;
 
     // Build summary section matching your CSS
@@ -74,15 +100,18 @@ async function maybeShowSummary() {
     `;
     container.prepend(part0);
 
+    console.log("🟢 Summary panel inserted");
+
     // Button → remove summary + begin lesson
     part0.querySelector("#start-lesson").addEventListener("click", () => {
+      console.log("🟢 Begin Lesson clicked → removing summary");
       part0.remove();
       window.LessonCore.showPart(1);
     });
 
     return true;
   } catch (err) {
-    console.warn("Summary load failed:", err);
+    console.warn("⚠️ Summary load failed:", err);
     return false;
   }
 }
