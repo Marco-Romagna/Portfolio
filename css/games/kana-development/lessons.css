@@ -40,7 +40,7 @@ body.site {
   list-style: none;
   padding: 0;
   margin: 0 0 12px;
-  flex-wrap: nowrap; /* keep on one row */
+  flex-wrap: nowrap;
 }
 .step {
   flex: 1;
@@ -364,7 +364,6 @@ body.site {
 
 .lesson[data-lesson-id$="-4"] .lesson-progress .progressbar { display: none; }
 
-
 /* =========================================================
    Vocab Explorer (Part 1)
    ========================================================= */
@@ -381,10 +380,9 @@ body.site {
   background: var(--kp-surface);
   border: 1px solid var(--kp-border);
   border-radius: var(--kp-radius);
-
-  display: inline-block;   /* shrink to fit items */
-  min-width: 140px;        /* prevent it from collapsing too small */
-  max-height: 70vh;        /* if too many items, allow scrolling */
+  display: inline-block;
+  min-width: 140px;
+  max-height: 70vh;
   overflow-y: auto;
 }
 
@@ -394,9 +392,7 @@ body.site {
   border-bottom: 1px solid var(--kp-border);
   transition: background .2s, color .2s;
 }
-.vocab-list li:last-child {
-  border-bottom: none;
-}
+.vocab-list li:last-child { border-bottom: none; }
 
 .vocab-detail {
   background: var(--kp-surface);
@@ -406,7 +402,6 @@ body.site {
   text-align: center;
   box-shadow: var(--kp-shadow);
 }
-
 .vocab-card-large .kana-glyph {
   font-size: clamp(64px, 8vw, 120px);
   margin-bottom: 1rem;
@@ -435,7 +430,6 @@ body.site {
 .vocab-example p { margin: 0.25rem 0; }
 .vocab-example .muted { color: var(--kp-muted); }
 
-/* Active word in the vocab sidebar */
 .vocab-list li.is-active {
   background: color-mix(in srgb, var(--kp-accent) 20%, transparent);
   color: var(--kp-accent);
@@ -446,18 +440,13 @@ body.site {
 /* =========================================================
    Part 2 — Word Hunt styles
    ========================================================= */
-.hunt-panel {
-  padding: 16px;
-}
-
+.hunt-panel { padding: 16px; }
 .hunt-instruction {
   margin-bottom: 12px;
   color: var(--kp-muted);
   font-size: 1.05rem;
   text-align: center;
 }
-
-/* Hunt target box */
 .hunt-target {
   text-align: center;
   margin: 20px auto;
@@ -467,8 +456,6 @@ body.site {
   box-shadow: var(--kp-shadow);
   max-width: 360px;
 }
-
-/* Romaji display (big + bold) */
 .hunt-target .hunt-romaji {
   font-size: 2.2rem;
   font-weight: 700;
@@ -476,24 +463,18 @@ body.site {
   margin-bottom: 8px;
   letter-spacing: 1px;
 }
-
-/* English gloss (smaller, muted) */
 .hunt-target .hunt-english {
   font-size: 1.2rem;
   font-weight: 500;
   color: var(--kp-text);
   font-style: italic;
 }
-
-/* Paragraph text area */
 .hunt-passage {
   margin: 16px 0;
   line-height: 2;
   font-size: 1.3rem;
   text-align: left;
 }
-
-/* Clickable tokens */
 .hunt-token {
   display: inline-block;
   cursor: pointer;
@@ -502,7 +483,7 @@ body.site {
   transition: background 0.2s, color 0.2s;
 }
 .hunt-token:hover {
-  background: rgba(255,255,255,0.08); /* subtle highlight */
+  background: rgba(255,255,255,0.08);
 }
 .hunt-token.is-correct {
   background: var(--kp-correct);
@@ -512,8 +493,6 @@ body.site {
   background: var(--kp-wrong);
   color: #fff;
 }
-
-/* Progress text (optional) */
 .hunt-progress {
   margin-top: 12px;
   font-size: .9rem;
@@ -521,49 +500,26 @@ body.site {
   text-align: center;
 }
 
-/* Theme variants for Identify buttons */
-.option.theme-dark {
-  background: #1a1a2e;
-  color: #fff;
-}
-.option.theme-light {
-  background: #f5f5f5;
-  color: #222;
-}
-.option.theme-sepia {
-  background: #fdf6e3;
-  color: #654321;
-}
-.option.theme-high {
-  background: #222;
-  border: 2px solid #ff4081;
-  color: #ff4081;
-}
-
-/* Keep Identify button size/layout consistent */
+/* Option button variants */
+.option.theme-dark { background:#1a1a2e; color:#fff; }
+.option.theme-light { background:#f5f5f5; color:#222; }
+.option.theme-sepia { background:#fdf6e3; color:#654321; }
+.option.theme-high  { background:#222; border:2px solid #ff4081; color:#ff4081; }
 .option {
-  display: inline-block;
-  min-width: 150px;
-  padding: 16px 24px;
-  margin: 10px;
-  font-size: 2rem;         /* bigger characters */
-  font-weight: 600;        /* thicker strokes */
-  font-family: "Noto Sans JP", "Hiragino Kaku Gothic Pro", "Meiryo", sans-serif;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.25s ease;
-  text-align: center;
+  display:inline-block;
+  min-width:150px;
+  padding:16px 24px;
+  margin:10px;
+  font-size:2rem;
+  font-weight:600;
+  font-family:"Noto Sans JP","Hiragino Kaku Gothic Pro","Meiryo",sans-serif;
+  border-radius:8px;
+  cursor:pointer;
+  transition:all 0.25s ease;
+  text-align:center;
 }
-
-/* Feedback colors */
-.option.is-correct {
-  background: #28a745 !important; /* green */
-  color: #fff !important;
-}
-.option.is-wrong {
-  background: #dc3545 !important; /* red */
-  color: #fff !important;
-}
+.option.is-correct { background:#28a745!important; color:#fff!important; }
+.option.is-wrong   { background:#dc3545!important; color:#fff!important; }
 
 .debug-bar {
   position: fixed;
@@ -573,123 +529,117 @@ body.site {
   display: flex;
   gap: 0.5rem;
 }
-
 .debug-bar button {
-  background: #444;
-  color: white;
-  border: none;
-  padding: 0.25rem 0.5rem;
-  cursor: pointer;
+  background:#444;
+  color:white;
+  border:none;
+  padding:0.25rem 0.5rem;
+  cursor:pointer;
 }
+
 /* Centered navigation buttons (Back + Next) */
 .lesson-cta {
   position: sticky;
   bottom: 0;
   display: flex;
-  justify-content: center;   /* center horizontally */
-  gap: var(--kp-gap);        /* spacing between buttons */
+  justify-content: center;
+  gap: var(--kp-gap);
   padding: 16px 0 8px;
   background: linear-gradient(to top, rgba(0,0,0,.25), rgba(0,0,0,0));
 }
-
 .lesson-cta .btn {
-  min-width: 140px;
-  text-align: center;
+  min-width:140px;
+  text-align:center;
 }
-
 .lesson-cta .btn.primary {
-  background: var(--kp-accent);
-  border-color: transparent;
-  color: #fff;
+  background:var(--kp-accent);
+  border-color:transparent;
+  color:#fff;
 }
 
-/* Part 4 Typing Styles */
+/* Typing Styles */
 .quiz-input-wrapper {
   margin: 1rem 0;
   display: flex;
   justify-content: center;
 }
 .quiz-input {
-  font-size: 1.5rem;
-  padding: 0.75rem 1rem;
-  border-radius: 8px;
-  border: 2px solid #666;
-  background: #111827;
-  color: #f9fafb;
-  text-align: center;
-  width: 250px;
+  font-size:1.5rem;
+  padding:0.75rem 1rem;
+  border-radius:8px;
+  border:2px solid #666;
+  background:#111827;
+  color:#f9fafb;
+  text-align:center;
+  width:250px;
 }
 .quiz-input:focus {
-  outline: none;
-  border-color: #7c3aed; /* purple highlight */
+  outline:none;
+  border-color:#7c3aed;
 }
 .quiz-feedback {
-  margin-top: 0.5rem;
-  text-align: center;
-  min-height: 1.5rem;
+  margin-top:0.5rem;
+  text-align:center;
+  min-height:1.5rem;
 }
-.quiz-feedback .correct {
-  color: #10b981; /* green */
-}
-.quiz-feedback .wrong {
-  color: #ef4444; /* red */
-}
+.quiz-feedback .correct { color:#10b981; }
+.quiz-feedback .wrong   { color:#ef4444; }
 .quiz-progress {
-  margin-top: 1rem;
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  margin-top:1rem;
+  text-align:center;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
 }
-
 .quiz-progress .meter {
-  height: 6px;
-  border-radius: 4px;
-  background: #1f2937;
-  overflow: hidden;
-  margin-bottom: 0.5rem;
-  width: 300px; /* adjust this to be slightly larger than .quiz-input */
-  max-width: 90%; /* safe on smaller screens */
+  height:6px;
+  border-radius:4px;
+  background:#1f2937;
+  overflow:hidden;
+  margin-bottom:0.5rem;
+  width:300px;
+  max-width:90%;
 }
-
 .quiz-progress .meter-fill {
-  height: 100%;
-  width: 0;
-  background: linear-gradient(to right, #7c3aed, #06b6d4);
-  transition: width 0.3s ease;
+  height:100%;
+  width:0;
+  background:linear-gradient(to right,#7c3aed,#06b6d4);
+  transition:width 0.3s ease;
 }
-
 .quiz-progress .meter-label {
-  font-size: 0.9rem;
-  color: #d1d5db;
+  font-size:0.9rem;
+  color:#d1d5db;
 }
-.quiz-prompt .prompt-target {
-  color: #7c3aed; /* purple accent */
-}
+.quiz-prompt .prompt-target { color:#7c3aed; }
 
-/* ---------- Lesson Summaries (Pre-Lesson Screen) ---------- */
+/* ---------- Lesson Summaries ---------- */
 .lesson-summary {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 70vh; /* taller, centers content nicely */
+  display:flex;
+  justify-content:center;
+  align-items:flex-start;
+  min-height:calc(100vh - 120px);
+  padding-top:12vh;
+  background:var(--kp-bg,#0f172a);
 }
+.lesson.has-summary .lesson-progress,
+.lesson.has-summary .lesson-part { display:none; }
 
+/* ---------- Lesson Summary Panel Styling ---------- */
 .summary-panel {
   padding: 2rem 2.5rem;
-  background: var(--surface, #1a1a2e);
-  border: 1px solid var(--border, #333);
+  background: var(--kp-surface, #1a1a2e);
+  border: 1px solid var(--kp-border, #333);
   border-radius: 16px;
   box-shadow: 0 6px 16px rgba(0,0,0,0.25);
   max-width: 720px;
   width: 100%;
-  text-align: center; /* center content instead of left */
+  text-align: center;
 }
 
 .summary-kana {
   font-size: 1.2rem;
   margin-bottom: 0.5rem;
-  color: var(--accent, #8b5cf6);
+  color: var(--kp-accent, #8b5cf6);
   font-weight: bold;
 }
 
@@ -697,15 +647,15 @@ body.site {
   font-size: 1.6rem;
   font-weight: bold;
   margin-bottom: 1rem;
-  color: var(--text-strong, #fff);
+  color: var(--kp-text, #fff);
 }
 
 .summary-panel p {
   font-size: 1.1rem;
   line-height: 1.8;
-  color: var(--text, #ddd);
+  color: var(--kp-muted, #ddd);
   margin: 0 auto 1.5rem;
-  max-width: 600px; /* keep text lines comfortable */
+  max-width: 600px;
 }
 
 .summary-panel #start-lesson {
@@ -716,59 +666,41 @@ body.site {
   display: inline-block;
 }
 
-
-/* Mixed-script lessons only */
+/* ---------- Mixed-script lessons ---------- */
 .mixed-script .pair-card {
-  cursor: pointer;
-  padding: 1rem;
-  border-radius: 0.75rem;
-  transition: background 0.2s ease, transform 0.1s ease;
+  cursor:pointer;
+  padding:1rem;
+  border-radius:0.75rem;
+  transition:background 0.2s ease,transform 0.1s ease;
 }
-
 .mixed-script .pair-card:hover {
-  background: rgba(255, 255, 255, 0.08);
-  transform: scale(1.03);
+  background:rgba(255,255,255,0.08);
+  transform:scale(1.03);
 }
-
 .mixed-script .pair-row {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 0.5rem;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  margin-bottom:0.5rem;
 }
-
 .mixed-script .pair-row .glyph {
-  font-size: 2.4rem;      
-  width: 2.5rem;          
-  text-align: center;
-  display: inline-block; 
+  font-size:2.4rem;
+  width:2.5rem;
+  text-align:center;
+  display:inline-block;
 }
-.mixed-script .pair-row .link {
-  margin: 0 0.75rem;
-  opacity: 0.7;
-}
-.pair-row .link {
-  font-size: 1.2rem;    
-  margin: 0 0.4rem;     
-  opacity: 0.6;         
-}
+.pair-row .link { font-size:1.2rem; margin:0 0.4rem; opacity:0.6; }
+.mixed-script .pair-romaji { font-size:1.1rem; color:#ccc; }
 
-.mixed-script .pair-romaji {
-  font-size: 1.1rem;
-  color: #ccc;
-}
-
-
-/* Make vocab kana word look interactive */
+/* ---------- Vocab detail hover ---------- */
 .vocab-detail .kana-glyph {
-  cursor: pointer;              
-  transition: transform 0.15s ease, color 0.15s ease;
-  display: inline-block;
+  cursor:pointer;
+  transition:transform 0.15s ease,color 0.15s ease;
+  display:inline-block;
 }
-
 .vocab-detail .kana-glyph:hover {
-  color: #ffd27f;               
-  transform: scale(1.05);       
+  color:#ffd27f;
+  transform:scale(1.05);
 }
 
 /* =========================================================
@@ -794,11 +726,10 @@ body.site {
   background: color-mix(in oklab, var(--kp-accent) 15%, var(--kp-surface-2));
   transform: translateY(-1px);
 }
+
 /* =========================================================
    Part 5 — Audio Recognition
    ========================================================= */
-
-/* Audio + Control Buttons */
 .audio-section {
   display: flex;
   justify-content: center;
@@ -814,30 +745,24 @@ body.site {
   box-shadow: 0 0 14px rgba(130, 0, 255, 0.3);
   transition: transform 0.15s ease, box-shadow 0.2s ease, background 0.3s;
 }
-
 .audio-section #play-audio:hover {
   transform: scale(1.06);
   box-shadow: 0 0 20px rgba(150, 50, 255, 0.55);
   background: linear-gradient(90deg, #8a63ff, #a74bff);
 }
 
-#hint-btn,
-#slow-mode-toggle {
+#hint-btn, #slow-mode-toggle {
   font-size: 0.9rem;
   padding: 0.45rem 0.9rem;
   opacity: 0.85;
   transition: opacity 0.3s ease, transform 0.2s;
 }
-#hint-btn:hover,
-#slow-mode-toggle:hover {
+#hint-btn:hover, #slow-mode-toggle:hover {
   opacity: 1;
   transform: scale(1.03);
 }
-#hint-btn.is-hidden {
-  display: none;
-}
+#hint-btn.is-hidden { display: none; }
 
-/* Answer Grid */
 .options-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -847,7 +772,6 @@ body.site {
   max-width: 620px;
   margin: 1.2rem auto 1.5rem;
 }
-
 .options-grid .btn {
   font-size: 1.05rem;
   font-weight: 600;
@@ -856,12 +780,10 @@ body.site {
   width: 100%;
   transition: background 0.25s, transform 0.15s, color 0.25s;
 }
-
 .options-grid .btn:hover {
   transform: translateY(-2px);
   background: rgba(255,255,255,0.1);
 }
-
 .options-grid .btn.is-correct {
   background-color: #3cdfff !important;
   color: #000;
@@ -871,7 +793,6 @@ body.site {
   color: #fff;
 }
 
-/* Feedback */
 .quiz-feedback {
   text-align: center;
   font-size: 1.1rem;
@@ -883,7 +804,6 @@ body.site {
 .quiz-feedback.correct { color: #4effc3; }
 .quiz-feedback.wrong   { color: #ff7676; }
 
-/* Example Sentence Reveal */
 .example-display {
   background: rgba(255,255,255,0.05);
   padding: 1rem;
@@ -904,17 +824,15 @@ body.site {
   to   { opacity: 1; transform: translateY(0); }
 }
 
-/* Progress Bar (match Parts 2 & 3 style) */
+/* Progress Bar */
 .lesson #part-5 .quiz-progress {
   display: grid;
   justify-items: center;
-  justify-content: center;
   gap: 8px;
   width: 100%;
   margin: 16px 0 6px;
   color: color-mix(in oklab, var(--kp-text) 80%, var(--kp-muted));
 }
-
 .lesson #part-5 .meter {
   width: min(560px, 90%);
   height: 10px;
@@ -924,32 +842,102 @@ body.site {
   overflow: hidden;
   margin: 0 auto;
 }
-
 .lesson #part-5 .meter-fill {
   height: 100%;
   width: 0%;
   background: linear-gradient(90deg, var(--kp-accent), var(--kp-accent-2));
   transition: width .2s ease;
 }
+.lesson #part-5 .meter-label { font-size: .95rem; }
 
-.lesson #part-5 .meter-label {
-  font-size: .95rem;
+/* =========================================================
+   Ancient Japanese Aesthetic (index/world carousel)
+   ========================================================= */
+.ancient-theme {
+  background: radial-gradient(circle at 50% 50%, #1b1b1b 0%, #0a0a0a 90%);
+  font-family: "Shippori Mincho", "Noto Serif JP", serif;
+  color: #e9d8a6;
+  letter-spacing: 0.02em;
 }
 
-/* ---------- Lesson Summaries (Pre-Lesson Screen) ---------- */
-.lesson-summary {
+.ancient-theme .world-carousel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.8rem;
+  padding: 2rem;
+  text-align: center;
+}
+
+.world-panel {
+  background: rgba(33, 33, 33, 0.7);
+  border: 1px solid rgba(140, 120, 80, 0.4);
+  border-radius: 20px;
+  padding: 2rem;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+  max-width: 780px;
+  width: 100%;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.world-panel:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 40px rgba(180,160,100,0.4);
+}
+
+.world-panel h2 {
+  font-size: 1.8rem;
+  margin-bottom: 0.75rem;
+  color: #f4e3b0;
+  text-shadow: 0 2px 6px rgba(0,0,0,0.5);
+}
+.world-panel p {
+  font-size: 1.05rem;
+  line-height: 1.8;
+  color: #e6dcb5;
+  max-width: 600px;
+  margin: 0 auto 1rem;
+}
+
+.world-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 1.5rem;
+}
+.world-buttons .btn {
+  background: linear-gradient(90deg, #5c4033, #8b5e3c);
+  border: 1px solid rgba(200,180,120,0.3);
+  color: #f6edd9;
+  font-weight: 600;
+  padding: 0.75rem 1.4rem;
+  border-radius: 10px;
+  transition: all 0.3s ease;
+}
+.world-buttons .btn:hover {
+  background: linear-gradient(90deg, #7a5b43, #b48c61);
+  transform: translateY(-2px);
+}
+
+/* Carousel Navigation */
+.carousel-nav {
   display: flex;
   justify-content: center;
-  align-items: flex-start;
-  min-height: calc(100vh - 120px);
-  padding-top: 12vh;
-  background: var(--kp-bg, #0f172a);
+  gap: 0.5rem;
+  margin-top: 1rem;
 }
-
-
-.lesson.has-summary .lesson-progress,
-.lesson.has-summary .lesson-part {
-  display: none;
+.carousel-nav button {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255,255,255,0.25);
+  cursor: pointer;
+  transition: background 0.25s;
+}
+.carousel-nav button.active {
+  background: #e9d8a6;
+  box-shadow: 0 0 8px rgba(255,255,200,0.7);
 }
 
 
