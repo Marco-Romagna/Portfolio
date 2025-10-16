@@ -1,4 +1,3 @@
-// Worlds + Levels data
 window.KANA_STAGES = {
   worlds: [
     { code: "1", title: "World 1 — Vowels", desc: "Start here. Learn the five core vowels in both scripts.", levels: ["1-1","1-2","1-3","1-4"] },
@@ -109,3 +108,19 @@ window.KANA_STAGES = {
     { code: "10-5", title: "10-5 — Vocabulary Challenge (Katakana)", href: "lessons/lesson.html?id=10-5", thumb: "語", lexicon: "katakana", vocabKey: "10-vocab-kata" }
   ]
 };
+
+(() => {
+  const STAGES = window.KANA_STAGES;
+  if (!STAGES || !STAGES.worlds || !STAGES.levels) return;
+
+  const levelMap = Object.fromEntries(STAGES.levels.map(lv => [lv.code, lv]));
+
+  window.WORLDS = STAGES.worlds.map(w => ({
+    code: w.code,
+    title: w.title,
+    desc: w.desc,
+    levels: (w.levels || []).map(code => levelMap[code]).filter(Boolean)
+  }));
+
+  console.log(`[Stages] Loaded ${window.WORLDS.length} worlds for carousel`);
+})();
