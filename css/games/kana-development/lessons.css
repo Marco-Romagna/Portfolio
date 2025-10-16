@@ -932,21 +932,45 @@ body.site {
   margin: 2rem auto 4rem;
 }
 
+/* Track containing all worlds */
 #worlds-track {
   display: flex;
   flex-direction: row;
   transition: transform 0.6s ease;
-  width: 100%;
   will-change: transform;
+  overflow: hidden;
+  backface-visibility: hidden;
+  transform-style: preserve-3d;
 }
 
+/* Each individual world (slide) */
 #worlds-track > .world {
   flex: 0 0 100%;
-  padding: 2rem 1rem;
+  max-width: 100%;
   box-sizing: border-box;
+  padding: 2rem 1rem;
+  position: relative;
+  overflow: hidden;
+  backface-visibility: hidden;
 }
 
-/* Carousel Navigation */
+/* Anti-aliasing seam fix — hides subpixel line between slides */
+#worlds-track::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  background: #0f172a; /* match your background color */
+  mix-blend-mode: multiply;
+  opacity: 0.002; /* invisible but hides seam */
+}
+
+/* =========================================================
+   Carousel Navigation
+   ========================================================= */
 .carousel-nav {
   display: flex;
   justify-content: center;
@@ -964,76 +988,17 @@ body.site {
   cursor: pointer;
   transition: all 0.3s ease;
 }
-
 .carousel-nav button:hover {
   background: rgba(255, 255, 255, 0.5);
 }
-
 .carousel-nav button.active {
   background: #f5e6c4;
   box-shadow: 0 0 10px rgba(255, 255, 200, 0.7);
 }
 
-/* Optional: subtle fade edges for aesthetic polish */
-.world-carousel::before,
-.world-carousel::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  width: 50px;
-  height: 100%;
-  pointer-events: none;
-  z-index: 2;
-  background: linear-gradient(to right, var(--kp-bg) 0%, transparent 100%);
-}
-.world-carousel::after {
-  right: 0;
-  left: auto;
-  transform: rotate(180deg);
-}
-
 /* =========================================================
-   Carousel layout and visual fix
+   Subtle Fade Edges
    ========================================================= */
-.world-carousel {
-  position: relative;
-  overflow: hidden;
-  width: 100%;
-}
-
-#worlds-track {
-  display: flex;
-  transition: transform 0.6s ease;
-  will-change: transform;
-  overflow: hidden;
-  backface-visibility: hidden;
-  transform-style: preserve-3d;
-}
-
-#worlds-track > .world-panel {
-  flex: 0 0 100%;
-  max-width: 100%;
-  box-sizing: border-box;
-  position: relative;
-  overflow: hidden;
-  backface-visibility: hidden;
-}
-
-/* Anti-aliasing seam fix — hides subpixel line between slides */
-#worlds-track::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  pointer-events: none;
-  background: #0f172a; /* match your background */
-  mix-blend-mode: multiply;
-  opacity: 0.002; /* invisible but removes visible seam */
-}
-
-
 .world-carousel::before,
 .world-carousel::after {
   content: "";
