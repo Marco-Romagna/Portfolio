@@ -938,15 +938,14 @@ body.site {
 
 /* ---------- Lesson Summaries (Pre-Lesson Screen) ---------- */
 .lesson-summary {
-  position: relative;
-  z-index: 5;
   display: flex;
   justify-content: center;
-  align-items: center;
-  min-height: calc(100vh - 80px); 
+  align-items: flex-start; 
+  min-height: calc(100vh - 120px); 
+  padding-top: 6vh; 
   background: var(--kp-bg, #0f172a);
-  padding-top: 2rem;
 }
+
 
 .lesson.has-summary .lesson-progress,
 .lesson.has-summary .lesson-part {
