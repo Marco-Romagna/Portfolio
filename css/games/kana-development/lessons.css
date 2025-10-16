@@ -904,27 +904,36 @@ body.site {
   to   { opacity: 1; transform: translateY(0); }
 }
 
-/* Progress Bar */
-.quiz-progress {
-  width: 65%;
-  max-width: 420px;
-  margin: 0.8rem auto 1rem;
-  text-align: center;
+/* Progress Bar (match Parts 2 & 3 style) */
+.lesson #part-5 .quiz-progress {
+  display: grid;
+  justify-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  margin: 16px 0 6px;
+  color: color-mix(in oklab, var(--kp-text) 80%, var(--kp-muted));
 }
-.quiz-progress .meter {
-  height: 6px;
-  border-radius: 6px;
-  background: rgba(255,255,255,0.1);
+
+.lesson #part-5 .meter {
+  width: min(560px, 90%);
+  height: 10px;
+  background: var(--kp-surface-2);
+  border: 1px solid var(--kp-border);
+  border-radius: 999px;
   overflow: hidden;
+  margin: 0 auto;
 }
-.quiz-progress .meter-fill {
-  background: linear-gradient(90deg, #8a63ff, #37e2d5);
+
+.lesson #part-5 .meter-fill {
   height: 100%;
-  transition: width 0.4s ease;
+  width: 0%;
+  background: linear-gradient(90deg, var(--kp-accent), var(--kp-accent-2));
+  transition: width .2s ease;
 }
-.quiz-progress .meter-label {
-  margin-top: 0.4rem;
-  font-size: 0.9rem;
-  opacity: 0.85;
+
+.lesson #part-5 .meter-label {
+  font-size: .95rem;
 }
+
 
