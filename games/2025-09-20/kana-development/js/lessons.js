@@ -5,11 +5,13 @@
 
 (() => {
   const { IS_VOCAB, showPart } = window.LessonCore;
-
+  console.log("✅ lessons.js is executing");   // confirms the IIFE runs
+  
   // ----------------------------------------------------------
   // Part 0 — Optional Summary Loader
   // ----------------------------------------------------------
   async function maybeShowSummary() {
+     console.log("maybeShowSummary() called");  // confirms startLesson() called this
     try {
       // 1. Get current lesson ID
       const lessonId =
@@ -19,10 +21,12 @@
 
       // 2. Fetch summaries JSON
       const res = await fetch("../../data/lexicon_summaries.json");
+      console.log("Fetching:", "../../data/lexicon_summaries.json");
       const summaries = await res.json();
 
       // 3. Look up this lesson’s summary text
       const summaryText = summaries?.[lessonId];
+      console.log("Summaries loaded:", summaries);
       if (!summaryText) return false;
 
       // 4. Build the summary “Part 0” section
@@ -46,6 +50,9 @@
           part0.remove();
           window.LessonCore.showPart(1);
         });
+      
+      console.log("Lesson ID:", lessonId);
+      console.log("Found summary:", summaries?.[lessonId]);
 
       return true;
     } catch (err) {
