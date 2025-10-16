@@ -920,16 +920,15 @@ body.site {
   background: linear-gradient(90deg, #7a5b43, #b48c61);
   transform: translateY(-2px);
 }
-
 /* =========================================================
-   Horizontal Carousel Layout (Worlds) 
+   Horizontal Carousel — One world per view
    ========================================================= */
 .world-carousel {
   position: relative;
   overflow: hidden;
   width: 100%;
-  max-width: 1000px;
-  margin: 2rem auto 4rem;
+  max-width: 960px;
+  margin: 3rem auto 5rem;
 }
 
 #worlds-track {
@@ -943,24 +942,23 @@ body.site {
 
 #worlds-track > .world {
   flex: 0 0 100%;
-  width: 100%;
+  max-width: 100%;
+  padding: 2rem;
   box-sizing: border-box;
-  position: relative;
-  min-height: 70vh; /* ensures full slide height */
-  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 /* =========================================================
-   World Panel Styling 
+   World Panel
    ========================================================= */
 #worlds-track > .world {
   background: rgba(33, 33, 33, 0.7);
   border: 1px solid rgba(140, 120, 80, 0.4);
   border-radius: 20px;
-  padding: 2rem;
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
-  max-width: 780px;
-  margin: 0 auto;
   text-align: center;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
@@ -989,6 +987,8 @@ body.site {
   display: flex;
   flex-direction: column;
   gap: 0.4rem;
+  width: 100%;
+  max-width: 620px;
 }
 
 #worlds-track .level-row {
@@ -1004,3 +1004,57 @@ body.site {
   background: rgba(60, 50, 40, 0.7);
   transform: translateY(-2px);
 }
+
+/* =========================================================
+   Carousel Navigation Dots
+   ========================================================= */
+.carousel-nav {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.6rem;
+  margin-top: 1.5rem;
+}
+
+.carousel-nav button {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.25);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.carousel-nav button:hover {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.carousel-nav button.active {
+  background: #f5e6c4;
+  box-shadow: 0 0 10px rgba(255, 255, 200, 0.7);
+}
+
+/* =========================================================
+   Soft Edge Fade
+   ========================================================= */
+.world-carousel::before,
+.world-carousel::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  width: 60px;
+  height: 100%;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.world-carousel::before {
+  left: 0;
+  background: linear-gradient(to right, #0f172a 40%, transparent);
+}
+.world-carousel::after {
+  right: 0;
+  background: linear-gradient(to left, #0f172a 40%, transparent);
+}
+
