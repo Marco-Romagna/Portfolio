@@ -936,18 +936,18 @@ body.site {
   font-size: .95rem;
 }
 
-/* Center summary panel in the viewport */
+/* ---------- Lesson Summaries (Pre-Lesson Screen) ---------- */
 .lesson-summary {
+  position: relative;
+  z-index: 5;
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 100vh; /* full viewport height */
-  background: var(--surface, #0f0f1f); /* optional subtle backdrop */
-  position: relative;
-  z-index: 10;
+  min-height: calc(100vh - 60px); /* full height minus header */
+  background: var(--kp-bg, #0f172a);
+  padding-top: 2rem;
 }
 
-/* While summary is visible, hide all lesson parts + nav */
 .lesson.has-summary .lesson-progress,
 .lesson.has-summary .lesson-part {
   display: none;
