@@ -1,5 +1,5 @@
 // ==========================================================
-// carousel.js — horizontal world carousel logic
+// carousel.js — horizontal world carousel logic 
 // ==========================================================
 window.initCarousel = function () {
   const track = document.getElementById("worlds-track");
@@ -16,7 +16,8 @@ window.initCarousel = function () {
     if (!slides.length) return;
 
     current = (index + slides.length) % slides.length;
-    track.style.transform = `translateX(-${current * 100}%)`;
+    // Add translateZ(0) to fix Chrome seam issue
+    track.style.transform = `translateX(-${current * 100}%) translateZ(0)`;
 
     [...nav.children].forEach((dot, i) =>
       dot.classList.toggle("active", i === current)
@@ -49,11 +50,15 @@ window.initCarousel = function () {
 
     track.style.display = "flex";
     track.style.transition = "transform 0.6s ease";
-    track.style.width = `${slides.length * 100}%`;
+    track.style.willChange = "transform";
+    track.style.backfaceVisibility = "hidden";
+    track.style.transformStyle = "preserve-3d";
 
     [...slides].forEach(slide => {
-      slide.style.width = "100%";
-      slide.style.flexShrink = "0";
+      slide.style.flex = "0 0 100%";
+      slide.style.maxWidth = "100%";
+      slide.style.boxSizing = "border-box";
+      slide.style.backfaceVisibility = "hidden";
     });
 
     // Build nav dots
