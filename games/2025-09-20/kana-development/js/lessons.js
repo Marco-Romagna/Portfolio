@@ -4,22 +4,22 @@
 // ==========================================================
 
 document.addEventListener("DOMContentLoaded", async () => {
-  // Wait until LessonCore is defined (in case scripts load slowly)
+  // Wait for LessonCore to exist before continuing
   await waitFor(() => window.LessonCore && typeof window.LessonCore.showPart === "function");
 
   const { IS_VOCAB, showPart } = window.LessonCore;
 
-  // 1️⃣ Initialize lesson content (Kana or Vocab)
+  // 1 Initialize lesson parts
   if (IS_VOCAB && typeof initVocabParts === "function") {
     initVocabParts();
   } else if (!IS_VOCAB && typeof initKanaParts === "function") {
     initKanaParts();
   } else {
-    console.error("init functions not found — are lessons-kana.js / lessons-vocab.js included?");
+    console.error("initVocabParts / initKanaParts not found. Check script includes.");
     return;
   }
 
-  // 2️⃣ Try to show summary first; otherwise start Part 1
+  // 2 Try to show summary first; otherwise start directly
   const hadSummary = await maybeShowSummary();
   if (!hadSummary) {
     showPart(1);
@@ -27,7 +27,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 });
 
 // ----------------------------------------------------------
-// Helper: wait for condition
+// Utility: wait for a condition to become true
 // ----------------------------------------------------------
 function waitFor(check, interval = 25, timeout = 5000) {
   return new Promise((resolve, reject) => {
@@ -45,14 +45,14 @@ function waitFor(check, interval = 25, timeout = 5000) {
 }
 
 // ----------------------------------------------------------
-// Part 0 — Optional Summary Loader
+// Part 0 — Optional Summary (Pre-Lesson Screen)
 // ----------------------------------------------------------
 async function maybeShowSummary() {
   try {
     const lessonId = new URLSearchParams(location.search).get("lesson");
     if (!lessonId) return false;
 
-    // Adjust path as needed (relative to lesson.html)
+    // adjust relative path if needed
     const res = await fetch("../data/lexicon_summaries.json");
     if (!res.ok) throw new Error(`fetch failed (${res.status})`);
     const summaries = await res.json();
@@ -60,20 +60,22 @@ async function maybeShowSummary() {
     const summaryText = summaries?.[lessonId];
     if (!summaryText) return false;
 
+    // Build summary section matching your CSS
     const container = document.querySelector(".lesson") || document.body;
     const part0 = document.createElement("section");
-    part0.id = "part-0";
-    part0.className = "lesson-part is-visible";
+    part0.className = "lesson-summary";
     part0.innerHTML = `
-      <h2 class="part-title">Summary</h2>
-      <div class="lesson-summary">${summaryText}</div>
-      <div class="actions">
-        <button class="btn primary" data-action="begin">Begin Lesson</button>
+      <div class="summary-panel">
+        <div class="summary-kana">${lessonId}</div>
+        <h2>Summary</h2>
+        <p>${summaryText}</p>
+        <button id="start-lesson" class="btn primary">Begin Lesson</button>
       </div>
     `;
     container.prepend(part0);
 
-    part0.querySelector("[data-action='begin']").addEventListener("click", () => {
+    // Button → remove summary + begin lesson
+    part0.querySelector("#start-lesson").addEventListener("click", () => {
       part0.remove();
       window.LessonCore.showPart(1);
     });
