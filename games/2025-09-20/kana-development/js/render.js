@@ -1,74 +1,118 @@
 // ==========================================================
-// render.js — render list of worlds and levels
-// header-only rows, whole row navigates to lv.href
+// render.js — render list of worlds and levels (carousel version)
+// combines full renderWorlds logic + carousel-ready structure
 // ==========================================================
-function renderWorlds(worlds) {
-  const root = document.getElementById("worlds-root");
+document.addEventListener("DOMContentLoaded", () => {
+  const track = document.getElementById("worlds-track");
+  const nav = document.getElementById("carousel-nav");
   const worldTpl = document.getElementById("tpl-world");
   const rowTpl = document.getElementById("tpl-level-row");
-  root.innerHTML = "";
 
+  if (!track || !worldTpl || !rowTpl) {
+    console.warn("[Render] Missing required DOM elements");
+    return;
+  }
+
+  // Clear existing track
+  track.innerHTML = "";
+
+  // Load from global WORLDS (stages.js)
+  const worlds = window.WORLDS || [];
+  if (!worlds.length) {
+    console.warn("[Render] No worlds found");
+    return;
+  }
+
+  // --- Render all worlds ---
   worlds.forEach(w => {
     const wNode = worldTpl.content.cloneNode(true);
+    const wEl = wNode.querySelector(".world");
 
-    // World title + optional description
-    wNode.querySelector(".world-title").textContent = w.title;
-    wNode.querySelector(".world-desc").textContent = w.desc || "";
+    // Titles + desc
+    wEl.querySelector(".world-title").textContent = w.title;
+    wEl.querySelector(".world-desc").textContent = w.desc || "";
 
-    const list = wNode.querySelector(".levels-list");
+    const list = wEl.querySelector(".levels-list");
 
+    // --- Render all levels within this world ---
     (w.levels || []).forEach(lv => {
       const node = rowTpl.content.cloneNode(true);
-
-      // Bits we keep
       const head  = node.querySelector(".level-head");
       const icon  = node.querySelector(".level-icon");
       const title = node.querySelector(".level-title");
 
-      // Optional styling class from stages.js
-      if (lv.class) {
-        icon.classList.add(lv.class);
-      }
+      // optional style/icon
+      if (lv.class) icon.classList.add(lv.class);
 
-      // Collapse: remove body/chevron
-      node.querySelector(".level-body")?.remove();
-      node.querySelector(".chev")?.remove();
-
-      // Fill header
       icon.textContent = lv.thumb || lv.code || "";
       title.textContent = lv.title || lv.code || "";
 
-      // Label hiragana vs katakana
-      if (lv.lexicon === "katakana") {
-        title.textContent += " (カタカナ)";
-      } else if (lv.lexicon === "hiragana") {
-        title.textContent += " (ひらがな)";
-      }
+      // Label script type
+      if (lv.lexicon === "katakana") title.textContent += " (カタカナ)";
+      else if (lv.lexicon === "hiragana") title.textContent += " (ひらがな)";
 
-      // Make the entire header act like a link
+      // Make row navigable
       const href = lv.href || "#";
-      head.setAttribute("role", "link");
-      head.setAttribute("aria-expanded", "false"); // no accordion behavior
-      head.tabIndex = 0;
-      if (href && href !== "#") head.title = `Open: ${lv.title || lv.code}`;
-
-      // Click/keyboard navigate
-      function go() {
-        if (href && href !== "#") window.location.href = href;
-      }
+      const go = () => { if (href && href !== "#") window.location.href = href; };
       head.addEventListener("click", go);
-      head.addEventListener("keydown", (e) => {
+      head.addEventListener("keydown", e => {
         if (e.key === "Enter" || e.key === " ") {
-          e.preventDefault();
-          go();
+          e.preventDefault(); go();
         }
       });
 
       list.appendChild(node);
     });
 
-    root.appendChild(wNode);
+    track.appendChild(wNode);
   });
-}
 
-window.renderWorlds = renderWorlds;
+  // --- Initialize carousel layout ---
+  const slides = Array.from(track.children);
+  if (!slides.length) return;
+
+  track.style.display = "flex";
+  track.style.transition = "transform 0.6s ease";
+  track.style.width = `${slides.length * 100}%`;
+
+  slides.forEach(slide => {
+    slide.style.width = "100%";
+    slide.style.flexShrink = "0";
+    slide.style.padding = "1rem";
+  });
+
+  // --- Build nav dots ---
+  nav.innerHTML = "";
+  slides.forEach((_, i) => {
+    const dot = document.createElement("button");
+    dot.addEventListener("click", () => updateCarousel(i));
+    nav.appendChild(dot);
+  });
+
+  // --- Carousel control ---
+  let current = 0;
+  function updateCarousel(index) {
+    current = (index + slides.length) % slides.length;
+    track.style.transform = `translateX(-${current * 100}%)`;
+    [...nav.children].forEach((dot, i) =>
+      dot.classList.toggle("active", i === current)
+    );
+  }
+
+  // Keyboard + swipe navigation
+  document.addEventListener("keydown", e => {
+    if (e.key === "ArrowRight") updateCarousel(current + 1);
+    if (e.key === "ArrowLeft") updateCarousel(current - 1);
+  });
+
+  let startX = 0;
+  track.addEventListener("touchstart", e => startX = e.touches[0].clientX);
+  track.addEventListener("touchend", e => {
+    const diff = e.changedTouches[0].clientX - startX;
+    if (Math.abs(diff) > 50) updateCarousel(current + (diff < 0 ? 1 : -1));
+  });
+
+  // --- Initialize ---
+  updateCarousel(0);
+  console.log("[Render] Carousel worlds rendered successfully");
+});
