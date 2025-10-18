@@ -984,12 +984,19 @@ body.site {
 }
 
 #worlds-track .levels-list {
-  display: flex;
-  flex-direction: column;
-  gap: 0.4rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 0.8rem 1rem;
+  justify-items: center;
   width: 100%;
-  max-width: 620px;
+  max-width: 720px;
+  margin: 0 auto;
 }
+#worlds-track .level-row {
+  width: 100%;
+  text-align: center;
+}
+
 
 #worlds-track .level-row {
   background: rgba(40, 40, 40, 0.6);
