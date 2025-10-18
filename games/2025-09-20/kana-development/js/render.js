@@ -1,6 +1,5 @@
 // ==========================================================
-// render.js — render list of worlds and levels (carousel version)
-// combines full renderWorlds logic + carousel-ready structure
+// render.js — grouped kana rows (Hira / Kata / Mix / Vocab)
 // ==========================================================
 document.addEventListener("DOMContentLoaded", () => {
   const track = document.getElementById("worlds-track");
@@ -8,80 +7,102 @@ document.addEventListener("DOMContentLoaded", () => {
   const worldTpl = document.getElementById("tpl-world");
   const rowTpl = document.getElementById("tpl-level-row");
 
-  if (!track || !worldTpl || !rowTpl) {
+  if (!track || !worldTpl) {
     console.warn("[Render] Missing required DOM elements");
     return;
   }
 
-  // Clear existing track
   track.innerHTML = "";
-
-  // Load from global WORLDS (stages.js)
   const worlds = window.WORLDS || [];
   if (!worlds.length) {
     console.warn("[Render] No worlds found");
     return;
   }
 
-  // --- Render all worlds ---
+  // Helper: short label from title
+  const shortLabel = (title = "") => {
+    if (title.includes("Hiragana")) return "Hira";
+    if (title.includes("Katakana")) return "Kata";
+    if (title.includes("Mixed")) return "Mix";
+    if (title.includes("Vocab") && title.includes("Hiragana")) return "Voc-H";
+    if (title.includes("Vocab") && title.includes("Katakana")) return "Voc-K";
+    return title.split("—")[1]?.trim() || title;
+  };
+
+  // Helper: detect kana row key from title (K, G, P, etc.)
+  const detectKanaRow = (title = "") => {
+    const match = title.match(/—\s+([A-Za-z])\s/);
+    return match ? match[1] : "Other";
+  };
+
+  // --- Render each world ---
   worlds.forEach(w => {
     const wNode = worldTpl.content.cloneNode(true);
     const wEl = wNode.querySelector(".world");
 
-    // Titles + desc
     wEl.querySelector(".world-title").textContent = w.title;
     wEl.querySelector(".world-desc").textContent = w.desc || "";
 
     const list = wEl.querySelector(".levels-list");
 
-    // --- Render all levels within this world ---
+    // Group levels by kana letter (like K, G, P)
+    const groups = {};
     (w.levels || []).forEach(lv => {
-      const node = rowTpl.content.cloneNode(true);
-      const head  = node.querySelector(".level-head");
-      const icon  = node.querySelector(".level-icon");
-      const title = node.querySelector(".level-title");
+      const key = detectKanaRow(lv.title);
+      if (!groups[key]) groups[key] = [];
+      groups[key].push(lv);
+    });
 
-      // optional style/icon
-      if (lv.class) icon.classList.add(lv.class);
+    // --- Render grouped rows ---
+    Object.entries(groups).forEach(([kana, levels]) => {
+      const rowGroup = document.createElement("div");
+      rowGroup.className = "level-row-group";
 
-      icon.textContent = lv.thumb || lv.code || "";
-      title.textContent = lv.title || lv.code || "";
+      const label = document.createElement("div");
+      label.className = "level-row-label";
+      label.textContent = kana + "-row";
+      rowGroup.appendChild(label);
 
-      // Label script type
-      if (lv.lexicon === "katakana") title.textContent += " (カタカナ)";
-      else if (lv.lexicon === "hiragana") title.textContent += " (ひらがな)";
+      const rowButtons = document.createElement("div");
+      rowButtons.className = "level-row-buttons";
 
-      // Make row navigable
-      const href = lv.href || "#";
-      const go = () => { if (href && href !== "#") window.location.href = href; };
-      head.addEventListener("click", go);
-      head.addEventListener("keydown", e => {
-        if (e.key === "Enter" || e.key === " ") {
-          e.preventDefault(); go();
-        }
+      levels.forEach(lv => {
+        const btn = document.createElement("div");
+        btn.className = "level-btn";
+        btn.textContent = shortLabel(lv.title);
+
+        const href = lv.href || "#";
+        const go = () => { if (href && href !== "#") window.location.href = href; };
+        btn.addEventListener("click", go);
+        btn.addEventListener("keydown", e => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            go();
+          }
+        });
+
+        rowButtons.appendChild(btn);
       });
 
-      list.appendChild(node);
+      rowGroup.appendChild(rowButtons);
+      list.appendChild(rowGroup);
     });
 
     track.appendChild(wEl);
   });
 
-  // --- Initialize carousel layout ---
+  // --- Carousel setup ---
   const slides = Array.from(track.children);
   if (!slides.length) return;
 
   track.style.display = "flex";
   track.style.transition = "transform 0.6s ease";
   track.style.width = `${slides.length * 100}%`;
-
   slides.forEach(slide => {
     slide.style.width = "100%";
     slide.style.flexShrink = "0";
-    slide.style.padding = "1rem";
   });
 
-  // --- Build nav dots ---
   nav.innerHTML = "";
   slides.forEach((_, i) => {
     const dot = document.createElement("button");
@@ -89,7 +110,6 @@ document.addEventListener("DOMContentLoaded", () => {
     nav.appendChild(dot);
   });
 
-  // --- Carousel control ---
   let current = 0;
   function updateCarousel(index) {
     current = (index + slides.length) % slides.length;
@@ -99,20 +119,18 @@ document.addEventListener("DOMContentLoaded", () => {
     );
   }
 
-  // Keyboard + swipe navigation
   document.addEventListener("keydown", e => {
     if (e.key === "ArrowRight") updateCarousel(current + 1);
     if (e.key === "ArrowLeft") updateCarousel(current - 1);
   });
 
   let startX = 0;
-  track.addEventListener("touchstart", e => startX = e.touches[0].clientX);
+  track.addEventListener("touchstart", e => (startX = e.touches[0].clientX));
   track.addEventListener("touchend", e => {
     const diff = e.changedTouches[0].clientX - startX;
     if (Math.abs(diff) > 50) updateCarousel(current + (diff < 0 ? 1 : -1));
   });
 
-  // --- Initialize ---
   updateCarousel(0);
-  console.log("[Render] Carousel worlds rendered successfully");
+  console.log("[Render] Rowed kana grid rendered successfully");
 });
