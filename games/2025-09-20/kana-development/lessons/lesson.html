@@ -3,56 +3,97 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Kana Lesson</title>
+  <title>Kana Development • Worlds</title>
 
-  <!-- Site styles -->
-  <link rel="stylesheet" href="../../../../css/main.css">
-  <link rel="stylesheet" href="../../../../css/games/kana-development/stages.css">
-  <link rel="stylesheet" href="../../../../css/games/kana-development/lessons.css">
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Noto+Serif+JP:wght@500;700&family=Shippori+Mincho:wght@500&display=swap" rel="stylesheet">
+
+  <!-- Global Styles -->
+  <link rel="stylesheet" href="../../../css/main.css">
+  <link rel="stylesheet" href="../../../css/games/kana-development/lessons.css">
 </head>
-<body class="site mode-light lesson" data-lesson-id="" data-total-parts="">
 
-  <!-- Site header -->
+<body class="site ancient-theme">
+  <!-- Header -->
   <header class="header">
     <div class="container nav">
-      <a class="brand" href="../index.html">
-        <span class="dot"></span><span>Kana Development</span>
+      <a class="brand" href="../../../index.html">
+        <span class="dot"></span><span>Marco • Portfolio</span>
       </a>
+      <nav class="links">
+        <a class="cta" href="https://www.linkedin.com/in/marco-romagna" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+      </nav>
     </div>
   </header>
 
-  <!-- Sticky CTA (hidden unless JS unhides) -->
-  <div class="lesson-cta is-hidden">
-    <button class="btn primary" data-action="advance">Next</button>
-  </div>
+  <!-- Main -->
+  <main class="container">
+    <!-- Intro Summary -->
+    <section class="panel summary">
+      <h2>Kana Development</h2>
+      <p>
+        <strong>Kana Development</strong> is an interactive webpage built to introduce learners to Japan’s two phonetic writing systems —
+        <strong>hiragana (ひらがな)</strong> and <strong>katakana (カタカナ)</strong>.
+        The goal of this project isn’t to teach the entire Japanese language or serve as a full vocabulary memorization tool,
+        but rather to provide a starting point for recognizing kana and becoming familiar with how they look and sound.
+      </p>
+      <p>
+        Learners progress through short, structured lessons that focus on reading and identification.
+        Vocabulary words are included as practice material to reinforce recognition, though memorization is not the primary goal.
+        Some words and audio samples may feel challenging or unfamiliar, and that’s expected as part of the exposure process.
+        For dedicated vocabulary study, tools such as <strong>Anki</strong> or other flashcard-based systems are highly recommended.
+      </p>
+      <p>
+        The script displayed on this webpage reflects modern digital Japanese, which can differ slightly from handwritten forms.
+        This project was developed alongside my own study of kana and aims to make the early stages of learning more approachable
+        through an interactive and focused online environment.
+      </p>
+    </section>
 
-  <!-- Main lesson container -->
-  <main class="container game-wrap">
+    <!-- Section Header -->
+    <h3 class="muted small-header">Choose a World</h3>
 
-    <!-- Progress steps (populated by lessons-core.js) -->
-    <nav class="lesson-progress" aria-label="Lesson progress">
-      <ol class="steps"></ol>
-    </nav>
-
-    <!-- Summary placeholder (shown only if summary exists) -->
-    <section id="lesson-summary" class="lesson-summary is-hidden"></section>
-
-    <!-- Placeholder sections for actual lesson parts -->
-    <section id="part-1" class="lesson-part" data-part-index="1"></section>
-    <section id="part-2" class="lesson-part" data-part-index="2"></section>
-    <section id="part-3" class="lesson-part" data-part-index="3"></section>
-    <section id="part-4" class="lesson-part" data-part-index="4"></section>
-    <section id="part-5" class="lesson-part" data-part-index="5"></section>
+    <!-- World Carousel -->
+    <section class="world-carousel">
+      <div id="worlds-track"></div>
+      <div id="carousel-nav" class="carousel-nav"></div>
+    </section>
   </main>
 
-  <!-- Universal lesson logic -->
-  <script defer src="../js/vocab.js"></script>
-  <script defer src="../js/stages.js"></script>
-  <script defer src="../js/lessons-core.js"></script>
-  <script defer src="../js/lessons-kana.js"></script>
-  <script defer src="../js/lessons-vocab.js"></script>
-  <script defer src="../js/lessons.js"></script>
+  <!-- Footer -->
+  <footer class="footer">
+    © <span id="year"></span> Marco Romagna • All rights reserved
+  </footer>
 
+  <!-- Templates -->
+  <template id="tpl-world">
+    <section class="panel world">
+      <h2 class="world-title"></h2>
+      <p class="muted world-desc"></p>
+      <ul class="levels-list"></ul>
+    </section>
+  </template>
 
+  <template id="tpl-level-row">
+    <li class="level-row card">
+      <div class="level-head">
+        <span class="level-icon no-thumb-mark"></span>
+        <span class="level-title"></span>
+      </div>
+    </li>
+  </template>
+
+  <!-- Scripts -->
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
+
+  <!-- Data & Rendering Logic -->
+  <script src="js/lessons-core.js"></script>
+  <script src="js/lessons-kana.js"></script>
+  <script src="js/render.js"></script>
+  <script src="js/stages.js"></script>
+  <script src="js/init.js"></script>
+  <script src="js/carousel.js"></script>
 </body>
 </html>
