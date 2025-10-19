@@ -5,7 +5,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const track = document.getElementById("worlds-track");
   const nav = document.getElementById("carousel-nav");
   const worldTpl = document.getElementById("tpl-world");
-  const rowTpl = document.getElementById("tpl-level-row");
 
   if (!track || !worldTpl) {
     console.warn("[Render] Missing required DOM elements");
@@ -19,20 +18,22 @@ document.addEventListener("DOMContentLoaded", () => {
     return;
   }
 
-  // Helper: short label from title
+  // Helper: short label for each level button
   const shortLabel = (title = "") => {
+    if (title.includes("Vocabulary") && title.includes("Hiragana")) return "Hira Vocab";
+    if (title.includes("Vocabulary") && title.includes("Katakana")) return "Kata Vocab";
     if (title.includes("Hiragana")) return "Hira";
     if (title.includes("Katakana")) return "Kata";
     if (title.includes("Mixed")) return "Mix";
-    if (title.includes("Vocab") && title.includes("Hiragana")) return "Voc-H";
-    if (title.includes("Vocab") && title.includes("Katakana")) return "Voc-K";
     return title.split("—")[1]?.trim() || title;
   };
 
-  // Helper: detect kana row key from title (K, G, P, etc.)
+  // Helper: detect kana row (K, G, P, etc.)
   const detectKanaRow = (title = "") => {
-    const match = title.match(/—\s+([A-Za-z])\s/);
-    return match ? match[1] : "Other";
+    const match = title.match(/Hiragana\s+([A-Za-z])|Katakana\s+([A-Za-z])/);
+    if (match) return match[1] || match[2];
+    if (title.includes("Vowel")) return "Vowel";
+    return "Other";
   };
 
   // --- Render each world ---
@@ -45,7 +46,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const list = wEl.querySelector(".levels-list");
 
-    // Group levels by kana letter (like K, G, P)
+    // Group levels by kana letter (K, G, H, etc.)
     const groups = {};
     (w.levels || []).forEach(lv => {
       const key = detectKanaRow(lv.title);
@@ -53,14 +54,14 @@ document.addEventListener("DOMContentLoaded", () => {
       groups[key].push(lv);
     });
 
-    // --- Render grouped rows ---
+    // --- Render each kana row ---
     Object.entries(groups).forEach(([kana, levels]) => {
       const rowGroup = document.createElement("div");
       rowGroup.className = "level-row-group";
 
       const label = document.createElement("div");
       label.className = "level-row-label";
-      label.textContent = kana + "-row";
+      label.textContent = kana === "Vowel" ? "Vowel Row" : `${kana} Row`;
       rowGroup.appendChild(label);
 
       const rowButtons = document.createElement("div");
