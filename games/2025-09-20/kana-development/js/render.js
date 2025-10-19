@@ -1,5 +1,5 @@
 // ==========================================================
-// render.js — rule-based kana row grouping (explicit world map)
+// render.js
 // ==========================================================
 document.addEventListener("DOMContentLoaded", () => {
   const track = document.getElementById("worlds-track");
@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded", () => {
     return;
   }
 
-  // Explicit rows per world
+  // Explicit consonant rows per world
   const WORLD_ROWS = {
     1: ["V"],
     2: ["K", "G"],
@@ -32,23 +32,29 @@ document.addEventListener("DOMContentLoaded", () => {
     10: ["W"]
   };
 
-  // Shorter labels
+  // Shorter button labels
   const shortLabel = (title = "") => {
-    if (title.includes("Vocabulary") && title.includes("Hiragana")) return "Hira Vocab";
-    if (title.includes("Vocabulary") && title.includes("Katakana")) return "Kata Vocab";
+    if (title.includes("Vocabulary") && title.includes("Hiragana"))
+      return "Hira Vocab";
+    if (title.includes("Vocabulary") && title.includes("Katakana"))
+      return "Kata Vocab";
     if (title.includes("Hiragana")) return "Hira";
     if (title.includes("Katakana")) return "Kata";
     if (title.includes("Mixed")) return "Mix";
     return title.split("—")[1]?.trim() || title;
   };
 
-  // Extract kana samples (like (かきくけこ))
+  // Extract kana sample (e.g., "(かきくけこ)")
   const extractKanaSample = (title = "") => {
     const match = title.match(/\(([ぁ-んァ-ン]+)\)/);
     return match ? match[1] : "";
   };
 
-  // Render each world
+  // Dakuten + Handakuten mapping
+  const DAKU_MAP = { K: "G", S: "Z", T: "D", H: "B" };
+  const HANDA_MAP = { H: "P" };
+
+  // ---------- Render each world ----------
   worlds.forEach(w => {
     const wNode = worldTpl.content.cloneNode(true);
     const wEl = wNode.querySelector(".world");
@@ -61,39 +67,73 @@ document.addEventListener("DOMContentLoaded", () => {
     const worldNum = parseInt(w.code);
     const rows = WORLD_ROWS[worldNum] || [];
 
-    // Group by row consonant (V, K, G, etc.)
     rows.forEach(rowKey => {
+      // Filter levels belonging to this row
       const levels = (w.levels || []).filter(lv => {
         const title = lv.title;
+
+        // --- Vowels ---
         if (rowKey === "V") return title.includes("Vowel");
-        if (rowKey === "K") return title.includes("K (");
-        if (rowKey === "G") return title.includes("G (");
-        if (rowKey === "S") return title.includes("S (");
-        if (rowKey === "Z") return title.includes("Z (");
-        if (rowKey === "T") return title.includes("T (");
-        if (rowKey === "D") return title.includes("D (");
-        if (rowKey === "N") return title.includes("N (");
-        if (rowKey === "H") return title.includes("H (");
-        if (rowKey === "B") return title.includes("B (");
-        if (rowKey === "P") return title.includes("P (");
-        if (rowKey === "M") return title.includes("M (");
-        if (rowKey === "Y") return title.includes("Y (");
-        if (rowKey === "R") return title.includes("R (");
-        if (rowKey === "W") return title.includes("W (");
-        return false;
+
+        // --- Regular kana rows (K, S, T, etc.) ---
+        let match =
+          title.includes(`${rowKey} (`) ||
+          // include non-dakuten vocab for same-row
+          (title.includes("Vocabulary") &&
+            !title.includes("Dakuten") &&
+            !title.includes("Handakuten") &&
+            WORLD_ROWS[worldNum]?.includes(rowKey));
+
+        // --- Dakuten rows (G, Z, D, B) ---
+        const baseForDakuten = Object.keys(DAKU_MAP).find(
+          base => DAKU_MAP[base] === rowKey
+        );
+        if (baseForDakuten) {
+          match =
+            match ||
+            (title.includes("Dakuten") &&
+              title.includes("Vocabulary") &&
+              title.includes("Katakana")) ||
+            (title.includes("Dakuten") &&
+              title.includes("Vocabulary") &&
+              title.includes("Hiragana")) ||
+            title.includes(`${rowKey} (`);
+        }
+
+        // --- Handakuten rows (P) ---
+        const baseForHanda = Object.keys(HANDA_MAP).find(
+          base => HANDA_MAP[base] === rowKey
+        );
+        if (baseForHanda) {
+          match =
+            match ||
+            (title.includes("Handakuten") &&
+              title.includes("Vocabulary") &&
+              title.includes("Katakana")) ||
+            (title.includes("Handakuten") &&
+              title.includes("Vocabulary") &&
+              title.includes("Hiragana")) ||
+            title.includes(`${rowKey} (`);
+        }
+
+        return match;
       });
 
       if (!levels.length) return; // skip empty rows
 
+      // Row label with kana sample
       const sample = extractKanaSample(levels[0].title);
       const rowGroup = document.createElement("div");
       rowGroup.className = "level-row-group";
 
       const label = document.createElement("div");
       label.className = "level-row-label";
-      label.textContent = `${rowKey === "V" ? "Vowel" : rowKey} Row${sample ? ` (${sample})` : ""}`;
+      label.textContent = `${
+        rowKey === "V" ? "Vowel" : rowKey
+      } Row${sample ? ` (${sample})` : ""}`;
       rowGroup.appendChild(label);
 
+      // Buttons
       const rowButtons = document.createElement("div");
       rowButtons.className = "level-row-buttons";
 
@@ -115,7 +155,7 @@ document.addEventListener("DOMContentLoaded", () => {
     track.appendChild(wEl);
   });
 
-  // Carousel setup
+  // ---------- Carousel logic ----------
   const slides = Array.from(track.children);
   if (!slides.length) return;
 
@@ -156,5 +196,4 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   updateCarousel(0);
-  console.log("[Render] Explicit world-based kana rows rendered successfully");
 });
