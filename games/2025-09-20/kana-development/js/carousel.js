@@ -19,6 +19,7 @@ window.initCarousel = function () {
     // Add translateZ(0) to fix Chrome seam issue
     track.style.transform = `translateX(-${current * 100}%) translateZ(0)`;
 
+    // Update nav dots
     [...nav.children].forEach((dot, i) =>
       dot.classList.toggle("active", i === current)
     );
@@ -95,7 +96,7 @@ window.initCarousel = function () {
 
     jumpButtons.forEach((btn, i) => {
       btn.addEventListener("click", () => {
-        updateCarousel(i); // Reuse main carousel update
+        updateCarousel(i); // reuse carousel function
       });
     });
   });
