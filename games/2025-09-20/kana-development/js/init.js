@@ -1,42 +1,35 @@
 // ==========================================================
-// init.js — initialize world carousel once data is ready
+// init.js — entrypoint for Kana Development worlds
 // ==========================================================
-window.addEventListener("DOMContentLoaded", () => {
-  // Wait for both stages + render.js to be loaded
-  if (!window.WORLDS || !window.renderWorlds) {
-    console.warn("[Init] Worlds or render function not ready yet.");
-    return;
+
+(function () {
+  console.log("[Init] Starting Kana Development...");
+
+  // Utility: wait until worlds and renderer are both ready
+  function tryInitWorlds(attempt = 0) {
+    if (window.renderWorlds && window.KANA_STAGES) {
+      // Render all world panels
+      renderWorlds();
+
+      // Initialize carousel when DOM & slides exist
+      if (typeof window.initCarousel === "function") {
+        window.initCarousel();
+      } else {
+        console.warn("[Init] Carousel not yet defined.");
+      }
+
+      console.log("[Init] Worlds + Carousel initialized.");
+    } else {
+      // Retry logic for slow loads
+      if (attempt < 10) {
+        console.warn("[Init] Worlds not ready, retrying...", attempt);
+        setTimeout(() => tryInitWorlds(attempt + 1), 300);
+      } else {
+        console.error("[Init] Failed to initialize after 10 attempts.");
+      }
+    }
   }
 
-  // Render the worlds inside the track
-  const track = document.getElementById("worlds-track");
-  if (track) {
-    // Clear and render each world as a slide
-    track.innerHTML = "";
-    window.WORLDS.forEach(world => {
-      const slide = document.createElement("div");
-      slide.className = "world-panel";
-      slide.innerHTML = `
-        <h2>${world.title}</h2>
-        <p>${world.desc}</p>
-        <div class="world-buttons">
-          ${(world.levels || [])
-            .map(
-              lv => `<a href="${lv.href}" class="btn">${lv.thumb || lv.title}</a>`
-            )
-            .join("")}
-        </div>
-      `;
-      track.appendChild(slide);
-    });
-
-    console.log(`[Init] Rendered ${window.WORLDS.length} worlds in carousel`);
-  }
-
-  // Start the carousel behavior
-  if (typeof window.initCarousel === "function") {
-    window.initCarousel();
-  } else {
-    console.warn("[Init] Carousel script not found or not loaded yet.");
-  }
-});
+  // Start when DOM is ready
+  document.addEventListener("DOMContentLoaded", () => tryInitWorlds());
+})();
