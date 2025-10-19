@@ -83,11 +83,13 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         // --- Base detection ---
-        // Treat entries like "Hiragana W + ん" or "Katakana W + ン" as valid even without parentheses
+        // Treat kana lessons like "Hiragana W + ん", "Katakana W + ン", or "Mixed W/N" as valid rows
         const isKanaRow =
-          title.includes(`${rowKey} (`) ||
-          title.includes(` ${rowKey} `) ||
-          title.includes(`${rowKey} +`);
+          title.includes(`${rowKey} (`) ||             // normal "(かきくけこ)"
+          title.includes(` ${rowKey} `) ||             // spaced " K "
+          title.includes(`${rowKey} +`) ||             // "W + ん"
+          title.includes(`${rowKey}/`) ||              // "Mixed W/N"
+          title.startsWith(rowKey);                    // fallback, e.g., "W Row" edge cases
         const isSameRowVocab =
           title.includes("Vocabulary") &&
           !title.includes("Dakuten") &&
