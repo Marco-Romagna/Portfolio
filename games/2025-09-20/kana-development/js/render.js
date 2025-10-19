@@ -83,7 +83,11 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         // --- Base detection ---
-        const isKanaRow = title.includes(`${rowKey} (`);
+        // Treat entries like "Hiragana W + ん" or "Katakana W + ン" as valid even without parentheses
+        const isKanaRow =
+          title.includes(`${rowKey} (`) ||
+          title.includes(` ${rowKey} `) ||
+          title.includes(`${rowKey} +`);
         const isSameRowVocab =
           title.includes("Vocabulary") &&
           !title.includes("Dakuten") &&
