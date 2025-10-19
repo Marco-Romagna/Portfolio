@@ -1,73 +1,188 @@
 // ==========================================================
-// render.js — render list of worlds and levels (carousel version)
-// combines full renderWorlds logic + carousel-ready structure
+// render.js — grouped rows with correct vocab placement
 // ==========================================================
-document.addEventListener("DOMContentLoaded", () => {
+window.renderWorlds = function () {
   const track = document.getElementById("worlds-track");
   const nav = document.getElementById("carousel-nav");
   const worldTpl = document.getElementById("tpl-world");
-  const rowTpl = document.getElementById("tpl-level-row");
 
-  if (!track || !worldTpl || !rowTpl) {
+  if (!track || !worldTpl) {
     console.warn("[Render] Missing required DOM elements");
     return;
   }
 
-  // Clear existing track
   track.innerHTML = "";
 
-  // Load from global WORLDS (stages.js)
-  const worlds = window.WORLDS || [];
+  //  Pull from KANA_STAGES
+  const worlds = (window.KANA_STAGES && window.KANA_STAGES.worlds) || [];
   if (!worlds.length) {
     console.warn("[Render] No worlds found");
     return;
   }
 
-  // --- Render all worlds ---
+  //  Link level objects to each world
+  if (window.KANA_STAGES && window.KANA_STAGES.levels) {
+    const levelMap = new Map(window.KANA_STAGES.levels.map(l => [l.code, l]));
+    worlds.forEach(w => {
+      w.levels = (w.levels || [])
+        .map(code => levelMap.get(code))
+        .filter(Boolean);
+    });
+  }
+
+  // Explicit consonant rows per world
+  const WORLD_ROWS = {
+    1: ["V"],
+    2: ["K", "G"],
+    3: ["S", "Z"],
+    4: ["T", "D"],
+    5: ["N"],
+    6: ["H", "B", "P"],
+    7: ["M"],
+    8: ["Y"],
+    9: ["R"],
+    10: ["W"]
+  };
+
+  // Label shortening
+  const shortLabel = (title = "") => {
+    if (title.includes("Vocabulary") && title.includes("Hiragana"))
+      return "Hira Vocab";
+    if (title.includes("Vocabulary") && title.includes("Katakana"))
+      return "Kata Vocab";
+    if (title.includes("Hiragana")) return "Hira";
+    if (title.includes("Katakana")) return "Kata";
+    if (title.includes("Mixed")) return "Mix";
+    return title.split("—")[1]?.trim() || title;
+  };
+
+  // Extract kana sample for label
+  const extractKanaSample = (title = "") => {
+    const match = title.match(/\(([ぁ-んァ-ン]+)\)/);
+    return match ? match[1] : "";
+  };
+
+  // Dakuten and Handakuten mapping
+  const DAKU_MAP = { K: "G", S: "Z", T: "D", H: "B" };
+  const HANDA_MAP = { H: "P" };
+
+  // ---------- Render each world ----------
   worlds.forEach(w => {
     const wNode = worldTpl.content.cloneNode(true);
     const wEl = wNode.querySelector(".world");
 
-    // Titles + desc
     wEl.querySelector(".world-title").textContent = w.title;
     wEl.querySelector(".world-desc").textContent = w.desc || "";
 
     const list = wEl.querySelector(".levels-list");
 
-    // --- Render all levels within this world ---
-    (w.levels || []).forEach(lv => {
-      const node = rowTpl.content.cloneNode(true);
-      const head  = node.querySelector(".level-head");
-      const icon  = node.querySelector(".level-icon");
-      const title = node.querySelector(".level-title");
+    const worldNum = parseInt(w.code);
+    const rows = WORLD_ROWS[worldNum] || [];
+    let usedVocab = new Set(); // track vocab usage per world
 
-      // optional style/icon
-      if (lv.class) icon.classList.add(lv.class);
+    rows.forEach((rowKey, rowIndex) => {
+      const levels = (w.levels || []).filter(lv => {
+        if (!lv || !lv.title) return false; // safety guard
+        const title = lv.title;
 
-      icon.textContent = lv.thumb || lv.code || "";
-      title.textContent = lv.title || lv.code || "";
-
-      // Label script type
-      if (lv.lexicon === "katakana") title.textContent += " (カタカナ)";
-      else if (lv.lexicon === "hiragana") title.textContent += " (ひらがな)";
-
-      // Make row navigable
-      const href = lv.href || "#";
-      const go = () => { if (href && href !== "#") window.location.href = href; };
-      head.addEventListener("click", go);
-      head.addEventListener("keydown", e => {
-        if (e.key === "Enter" || e.key === " ") {
-          e.preventDefault(); go();
+        // --- Vowel world ---
+        if (rowKey === "V") {
+          return (
+            title.includes("Vowel") ||
+            (title.includes("Vocabulary") &&
+              title.includes("Hiragana") &&
+              !usedVocab.has("HiraVocab"))
+          );
         }
+
+        // --- Base detection ---
+        const isKanaRow =
+          title.includes(`${rowKey} (`) ||
+          title.includes(` ${rowKey} `) ||
+          title.includes(`${rowKey} +`) ||
+          title.includes(`${rowKey}/`) ||
+          title.startsWith(rowKey);
+
+        const isSameRowVocab =
+          title.includes("Vocabulary") &&
+          !title.includes("Dakuten") &&
+          !title.includes("Handakuten");
+
+        const dakuBase = Object.keys(DAKU_MAP).find(b => DAKU_MAP[b] === rowKey);
+        const handaBase = Object.keys(HANDA_MAP).find(b => HANDA_MAP[b] === rowKey);
+
+        const isDakutenVocab =
+          title.includes("Vocabulary") && title.includes("Dakuten") && !!dakuBase;
+
+        const isHandakutenVocab =
+          title.includes("Vocabulary") &&
+          title.includes("Handakuten") &&
+          !!handaBase;
+
+        const vocabType = title.includes("Katakana")
+          ? "KataVocab"
+          : title.includes("Hiragana")
+          ? "HiraVocab"
+          : null;
+
+        // --- Decide if vocab should show for this row ---
+        let allowVocab = false;
+
+        if (isSameRowVocab && rowIndex === 0 && !usedVocab.has(vocabType)) {
+          allowVocab = true;
+        }
+
+        if (isDakutenVocab && rowKey === DAKU_MAP[dakuBase]) {
+          allowVocab = true;
+        }
+
+        if (isHandakutenVocab && rowKey === HANDA_MAP[handaBase]) {
+          allowVocab = true;
+        }
+
+        const isKanaLesson = isKanaRow && !title.includes("Vocabulary");
+
+        if (allowVocab && vocabType) usedVocab.add(vocabType);
+
+        return isKanaLesson || allowVocab;
       });
 
-      list.appendChild(node);
+      if (!levels.length) return;
+
+      // --- Build row group ---
+      const sample = extractKanaSample(levels[0].title);
+      const rowGroup = document.createElement("div");
+      rowGroup.className = "level-row-group";
+
+      const label = document.createElement("div");
+      label.className = "level-row-label";
+      label.textContent = `${
+        rowKey === "V" ? "Vowel" : rowKey
+      } Row${sample ? ` (${sample})` : ""}`;
+      rowGroup.appendChild(label);
+
+      const rowButtons = document.createElement("div");
+      rowButtons.className = "level-row-buttons";
+
+      levels.forEach(lv => {
+        const btn = document.createElement("div");
+        btn.className = "level-btn";
+        btn.textContent = shortLabel(lv.title);
+        const href = lv.href || "#";
+        btn.addEventListener("click", () => {
+          if (href && href !== "#") window.location.href = href;
+        });
+        rowButtons.appendChild(btn);
+      });
+
+      rowGroup.appendChild(rowButtons);
+      list.appendChild(rowGroup);
     });
 
     track.appendChild(wEl);
   });
 
-  // --- Initialize carousel layout ---
+  // ---------- Carousel ----------
   const slides = Array.from(track.children);
   if (!slides.length) return;
 
@@ -78,10 +193,8 @@ document.addEventListener("DOMContentLoaded", () => {
   slides.forEach(slide => {
     slide.style.width = "100%";
     slide.style.flexShrink = "0";
-    slide.style.padding = "1rem";
   });
 
-  // --- Build nav dots ---
   nav.innerHTML = "";
   slides.forEach((_, i) => {
     const dot = document.createElement("button");
@@ -89,7 +202,6 @@ document.addEventListener("DOMContentLoaded", () => {
     nav.appendChild(dot);
   });
 
-  // --- Carousel control ---
   let current = 0;
   function updateCarousel(index) {
     current = (index + slides.length) % slides.length;
@@ -99,20 +211,17 @@ document.addEventListener("DOMContentLoaded", () => {
     );
   }
 
-  // Keyboard + swipe navigation
   document.addEventListener("keydown", e => {
     if (e.key === "ArrowRight") updateCarousel(current + 1);
     if (e.key === "ArrowLeft") updateCarousel(current - 1);
   });
 
   let startX = 0;
-  track.addEventListener("touchstart", e => startX = e.touches[0].clientX);
+  track.addEventListener("touchstart", e => (startX = e.touches[0].clientX));
   track.addEventListener("touchend", e => {
     const diff = e.changedTouches[0].clientX - startX;
     if (Math.abs(diff) > 50) updateCarousel(current + (diff < 0 ? 1 : -1));
   });
 
-  // --- Initialize ---
   updateCarousel(0);
-  console.log("[Render] Carousel worlds rendered successfully");
-});
+};

@@ -952,14 +952,15 @@ body.site {
 }
 
 /* =========================================================
-   World Panel
+   World Panel  - Rowed Layout (Kana Grid)
    ========================================================= */
 #worlds-track > .world {
-  background: rgba(33, 33, 33, 0.7);
+  background: rgba(33, 33, 33, 0.75);
   border: 1px solid rgba(140, 120, 80, 0.4);
   border-radius: 20px;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.45);
   text-align: center;
+  padding: 2rem 1rem;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
@@ -969,8 +970,8 @@ body.site {
 }
 
 #worlds-track .world-title {
-  font-size: 1.8rem;
-  margin-bottom: 0.75rem;
+  font-size: 1.9rem;
+  margin-bottom: 0.5rem;
   color: #f4e3b0;
   text-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
 }
@@ -979,31 +980,72 @@ body.site {
   font-size: 1.05rem;
   line-height: 1.8;
   color: #e6dcb5;
-  max-width: 600px;
-  margin: 0 auto 1.5rem;
+  max-width: 700px;
+  margin: 0 auto 2rem;
 }
 
-#worlds-track .levels-list {
+/* ==========================================
+   Lesson Grid (Grouped Rows)
+   ========================================== */
+.levels-list {
   display: flex;
   flex-direction: column;
-  gap: 0.4rem;
+  gap: 1.5rem;
+  align-items: stretch;
   width: 100%;
-  max-width: 620px;
+  max-width: 960px;
+  margin: 0 auto;
 }
 
-#worlds-track .level-row {
-  background: rgba(40, 40, 40, 0.6);
+/* Each row = one kana group (A/B/C-style layout) */
+.level-row-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  align-items: center;
+}
+
+.level-row-label {
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: #f5e6c4;
+  font-family: "Shippori Mincho", serif;
+  margin-bottom: 0.25rem;
+}
+
+/* Button strip inside each row */
+.level-row-buttons {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+/* Each button tile */
+.level-btn {
+  background: rgba(45, 45, 45, 0.8);
   border-radius: 8px;
-  padding: 0.75rem 1rem;
   border: 1px solid rgba(120, 100, 70, 0.3);
+  padding: 0.6rem 1rem;
+  font-size: 0.95rem;
+  color: #f4e4c0;
   cursor: pointer;
   transition: background 0.2s ease, transform 0.2s ease;
+  min-width: 100px;
+  text-align: center;
+  user-select: none;
 }
 
-#worlds-track .level-row:hover {
-  background: rgba(60, 50, 40, 0.7);
+.level-btn:hover {
+  background: rgba(70, 60, 45, 0.85);
   transform: translateY(-2px);
 }
+
+/* Center all rows nicely */
+.levels-list > .level-row-group:last-child {
+  margin-bottom: 1rem;
+}
+
 
 /* =========================================================
    Carousel Navigation Dots
@@ -1058,3 +1100,96 @@ body.site {
   background: linear-gradient(to left, #0f172a 40%, transparent);
 }
 
+/* =========================================================
+   Kana Development — Summary + Carousel Layout
+   ========================================================= */
+
+.panel.summary {
+  margin-bottom: 2rem;
+  background: var(--kp-surface);
+  border: 1px solid var(--kp-border);
+  border-radius: var(--kp-radius);
+  padding: 1.5rem 2rem;
+  box-shadow: var(--kp-shadow);
+}
+
+.panel.summary h2 {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  font-size: 1.75rem;
+}
+
+.panel.summary p {
+  line-height: 1.6;
+  margin-bottom: 0.75rem;
+  color: var(--kp-muted);
+}
+
+.panel.summary p:last-child {
+  margin-bottom: 0;
+}
+
+.world-carousel {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--kp-border);
+}
+
+.small-header {
+  text-align: center;
+  margin: 0.5rem 0 1rem;
+  color: var(--kp-muted);
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+/* =========================================================
+   World Header Quick Navigation (Updated with active glow)
+   ========================================================= */
+.world-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.small-header {
+  margin: 0;
+  color: var(--kp-muted);
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+.world-nav-buttons {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+
+.world-nav-buttons button {
+  background: var(--kp-surface-2);
+  color: var(--kp-text);
+  border: 1px solid var(--kp-border);
+  border-radius: 6px;
+  padding: 4px 8px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background 0.25s ease, border-color 0.25s ease, color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.world-nav-buttons button:hover {
+  background: var(--kp-accent);
+  border-color: transparent;
+  color: #fff;
+}
+
+/* Active state (glow + accent) */
+.world-nav-buttons button.active {
+  background: var(--kp-accent);
+  border-color: transparent;
+  color: #fff;
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--kp-accent) 35%, transparent);
+}

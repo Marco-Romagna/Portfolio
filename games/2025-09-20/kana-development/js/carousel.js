@@ -19,8 +19,15 @@ window.initCarousel = function () {
     // Add translateZ(0) to fix Chrome seam issue
     track.style.transform = `translateX(-${current * 100}%) translateZ(0)`;
 
+    // Update carousel dots
     [...nav.children].forEach((dot, i) =>
       dot.classList.toggle("active", i === current)
+    );
+
+    // Highlight the quick-jump button
+    const jumpButtons = document.querySelectorAll(".world-nav-buttons button");
+    jumpButtons.forEach((btn, i) =>
+      btn.classList.toggle("active", i === current)
     );
   }
 
@@ -79,4 +86,16 @@ window.initCarousel = function () {
   track.addEventListener("touchend", handleTouchEnd);
 
   console.log("[Carousel] Initialized");
+
+  // ==========================================================
+  // Quick world jump buttons (1–10 navigation)
+  // ==========================================================
+  const jumpButtons = document.querySelectorAll(".world-nav-buttons button");
+  if (jumpButtons.length) {
+    jumpButtons.forEach((btn, i) => {
+      btn.addEventListener("click", () => {
+        updateCarousel(i);
+      });
+    });
+  }
 };
