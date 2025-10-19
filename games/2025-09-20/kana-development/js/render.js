@@ -1,5 +1,5 @@
 // ==========================================================
-// render.js — world-row grouping with vocab & duplication fix
+// render.js
 // ==========================================================
 document.addEventListener("DOMContentLoaded", () => {
   const track = document.getElementById("worlds-track");
@@ -188,5 +188,4 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   updateCarousel(0);
-  console.log("[Render] World rows + vocab display finalized ✅");
 });
