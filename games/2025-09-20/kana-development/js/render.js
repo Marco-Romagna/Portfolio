@@ -1,7 +1,7 @@
 // ==========================================================
 // render.js — grouped rows with correct vocab placement
 // ==========================================================
-document.addEventListener("DOMContentLoaded", () => {
+window.renderWorlds = function () {
   const track = document.getElementById("worlds-track");
   const nav = document.getElementById("carousel-nav");
   const worldTpl = document.getElementById("tpl-world");
@@ -12,7 +12,9 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   track.innerHTML = "";
-  const worlds = window.WORLDS || [];
+
+  //  pull from KANA_STAGES instead of WORLDS
+  const worlds = (window.KANA_STAGES && window.KANA_STAGES.worlds) || [];
   if (!worlds.length) {
     console.warn("[Render] No worlds found");
     return;
@@ -83,13 +85,13 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         // --- Base detection ---
-        // Treat kana lessons like "Hiragana W + ん", "Katakana W + ン", or "Mixed W/N" as valid rows
         const isKanaRow =
-          title.includes(`${rowKey} (`) ||             // normal "(かきくけこ)"
-          title.includes(` ${rowKey} `) ||             // spaced " K "
-          title.includes(`${rowKey} +`) ||             // "W + ん"
-          title.includes(`${rowKey}/`) ||              // "Mixed W/N"
-          title.startsWith(rowKey);                    // fallback, e.g., "W Row" edge cases
+          title.includes(`${rowKey} (`) ||
+          title.includes(` ${rowKey} `) ||
+          title.includes(`${rowKey} +`) ||
+          title.includes(`${rowKey}/`) ||
+          title.startsWith(rowKey);
+
         const isSameRowVocab =
           title.includes("Vocabulary") &&
           !title.includes("Dakuten") &&
@@ -115,17 +117,14 @@ document.addEventListener("DOMContentLoaded", () => {
         // --- Decide if vocab should show for this row ---
         let allowVocab = false;
 
-        // Base row vocab → only first row (normal)
         if (isSameRowVocab && rowIndex === 0 && !usedVocab.has(vocabType)) {
           allowVocab = true;
         }
 
-        // Dakuten vocab → belongs to rowKey = mapped dakuten letter
         if (isDakutenVocab && rowKey === DAKU_MAP[dakuBase]) {
           allowVocab = true;
         }
 
-        // Handakuten vocab → belongs to rowKey = mapped handakuten letter
         if (isHandakutenVocab && rowKey === HANDA_MAP[handaBase]) {
           allowVocab = true;
         }
@@ -179,6 +178,7 @@ document.addEventListener("DOMContentLoaded", () => {
   track.style.display = "flex";
   track.style.transition = "transform 0.6s ease";
   track.style.width = `${slides.length * 100}%`;
+
   slides.forEach(slide => {
     slide.style.width = "100%";
     slide.style.flexShrink = "0";
@@ -213,4 +213,4 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   updateCarousel(0);
-});
+};
