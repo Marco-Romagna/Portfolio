@@ -13,11 +13,21 @@ window.renderWorlds = function () {
 
   track.innerHTML = "";
 
-  //  pull from KANA_STAGES instead of WORLDS
+  //  Pull from KANA_STAGES
   const worlds = (window.KANA_STAGES && window.KANA_STAGES.worlds) || [];
   if (!worlds.length) {
     console.warn("[Render] No worlds found");
     return;
+  }
+
+  //  Link level objects to each world
+  if (window.KANA_STAGES && window.KANA_STAGES.levels) {
+    const levelMap = new Map(window.KANA_STAGES.levels.map(l => [l.code, l]));
+    worlds.forEach(w => {
+      w.levels = (w.levels || [])
+        .map(code => levelMap.get(code))
+        .filter(Boolean);
+    });
   }
 
   // Explicit consonant rows per world
@@ -72,6 +82,7 @@ window.renderWorlds = function () {
 
     rows.forEach((rowKey, rowIndex) => {
       const levels = (w.levels || []).filter(lv => {
+        if (!lv || !lv.title) return false; // safety guard
         const title = lv.title;
 
         // --- Vowel world ---
