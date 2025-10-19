@@ -1,5 +1,5 @@
 // ==========================================================
-// render.js — grouped kana rows (Hira / Kata / Mix / Vocab)
+// render.js — smarter kana grouping + kana samples
 // ==========================================================
 document.addEventListener("DOMContentLoaded", () => {
   const track = document.getElementById("worlds-track");
@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded", () => {
     return;
   }
 
-  // --- Helpers ---
+  // ---------- Helpers ----------
   const shortLabel = (title = "") => {
     if (title.includes("Vocabulary") && title.includes("Hiragana")) return "Hira Vocab";
     if (title.includes("Vocabulary") && title.includes("Katakana")) return "Kata Vocab";
@@ -28,32 +28,29 @@ document.addEventListener("DOMContentLoaded", () => {
     return title.split("—")[1]?.trim() || title;
   };
 
-  // Detect consonant row: e.g., K, G, H, B, P, etc.
   const detectKanaRow = (title = "") => {
-    if (title.includes("Vowel")) return "Vowel"; // world 1 only
+    if (title.includes("Vowel")) return "Vowel";
 
-    // Extract consonant like K, G, H, B, etc.
-    const match = title.match(/[—\(]\s*[HKGZDBPMNRWY]\s/);
-    if (match) {
-      const letter = match[0].match(/[HKGZDBPMNRWY]/)[0];
-      return letter;
-    }
+    const match = title.match(/[—\(]\s*([HKGZDBPMNRWY])\s/);
+    if (match) return match[1];
 
-    // Try a fallback for “Dakuten” (map to previous consonant)
     if (title.includes("Dakuten")) {
       if (title.includes("K")) return "G";
       if (title.includes("S")) return "Z";
       if (title.includes("T")) return "D";
       if (title.includes("H")) return "B";
     }
-
-    // Handakuten → P row
     if (title.includes("Handakuten")) return "P";
-
     return "Other";
   };
 
-  // --- Render each world ---
+  // Extract kana sample (e.g. "かきくけこ") from title if present
+  const extractKanaSample = (title = "") => {
+    const match = title.match(/\(([ぁ-んァ-ン]+)\)/);
+    return match ? match[1] : null;
+  };
+
+  // ---------- Render ----------
   worlds.forEach(w => {
     const wNode = worldTpl.content.cloneNode(true);
     const wEl = wNode.querySelector(".world");
@@ -63,17 +60,22 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const list = wEl.querySelector(".levels-list");
 
-    // Group levels by kana letter (K, G, etc.)
+    // Group by kana letter (K, G, etc.)
     const groups = {};
+    const kanaSamples = {};
+
     (w.levels || []).forEach(lv => {
       const key = detectKanaRow(lv.title);
       if (!groups[key]) groups[key] = [];
       groups[key].push(lv);
+
+      // grab kana samples once per consonant
+      const sample = extractKanaSample(lv.title);
+      if (sample && !kanaSamples[key]) kanaSamples[key] = sample;
     });
 
-    // --- Render each kana row ---
+    // Build each row
     Object.entries(groups).forEach(([kana, levels]) => {
-      // Skip filler groups for vowels (we only want one)
       if (w.title.includes("Vowel") && kana !== "Vowel") return;
 
       const rowGroup = document.createElement("div");
@@ -81,8 +83,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const label = document.createElement("div");
       label.className = "level-row-label";
-      label.textContent =
-        kana === "Vowel" ? "Vowel Row" : `${kana} Row`;
+
+      // smarter label: add kana samples
+      if (kana === "Vowel") label.textContent = "Vowel Row";
+      else {
+        const sample = kanaSamples[kana] ? ` (${kanaSamples[kana]})` : "";
+        label.textContent = `${kana} Row${sample}`;
+      }
+
       rowGroup.appendChild(label);
 
       const rowButtons = document.createElement("div");
@@ -115,7 +123,7 @@ document.addEventListener("DOMContentLoaded", () => {
     track.appendChild(wEl);
   });
 
-  // --- Carousel setup ---
+  // ---------- Carousel ----------
   const slides = Array.from(track.children);
   if (!slides.length) return;
 
@@ -156,5 +164,5 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   updateCarousel(0);
-  console.log("[Render] Improved kana grid rendered successfully");
+  console.log("[Render] Kana samples & smart rows rendered successfully");
 });
