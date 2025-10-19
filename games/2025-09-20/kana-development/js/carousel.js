@@ -22,6 +22,12 @@ window.initCarousel = function () {
     [...nav.children].forEach((dot, i) =>
       dot.classList.toggle("active", i === current)
     );
+
+    // Highlight matching quick-jump button if present
+    const jumpButtons = document.querySelectorAll(".world-nav-buttons button");
+    jumpButtons.forEach((btn, i) =>
+      btn.classList.toggle("active", i === current)
+    );
   }
 
   // Keyboard navigation
@@ -79,4 +85,18 @@ window.initCarousel = function () {
   track.addEventListener("touchend", handleTouchEnd);
 
   console.log("[Carousel] Initialized");
+
+  // ==========================================================
+  // Quick world jump buttons (1–10 navigation)
+  // ==========================================================
+  document.addEventListener("DOMContentLoaded", () => {
+    const jumpButtons = document.querySelectorAll(".world-nav-buttons button");
+    if (!jumpButtons.length) return;
+
+    jumpButtons.forEach((btn, i) => {
+      btn.addEventListener("click", () => {
+        updateCarousel(i); // Reuse main carousel update
+      });
+    });
+  });
 };
