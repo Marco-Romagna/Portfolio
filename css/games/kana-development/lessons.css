@@ -1142,3 +1142,47 @@ body.site {
   font-weight: 600;
   letter-spacing: 0.5px;
 }
+
+/* =========================================================
+   World Header Quick Navigation
+   ========================================================= */
+.world-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.small-header {
+  margin: 0;
+  color: var(--kp-muted);
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+.world-nav-buttons {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+
+.world-nav-buttons button {
+  background: var(--kp-surface-2);
+  color: var(--kp-text);
+  border: 1px solid var(--kp-border);
+  border-radius: 6px;
+  padding: 4px 8px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.world-nav-buttons button:hover {
+  background: var(--kp-accent);
+  border-color: transparent;
+  color: #fff;
+}
+
