@@ -1144,7 +1144,7 @@ body.site {
 }
 
 /* =========================================================
-   World Header Quick Navigation
+   World Header Quick Navigation (Updated with active glow)
    ========================================================= */
 .world-header {
   display: flex;
@@ -1177,7 +1177,7 @@ body.site {
   font-weight: 600;
   font-size: 0.9rem;
   cursor: pointer;
-  transition: background 0.2s, border-color 0.2s;
+  transition: background 0.25s ease, border-color 0.25s ease, color 0.25s ease, box-shadow 0.25s ease;
 }
 
 .world-nav-buttons button:hover {
@@ -1186,3 +1186,10 @@ body.site {
   color: #fff;
 }
 
+/* Active state (glow + accent) */
+.world-nav-buttons button.active {
+  background: var(--kp-accent);
+  border-color: transparent;
+  color: #fff;
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--kp-accent) 35%, transparent);
+}
