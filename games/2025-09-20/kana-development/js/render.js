@@ -1,5 +1,5 @@
 // ==========================================================
-// render.js — grouped row display with single vocab set per world
+// render.js — grouped rows with correct vocab placement
 // ==========================================================
 document.addEventListener("DOMContentLoaded", () => {
   const track = document.getElementById("worlds-track");
@@ -44,7 +44,7 @@ document.addEventListener("DOMContentLoaded", () => {
     return title.split("—")[1]?.trim() || title;
   };
 
-  // Extract kana sample for labeling
+  // Extract kana sample for label
   const extractKanaSample = (title = "") => {
     const match = title.match(/\(([ぁ-んァ-ン]+)\)/);
     return match ? match[1] : "";
@@ -66,14 +66,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const worldNum = parseInt(w.code);
     const rows = WORLD_ROWS[worldNum] || [];
-    let usedVocab = new Set(); // track vocab used once per world
+    let usedVocab = new Set(); // track vocab usage per world
 
-    // ---------- Each row ----------
     rows.forEach((rowKey, rowIndex) => {
       const levels = (w.levels || []).filter(lv => {
         const title = lv.title;
 
-        // --- Vowels (World 1 only) ---
+        // --- Vowel world ---
         if (rowKey === "V") {
           return (
             title.includes("Vowel") ||
@@ -83,7 +82,7 @@ document.addEventListener("DOMContentLoaded", () => {
           );
         }
 
-        // --- Regular kana rows ---
+        // --- Base detection ---
         const isKanaRow = title.includes(`${rowKey} (`);
         const isSameRowVocab =
           title.includes("Vocabulary") &&
@@ -107,12 +106,23 @@ document.addEventListener("DOMContentLoaded", () => {
           ? "HiraVocab"
           : null;
 
-        // only allow each vocab type once per world (first row only)
-        const allowVocab =
-          ((isSameRowVocab || isDakutenVocab || isHandakutenVocab) &&
-            vocabType &&
-            !usedVocab.has(vocabType) &&
-            rowIndex === 0);
+        // --- Decide if vocab should show for this row ---
+        let allowVocab = false;
+
+        // Base row vocab → only first row (normal)
+        if (isSameRowVocab && rowIndex === 0 && !usedVocab.has(vocabType)) {
+          allowVocab = true;
+        }
+
+        // Dakuten vocab → belongs to rowKey = mapped dakuten letter
+        if (isDakutenVocab && rowKey === DAKU_MAP[dakuBase]) {
+          allowVocab = true;
+        }
+
+        // Handakuten vocab → belongs to rowKey = mapped handakuten letter
+        if (isHandakutenVocab && rowKey === HANDA_MAP[handaBase]) {
+          allowVocab = true;
+        }
 
         const isKanaLesson = isKanaRow && !title.includes("Vocabulary");
 
@@ -123,7 +133,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if (!levels.length) return;
 
-      // Build row group
+      // --- Build row group ---
       const sample = extractKanaSample(levels[0].title);
       const rowGroup = document.createElement("div");
       rowGroup.className = "level-row-group";
