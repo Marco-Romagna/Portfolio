@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded", () => {
     return;
   }
 
-  // Helper: short label for each level button
+  // --- Helpers ---
   const shortLabel = (title = "") => {
     if (title.includes("Vocabulary") && title.includes("Hiragana")) return "Hira Vocab";
     if (title.includes("Vocabulary") && title.includes("Katakana")) return "Kata Vocab";
@@ -28,11 +28,28 @@ document.addEventListener("DOMContentLoaded", () => {
     return title.split("—")[1]?.trim() || title;
   };
 
-  // Helper: detect kana row (K, G, P, etc.)
+  // Detect consonant row: e.g., K, G, H, B, P, etc.
   const detectKanaRow = (title = "") => {
-    const match = title.match(/Hiragana\s+([A-Za-z])|Katakana\s+([A-Za-z])/);
-    if (match) return match[1] || match[2];
-    if (title.includes("Vowel")) return "Vowel";
+    if (title.includes("Vowel")) return "Vowel"; // world 1 only
+
+    // Extract consonant like K, G, H, B, etc.
+    const match = title.match(/[—\(]\s*[HKGZDBPMNRWY]\s/);
+    if (match) {
+      const letter = match[0].match(/[HKGZDBPMNRWY]/)[0];
+      return letter;
+    }
+
+    // Try a fallback for “Dakuten” (map to previous consonant)
+    if (title.includes("Dakuten")) {
+      if (title.includes("K")) return "G";
+      if (title.includes("S")) return "Z";
+      if (title.includes("T")) return "D";
+      if (title.includes("H")) return "B";
+    }
+
+    // Handakuten → P row
+    if (title.includes("Handakuten")) return "P";
+
     return "Other";
   };
 
@@ -46,7 +63,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const list = wEl.querySelector(".levels-list");
 
-    // Group levels by kana letter (K, G, H, etc.)
+    // Group levels by kana letter (K, G, etc.)
     const groups = {};
     (w.levels || []).forEach(lv => {
       const key = detectKanaRow(lv.title);
@@ -56,12 +73,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // --- Render each kana row ---
     Object.entries(groups).forEach(([kana, levels]) => {
+      // Skip filler groups for vowels (we only want one)
+      if (w.title.includes("Vowel") && kana !== "Vowel") return;
+
       const rowGroup = document.createElement("div");
       rowGroup.className = "level-row-group";
 
       const label = document.createElement("div");
       label.className = "level-row-label";
-      label.textContent = kana === "Vowel" ? "Vowel Row" : `${kana} Row`;
+      label.textContent =
+        kana === "Vowel" ? "Vowel Row" : `${kana} Row`;
       rowGroup.appendChild(label);
 
       const rowButtons = document.createElement("div");
@@ -73,7 +94,9 @@ document.addEventListener("DOMContentLoaded", () => {
         btn.textContent = shortLabel(lv.title);
 
         const href = lv.href || "#";
-        const go = () => { if (href && href !== "#") window.location.href = href; };
+        const go = () => {
+          if (href && href !== "#") window.location.href = href;
+        };
         btn.addEventListener("click", go);
         btn.addEventListener("keydown", e => {
           if (e.key === "Enter" || e.key === " ") {
@@ -133,5 +156,5 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   updateCarousel(0);
-  console.log("[Render] Rowed kana grid rendered successfully");
+  console.log("[Render] Improved kana grid rendered successfully");
 });
