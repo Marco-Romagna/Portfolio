@@ -1,5 +1,5 @@
 // ==========================================================
-// render.js — smarter kana grouping + kana samples
+// render.js — rule-based kana row grouping (explicit world map)
 // ==========================================================
 document.addEventListener("DOMContentLoaded", () => {
   const track = document.getElementById("worlds-track");
@@ -18,7 +18,21 @@ document.addEventListener("DOMContentLoaded", () => {
     return;
   }
 
-  // ---------- Helpers ----------
+  // Explicit rows per world
+  const WORLD_ROWS = {
+    1: ["V"],
+    2: ["K", "G"],
+    3: ["S", "Z"],
+    4: ["T", "D"],
+    5: ["N"],
+    6: ["H", "B", "P"],
+    7: ["M"],
+    8: ["Y"],
+    9: ["R"],
+    10: ["W"]
+  };
+
+  // Shorter labels
   const shortLabel = (title = "") => {
     if (title.includes("Vocabulary") && title.includes("Hiragana")) return "Hira Vocab";
     if (title.includes("Vocabulary") && title.includes("Katakana")) return "Kata Vocab";
@@ -28,29 +42,13 @@ document.addEventListener("DOMContentLoaded", () => {
     return title.split("—")[1]?.trim() || title;
   };
 
-  const detectKanaRow = (title = "") => {
-    if (title.includes("Vowel")) return "Vowel";
-
-    const match = title.match(/[—\(]\s*([HKGZDBPMNRWY])\s/);
-    if (match) return match[1];
-
-    if (title.includes("Dakuten")) {
-      if (title.includes("K")) return "G";
-      if (title.includes("S")) return "Z";
-      if (title.includes("T")) return "D";
-      if (title.includes("H")) return "B";
-    }
-    if (title.includes("Handakuten")) return "P";
-    return "Other";
-  };
-
-  // Extract kana sample (e.g. "かきくけこ") from title if present
+  // Extract kana samples (like (かきくけこ))
   const extractKanaSample = (title = "") => {
     const match = title.match(/\(([ぁ-んァ-ン]+)\)/);
-    return match ? match[1] : null;
+    return match ? match[1] : "";
   };
 
-  // ---------- Render ----------
+  // Render each world
   worlds.forEach(w => {
     const wNode = worldTpl.content.cloneNode(true);
     const wEl = wNode.querySelector(".world");
@@ -60,37 +58,40 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const list = wEl.querySelector(".levels-list");
 
-    // Group by kana letter (K, G, etc.)
-    const groups = {};
-    const kanaSamples = {};
+    const worldNum = parseInt(w.code);
+    const rows = WORLD_ROWS[worldNum] || [];
 
-    (w.levels || []).forEach(lv => {
-      const key = detectKanaRow(lv.title);
-      if (!groups[key]) groups[key] = [];
-      groups[key].push(lv);
+    // Group by row consonant (V, K, G, etc.)
+    rows.forEach(rowKey => {
+      const levels = (w.levels || []).filter(lv => {
+        const title = lv.title;
+        if (rowKey === "V") return title.includes("Vowel");
+        if (rowKey === "K") return title.includes("K (");
+        if (rowKey === "G") return title.includes("G (");
+        if (rowKey === "S") return title.includes("S (");
+        if (rowKey === "Z") return title.includes("Z (");
+        if (rowKey === "T") return title.includes("T (");
+        if (rowKey === "D") return title.includes("D (");
+        if (rowKey === "N") return title.includes("N (");
+        if (rowKey === "H") return title.includes("H (");
+        if (rowKey === "B") return title.includes("B (");
+        if (rowKey === "P") return title.includes("P (");
+        if (rowKey === "M") return title.includes("M (");
+        if (rowKey === "Y") return title.includes("Y (");
+        if (rowKey === "R") return title.includes("R (");
+        if (rowKey === "W") return title.includes("W (");
+        return false;
+      });
 
-      // grab kana samples once per consonant
-      const sample = extractKanaSample(lv.title);
-      if (sample && !kanaSamples[key]) kanaSamples[key] = sample;
-    });
+      if (!levels.length) return; // skip empty rows
 
-    // Build each row
-    Object.entries(groups).forEach(([kana, levels]) => {
-      if (w.title.includes("Vowel") && kana !== "Vowel") return;
-
+      const sample = extractKanaSample(levels[0].title);
       const rowGroup = document.createElement("div");
       rowGroup.className = "level-row-group";
 
       const label = document.createElement("div");
       label.className = "level-row-label";
-
-      // smarter label: add kana samples
-      if (kana === "Vowel") label.textContent = "Vowel Row";
-      else {
-        const sample = kanaSamples[kana] ? ` (${kanaSamples[kana]})` : "";
-        label.textContent = `${kana} Row${sample}`;
-      }
-
+      label.textContent = `${rowKey === "V" ? "Vowel" : rowKey} Row${sample ? ` (${sample})` : ""}`;
       rowGroup.appendChild(label);
 
       const rowButtons = document.createElement("div");
@@ -100,19 +101,10 @@ document.addEventListener("DOMContentLoaded", () => {
         const btn = document.createElement("div");
         btn.className = "level-btn";
         btn.textContent = shortLabel(lv.title);
-
         const href = lv.href || "#";
-        const go = () => {
+        btn.addEventListener("click", () => {
           if (href && href !== "#") window.location.href = href;
-        };
-        btn.addEventListener("click", go);
-        btn.addEventListener("keydown", e => {
-          if (e.key === "Enter" || e.key === " ") {
-            e.preventDefault();
-            go();
-          }
         });
-
         rowButtons.appendChild(btn);
       });
 
@@ -123,7 +115,7 @@ document.addEventListener("DOMContentLoaded", () => {
     track.appendChild(wEl);
   });
 
-  // ---------- Carousel ----------
+  // Carousel setup
   const slides = Array.from(track.children);
   if (!slides.length) return;
 
@@ -164,5 +156,5 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   updateCarousel(0);
-  console.log("[Render] Kana samples & smart rows rendered successfully");
+  console.log("[Render] Explicit world-based kana rows rendered successfully");
 });
