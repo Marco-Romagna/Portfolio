@@ -493,7 +493,7 @@
           b.disabled = true;
           if (b === sel) {
             b.classList.add(correct ? 'is-correct' : 'is-wrong');
-            b.classList.add('was-selected');=
+            b.classList.add('was-selected');
           }
           if (!correct && b.textContent === current.romaji)
             b.classList.add('is-correct');
