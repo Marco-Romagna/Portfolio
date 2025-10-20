@@ -730,101 +730,104 @@ body.site {
 /* =========================================================
    Part 5 — Audio Recognition
    ========================================================= */
-.audio-section {
+
+/* Main quiz bar layout */
+#part-5 .quiz-bar {
   display: flex;
+  align-items: center;
   justify-content: center;
+  gap: 1.5rem;
+  margin: 1.5rem auto;
+  padding: 1rem 1.5rem;
+  max-width: 850px;
+  background: var(--kp-surface-2);
+  border-radius: 1rem;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+}
+
+/* Play + Slow controls */
+#part-5 .controls {
+  display: flex;
   align-items: center;
-  gap: 0.6rem;
-  margin-bottom: 1.2rem;
+  gap: 0.75rem;
 }
-
-.audio-section #play-audio {
-  font-size: 1.1rem;
-  padding: 0.8rem 1.4rem;
-  border-radius: 12px;
-  box-shadow: 0 0 14px rgba(130, 0, 255, 0.3);
-  transition: transform 0.15s ease, box-shadow 0.2s ease, background 0.3s;
-}
-.audio-section #play-audio:hover {
-  transform: scale(1.06);
-  box-shadow: 0 0 20px rgba(150, 50, 255, 0.55);
-  background: linear-gradient(90deg, #8a63ff, #a74bff);
-}
-
-#hint-btn, #slow-mode-toggle {
-  font-size: 0.9rem;
-  padding: 0.45rem 0.9rem;
-  opacity: 0.85;
-  transition: opacity 0.3s ease, transform 0.2s;
-}
-#hint-btn:hover, #slow-mode-toggle:hover {
-  opacity: 1;
-  transform: scale(1.03);
-}
-#hint-btn.is-hidden { display: none; }
-
-.options-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 0.8rem;
-  justify-items: center;
-  align-items: center;
-  max-width: 620px;
-  margin: 1.2rem auto 1.5rem;
-}
-.options-grid .btn {
-  font-size: 1.05rem;
+#part-5 .controls .btn {
+  padding: 0.5rem 1.2rem;
   font-weight: 600;
-  padding: 0.7rem 1.1rem;
-  border-radius: 10px;
-  width: 100%;
-  transition: background 0.25s, transform 0.15s, color 0.25s;
-}
-.options-grid .btn:hover {
-  transform: translateY(-2px);
-  background: rgba(255,255,255,0.1);
-}
-.options-grid .btn.is-correct {
-  background-color: #3cdfff !important;
-  color: #000;
-}
-.options-grid .btn.is-wrong {
-  background-color: #ff6f6f !important;
-  color: #fff;
 }
 
-.quiz-feedback {
+/* Word & tense selectors */
+#part-5 .selector {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  min-width: 120px;
+  user-select: none;
+}
+#part-5 .selector .display {
+  font-weight: 600;
+  min-width: 110px;
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--kp-border);
+  border-radius: 0.75rem;
+  background: color-mix(in oklab, var(--kp-surface) 80%, transparent);
   text-align: center;
-  font-size: 1.1rem;
-  font-weight: 600;
-  min-height: 1.5rem;
-  margin-bottom: 1rem;
-  transition: color 0.3s ease;
+  transition: background 0.2s, color 0.2s, border-color 0.2s;
 }
-.quiz-feedback.correct { color: #4effc3; }
-.quiz-feedback.wrong   { color: #ff7676; }
+#part-5 .selector .arrow {
+  border: none;
+  background: none;
+  color: var(--kp-text-muted);
+  font-size: 1rem;
+  cursor: pointer;
+  line-height: 1;
+  transition: transform 0.1s ease;
+}
+#part-5 .selector .arrow:hover {
+  transform: scale(1.2);
+  color: var(--kp-accent);
+}
 
-.example-display {
-  background: rgba(255,255,255,0.05);
-  padding: 1rem;
-  margin: 1rem auto;
-  border-radius: 10px;
+/* Confirm button */
+#part-5 .confirm-zone {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+#part-5 #confirm {
+  padding: 0.6rem 1.2rem;
+  font-weight: 600;
+  border-radius: 0.75rem;
+  background: var(--kp-accent);
+  color: white;
+  transition: transform 0.1s ease, background 0.2s ease;
+}
+#part-5 #confirm:hover {
+  transform: scale(1.05);
+  background: color-mix(in oklab, var(--kp-accent) 80%, white 10%);
+}
+
+/* Example / feedback box */
+#part-5 .result-box {
+  margin: 1.25rem auto;
+  padding: 1.25rem;
   max-width: 600px;
+  background: var(--kp-surface);
+  border-radius: 0.75rem;
+  border: 1px solid var(--kp-border);
   text-align: center;
-  line-height: 1.6;
   animation: fadeIn 0.3s ease;
 }
-.example-display.is-hidden { display: none; }
-.example-display p { margin: 0.25rem 0; }
-.example-display .ex-jp { font-size: 1.3rem; color: #fff; }
-.example-display .ex-en { font-size: 0.95rem; color: #ccc; }
-
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to   { opacity: 1; transform: translateY(0); }
+#part-5 .result-box p {
+  margin: 0.25rem 0;
+}
+#part-5 .result-box .ex-jp {
+  font-size: 1.3rem;
+  font-weight: 500;
 }
 
-/* Progress Bar */
+/* Progress bar (kept from earlier layout) */
 .lesson #part-5 .quiz-progress {
   display: grid;
   justify-items: center;
@@ -849,6 +852,13 @@ body.site {
   transition: width .2s ease;
 }
 .lesson #part-5 .meter-label { font-size: .95rem; }
+
+/* Animation */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
 
 /* =========================================================
    Ancient Japanese Aesthetic (index/world carousel)
@@ -1193,108 +1203,4 @@ body.site {
   color: #fff;
   box-shadow: 0 0 0 3px color-mix(in oklab, var(--kp-accent) 35%, transparent);
 }
-
-/* ===============================
-   Part 5 — Audio Recognition Layout
-   =============================== */
-#part-5 .quiz-panel {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-}
-
-/* --- Play controls --- */
-#part-5 .audio-section {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 1rem;
-  margin-bottom: 1.5rem;
-}
-
-/* --- Vocab choice grid --- */
-#part-5 .options-grid {
-  display: grid;
-  justify-content: center;
-  gap: var(--kp-gap);
-  margin-bottom: 1rem;
-}
-
-#part-5 .options-grid .vocab-choice {
-  min-width: 130px;
-  text-transform: lowercase;
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
-}
-
-/* --- Tense quiz layout --- */
-#part-5 .tense-quiz {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  margin-top: 1rem;
-  width: 100%;
-}
-
-#part-5 .tense-quiz p {
-  font-weight: 600;
-  margin-bottom: 0.5rem;
-}
-
-#part-5 .tense-quiz .tense-options {
-  display: flex;
-  justify-content: center;
-  gap: 1rem;
-  flex-wrap: wrap;
-}
-
-/* --- Example display box --- */
-#part-5 .example-display {
-  margin-top: 1.5rem;
-  text-align: center;
-  max-width: 600px;
-}
-
-/* --- Button feedback (correct / wrong) --- */
-.vocab-choice.is-correct,
-.tense-opt.is-correct {
-  border-color: var(--kp-correct) !important;
-  background: color-mix(in oklab, var(--kp-correct) 15%, transparent);
-  color: var(--kp-text);
-}
-
-.vocab-choice.is-wrong,
-.tense-opt.is-wrong {
-  border-color: var(--kp-wrong) !important;
-  background: color-mix(in oklab, var(--kp-wrong) 15%, transparent);
-  color: var(--kp-text);
-}
-
-
-#part-5 .vocab-choice:not([disabled]):hover,
-#part-5 .tense-opt:not([disabled]):hover {
-  transform: translateY(-2px);
-  border-color: var(--kp-accent);
-}
-
-.vocab-choice.was-selected.is-correct {
-  border-color: var(--kp-correct) !important;
-  background: color-mix(in oklab, var(--kp-correct) 25%, transparent);
-  box-shadow: 0 0 12px color-mix(in oklab, var(--kp-correct) 40%, transparent);
-  transform: scale(1.05);
-  opacity: 1 !important;
-  z-index: 2;
-}
-
-.vocab-choice.was-selected.is-wrong {
-  border-color: var(--kp-wrong) !important;
-  background: color-mix(in oklab, var(--kp-wrong) 25%, transparent);
-  box-shadow: 0 0 12px color-mix(in oklab, var(--kp-wrong) 40%, transparent);
-  transform: scale(1.05);
-  opacity: 1 !important;
-  z-index: 2;
-}
-
 
