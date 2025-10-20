@@ -1255,4 +1255,27 @@ body.site {
   border-color: var(--kp-wrong);
   background: color-mix(in oklab, var(--kp-wrong) 15%, transparent);
 }
+/* Center the tense-quiz section in Part 5 */
+#part-5 .tense-quiz {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  margin-top: 1rem;
+  width: 100%;
+}
+
+#part-5 .tense-quiz p {
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  text-align: center;
+}
+
+#part-5 .tense-quiz .tense-options {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
 
