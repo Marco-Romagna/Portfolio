@@ -1193,8 +1193,9 @@ body.site {
   color: #fff;
   box-shadow: 0 0 0 3px color-mix(in oklab, var(--kp-accent) 35%, transparent);
 }
+
 /* ===============================
-   Part 5 — Audio Recognition Layout 
+   Part 5 — Audio Recognition Layout
    =============================== */
 #part-5 .quiz-panel {
   display: flex;
@@ -1203,6 +1204,7 @@ body.site {
   text-align: center;
 }
 
+/* --- Play controls --- */
 #part-5 .audio-section {
   display: flex;
   justify-content: center;
@@ -1211,6 +1213,7 @@ body.site {
   margin-bottom: 1.5rem;
 }
 
+/* --- Vocab choice grid --- */
 #part-5 .options-grid {
   display: grid;
   justify-content: center;
@@ -1221,41 +1224,10 @@ body.site {
 #part-5 .options-grid .vocab-choice {
   min-width: 130px;
   text-transform: lowercase;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 
-#part-5 .tense-quiz {
-  text-align: center;
-  margin-top: 1rem;
-}
-
-#part-5 .tense-quiz p {
-  font-weight: 600;
-  margin-bottom: 0.5rem;
-}
-
-#part-5 .tense-quiz .tense-options {
-  display: flex;
-  justify-content: center;
-  gap: 1rem;
-  flex-wrap: wrap;
-}
-
-#part-5 .example-display {
-  margin-top: 1.5rem;
-  text-align: center;
-  max-width: 600px;
-}
-
-#part-5 .vocab-choice.is-correct {
-  border-color: var(--kp-correct);
-  background: color-mix(in oklab, var(--kp-correct) 15%, transparent);
-}
-
-#part-5 .vocab-choice.is-wrong {
-  border-color: var(--kp-wrong);
-  background: color-mix(in oklab, var(--kp-wrong) 15%, transparent);
-}
-
+/* --- Tense quiz layout --- */
 #part-5 .tense-quiz {
   display: flex;
   flex-direction: column;
@@ -1269,7 +1241,6 @@ body.site {
 #part-5 .tense-quiz p {
   font-weight: 600;
   margin-bottom: 0.5rem;
-  text-align: center;
 }
 
 #part-5 .tense-quiz .tense-options {
@@ -1279,6 +1250,14 @@ body.site {
   flex-wrap: wrap;
 }
 
+/* --- Example display box --- */
+#part-5 .example-display {
+  margin-top: 1.5rem;
+  text-align: center;
+  max-width: 600px;
+}
+
+/* --- Button feedback (correct / wrong) --- */
 .vocab-choice.is-correct,
 .tense-opt.is-correct {
   border-color: var(--kp-correct) !important;
@@ -1292,4 +1271,24 @@ body.site {
   background: color-mix(in oklab, var(--kp-wrong) 15%, transparent);
   color: var(--kp-text);
 }
+
+/* --- Highlight for the vocab button you clicked --- */
+.vocab-choice.was-selected.is-correct {
+  box-shadow: 0 0 10px color-mix(in oklab, var(--kp-correct) 40%, transparent);
+  transform: scale(1.05);
+  z-index: 1;
+}
+
+.vocab-choice.was-selected.is-wrong {
+  box-shadow: 0 0 10px color-mix(in oklab, var(--kp-wrong) 40%, transparent);
+  opacity: 0.9;
+}
+
+/* --- Optional smooth hover before selection --- */
+#part-5 .vocab-choice:not([disabled]):hover,
+#part-5 .tense-opt:not([disabled]):hover {
+  transform: translateY(-2px);
+  border-color: var(--kp-accent);
+}
+
 
