@@ -168,7 +168,11 @@ window.renderWorlds = function () {
         const btn = document.createElement("div");
         btn.className = "level-btn";
         btn.textContent = shortLabel(lv.title);
-        const href = lv.href || "#";
+        const href = lv.href
+          ? (lv.href.startsWith("http") || lv.href.startsWith("/"))
+            ? lv.href
+            : `/Portfolio/games/2025-09-20/kana-development/${lv.href}`
+          : "#";
         btn.addEventListener("click", () => {
           if (href && href !== "#") window.location.href = href;
         });
