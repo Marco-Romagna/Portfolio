@@ -488,15 +488,17 @@
       locked = true;
       const correct = sel.id === current.id;
 
-      // Disable and style all buttons
-      opts.querySelectorAll('button').forEach(b => {
-        b.disabled = true;
-        if (b === sel) b.classList.add(correct ? 'is-correct' : 'is-wrong');
-        if (!correct && b.textContent === current.romaji)
-          b.classList.add('is-correct'); // reveal correct one
-      });
+       // Disable and style all buttons
+        opts.querySelectorAll('button').forEach(b => {
+          b.disabled = true;
+          if (b === sel) {
+            b.classList.add(correct ? 'is-correct' : 'is-wrong');
+            b.classList.add('was-selected');=
+          }
+          if (!correct && b.textContent === current.romaji)
+            b.classList.add('is-correct');
+        });
       
-      // Optional subtle feedback line (can remove if you prefer)
       feedback.textContent = correct ? ' ' : ''; 
       
       // Continue
