@@ -1272,23 +1272,29 @@ body.site {
   color: var(--kp-text);
 }
 
-/* --- Highlight for the vocab button you clicked --- */
-.vocab-choice.was-selected.is-correct {
-  box-shadow: 0 0 10px color-mix(in oklab, var(--kp-correct) 40%, transparent);
-  transform: scale(1.05);
-  z-index: 1;
-}
 
-.vocab-choice.was-selected.is-wrong {
-  box-shadow: 0 0 10px color-mix(in oklab, var(--kp-wrong) 40%, transparent);
-  opacity: 0.9;
-}
-
-/* --- Optional smooth hover before selection --- */
 #part-5 .vocab-choice:not([disabled]):hover,
 #part-5 .tense-opt:not([disabled]):hover {
   transform: translateY(-2px);
   border-color: var(--kp-accent);
+}
+
+.vocab-choice.was-selected.is-correct {
+  border-color: var(--kp-correct) !important;
+  background: color-mix(in oklab, var(--kp-correct) 25%, transparent);
+  box-shadow: 0 0 12px color-mix(in oklab, var(--kp-correct) 40%, transparent);
+  transform: scale(1.05);
+  opacity: 1 !important;
+  z-index: 2;
+}
+
+.vocab-choice.was-selected.is-wrong {
+  border-color: var(--kp-wrong) !important;
+  background: color-mix(in oklab, var(--kp-wrong) 25%, transparent);
+  box-shadow: 0 0 12px color-mix(in oklab, var(--kp-wrong) 40%, transparent);
+  transform: scale(1.05);
+  opacity: 1 !important;
+  z-index: 2;
 }
 
 
