@@ -506,30 +506,47 @@
     confirmBtn.onclick = () => {
       if (locked) return;
       locked = true;
+    
       const selectedWord = words[wordIndex];
       const selectedTense = encounteredForms[tenseIndex] || 'dictionary';
       const correctWord = selectedWord.id === current.id;
       const correctTense = selectedTense === currentTense;
-  
       const wordCorrect = correctWord && correctTense;
-  
-      exampleBox.classList.remove('is-hidden');
+    
+      // --- visual feedback on displays ---
+      wordDisplay.classList.remove('correct', 'wrong');
+      tenseDisplay.classList.remove('correct', 'wrong');
+      if (wordCorrect) {
+        wordDisplay.classList.add('correct');
+        tenseDisplay.classList.add('correct');
+      } else {
+        if (!correctWord) wordDisplay.classList.add('wrong');
+        if (!correctTense) tenseDisplay.classList.add('wrong');
+      }
+    
+      // --- example feedback box ---
       const exSet = current.examples?.[currentTense] || current.examples?.dictionary || [];
       const ex = exSet[currentExIndex] || exSet[0];
+      exampleBox.classList.remove('is-hidden');
       exampleBox.innerHTML = `
         <p class="ex-jp">${ex.kana}</p>
         <p class="ex-en">${ex.english}</p>
         <button class="btn small mt-2" id="next-btn">Continue →</button>
       `;
-  
+    
+      // --- score + progress ---
       if (wordCorrect) score++;
       updateMeter();
-  
+    
+      // --- reset on Continue ---
       $('#next-btn', exampleBox).onclick = () => {
         locked = false;
+        wordDisplay.classList.remove('correct', 'wrong');
+        tenseDisplay.classList.remove('correct', 'wrong');
         pickNext();
       };
     };
+
   
     // --- init ---
     btnPlay.onclick = () => playAudio(currentAudioSrc, currentFallback, slowMode);
