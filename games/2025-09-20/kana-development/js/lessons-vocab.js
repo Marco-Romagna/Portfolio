@@ -487,11 +487,17 @@
       if (locked) return;
       locked = true;
       const correct = sel.id === current.id;
-      opts.querySelectorAll('button').forEach(b => (b.disabled = true));
-  
-      feedback.classList.remove('correct', 'wrong');
-      feedback.classList.add(correct ? 'correct' : 'wrong');
-      feedback.textContent = correct ? ' Correct!' : ' Incorrect!';
+        opts.querySelectorAll('button').forEach(b => {
+          b.disabled = true;
+          if (b === sel && correct) b.classList.add('is-correct');
+          if (b === sel && !correct) b.classList.add('is-wrong');
+          if (!correct && b.textContent === current.romaji) b.classList.add('is-correct'); // show correct one
+        });
+        
+        feedback.classList.remove('correct', 'wrong');
+        feedback.classList.add(correct ? 'correct' : 'wrong');
+        feedback.textContent = correct ? 'Correct!' : 'Incorrect!';
+
   
       if (correct) showTenseStep();
       else showExample();
