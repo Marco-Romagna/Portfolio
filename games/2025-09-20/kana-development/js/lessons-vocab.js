@@ -487,20 +487,22 @@
       if (locked) return;
       locked = true;
       const correct = sel.id === current.id;
-        opts.querySelectorAll('button').forEach(b => {
-          b.disabled = true;
-          if (b === sel && correct) b.classList.add('is-correct');
-          if (b === sel && !correct) b.classList.add('is-wrong');
-          if (!correct && b.textContent === current.romaji) b.classList.add('is-correct'); // show correct one
-        });
-        
-        feedback.classList.remove('correct', 'wrong');
-        feedback.classList.add(correct ? 'correct' : 'wrong');
-        feedback.textContent = correct ? 'Correct!' : 'Incorrect!';
 
-  
+      // Disable and style all buttons
+      opts.querySelectorAll('button').forEach(b => {
+        b.disabled = true;
+        if (b === sel) b.classList.add(correct ? 'is-correct' : 'is-wrong');
+        if (!correct && b.textContent === current.romaji)
+          b.classList.add('is-correct'); // reveal correct one
+      });
+      
+      // Optional subtle feedback line (can remove if you prefer)
+      feedback.textContent = correct ? ' ' : ''; 
+      
+      // Continue
       if (correct) showTenseStep();
       else showExample();
+
     }
   
     // --- second step: choose tense (only if relevant)
@@ -520,13 +522,23 @@
         btn.onclick = () => {
           const chosen = btn.dataset.form;
           const correct = chosen === currentTense;
+      
+          // Highlight clicked button
           btn.classList.add(correct ? 'is-correct' : 'is-wrong');
-          tenseBox.querySelectorAll('.tense-opt').forEach(b => b.disabled = true);
-  
-          setTimeout(() => showExample(correct), 600);
+      
+          // If wrong, also mark the correct one
+          if (!correct) {
+            const correctBtn = tenseBox.querySelector(`[data-form="${currentTense}"]`);
+            if (correctBtn) correctBtn.classList.add('is-correct');
+          }
+      
+          // Disable all after click
+          tenseBox.querySelectorAll('.tense-opt').forEach(b => (b.disabled = true));
+      
+          setTimeout(() => showExample(correct), 900);
         };
       });
-    }
+          }
   
     // --- confirmation step
     function showExample(wasCorrect = true) {
