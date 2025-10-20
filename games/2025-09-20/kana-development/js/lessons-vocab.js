@@ -374,47 +374,66 @@
   
     part5.innerHTML = `
       <h2 class="part-title">Audio Recognition</h2>
-      <div class="quiz-panel">
-        <div class="audio-section">
+      <div class="quiz-bar">
+        <div class="controls">
           <button class="btn primary" id="play-audio">▶ Play</button>
-          <button class="btn ghost" id="slow-mode-toggle"> Slow: Off</button>
+          <button class="btn ghost" id="slow-mode-toggle">Slow: Off</button>
         </div>
   
-        <div id="options" class="options-grid"></div>
-        <div id="feedback" class="quiz-feedback"></div>
-        <div id="tense-quiz" class="tense-quiz is-hidden"></div>
-        <div id="example-display" class="example-display is-hidden"></div>
-  
-        <div class="quiz-progress">
-          <div class="meter"><div class="meter-fill"></div></div>
-          <div class="meter-label"></div>
+        <div class="selector word-selector">
+          <button class="arrow up" data-type="word">▲</button>
+          <div class="display" id="word-display">–</div>
+          <button class="arrow down" data-type="word">▼</button>
         </div>
   
-        <div class="actions">
-          <button class="btn primary is-hidden" data-action="finish-lesson">Finish</button>
+        <div class="selector tense-selector">
+          <button class="arrow up" data-type="tense">▲</button>
+          <div class="display" id="tense-display">–</div>
+          <button class="arrow down" data-type="tense">▼</button>
         </div>
+  
+        <div class="confirm-zone">
+          <button class="btn success" id="confirm">Confirm</button>
+        </div>
+      </div>
+  
+      <div class="result-box is-hidden" id="example-display"></div>
+  
+      <div class="quiz-progress">
+        <div class="meter"><div class="meter-fill"></div></div>
+        <div class="meter-label"></div>
+      </div>
+  
+      <div class="actions">
+        <button class="btn primary is-hidden" data-action="finish-lesson">Finish</button>
       </div>
     `;
   
-    // --- UI refs
+    // Refs
     const btnPlay = $('#play-audio', part5);
     const slowToggle = $('#slow-mode-toggle', part5);
-    const opts = $('#options', part5);
-    const feedback = $('#feedback', part5);
-    const tenseBox = $('#tense-quiz', part5);
+    const confirmBtn = $('#confirm', part5);
     const exampleBox = $('#example-display', part5);
-    const finishBtn = $('[data-action="finish-lesson"]', part5);
     const meterFill = $('.meter-fill', part5);
     const meterLabel = $('.meter-label', part5);
+    const finishBtn = $('[data-action="finish-lesson"]', part5);
+    const wordDisplay = $('#word-display', part5);
+    const tenseDisplay = $('#tense-display', part5);
   
-    // --- lesson data
+    // Lesson data
     const encounteredForms = LessonCore.getAvailableTensesForWorld(WORLD);
     const goal = words.length * 2;
     let score = 0, slowMode = false, locked = false;
-    let current = null, currentTense = '', currentExIndex = 0;
-    let currentAudioSrc = '', currentFallback = '';
   
-    // --- helpers
+    // Word + tense state
+    let wordIndex = 0;
+    let tenseIndex = 0;
+    let current = null;
+    let currentTense = '';
+    let currentAudioSrc = '', currentFallback = '';
+    let currentExIndex = 0;
+  
+    // --- helpers ---
     function updateMeter() {
       const pct = Math.round((score / goal) * 100);
       meterFill.style.width = `${pct}%`;
@@ -435,24 +454,15 @@
   
     slowToggle.onclick = () => {
       slowMode = !slowMode;
-      slowToggle.textContent = slowMode ? ' Slow: On' : ' Slow: Off';
+      slowToggle.textContent = slowMode ? 'Slow: On' : 'Slow: Off';
     };
   
-    // --- main round
+    // --- picking + setup ---
     function pickNext() {
-      opts.innerHTML = '';
-      feedback.textContent = '';
-      tenseBox.classList.add('is-hidden');
       exampleBox.classList.add('is-hidden');
       exampleBox.innerHTML = '';
-      locked = false;
   
-      let next;
-      do { next = LessonCore.pickRandom(words); }
-      while (current && next.id === current.id);
-      current = next;
-  
-      // pick a tense from encountered forms that exists for this word
+      current = LessonCore.pickRandom(words);
       const available = Object.keys(current.examples || {}).filter(f => encounteredForms.includes(f));
       currentTense = LessonCore.pickRandom(available.length ? available : ['dictionary']);
   
@@ -460,114 +470,87 @@
       const folderWord = current.id.replace(/_hira|_kata/g, '');
       const exSet = current.examples?.[currentTense] || current.examples?.dictionary || [];
       currentExIndex = Math.floor(Math.random() * exSet.length);
-  
       const basePath = `../../kana-development/assets/audio/vocab_examples/${currentTense}/${scriptType}/${folderWord}/`;
       currentAudioSrc = `${basePath}ex${currentExIndex + 1}.mp3`;
       currentFallback = `../../kana-development/assets/audio/vocab_examples/dictionary/${scriptType}/${folderWord}/ex1.mp3`;
   
       playAudio(currentAudioSrc, currentFallback, slowMode);
   
-      // build 6 answer buttons
-      const shuffled = LessonCore.shuffle(words).slice(0, 6);
-      if (!shuffled.includes(current))
-        shuffled[Math.floor(Math.random() * shuffled.length)] = current;
-  
-      shuffled.forEach(w => {
-        const b = document.createElement('button');
-        b.className = 'btn vocab-choice';
-        b.textContent = w.romaji;
-        b.onclick = () => handleAnswer(w);
-        opts.appendChild(b);
-      });
-      opts.style.gridTemplateColumns = 'repeat(3, 1fr)';
+      // reset selectors
+      wordIndex = 0;
+      tenseIndex = 0;
+      updateDisplays();
     }
   
-    // --- first step: pick word
-    function handleAnswer(sel) {
+    function updateDisplays() {
+      wordDisplay.textContent = words[wordIndex].romaji;
+      tenseDisplay.textContent = encounteredForms[tenseIndex] || 'dictionary';
+    }
+  
+    // --- selector arrows ---
+    part5.querySelectorAll('.arrow').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const type = btn.dataset.type;
+        if (type === 'word') {
+          if (btn.classList.contains('up')) wordIndex = (wordIndex - 1 + words.length) % words.length;
+          else wordIndex = (wordIndex + 1) % words.length;
+        } else if (type === 'tense') {
+          if (btn.classList.contains('up')) tenseIndex = (tenseIndex - 1 + encounteredForms.length) % encounteredForms.length;
+          else tenseIndex = (tenseIndex + 1) % encounteredForms.length;
+        }
+        updateDisplays();
+      });
+    });
+  
+    // --- confirm ---
+    confirmBtn.onclick = () => {
       if (locked) return;
       locked = true;
-      const correct = sel.id === current.id;
-
-       // Disable and style all buttons
-        opts.querySelectorAll('button').forEach(b => {
-          b.disabled = true;
-          if (b === sel) {
-            b.classList.add(correct ? 'is-correct' : 'is-wrong');
-            b.classList.add('was-selected');
-          }
-          if (!correct && b.textContent === current.romaji)
-            b.classList.add('is-correct');
-        });
-      
-      feedback.textContent = correct ? ' ' : ''; 
-      
-      // Continue
-      if (correct) showTenseStep();
-      else showExample();
-
-    }
-  
-    // --- second step: choose tense (only if relevant)
-    function showTenseStep() {
-      const available = Object.keys(current.examples || {}).filter(f => encounteredForms.includes(f));
-      if (available.length <= 1) return showExample(); // no tense question
-  
-      tenseBox.innerHTML = `
-        <p>Which form was used?</p>
-        <div class="tense-options">
-          ${available.map(f => `<button class="btn tense-opt" data-form="${f}">${LessonCore.formatTenseLabel(f)}</button>`).join('')}
-        </div>
-      `;
-      tenseBox.classList.remove('is-hidden');
-  
-      tenseBox.querySelectorAll('.tense-opt').forEach(btn => {
-        btn.onclick = () => {
-          const chosen = btn.dataset.form;
-          const correct = chosen === currentTense;
-      
-          // Highlight clicked button
-          btn.classList.add(correct ? 'is-correct' : 'is-wrong');
-      
-          // If wrong, also mark the correct one
-          if (!correct) {
-            const correctBtn = tenseBox.querySelector(`[data-form="${currentTense}"]`);
-            if (correctBtn) correctBtn.classList.add('is-correct');
-          }
-      
-          // Disable all after click
-          tenseBox.querySelectorAll('.tense-opt').forEach(b => (b.disabled = true));
-      
-          setTimeout(() => showExample(correct), 900);
-        };
-      });
-          }
-  
-    // --- confirmation step
-    function showExample(wasCorrect = true) {
+    
+      const selectedWord = words[wordIndex];
+      const selectedTense = encounteredForms[tenseIndex] || 'dictionary';
+      const correctWord = selectedWord.id === current.id;
+      const correctTense = selectedTense === currentTense;
+    
+      // --- independent visual feedback ---
+      wordDisplay.classList.remove('correct', 'wrong');
+      tenseDisplay.classList.remove('correct', 'wrong');
+    
+      if (correctWord) wordDisplay.classList.add('correct');
+      else wordDisplay.classList.add('wrong');
+    
+      if (correctTense) tenseDisplay.classList.add('correct');
+      else tenseDisplay.classList.add('wrong');
+    
+      // --- example + next step ---
       const exSet = current.examples?.[currentTense] || current.examples?.dictionary || [];
       const ex = exSet[currentExIndex] || exSet[0];
+      exampleBox.classList.remove('is-hidden');
       exampleBox.innerHTML = `
         <p class="ex-jp">${ex.kana}</p>
         <p class="ex-en">${ex.english}</p>
         <button class="btn small mt-2" id="next-btn">Continue →</button>
       `;
-      exampleBox.classList.remove('is-hidden');
-  
+    
+      // --- score and meter ---
+      if (correctWord && correctTense) score++;
+      updateMeter();
+    
       $('#next-btn', exampleBox).onclick = () => {
-        if (wasCorrect) score++;
-        updateMeter();
+        locked = false;
+        wordDisplay.classList.remove('correct', 'wrong');
+        tenseDisplay.classList.remove('correct', 'wrong');
         pickNext();
       };
-    }
+    };
+
   
-    // --- buttons
+    // --- init ---
     btnPlay.onclick = () => playAudio(currentAudioSrc, currentFallback, slowMode);
     finishBtn.onclick = () => (window.location.href = '../index.html');
-  
     updateMeter();
     pickNext();
   }
-
   
   // ======================================================
   // Public API
