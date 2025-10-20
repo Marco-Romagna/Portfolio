@@ -1255,7 +1255,7 @@ body.site {
   border-color: var(--kp-wrong);
   background: color-mix(in oklab, var(--kp-wrong) 15%, transparent);
 }
-/* Center the tense-quiz section in Part 5 */
+
 #part-5 .tense-quiz {
   display: flex;
   flex-direction: column;
@@ -1277,5 +1277,19 @@ body.site {
   justify-content: center;
   gap: 1rem;
   flex-wrap: wrap;
+}
+
+.vocab-choice.is-correct,
+.tense-opt.is-correct {
+  border-color: var(--kp-correct) !important;
+  background: color-mix(in oklab, var(--kp-correct) 15%, transparent);
+  color: var(--kp-text);
+}
+
+.vocab-choice.is-wrong,
+.tense-opt.is-wrong {
+  border-color: var(--kp-wrong) !important;
+  background: color-mix(in oklab, var(--kp-wrong) 15%, transparent);
+  color: var(--kp-text);
 }
 
