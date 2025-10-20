@@ -511,20 +511,18 @@
       const selectedTense = encounteredForms[tenseIndex] || 'dictionary';
       const correctWord = selectedWord.id === current.id;
       const correctTense = selectedTense === currentTense;
-      const wordCorrect = correctWord && correctTense;
     
-      // --- visual feedback on displays ---
+      // --- independent visual feedback ---
       wordDisplay.classList.remove('correct', 'wrong');
       tenseDisplay.classList.remove('correct', 'wrong');
-      if (wordCorrect) {
-        wordDisplay.classList.add('correct');
-        tenseDisplay.classList.add('correct');
-      } else {
-        if (!correctWord) wordDisplay.classList.add('wrong');
-        if (!correctTense) tenseDisplay.classList.add('wrong');
-      }
     
-      // --- example feedback box ---
+      if (correctWord) wordDisplay.classList.add('correct');
+      else wordDisplay.classList.add('wrong');
+    
+      if (correctTense) tenseDisplay.classList.add('correct');
+      else tenseDisplay.classList.add('wrong');
+    
+      // --- example + next step ---
       const exSet = current.examples?.[currentTense] || current.examples?.dictionary || [];
       const ex = exSet[currentExIndex] || exSet[0];
       exampleBox.classList.remove('is-hidden');
@@ -534,11 +532,10 @@
         <button class="btn small mt-2" id="next-btn">Continue →</button>
       `;
     
-      // --- score + progress ---
-      if (wordCorrect) score++;
+      // --- score and meter ---
+      if (correctWord && correctTense) score++;
       updateMeter();
     
-      // --- reset on Continue ---
       $('#next-btn', exampleBox).onclick = () => {
         locked = false;
         wordDisplay.classList.remove('correct', 'wrong');
