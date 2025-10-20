@@ -1193,3 +1193,108 @@ body.site {
   color: #fff;
   box-shadow: 0 0 0 3px color-mix(in oklab, var(--kp-accent) 35%, transparent);
 }
+
+/* ===============================
+   Part 5 — Audio Recognition Layout
+   =============================== */
+#part-5 .quiz-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+/* --- Play controls --- */
+#part-5 .audio-section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+/* --- Vocab choice grid --- */
+#part-5 .options-grid {
+  display: grid;
+  justify-content: center;
+  gap: var(--kp-gap);
+  margin-bottom: 1rem;
+}
+
+#part-5 .options-grid .vocab-choice {
+  min-width: 130px;
+  text-transform: lowercase;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+/* --- Tense quiz layout --- */
+#part-5 .tense-quiz {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  margin-top: 1rem;
+  width: 100%;
+}
+
+#part-5 .tense-quiz p {
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+#part-5 .tense-quiz .tense-options {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+/* --- Example display box --- */
+#part-5 .example-display {
+  margin-top: 1.5rem;
+  text-align: center;
+  max-width: 600px;
+}
+
+/* --- Button feedback (correct / wrong) --- */
+.vocab-choice.is-correct,
+.tense-opt.is-correct {
+  border-color: var(--kp-correct) !important;
+  background: color-mix(in oklab, var(--kp-correct) 15%, transparent);
+  color: var(--kp-text);
+}
+
+.vocab-choice.is-wrong,
+.tense-opt.is-wrong {
+  border-color: var(--kp-wrong) !important;
+  background: color-mix(in oklab, var(--kp-wrong) 15%, transparent);
+  color: var(--kp-text);
+}
+
+
+#part-5 .vocab-choice:not([disabled]):hover,
+#part-5 .tense-opt:not([disabled]):hover {
+  transform: translateY(-2px);
+  border-color: var(--kp-accent);
+}
+
+.vocab-choice.was-selected.is-correct {
+  border-color: var(--kp-correct) !important;
+  background: color-mix(in oklab, var(--kp-correct) 25%, transparent);
+  box-shadow: 0 0 12px color-mix(in oklab, var(--kp-correct) 40%, transparent);
+  transform: scale(1.05);
+  opacity: 1 !important;
+  z-index: 2;
+}
+
+.vocab-choice.was-selected.is-wrong {
+  border-color: var(--kp-wrong) !important;
+  background: color-mix(in oklab, var(--kp-wrong) 25%, transparent);
+  box-shadow: 0 0 12px color-mix(in oklab, var(--kp-wrong) 40%, transparent);
+  transform: scale(1.05);
+  opacity: 1 !important;
+  z-index: 2;
+}
+
+

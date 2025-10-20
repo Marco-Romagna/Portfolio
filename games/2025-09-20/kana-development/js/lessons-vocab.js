@@ -365,8 +365,9 @@
   }
 
   // ======================================================
-  // Part 5 — Audio Recognition (Refined No-Hint Version)
+  // Part 5 — Audio Recognition
   // ======================================================
+
   async function initPart5(words) {
     const part5 = $('#part-5');
     if (!part5) return;
@@ -381,6 +382,7 @@
   
         <div id="options" class="options-grid"></div>
         <div id="feedback" class="quiz-feedback"></div>
+        <div id="tense-quiz" class="tense-quiz is-hidden"></div>
         <div id="example-display" class="example-display is-hidden"></div>
   
         <div class="quiz-progress">
@@ -394,30 +396,25 @@
       </div>
     `;
   
-    // UI refs
+    // --- UI refs
     const btnPlay = $('#play-audio', part5);
     const slowToggle = $('#slow-mode-toggle', part5);
     const opts = $('#options', part5);
     const feedback = $('#feedback', part5);
+    const tenseBox = $('#tense-quiz', part5);
     const exampleBox = $('#example-display', part5);
     const finishBtn = $('[data-action="finish-lesson"]', part5);
     const meterFill = $('.meter-fill', part5);
     const meterLabel = $('.meter-label', part5);
   
-    // lesson data
-    const tenses = LessonCore.getAvailableTensesForWorld(LessonCore.WORLD);
+    // --- lesson data
+    const encounteredForms = LessonCore.getAvailableTensesForWorld(WORLD);
     const goal = words.length * 2;
-    let score = 0;
-    let slowMode = false;
-    let current = null;
-    let lastAudio = '';
-    let currentAudioSrc = '';
-    let currentFallback = '';
-    let currentTense = '';
-    let currentExIndex = 0;
-    let locked = false;
+    let score = 0, slowMode = false, locked = false;
+    let current = null, currentTense = '', currentExIndex = 0;
+    let currentAudioSrc = '', currentFallback = '';
   
-    // --- progress updater
+    // --- helpers
     function updateMeter() {
       const pct = Math.round((score / goal) * 100);
       meterFill.style.width = `${pct}%`;
@@ -425,7 +422,6 @@
       if (score >= goal) finishBtn.classList.remove('is-hidden');
     }
   
-    // --- audio helper
     function playAudio(src, fallback, slow = false) {
       const a = new Audio(src);
       a.playbackRate = slow ? 0.7 : 1.0;
@@ -437,100 +433,140 @@
       a.play().catch(() => {});
     }
   
-    // --- toggle slow mode
     slowToggle.onclick = () => {
       slowMode = !slowMode;
       slowToggle.textContent = slowMode ? ' Slow: On' : ' Slow: Off';
     };
   
-    // --- next round picker
+    // --- main round
     function pickNext() {
       opts.innerHTML = '';
       feedback.textContent = '';
+      tenseBox.classList.add('is-hidden');
       exampleBox.classList.add('is-hidden');
       exampleBox.innerHTML = '';
       locked = false;
   
-      // prevent same audio twice consecutively
       let next;
-      do {
-        next = LessonCore.pickRandom(words);
-      } while (current && next.id === current.id);
-  
+      do { next = LessonCore.pickRandom(words); }
+      while (current && next.id === current.id);
       current = next;
-      currentTense = LessonCore.pickRandom(tenses);
+  
+      // pick a tense from encountered forms that exists for this word
+      const available = Object.keys(current.examples || {}).filter(f => encounteredForms.includes(f));
+      currentTense = LessonCore.pickRandom(available.length ? available : ['dictionary']);
   
       const scriptType = LessonCore.LEXICON || 'hiragana';
       const folderWord = current.id.replace(/_hira|_kata/g, '');
       const exSet = current.examples?.[currentTense] || current.examples?.dictionary || [];
-      const n = Math.floor(Math.random() * exSet.length) + 1;
-      currentExIndex = n - 1;
+      currentExIndex = Math.floor(Math.random() * exSet.length);
   
       const basePath = `../../kana-development/assets/audio/vocab_examples/${currentTense}/${scriptType}/${folderWord}/`;
-      currentAudioSrc = `${basePath}ex${n}.mp3`;
+      currentAudioSrc = `${basePath}ex${currentExIndex + 1}.mp3`;
       currentFallback = `../../kana-development/assets/audio/vocab_examples/dictionary/${scriptType}/${folderWord}/ex1.mp3`;
   
-      // play once at start
       playAudio(currentAudioSrc, currentFallback, slowMode);
   
-      // --- build answer grid (always 6 options)
+      // build 6 answer buttons
       const shuffled = LessonCore.shuffle(words).slice(0, 6);
       if (!shuffled.includes(current))
         shuffled[Math.floor(Math.random() * shuffled.length)] = current;
   
       shuffled.forEach(w => {
-        const btn = document.createElement('button');
-        btn.className = 'btn vocab-choice';
-        btn.textContent = w.romaji;
-        btn.onclick = () => handleAnswer(w);
-        opts.appendChild(btn);
+        const b = document.createElement('button');
+        b.className = 'btn vocab-choice';
+        b.textContent = w.romaji;
+        b.onclick = () => handleAnswer(w);
+        opts.appendChild(b);
       });
       opts.style.gridTemplateColumns = 'repeat(3, 1fr)';
     }
   
-    // --- handle answer click
+    // --- first step: pick word
     function handleAnswer(sel) {
       if (locked) return;
       locked = true;
-  
       const correct = sel.id === current.id;
-      opts.querySelectorAll('button').forEach(b => (b.disabled = true));
-      feedback.classList.remove('correct', 'wrong');
-      feedback.classList.add(correct ? 'correct' : 'wrong');
-      feedback.textContent = correct ? ' Correct!' : ' Incorrect!';
-  
-      if (correct) {
-        score++;
-        updateMeter();
-  
-        if (score < goal) {
-          setTimeout(pickNext, 900);
-        } else {
-          // reached goal, stop autoplay
-          feedback.textContent = ' Lesson Complete!';
-        }
-      } else {
-        // show the example sentence
-        const exSet = current.examples?.[currentTense] || current.examples?.dictionary || [];
-        const ex = exSet[currentExIndex] || exSet[0];
-        exampleBox.innerHTML = `
-          <p class="ex-jp">${ex.kana}</p>
-          <p class="ex-en">${ex.english}</p>
-          <button class="btn small mt-2" id="next-btn">Continue →</button>
-        `;
-        exampleBox.classList.remove('is-hidden');
-        $('#next-btn', exampleBox).onclick = () => pickNext();
-        playAudio(currentAudioSrc, currentFallback, true);
-      }
+
+       // Disable and style all buttons
+        opts.querySelectorAll('button').forEach(b => {
+          b.disabled = true;
+          if (b === sel) {
+            b.classList.add(correct ? 'is-correct' : 'is-wrong');
+            b.classList.add('was-selected');
+          }
+          if (!correct && b.textContent === current.romaji)
+            b.classList.add('is-correct');
+        });
+      
+      feedback.textContent = correct ? ' ' : ''; 
+      
+      // Continue
+      if (correct) showTenseStep();
+      else showExample();
+
     }
   
+    // --- second step: choose tense (only if relevant)
+    function showTenseStep() {
+      const available = Object.keys(current.examples || {}).filter(f => encounteredForms.includes(f));
+      if (available.length <= 1) return showExample(); // no tense question
+  
+      tenseBox.innerHTML = `
+        <p>Which form was used?</p>
+        <div class="tense-options">
+          ${available.map(f => `<button class="btn tense-opt" data-form="${f}">${LessonCore.formatTenseLabel(f)}</button>`).join('')}
+        </div>
+      `;
+      tenseBox.classList.remove('is-hidden');
+  
+      tenseBox.querySelectorAll('.tense-opt').forEach(btn => {
+        btn.onclick = () => {
+          const chosen = btn.dataset.form;
+          const correct = chosen === currentTense;
+      
+          // Highlight clicked button
+          btn.classList.add(correct ? 'is-correct' : 'is-wrong');
+      
+          // If wrong, also mark the correct one
+          if (!correct) {
+            const correctBtn = tenseBox.querySelector(`[data-form="${currentTense}"]`);
+            if (correctBtn) correctBtn.classList.add('is-correct');
+          }
+      
+          // Disable all after click
+          tenseBox.querySelectorAll('.tense-opt').forEach(b => (b.disabled = true));
+      
+          setTimeout(() => showExample(correct), 900);
+        };
+      });
+          }
+  
+    // --- confirmation step
+    function showExample(wasCorrect = true) {
+      const exSet = current.examples?.[currentTense] || current.examples?.dictionary || [];
+      const ex = exSet[currentExIndex] || exSet[0];
+      exampleBox.innerHTML = `
+        <p class="ex-jp">${ex.kana}</p>
+        <p class="ex-en">${ex.english}</p>
+        <button class="btn small mt-2" id="next-btn">Continue →</button>
+      `;
+      exampleBox.classList.remove('is-hidden');
+  
+      $('#next-btn', exampleBox).onclick = () => {
+        if (wasCorrect) score++;
+        updateMeter();
+        pickNext();
+      };
+    }
+  
+    // --- buttons
     btnPlay.onclick = () => playAudio(currentAudioSrc, currentFallback, slowMode);
     finishBtn.onclick = () => (window.location.href = '../index.html');
   
     updateMeter();
     pickNext();
   }
-
 
   
   // ======================================================
