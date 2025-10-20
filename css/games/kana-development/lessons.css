@@ -1246,4 +1246,13 @@ body.site {
   max-width: 600px;
 }
 
+#part-5 .vocab-choice.is-correct {
+  border-color: var(--kp-correct);
+  background: color-mix(in oklab, var(--kp-correct) 15%, transparent);
+}
+
+#part-5 .vocab-choice.is-wrong {
+  border-color: var(--kp-wrong);
+  background: color-mix(in oklab, var(--kp-wrong) 15%, transparent);
+}
 
