@@ -859,6 +859,19 @@ body.site {
   to   { opacity: 1; transform: translateY(0); }
 }
 
+/* Feedback states for displays */
+#part-5 .display.correct {
+  border-color: var(--kp-correct);
+  background: color-mix(in oklab, var(--kp-correct) 20%, transparent);
+  color: var(--kp-correct);
+}
+
+#part-5 .display.wrong {
+  border-color: var(--kp-wrong);
+  background: color-mix(in oklab, var(--kp-wrong) 20%, transparent);
+  color: var(--kp-wrong);
+}
+
 
 /* =========================================================
    Ancient Japanese Aesthetic (index/world carousel)
