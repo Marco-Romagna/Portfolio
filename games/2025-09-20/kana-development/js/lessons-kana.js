@@ -42,40 +42,57 @@
     const part1 = $('#part-1');
     if (!part1) return;
     part1.innerHTML = '';
-
+  
     const title = document.createElement('h2');
     title.className = 'part-title';
     part1.appendChild(title);
-
-    // -3/-7 → pair cards; others → single-script
-    if (SUFFIX === 3 || SUFFIX === 7) {
+  
+    // Mixed-script lessons (3, 8, 13) → add marker class
+    if (SUFFIX === 3 || SUFFIX === 8 || SUFFIX === 13) {
+      part1.classList.add("mixed-script");
       title.textContent = 'Preview — Script Pairs';
+  
       const grid = document.createElement('div');
       grid.className = 'kana-grid';
       part1.appendChild(grid);
-
+  
       const hiraganaPool = KANA.filter(g => isHira(g));
       const pairs = hiraganaPool.map(h => ({ h, k: PAIR[h], r: ROMA[h] })).filter(p => !!p.k);
-
+  
       pairs.forEach(p => {
         const card = document.createElement('article');
-        card.className = 'pair-card';
+        card.className = 'card-big kana-card';   // same as single-script cards
+      
         card.innerHTML = `
           <div class="pair-row">
             <span class="glyph h">${p.h}</span>
-            <span class="link">⇄</span>
+            <span class="link">↔</span>
             <span class="glyph k">${p.k}</span>
           </div>
-          <div class="pair-romaji">${p.r}</div>
+          <span class="kana-sub">${p.r}</span>
         `;
+      
+        // Audio
+        card.addEventListener('click', () => {
+          const romaji = p.r;
+          if (romaji) {
+            const audioPath = `../assets/audio/kana/${romaji}.mp3`;
+            const audio = new Audio(audioPath);
+            audio.play().catch(err => console.warn('Audio failed:', err));
+          }
+        });
+      
         grid.appendChild(card);
       });
     } else {
+      // Single-script lessons
+      part1.classList.remove("mixed-script");
       title.textContent = 'Preview';
+  
       const grid = document.createElement('div');
       grid.className = 'kana-grid';
       part1.appendChild(grid);
-
+  
       const uniq = Array.from(new Set(KANA));
       uniq.forEach(g => {
         const card = document.createElement('article');
@@ -84,15 +101,30 @@
           <span class="kana-glyph">${g}</span>
           <span class="kana-sub">${ROMA[g] || ''}</span>
         `;
+  
+        // --- Audio: make the whole card clickable ---
+        card.addEventListener('click', () => {
+          const romaji = ROMA[g];
+          if (romaji) {
+            const audioPath = `../assets/audio/kana/${romaji}.mp3`;
+            const audio = new Audio(audioPath);
+            audio.play().catch(err => console.warn('Audio failed:', err));
+          }
+        });
+  
         grid.appendChild(card);
       });
     }
-
+  
     const actions = document.createElement('div');
     actions.className = 'actions';
     actions.innerHTML = `<button class="btn primary" data-action="advance">${(SUFFIX === 4 || SUFFIX === 8) ? 'Start Typing' : 'Start'}</button>`;
     part1.appendChild(actions);
-    actions.querySelector('[data-action="advance"]')?.addEventListener('click', () => showPart(2));
+    actions.querySelector('[data-action="advance"]')
+      ?.addEventListener('click', () => {
+        initPart2();   // create Part 2 dynamically
+        showPart(2);   // then switch to it
+      });
   }
 
   // ======================================================
@@ -163,25 +195,49 @@
       }
 
       let options=[];
-      if(MIXED_TYPE){
-        const correct=PAIR[promptGlyph];
-        const pool=isHira(promptGlyph)
-          ? KANA.filter(g=>isKata(g))
-          : KANA.filter(g=>isHira(g));
-        options=[correct,...sample(pool.filter(g=>g!==correct),3)];
+      if (MIXED_TYPE) {
+        const correct = PAIR[promptGlyph];
+        const correctRomaji = ROMA[correct];
+        const pool = isHira(promptGlyph)
+          ? KANA.filter(g => isKata(g))
+          : KANA.filter(g => isHira(g));
+      
+        const usedRomaji = new Set([correctRomaji]);
+        const distractors = [];
+      
+        for (const k of shuffle(pool)) {
+          const r = ROMA[k];
+          if (!r || usedRomaji.has(r)) continue;
+          distractors.push(k);
+          usedRomaji.add(r);
+          if (distractors.length >= 3) break;
+        }
+      
+        options = shuffle([correct, ...distractors]);
       } else {
-        const correct=promptGlyph;
-        options=[correct,...sample(KANA.filter(k=>k!==correct),3)];
+        const correct = promptGlyph;
+        const correctRomaji = ROMA[correct];
+        const usedRomaji = new Set([correctRomaji]);
+        const distractors = [];
+      
+        for (const k of shuffle(KANA)) {
+          const r = ROMA[k];
+          if (k === correct || !r || usedRomaji.has(r)) continue;
+          distractors.push(k);
+          usedRomaji.add(r);
+          if (distractors.length >= 3) break;
+        }
+      
+        options = shuffle([correct, ...distractors]);
       }
 
-      const ordered=arrangeOptionsNoSlotRepeat(options);
 
-      // Fixed theme order: dark, light, sepia, high
+      const ordered=arrangeOptionsNoSlotRepeat(options);
       const themes = THEMES.slice(0, ordered.length);
 
       ordered.forEach((glyph,i)=>{
         const b=document.createElement('button');
-        b.className=`option ${themes[i]}`;  // 👈 fixed per slot
+        b.className=`option ${themes[i]}`;
         b.dataset.value=glyph;
         b.textContent=glyph;
         b.addEventListener('click',()=>onPick(glyph,promptGlyph,b));
@@ -223,11 +279,11 @@
     }
 
     $('[data-action="next-part"]', part2)?.addEventListener('click', () => showPart(3));
-    updateMeter(); nextQuestion();
+    updateMeter(); nextQuestion(); afterInitPart2();
   }
 
   // ======================================================
-  // Part 3 — Typing
+  // Part 3 — Typing (with combos)
   // ======================================================
   function initPart3(){
     if(IS_TYPING_ONLY) return;
@@ -246,27 +302,146 @@
       </div>
     `;
     initTyping(part3, GOAL_TYPE, false);
+    afterInitPart3();
   }
 
   // ======================================================
-  // Part 4 — Speak (placeholder)
+  // Part 4 — Audio Identify (sound → kana)
   // ======================================================
-  function initPart4(){
-    const part4=$('#part-4'); if(!part4) return;
-    part4.innerHTML = '';
-    const panel=document.createElement('div');
-    panel.className='speak-panel';
-    panel.innerHTML=`
-      <div class="kana-glyph speak-glyph">${KANA[0]||'あ'}</div>
-      <p class="muted">Speaking practice is in progress.</p>
-      <button class="btn primary" data-action="finish-lesson">Finish</button>
-    `;
-    part4.appendChild(panel);
-    panel.querySelector('[data-action="finish-lesson"]')?.addEventListener('click',()=>{ window.location.href='../index.html'; });
-  }
+    function initPart4() {
+      const part4 = $('#part-4');
+      if (!part4) return;
+    
+      part4.innerHTML = `
+        <h2 class="part-title">Audio — Listen & Identify</h2>
+        <div class="quiz-panel">
+          <div class="quiz-prompt">
+            <button class="btn ghost" id="replay-audio">🔊 Replay sound</button>
+          </div>
+          <div class="quiz-options"></div>
+          <div class="quiz-progress">
+            <div class="meter"><div class="meter-fill"></div></div>
+            <div class="meter-label"></div>
+          </div>
+          <div class="quiz-feedback"><p class="feedback-text"></p></div>
+          <div class="actions"><button class="btn primary is-hidden" data-action="next-part">Finish Lesson</button></div>
+        </div>
+      `;
+    
+      const grid = $('.quiz-options', part4);
+      const feedback = $('.quiz-feedback .feedback-text', part4);
+      const meterFill = $('.quiz-progress .meter-fill', part4);
+      const meterLabel = $('.quiz-progress .meter-label', part4);
+      const replayBtn = $('#replay-audio', part4);
+    
+      const GOAL = KANA.length * 2;
+      let progressPts = 0;
+      let unseen = [...KANA];
+      let currentKana = null;
+      let lastRomaji = null;
+      let roundLocked = false;
+    
+      const THEMES = ['theme-dark','theme-light','theme-sepia','theme-high'];
+    
+      function playAudio(k) {
+        const romaji = ROMA[k];
+        if (!romaji) return;
+        const audioPath = `../assets/audio/kana/${romaji}.mp3`;
+        const audio = new Audio(audioPath);
+        audio.play().catch(err => console.warn("Audio failed:", err));
+      }
+    
+      function updateMeter() {
+        const pct = Math.round((progressPts / GOAL) * 100);
+        meterFill.style.width = `${pct}%`;
+        meterLabel.textContent = `Progress: ${progressPts} / ${GOAL}`;
+      }
+    
+      function pickPromptKana() {
+        const pool = unseen.length ? unseen : [...KANA];
+        const filtered = pool.filter(k => ROMA[k] !== lastRomaji);
+        const pickFrom = filtered.length ? filtered : pool;
+        const pick = pickFrom[Math.floor(Math.random() * pickFrom.length)];
+        lastRomaji = ROMA[pick];
+        return pick;
+      }
+    
+      function nextQuestion() {
+        roundLocked = false;
+        grid.innerHTML = '';
+        feedback.textContent = '';
+    
+        if (unseen.length === 0) unseen = [...KANA];
+        currentKana = pickPromptKana();
+        unseen = unseen.filter(k => k !== currentKana);
+    
+        setTimeout(() => playAudio(currentKana), 600);
+    
+        // --- build distractors ensuring no duplicate romaji within options ---
+        const correctRomaji = ROMA[currentKana];
+        const usedRomaji = new Set([correctRomaji]);
+        const distractors = [];
+    
+        for (const k of shuffle(KANA)) {
+          if (k === currentKana) continue;
+          const r = ROMA[k];
+          if (!r || usedRomaji.has(r)) continue; // skip duplicate sound
+          distractors.push(k);
+          usedRomaji.add(r);
+          if (distractors.length >= 3) break;
+        }
+    
+        const options = shuffle([currentKana, ...distractors]);
+    
+        options.forEach((g, i) => {
+          const b = document.createElement('button');
+          b.className = `option ${THEMES[i % THEMES.length]}`;
+          b.textContent = g;
+          b.addEventListener('click', () => onPick(g, b));
+          grid.appendChild(b);
+        });
+    
+        replayBtn.onclick = () => playAudio(currentKana);
+      }
+    
+      function onPick(choice, btn) {
+        if (roundLocked) return;
+        roundLocked = true;
+        const all = $$('.option', part4);
+        all.forEach(b => b.disabled = true);
+    
+        if (choice === currentKana) {
+          btn.classList.add('is-correct');
+          feedback.textContent = 'Correct!';
+          progressPts++;
+          updateMeter();
+          setTimeout(() => {
+            if (progressPts >= GOAL) {
+              $('[data-action="next-part"]', part4)?.classList.remove('is-hidden');
+              feedback.textContent = 'Part complete!';
+            } else {
+              nextQuestion();
+            }
+          }, 350);
+        } else {
+          btn.classList.add('is-wrong');
+          feedback.textContent = 'Try again…';
+          progressPts = Math.max(0, progressPts - 1);
+          updateMeter();
+          setTimeout(() => nextQuestion(), 450);
+        }
+      }
+    
+      $('[data-action="next-part"]', part4)
+        ?.addEventListener('click', () => window.location.href = '../index.html');
+    
+      updateMeter();
+      setTimeout(() => nextQuestion(), 400);
+    }
+
 
   // ======================================================
-  // Typing Engine (shared)
+  // Typing Engine (shared with combos)
   // ======================================================
   function initTyping(scopeEl,GOAL,isPart2){
     const wrapper=$('.type-glyph-wrapper',scopeEl);
@@ -389,12 +564,56 @@
   }
 
   // ======================================================
+  // Helpers to wire progression
+  // ======================================================
+  function afterInitPart2() {
+    const part2 = $('#part-2');
+    $('[data-action="next-part"]', part2)
+      ?.addEventListener('click', () => {
+        initPart3();
+        showPart(3);
+      });
+  }
+
+  function afterInitPart3() {
+    const part3 = $('#part-3');
+    $('[data-action="next-part"]', part3)
+      ?.addEventListener('click', () => {
+        initPart4();
+        showPart(4);
+      });
+  }
+
+  // ======================================================
+  // Auto-select correct kana script before starting
+  // ======================================================
+  document.addEventListener("DOMContentLoaded", () => {
+    const lessonEl = document.querySelector(".lesson");
+    if (!lessonEl) return;
+  
+    const lessonId = lessonEl.dataset.lessonId || "";
+    let activeLexicon = "hiragana";
+  
+    // For katakana lessons (1-2, 2-2, 3-2, etc.)
+    if (lessonId.endsWith("-2")) {
+      activeLexicon = "katakana";
+    }
+  
+    // Store globally for LessonCore and other scripts
+    window.ACTIVE_LEXICON = activeLexicon;
+  
+    // Swap KANA source if katakana
+    if (activeLexicon === "katakana" && window.KANA_KATAKANA) {
+      window.LessonCore.KANA = window.KANA_KATAKANA;
+    }
+  });
+
+  // ======================================================
   // Public API
   // ======================================================
   window.initKanaParts = function(){
-    initPart1();
-    initPart2();
-    initPart3();
-    initPart4();
+    initPart1();   // only start with Preview
   };
+  window.initPart1 = initPart1;
+
 })();

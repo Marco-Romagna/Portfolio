@@ -1,0 +1,1452 @@
+{
+  "meta": {"version":1,"locale":"ja-JP","script":"katakana"},
+  "words": [
+      {
+        "id": "iku_kata", "kana": "イク", "romaji": "iku",
+        "gloss_en": "to go", "tags": ["core","k-row","verb"], "worlds": ["2-vocab-kata"],
+        "note": "Katakana rendering of いく (iku). Used stylistically or for emphasis in signage or creative writing.",
+        "examples": {
+          "dictionary": [
+            { "kana": "ガッコウニイク。", "romaji": "gakkou ni iku", "english": "to go to school." },
+            { "kana": "エキニイク。", "romaji": "eki ni iku", "english": "to go to the station." },
+            { "kana": "トモダチノイエニイク。", "romaji": "tomodachi no ie ni iku", "english": "to go to a friend’s house." }
+          ]
+        }
+      },
+      {
+        "id": "kiku_kata", "kana": "キク", "romaji": "kiku",
+        "gloss_en": "to listen; to ask", "tags": ["core","k-row","verb"], "worlds": ["2-vocab-kata"],
+        "note": "Katakana version of きく (kiku). Seen in stylized text or song titles. Context decides whether it means 'listen' or 'ask'.",
+        "examples": {
+          "dictionary": [
+            { "kana": "センセイニキク。", "romaji": "sensei ni kiku", "english": "to ask the teacher." },
+            { "kana": "オンガクヲキク。", "romaji": "ongaku wo kiku", "english": "to listen to music." },
+            { "kana": "ラジオヲキク。", "romaji": "rajio wo kiku", "english": "to listen to the radio." }
+          ]
+        }
+      },
+      {
+        "id": "kau_kata", "kana": "カウ", "romaji": "kau",
+        "gloss_en": "to buy", "tags": ["core","k-row","verb"], "worlds": ["2-vocab-kata"],
+        "note": "Katakana rendering of かう (kau). Appears stylistically in advertisements or games.",
+        "examples": {
+          "dictionary": [
+            { "kana": "パンヲカウ。", "romaji": "pan wo kau", "english": "to buy bread." },
+            { "kana": "ホンヲカウ。", "romaji": "hon wo kau", "english": "to buy a book." },
+            { "kana": "プレゼントヲカウ。", "romaji": "purezento wo kau", "english": "to buy a present." }
+          ]
+        }
+      },
+      {
+        "id": "kao_kata", "kana": "カオ", "romaji": "kao",
+        "gloss_en": "face", "tags": ["core","k-row","body"], "worlds": ["2-vocab-kata"],
+        "note": "Katakana version of かお (kao). Sometimes used in stylized text or names. Means 'face'.",
+        "examples": {
+          "dictionary": [
+            { "kana": "カオヲアラウ。", "romaji": "kao wo arau", "english": "to wash one’s face." },
+            { "kana": "カオガアカイ。", "romaji": "kao ga akai", "english": "the face is red." },
+            { "kana": "カオヲミル。", "romaji": "kao wo miru", "english": "to look at a face." }
+          ]
+        }
+      },
+      {
+        "id": "ike_kata", "kana": "イケ", "romaji": "ike",
+        "gloss_en": "pond", "tags": ["core","k-row","place"], "worlds": ["2-vocab-kata"],
+        "note": "Katakana rendering of いけ (ike). Rare outside stylized uses. Refers to a pond, often man-made.",
+        "examples": {
+          "dictionary": [
+            { "kana": "イケニサカナガイル。", "romaji": "ike ni sakana ga iru", "english": "There are fish in the pond." },
+            { "kana": "イケノソバニスワル。", "romaji": "ike no soba ni suwaru", "english": "to sit near the pond." },
+            { "kana": "チイサイイケダ。", "romaji": "chiisai ike da", "english": "It’s a small pond." }
+          ]
+        }
+      },
+      {
+        "id": "koe_kata", "kana": "コエ", "romaji": "koe",
+        "gloss_en": "voice", "tags": ["core","k-row"], "worlds": ["2-vocab-kata"],
+        "note": "Katakana version of こえ (koe). Used for stylistic emphasis in titles or lyrics. Refers to human or animal voices.",
+        "examples": {
+          "dictionary": [
+            { "kana": "キレイナコエ。", "romaji": "kirei na koe", "english": "a beautiful voice." },
+            { "kana": "コエヲキク。", "romaji": "koe wo kiku", "english": "to hear a voice." },
+            { "kana": "オオキイコエデイウ。", "romaji": "ookii koe de iu", "english": "to speak in a loud voice." }
+          ]
+        }
+      },
+  
+      {
+        "id": "gasorin_kata", "kana": "ガソリン", "romaji": "gasorin",
+        "gloss_en": "gasoline", "tags": ["loanword","object","g-row"], "worlds": ["2-daku-kata"],
+        "note": "Loanword from English 'gasoline'. Very common everyday word used at gas stations or when refueling a car.",
+        "examples": {
+          "dictionary": [
+            { "kana": "クルマニガソリンヲイレル。", "romaji": "kuruma ni gasorin wo ireru", "english": "to put gasoline into a car." },
+            { "kana": "ガソリンスタンドニイク。", "romaji": "gasorin sutando ni iku", "english": "to go to a gas station." },
+            { "kana": "ガソリンガスコシアル。", "romaji": "gasorin ga sukoshi aru", "english": "there is a little gasoline." }
+          ]
+        }
+      },
+      {
+        "id": "gifuto_kata", "kana": "ギフト", "romaji": "gifuto",
+        "gloss_en": "gift; present", "tags": ["loanword","object","g-row"], "worlds": ["2-daku-kata"],
+        "note": "Loanword from English 'gift'. Common in stores and online shopping.",
+        "examples": {
+          "dictionary": [
+            { "kana": "トモダチニギフトヲオクル。", "romaji": "tomodachi ni gifuto wo okuru", "english": "to give a gift to a friend." },
+            { "kana": "ギフトショップニイク。", "romaji": "gifuto shoppu ni iku", "english": "to go to a gift shop." },
+            { "kana": "キレイナギフトガアル。", "romaji": "kirei na gifuto ga aru", "english": "there is a beautiful gift." }
+          ]
+        }
+      },
+      {
+        "id": "gurasu_kata", "kana": "グラス", "romaji": "gurasu",
+        "gloss_en": "glass (cup)","tags": ["loanword","object","g-row"], "worlds": ["2-daku-kata"],
+        "note": "Loanword from English 'glass'. Refers to a drinking glass or cup.",
+        "examples": {
+          "dictionary": [
+            { "kana": "グラスニミズヲイレル。", "romaji": "gurasu ni mizu wo ireru", "english": "to pour water into a glass." },
+            { "kana": "テーブルニグラスガアル。", "romaji": "teeburu ni gurasu ga aru", "english": "there is a glass on the table." },
+            { "kana": "グラスヲアラウ。", "romaji": "gurasu wo arau", "english": "to wash the glass." }
+          ]
+        }
+      },
+      {
+        "id": "gesuto_kata", "kana": "ゲスト", "romaji": "gesuto", "gloss_en": "guest",
+        "tags": ["loanword","people","g-row"], "worlds": ["2-daku-kata"],
+        "note": "Loanword from English 'guest'. Used for visitors or invited participants.",
+        "examples": {
+          "dictionary": [
+            { "kana": "ゲストガホテルニトマル。", "romaji": "gesuto ga hoteru ni tomaru", "english": "the guest stays at the hotel." },
+            { "kana": "ゲストトハナス。", "romaji": "gesuto to hanasu", "english": "to talk with a guest." },
+            { "kana": "ゲストガクル。", "romaji": "gesuto ga kuru", "english": "a guest is coming." }
+          ]
+        }
+      },
+      {
+        "id": "gorufu_kata", "kana": "ゴルフ", "romaji": "gorufu",
+        "gloss_en": "golf", "tags": ["loanword","sport","g-row"], "worlds": ["2-daku-kata"],
+        "note": "Loanword from English 'golf'. Commonly used with する (to do/play).",
+        "examples": {
+          "dictionary": [
+            { "kana": "トモダチトゴルフヲスル。", "romaji": "tomodachi to gorufu wo suru", "english": "to play golf with a friend." },
+            { "kana": "ゴルフジョウニイク。", "romaji": "gorufu jou ni iku", "english": "to go to a golf course." },
+            { "kana": "ゴルフガスキ。", "romaji": "gorufu ga suki", "english": "I like golf." }
+          ]
+        }
+      },
+      {
+        "id": "gamu_kata", "kana": "ガム", "romaji": "gamu",
+        "gloss_en": "chewing gum", "tags": ["loanword","food","g-row"], "worlds": ["2-daku-kata"],
+        "note": "Loanword from English 'gum'. Always written in katakana; refers to chewing or bubble gum.",
+        "examples": {
+          "dictionary": [
+            { "kana": "ガムヲカム。", "romaji": "gamu wo kamu", "english": "to chew gum." },
+            { "kana": "アマイガムヲカウ。", "romaji": "amai gamu wo kau", "english": "to buy sweet gum." },
+            { "kana": "ガムヲスイテイル。", "romaji": "gamu wo suiteiru", "english": "is chewing gum." }
+          ]
+        }
+      },
+
+      {
+        "id": "sarada_kata", "kana": "サラダ", "romaji": "sarada",
+        "gloss_en": "salad", "tags": ["loanword","food","s-row"], "worlds": ["3-vocab-kata"],
+        "note": "Loanword from English 'salad'. Very common everyday word used in meals or restaurants.",
+        "examples": {
+          "dictionary": [
+            { "kana": "サラダヲタベル。", "romaji": "sarada wo taberu", "english": "to eat a salad." },
+            { "kana": "オイシイサラダヲツクル。", "romaji": "oishii sarada wo tsukuru", "english": "to make a tasty salad." },
+            { "kana": "レストランデサラダヲタベル。", "romaji": "resutoran de sarada wo taberu", "english": "to eat salad at a restaurant." }
+          ]
+        }
+      },
+      {
+        "id": "saru_kata", "kana": "サル", "romaji": "saru",
+        "gloss_en": "monkey", "tags": ["loanword","animal","s-row"], "worlds": ["3-vocab-kata"],
+        "note": "Monkey. Usually written 猿, but katakana サル is common in signs or simple texts.",
+        "examples": {
+          "dictionary": [
+            { "kana": "サルガヤマニイル。", "romaji": "saru ga yama ni iru", "english": "There is a monkey in the mountain." },
+            { "kana": "サルガバナヲタベル。", "romaji": "saru ga bana wo taberu", "english": "The monkey eats a banana." },
+            { "kana": "コウエンデサルヲミル。", "romaji": "kouen de saru wo miru", "english": "to see a monkey at the park." }
+          ]
+        }
+      },
+      {
+        "id": "semi_kata", "kana": "セミ", "romaji": "semi",
+        "gloss_en": "cicada", "tags": ["loanword","animal","s-row"], "worlds": ["3-vocab-kata"],
+        "note": "Cicada (summer insect). Usually written 蝉 but katakana セミ is common in casual writing or children’s books.",
+        "examples": {
+          "dictionary": [
+            { "kana": "セミガナク。", "romaji": "semi ga naku", "english": "The cicada chirps." },
+            { "kana": "ナツニセミガナク。", "romaji": "natsu ni semi ga naku", "english": "Cicadas cry in summer." },
+            { "kana": "セミノコエガオオキイ。", "romaji": "semi no koe ga ookii", "english": "The sound of cicadas is loud." }
+          ]
+        }
+      },
+      {
+        "id": "suika_kata", "kana": "スイカ", "romaji": "suika",
+        "gloss_en": "watermelon", "tags": ["loanword","food","s-row"], "worlds": ["3-vocab-kata"],
+        "note": "Watermelon. Usually written 西瓜, but katakana スイカ is very common in modern writing.",
+        "examples": {
+          "dictionary": [
+            { "kana": "スイカヲカウ。", "romaji": "suika wo kau", "english": "to buy a watermelon." },
+            { "kana": "ナツニスイカヲタベル。", "romaji": "natsu ni suika wo taberu", "english": "to eat watermelon in summer." },
+            { "kana": "オオキイスイカガアル。", "romaji": "ookii suika ga aru", "english": "there is a big watermelon." }
+          ]
+        }
+      },
+      {
+        "id": "sofa_kata", "kana": "ソファ", "romaji": "sofa",
+        "gloss_en": "sofa", "tags": ["loanword","furniture","s-row"], "worlds": ["3-vocab-kata"],
+        "note": "Loanword from English 'sofa'. Common in homes and furniture stores.",
+        "examples": {
+          "dictionary": [
+            { "kana": "ソファニスワル。", "romaji": "sofa ni suwaru", "english": "to sit on the sofa." },
+            { "kana": "オオキイソファヲカウ。", "romaji": "ookii sofa wo kau", "english": "to buy a large sofa." },
+            { "kana": "ヘヤニソファガアル。", "romaji": "heya ni sofa ga aru", "english": "there is a sofa in the room." }
+          ]
+        }
+      },
+      {
+        "id": "sekai_kata", "kana": "セカイ", "romaji": "sekai",
+        "gloss_en": "world", "tags": ["loanword","abstract","s-row"], "worlds": ["3-vocab-kata"],
+        "note": "Usually written 世界, but katakana セカイ appears often in media and songs for stylistic effect.",
+        "examples": {
+          "dictionary": [
+            { "kana": "セカイヲミル。", "romaji": "sekai wo miru", "english": "to see the world." },
+            { "kana": "オオキイセカイヲタビスル。", "romaji": "ookii sekai wo tabi suru", "english": "to travel the big world." },
+            { "kana": "セカイガヒロイ。", "romaji": "sekai ga hiroi", "english": "the world is wide." }
+          ]
+        }
+      },
+
+      {
+        "id": "zubon_kata", "kana": "ズボン", "romaji": "zubon",
+        "gloss_en": "pants", "tags": ["loanword","clothing","z-row"], "worlds": ["3-daku-kata"],
+        "note": "Loanword from French 'jupon'. Refers to trousers or pants, always written in katakana.",
+        "examples": {
+          "dictionary": [
+            { "kana": "ズボンヲハク。", "romaji": "zubon wo haku", "english": "to wear pants." },
+            { "kana": "アオイズボンヲカウ。", "romaji": "aoi zubon wo kau", "english": "to buy blue pants." },
+            { "kana": "ズボンガクローゼットニアル。", "romaji": "zubon ga kuroozetto ni aru", "english": "the pants are in the closet." }
+          ]
+        }
+      },
+      {
+        "id": "zonbi_kata", "kana": "ゾンビ", "romaji": "zonbi",
+        "gloss_en": "zombie", "tags": ["loanword","creature","z-row"], "worlds": ["3-daku-kata"],
+        "note": "Loanword from English 'zombie'. Commonly used in games, movies, and pop culture.",
+        "examples": {
+          "dictionary": [
+            { "kana": "ゾンビゲームヲスル。", "romaji": "zonbi geemu wo suru", "english": "to play a zombie game." },
+            { "kana": "ゾンビガマチニイル。", "romaji": "zonbi ga machi ni iru", "english": "zombies are in the city." },
+            { "kana": "ゾンビヲミル。", "romaji": "zonbi wo miru", "english": "to see a zombie." }
+          ]
+        }
+      },
+      {
+        "id": "zemi_kata", "kana": "ゼミ", "romaji": "zemi",
+        "gloss_en": "seminar", "tags": ["loanword","school","z-row"], "worlds": ["3-daku-kata"],
+        "note": "Abbreviation of 'seminar'. Very common term for university study groups or discussions.",
+        "examples": {
+          "dictionary": [
+            { "kana": "ゼミニサンカスル。", "romaji": "zemi ni sanka suru", "english": "to attend a seminar." },
+            { "kana": "ゼミノトモダチトハナス。", "romaji": "zemi no tomodachi to hanasu", "english": "to talk with friends from the seminar." },
+            { "kana": "ゼミデハッピョウスル。", "romaji": "zemi de happyou suru", "english": "to present at a seminar." }
+          ]
+        }
+      },
+      {
+        "id": "zaru_kata", "kana": "ザル", "romaji": "zaru",
+        "gloss_en": "basket; strainer", "tags": ["loanword","object","z-row"], "worlds": ["3-daku-kata"],
+        "note": "Usually written ざる, but katakana ザル is often used for food items like ザルソバ (cold soba).",
+        "examples": {
+          "dictionary": [
+            { "kana": "ザルヲツカウ。", "romaji": "zaru wo tsukau", "english": "to use a strainer." },
+            { "kana": "ザルニヤサイヲイレル。", "romaji": "zaru ni yasai wo ireru", "english": "to put vegetables in a strainer." },
+            { "kana": "ザルヲアラウ。", "romaji": "zaru wo arau", "english": "to wash the strainer." }
+          ]
+        }
+      },
+      {
+        "id": "zame_kata", "kana": "ザメ", "romaji": "zame",
+        "gloss_en": "shark", "tags": ["loanword","animal","z-row"], "worlds": ["3-daku-kata"],
+        "note": "Appears in words like フカザメ ('shark'). Sometimes used in fishing or ocean contexts.",
+        "examples": {
+          "dictionary": [
+            { "kana": "ザメガウミヲオヨグ。", "romaji": "zame ga umi wo oyogu", "english": "a shark swims in the sea." },
+            { "kana": "オオキイザメヲミル。", "romaji": "ookii zame wo miru", "english": "to see a big shark." },
+            { "kana": "ザメガサカナヲタベル。", "romaji": "zame ga sakana wo taberu", "english": "the shark eats fish." }
+          ]
+        }
+      },
+      {
+        "id": "zerachin_kata", "kana": "ゼラチン", "romaji": "zerachin",
+        "gloss_en": "gelatin", "tags": ["loanword","food","z-row"], "worlds": ["3-daku-kata"],
+        "note": "Loanword from German 'Gelatine'. Commonly used in desserts and cooking.",
+        "examples": {
+          "dictionary": [
+            { "kana": "ゼラチンヲツカウ。", "romaji": "zerachin wo tsukau", "english": "to use gelatin." },
+            { "kana": "ゼラチンデケーキヲツクル。", "romaji": "zerachin de keeki wo tsukuru", "english": "to make cake with gelatin." },
+            { "kana": "ゼラチンガトケル。", "romaji": "zerachin ga tokeru", "english": "the gelatin melts." }
+          ]
+        }
+      },
+
+      {
+        "id": "taoru_kata", "kana": "タオル", "romaji": "taoru",
+        "gloss_en": "towel", "tags": ["loanword","object","t-row"], "worlds": ["4-vocab-kata"],
+        "note": "Loanword from English 'towel'. Common household item used after washing or bathing.",
+        "examples": {
+          "dictionary": [
+            { "kana": "タオルヲツカウ。", "romaji": "taoru wo tsukau", "english": "to use a towel." },
+            { "kana": "アタラシイタオルヲカウ。", "romaji": "atarashii taoru wo kau", "english": "to buy a new towel." },
+            { "kana": "タオルヲカミニアテル。", "romaji": "taoru wo kami ni ateru", "english": "to press a towel to one’s hair." }
+          ],
+          "polite": [
+            { "kana": "タオルヲツカイマス。", "romaji": "taoru wo tsukaimasu", "english": "I use a towel." },
+            { "kana": "アタラシイタオルヲカイマス。", "romaji": "atarashii taoru wo kaimasu", "english": "I buy a new towel." }
+          ]
+        }
+      },
+      {
+        "id": "tanku_kata", "kana": "タンク", "romaji": "tanku",
+        "gloss_en": "tank", "tags": ["loanword","object","t-row"], "worlds": ["4-vocab-kata"],
+        "note": "Loanword from English 'tank'. Refers to containers, fuel tanks, or even armored vehicles depending on context.",
+        "examples": {
+          "dictionary": [
+            { "kana": "タンクニミズヲイレル。", "romaji": "tanku ni mizu wo ireru", "english": "to put water in a tank." },
+            { "kana": "オオキイタンクガアル。", "romaji": "ookii tanku ga aru", "english": "there is a large tank." },
+            { "kana": "タンクヲアラウ。", "romaji": "tanku wo arau", "english": "to wash the tank." }
+          ],
+          "polite": [
+            { "kana": "タンクニミズヲイレマス。", "romaji": "tanku ni mizu wo iremasu", "english": "I put water in a tank." },
+            { "kana": "タンクヲアライマス。", "romaji": "tanku wo araimasu", "english": "I wash the tank." }
+          ]
+        }
+      },
+      {
+        "id": "tsuna_kata", "kana": "ツナ", "romaji": "tsuna", "gloss_en": "tuna",
+        "tags": ["loanword","food","t-row"], "worlds": ["4-vocab-kata"],
+        "note": "Loanword from English 'tuna'. Usually refers to canned tuna in Japan, common in sandwiches and salads.",
+        "examples": {
+          "dictionary": [
+            { "kana": "ツナサンドヲタベル。", "romaji": "tsuna sando wo taberu", "english": "to eat a tuna sandwich." },
+            { "kana": "ツナヲカウ。", "romaji": "tsuna wo kau", "english": "to buy tuna." },
+            { "kana": "ツナガサラダニアル。", "romaji": "tsuna ga sarada ni aru", "english": "there is tuna in the salad." }
+          ],
+          "polite": [
+            { "kana": "ツナサンドヲタベマス。", "romaji": "tsuna sando wo tabemasu", "english": "I eat a tuna sandwich." },
+            { "kana": "ツナヲカイマス。", "romaji": "tsuna wo kaimasu", "english": "I buy tuna." }
+          ]
+        }
+      },
+      {
+        "id": "terebi_kata", "kana": "テレビ", "romaji": "terebi",
+        "gloss_en": "television", "tags": ["loanword","object","t-row"], "worlds": ["4-vocab-kata"],
+        "note": "Loanword from English 'television'. Extremely common everyday word for TV.",
+        "examples": {
+          "dictionary": [
+            { "kana": "テレビヲミル。", "romaji": "terebi wo miru", "english": "to watch TV." },
+            { "kana": "テレビガコワレタ。", "romaji": "terebi ga kowareta", "english": "the TV broke." },
+            { "kana": "テレビデニュースヲミル。", "romaji": "terebi de nyuusu wo miru", "english": "to watch the news on TV." }
+          ],
+          "polite": [
+            { "kana": "テレビヲミマス。", "romaji": "terebi wo mimasu", "english": "I watch TV." },
+            { "kana": "テレビデニュースヲミマス。", "romaji": "terebi de nyuusu wo mimasu", "english": "I watch the news on TV." }
+          ]
+        }
+      },
+      {
+        "id": "tenpo_kata", "kana": "テンポ", "romaji": "tenpo",
+        "gloss_en": "tempo", "tags": ["loanword","abstract","t-row"], "worlds": ["4-vocab-kata"],
+        "note": "Loanword from Italian 'tempo'. Commonly used when discussing music speed or rhythm.",
+        "examples": {
+          "dictionary": [
+            { "kana": "テンポガハヤイ。", "romaji": "tenpo ga hayai", "english": "the tempo is fast." },
+            { "kana": "テンポヲオトス。", "romaji": "tenpo wo otosu", "english": "to slow down the tempo." },
+            { "kana": "テンポガスキデス。", "romaji": "tenpo ga suki desu", "english": "I like this tempo." }
+          ],
+          "polite": [
+            { "kana": "テンポガハヤイデス。", "romaji": "tenpo ga hayai desu", "english": "The tempo is fast." },
+            { "kana": "テンポヲオトシマス。", "romaji": "tenpo wo otoshimasu", "english": "I slow down the tempo." }
+          ]
+        }
+      },
+      {
+        "id": "tomato_kata", "kana": "トマト", "romaji": "tomato",
+        "gloss_en": "tomato", "tags": ["loanword","food","t-row"], "worlds": ["4-vocab-kata"],
+        "note": "Loanword from English 'tomato'. Commonly used for salads and cooking.",
+        "examples": {
+          "dictionary": [
+            { "kana": "トマトヲタベル。", "romaji": "tomato wo taberu", "english": "to eat a tomato." },
+            { "kana": "アカイトマトヲカウ。", "romaji": "akai tomato wo kau", "english": "to buy a red tomato." },
+            { "kana": "トマトガサラダニアル。", "romaji": "tomato ga sarada ni aru", "english": "there is tomato in the salad." }
+          ],
+          "polite": [
+            { "kana": "トマトヲタベマス。", "romaji": "tomato wo tabemasu", "english": "I eat a tomato." },
+            { "kana": "アカイトマトヲカイマス。", "romaji": "akai tomato wo kaimasu", "english": "I buy a red tomato." }
+          ]
+        }
+      },
+
+      {
+        "id": "denshi_kata", "kana": "デンシ", "romaji": "denshi",
+        "gloss_en": "electronic", "tags": ["loanword","tech","d-row"], "worlds": ["4-daku-kata"],
+        "note": "Means 'electronic'. Common in compounds such as デンシレンジ (microwave) or デンシメール (email).",
+        "examples": {
+          "dictionary": [
+            { "kana": "デンシブックヲヨム。", "romaji": "denshi bukku wo yomu", "english": "to read an e-book." },
+            { "kana": "デンシメールヲオクル。", "romaji": "denshi meeru wo okuru", "english": "to send an email." },
+            { "kana": "デンシレンジヲツカウ。", "romaji": "denshi renji wo tsukau", "english": "to use a microwave oven." }
+          ],
+          "polite": [
+            { "kana": "デンシブックヲヨミマス。", "romaji": "denshi bukku wo yomimasu", "english": "I read an e-book." },
+            { "kana": "デンシレンジヲツカイマス。", "romaji": "denshi renji wo tsukaimasu", "english": "I use a microwave oven." }
+          ]
+        }
+      },
+      {
+        "id": "dejitaru_kata", "kana": "デジタル", "romaji": "dejitaru",
+        "gloss_en": "digital", "tags": ["loanword","tech","d-row"], "worlds": ["4-daku-kata"],
+        "note": "Loanword from English 'digital'. Used for devices or media: デジタルカメラ (digital camera), デジタルおんがく (digital music).",
+        "examples": {
+          "dictionary": [
+            { "kana": "デジタルカメラヲツカウ。", "romaji": "dejitaru kamera wo tsukau", "english": "to use a digital camera." },
+            { "kana": "デジタルオンガクヲキク。", "romaji": "dejitaru ongaku wo kiku", "english": "to listen to digital music." },
+            { "kana": "デジタルノホンヲヨム。", "romaji": "dejitaru no hon wo yomu", "english": "to read a digital book." }
+          ],
+          "polite": [
+            { "kana": "デジタルカメラヲツカイマス。", "romaji": "dejitaru kamera wo tsukaimasu", "english": "I use a digital camera." },
+            { "kana": "デジタルオンガクヲキキマス。", "romaji": "dejitaru ongaku wo kikimasu", "english": "I listen to digital music." }
+          ]
+        }
+      },
+      {
+        "id": "doresu_kata", "kana": "ドレス", "romaji": "doresu",
+        "gloss_en": "dress", "tags": ["loanword","clothing","d-row"], "worlds": ["4-daku-kata"],
+        "note": "Loanword from English 'dress'. Often used for formal or party clothing.",
+        "examples": {
+          "dictionary": [
+            { "kana": "ドレスヲキル。", "romaji": "doresu wo kiru", "english": "to wear a dress." },
+            { "kana": "アカイドレスヲカウ。", "romaji": "akai doresu wo kau", "english": "to buy a red dress." },
+            { "kana": "キレイナドレスデパーティーニイク。", "romaji": "kirei na doresu de paatii ni iku", "english": "to go to a party in a beautiful dress." }
+          ],
+          "polite": [
+            { "kana": "ドレスヲキマス。", "romaji": "doresu wo kimasu", "english": "I wear a dress." },
+            { "kana": "アカイドレスヲカイマス。", "romaji": "akai doresu wo kaimasu", "english": "I buy a red dress." }
+          ]
+        }
+      },
+      {
+        "id": "dotto_kata", "kana": "ドット", "romaji": "dotto",
+        "gloss_en": "dot", "tags": ["loanword","object","d-row"], "worlds": ["4-daku-kata"],
+        "note": "Loanword from English 'dot'. Demonstrates the small ッ (sokuon). Common in tech or pattern words like ドットパターン (dot pattern).",
+        "examples": {
+          "dictionary": [
+            { "kana": "ドットヲウツ。", "romaji": "dotto wo utsu", "english": "to type a dot." },
+            { "kana": "ドットパターンガスキ。", "romaji": "dotto patān ga suki", "english": "I like dot patterns." },
+            { "kana": "ドットガラノシャツヲキル。", "romaji": "dotto gara no shatsu wo kiru", "english": "to wear a polka-dot shirt." }
+          ],
+          "polite": [
+            { "kana": "ドットヲウチマス。", "romaji": "dotto wo uchimasu", "english": "I type a dot." },
+            { "kana": "ドットガラノシャツヲキマス。", "romaji": "dotto gara no shatsu wo kimasu", "english": "I wear a polka-dot shirt." }
+          ]
+        }
+      },
+      {
+        "id": "deeto_kata", "kana": "デート", "romaji": "deeto",
+        "gloss_en": "date (romantic outing)", "tags": ["loanword","event","d-row"], "worlds": ["4-daku-kata"],
+        "note": "Loanword from English 'date'. Refers to a romantic outing, not a calendar date.",
+        "examples": {
+          "dictionary": [
+            { "kana": "カノジョトデートスル。", "romaji": "kanojo to deeto suru", "english": "to go on a date with my girlfriend." },
+            { "kana": "デートニイク。", "romaji": "deeto ni iku", "english": "to go on a date." },
+            { "kana": "デートノヨテイガアル。", "romaji": "deeto no yotei ga aru", "english": "I have a date planned." }
+          ],
+          "polite": [
+            { "kana": "カノジョトデートシマス。", "romaji": "kanojo to deeto shimasu", "english": "I go on a date with my girlfriend." },
+            { "kana": "デートニイキマス。", "romaji": "deeto ni ikimasu", "english": "I go on a date." }
+          ]
+        }
+      },
+      {
+        "id": "dansu_kata", "kana": "ダンス", "romaji": "dansu",
+        "gloss_en": "dance", "tags": ["loanword","activity","d-row"], "worlds": ["4-daku-kata"],
+        "note": "Loanword from English 'dance'. Used both as noun and verb (ダンスをおどる = to dance).",
+        "examples": {
+          "dictionary": [
+            { "kana": "ダンスヲオドル。", "romaji": "dansu wo odoru", "english": "to dance." },
+            { "kana": "ダンスノレッスンニイク。", "romaji": "dansu no ressun ni iku", "english": "to go to a dance lesson." },
+            { "kana": "ダンスガジョウズダ。", "romaji": "dansu ga jouzu da", "english": "I am good at dancing." }
+          ],
+          "polite": [
+            { "kana": "ダンスヲオドリマス。", "romaji": "dansu wo odorimasu", "english": "I dance." },
+            { "kana": "ダンスノレッスンニイキマス。", "romaji": "dansu no ressun ni ikimasu", "english": "I go to a dance lesson." }
+          ]
+        }
+      },
+
+
+      {
+        "id": "naisu_kata", "kana": "ナイス", "romaji": "naisu",
+        "gloss_en": "nice", "tags": ["loanword","adjective","n-row"], "worlds": ["5-vocab-kata"],
+        "note": "Loanword from English 'nice'. Commonly used in sports and casual conversation (ナイスショット, ナイスプレー).",
+        "examples": {
+          "dictionary": [
+            { "kana": "ナイスプレーデス。", "romaji": "naisu puree desu", "english": "Nice play!" },
+            { "kana": "ナイスショット。", "romaji": "naisu shotto", "english": "Nice shot!" },
+            { "kana": "ナイスアイデア。", "romaji": "naisu aidea", "english": "Nice idea." }
+          ],
+          "polite": [
+            { "kana": "ナイスデス。", "romaji": "naisu desu", "english": "That’s nice." },
+            { "kana": "ナイスプレーデシタ。", "romaji": "naisu puree deshita", "english": "That was a nice play." }
+          ],
+          "past": [
+            { "kana": "ナイスダッタ。", "romaji": "naisu datta", "english": "It was nice. (plain past)" }
+          ]
+        }
+      },
+      {
+        "id": "nekutai_kata", "kana": "ネクタイ", "romaji": "nekutai",
+        "gloss_en": "necktie", "tags": ["loanword","clothing","n-row"], "worlds": ["5-vocab-kata"],
+        "note": "Loanword from English 'necktie'. Worn with business suits or uniforms.",
+        "examples": {
+          "dictionary": [
+            { "kana": "ネクタイヲシメル。", "romaji": "nekutai wo shimeru", "english": "to wear a necktie." },
+            { "kana": "アオイネクタイヲカウ。", "romaji": "aoi nekutai wo kau", "english": "to buy a blue necktie." },
+            { "kana": "ネクタイヲハズス。", "romaji": "nekutai wo hazusu", "english": "to take off a necktie." }
+          ],
+          "polite": [
+            { "kana": "ネクタイヲシメマス。", "romaji": "nekutai wo shimemasu", "english": "I wear a necktie." },
+            { "kana": "アオイネクタイヲカイマス。", "romaji": "aoi nekutai wo kaimasu", "english": "I buy a blue necktie." }
+          ],
+          "past": [
+            { "kana": "ネクタイヲシメマシタ。", "romaji": "nekutai wo shimemashita", "english": "I wore a necktie." },
+            { "kana": "ネクタイヲハズシマシタ。", "romaji": "nekutai wo hazushimashita", "english": "I took off a necktie." }
+          ]
+        }
+      },
+      {
+        "id": "natsu_kata", "kana": "ナツ", "romaji": "natsu",
+        "gloss_en": "summer", "tags": ["loanword","season","n-row"], "worlds": ["5-vocab-kata"],
+        "note": "Native word 夏 (natsu). Katakana ナツ is used stylistically in titles, names, or advertisements.",
+        "examples": {
+          "dictionary": [
+            { "kana": "ナツガアツイ。", "romaji": "natsu ga atsui", "english": "Summer is hot." },
+            { "kana": "ナツノヨルガスキ。", "romaji": "natsu no yoru ga suki", "english": "I like summer nights." },
+            { "kana": "ナツガハジマル。", "romaji": "natsu ga hajimaru", "english": "Summer begins." }
+          ],
+          "polite": [
+            { "kana": "ナツガアツイデス。", "romaji": "natsu ga atsui desu", "english": "Summer is hot." }
+          ],
+          "past": [
+            { "kana": "ナツガアツカッタデス。", "romaji": "natsu ga atsukatta desu", "english": "Summer was hot." }
+          ]
+        }
+      },
+      {
+        "id": "naifu_kata", "kana": "ナイフ", "romaji": "naifu",
+        "gloss_en": "knife", "tags": ["loanword","object","n-row"], "worlds": ["5-vocab-kata"],
+        "note": "Loanword from English 'knife'. Used in cooking or dining.",
+        "examples": {
+          "dictionary": [
+            { "kana": "ナイフヲツカウ。", "romaji": "naifu wo tsukau", "english": "to use a knife." },
+            { "kana": "ナイフデパンヲキル。", "romaji": "naifu de pan wo kiru", "english": "to cut bread with a knife." },
+            { "kana": "ナイフヲアラウ。", "romaji": "naifu wo arau", "english": "to wash the knife." }
+          ],
+          "polite": [
+            { "kana": "ナイフヲツカイマス。", "romaji": "naifu wo tsukaimasu", "english": "I use a knife." },
+            { "kana": "ナイフデパンヲキリマス。", "romaji": "naifu de pan wo kirimasu", "english": "I cut bread with a knife." }
+          ],
+          "past": [
+            { "kana": "ナイフヲツカイマシタ。", "romaji": "naifu wo tsukaimashita", "english": "I used a knife." },
+            { "kana": "ナイフヲアライマシタ。", "romaji": "naifu wo araimashita", "english": "I washed the knife." }
+          ]
+        }
+      },
+      {
+        "id": "nooto_kata", "kana": "ノート", "romaji": "nooto",
+        "gloss_en": "notebook", "tags": ["loanword","object","n-row"], "worlds": ["5-vocab-kata"],
+        "note": "Loanword from English 'notebook'. Common in schools and offices.",
+        "examples": {
+          "dictionary": [
+            { "kana": "ノートニカク。", "romaji": "nooto ni kaku", "english": "to write in a notebook." },
+            { "kana": "ノートヲヒラク。", "romaji": "nooto wo hiraku", "english": "to open a notebook." },
+            { "kana": "ノートニナマエヲカク。", "romaji": "nooto ni namae wo kaku", "english": "to write one’s name in a notebook." }
+          ],
+          "polite": [
+            { "kana": "ノートニカキマス。", "romaji": "nooto ni kakimasu", "english": "I write in a notebook." },
+            { "kana": "ノートヲヒラキマス。", "romaji": "nooto wo hirakimasu", "english": "I open a notebook." }
+          ],
+          "past": [
+            { "kana": "ノートニカキマシタ。", "romaji": "nooto ni kakimashita", "english": "I wrote in a notebook." },
+            { "kana": "ノートヲトジマシタ。", "romaji": "nooto wo tojimashita", "english": "I closed the notebook." }
+          ]
+        }
+      },
+      {
+        "id": "netto_kata", "kana": "ネット", "romaji": "netto",
+        "gloss_en": "net; internet", "tags": ["loanword","object","n-row"], "worlds": ["5-vocab-kata"],
+        "note": "Loanword from English 'net'. Used for both physical nets and the Internet depending on context.",
+        "examples": {
+          "dictionary": [
+            { "kana": "ネットヲツカウ。", "romaji": "netto wo tsukau", "english": "to use the internet." },
+            { "kana": "ネットデミル。", "romaji": "netto de miru", "english": "to watch something online." },
+            { "kana": "ネットガオソイ。", "romaji": "netto ga osoi", "english": "the internet is slow." }
+          ],
+          "polite": [
+            { "kana": "ネットヲツカイマス。", "romaji": "netto wo tsukaimasu", "english": "I use the internet." },
+            { "kana": "ネットデミマス。", "romaji": "netto de mimasu", "english": "I watch online." }
+          ],
+          "past": [
+            { "kana": "ネットヲツカイマシタ。", "romaji": "netto wo tsukaimashita", "english": "I used the internet." },
+            { "kana": "ネットデミマシタ。", "romaji": "netto de mimashita", "english": "I watched online." }
+          ]
+        }
+      },
+
+      {
+        "id": "hanbaagaa_kata", "kana": "ハンバーガー", "romaji": "hanbaagaa",
+        "gloss_en": "hamburger", "tags": ["loanword","food","h-row"], "worlds": ["6-vocab-kata"],
+        "note": "Loanword from English 'hamburger'. Common fast-food word used daily.",
+        "examples": {
+          "dictionary": [
+            { "kana": "ハンバーガーヲタベル。", "romaji": "hanbaagaa wo taberu", "english": "to eat a hamburger." },
+            { "kana": "ハンバーガーヲカウ。", "romaji": "hanbaagaa wo kau", "english": "to buy a hamburger." },
+            { "kana": "ハンバーガートポテトヲタベル。", "romaji": "hanbaagaa to poteto wo taberu", "english": "to eat a hamburger and fries." }
+          ],
+          "polite": [
+            { "kana": "ハンバーガーヲタベマス。", "romaji": "hanbaagaa wo tabemasu", "english": "I eat a hamburger." },
+            { "kana": "ハンバーガーヲカイマス。", "romaji": "hanbaagaa wo kaimasu", "english": "I buy a hamburger." }
+          ],
+          "past": [
+            { "kana": "ハンバーガーヲタベマシタ。", "romaji": "hanbaagaa wo tabemashita", "english": "I ate a hamburger." },
+            { "kana": "ハンバーガーヲカイマシタ。", "romaji": "hanbaagaa wo kaimashita", "english": "I bought a hamburger." }
+          ]
+        }
+      },
+      {
+        "id": "hiirou_kata", "kana": "ヒーロー", "romaji": "hiirou",
+        "gloss_en": "hero", "tags": ["loanword","person","h-row"], "worlds": ["6-vocab-kata"],
+        "note": "Loanword from English 'hero'. Common in manga, anime, and media.",
+        "examples": {
+          "dictionary": [
+            { "kana": "ヒーローニナル。", "romaji": "hiirou ni naru", "english": "to become a hero." },
+            { "kana": "ヒーローガタタカウ。", "romaji": "hiirou ga tatakau", "english": "the hero fights." },
+            { "kana": "コノヒトハヒーローダ。", "romaji": "kono hito wa hiirou da", "english": "this person is a hero." }
+          ],
+          "polite": [
+            { "kana": "ヒーローニナリマス。", "romaji": "hiirou ni narimasu", "english": "I become a hero." },
+            { "kana": "ヒーローデス。", "romaji": "hiirou desu", "english": "I am a hero." }
+          ],
+          "past": [
+            { "kana": "ヒーローニナリマシタ。", "romaji": "hiirou ni narimashita", "english": "I became a hero." },
+            { "kana": "ヒーローデシタ。", "romaji": "hiirou deshita", "english": "He was a hero." }
+          ]
+        }
+      },
+      {
+        "id": "herumetto_kata", "kana": "ヘルメット", "romaji": "herumetto",
+        "gloss_en": "helmet", "tags": ["loanword","object","h-row"], "worlds": ["6-vocab-kata"],
+        "note": "Loanword from English 'helmet'. Common safety gear for biking or construction.",
+        "examples": {
+          "dictionary": [
+            { "kana": "ヘルメットヲカブル。", "romaji": "herumetto wo kaburu", "english": "to wear a helmet." },
+            { "kana": "ヘルメットヲカウ。", "romaji": "herumetto wo kau", "english": "to buy a helmet." },
+            { "kana": "ヘルメットガヒツヨウダ。", "romaji": "herumetto ga hitsuyou da", "english": "a helmet is necessary." }
+          ],
+          "polite": [
+            { "kana": "ヘルメットヲカブリマス。", "romaji": "herumetto wo kaburimasu", "english": "I wear a helmet." },
+            { "kana": "ヘルメットヲカイマス。", "romaji": "herumetto wo kaimasu", "english": "I buy a helmet." }
+          ],
+          "past": [
+            { "kana": "ヘルメットヲカブリマシタ。", "romaji": "herumetto wo kaburimashita", "english": "I wore a helmet." },
+            { "kana": "ヘルメットヲカイマシタ。", "romaji": "herumetto wo kaimashita", "english": "I bought a helmet." }
+          ]
+        }
+      },
+      {
+        "id": "hoteru_kata", "kana": "ホテル", "romaji": "hoteru",
+        "gloss_en": "hotel", "tags": ["loanword","place","h-row"], "worlds": ["6-vocab-kata"],
+        "note": "Loanword from English 'hotel'. Very common for travel or tourism contexts.",
+        "examples": {
+          "dictionary": [
+            { "kana": "ホテルニトマル。", "romaji": "hoteru ni tomaru", "english": "to stay at a hotel." },
+            { "kana": "ホテルヲヨヤクスル。", "romaji": "hoteru wo yoyaku suru", "english": "to book a hotel." },
+            { "kana": "ホテルガタカイ。", "romaji": "hoteru ga takai", "english": "the hotel is expensive." }
+          ],
+          "polite": [
+            { "kana": "ホテルニトマリマス。", "romaji": "hoteru ni tomarimasu", "english": "I stay at a hotel." },
+            { "kana": "ホテルヲヨヤクシマス。", "romaji": "hoteru wo yoyaku shimasu", "english": "I book a hotel." }
+          ],
+          "past": [
+            { "kana": "ホテルニトマリマシタ。", "romaji": "hoteru ni tomarimashita", "english": "I stayed at a hotel." },
+            { "kana": "ホテルヲヨヤクシマシタ。", "romaji": "hoteru wo yoyaku shimashita", "english": "I booked a hotel." }
+          ]
+        }
+      },
+      {
+        "id": "hamu_kata", "kana": "ハム", "romaji": "hamu",
+        "gloss_en": "ham", "tags": ["loanword","food","h-row"], "worlds": ["6-vocab-kata"],
+        "note": "Loanword from English 'ham'. Commonly used in sandwiches and breakfasts.",
+        "examples": {
+          "dictionary": [
+            { "kana": "ハムヲタベル。", "romaji": "hamu wo taberu", "english": "to eat ham." },
+            { "kana": "ハムサンドヲツクル。", "romaji": "hamu sando wo tsukuru", "english": "to make a ham sandwich." },
+            { "kana": "ハムガスキダ。", "romaji": "hamu ga suki da", "english": "I like ham." }
+          ],
+          "polite": [
+            { "kana": "ハムヲタベマス。", "romaji": "hamu wo tabemasu", "english": "I eat ham." },
+            { "kana": "ハムサンドヲツクリマス。", "romaji": "hamu sando wo tsukurimasu", "english": "I make a ham sandwich." }
+          ],
+          "past": [
+            { "kana": "ハムヲタベマシタ。", "romaji": "hamu wo tabemashita", "english": "I ate ham." },
+            { "kana": "ハムサンドヲツクリマシタ。", "romaji": "hamu sando wo tsukurimashita", "english": "I made a ham sandwich." }
+          ]
+        }
+      },
+      {
+        "id": "hotto_kata", "kana": "ホット", "romaji": "hotto",
+        "gloss_en": "hot", "tags": ["loanword","adjective","h-row"], "worlds": ["6-vocab-kata"],
+        "note": "Loanword from English 'hot'. Often used in phrases like ホットコーヒー (hot coffee).",
+        "examples": {
+          "dictionary": [
+            { "kana": "ホットコーヒーヲノム。", "romaji": "hotto koohii wo nomu", "english": "to drink hot coffee." },
+            { "kana": "ホットドリンクガスキ。", "romaji": "hotto dorinku ga suki", "english": "I like hot drinks." },
+            { "kana": "ホットスープヲツクル。", "romaji": "hotto suupu wo tsukuru", "english": "to make hot soup." }
+          ],
+          "polite": [
+            { "kana": "ホットコーヒーヲノミマス。", "romaji": "hotto koohii wo nomimasu", "english": "I drink hot coffee." },
+            { "kana": "ホットスープヲツクリマス。", "romaji": "hotto suupu wo tsukurimasu", "english": "I make hot soup." }
+          ],
+          "past": [
+            { "kana": "ホットコーヒーヲノミマシタ。", "romaji": "hotto koohii wo nomimashita", "english": "I drank hot coffee." },
+            { "kana": "ホットスープヲツクリマシタ。", "romaji": "hotto suupu wo tsukurimashita", "english": "I made hot soup." }
+          ]
+        }
+      },
+
+      {
+        "id": "banana_kata", "kana": "バナナ", "romaji": "banana",
+        "gloss_en": "banana", "tags": ["loanword","food","b-row"], "worlds": ["6-daku-kata"],
+        "note": "Loanword from English 'banana'. Common fruit word used in daily life.",
+        "examples": {
+          "dictionary": [
+            { "kana": "バナナヲタベル。", "romaji": "banana wo taberu", "english": "to eat a banana." },
+            { "kana": "バナナヲカウ。", "romaji": "banana wo kau", "english": "to buy a banana." },
+            { "kana": "バナナトミルクヲノム。", "romaji": "banana to miruku wo nomu", "english": "to drink banana milk." }
+          ],
+          "polite": [
+            { "kana": "バナナヲタベマス。", "romaji": "banana wo tabemasu", "english": "I eat a banana." },
+            { "kana": "バナナヲカイマス。", "romaji": "banana wo kaimasu", "english": "I buy a banana." }
+          ],
+          "past": [
+            { "kana": "バナナヲタベマシタ。", "romaji": "banana wo tabemashita", "english": "I ate a banana." },
+            { "kana": "バナナヲカイマシタ。", "romaji": "banana wo kaimashita", "english": "I bought a banana." }
+          ]
+        }
+      },
+      {
+        "id": "bideo_kata", "kana": "ビデオ", "romaji": "bideo",
+        "gloss_en": "video", "tags": ["loanword","object","b-row"], "worlds": ["6-daku-kata"],
+        "note": "Loanword from English 'video'. Used for movies, video clips, or video cameras.",
+        "examples": {
+          "dictionary": [
+            { "kana": "ビデオヲミル。", "romaji": "bideo wo miru", "english": "to watch a video." },
+            { "kana": "ビデオヲトル。", "romaji": "bideo wo toru", "english": "to record a video." },
+            { "kana": "ビデオガオモシロイ。", "romaji": "bideo ga omoshiroi", "english": "the video is interesting." }
+          ],
+          "polite": [
+            { "kana": "ビデオヲミマス。", "romaji": "bideo wo mimasu", "english": "I watch a video." },
+            { "kana": "ビデオヲトリマス。", "romaji": "bideo wo torimasu", "english": "I record a video." }
+          ],
+          "past": [
+            { "kana": "ビデオヲミマシタ。", "romaji": "bideo wo mimashita", "english": "I watched a video." },
+            { "kana": "ビデオヲトリマシタ。", "romaji": "bideo wo torimashita", "english": "I recorded a video." }
+          ]
+        }
+      },
+      {
+        "id": "buutsu_kata", "kana": "ブーツ", "romaji": "buutsu",
+        "gloss_en": "boots", "tags": ["loanword","object","b-row"], "worlds": ["6-daku-kata"],
+        "note": "Loanword from English 'boots'. Used for shoes that cover the ankle or higher.",
+        "examples": {
+          "dictionary": [
+            { "kana": "ブーツヲハク。", "romaji": "buutsu wo haku", "english": "to wear boots." },
+            { "kana": "アカイブーツヲカウ。", "romaji": "akai buutsu wo kau", "english": "to buy red boots." },
+            { "kana": "ブーツガスキダ。", "romaji": "buutsu ga suki da", "english": "I like boots." }
+          ],
+          "polite": [
+            { "kana": "ブーツヲハキマス。", "romaji": "buutsu wo hakimasu", "english": "I wear boots." },
+            { "kana": "ブーツヲカイマス。", "romaji": "buutsu wo kaimasu", "english": "I buy boots." }
+          ],
+          "past": [
+            { "kana": "ブーツヲハキマシタ。", "romaji": "buutsu wo hakimashita", "english": "I wore boots." },
+            { "kana": "ブーツヲカイマシタ。", "romaji": "buutsu wo kaimashita", "english": "I bought boots." }
+          ]
+        }
+      },
+      {
+        "id": "beddo_kata", "kana": "ベッド", "romaji": "beddo",
+        "gloss_en": "bed", "tags": ["loanword","object","b-row"], "worlds": ["6-daku-kata"],
+        "note": "Loanword from English 'bed'. Very common daily-use word.",
+        "examples": {
+          "dictionary": [
+            { "kana": "ベッドデネル。", "romaji": "beddo de neru", "english": "to sleep in a bed." },
+            { "kana": "ベッドヲカウ。", "romaji": "beddo wo kau", "english": "to buy a bed." },
+            { "kana": "ベッドガオオキイ。", "romaji": "beddo ga ookii", "english": "the bed is big." }
+          ],
+          "polite": [
+            { "kana": "ベッドデネマス。", "romaji": "beddo de nemasu", "english": "I sleep in a bed." },
+            { "kana": "ベッドヲカイマス。", "romaji": "beddo wo kaimasu", "english": "I buy a bed." }
+          ],
+          "past": [
+            { "kana": "ベッドデネマシタ。", "romaji": "beddo de nemashita", "english": "I slept in a bed." },
+            { "kana": "ベッドヲカイマシタ。", "romaji": "beddo wo kaimashita", "english": "I bought a bed." }
+          ]
+        }
+      },
+      {
+        "id": "booru_kata", "kana": "ボール", "romaji": "booru",
+        "gloss_en": "ball", "tags": ["loanword","object","b-row"], "worlds": ["6-daku-kata"],
+        "note": "Loanword from English 'ball'. Used in many sports and games.",
+        "examples": {
+          "dictionary": [
+            { "kana": "ボールヲケル。", "romaji": "booru wo keru", "english": "to kick a ball." },
+            { "kana": "ボールヲナゲル。", "romaji": "booru wo nageru", "english": "to throw a ball." },
+            { "kana": "ボールデアソブ。", "romaji": "booru de asobu", "english": "to play with a ball." }
+          ],
+          "polite": [
+            { "kana": "ボールヲケリマス。", "romaji": "booru wo kerimasu", "english": "I kick a ball." },
+            { "kana": "ボールヲナゲマス。", "romaji": "booru wo nugemasu", "english": "I throw a ball." }
+          ],
+          "past": [
+            { "kana": "ボールヲケリマシタ。", "romaji": "booru wo kerimashita", "english": "I kicked a ball." },
+            { "kana": "ボールヲナゲマシタ。", "romaji": "booru wo nagemashita", "english": "I threw a ball." }
+          ]
+        }
+      },
+      {
+        "id": "basu_kata", "kana": "バス", "romaji": "basu",
+        "gloss_en": "bus", "tags": ["loanword","transport","b-row"], "worlds": ["6-daku-kata"],
+        "note": "Loanword from English 'bus'. Common transport word for public transit.",
+        "examples": {
+          "dictionary": [
+            { "kana": "バスニノル。", "romaji": "basu ni noru", "english": "to ride a bus." },
+            { "kana": "バスデイエニカエル。", "romaji": "basu de ie ni kaeru", "english": "to go home by bus." },
+            { "kana": "バスガオソイ。", "romaji": "basu ga osoi", "english": "the bus is late." }
+          ],
+          "polite": [
+            { "kana": "バスニノリマス。", "romaji": "basu ni norimasu", "english": "I ride a bus." },
+            { "kana": "バスデカエリマス。", "romaji": "basu de kaerimasu", "english": "I go home by bus." }
+          ],
+          "past": [
+            { "kana": "バスニノリマシタ。", "romaji": "basu ni norimashita", "english": "I rode a bus." },
+            { "kana": "バスデカエリマシタ。", "romaji": "basu de kaerimashita", "english": "I went home by bus." }
+          ]
+        }
+      },
+
+
+      {
+        "id": "pasokon_kata", "kana": "パソコン", "romaji": "pasokon",
+        "gloss_en": "PC; computer", "tags": ["loanword","object","p-row"], "worlds": ["6-handaku-kata"],
+        "note": "Abbreviation of 'personal computer'. Common in daily life, work, and school.",
+        "examples": {
+          "dictionary": [
+            { "kana": "パソコンヲツカウ。", "romaji": "pasokon wo tsukau", "english": "to use a computer." },
+            { "kana": "パソコンヲカウ。", "romaji": "pasokon wo kau", "english": "to buy a computer." },
+            { "kana": "パソコンデシゴトヲスル。", "romaji": "pasokon de shigoto wo suru", "english": "to work on a computer." }
+          ],
+          "polite": [
+            { "kana": "パソコンヲツカイマス。", "romaji": "pasokon wo tsukaimasu", "english": "I use a computer." },
+            { "kana": "パソコンデシゴトヲシマス。", "romaji": "pasokon de shigoto wo shimasu", "english": "I work on a computer." }
+          ],
+          "past": [
+            { "kana": "パソコンヲツカイマシタ。", "romaji": "pasokon wo tsukaimashita", "english": "I used a computer." },
+            { "kana": "パソコンヲカイマシタ。", "romaji": "pasokon wo kaimashita", "english": "I bought a computer." }
+          ]
+        }
+      },
+      {
+        "id": "piza_kata", "kana": "ピザ", "romaji": "piza",
+        "gloss_en": "pizza", "tags": ["loanword","food","p-row"], "worlds": ["6-handaku-kata"],
+        "note": "Loanword from Italian 'pizza'. Extremely common food word in Japan.",
+        "examples": {
+          "dictionary": [
+            { "kana": "ピザヲタベル。", "romaji": "piza wo taberu", "english": "to eat pizza." },
+            { "kana": "ピザヲカウ。", "romaji": "piza wo kau", "english": "to buy pizza." },
+            { "kana": "ピザトジュースヲタベル。", "romaji": "piza to juusu wo taberu", "english": "to eat pizza and drink juice." }
+          ],
+          "polite": [
+            { "kana": "ピザヲタベマス。", "romaji": "piza wo tabemasu", "english": "I eat pizza." },
+            { "kana": "ピザヲカイマス。", "romaji": "piza wo kaimasu", "english": "I buy pizza." }
+          ],
+          "past": [
+            { "kana": "ピザヲタベマシタ。", "romaji": "piza wo tabemashita", "english": "I ate pizza." },
+            { "kana": "ピザヲカイマシタ。", "romaji": "piza wo kaimashita", "english": "I bought pizza." }
+          ]
+        }
+      },
+      {
+        "id": "purin_kata", "kana": "プリン", "romaji": "purin",
+        "gloss_en": "pudding; flan", "tags": ["loanword","food","p-row"], "worlds": ["6-handaku-kata"],
+        "note": "Loanword for custard pudding or flan. Common dessert in Japan.",
+        "examples": {
+          "dictionary": [
+            { "kana": "プリンヲツクル。", "romaji": "purin wo tsukuru", "english": "to make pudding." },
+            { "kana": "プリンヲタベル。", "romaji": "purin wo taberu", "english": "to eat pudding." },
+            { "kana": "プリンガスキダ。", "romaji": "purin ga suki da", "english": "I like pudding." }
+          ],
+          "polite": [
+            { "kana": "プリンヲツクリマス。", "romaji": "purin wo tsukurimasu", "english": "I make pudding." },
+            { "kana": "プリンヲタベマス。", "romaji": "purin wo tabemasu", "english": "I eat pudding." }
+          ],
+          "past": [
+            { "kana": "プリンヲツクリマシタ。", "romaji": "purin wo tsukurimashita", "english": "I made pudding." },
+            { "kana": "プリンヲタベマシタ。", "romaji": "purin wo tabemashita", "english": "I ate pudding." }
+          ]
+        }
+      },
+      {
+        "id": "pengin_kata", "kana": "ペンギン", "romaji": "pengin",
+        "gloss_en": "penguin", "tags": ["loanword","animal","p-row"], "worlds": ["6-handaku-kata"],
+        "note": "Loanword from English 'penguin'. Common word in zoos or kids' books.",
+        "examples": {
+          "dictionary": [
+            { "kana": "ペンギンヲミル。", "romaji": "pengin wo miru", "english": "to see a penguin." },
+            { "kana": "ペンギンガアルク。", "romaji": "pengin ga aruku", "english": "a penguin walks." },
+            { "kana": "ペンギンガカワイイ。", "romaji": "pengin ga kawaii", "english": "penguins are cute." }
+          ],
+          "polite": [
+            { "kana": "ペンギンヲミマス。", "romaji": "pengin wo mimasu", "english": "I see a penguin." },
+            { "kana": "ペンギンガアルキマス。", "romaji": "pengin ga arukimasu", "english": "the penguin walks." }
+          ],
+          "past": [
+            { "kana": "ペンギンヲミマシタ。", "romaji": "pengin wo mimashita", "english": "I saw a penguin." },
+            { "kana": "ペンギンガアルキマシタ。", "romaji": "pengin ga arukimashita", "english": "the penguin walked." }
+          ]
+        }
+      },
+      {
+        "id": "poketto_kata", "kana": "ポケット", "romaji": "poketto",
+        "gloss_en": "pocket", "tags": ["loanword","object","p-row"], "worlds": ["6-handaku-kata"],
+        "note": "Loanword from English 'pocket'. Common clothing or bag word.",
+        "examples": {
+          "dictionary": [
+            { "kana": "ポケットニイレル。", "romaji": "poketto ni ireru", "english": "to put it in the pocket." },
+            { "kana": "ポケットヲサガス。", "romaji": "poketto wo sagasu", "english": "to search a pocket." },
+            { "kana": "ポケットガアツイ。", "romaji": "poketto ga atsui", "english": "the pocket feels warm." }
+          ],
+          "polite": [
+            { "kana": "ポケットニイレマス。", "romaji": "poketto ni iremasu", "english": "I put it in the pocket." },
+            { "kana": "ポケットヲサガシマス。", "romaji": "poketto wo sagashimasu", "english": "I search the pocket." }
+          ],
+          "past": [
+            { "kana": "ポケットニイレマシタ。", "romaji": "poketto ni iremashita", "english": "I put it in the pocket." },
+            { "kana": "ポケットヲサガシマシタ。", "romaji": "poketto wo sagashimashita", "english": "I searched the pocket." }
+          ]
+        }
+      },
+      {
+        "id": "panda_kata", "kana": "パンダ", "romaji": "panda",
+        "gloss_en": "panda", "tags": ["loanword","animal","p-row"], "worlds": ["6-handaku-kata"],
+        "note": "Loanword from English 'panda'. Common animal word, often used in children's materials.",
+        "examples": {
+          "dictionary": [
+            { "kana": "パンダガイル。", "romaji": "panda ga iru", "english": "there is a panda." },
+            { "kana": "パンダヲミル。", "romaji": "panda wo miru", "english": "to see a panda." },
+            { "kana": "パンダガカワイイ。", "romaji": "panda ga kawaii", "english": "the panda is cute." }
+          ],
+          "polite": [
+            { "kana": "パンダガイマス。", "romaji": "panda ga imasu", "english": "there is a panda." },
+            { "kana": "パンダヲミマス。", "romaji": "panda wo mimasu", "english": "I see a panda." }
+          ],
+          "past": [
+            { "kana": "パンダガイマシタ。", "romaji": "panda ga imashita", "english": "there was a panda." },
+            { "kana": "パンダヲミマシタ。", "romaji": "panda wo mimashita", "english": "I saw a panda." }
+          ]
+        }
+      },
+
+      {
+        "id": "manga_kata", "kana": "マンガ", "romaji": "manga",
+        "gloss_en": "comic; manga", "tags": ["loanword","culture","m-row"], "worlds": ["7-vocab-kata"],
+        "note": "Loanword from English 'manga'. Usually written 漫画 in kanji, but katakana マンガ is common for genre and pop culture.",
+        "examples": {
+          "dictionary": [
+            { "kana": "マンガヲヨム。", "romaji": "manga wo yomu", "english": "to read manga." },
+            { "kana": "マンガヲカウ。", "romaji": "manga wo kau", "english": "to buy manga." }
+          ],
+          "polite": [
+            { "kana": "マンガヲヨミマス。", "romaji": "manga wo yomimasu", "english": "I read manga." },
+            { "kana": "マンガヲカイマス。", "romaji": "manga wo kaimasu", "english": "I buy manga." }
+          ],
+          "past": [
+            { "kana": "マンガヲヨミマシタ。", "romaji": "manga wo yomimashita", "english": "I read manga." },
+            { "kana": "マンガヲカイマシタ。", "romaji": "manga wo kaimashita", "english": "I bought manga." }
+          ]
+        }
+      },
+      {
+        "id": "miruku_kata", "kana": "ミルク", "romaji": "miruku",
+        "gloss_en": "milk", "tags": ["loanword","food","m-row"], "worlds": ["7-vocab-kata"],
+        "note": "Loanword from English 'milk'. Common everyday drink word.",
+        "examples": {
+          "dictionary": [
+            { "kana": "ミルクヲノム。", "romaji": "miruku wo nomu", "english": "to drink milk." },
+            { "kana": "ミルクトパンヲタベル。", "romaji": "miruku to pan wo taberu", "english": "to eat bread with milk." }
+          ],
+          "polite": [
+            { "kana": "ミルクヲノミマス。", "romaji": "miruku wo nomimasu", "english": "I drink milk." },
+            { "kana": "ミルクトパンヲタベマス。", "romaji": "miruku to pan wo tabemasu", "english": "I eat bread with milk." }
+          ],
+          "past": [
+            { "kana": "ミルクヲノミマシタ。", "romaji": "miruku wo nomimashita", "english": "I drank milk." },
+            { "kana": "ミルクトパンヲタベマシタ。", "romaji": "miruku to pan wo tabemashita", "english": "I ate bread with milk." }
+          ]
+        }
+      },
+      {
+        "id": "monsutaa_kata", "kana": "モンスター", "romaji": "monsutaa",
+        "gloss_en": "monster", "tags": ["loanword","fantasy","m-row"], "worlds": ["7-vocab-kata"],
+        "note": "Loanword from English 'monster'. Common in games, anime, and fantasy contexts.",
+        "examples": {
+          "dictionary": [
+            { "kana": "モンスターヲタオス。", "romaji": "monsutaa wo taosu", "english": "to defeat a monster." },
+            { "kana": "モンスターヲミル。", "romaji": "monsutaa wo miru", "english": "to see a monster." }
+          ],
+          "polite": [
+            { "kana": "モンスターヲタオシマス。", "romaji": "monsutaa wo taoshimasu", "english": "I defeat a monster." },
+            { "kana": "モンスターヲミマス。", "romaji": "monsutaa wo mimasu", "english": "I see a monster." }
+          ],
+          "past": [
+            { "kana": "モンスターヲタオシマシタ。", "romaji": "monsutaa wo taoshimashita", "english": "I defeated a monster." },
+            { "kana": "モンスターヲミマシタ。", "romaji": "monsutaa wo mimashita", "english": "I saw a monster." }
+          ]
+        }
+      },
+      {
+        "id": "messeiji_kata", "kana": "メッセージ", "romaji": "messeiji",
+        "gloss_en": "message", "tags": ["loanword","object","m-row"], "worlds": ["7-vocab-kata"],
+        "note": "Loanword from English 'message'. Used for emails, texts, and chats.",
+        "examples": {
+          "dictionary": [
+            { "kana": "メッセージヲオクル。", "romaji": "messeiji wo okuru", "english": "to send a message." },
+            { "kana": "メッセージヲヨム。", "romaji": "messeiji wo yomu", "english": "to read a message." }
+          ],
+          "polite": [
+            { "kana": "メッセージヲオクリマス。", "romaji": "messeiji wo okurimasu", "english": "I send a message." },
+            { "kana": "メッセージヲヨミマス。", "romaji": "messeiji wo yomimasu", "english": "I read a message." }
+          ],
+          "past": [
+            { "kana": "メッセージヲオクリマシタ。", "romaji": "messeiji wo okurimashita", "english": "I sent a message." },
+            { "kana": "メッセージヲヨミマシタ。", "romaji": "messeiji wo yomimashita", "english": "I read a message." }
+          ]
+        }
+      },
+      {
+        "id": "masuku_kata", "kana": "マスク", "romaji": "masuku",
+        "gloss_en": "mask", "tags": ["loanword","object","m-row"], "worlds": ["7-vocab-kata"],
+        "note": "Loanword from English 'mask'. Common for face masks in Japan.",
+        "examples": {
+          "dictionary": [
+            { "kana": "マスクヲツケル。", "romaji": "masuku wo tsukeru", "english": "to wear a mask." },
+            { "kana": "マスクヲハズス。", "romaji": "masuku wo hazusu", "english": "to take off a mask." }
+          ],
+          "polite": [
+            { "kana": "マスクヲツケマス。", "romaji": "masuku wo tsukemasu", "english": "I wear a mask." },
+            { "kana": "マスクヲハズシマス。", "romaji": "masuku wo hazushimasu", "english": "I take off a mask." }
+          ],
+          "past": [
+            { "kana": "マスクヲツケマシタ。", "romaji": "masuku wo tsukemashita", "english": "I wore a mask." },
+            { "kana": "マスクヲハズシマシタ。", "romaji": "masuku wo hazushimashita", "english": "I took off a mask." }
+          ]
+        }
+      },
+      {
+        "id": "memo_kata", "kana": "メモ", "romaji": "memo", 
+        "gloss_en": "memo; note", "tags": ["loanword","object","m-row"], "worlds": ["7-vocab-kata"],
+        "note": "Loanword from English 'memo'. Common for short notes or reminders.",
+        "examples": {
+          "dictionary": [
+            { "kana": "メモヲトル。", "romaji": "memo wo toru", "english": "to take a memo." },
+            { "kana": "メモヲミル。", "romaji": "memo wo miru", "english": "to look at a memo." }
+          ],
+          "polite": [
+            { "kana": "メモヲトリマス。", "romaji": "memo wo torimasu", "english": "I take a memo." },
+            { "kana": "メモヲミマス。", "romaji": "memo wo mimasu", "english": "I look at a memo." }
+          ],
+          "past": [
+            { "kana": "メモヲトリマシタ。", "romaji": "memo wo torimashita", "english": "I took a memo." },
+            { "kana": "メモヲミマシタ。", "romaji": "memo wo mimashita", "english": "I looked at a memo." }
+          ]
+        }
+      },
+  
+      {
+        "id": "yotto_kata", "kana": "ヨット", "romaji": "yotto",
+        "gloss_en": "yacht", "tags": ["loanword","transport","y-row"], "worlds": ["8-vocab-kata"],
+        "note": "Loanword from English 'yacht'. Common in leisure and sports contexts.",
+        "examples": {
+          "dictionary": [
+            { "kana": "ヨットニノル。", "romaji": "yotto ni noru", "english": "to ride a yacht." },
+            { "kana": "ヨットヲミル。", "romaji": "yotto wo miru", "english": "to see a yacht." }
+          ],
+          "polite": [
+            { "kana": "ヨットニノリマス。", "romaji": "yotto ni norimasu", "english": "I ride a yacht." },
+            { "kana": "ヨットヲミマス。", "romaji": "yotto wo mimasu", "english": "I see a yacht." }
+          ],
+          "past": [
+            { "kana": "ヨットニノリマシタ。", "romaji": "yotto ni norimashita", "english": "I rode a yacht." },
+            { "kana": "ヨットヲミマシタ。", "romaji": "yotto wo mimashita", "english": "I saw a yacht." }
+          ]
+        }
+      },
+      {
+        "id": "yooguruto_kata", "kana": "ヨーグルト", "romaji": "yooguruto",
+        "gloss_en": "yogurt", "tags": ["loanword","food","y-row"], "worlds": ["8-vocab-kata"],
+        "note": "Loanword from English 'yogurt'. Common food item eaten for breakfast or dessert.",
+        "examples": {
+          "dictionary": [
+            { "kana": "ヨーグルトヲタベル。", "romaji": "yooguruto wo taberu", "english": "to eat yogurt." },
+            { "kana": "ヨーグルトヲカウ。", "romaji": "yooguruto wo kau", "english": "to buy yogurt." }
+          ],
+          "polite": [
+            { "kana": "ヨーグルトヲタベマス。", "romaji": "yooguruto wo tabemasu", "english": "I eat yogurt." },
+            { "kana": "ヨーグルトヲカイマス。", "romaji": "yooguruto wo kaimasu", "english": "I buy yogurt." }
+          ],
+          "past": [
+            { "kana": "ヨーグルトヲタベマシタ。", "romaji": "yooguruto wo tabemashita", "english": "I ate yogurt." },
+            { "kana": "ヨーグルトヲカイマシタ。", "romaji": "yooguruto wo kaimashita", "english": "I bought yogurt." }
+          ]
+        }
+      },
+      {
+        "id": "yaado_kata", "kana": "ヤード", "romaji": "yaado",
+        "gloss_en": "yard (measure)", "tags": ["loanword","measurement","y-row"], "worlds": ["8-vocab-kata"],
+        "note": "Loanword from English 'yard'. Used in sports and measurement contexts.",
+        "examples": {
+          "dictionary": [
+            { "kana": "ヤードデハカル。", "romaji": "yaado de hakaru", "english": "to measure in yards." },
+            { "kana": "ヤードデイウ。", "romaji": "yaado de iu", "english": "to say it in yards." }
+          ],
+          "polite": [
+            { "kana": "ヤードデハカリマス。", "romaji": "yaado de hakarimasu", "english": "I measure in yards." },
+            { "kana": "ヤードデイイマス。", "romaji": "yaado de iimasu", "english": "I say it in yards." }
+          ],
+          "past": [
+            { "kana": "ヤードデハカリマシタ。", "romaji": "yaado de hakarimashita", "english": "I measured in yards." },
+            { "kana": "ヤードデイイマシタ。", "romaji": "yaado de iimashita", "english": "I said it in yards." }
+          ]
+        }
+      },
+      {
+        "id": "yuumoa_kata", "kana": "ユーモア", "romaji": "yuumoa",
+        "gloss_en": "humor", "tags": ["loanword","abstract","y-row"], "worlds": ["8-vocab-kata"],
+        "note": "Loanword from English 'humor'. Used in describing personality or tone.",
+        "examples": {
+          "dictionary": [
+            { "kana": "ユーモアガアル。", "romaji": "yuumoa ga aru", "english": "to have a sense of humor." },
+            { "kana": "ユーモアガスキダ。", "romaji": "yuumoa ga suki da", "english": "I like humor." }
+          ],
+          "polite": [
+            { "kana": "ユーモアガアリマス。", "romaji": "yuumoa ga arimasu", "english": "I have a sense of humor." },
+            { "kana": "ユーモアガスキデス。", "romaji": "yuumoa ga suki desu", "english": "I like humor." }
+          ],
+          "past": [
+            { "kana": "ユーモアガアリマシタ。", "romaji": "yuumoa ga arimashita", "english": "I had a sense of humor." },
+            { "kana": "ユーモアガスキデシタ。", "romaji": "yuumoa ga suki deshita", "english": "I liked humor." }
+          ]
+        }
+      },
+      {
+        "id": "yuuro_kata", "kana": "ユーロ", "romaji": "yuuro",
+        "gloss_en": "euro (currency)", "tags": ["loanword","money","y-row"], "worlds": ["8-vocab-kata"],
+        "note": "Loanword for the 'euro' currency. Common in travel and finance contexts.",
+        "examples": {
+          "dictionary": [
+            { "kana": "ユーロデシハラウ。", "romaji": "yuuro de shiharau", "english": "to pay in euros." },
+            { "kana": "ユーロヲカエル。", "romaji": "yuuro wo kaeru", "english": "to exchange euros." }
+          ],
+          "polite": [
+            { "kana": "ユーロデシハライマス。", "romaji": "yuuro de shiharaimasu", "english": "I pay in euros." },
+            { "kana": "ユーロヲカエマス。", "romaji": "yuuro wo kaemasu", "english": "I exchange euros." }
+          ],
+          "past": [
+            { "kana": "ユーロデシハライマシタ。", "romaji": "yuuro de shiharaimashita", "english": "I paid in euros." },
+            { "kana": "ユーロヲカエマシタ。", "romaji": "yuuro wo kaemashita", "english": "I exchanged euros." }
+          ]
+        }
+      },
+      {
+        "id": "yunitto_kata", "kana": "ユニット", "romaji": "yunitto",
+        "gloss_en": "unit", "tags": ["loanword","object","y-row"], "worlds": ["8-vocab-kata"],
+        "note": "Loanword from English 'unit'. Used in housing, electronics, or pop-music groups.",
+        "examples": {
+          "dictionary": [
+            { "kana": "ユニットヲツクル。", "romaji": "yunitto wo tsukuru", "english": "to make a unit." },
+            { "kana": "アーティストノユニット。", "romaji": "aatisuto no yunitto", "english": "an artist unit." }
+          ],
+          "polite": [
+            { "kana": "ユニットヲツクリマス。", "romaji": "yunitto wo tsukurimasu", "english": "I make a unit." },
+            { "kana": "アーティストノユニットデス。", "romaji": "aatisuto no yunitto desu", "english": "It’s an artist unit." }
+          ],
+          "past": [
+            { "kana": "ユニットヲツクリマシタ。", "romaji": "yunitto wo tsukurimashita", "english": "I made a unit." },
+            { "kana": "アーティストノユニットデシタ。", "romaji": "aatisuto no yunitto deshita", "english": "It was an artist unit." }
+          ]
+        }
+      },
+
+      {
+        "id": "raamen_kata", "kana": "ラーメン", "romaji": "raamen",
+        "gloss_en": "ramen", "tags": ["loanword","food","r-row"], "worlds": ["9-vocab-kata"],
+        "note": "Loanword from Chinese 拉麺. Katakana ラーメン is the standard modern spelling.",
+        "examples": {
+          "dictionary": [
+            { "kana": "ラーメンヲタベル。", "romaji": "raamen wo taberu", "english": "to eat ramen." },
+            { "kana": "ラーメンヲツクル。", "romaji": "raamen wo tsukuru", "english": "to make ramen." }
+          ],
+          "polite": [
+            { "kana": "ラーメンヲタベマス。", "romaji": "raamen wo tabemasu", "english": "I eat ramen." },
+            { "kana": "ラーメンヲツクリマス。", "romaji": "raamen wo tsukurimasu", "english": "I make ramen." }
+          ],
+          "past": [
+            { "kana": "ラーメンヲタベマシタ。", "romaji": "raamen wo tabemashita", "english": "I ate ramen." },
+            { "kana": "ラーメンヲツクリマシタ。", "romaji": "raamen wo tsukurimashita", "english": "I made ramen." }
+          ]
+        }
+      },
+      {
+        "id": "rajio_kata", "kana": "ラジオ", "romaji": "rajio",
+        "gloss_en": "radio", "tags": ["loanword","object","r-row"], "worlds": ["9-vocab-kata"],
+        "note": "Loanword from English 'radio'. Katakana ラジオ is the standard spelling.",
+        "examples": {
+          "dictionary": [
+            { "kana": "ラジオヲキク。", "romaji": "rajio wo kiku", "english": "to listen to the radio." },
+            { "kana": "ラジオヲツケル。", "romaji": "rajio wo tsukeru", "english": "to turn on the radio." }
+          ],
+          "polite": [
+            { "kana": "ラジオヲキキマス。", "romaji": "rajio wo kikimasu", "english": "I listen to the radio." },
+            { "kana": "ラジオヲツケマス。", "romaji": "rajio wo tsukemasu", "english": "I turn on the radio." }
+          ],
+          "past": [
+            { "kana": "ラジオヲキキマシタ。", "romaji": "rajio wo kikimashita", "english": "I listened to the radio." },
+            { "kana": "ラジオヲツケマシタ。", "romaji": "rajio wo tsukemashita", "english": "I turned on the radio." }
+          ]
+        }
+      },
+      {
+        "id": "risutora_kata", "kana": "リストラ", "romaji": "risutora",
+        "gloss_en": "restructuring; layoff", "tags": ["loanword","business","r-row"], "worlds": ["9-vocab-kata"],
+        "note": "Abbreviation of 'restructure'. Often used for company downsizing or layoffs.",
+        "examples": {
+          "dictionary": [
+            { "kana": "リストラサレル。", "romaji": "risutora sareru", "english": "to be laid off." },
+            { "kana": "リストラガアッタ。", "romaji": "risutora ga atta", "english": "There was a layoff." }
+          ],
+          "polite": [
+            { "kana": "リストラサレマス。", "romaji": "risutora saremasu", "english": "I am laid off." },
+            { "kana": "リストラガアリマシタ。", "romaji": "risutora ga arimashita", "english": "There was a restructuring." }
+          ],
+          "past": [
+            { "kana": "リストラサレマシタ。", "romaji": "risutora saremashita", "english": "I was laid off." },
+            { "kana": "リストラガアリマシタ。", "romaji": "risutora ga arimashita", "english": "There was a restructuring." }
+          ]
+        }
+      },
+      {
+        "id": "risaikuru_kata", "kana": "リサイクル", "romaji": "risaikuru",
+        "gloss_en": "recycle", "tags": ["loanword","environment","r-row"], "worlds": ["9-vocab-kata"],
+        "note": "Loanword from English 'recycle'. Used widely in environmental campaigns.",
+        "examples": {
+          "dictionary": [
+            { "kana": "リサイクルヲスル。", "romaji": "risaikuru wo suru", "english": "to recycle." },
+            { "kana": "ペットボトルヲリサイクルスル。", "romaji": "petto botoru wo risaikuru suru", "english": "to recycle plastic bottles." }
+          ],
+          "polite": [
+            { "kana": "リサイクルヲシマス。", "romaji": "risaikuru wo shimasu", "english": "I recycle." },
+            { "kana": "ペットボトルヲリサイクルシマス。", "romaji": "petto botoru wo risaikuru shimasu", "english": "I recycle bottles." }
+          ],
+          "past": [
+            { "kana": "リサイクルヲシマシタ。", "romaji": "risaikuru wo shimashita", "english": "I recycled." },
+            { "kana": "ペットボトルヲリサイクルシマシタ。", "romaji": "petto botoru wo risaikuru shimashita", "english": "I recycled bottles." }
+          ]
+        }
+      },
+      {
+        "id": "rekoodo_kata", "kana": "レコード", "romaji": "rekoodo",
+        "gloss_en": "record (music)", "tags": ["loanword","music","r-row"], "worlds": ["9-vocab-kata"],
+        "note": "Loanword from English 'record'. Refers to vinyl records or musical recordings.",
+        "examples": {
+          "dictionary": [
+            { "kana": "レコードヲキク。", "romaji": "rekoodo wo kiku", "english": "to listen to a record." },
+            { "kana": "レコードヲアツメル。", "romaji": "rekoodo wo atsumeru", "english": "to collect records." }
+          ],
+          "polite": [
+            { "kana": "レコードヲキキマス。", "romaji": "rekoodo wo kikimasu", "english": "I listen to records." },
+            { "kana": "レコードヲアツメマス。", "romaji": "rekoodo wo atsumemasu", "english": "I collect records." }
+          ],
+          "past": [
+            { "kana": "レコードヲキキマシタ。", "romaji": "rekoodo wo kikimashita", "english": "I listened to a record." },
+            { "kana": "レコードヲアツメマシタ。", "romaji": "rekoodo wo atsumemashita", "english": "I collected records." }
+          ]
+        }
+      },
+      {
+        "id": "resutoran_kata", "kana": "レストラン", "romaji": "resutoran",
+        "gloss_en": "restaurant", "tags": ["loanword","place","r-row"], "worlds": ["9-vocab-kata"],
+        "note": "Loanword from French 'restaurant'. Common in everyday Japanese.",
+        "examples": {
+          "dictionary": [
+            { "kana": "レストランデタベル。", "romaji": "resutoran de taberu", "english": "to eat at a restaurant." },
+            { "kana": "レストランニイク。", "romaji": "resutoran ni iku", "english": "to go to a restaurant." }
+          ],
+          "polite": [
+            { "kana": "レストランデタベマス。", "romaji": "resutoran de tabemasu", "english": "I eat at a restaurant." },
+            { "kana": "レストランニイキマス。", "romaji": "resutoran ni ikimasu", "english": "I go to a restaurant." }
+          ],
+          "past": [
+            { "kana": "レストランデタベマシタ。", "romaji": "resutoran de tabemashita", "english": "I ate at a restaurant." },
+            { "kana": "レストランニイキマシタ。", "romaji": "resutoran ni ikimashita", "english": "I went to a restaurant." }
+          ]
+        }
+      },
+
+      {
+        "id": "wan_kata", "kana": "ワン", "romaji": "wan",
+        "gloss_en": "woof (dog sound)", "tags": ["loanword","onomatopoeia","w-row"], "worlds": ["10-vocab-kata"],
+        "note": "ワン is the common onomatopoeia for a dog's bark, like 'woof'.",
+        "examples": {
+          "dictionary": [
+            { "kana": "イヌガ『ワン』トナク。", "romaji": "inu ga 'wan' to naku", "english": "the dog barks 'woof'." },
+            { "kana": "ワンワンナクイヌ。", "romaji": "wan wan naku inu", "english": "a dog that barks woof woof." }
+          ],
+          "polite": [
+            { "kana": "イヌガ『ワン』トナキマス。", "romaji": "inu ga 'wan' to nakimasu", "english": "the dog barks 'woof'." },
+            { "kana": "イヌガワンワントナキマス。", "romaji": "inu ga wan wan to nakimasu", "english": "the dog goes woof woof." }
+          ],
+          "past": [
+            { "kana": "イヌガ『ワン』トナキマシタ。", "romaji": "inu ga 'wan' to nakimashita", "english": "the dog barked 'woof'." },
+            { "kana": "イヌガワンワントナキマシタ。", "romaji": "inu ga wan wan to nakimashita", "english": "the dog went woof woof." }
+          ]
+        }
+      },
+      {
+        "id": "wain_kata", "kana": "ワイン", "romaji": "wain",
+        "gloss_en": "wine", "tags": ["loanword","drink","w-row"], "worlds": ["10-vocab-kata"],
+        "note": "Loanword from English 'wine'. Common in restaurants and casual speech.",
+        "examples": {
+          "dictionary": [
+            { "kana": "ワインヲノム。", "romaji": "wain wo nomu", "english": "to drink wine." },
+            { "kana": "ワインヲカウ。", "romaji": "wain wo kau", "english": "to buy wine." }
+          ],
+          "polite": [
+            { "kana": "ワインヲノミマス。", "romaji": "wain wo nomimasu", "english": "I drink wine." },
+            { "kana": "ワインヲカイマス。", "romaji": "wain wo kaimasu", "english": "I buy wine." }
+          ],
+          "past": [
+            { "kana": "ワインヲノミマシタ。", "romaji": "wain wo nomimashita", "english": "I drank wine." },
+            { "kana": "ワインヲカイマシタ。", "romaji": "wain wo kaimashita", "english": "I bought wine." }
+          ]
+        }
+      },
+      {
+        "id": "wagon_kata", "kana": "ワゴン", "romaji": "wagon",
+        "gloss_en": "wagon; car wagon", "tags": ["loanword","transport","w-row"], "worlds": ["10-vocab-kata"],
+        "note": "Loanword from English 'wagon'. Used for both wagons and wagon-type cars.",
+        "examples": {
+          "dictionary": [
+            { "kana": "ワゴンニノル。", "romaji": "wagon ni noru", "english": "to ride in a wagon." },
+            { "kana": "ワゴンヲウゴカス。", "romaji": "wagon wo ugokasu", "english": "to move a wagon." }
+          ],
+          "polite": [
+            { "kana": "ワゴンニノリマス。", "romaji": "wagon ni norimasu", "english": "I ride in a wagon." },
+            { "kana": "ワゴンヲウゴカシマス。", "romaji": "wagon wo ugokashimasu", "english": "I move a wagon." }
+          ],
+          "past": [
+            { "kana": "ワゴンニノリマシタ。", "romaji": "wagon ni norimashita", "english": "I rode in a wagon." },
+            { "kana": "ワゴンヲウゴカシマシタ。", "romaji": "wagon wo ugokashimashita", "english": "I moved a wagon." }
+          ]
+        }
+      },
+      {
+        "id": "waado_kata", "kana": "ワード", "romaji": "waado",
+        "gloss_en": "word", "tags": ["loanword","abstract","w-row"], "worlds": ["10-vocab-kata"],
+        "note": "Loanword from English 'word'. Also refers to Microsoft Word.",
+        "examples": {
+          "dictionary": [
+            { "kana": "ワードヲツカウ。", "romaji": "waado wo tsukau", "english": "to use Word." },
+            { "kana": "ワードヲカク。", "romaji": "waado wo kaku", "english": "to write a word." }
+          ],
+          "polite": [
+            { "kana": "ワードヲツカイマス。", "romaji": "waado wo tsukaimasu", "english": "I use Word." },
+            { "kana": "ワードヲカキマス。", "romaji": "waado wo kakimasu", "english": "I write a word." }
+          ],
+          "past": [
+            { "kana": "ワードヲツカイマシタ。", "romaji": "waado wo tsukaimashita", "english": "I used Word." },
+            { "kana": "ワードヲカキマシタ。", "romaji": "waado wo kakimashita", "english": "I wrote a word." }
+          ]
+        }
+      },
+      {
+        "id": "wakkusu_kata", "kana": "ワックス", "romaji": "wakkusu",
+        "gloss_en": "wax", "tags": ["loanword","object","w-row"], "worlds": ["10-vocab-kata"],
+        "note": "Loanword from English 'wax'. Used for car polish or hair styling.",
+        "examples": {
+          "dictionary": [
+            { "kana": "ワックスヲツケル。", "romaji": "wakkusu wo tsukeru", "english": "to apply wax." },
+            { "kana": "クルマニワックスヲカケル。", "romaji": "kuruma ni wakkusu wo kakeru", "english": "to wax the car." }
+          ],
+          "polite": [
+            { "kana": "ワックスヲツケマス。", "romaji": "wakkusu wo tsukemasu", "english": "I apply wax." },
+            { "kana": "クルマニワックスヲカケマス。", "romaji": "kuruma ni wakkusu wo kakemasu", "english": "I wax the car." }
+          ],
+          "past": [
+            { "kana": "ワックスヲツケマシタ。", "romaji": "wakkusu wo tsukemashita", "english": "I applied wax." },
+            { "kana": "クルマニワックスヲカケマシタ。", "romaji": "kuruma ni wakkusu wo kakemashita", "english": "I waxed the car." }
+          ]
+        }
+      },
+      {
+        "id": "waffuru_kata", "kana": "ワッフル", "romaji": "waffuru",
+        "gloss_en": "waffle", "tags": ["loanword","food","w-row"], "worlds": ["10-vocab-kata"],
+        "note": "Loanword from English 'waffle'. Common in cafes and dessert menus.",
+        "examples": {
+          "dictionary": [
+            { "kana": "ワッフルヲタベル。", "romaji": "waffuru wo taberu", "english": "to eat a waffle." },
+            { "kana": "ワッフルヲツクル。", "romaji": "waffuru wo tsukuru", "english": "to make waffles." }
+          ],
+          "polite": [
+            { "kana": "ワッフルヲタベマス。", "romaji": "waffuru wo tabemasu", "english": "I eat waffles." },
+            { "kana": "ワッフルヲツクリマス。", "romaji": "waffuru wo tsukurimasu", "english": "I make waffles." }
+          ],
+          "past": [
+            { "kana": "ワッフルヲタベマシタ。", "romaji": "waffuru wo tabemashita", "english": "I ate waffles." },
+            { "kana": "ワッフルヲツクリマシタ。", "romaji": "waffuru wo tsukurimashita", "english": "I made waffles." }
+          ]
+        }
+      }
+
+
+      ],
+  "byWorld": {
+    "1-vocab-kata": [],
+    "2-vocab-kata": ["iku_kata","kiku_kata","kau_kata","kao_kata","ike_kata","koe_kata"],
+    "2-vocab-daku-kata": ["gasorin_kata","gifuto_kata","gurasu_kata","gesuto_kata","gorufu_kata","gamu_kata"],
+    "3-vocab-kata": ["sarada_kata","saru_kata","semi_kata","suika_kata","sofa_kata","sekai_kata"],
+    "3-vocab-daku-kata": ["zubon_kata","zonbi_kata","zemi_kata","zaru_kata","zame_kata","zerachin_kata"],
+    "4-vocab-kata": ["taoru_kata","tanku_kata","tsuna_kata","terebi_kata","tenpo_kata","tomato_kata"],
+    "4-vocab-daku-kata": ["denshi_kata","dejitaru_kata","doresu_kata","dotto_kata","deeto_kata","dansu_kata"],
+    "5-vocab-kata": ["naisu_kata","nekutai_kata","natsu_kata","naifu_kata","nooto_kata","netto_kata"],
+    "6-vocab-kata": ["hanbaagaa_kata","hiirou_kata","herumetto_kata","hoteru_kata","hamu_kata","hotto_kata"],
+    "6-vocab-daku-kata": ["banana_kata","bideo_kata","buutsu_kata","beddo_kata","booru_kata","basu_kata"],
+    "6-vocab-handaku-kata": ["pasokon_kata","piza_kata","purin_kata","pengin_kata","poketto_kata","panda_kata"],
+    "7-vocab-kata": ["manga_kata","miruku_kata","monsutaa_kata","messeiji_kata","masuku_kata","memo_kata"],
+    "8-vocab-kata": ["yotto_kata","yooguruto_kata","yaado_kata","yuumoa_kata","yuuro_kata","yunitto_kata"],
+    "9-vocab-kata": ["raamen_kata","rajio_kata","risutora_kata","risaikuru_kata","rekoodo_kata","resutoran_kata"],
+    "10-vocab-kata": ["wan_kata","wain_kata","wagon_kata","waado_kata","wakkusu_kata","waffuru_kata"]
+  }
+}

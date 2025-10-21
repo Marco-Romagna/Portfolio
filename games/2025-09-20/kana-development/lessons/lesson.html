@@ -6,16 +6,16 @@
   <title>Kana Lesson</title>
 
   <!-- Site styles -->
-  <link rel="stylesheet" href="../../../../css/main.css">
-  <link rel="stylesheet" href="../../../../css/games/kana-development/stages.css">
-  <link rel="stylesheet" href="../../../../css/games/kana-development/lessons.css">
+  <link rel="stylesheet" href="/Portfolio/css/main.css">
+  <link rel="stylesheet" href="/Portfolio/css/games/kana-development/stages.css">
+  <link rel="stylesheet" href="/Portfolio/css/games/kana-development/lessons.css">
 </head>
-<body class="site mode-light lesson" data-lesson-id="" data-total-parts="">
 
+<body class="site mode-light lesson" data-lesson-id="" data-total-parts="">
   <!-- Site header -->
   <header class="header">
     <div class="container nav">
-      <a class="brand" href="../index.html">
+      <a class="brand" href="/Portfolio/games/2025-09-20/kana-development/">
         <span class="dot"></span><span>Kana Development</span>
       </a>
     </div>
@@ -28,14 +28,16 @@
 
   <!-- Main lesson container -->
   <main class="container game-wrap">
-
     <!-- Progress steps (populated by lessons-core.js) -->
     <nav class="lesson-progress" aria-label="Lesson progress">
       <ol class="steps"></ol>
     </nav>
 
-    <!-- Placeholder sections -->
-    <section id="part-1" class="lesson-part is-visible" data-part-index="1"></section>
+    <!-- Summary placeholder (shown only if summary exists) -->
+    <section id="lesson-summary" class="lesson-summary is-hidden"></section>
+
+    <!-- Placeholder sections for actual lesson parts -->
+    <section id="part-1" class="lesson-part" data-part-index="1"></section>
     <section id="part-2" class="lesson-part" data-part-index="2"></section>
     <section id="part-3" class="lesson-part" data-part-index="3"></section>
     <section id="part-4" class="lesson-part" data-part-index="4"></section>
@@ -44,10 +46,10 @@
 
   <!-- Universal lesson logic -->
   <script defer src="../js/vocab.js"></script>
+  <script defer src="../js/stages.js"></script>
   <script defer src="../js/lessons-core.js"></script>
   <script defer src="../js/lessons-kana.js"></script>
   <script defer src="../js/lessons-vocab.js"></script>
   <script defer src="../js/lessons.js"></script>
-
 </body>
 </html>

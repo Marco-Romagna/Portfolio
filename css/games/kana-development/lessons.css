@@ -40,7 +40,7 @@ body.site {
   list-style: none;
   padding: 0;
   margin: 0 0 12px;
-  flex-wrap: nowrap; /* keep on one row */
+  flex-wrap: nowrap;
 }
 .step {
   flex: 1;
@@ -364,7 +364,6 @@ body.site {
 
 .lesson[data-lesson-id$="-4"] .lesson-progress .progressbar { display: none; }
 
-
 /* =========================================================
    Vocab Explorer (Part 1)
    ========================================================= */
@@ -381,10 +380,9 @@ body.site {
   background: var(--kp-surface);
   border: 1px solid var(--kp-border);
   border-radius: var(--kp-radius);
-
-  display: inline-block;   /* shrink to fit items */
-  min-width: 140px;        /* prevent it from collapsing too small */
-  max-height: 70vh;        /* if too many items, allow scrolling */
+  display: inline-block;
+  min-width: 140px;
+  max-height: 70vh;
   overflow-y: auto;
 }
 
@@ -394,9 +392,7 @@ body.site {
   border-bottom: 1px solid var(--kp-border);
   transition: background .2s, color .2s;
 }
-.vocab-list li:last-child {
-  border-bottom: none;
-}
+.vocab-list li:last-child { border-bottom: none; }
 
 .vocab-detail {
   background: var(--kp-surface);
@@ -406,7 +402,6 @@ body.site {
   text-align: center;
   box-shadow: var(--kp-shadow);
 }
-
 .vocab-card-large .kana-glyph {
   font-size: clamp(64px, 8vw, 120px);
   margin-bottom: 1rem;
@@ -435,7 +430,6 @@ body.site {
 .vocab-example p { margin: 0.25rem 0; }
 .vocab-example .muted { color: var(--kp-muted); }
 
-/* Active word in the vocab sidebar */
 .vocab-list li.is-active {
   background: color-mix(in srgb, var(--kp-accent) 20%, transparent);
   color: var(--kp-accent);
@@ -446,18 +440,13 @@ body.site {
 /* =========================================================
    Part 2 — Word Hunt styles
    ========================================================= */
-.hunt-panel {
-  padding: 16px;
-}
-
+.hunt-panel { padding: 16px; }
 .hunt-instruction {
   margin-bottom: 12px;
   color: var(--kp-muted);
   font-size: 1.05rem;
   text-align: center;
 }
-
-/* Hunt target box */
 .hunt-target {
   text-align: center;
   margin: 20px auto;
@@ -467,8 +456,6 @@ body.site {
   box-shadow: var(--kp-shadow);
   max-width: 360px;
 }
-
-/* Romaji display (big + bold) */
 .hunt-target .hunt-romaji {
   font-size: 2.2rem;
   font-weight: 700;
@@ -476,24 +463,18 @@ body.site {
   margin-bottom: 8px;
   letter-spacing: 1px;
 }
-
-/* English gloss (smaller, muted) */
 .hunt-target .hunt-english {
   font-size: 1.2rem;
   font-weight: 500;
   color: var(--kp-text);
   font-style: italic;
 }
-
-/* Paragraph text area */
 .hunt-passage {
   margin: 16px 0;
   line-height: 2;
   font-size: 1.3rem;
   text-align: left;
 }
-
-/* Clickable tokens */
 .hunt-token {
   display: inline-block;
   cursor: pointer;
@@ -502,7 +483,7 @@ body.site {
   transition: background 0.2s, color 0.2s;
 }
 .hunt-token:hover {
-  background: rgba(255,255,255,0.08); /* subtle highlight */
+  background: rgba(255,255,255,0.08);
 }
 .hunt-token.is-correct {
   background: var(--kp-correct);
@@ -512,8 +493,6 @@ body.site {
   background: var(--kp-wrong);
   color: #fff;
 }
-
-/* Progress text (optional) */
 .hunt-progress {
   margin-top: 12px;
   font-size: .9rem;
@@ -521,49 +500,26 @@ body.site {
   text-align: center;
 }
 
-/* Theme variants for Identify buttons */
-.option.theme-dark {
-  background: #1a1a2e;
-  color: #fff;
-}
-.option.theme-light {
-  background: #f5f5f5;
-  color: #222;
-}
-.option.theme-sepia {
-  background: #fdf6e3;
-  color: #654321;
-}
-.option.theme-high {
-  background: #222;
-  border: 2px solid #ff4081;
-  color: #ff4081;
-}
-
-/* Keep Identify button size/layout consistent */
+/* Option button variants */
+.option.theme-dark { background:#1a1a2e; color:#fff; }
+.option.theme-light { background:#f5f5f5; color:#222; }
+.option.theme-sepia { background:#fdf6e3; color:#654321; }
+.option.theme-high  { background:#222; border:2px solid #ff4081; color:#ff4081; }
 .option {
-  display: inline-block;
-  min-width: 150px;
-  padding: 16px 24px;
-  margin: 10px;
-  font-size: 2rem;         /* bigger characters */
-  font-weight: 600;        /* thicker strokes */
-  font-family: "Noto Sans JP", "Hiragino Kaku Gothic Pro", "Meiryo", sans-serif;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.25s ease;
-  text-align: center;
+  display:inline-block;
+  min-width:150px;
+  padding:16px 24px;
+  margin:10px;
+  font-size:2rem;
+  font-weight:600;
+  font-family:"Noto Sans JP","Hiragino Kaku Gothic Pro","Meiryo",sans-serif;
+  border-radius:8px;
+  cursor:pointer;
+  transition:all 0.25s ease;
+  text-align:center;
 }
-
-/* Feedback colors */
-.option.is-correct {
-  background: #28a745 !important; /* green */
-  color: #fff !important;
-}
-.option.is-wrong {
-  background: #dc3545 !important; /* red */
-  color: #fff !important;
-}
+.option.is-correct { background:#28a745!important; color:#fff!important; }
+.option.is-wrong   { background:#dc3545!important; color:#fff!important; }
 
 .debug-bar {
   position: fixed;
@@ -573,96 +529,706 @@ body.site {
   display: flex;
   gap: 0.5rem;
 }
-
 .debug-bar button {
-  background: #444;
-  color: white;
-  border: none;
-  padding: 0.25rem 0.5rem;
-  cursor: pointer;
+  background:#444;
+  color:white;
+  border:none;
+  padding:0.25rem 0.5rem;
+  cursor:pointer;
 }
+
 /* Centered navigation buttons (Back + Next) */
 .lesson-cta {
   position: sticky;
   bottom: 0;
   display: flex;
-  justify-content: center;   /* center horizontally */
-  gap: var(--kp-gap);        /* spacing between buttons */
+  justify-content: center;
+  gap: var(--kp-gap);
   padding: 16px 0 8px;
   background: linear-gradient(to top, rgba(0,0,0,.25), rgba(0,0,0,0));
 }
-
 .lesson-cta .btn {
-  min-width: 140px;
-  text-align: center;
+  min-width:140px;
+  text-align:center;
 }
-
 .lesson-cta .btn.primary {
-  background: var(--kp-accent);
-  border-color: transparent;
-  color: #fff;
+  background:var(--kp-accent);
+  border-color:transparent;
+  color:#fff;
 }
 
-/* Part 4 Typing Styles */
+/* Typing Styles */
 .quiz-input-wrapper {
   margin: 1rem 0;
   display: flex;
   justify-content: center;
 }
 .quiz-input {
-  font-size: 1.5rem;
-  padding: 0.75rem 1rem;
-  border-radius: 8px;
-  border: 2px solid #666;
-  background: #111827;
-  color: #f9fafb;
-  text-align: center;
-  width: 250px;
+  font-size:1.5rem;
+  padding:0.75rem 1rem;
+  border-radius:8px;
+  border:2px solid #666;
+  background:#111827;
+  color:#f9fafb;
+  text-align:center;
+  width:250px;
 }
 .quiz-input:focus {
-  outline: none;
-  border-color: #7c3aed; /* purple highlight */
+  outline:none;
+  border-color:#7c3aed;
 }
 .quiz-feedback {
-  margin-top: 0.5rem;
-  text-align: center;
-  min-height: 1.5rem;
+  margin-top:0.5rem;
+  text-align:center;
+  min-height:1.5rem;
 }
-.quiz-feedback .correct {
-  color: #10b981; /* green */
-}
-.quiz-feedback .wrong {
-  color: #ef4444; /* red */
-}
+.quiz-feedback .correct { color:#10b981; }
+.quiz-feedback .wrong   { color:#ef4444; }
 .quiz-progress {
-  margin-top: 1rem;
+  margin-top:1rem;
+  text-align:center;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+}
+.quiz-progress .meter {
+  height:6px;
+  border-radius:4px;
+  background:#1f2937;
+  overflow:hidden;
+  margin-bottom:0.5rem;
+  width:300px;
+  max-width:90%;
+}
+.quiz-progress .meter-fill {
+  height:100%;
+  width:0;
+  background:linear-gradient(to right,#7c3aed,#06b6d4);
+  transition:width 0.3s ease;
+}
+.quiz-progress .meter-label {
+  font-size:0.9rem;
+  color:#d1d5db;
+}
+.quiz-prompt .prompt-target { color:#7c3aed; }
+
+/* ---------- Lesson Summaries ---------- */
+.lesson-summary {
+  display:flex;
+  justify-content:center;
+  align-items:flex-start;
+  min-height:calc(100vh - 120px);
+  padding-top:12vh;
+  background:var(--kp-bg,#0f172a);
+}
+.lesson.has-summary .lesson-progress,
+.lesson.has-summary .lesson-part { display:none; }
+
+/* ---------- Lesson Summary Panel Styling ---------- */
+.summary-panel {
+  padding: 2rem 2.5rem;
+  background: var(--kp-surface, #1a1a2e);
+  border: 1px solid var(--kp-border, #333);
+  border-radius: 16px;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.25);
+  max-width: 720px;
+  width: 100%;
   text-align: center;
+}
+
+.summary-kana {
+  font-size: 1.2rem;
+  margin-bottom: 0.5rem;
+  color: var(--kp-accent, #8b5cf6);
+  font-weight: bold;
+}
+
+.summary-panel h2 {
+  font-size: 1.6rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  color: var(--kp-text, #fff);
+}
+
+.summary-panel p {
+  font-size: 1.1rem;
+  line-height: 1.8;
+  color: var(--kp-muted, #ddd);
+  margin: 0 auto 1.5rem;
+  max-width: 600px;
+}
+
+.summary-panel #start-lesson {
+  font-size: 1.1rem;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  margin-top: 0.5rem;
+  display: inline-block;
+}
+
+/* ---------- Mixed-script lessons ---------- */
+.mixed-script .pair-card {
+  cursor:pointer;
+  padding:1rem;
+  border-radius:0.75rem;
+  transition:background 0.2s ease,transform 0.1s ease;
+}
+.mixed-script .pair-card:hover {
+  background:rgba(255,255,255,0.08);
+  transform:scale(1.03);
+}
+.mixed-script .pair-row {
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  margin-bottom:0.5rem;
+}
+.mixed-script .pair-row .glyph {
+  font-size:2.4rem;
+  width:2.5rem;
+  text-align:center;
+  display:inline-block;
+}
+.pair-row .link { font-size:1.2rem; margin:0 0.4rem; opacity:0.6; }
+.mixed-script .pair-romaji { font-size:1.1rem; color:#ccc; }
+
+/* ---------- Vocab detail hover ---------- */
+.vocab-detail .kana-glyph {
+  cursor:pointer;
+  transition:transform 0.15s ease,color 0.15s ease;
+  display:inline-block;
+}
+.vocab-detail .kana-glyph:hover {
+  color:#ffd27f;
+  transform:scale(1.05);
+}
+
+/* =========================================================
+   Kana Part 4 — Audio Identify
+   ========================================================= */
+.lesson #part-4 .quiz-prompt {
+  text-align: center;
+  margin-bottom: 14px;
+}
+
+.lesson #part-4 #replay-audio {
+  font-size: 1rem;
+  padding: 10px 16px;
+  border-radius: var(--kp-radius);
+  background: var(--kp-surface-2);
+  color: var(--kp-text);
+  border: 1px solid var(--kp-border);
+  cursor: pointer;
+  transition: background .15s, transform .1s;
+}
+
+.lesson #part-4 #replay-audio:hover {
+  background: color-mix(in oklab, var(--kp-accent) 15%, var(--kp-surface-2));
+  transform: translateY(-1px);
+}
+
+/* =========================================================
+   Part 5 — Audio Recognition
+   ========================================================= */
+
+/* Main quiz bar layout */
+#part-5 .quiz-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  margin: 1.5rem auto;
+  padding: 1rem 1.5rem;
+  max-width: 850px;
+  background: var(--kp-surface-2);
+  border-radius: 1rem;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+}
+
+/* Play + Slow controls */
+#part-5 .controls {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+#part-5 .controls .btn {
+  padding: 0.5rem 1.2rem;
+  font-weight: 600;
+}
+
+/* Word & tense selectors */
+#part-5 .selector {
   display: flex;
   flex-direction: column;
   align-items: center;
+  gap: 0.25rem;
+  min-width: 120px;
+  user-select: none;
+}
+#part-5 .selector .display {
+  font-weight: 600;
+  min-width: 110px;
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--kp-border);
+  border-radius: 0.75rem;
+  background: color-mix(in oklab, var(--kp-surface) 80%, transparent);
+  text-align: center;
+  transition: background 0.2s, color 0.2s, border-color 0.2s;
+}
+#part-5 .selector .arrow {
+  border: none;
+  background: none;
+  color: var(--kp-text-muted);
+  font-size: 1rem;
+  cursor: pointer;
+  line-height: 1;
+  transition: transform 0.1s ease;
+}
+#part-5 .selector .arrow:hover {
+  transform: scale(1.2);
+  color: var(--kp-accent);
 }
 
-.quiz-progress .meter {
-  height: 6px;
-  border-radius: 4px;
-  background: #1f2937;
+/* Confirm button */
+#part-5 .confirm-zone {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+#part-5 #confirm {
+  padding: 0.6rem 1.2rem;
+  font-weight: 600;
+  border-radius: 0.75rem;
+  background: var(--kp-accent);
+  color: white;
+  transition: transform 0.1s ease, background 0.2s ease;
+}
+#part-5 #confirm:hover {
+  transform: scale(1.05);
+  background: color-mix(in oklab, var(--kp-accent) 80%, white 10%);
+}
+
+/* Example / feedback box */
+#part-5 .result-box {
+  margin: 1.25rem auto;
+  padding: 1.25rem;
+  max-width: 600px;
+  background: var(--kp-surface);
+  border-radius: 0.75rem;
+  border: 1px solid var(--kp-border);
+  text-align: center;
+  animation: fadeIn 0.3s ease;
+}
+#part-5 .result-box p {
+  margin: 0.25rem 0;
+}
+#part-5 .result-box .ex-jp {
+  font-size: 1.3rem;
+  font-weight: 500;
+}
+
+/* Progress bar (kept from earlier layout) */
+.lesson #part-5 .quiz-progress {
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+  width: 100%;
+  margin: 16px 0 6px;
+  color: color-mix(in oklab, var(--kp-text) 80%, var(--kp-muted));
+}
+.lesson #part-5 .meter {
+  width: min(560px, 90%);
+  height: 10px;
+  background: var(--kp-surface-2);
+  border: 1px solid var(--kp-border);
+  border-radius: 999px;
   overflow: hidden;
-  margin-bottom: 0.5rem;
-  width: 300px; /* adjust this to be slightly larger than .quiz-input */
-  max-width: 90%; /* safe on smaller screens */
+  margin: 0 auto;
 }
-
-.quiz-progress .meter-fill {
+.lesson #part-5 .meter-fill {
   height: 100%;
-  width: 0;
-  background: linear-gradient(to right, #7c3aed, #06b6d4);
-  transition: width 0.3s ease;
+  width: 0%;
+  background: linear-gradient(90deg, var(--kp-accent), var(--kp-accent-2));
+  transition: width .2s ease;
+}
+.lesson #part-5 .meter-label { font-size: .95rem; }
+
+/* Animation */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
-.quiz-progress .meter-label {
-  font-size: 0.9rem;
-  color: #d1d5db;
+/* Feedback states for displays */
+#part-5 .display.correct {
+  border-color: var(--kp-correct);
+  background: color-mix(in oklab, var(--kp-correct) 20%, transparent);
+  color: var(--kp-correct);
 }
-.quiz-prompt .prompt-target {
-  color: #7c3aed; /* purple accent */
+
+#part-5 .display.wrong {
+  border-color: var(--kp-wrong);
+  background: color-mix(in oklab, var(--kp-wrong) 20%, transparent);
+  color: var(--kp-wrong);
+}
+
+
+/* =========================================================
+   Ancient Japanese Aesthetic (index/world carousel)
+   ========================================================= */
+.ancient-theme {
+  background: radial-gradient(circle at 50% 50%, #1b1b1b 0%, #0a0a0a 90%);
+  font-family: "Shippori Mincho", "Noto Serif JP", serif;
+  color: #e9d8a6;
+  letter-spacing: 0.02em;
+}
+
+.ancient-theme .world-carousel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.8rem;
+  padding: 2rem;
+  text-align: center;
+}
+
+/* Individual world panel cards */
+.world-panel {
+  background: rgba(33, 33, 33, 0.7);
+  border: 1px solid rgba(140, 120, 80, 0.4);
+  border-radius: 20px;
+  padding: 2rem;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+  max-width: 780px;
+  width: 100%;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.world-panel:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 40px rgba(180,160,100,0.4);
+}
+
+.world-panel h2 {
+  font-size: 1.8rem;
+  margin-bottom: 0.75rem;
+  color: #f4e3b0;
+  text-shadow: 0 2px 6px rgba(0,0,0,0.5);
+}
+.world-panel p {
+  font-size: 1.05rem;
+  line-height: 1.8;
+  color: #e6dcb5;
+  max-width: 600px;
+  margin: 0 auto 1rem;
+}
+
+/* Buttons within each world */
+.world-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 1.5rem;
+}
+.world-buttons .btn {
+  background: linear-gradient(90deg, #5c4033, #8b5e3c);
+  border: 1px solid rgba(200,180,120,0.3);
+  color: #f6edd9;
+  font-weight: 600;
+  padding: 0.75rem 1.4rem;
+  border-radius: 10px;
+  transition: all 0.3s ease;
+}
+.world-buttons .btn:hover {
+  background: linear-gradient(90deg, #7a5b43, #b48c61);
+  transform: translateY(-2px);
+}
+/* =========================================================
+   Horizontal Carousel — One world per view
+   ========================================================= */
+.world-carousel {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  max-width: 960px;
+  margin: 3rem auto 5rem;
+}
+
+#worlds-track {
+  display: flex;
+  flex-wrap: nowrap;
+  transition: transform 0.6s ease;
+  will-change: transform;
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+}
+
+#worlds-track > .world {
+  flex: 0 0 100%;
+  max-width: 100%;
+  padding: 2rem;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/* =========================================================
+   World Panel  - Rowed Layout (Kana Grid)
+   ========================================================= */
+#worlds-track > .world {
+  background: rgba(33, 33, 33, 0.75);
+  border: 1px solid rgba(140, 120, 80, 0.4);
+  border-radius: 20px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.45);
+  text-align: center;
+  padding: 2rem 1rem;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+#worlds-track > .world:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 40px rgba(180, 160, 100, 0.4);
+}
+
+#worlds-track .world-title {
+  font-size: 1.9rem;
+  margin-bottom: 0.5rem;
+  color: #f4e3b0;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+}
+
+#worlds-track .world-desc {
+  font-size: 1.05rem;
+  line-height: 1.8;
+  color: #e6dcb5;
+  max-width: 700px;
+  margin: 0 auto 2rem;
+}
+
+/* ==========================================
+   Lesson Grid (Grouped Rows)
+   ========================================== */
+.levels-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  align-items: stretch;
+  width: 100%;
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+/* Each row = one kana group (A/B/C-style layout) */
+.level-row-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  align-items: center;
+}
+
+.level-row-label {
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: #f5e6c4;
+  font-family: "Shippori Mincho", serif;
+  margin-bottom: 0.25rem;
+}
+
+/* Button strip inside each row */
+.level-row-buttons {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+/* Each button tile */
+.level-btn {
+  background: rgba(45, 45, 45, 0.8);
+  border-radius: 8px;
+  border: 1px solid rgba(120, 100, 70, 0.3);
+  padding: 0.6rem 1rem;
+  font-size: 0.95rem;
+  color: #f4e4c0;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease;
+  min-width: 100px;
+  text-align: center;
+  user-select: none;
+}
+
+.level-btn:hover {
+  background: rgba(70, 60, 45, 0.85);
+  transform: translateY(-2px);
+}
+
+/* Center all rows nicely */
+.levels-list > .level-row-group:last-child {
+  margin-bottom: 1rem;
+}
+
+
+/* =========================================================
+   Carousel Navigation Dots
+   ========================================================= */
+.carousel-nav {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.6rem;
+  margin-top: 1.5rem;
+}
+
+.carousel-nav button {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.25);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.carousel-nav button:hover {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.carousel-nav button.active {
+  background: #f5e6c4;
+  box-shadow: 0 0 10px rgba(255, 255, 200, 0.7);
+}
+
+/* =========================================================
+   Soft Edge Fade
+   ========================================================= */
+.world-carousel::before,
+.world-carousel::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  width: 60px;
+  height: 100%;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.world-carousel::before {
+  left: 0;
+  background: linear-gradient(to right, #0f172a 40%, transparent);
+}
+.world-carousel::after {
+  right: 0;
+  background: linear-gradient(to left, #0f172a 40%, transparent);
+}
+
+/* =========================================================
+   Kana Development — Summary + Carousel Layout
+   ========================================================= */
+
+.panel.summary {
+  margin-bottom: 2rem;
+  background: var(--kp-surface);
+  border: 1px solid var(--kp-border);
+  border-radius: var(--kp-radius);
+  padding: 1.5rem 2rem;
+  box-shadow: var(--kp-shadow);
+}
+
+.panel.summary h2 {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  font-size: 1.75rem;
+}
+
+.panel.summary p {
+  line-height: 1.6;
+  margin-bottom: 0.75rem;
+  color: var(--kp-muted);
+}
+
+.panel.summary p:last-child {
+  margin-bottom: 0;
+}
+
+.world-carousel {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--kp-border);
+}
+
+.small-header {
+  text-align: center;
+  margin: 0.5rem 0 1rem;
+  color: var(--kp-muted);
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+/* =========================================================
+   World Header Quick Navigation (Updated with active glow)
+   ========================================================= */
+.world-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.small-header {
+  margin: 0;
+  color: var(--kp-muted);
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+.world-nav-buttons {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+
+.world-nav-buttons button {
+  background: var(--kp-surface-2);
+  color: var(--kp-text);
+  border: 1px solid var(--kp-border);
+  border-radius: 6px;
+  padding: 4px 8px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background 0.25s ease, border-color 0.25s ease, color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.world-nav-buttons button:hover {
+  background: var(--kp-accent);
+  border-color: transparent;
+  color: #fff;
+}
+
+/* Active state (glow + accent) */
+.world-nav-buttons button.active {
+  background: var(--kp-accent);
+  border-color: transparent;
+  color: #fff;
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--kp-accent) 35%, transparent);
+}
+
+/* =========================================================
+   Kana preview hover feedback 
+   ========================================================= */
+.kana-card {
+  transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.kana-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--kp-accent);
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--kp-accent) 35%, transparent);
+  cursor: pointer;
+}
+.kana-card:active {
+  transform: scale(0.98);
 }

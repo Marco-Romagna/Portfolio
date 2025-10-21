@@ -1,113 +1,73 @@
 // ==========================================================
 // vocab.js
-// Utility for loading and managing vocabulary sets
+// Utility for loading and managing vocabulary sets + summaries
 // ==========================================================
-
 (() => {
-  const LEXICON_URL = "../data/lexicon.json";
-  let _lexicon = null;
+  const HIRA_URL = "../data/lexicon_hiragana.json";
+  const KATA_URL = "../data/lexicon_katakana.json";
+  const SUM_URL  = "../data/lexicon_summaries.json";
+
+  let cache = { hiragana: null, katakana: null };
+  let summariesCache = null;
 
   // ---------- Load + Cache ----------
-  async function loadLexicon() {
-    if (_lexicon) return _lexicon;
-    const res = await fetch(LEXICON_URL);
-    _lexicon = await res.json();
-    return _lexicon;
+  async function loadLexicon(type = "hiragana") {
+    if (cache[type]) return cache[type];
+    const url = type === "hiragana" ? HIRA_URL : KATA_URL;
+    const res = await fetch(url);
+    const data = await res.json();
+    cache[type] = data;
+
+    // Build vocab-level mapping from this lexicon’s byWorld data
+    buildVocabMapFromLexicon(data);
+
+    return data;
   }
 
-  // ---------- Get full lexicon ----------
-  async function getLexicon() {
-    const data = await loadLexicon();
-    return data.words || [];
+  async function loadSummaries() {
+    if (summariesCache) return summariesCache;
+    const res = await fetch(SUM_URL);
+    const data = await res.json();
+    summariesCache = data.summaries || [];
+    return summariesCache;
   }
 
-  // ---------- Lookup ----------
-  async function findById(id) {
-    const words = await getLexicon();
-    return words.find(w => w.id === id) || null;
-  }
+  // ---------- Build Global Map from Lexicons ----------
+  window.VOCAB_WORDS_BY_LEVEL = window.VOCAB_WORDS_BY_LEVEL || {};
 
-  async function findByKana(kana) {
-    const words = await getLexicon();
-    return words.find(w => w.kana === kana) || null;
-  }
-
-  async function findByRomaji(romaji) {
-    const words = await getLexicon();
-    return words.find(w => w.romaji === romaji) || null;
-  }
-
-  // ---------- Helpers ----------
-  function shuffle(arr) {
-    const a = arr.slice();
-    for (let i = a.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [a[i], a[j]] = [a[j], a[i]];
+  function buildVocabMapFromLexicon(lexicon) {
+    if (!lexicon.byWorld) return;
+    for (const [key, wordIds] of Object.entries(lexicon.byWorld)) {
+      // Directly use "2-vocab-hira", "4-vocab-kata", etc.
+      window.VOCAB_WORDS_BY_LEVEL[key] = wordIds;
     }
-    return a;
   }
 
-  function sample(arr, n) {
-    return shuffle(arr).slice(0, n);
+  // ---------- Get words for a world milestone ----------
+  // Example: getWorldMilestone("2-base", "hiragana")
+  async function getWorldMilestone(worldKey, type = "hiragana") {
+    const data = await loadLexicon(type);
+    const summaries = await loadSummaries();
+
+    const ids = (data.byWorld?.[worldKey]) || [];
+    let words = data.words.filter(w => ids.includes(w.id));
+
+    // prepend any summaries for this world
+    const extras = summaries.filter(s => s.worlds.includes(worldKey));
+    return [...extras, ...words];
   }
 
-  // ---------- Get set by IDs ----------
-  async function getSet(ids) {
-    const words = await getLexicon();
-    return words.filter(w => ids.includes(w.id));
+  // ---------- Lookup single word ----------
+  async function getWord(id, type = "hiragana") {
+    const data = await loadLexicon(type);
+    return data.words.find(w => w.id === id) || null;
   }
 
-  // ---------- Get words by tag ----------
-  async function getByTag(tag) {
-    const words = await getLexicon();
-    return words.filter(w => (w.tags || []).includes(tag));
-  }
-
-  // ---------- Get words by JLPT ----------
-  async function getByJLPT(level) {
-    const words = await getLexicon();
-    return words.filter(w => w.jlpt === level);
-  }
-
-  // ---------- Get random subset ----------
-  async function getRandom(n) {
-    const words = await getLexicon();
-    return sample(words, n);
-  }
-
-  // ======================================================
-  // NEW: Get words for a specific world milestone
-  // roleKey examples: "1-base", "2-daku", "2-handaku"
-  // ======================================================
-  async function getWorldMilestone(roleKey) {
-    const data = await loadLexicon();
-    const ids = data.byWorld[roleKey] || [];
-    return data.words.filter(w => ids.includes(w.id));
-  }
-
-  // ======================================================
-  // UPDATED: Get all words for a world (all its stages)
-  // e.g. worldCode = "2" → returns words from 2-base, 2-daku, 2-handaku
-  // ======================================================
-  async function getWorld(worldCode) {
-    const data = await loadLexicon();
-    const keys = Object.keys(data.byWorld).filter(k => k.startsWith(worldCode + "-"));
-    const ids = keys.flatMap(k => data.byWorld[k]);
-    return data.words.filter(w => ids.includes(w.id));
-  }
-
-  // ---------- Expose ----------
+  // ---------- Export ----------
   window.Vocab = {
     loadLexicon,
-    getLexicon,
-    findById,
-    findByKana,
-    findByRomaji,
-    getSet,
-    getByTag,
-    getByJLPT,
-    getRandom,
-    getWorldMilestone, // NEW
-    getWorld           // UPDATED
+    loadSummaries,
+    getWorldMilestone,
+    getWord
   };
 })();
