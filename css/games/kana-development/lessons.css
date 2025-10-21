@@ -1217,3 +1217,18 @@ body.site {
   box-shadow: 0 0 0 3px color-mix(in oklab, var(--kp-accent) 35%, transparent);
 }
 
+/* =========================================================
+   Kana preview hover feedback 
+   ========================================================= */
+.kana-card {
+  transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.kana-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--kp-accent);
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--kp-accent) 35%, transparent);
+  cursor: pointer;
+}
+.kana-card:active {
+  transform: scale(0.98);
+}
